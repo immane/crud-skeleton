@@ -1511,10 +1511,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -1522,10 +1522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -1714,13 +1714,13 @@ C. 合并建议。</p>
   存储接受/拒绝、创建逻辑删除前取消、发件箱→收件箱重复数据删除和存储边界
   来自 <code>BUSINESS_INVARIANTS.md</code> / 矩阵关键路径 #6 的授权不变量。不要删除。</li>
 <li><strong>并发测试。</strong> <code>TradeOrderCreatedHandlerConcurrencyTest</code>、<code>TradeOrderCancelledHandlerConcurrencyTest</code>、
-  <code>InventoryReservationOutcomeConcurrencyTest</code> 在<code>wrapInTransaction</code>中执行双重检查<code>findOneBy</code>
+  <code>InventoryReservationOutcomeConcurrencyTest</code> 在 <code>wrapInTransaction</code> 中执行双重检查 <code>findOneBy</code>
   （“支票和交易之间消耗的事件”竞赛）。根据审计摘要，并发测试是保留的。</li>
 <li><strong>跳过错误记录测试。</strong> <code>StoreOrderServiceTest::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code>
   （已跳过；文档 <code>matchesSnapshot</code> 顺序敏感 <code>===</code>，覆盖 README bug 28）。保持。</li>
-<li><strong>Repository.</strong> <code>StoreOutboxMessageRepositoryTest</code> 是 <code>findUnpublished</code> 的唯一持久性绑定覆盖范围，
+<li><strong>Repository.</strong> <code>StoreOutboxMessageRepositoryTest</code> 是 <code>findUnpublished</code> 唯一持久化绑定的覆盖范围，
   <code>claim</code> 和 <code>defer</code> SQL（包括 <code>defer()</code> 声明所有权保护间隙，覆盖 README bug 15）。保留所有 11 个。</li>
-<li><strong>Command.</strong> <code>PublishOutboxCommandTest</code> 涵盖完整的发布/声明/延迟/调度合同（错误 16/52/53/54）。
+<li><strong>Command.</strong> <code>PublishOutboxCommandTest</code> 涵盖完整的发布/声明/延迟/调度合约（错误 16/52/53/54）。
   四个 <code>claim</code> 错误分支测试是不同的防护，而不是重复。保持。</li>
 <li><strong>服务单元测试。</strong> <code>StoreServiceTest</code>、<code>StoreMembershipServiceTest</code>、<code>StoreContextResolverTest</code>、
   <code>StoreOrderServiceTest</code> 是验证/幂等性/授权决策的规范单元层。
@@ -1748,85 +1748,85 @@ C. 合并建议。</p>
 <table>
 <thead>
 <tr>
-<th>File::method</th>
-<th>Reason</th>
-<th>Confidence</th>
-<th>Covered by</th>
+<th>文件::方法</th>
+<th>原因</th>
+<th>信心</th>
+<th>涵盖范围</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Store/Entity/StoreOutboxMessageLifecycleTest::testIdBecomesAvailableAfterPersistenceIdAssignment</code></td>
-<td>1 COVERAGE-CHASING — reflection-injects the private <code>id</code> property and asserts the <code>getId()</code> getter reads it back; a tautological getter readback that cannot fail. The <code>id === null</code> default is already asserted by the sibling <code>testNewMessageHasNoId…</code>.</td>
-<td>HIGH</td>
-<td>Same file <code>testNewMessageHasNoIdAndOccurredAtDefaultsToAvailableAt</code> (asserts the null default on construction); no behavior beyond a field getter.</td>
+<td>1 COVERAGE-CHASING — 反射注入私有 <code>id</code> 属性并断言 <code>getId()</code> getter 将其读回；一个不会失败的同义反复 getter 读回。 <code>id === null</code> 默认值已由同级 <code>testNewMessageHasNoId…</code> 断言。</td>
+<td>高</td>
+<td>相同的文件<code>testNewMessageHasNoIdAndOccurredAtDefaultsToAvailableAt</code>（在构造时断言空默认值）；没有超出领域吸气剂的行为。</td>
 </tr>
 <tr>
 <td><code>tests/Store/Entity/StoreConsumedEventLifecycleTest::testIdBecomesAvailableAfterPersistenceIdAssignment</code></td>
-<td>1 COVERAGE-CHASING — identical reflection-inject + getter-readback tautology on <code>StoreConsumedEvent::id</code>.</td>
-<td>HIGH</td>
-<td><code>StoreConsumedEventTest::testStoresInboundEventAuditFields</code> already constructs the entity; <code>testNewEventHasNoIdUntilPersisted</code> in the same file asserts the null default.</td>
+<td>1 覆盖范围追踪 — <code>StoreConsumedEvent::id</code> 上相同的反射注入 + getter 读回同义反复。</td>
+<td>高</td>
+<td><code>StoreConsumedEventTest::testStoresInboundEventAuditFields</code> 已经构造实体；同一文件中的 <code>testNewEventHasNoIdUntilPersisted</code> 声明空默认值。</td>
 </tr>
 <tr>
 <td><code>tests/Store/Entity/StoreConsumedEventLifecycleTest::testNewEventHasNoIdUntilPersisted</code></td>
-<td>1 COVERAGE-CHASING / 4 REDUNDANT-REGRESSION — asserts only the trivially-true <code>getId() === null</code> default that the entity constructor guarantees; adds nothing beyond <code>StoreConsumedEventTest</code> construction.</td>
-<td>MEDIUM</td>
-<td><code>StoreConsumedEventTest::testStoresInboundEventAuditFields</code> (constructs the same entity and asserts its fields).</td>
+<td>1 COVERAGE-CHASING / 4 REDUNDANT-REGRESSION — 仅断言实体构造函数保证的平凡的 true <code>getId() === null</code> 默认值；除了 <code>StoreConsumedEventTest</code> 构造之外，没有添加任何内容。</td>
+<td>中</td>
+<td><code>StoreConsumedEventTest::testStoresInboundEventAuditFields</code>（构造相同的实体并断言其字段）。</td>
 </tr>
 <tr>
 <td><code>tests/Store/Controller/Manage/StoreControllerTest::testProcessCreateContentReturnsValidContent</code></td>
-<td>1 COVERAGE-CHASING — reflection-invokes <code>processCreateContent()</code> with already-valid content and asserts <code>assertSame($content, $result)</code>, a passthrough identity tautology. Valid-input acceptance is proven by the sibling reject tests (<code>testCreateActionRejects*</code>) and end-to-end by <code>StoreControllerViewIntegrationTest</code> (POST <code>/manage/stores</code> → 201).</td>
-<td>MEDIUM</td>
-<td><code>StoreControllerViewIntegrationTest::testStoreViewsManageViewsAndStaffViews</code> (HTTP 201 create with the same fields); sibling <code>testCreateActionRejectsEmptyCode</code> etc.</td>
+<td>1 覆盖范围追踪 — 反射调用具有有效内容的 <code>processCreateContent()</code> 并断言 <code>assertSame($content, $result)</code>，这是一种直通身份同义反复。有效输入接受由同级拒绝测试 (<code>testCreateActionRejects*</code>) 证明，并由 <code>StoreControllerViewIntegrationTest</code> 端到端证明（POST <code>/manage/stores</code> → 201）。</td>
+<td>中</td>
+<td><code>StoreControllerViewIntegrationTest::testStoreViewsManageViewsAndStaffViews</code>（使用相同字段创建 HTTP 201）；兄弟姐妹 <code>testCreateActionRejectsEmptyCode</code> 等</td>
 </tr>
 <tr>
 <td><code>tests/Store/Controller/Manage/StoreControllerTest::testProcessUpdateContentReturnsValidContent</code></td>
-<td>1 COVERAGE-CHASING — same passthrough-identity tautology for <code>processUpdateContent()</code>. Valid-input update acceptance is proven by <code>StoreControllerViewIntegrationTest</code> (PUT <code>/manage/stores/{id}</code> → 200).</td>
-<td>MEDIUM</td>
-<td><code>StoreControllerViewIntegrationTest::testStoreViewsManageViewsAndStaffViews</code> (HTTP 200 PUT update); sibling <code>testUpdateActionRejectsNonArraySettings</code>.</td>
+<td>1 覆盖范围追踪 — 与 <code>processUpdateContent()</code> 相同的直通身份同义反复。有效输入更新接受由 <code>StoreControllerViewIntegrationTest</code> (PUT <code>/manage/stores/{id}</code> → 200) 证明。</td>
+<td>中</td>
+<td><code>StoreControllerViewIntegrationTest::testStoreViewsManageViewsAndStaffViews</code>（HTTP 200 PUT 更新）；兄弟<code>testUpdateActionRejectsNonArraySettings</code>。</td>
 </tr>
 </tbody>
 </table>
-<p>No HIGH-confidence <strong>DUPLICATE</strong> (reason 2) was found in the explicitly flagged pairs: the entity tests are
-complementary (not mutually duplicative), <code>StoreOrderServiceTest</code> covers service-layer paths the handler
-integration tests reach only incidentally, and <code>InventoryReservationOutcomeCoverageTest</code> /
-<code>TradeOrderCreatedHandlerCoverageTest</code> cover distinct guard branches as explained in KEEP. The closest reason-2
-case is listed under MERGE below (<code>testRejectWithoutOutboxThrows</code>), held at MEDIUM because the accept/reject
-guards are separate source lines despite identical behavior.</p>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<p>在显式标记的对中未发现高置信度 <strong>重复</strong>（原因 2）：实体测试是
+互补（不相互重复），<code>StoreOrderServiceTest</code>涵盖处理程序的服务层路径
+集成测试只是偶然到达，并且<code>InventoryReservationOutcomeCoverageTest</code> /
+<code>TradeOrderCreatedHandlerCoverageTest</code> 覆盖不同的保护分支，如 KEEP 中所述。最接近的原因-2
+案例列在下面的 MERGE (<code>testRejectWithoutOutboxThrows</code>) 下，由于接受/拒绝而保持在 MEDIUM
+尽管行为相同，但守卫是单独的源代码行。</p>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong><code>StoreOutboxMessageLifecycleTest</code> → <code>StoreOutboxMessageTest</code>.</strong> <code>testNewMessageHasNoIdAndOccurredAtDefaultsToAvailableAt</code>
-   and <code>testConstructorAcceptsExplicitOccurredAt</code> assert real constructor behavior for the <strong>same entity</strong> as
-   <code>StoreOutboxMessageTest</code>; the campaign split them into a second file purely for coverage accounting. Fold the two
-   kept tests into <code>StoreOutboxMessageTest</code> (and drop the tautological id-reflection test per DELETE CANDIDATES).</li>
-<li><strong><code>StoreConsumedEventLifecycleTest::testNewEventHasNoIdUntilPersisted</code> → <code>StoreConsumedEventTest</code>.</strong> Single
-   assertion, same entity; fold into the base file (delete the id-reflection sibling).</li>
-<li><strong><code>StoreOrderServiceTest::testRejectWithoutOutboxThrows</code> → fold into <code>testAcceptRequiresAnOutboxService</code></strong>
-   (reason 2, MEDIUM). Both assert the identical <code>RuntimeException('Store outbox is not configured.')</code> thrown by the
-   same <code>outboxService === null</code> guard pattern (<code>src/Store/Service/StoreOrderService.php:30</code> and <code>:48</code>). A
-   table-driven <code>accept</code>/<code>reject</code> pair or a single retained guard test suffices.</li>
-<li><strong><code>StoreTradeOrderCancellationTest</code> → note only.</strong> A single getter-only test on a 3-field entity; the tombstone
-   behavior it mirrors is thoroughly exercised by <code>TradeOrderCancelledHandlerTest::testTombstoneForUnknownOrderIsIdempotent</code>
-   and <code>TradeOrderCreatedHandlerTest::testCancellationBeforeCreationCreatesCancelledOrderWithoutReservation</code>. Keep as-is
-   (harmless) or fold its three assertions into a cancellation-handler integration test.</li>
-<li><strong>Envelope-validation test density.</strong> <code>InventoryReservationOutcomeCoverageTest</code> (19 tests) plus the envelope
-   tests in <code>TradeOrderCancelledHandlerTest</code> / <code>TradeOrderCreatedHandlerCoverageTest</code> follow an identical
-   throw-<code>InvalidArgumentException</code>-with-message pattern per handler. If trimmed, prefer a table-driven
-   data-provider per handler (keeps the poison-message contract) rather than dropping branches.</li>
+   和<code>testConstructorAcceptsExplicitOccurredAt</code>断言<strong>相同实体</strong>的真实构造函数行为
+   <code>StoreOutboxMessageTest</code>;竞选活动将它们分成第二个文件，纯粹是为了覆盖范围统计。将两个对折
+   将测试保留在 <code>StoreOutboxMessageTest</code> 中（并删除每个 DELETE CanDIDATES 的同义反复 id-reflection 测试）。</li>
+<li><strong><code>StoreConsumedEventLifecycleTest::testNewEventHasNoIdUntilPersisted</code> → <code>StoreConsumedEventTest</code>.</strong> 单
+   断言，同一实体；折叠到基本文件中（删除 id-reflection 同级文件）。</li>
+<li><strong><code>StoreOrderServiceTest::testRejectWithoutOutboxThrows</code>→折叠成<code>testAcceptRequiresAnOutboxService</code></strong>
+   （原因 2，中等）。两者都断言由
+   相同的 <code>outboxService === null</code> 保护模式（<code>src/Store/Service/StoreOrderService.php:30</code> 和 <code>:48</code>）。一个
+   表驱动的 <code>accept</code>/<code>reject</code> 对或单个保留的保护测试就足够了。</li>
+<li><strong><code>StoreTradeOrderCancellationTest</code> → 仅注释。</strong> 对 3 字段实体进行单一 getter-only 测试；墓碑
+   它所反映的行为被 <code>TradeOrderCancelledHandlerTest::testTombstoneForUnknownOrderIsIdempotent</code> 彻底运用
+   和<code>TradeOrderCreatedHandlerTest::testCancellationBeforeCreationCreatesCancelledOrderWithoutReservation</code>。保持原样
+   （无害）或将其三个断言折叠到取消处理程序集成测试中。</li>
+<li><strong>信封验证测试密度。</strong> <code>InventoryReservationOutcomeCoverageTest</code>（19 个测试）加上信封
+   <code>TradeOrderCancelledHandlerTest</code> / <code>TradeOrderCreatedHandlerCoverageTest</code> 中的测试遵循相同的
+   每个处理程序抛出-<code>InvalidArgumentException</code>-with-message 模式。如果修剪，更喜欢表驱动
+   每个处理程序的数据提供者（保留有毒消息合同）而不是删除分支。</li>
 </ol>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>Before acting on any DELETE candidate:</p>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>在对任何 DELETE 候选人采取行动之前：</p>
 <ol>
-<li>Run the full suite to establish the green baseline:
+<li>运行全套套件以建立绿色基线：
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code></li>
-<li>For each candidate, temporarily remove the test method and re-run <code>tests/Store/</code> plus the sibling file that
-   "covered by" points to, confirming no assertion count/behavior change in the surviving tests.</li>
-<li>For the two HIGH-confidence entity candidates, confirm the deleted <code>id</code>-assignment lines remain covered via the
-   retained construction tests (line coverage is not a delete gate; behavioral value is).</li>
-<li>For the two <code>Manage/StoreControllerTest</code> candidates, confirm <code>StoreControllerViewIntegrationTest</code> still returns
-   201/200 for create/update, proving the happy path is not lost.</li>
-<li>Run <code>composer phpstan</code> and <code>composer rector:types:check</code> after any deletion; no <code>src/</code> change is permitted by
-   this audit.</li>
+<li>对于每个候选，暂时删除测试方法并重新运行 <code>tests/Store/</code> 以及
+   “covered by”指向，确认在幸存的测试中没有断言计数/行为变化。</li>
+<li>对于两个 HIGH-confidence 候选实体，通过
+   保留的构造测试（线路覆盖不是删除门；行为价值是）。</li>
+<li>对于两个<code>Manage/StoreControllerTest</code>候选者，确认<code>StoreControllerViewIntegrationTest</code>仍然返回
+   201/200 用于创建/更新，证明幸福路径没有丢失。
+5.删除后运行<code>composer phpstan</code>和<code>composer rector:types:check</code>；不允许 <code>src/</code> 进行更改
+   此次审计。</li>
 </ol>
 
 

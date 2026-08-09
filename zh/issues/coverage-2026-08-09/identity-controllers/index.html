@@ -27,7 +27,7 @@
     
     
       
-        <title>身份 — 控制器/OTP 服务/创建用户命令覆盖率约 100% 和错误报告 - CRUD Skeleton</title>
+        <title>Identity — controllers / OTP service / create-user command coverage to ~100% & bug report - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#otp-100" class="md-skip">
+        <a href="#identity-controllers-otp-service-create-user-command-coverage-to-100-bug-report" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              身份 — 控制器/OTP 服务/创建用户命令覆盖率约 100% 和错误报告
+              Identity — controllers / OTP service / create-user command coverage to ~100% &amp; bug report
             
           </span>
         </div>
@@ -1478,22 +1478,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#coverage-before-after" class="md-nav__link">
     <span class="md-ellipsis">
       
-        之前→之后的覆盖范围
+        Coverage before → after
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="之前→之后的覆盖范围">
+    <nav class="md-nav" aria-label="Coverage before → after">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#measurement-command" class="md-nav__link">
     <span class="md-ellipsis">
       
-        测量命令
+        Measurement command
       
     </span>
   </a>
@@ -1506,10 +1506,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#26-22-4" class="md-nav__link">
+  <a href="#test-files-added-26-tests-22-passing-4-skipped" class="md-nav__link">
     <span class="md-ellipsis">
       
-        添加测试文件（26 个测试：22 个通过 + 4 个跳过）
+        Test files added (26 tests: 22 passing + 4 skipped)
       
     </span>
   </a>
@@ -1517,22 +1517,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#bugs-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        发现错误
+        Bugs found
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="发现错误">
+    <nav class="md-nav" aria-label="Bugs found">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-a-json_decode-json_throw_on_error-http-500" class="md-nav__link">
+  <a href="#bug-a-unguarded-json_decode-json_throw_on_error-http-500-on-emptymalformed-bodies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug A — 不受保护的 json_decode(..., JSON_THROW_ON_ERROR) → 空/格式错误的主体上的 HTTP 500
+        Bug A — unguarded json_decode(..., JSON_THROW_ON_ERROR) → HTTP 500 on empty/malformed bodies
       
     </span>
   </a>
@@ -1540,10 +1540,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-b-verify_phone-phone_verifiedtrue" class="md-nav__link">
+  <a href="#bug-b-verify_phone-reports-phone_verifiedtrue-for-phone-numbers-with-no-user-account" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug B — verify_phone 报告没有用户帐户的电话号码的 phone_verified=true
+        Bug B — verify_phone reports phone_verified=true for phone numbers with no user account
       
     </span>
   </a>
@@ -1554,7 +1554,7 @@
   <a href="#bug-c-otpservicemaskphone" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug C — OtpService::maskPhone() 在日志中泄露短电话号码
+        Bug C — OtpService::maskPhone() 泄露日志中的短电话号码
       
     </span>
   </a>
@@ -1584,10 +1584,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-f-minor-robustness-createusercommand-drops-a-non-array-role-value" class="md-nav__link">
+  <a href="#bug-f-createusercommand-role" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug F (minor / robustness) — CreateUserCommand drops a non-array --role value
+        Bug F（次要/稳健性）- CreateUserCommand 删除非数组 --role 值
       
     </span>
   </a>
@@ -1600,10 +1600,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#skipped-tests-all-keep-the-suite-green" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Skipped tests (all keep the suite green)
+        跳过测试（全部保持套件绿色）
       
     </span>
   </a>
@@ -1611,10 +1611,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#result" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Result
+        结果
       
     </span>
   </a>
@@ -1641,64 +1641,64 @@
   
 
 
-<h1 id="otp-100">身份 — 控制器/OTP 服务/创建用户命令覆盖率约 100% 和错误报告<a class="headerlink" href="#otp-100" title="Permanent link">&para;</a></h1>
+<h1 id="identity-controllers-otp-service-create-user-command-coverage-to-100-bug-report">Identity — controllers / OTP service / create-user command coverage to ~100% &amp; bug report<a class="headerlink" href="#identity-controllers-otp-service-create-user-command-coverage-to-100-bug-report" title="Permanent link">&para;</a></h1>
 <ul>
-<li>日期：2026-08-09</li>
-<li>范围：<code>src/Identity/Controller/AuthController.php</code>、<code>src/Identity/Controller/OtpController.php</code>、<code>src/Identity/Service/OtpService.php</code>、<code>src/Identity/Command/CreateUserCommand.php</code>、<code>src/Identity/Service/ProfileService.php</code></li>
-<li>任务：将线路覆盖率提高到 100% 并寻找错误。</li>
-<li>遵守约束：<strong><code>src/</code> 下没有任何内容被修改</strong> — 仅在 <code>tests/</code> 下添加了新的测试文件以及此报告。</li>
-<li>运行器：<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code>（PHP 8.5.1、PHPUnit 12.5.30）。</li>
+<li>Date: 2026-08-09</li>
+<li>Scope: <code>src/Identity/Controller/AuthController.php</code>, <code>src/Identity/Controller/OtpController.php</code>, <code>src/Identity/Service/OtpService.php</code>, <code>src/Identity/Command/CreateUserCommand.php</code>, <code>src/Identity/Service/ProfileService.php</code></li>
+<li>Task: raise line coverage to ~100% and hunt for bugs.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong> — only new test files added under <code>tests/</code> plus this report.</li>
+<li>Runner: <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code> (PHP 8.5.1, PHPUnit 12.5.30).</li>
 </ul>
-<h2 id="_1">之前→之后的覆盖范围<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>来自 <code>var/uncovered-map.txt</code> / <code>var/coverage2/</code> HTML 的基线（2026 年 8 月 9 日生成，全套）。
-After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
-（参见下面的“测量命令”）。</p>
+<h2 id="coverage-before-after">Coverage before → after<a class="headerlink" href="#coverage-before-after" title="Permanent link">&para;</a></h2>
+<p>Baseline from <code>var/uncovered-map.txt</code> / <code>var/coverage2/</code> HTML (generated 2026-08-09, full suite).
+After = measured with Xdebug + Clover against the combined existing + new tests for these classes
+(see "Measurement command" below).</p>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>之前</th>
-<th>之后</th>
-<th>剩余未覆盖线路</th>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
+<th>Remaining uncovered lines</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Identity/Controller/OtpController.php</code></td>
-<td>86.05%（第 42、53、65、69、73、79 行）</td>
+<td>86.05% (lines 42, 53, 65, 69, 73, 79)</td>
 <td><strong>100%</strong> (43/43)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Controller/AuthController.php</code></td>
-<td>93.46%（第 280、294、295、296、297、300、387 行）</td>
+<td>93.46% (lines 280, 294, 295, 296, 297, 300, 387)</td>
 <td><strong>100%</strong> (107/107)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Service/OtpService.php</code></td>
-<td>93.75%（第 111、112、115 行）</td>
+<td>93.75% (lines 111, 112, 115)</td>
 <td><strong>100%</strong> (48/48)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Command/CreateUserCommand.php</code></td>
-<td>94.37%（第 83、85、137、143 行）</td>
+<td>94.37% (lines 83, 85, 137, 143)</td>
 <td><strong>100%</strong> (71/71)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Service/ProfileService.php</code></td>
-<td>已 100%（0 未覆盖）</td>
+<td>already 100% (0 uncovered)</td>
 <td><strong>100%</strong> (8/8)</td>
 <td>—</td>
 </tr>
 </tbody>
 </table>
-<p><code>refresh()</code> 成功主体（AuthController 第 341-345 行）由
-全套中现有的<code>AuthIntegrationTest::testFullAuthFlow</code>；单元测试
-无论如何都添加了，所以该类在单元测试下也是 100% 的。</p>
-<h3 id="_2">测量命令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>The <code>refresh()</code> success body (AuthController lines 341–345) is covered by the
+existing <code>AuthIntegrationTest::testFullAuthFlow</code> in the full suite; a unit test
+was added anyway so the class is 100% under unit tests too.</p>
+<h3 id="measurement-command">Measurement command<a class="headerlink" href="#measurement-command" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/phpunit \
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  tests/Identity/Controller/AuthControllerTest.php \
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  tests/Identity/Controller/OtpControllerTest.php \
@@ -1716,63 +1716,63 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  --coverage-filter src/Identity/Service/ProfileService.php \
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  --coverage-clover /tmp/cov-run/clover.xml
 </code></pre></div>
-<h2 id="26-22-4">添加测试文件（26 个测试：22 个通过 + 4 个跳过）<a class="headerlink" href="#26-22-4" title="Permanent link">&para;</a></h2>
+<h2 id="test-files-added-26-tests-22-passing-4-skipped">Test files added (26 tests: 22 passing + 4 skipped)<a class="headerlink" href="#test-files-added-26-tests-22-passing-4-skipped" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>测试</th>
-<th>目的</th>
+<th>File</th>
+<th>Tests</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Identity/Controller/OtpControllerCoverageTest.php</code></td>
-<td>8（+1 跳过）</td>
-<td>requestOtp 目的无效 (42)、requestOtp 204 (53)、verifyOtp 缺少电话/otp (65)、verifyOtp 目的无效 (69)、verifyOtp 无效 OTP (73)、verifyOtp 登录未知用户/未验证电话 (79)、verify_phone 未知用户分支；跳过 Bug A 重现。</td>
+<td>8 (+1 skipped)</td>
+<td>requestOtp invalid purpose (42), requestOtp 204 (53), verifyOtp missing phone/otp (65), verifyOtp invalid purpose (69), verifyOtp invalid OTP (73), verifyOtp login unknown user / unverified phone (79), verify_phone unknown-user branch; skipped Bug A repro.</td>
 </tr>
 <tr>
 <td><code>tests/Identity/Controller/AuthControllerCoverageTest.php</code></td>
-<td>8（+2 跳过）</td>
-<td>verifyOtp 登录未验证/未知 (280)、verifyOtp verify_phone flag+flush (294–297, 300)、verifyOtp verify_phone 未知用户 (300)、使用非数组 JSON 正文注销 (387)、使用已验证的手机登录 → 令牌、刷新成功 → 旋转令牌 (341–345)；跳过 Bug A + Bug D 重现。</td>
+<td>8 (+2 skipped)</td>
+<td>verifyOtp login unverified/unknown (280), verifyOtp verify_phone flag+flush (294–297, 300), verifyOtp verify_phone unknown user (300), logout with non-array JSON body (387), login with verified phone → tokens, refresh success → rotated tokens (341–345); skipped Bug A + Bug D repros.</td>
 </tr>
 <tr>
 <td><code>tests/Identity/Service/OtpServiceCoverageTest.php</code></td>
 <td>3</td>
-<td>私有 <code>maskPhone()</code> (111, 112, 115) 通过公共 <code>generateAndSend()</code>/<code>verify()</code> 使用真正的 PSR 记录器执行，捕获日志上下文中的屏蔽 <code>phone</code>（长电话 → <code>+86****5678</code>，4 字符电话 → <code>***</code>，最大尝试日志路径）。</td>
+<td>private <code>maskPhone()</code> (111, 112, 115) exercised through public <code>generateAndSend()</code>/<code>verify()</code> with a real PSR logger, capturing the masked <code>phone</code> in the log context (long phone → <code>+86****5678</code>, 4-char phone → <code>***</code>, max-attempts log path).</td>
 </tr>
 <tr>
 <td><code>tests/Identity/Command/CreateUserCommandCoverageTest.php</code></td>
-<td>4（+1 跳过）</td>
-<td>用户名已存在失败 (83, 85); NormalizeRoles 跳过非字符串/空角色值 (137)；带有空段的逗号分隔角色 (143)；无电话/无角色创建；跳过 Bug E 重现。</td>
+<td>4 (+1 skipped)</td>
+<td>username-already-exists failure (83, 85); normalizeRoles skips non-string/empty role values (137); comma-separated roles with empty segments (143); no-phone/no-role creation; skipped Bug E repro.</td>
 </tr>
 </tbody>
 </table>
-<p>现有的 <code>tests/Identity/**</code> 未受影响；不需要新的数据库/集成测试 -
-所有新的覆盖范围都是与被嘲笑的合作者进行的纯单元测试。</p>
-<h2 id="_3">发现错误<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h3 id="bug-a-json_decode-json_throw_on_error-http-500">Bug A — 不受保护的 <code>json_decode(..., JSON_THROW_ON_ERROR)</code> → 空/格式错误的主体上的 HTTP 500<a class="headerlink" href="#bug-a-json_decode-json_throw_on_error-http-500" title="Permanent link">&para;</a></h3>
+<p>Existing <code>tests/Identity/**</code> untouched; no new DB/integration tests were needed —
+all new coverage is pure unit tests with mocked collaborators.</p>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-a-unguarded-json_decode-json_throw_on_error-http-500-on-emptymalformed-bodies">Bug A — unguarded <code>json_decode(..., JSON_THROW_ON_ERROR)</code> → HTTP 500 on empty/malformed bodies<a class="headerlink" href="#bug-a-unguarded-json_decode-json_throw_on_error-http-500-on-emptymalformed-bodies" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>AuthController.php</code> 73（登录）、134（注册）、331（刷新）、385（注销）； <code>OtpController.php</code> 33 (requestOtp), 59 (verifyOtp)。</li>
-<li><strong>描述：</strong> 每个 JSON 端点都使用 <code>JSON_THROW_ON_ERROR</code> 解码原始正文，并且不保护丢失/空/格式错误的正文。 <code>json_decode('', …)</code> 抛出 <code>JsonException</code> （已验证：<code>JsonException: Syntax error</code>）。只有 <code>logout()</code> 保护<em>空</em>主体（<code>$content === '' ? [] : …</code>，第 385 行），但 <strong>非空的畸形</strong>主体仍然会抛出异常。</li>
-<li><strong>影响：</strong> 不发送正文或格式错误的 JSON 的客户端会收到未捕获的 <code>JsonException</code> （HTTP 500 / 错误页面），而不是受控的 <code>400</code>；可能会泄漏非产品中的异常详细信息。所有六个 OTP/登录/注册/刷新/注销入口点都会受到影响。</li>
-<li><strong>复制：</strong> <code>POST /api/auth/otp/request</code> 带空主体，或 <code>POST /api/auth/logout</code> 带主体 <code>{oops</code> → <code>JsonException</code> 从控制器中冒泡。</li>
-<li><strong>建议的修复：</strong> 将解码包装在 <code>try/catch (\JsonException)</code> 中（或在非抛出解码后验证 <code>json_last_error()</code>）并返回 <code>$this-&gt;error(..., 400)</code>；对于 <code>logout()</code> 也将防护扩展到非空畸形体。</li>
-<li><strong>测试：</strong> <code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code> 和 <code>AuthControllerCoverageTest::testLogoutWithMalformedJsonShouldNotThrow</code> 被 <strong>跳过</strong>（它们断言固定的 400/204 行为；当前的 src 抛出）。保留在套房中以保护未来的修复。</li>
+<li><strong>Files/lines:</strong> <code>AuthController.php</code> 73 (login), 134 (register), 331 (refresh), 385 (logout); <code>OtpController.php</code> 33 (requestOtp), 59 (verifyOtp).</li>
+<li><strong>Description:</strong> every JSON endpoint decodes the raw body with <code>JSON_THROW_ON_ERROR</code> and no guard for a missing/empty/malformed body. <code>json_decode('', …)</code> throws <code>JsonException</code> (verified: <code>JsonException: Syntax error</code>). Only <code>logout()</code> guards the <em>empty</em> body (<code>$content === '' ? [] : …</code>, line 385), but a <strong>non-empty malformed</strong> body still throws.</li>
+<li><strong>Impact:</strong> a client that sends no body or malformed JSON gets an uncaught <code>JsonException</code> (HTTP 500 / error page) instead of a controlled <code>400</code>; potentially leaks exception details in non-prod. All six OTP/login/register/refresh/logout entry points are affected.</li>
+<li><strong>Reproduction:</strong> <code>POST /api/auth/otp/request</code> with empty body, or <code>POST /api/auth/logout</code> with body <code>{oops</code> → <code>JsonException</code> bubbles out of the controller.</li>
+<li><strong>Proposed fix:</strong> wrap the decode in a <code>try/catch (\JsonException)</code> (or validate <code>json_last_error()</code> after a non-throwing decode) and return <code>$this-&gt;error(..., 400)</code>; for <code>logout()</code> extend the guard to non-empty malformed bodies as well.</li>
+<li><strong>Tests:</strong> <code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code> and <code>AuthControllerCoverageTest::testLogoutWithMalformedJsonShouldNotThrow</code> are <strong>skipped</strong> (they assert the fixed 400/204 behavior; the current src throws). Kept in the suite to guard the future fix.</li>
 </ul>
-<h3 id="bug-b-verify_phone-phone_verifiedtrue">Bug B — <code>verify_phone</code> 报告没有用户帐户的电话号码的 <code>phone_verified=true</code><a class="headerlink" href="#bug-b-verify_phone-phone_verifiedtrue" title="Permanent link">&para;</a></h3>
+<h3 id="bug-b-verify_phone-reports-phone_verifiedtrue-for-phone-numbers-with-no-user-account">Bug B — <code>verify_phone</code> reports <code>phone_verified=true</code> for phone numbers with no user account<a class="headerlink" href="#bug-b-verify_phone-reports-phone_verifiedtrue-for-phone-numbers-with-no-user-account" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>AuthController.php</code> 294–300； <code>OtpController.php</code> 93–99。</li>
 <li><strong>描述：</strong>成功进行带有 <code>verify_phone</code> 目的的 OTP 验证后，控制器会查找用户，并且仅在用户存在时保留该标志，<strong>但始终</strong>返回 <code>['phone_verified' =&gt; true]</code> — 即使 <code>findByPhone()</code> 返回 <code>null</code> 时也是如此。 <code>login</code> 的目的不一致：它为缺失/未经验证的用户返回 <code>401</code>。</li>
-<li><strong>影响：</strong> 客户端被告知手机已验证，但没有任何结果；此后，用户仍将在 OTP 登录（或任何电话验证门）时被阻止。谎言只能被客户端察觉（重复请求会重新发出 OTP）。次要但不正确的成功合同。</li>
+<li><strong>影响：</strong> 客户端被告知手机已经过验证，但没有任何结果；此后，用户仍将在 OTP 登录（或任何电话验证门）时被阻止。谎言只能被客户端察觉（重复请求会重新发出 OTP）。次要但不正确的成功合同。</li>
 <li><strong>复制：</strong> (1) 为任何没有帐户的手机请求 <code>verify_phone</code> OTP（requestOtp 不检查是否存在），(2) 验证它→ HTTP 200 <code>{"phone_verified": true}</code>，即使没有更新任何行。</li>
 <li><strong>建议的修复：</strong> 当 <code>findByPhone()</code> 没有为 <code>verify_phone</code> 生成用户时，返回 <code>404</code>/<code>401</code>，或者记录响应故意不透明（反用户枚举），并为未知电话返回中性消息，同时仅针对已知电话保留。请注意，当前行为是<em>可观察的</em>（它永远不会透露用户是否存在），因此如果这是意图，它至少应该与 <code>login</code> 目的一致。</li>
-<li><strong>测试：</strong> <code>OtpControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> 和 <code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> <strong>描述</strong>当前行为（它们通过）并将其固定在报告中。</li>
+<li><strong>测试：</strong> <code>OtpControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> 和 <code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> <strong>描述</strong>当前行为（它们通过）并在报告中将其固定下来。</li>
 </ul>
-<h3 id="bug-c-otpservicemaskphone">Bug C — <code>OtpService::maskPhone()</code> 在日志中泄露短电话号码<a class="headerlink" href="#bug-c-otpservicemaskphone" title="Permanent link">&para;</a></h3>
+<h3 id="bug-c-otpservicemaskphone">Bug C — <code>OtpService::maskPhone()</code> 泄露日志中的短电话号码<a class="headerlink" href="#bug-c-otpservicemaskphone" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>OtpService.php</code> 109–116 (<code>maskPhone</code>)。</li>
-<li><strong>说明：</strong> 对于任何长度超过 4 个字符的电话，<code>maskPhone()</code> 返回 <code>mb_substr($phone, 0, 3) . '****' . mb_substr($phone, -4)</code>。对于长度为 5-7 的电话，两个子字符串<strong>覆盖每个数字</strong>（例如 <code>'12345'</code> → <code>'123****2345'</code>），因此“屏蔽”值是插入星号的完整数字。</li>
+<li><strong>描述：</strong> 对于任何长度超过 4 个字符的电话，<code>maskPhone()</code> 返回 <code>mb_substr($phone, 0, 3) . '****' . mb_substr($phone, -4)</code>。对于长度为 5-7 的电话，两个子字符串<strong>覆盖每个数字</strong>（例如 <code>'12345'</code> → <code>'123****2345'</code>），因此“屏蔽”值是插入星号的完整数字。</li>
 <li><strong>影响：</strong> 对于短电话号码（5-7 位数字 — 例如传统/短国家/地区号码），OTP 日志行 <code>[OTP] Sent … phone=…</code> 会将完整号码公开给具有日志访问权限的任何人。对于典型的 E.164 11-14 位数字，当前掩码很好 (<code>+86****5678</code>)。</li>
 <li><strong>复制：</strong> 使用记录器调用<code>generateAndSend('12345', …)</code>；日志上下文 <code>phone</code> 是 <code>'123****2345'</code>（所有五个数字都存在）。</li>
 <li><strong>建议的修复：</strong> 通过前 N 个和最后 N 个带有尺寸保护的掩模，例如当 <code>strlen &lt; 8</code> 时隐藏除第一个/最后两个字符之外的所有字符，或者重复使用像 <code>substr($phone,0,2).'****'.substr($phone,-2)</code> 这样的常量掩码，并另外确保至少一个掩码中间字符。</li>
@@ -1780,7 +1780,7 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 </ul>
 <h3 id="bug-d">Bug D — 具有纯数字用户名的用户永远无法使用其用户名登录<a class="headerlink" href="#bug-d" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>AuthController.php</code> 82–89（登录）；与<code>UserRepository::findByIdentifier()</code> (40–51) 交互，它<em>确实</em>处理电话标识符。</li>
+<li><strong>文件/行：</strong> <code>AuthController.php</code> 82–89（登录）；与<code>UserRepository::findByIdentifier()</code> (40–51)交互，它<em>确实</em>处理电话标识符。</li>
 <li><strong>描述：</strong> <code>login()</code> 通过 <code>findByPhone()</code> 路由与 <code>/^\+?[0-9]{7,20}$/</code> 匹配的每个标识符，并且永远不会回退到 <code>findByIdentifier()</code>。因此，<strong>用户名</strong>仅包含数字（注册允许任何非空用户名字符串，例如 <code>13800138000</code>）的用户永远无法使用该用户名进行身份验证 - <code>findByPhone()</code> 返回 <code>null</code> 并且代码返回 <code>401 Invalid credentials</code> 而无需查阅用户名索引。</li>
 <li><strong>影响：</strong> 具有数字用户名的帐户无法通过用户名登录；唯一的工作标识符是电子邮件（或他们的电话，如果设置+验证）。合法凭证的静默身份验证失败。</li>
 <li><strong>复制：</strong>注册<code>num@example.com</code> / 用户名<code>13800138000</code>； <code>POST /api/auth/login</code> 与 <code>identifier: '13800138000'</code>，正确的密码 → <code>401</code>（已验证：单元测试断言 <code>200</code> 因实际 <code>401</code> 而失败）。</li>
@@ -1789,60 +1789,60 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 </ul>
 <h3 id="bug-e-createusercommand">Bug E — <code>CreateUserCommand</code> 接受空电子邮件/用户名并创建损坏的帐户<a class="headerlink" href="#bug-e-createusercommand" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/lines:</strong> <code>CreateUserCommand.php</code> 70–86 (only the password is validated).</li>
-<li><strong>Description:</strong> the command validates that the password is non-empty (70–74) but never validates the email/username arguments. With <code>email: ''</code> the command proceeds: <code>findByEmail('')</code> → <code>null</code>, then persists a <code>User</code> with <code>email = ''</code> and returns <code>SUCCESS</code> (verified: <code>persist()</code> is called and the command exits 0). <code>getUserIdentifier()</code> then falls back to <code>'anonymous'</code>.</li>
-<li><strong>Impact:</strong> junk accounts with empty email/username; a second run with the same empty email hits the DB unique constraint and crashes with an uncaught <code>UniqueConstraintViolationException</code> instead of a friendly failure message.</li>
-<li><strong>Reproduction:</strong> <code>php bin/console app:identity:user:create '' emptymail 'Password123!'</code> → creates an account with <code>email=""</code> and exits 0.</li>
-<li><strong>Proposed fix:</strong> add guards mirroring the password check, e.g. <code>if ($email === '') { $io-&gt;error('Email cannot be empty.'); return Command::FAILURE; }</code> (and the same for username) before the repository lookups.</li>
-<li><strong>Tests:</strong> <code>CreateUserCommandCoverageTest::testExecuteWithEmptyEmailShouldFail</code> is <strong>skipped</strong> (asserts <code>Command::FAILURE</code> and no <code>persist</code>; current src persists and returns <code>SUCCESS</code>).</li>
+<li><strong>文件/行：</strong> <code>CreateUserCommand.php</code> 70–86（仅验证密码）。</li>
+<li><strong>说明：</strong> 该命令验证密码是否非空 (70–74)，但从不验证电子邮件/用户名参数。对于 <code>email: ''</code>，命令继续：<code>findByEmail('')</code> → <code>null</code>，然后将 <code>User</code> 与 <code>email = ''</code> 保持在一起并返回 <code>SUCCESS</code>（已验证：<code>persist()</code> 被调用并且命令退出 0）。 <code>getUserIdentifier()</code> 然后回退到 <code>'anonymous'</code>。</li>
+<li><strong>影响：</strong> 电子邮件/用户名为空的垃圾帐户；使用相同的空电子邮件进行第二次运行会遇到数据库唯一约束并崩溃，并显示未捕获的 <code>UniqueConstraintViolationException</code> 而不是友好的失败消息。</li>
+<li><strong>复制：</strong> <code>php bin/console app:identity:user:create '' emptymail 'Password123!'</code> → 使用 <code>email=""</code> 创建帐户并退出 0。</li>
+<li><strong>建议的修复：</strong> 添加镜像密码检查的守卫，例如<code>if ($email === '') { $io-&gt;error('Email cannot be empty.'); return Command::FAILURE; }</code> （与用户名相同）在存储库查找之前。</li>
+<li><strong>测试：</strong> <code>CreateUserCommandCoverageTest::testExecuteWithEmptyEmailShouldFail</code> 被 <strong>跳过</strong>（断言 <code>Command::FAILURE</code> 且无 <code>persist</code>；当前 src 保留并返回 <code>SUCCESS</code>）。</li>
 </ul>
-<h3 id="bug-f-minor-robustness-createusercommand-drops-a-non-array-role-value">Bug F (minor / robustness) — <code>CreateUserCommand</code> drops a non-array <code>--role</code> value<a class="headerlink" href="#bug-f-minor-robustness-createusercommand-drops-a-non-array-role-value" title="Permanent link">&para;</a></h3>
+<h3 id="bug-f-createusercommand-role">Bug F（次要/稳健性）- <code>CreateUserCommand</code> 删除非数组 <code>--role</code> 值<a class="headerlink" href="#bug-f-createusercommand-role" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>CreateUserCommand.php</code> 94–96 (<code>$roleInputs = is_array($rolesOption) ? $rolesOption : []</code>).</li>
-<li><strong>Description:</strong> when <code>getOption('role')</code> is not an array the roles are silently discarded. The real CLI (<code>ArgvInput</code>) always normalizes a single <code>--role=X</code> into <code>['X']</code> for <code>VALUE_IS_ARRAY</code> options (verified), so normal usage is fine — but <code>CommandTester</code>/<code>ArrayInput</code> and any programmatic invocation that passes a plain string lose every role silently.</li>
-<li><strong>Impact:</strong> low; roles are silently ignored for callers that pass a string. Confusing when writing tests or embedding the command.</li>
-<li><strong>Reproduction:</strong> <code>new CommandTester($cmd)-&gt;execute([... '--role' =&gt; 'ROLE_EDITOR'])</code> → created user has only <code>ROLE_USER</code>.</li>
-<li><strong>Proposed fix:</strong> normalize defensively, e.g. <code>$roleInputs = is_array($rolesOption) ? $rolesOption : [$rolesOption];</code> and filter non-strings (line 136 already skips them).</li>
-<li><strong>Tests:</strong> <code>CreateUserCommandCoverageTest::testExecuteSkipsNonStringAndEmptyRoleOptionValues</code> covers the skipping; the discrepancy is documented here, no test asserts the fixed behavior.</li>
+<li><strong>文件/行：</strong> <code>CreateUserCommand.php</code> 94–96 (<code>$roleInputs = is_array($rolesOption) ? $rolesOption : []</code>)。</li>
+<li><strong>描述：</strong> 当 <code>getOption('role')</code> 不是数组时，角色将被默默丢弃。真正的 CLI (<code>ArgvInput</code>) 总是将单个 <code>--role=X</code> 规范化为 <code>VALUE_IS_ARRAY</code> 选项的 <code>['X']</code>（已验证），因此正常使用没问题 — 但 <code>CommandTester</code>/<code>ArrayInput</code> 以及任何传递普通字符串的编程调用会默默地失去所有角色。</li>
+<li><strong>影响：</strong>低；对于传递字符串的调用者，角色将被默默忽略。编写测试或嵌入命令时会造成混乱。</li>
+<li><strong>复制：</strong> <code>new CommandTester($cmd)-&gt;execute([... '--role' =&gt; 'ROLE_EDITOR'])</code> → 创建的用户只有<code>ROLE_USER</code>。</li>
+<li><strong>建议的修复：</strong> 防御性正常化，例如<code>$roleInputs = is_array($rolesOption) ? $rolesOption : [$rolesOption];</code> 并过滤非字符串（第 136 行已经跳过它们）。</li>
+<li><strong>测试：</strong> <code>CreateUserCommandCoverageTest::testExecuteSkipsNonStringAndEmptyRoleOptionValues</code> 覆盖跳过；此处记录了差异，没有测试断言固定行为。</li>
 </ul>
-<h2 id="skipped-tests-all-keep-the-suite-green">Skipped tests (all keep the suite green)<a class="headerlink" href="#skipped-tests-all-keep-the-suite-green" title="Permanent link">&para;</a></h2>
+<h2 id="_1">跳过测试（全部保持套件绿色）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Test</th>
-<th>Bug</th>
-<th>Asserted (fixed) behavior</th>
+<th>测试</th>
+<th>错误</th>
+<th>断言（固定）行为</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code></td>
-<td>A</td>
-<td>malformed body → 400</td>
+<td>一个</td>
+<td>畸形身体 → 400</td>
 </tr>
 <tr>
 <td><code>AuthControllerCoverageTest::testLogoutWithMalformedJsonShouldNotThrow</code></td>
-<td>A</td>
-<td>malformed body → 204, no throw</td>
+<td>一个</td>
+<td>畸形体→204，禁止投掷</td>
 </tr>
 <tr>
 <td><code>AuthControllerCoverageTest::testLoginWithNumericUsernameShouldSucceed</code></td>
-<td>D</td>
-<td>numeric-username login → 200</td>
+<td>d</td>
+<td>数字用户名登录 → 200</td>
 </tr>
 <tr>
 <td><code>CreateUserCommandCoverageTest::testExecuteWithEmptyEmailShouldFail</code></td>
-<td>E</td>
-<td>empty email → <code>Command::FAILURE</code>, no persist</td>
+<td>电子</td>
+<td>空电子邮件 → <code>Command::FAILURE</code>，不坚持</td>
 </tr>
 </tbody>
 </table>
-<p>Verified individually (un-skipped) that each of these fails against the current <code>src/</code>, then re-skipped.</p>
-<h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>
+<p>单独验证（未跳过）其中每个都针对当前 <code>src/</code> 失败，然后重新跳过。</p>
+<h2 id="_2">结果<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li>4 new test files, <strong>26 tests, 71 assertions, 4 documented skips, exit 0</strong> (no deprecations/notices/warnings).</li>
-<li>All five target files now at <strong>100% line coverage</strong> (measured with Xdebug + Clover on the combined existing + new tests).</li>
-<li>6 findings documented (Bugs A–F), none fixed (per constraint — no <code>src/</code> changes).</li>
+<li>4 个新测试文件，<strong>26 个测试，71 个断言，4 个记录的跳过，退出 0</strong>（无弃用/通知/警告）。</li>
+<li>所有五个目标文件现在都处于 <strong>100% 行覆盖率</strong>（使用 Xdebug + Clover 在现有 + 新测试的组合上进行测量）。</li>
+<li>记录了 6 个发现（Bug A–F），没有固定（每个约束 - 没有 <code>src/</code> 更改）。</li>
 </ul>
 
 

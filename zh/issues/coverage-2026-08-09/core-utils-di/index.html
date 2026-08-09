@@ -27,7 +27,7 @@
     
     
       
-        <title>Core Utils / DependencyInjection / Serializer Normalizer — Coverage & Bug Report - CRUD Skeleton</title>
+        <title>Core Utils / DependencyInjection / Serializer Normalizer - 覆盖范围和错误报告 - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#core-utils-dependencyinjection-serializer-normalizer-coverage-bug-report" class="md-skip">
+        <a href="#core-utils-dependencyinjection-serializer-normalizer-" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Core Utils / DependencyInjection / Serializer Normalizer — Coverage &amp; Bug Report
+              Core Utils / DependencyInjection / Serializer Normalizer - 覆盖范围和错误报告
             
           </span>
         </div>
@@ -1478,10 +1478,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#test-files-added" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test files added
+        添加测试文件
       
     </span>
   </a>
@@ -1489,10 +1489,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage-results" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Coverage results
+        覆盖结果
       
     </span>
   </a>
@@ -1500,22 +1500,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bugs-found" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bugs found
+        发现错误
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Bugs found">
+    <nav class="md-nav" aria-label="发现错误">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-r-1-rsa-signatures-use-cryptographically-broken-md5-critical" class="md-nav__link">
+  <a href="#bug-r-1-rsa-md5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug R-1 — RSA signatures use cryptographically broken MD5 (CRITICAL)
+        Bug R-1 — RSA 签名使用加密损坏的 MD5（严重）
       
     </span>
   </a>
@@ -1523,10 +1523,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-r-2-sign-base64-encodes-an-undefined-variable-when-openssl_sign-fails-high" class="md-nav__link">
+  <a href="#bug-r-2-openssl_sign-sign-base64" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug R-2 — sign() base64-encodes an undefined variable when openssl_sign() fails (HIGH)
+        Bug R-2 — 当 openssl_sign() 失败时，sign() 对未定义的变量进行 base64 编码（高）
       
     </span>
   </a>
@@ -1534,10 +1534,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-r-3-getsigncontent-string-casts-arbitrary-values-medium" class="md-nav__link">
+  <a href="#bug-r-3-getsigncontent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug R-3 — getSignContent() string-casts arbitrary values (MEDIUM)
+        Bug R-3 — getSignContent() 字符串转换任意值（中）
       
     </span>
   </a>
@@ -1649,7 +1649,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         仍然存在未覆盖的线（都是故意的）
@@ -1660,7 +1660,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         跳过的项目
@@ -1671,7 +1671,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         命令参考
@@ -1701,96 +1701,96 @@
   
 
 
-<h1 id="core-utils-dependencyinjection-serializer-normalizer-coverage-bug-report">Core Utils / DependencyInjection / Serializer Normalizer — Coverage &amp; Bug Report<a class="headerlink" href="#core-utils-dependencyinjection-serializer-normalizer-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<h1 id="core-utils-dependencyinjection-serializer-normalizer-">Core Utils / DependencyInjection / Serializer Normalizer - 覆盖范围和错误报告<a class="headerlink" href="#core-utils-dependencyinjection-serializer-normalizer-" title="Permanent link">&para;</a></h1>
 <ul>
-<li>Date: 2026-08-09</li>
-<li>Scope: <code>src/Core/Utils/{RsaClient,Location,Math,Inflect}.php</code>, <code>src/Core/DependencyInjection/{Configuration,CoreExtension}.php</code>, <code>src/Core/Serializer/Normalizer/CircularReferenceHandler.php</code></li>
-<li>Task: raise line coverage to ~100% and find bugs.</li>
-<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+<li>日期：2026-08-09</li>
+<li>范围：<code>src/Core/Utils/{RsaClient,Location,Math,Inflect}.php</code>、<code>src/Core/DependencyInjection/{Configuration,CoreExtension}.php</code>、<code>src/Core/Serializer/Normalizer/CircularReferenceHandler.php</code></li>
+<li>任务：将线路覆盖率提高到约 100% 并查找错误。</li>
+<li>遵守约束：<strong><code>src/</code> 下的任何内容均未修改</strong>。仅添加了 <code>tests/</code> 下的新测试文件和此报告。</li>
 </ul>
-<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
-<p>All use <code>declare(strict_types=1);</code> and <code>extends \PHPUnit\Framework\TestCase</code> (pure unit tests, no DB):</p>
+<h2 id="_1">添加测试文件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>全部使用<code>declare(strict_types=1);</code>和<code>extends \PHPUnit\Framework\TestCase</code>（纯单元测试，无DB）：</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Class under test</th>
-<th>What it covers</th>
+<th>文件</th>
+<th>被测类</th>
+<th>它涵盖什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Core/Utils/RsaClientTest.php</code></td>
 <td><code>RsaClient</code></td>
-<td>Real RSA key pairs generated with <code>openssl_pkey_new()</code> and injected through the public key properties. Covers <code>rsaSign</code>/<code>rsaVerifySign</code>, <code>sign</code>/<code>verifySign</code>, <code>getSignContent</code> (ksort + empty-value skipping), <code>checkEmpty</code>, <code>getPrivateKey</code>/<code>getPublicKey</code> happy + bad paths (inline PEM, raw-base64 wrapping, file path, missing file → <code>false</code>), <code>getPrivateKenLen</code>/<code>getPublicKenLen</code>, and full encrypt/decrypt round trips plus non-string/missing-key error returns.</td>
+<td>使用 <code>openssl_pkey_new()</code> 生成并通过公钥属性注入的真实 RSA 密钥对。涵盖 <code>rsaSign</code>/<code>rsaVerifySign</code>、<code>sign</code>/<code>verifySign</code>、<code>getSignContent</code>（ksort + 空值跳过）、<code>checkEmpty</code>、<code>getPrivateKey</code>/<code>getPublicKey</code> 快乐 + 错误路径（内联 PEM、原始 Base64 包装、文件路径、丢失文件 → <code>false</code>）、<code>getPrivateKenLen</code>/<code>getPublicKenLen</code> 以及完整加密/解密往返以及返回非字符串/缺失键错误。</td>
 </tr>
 <tr>
 <td><code>tests/Core/Utils/LocationTest.php</code></td>
 <td><code>Location</code></td>
-<td>Drives <code>getLocation</code>/<code>getDistance</code> (success + <code>\ErrorException</code> catch paths) through a <strong>test-only stub of <code>Curl\Curl</code></strong> (see Testability note).</td>
+<td>通过 <code>Curl\Curl</code><strong> 的 </strong>仅测试存根驱动 <code>getLocation</code>/<code>getDistance</code> （成功 + <code>\ErrorException</code> 捕获路径）（请参阅可测试性说明）。</td>
 </tr>
 <tr>
 <td><code>tests/Core/Utils/MathCoverageTest.php</code></td>
 <td><code>Math</code></td>
-<td><code>acosh</code>, <code>asinh</code>, <code>atanh</code>, <code>getrandmax</code>, <code>mt_getrandmax</code>, <code>mt_srand</code>, <code>srand</code> (seed determinism).</td>
+<td><code>acosh</code>、<code>asinh</code>、<code>atanh</code>、<code>getrandmax</code>、<code>mt_getrandmax</code>、<code>mt_srand</code>、<code>srand</code>（种子决定论）。</td>
 </tr>
 <tr>
 <td><code>tests/Core/Utils/InflectCoverageTest.php</code></td>
 <td><code>Inflect</code></td>
-<td><code>singularize()</code> fall-through branch (word matching no rule); confirms <code>pluralize()</code> catch-all.</td>
+<td><code>singularize()</code> 落入分支（没有规则匹配的单词）；确认 <code>pluralize()</code> 包罗万象。</td>
 </tr>
 <tr>
 <td><code>tests/Core/DependencyInjection/ConfigurationTest.php</code></td>
 <td><code>Configuration</code></td>
-<td><code>getConfigTreeBuilder()</code> returns a <code>TreeBuilder('core')</code>, root named <code>core</code>, empty config processes to <code>[]</code>, unknown options rejected.</td>
+<td><code>getConfigTreeBuilder()</code> 返回一个 <code>TreeBuilder('core')</code>，根名为 <code>core</code>，空配置进程到 <code>[]</code>，未知选项被拒绝。</td>
 </tr>
 <tr>
 <td><code>tests/Core/DependencyInjection/CoreExtensionTest.php</code></td>
 <td><code>CoreExtension</code></td>
-<td><code>load([], new ContainerBuilder())</code> loads <code>services.yaml</code>, registers all 6 service definitions, carries correct class/tag/decorator metadata, idempotent across repeated <code>load()</code>.</td>
+<td><code>load([], new ContainerBuilder())</code>加载<code>services.yaml</code>，注册所有6个服务定义，携带正确的类/标签/装饰器元数据，在重复的<code>load()</code>之间幂等。</td>
 </tr>
 <tr>
 <td><code>tests/Core/Serializer/Normalizer/CircularReferenceHandlerTest.php</code></td>
 <td><code>CircularReferenceHandler</code></td>
-<td>scalar id → <code>['id'=&gt;…]</code>, non-scalar id (object/array) → <code>null</code>, missing <code>getId</code> → <code>\Exception</code>.</td>
+<td>标量 id → <code>['id'=&gt;…]</code>，非标量 id（对象/数组）→ <code>null</code>，缺少 <code>getId</code> → <code>\Exception</code>。</td>
 </tr>
 </tbody>
 </table>
-<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
-<p>Baseline from <code>var/uncovered-map.txt</code> vs. status after the new tests (verified with <code>phpunit --coverage-html</code> on the affected files):</p>
+<h2 id="_2">覆盖结果<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><code>var/uncovered-map.txt</code> 的基线与新测试后的状态（在受影响的文件上使用 <code>phpunit --coverage-html</code> 进行验证）：</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Baseline uncovered</th>
-<th>After</th>
-<th>Notes</th>
+<th>文件</th>
+<th>基线未发现</th>
+<th>之后</th>
+<th>笔记</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Utils/RsaClient</code></td>
-<td>0% (~110 lines)</td>
+<td>0%（~110 行）</td>
 <td><strong>90.13% (137/152)</strong></td>
-<td>remaining 15 lines are deprecated or unreachable (see below)</td>
+<td>其余 15 行已弃用或无法访问（见下文）</td>
 </tr>
 <tr>
 <td><code>Utils/Location</code></td>
 <td>0% (15,18–24,30,33–39,44–45,47,50–56)</td>
 <td><strong>69.57% (16/23)</strong></td>
-<td>remaining 7 lines all belong to broken <code>getAddress</code> (Bug L-2)</td>
+<td>剩下的 7 行都属于损坏的 <code>getAddress</code> (Bug L-2)</td>
 </tr>
 <tr>
 <td><code>Utils/Math</code></td>
 <td>53,55,58,72,78,84,85,86,91,102</td>
 <td><strong>95.16% (59/62)</strong></td>
-<td>remaining 78, 85, 91 are a deprecation + two bugs (Bugs M-1/M-2)</td>
+<td>其余 78、85、91 是弃用 + 两个错误（错误 M-1/M-2）</td>
 </tr>
 <tr>
 <td><code>Utils/Inflect</code></td>
 <td>135, 158</td>
 <td><strong>95.65% (22/23)</strong></td>
-<td>remaining 135 is dead code (Bug I-1)</td>
+<td>剩余 135 是死代码（Bug I-1）</td>
 </tr>
 <tr>
 <td><code>DependencyInjection/Configuration</code></td>
@@ -1812,35 +1812,35 @@
 </tr>
 </tbody>
 </table>
-<p>Full new-test run: <strong>63 tests, 93 assertions, 0 failures/errors/notices/warnings/deprecations, 4 skipped</strong> (each skip documents a bug or an untestable line; see Skipped items).</p>
-<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
-<h3 id="bug-r-1-rsa-signatures-use-cryptographically-broken-md5-critical">Bug R-1 — RSA signatures use cryptographically broken MD5 (CRITICAL)<a class="headerlink" href="#bug-r-1-rsa-signatures-use-cryptographically-broken-md5-critical" title="Permanent link">&para;</a></h3>
+<p>完整的新测试运行：<strong>63 个测试，93 个断言，0 个失败/错误/通知/警告/弃用，4 个跳过</strong>（每个跳过记录一个错误或不可测试的行；请参阅跳过的项目）。</p>
+<h2 id="_3">发现错误<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="bug-r-1-rsa-md5">Bug R-1 — RSA 签名使用加密损坏的 MD5（严重）<a class="headerlink" href="#bug-r-1-rsa-md5" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Core/Utils/RsaClient.php:51</code> (<code>openssl_sign(..., OPENSSL_ALGO_MD5)</code>) and <code>:99</code> (<code>openssl_verify(..., OPENSSL_ALGO_MD5)</code>).</li>
-<li><strong>Description:</strong> all sign/verify operations use MD5 as the digest algorithm.</li>
-<li><strong>Impact:</strong> MD5 is broken (collision/forgery attacks); signatures are not tamper-proof. FIPS 140-2/3 environments typically disable MD5, so <code>openssl_sign</code>/<code>openssl_verify</code> fail silently in those environments. The class is a payment/RSA-signing helper, making this a security defect.</li>
-<li><strong>Reproduction:</strong> <code>(new RsaClient())</code> with a valid key — <code>openssl_get_md5_methods()</code> still lists <code>md5</code> on PHP 8.5 so it works, but only because the environment permits MD5.</li>
-<li><strong>Proposed fix:</strong> use <code>OPENSSL_ALGO_SHA256</code> (or <code>SHA-256</code> with the <code>openssl</code> CLI for compatible peers).</li>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:51</code> (<code>openssl_sign(..., OPENSSL_ALGO_MD5)</code>) 和 <code>:99</code> (<code>openssl_verify(..., OPENSSL_ALGO_MD5)</code>)。</li>
+<li><strong>说明：</strong> 所有签名/验证操作均使用 MD5 作为摘要算法。</li>
+<li><strong>影响：</strong> MD5被破坏（碰撞/伪造攻击）；签名不防篡改。 FIPS 140-2/3 环境通常会禁用 MD5，因此 <code>openssl_sign</code>/<code>openssl_verify</code> 在这些环境中会默默失败。该类是一个支付/RSA 签名助手，这使其成为一个安全缺陷。</li>
+<li><strong>复制：</strong> <code>(new RsaClient())</code> 具有有效的密钥 - <code>openssl_get_md5_methods()</code> 仍然在 PHP 8.5 上列出 <code>md5</code>，因此它可以工作，但只是因为环境允许 MD5。</li>
+<li><strong>建议的修复：</strong> 使用 <code>OPENSSL_ALGO_SHA256</code> （或使用 <code>SHA-256</code> 与 <code>openssl</code> CLI 兼容的对等点）。</li>
 </ul>
-<h3 id="bug-r-2-sign-base64-encodes-an-undefined-variable-when-openssl_sign-fails-high">Bug R-2 — <code>sign()</code> base64-encodes an undefined variable when <code>openssl_sign()</code> fails (HIGH)<a class="headerlink" href="#bug-r-2-sign-base64-encodes-an-undefined-variable-when-openssl_sign-fails-high" title="Permanent link">&para;</a></h3>
+<h3 id="bug-r-2-openssl_sign-sign-base64">Bug R-2 — 当 <code>openssl_sign()</code> 失败时，<code>sign()</code> 对未定义的变量进行 base64 编码（高）<a class="headerlink" href="#bug-r-2-openssl_sign-sign-base64" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Core/Utils/RsaClient.php:51-59</code>.</li>
-<li><strong>Description:</strong> <code>openssl_sign()</code>’s return value is ignored. When it fails (e.g. <code>getPrivateKey()</code> returned a truthy-but-invalid wrapped string, or the environment rejects MD5), <code>$sign</code> is never assigned and <code>base64_encode($sign)</code> at line 58 runs on an undefined variable.</li>
-<li><strong>Impact:</strong> PHP warning + a bogus signature (<code>base64_encode(null)</code>), silently masking the failure; with <code>failOnWarning</code> CI this is a hard failure at the call site.</li>
-<li><strong>Reproduction:</strong> <code>$c = new RsaClient(); $c-&gt;rsaPrivateKey = 'garbage'; echo $c-&gt;sign('data');</code> — <code>getPrivateKey()</code> wraps the garbage into a truthy PEM, <code>openssl_sign</code> returns <code>false</code>, <code>base64_encode($sign)</code> warns on undefined <code>$sign</code>.</li>
-<li><strong>Proposed fix:</strong>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:51-59</code>。</li>
+<li><strong>说明：</strong> <code>openssl_sign()</code>的返回值被忽略。当它失败时（例如 <code>getPrivateKey()</code> 返回一个真实但无效的包装字符串，或者环境拒绝 MD5），<code>$sign</code> 永远不会被分配，并且第 58 行的 <code>base64_encode($sign)</code> 在未定义的变量上运行。</li>
+<li><strong>影响：</strong> PHP警告+伪造签名（<code>base64_encode(null)</code>），默默掩盖失败；对于 <code>failOnWarning</code> CI，这是调用站点的硬故障。</li>
+<li><strong>复制：</strong> <code>$c = new RsaClient(); $c-&gt;rsaPrivateKey = 'garbage'; echo $c-&gt;sign('data');</code> — <code>getPrivateKey()</code> 将垃圾包装到真实的 PEM 中，<code>openssl_sign</code> 返回 <code>false</code>，<code>base64_encode($sign)</code> 对未定义的 <code>$sign</code> 发出警告。</li>
+<li><strong>建议的修复：</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">if (!openssl_sign((string) $data, $sign, $res, OPENSSL_ALGO_SHA256)) {</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">    return &#39;&#39;;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">}</span>
 </code></pre></div></li>
 </ul>
-<h3 id="bug-r-3-getsigncontent-string-casts-arbitrary-values-medium">Bug R-3 — <code>getSignContent()</code> string-casts arbitrary values (MEDIUM)<a class="headerlink" href="#bug-r-3-getsigncontent-string-casts-arbitrary-values-medium" title="Permanent link">&para;</a></h3>
+<h3 id="bug-r-3-getsigncontent">Bug R-3 — <code>getSignContent()</code> 字符串转换任意值（中）<a class="headerlink" href="#bug-r-3-getsigncontent" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Core/Utils/RsaClient.php:75</code> and <code>:77</code> (<code>$stringToBeSigned .= "$k" . "=" . "$v";</code>).</li>
-<li><strong>Description:</strong> interpolation casts every value to string. Arrays become the literal <code>Array</code> (plus a PHP warning); objects invoke <code>__toString()</code> or throw.</li>
-<li><strong>Impact:</strong> wrong signature content and/or warnings when a param value is non-scalar; signed payload no longer round-trips with the caller’s plain data.</li>
-<li><strong>Reproduction:</strong> <code>$c-&gt;getSignContent(['a' =&gt; ['nested']])</code> → <code>"a=Array"</code> + warning.</li>
-<li><strong>Proposed fix:</strong> validate that <code>$k</code>/<code>$v</code> are scalar (or JSON-encode complex values) before concatenation; at minimum check <code>is_scalar($v)</code>.</li>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:75</code> 和 <code>:77</code> (<code>$stringToBeSigned .= "$k" . "=" . "$v";</code>)。</li>
+<li><strong>描述：</strong>插值将每个值转换为字符串。数组变成文字 <code>Array</code> （加上 PHP 警告）；对象调用 <code>__toString()</code> 或抛出。</li>
+<li><strong>影响：</strong>当参数值是非标量时错误的签名内容和/或警告；签名的有效负载不再与调用者的纯数据进行往返。</li>
+<li><strong>复制：</strong> <code>$c-&gt;getSignContent(['a' =&gt; ['nested']])</code> → <code>"a=Array"</code> + 警告。</li>
+<li><strong>建议的修复：</strong> 在连接之前验证 <code>$k</code>/<code>$v</code> 是标量（或 JSON 编码的复杂值）；至少检查<code>is_scalar($v)</code>。</li>
 </ul>
 <h3 id="bug-r-4-openssl_free_key-php-80">Bug R-4 — <code>openssl_free_key()</code> 自 PHP 8.0（低）起已弃用<a class="headerlink" href="#bug-r-4-openssl_free_key-php-80" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1920,7 +1920,7 @@
 1. 通过构造函数/静态 setter 而不是 <code>new Curl()</code> 注入 HTTP 客户端（<code>Curl</code> 或 Symfony <code>HttpClientInterface</code>）。
 2. 使 API 基本 URL + 键可配置（构造函数或常量 → 参数），以便测试可以指向虚假端点。
 3. 返回类型化的 DTO/<code>null</code> 而不是原始 JSON 对象。</p>
-<h2 id="_1">仍然存在未覆盖的线（都是故意的）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_4">仍然存在未覆盖的线（都是故意的）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>RsaClient.php</code> 54, 55, 103, 104 — <code>openssl_free_key()</code> 自 PHP 8.0 起已弃用；覆盖会发出弃用信息（Bug R-4）。</li>
 <li><code>RsaClient.php</code> 230, 272, 313, 355 — <code>$partLen &lt; 1</code> 防护：需要 RSA 密钥 &lt; 88 位（加密）/ &lt; 8 位（解密）； <code>openssl_pkey_new()</code> 最小值为 512 位 → 无法访问。</li>
@@ -1931,14 +1931,14 @@
 <li><code>Inflect.php</code> 135 — 死代码（Bug I-1）。</li>
 <li><code>Location.php</code> 30, 33, 34, 35, 37, 38, 39 — 全部位于损坏的 <code>getAddress()</code> 内（Bug L-2）。</li>
 </ul>
-<h2 id="_2">跳过的项目<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_5">跳过的项目<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>MathCoverageTest::testMtRand</code> — <strong>skipped</strong> (<code>See report — bug M-1</code>)：断言正确的行为（<code>[0, max]</code>中的 int），该行为不能成立，因为 <code>Math::mt_rand()</code> 总是抛出 <code>ArgumentCountError</code>。</li>
 <li><code>MathCoverageTest::testRand</code> — <strong>跳过</strong> (<code>See report — bug M-1</code>)：与 <code>Math::rand()</code> 相同。</li>
 <li><code>MathCoverageTest::testLcgValue</code> — <strong>跳过</strong> (<code>See report — bug M-2</code>)：覆盖它会发出弃用信息。</li>
 <li><code>LocationTest::testGetAddressIsBrokenByStringMethodCall</code> — <strong>跳过</strong> (<code>See report — bug L-2</code>)：getAddress 已损坏；没有测试断言错误的行为。</li>
 </ul>
-<h2 id="_3">命令参考<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_6">命令参考<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># run all new tests for this scope</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>off<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>tests/Core/Utils/RsaClientTest.php<span class="w"> </span><span class="se">\</span>

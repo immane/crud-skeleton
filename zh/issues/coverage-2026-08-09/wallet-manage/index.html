@@ -27,7 +27,7 @@
     
     
       
-        <title>Wallet Manage — Coverage & Bug Report - CRUD Skeleton</title>
+        <title>钱包管理 — 覆盖范围和错误报告 - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#wallet-manage-coverage-bug-report" class="md-skip">
+        <a href="#_1" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Wallet Manage — Coverage &amp; Bug Report
+              钱包管理 — 覆盖范围和错误报告
             
           </span>
         </div>
@@ -1478,10 +1478,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-coverage-results" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Coverage results
+        1. 覆盖结果
       
     </span>
   </a>
@@ -1489,10 +1489,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-test-files-added-all-under-tests-all-green" class="md-nav__link">
+  <a href="#2tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Test files added (all under tests/, all green)
+        2.添加测试文件（全部在tests/下，全绿色）
       
     </span>
   </a>
@@ -1500,22 +1500,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-bugs-found-no-source-changes-made" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Bugs found (no source changes made)
+        3. 发现错误（未更改源代码）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. Bugs found (no source changes made)">
+    <nav class="md-nav" aria-label="3. 发现错误（未更改源代码）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-amount-is-silently-coerced-with-int-fractionalstring-amounts-truncated-medium" class="md-nav__link">
+  <a href="#bug-1-amount-int" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-1 — amount is silently coerced with (int) — fractional/string amounts truncated (Medium)
+        BUG-1 — amount 被 (int) 默默强制 — 小数/字符串金额被截断（中）
       
     </span>
   </a>
@@ -1523,10 +1523,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-http-status-derived-from-exception-message-text-str_ends_with-not-found-mediumlow" class="md-nav__link">
+  <a href="#bug-2-str_ends_with-not-found-http" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-2 — HTTP status derived from exception message text (str_ends_with(..., 'not found')) (Medium/Low)
+        BUG-2 — 从异常消息文本 (str_ends_with(..., 'not found')) 派生的 HTTP 状态（中/低）
       
     </span>
   </a>
@@ -1534,10 +1534,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-empty-treats-amount-0-as-missing-returning-the-wrong-validation-message-low" class="md-nav__link">
+  <a href="#bug-3-empty-amount-0" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-3 — empty() treats amount = 0 as "missing", returning the wrong validation message (Low)
+        BUG-3 — empty() 将 amount = 0 视为“缺失”，返回错误的验证消息（低）
       
     </span>
   </a>
@@ -1602,23 +1602,23 @@
   
 
 
-<h1 id="wallet-manage-coverage-bug-report">Wallet Manage — Coverage &amp; Bug Report<a class="headerlink" href="#wallet-manage-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<h1 id="_1">钱包管理 — 覆盖范围和错误报告<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <ul>
-<li>Date: 2026-08-09</li>
-<li>Scope: <code>src/Wallet/Controller/Manage/TransferController.php</code>, <code>src/Wallet/Service/WalletService.php</code> (last two uncovered Wallet files in <code>var/uncovered-map.txt</code>)</li>
-<li>Constraint honored: <strong>no <code>src/</code> files modified</strong> — only test files under <code>tests/</code> and this report were added.</li>
+<li>日期：2026-08-09</li>
+<li>范围：<code>src/Wallet/Controller/Manage/TransferController.php</code>、<code>src/Wallet/Service/WalletService.php</code>（<code>var/uncovered-map.txt</code>中最后两个未覆盖的钱包文件）</li>
+<li>遵守约束：<strong>未修改 <code>src/</code> 文件</strong> — 仅添加 <code>tests/</code> 下的测试文件和此报告。</li>
 </ul>
-<h2 id="1-coverage-results">1. Coverage results<a class="headerlink" href="#1-coverage-results" title="Permanent link">&para;</a></h2>
-<p>Coverage measured by running the full <code>tests/Wallet</code> suite with
-<code>--coverage-filter src/Wallet</code> (PHP 8.5.1, PHPUnit 12.5.30). The two files listed in
-<code>var/uncovered-map.txt</code> were the only remaining uncovered Wallet entries; both are now at 100%.</p>
+<h2 id="1">1. 覆盖结果<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>通过运行完整的 <code>tests/Wallet</code> 套件来测量覆盖率
+<code>--coverage-filter src/Wallet</code>（PHP 8.5.1、PHPUnit 12.5.30）。列出的两个文件
+<code>var/uncovered-map.txt</code> 是唯一剩余的未覆盖的钱包条目；现在两者都处于 100%。</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Before</th>
-<th>After</th>
-<th>Lines added</th>
+<th>文件</th>
+<th>之前</th>
+<th>之后</th>
+<th>添加行</th>
 </tr>
 </thead>
 <tbody>
@@ -1626,7 +1626,7 @@
 <td><code>src/Wallet/Controller/Manage/TransferController.php</code></td>
 <td>95.24%</td>
 <td><strong>100%</strong> (63/63)</td>
-<td>67, 106, 108</td>
+<td>67、106、108</td>
 </tr>
 <tr>
 <td><code>src/Wallet/Service/WalletService.php</code></td>
@@ -1636,53 +1636,53 @@
 </tr>
 </tbody>
 </table>
-<p>No other <code>Wallet/...</code> entries appear in <code>var/uncovered-map.txt</code> — the map was scanned and
-everything else (entities, repositories, <code>TransferService</code>, <code>TransactionService</code>, payment DTOs,
-App/Manage <code>WalletController</code>/<code>TransactionController</code>) was already fully covered.</p>
-<p>Full <code>tests/Wallet</code> suite result: <code>OK (182 tests, 524 assertions, 2 skipped)</code> — the 2 skipped
-belong to this report (below); pre-existing DB integration tests pass with no failures.</p>
-<h2 id="2-test-files-added-all-under-tests-all-green">2. Test files added (all under <code>tests/</code>, all green)<a class="headerlink" href="#2-test-files-added-all-under-tests-all-green" title="Permanent link">&para;</a></h2>
+<p><code>var/uncovered-map.txt</code> 中没有出现其他 <code>Wallet/...</code> 条目 — 地图已被扫描并且
+其他一切（实体、存储库、<code>TransferService</code>、<code>TransactionService</code>、支付 DTO、
+应用程序/管理<code>WalletController</code>/<code>TransactionController</code>）已经完全覆盖。</p>
+<p>完整的 <code>tests/Wallet</code> 套件结果：<code>OK (182 tests, 524 assertions, 2 skipped)</code> — 2 被跳过
+属于本报告（如下）；预先存在的数据库集成测试顺利通过。</p>
+<h2 id="2tests">2.添加测试文件（全部在<code>tests/</code>下，全绿色）<a class="headerlink" href="#2tests" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Coverage targeted</th>
-<th>Notes</th>
+<th>文件</th>
+<th>覆盖目标</th>
+<th>笔记</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Wallet/Controller/Manage/TransferControllerTest.php</code></td>
-<td><code>TransferController</code> lines 67, 106, 108 + full branch matrix</td>
-<td>24 tests; mocks <code>TransferServiceInterface</code> + <code>#[AllowMockObjectsWithoutExpectations]</code> + <code>setRequestStack/setSerializer/setTranslator</code> (Trade <code>OrderControllerTest</code> pattern). Covers create/deposit guard clauses (missing fields, non-positive/negative/non-numeric amount, invalid JSON), happy paths (asserts service receives int-cast wallet ids, response payload), and every exception branch: <code>InsufficientFundsException</code>→402, <code>WalletFrozenException</code>→403 (deposit 106), <code>SameWalletTransferException</code>→400, plain <code>\InvalidArgumentException</code>→400 (create 67, deposit 108), <code>RuntimeException</code> message-ending-in-<code>not found</code>→404, other <code>RuntimeException</code>→500.</td>
+<td><code>TransferController</code>第67、106、108行+全分支矩阵</td>
+<td>24 项测试；模拟 <code>TransferServiceInterface</code> + <code>#[AllowMockObjectsWithoutExpectations]</code> + <code>setRequestStack/setSerializer/setTranslator</code> （交易 <code>OrderControllerTest</code> 模式）。涵盖创建/存款保护条款（缺少字段、非正/负/非数字金额、无效 JSON）、愉快路径（断言服务接收 int-cast 钱包 ID、响应负载）以及每个异常分支：<code>InsufficientFundsException</code>→402、<code>WalletFrozenException</code>→403（存款 106）、<code>SameWalletTransferException</code>→400、普通 <code>\InvalidArgumentException</code>→400（创建 67、存款 108）、 <code>RuntimeException</code>消息结尾-<code>not found</code>→404，其他<code>RuntimeException</code>→500。</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/WalletServiceCoverageTest.php</code></td>
-<td><code>WalletService</code> line 148</td>
-<td>2 tests; the EM resolves a non-<code>WalletRepository</code> (plain <code>EntityRepository</code> mock — satisfies the declared <code>getRepository()</code> return type but fails the <code>instanceof</code> guard) so <code>getWalletRepository()</code> throws <code>LogicException('Wallet repository is not available.')</code>, exercised through both <code>verifyBalance()</code> and <code>reconcile()</code>.</td>
+<td><code>WalletService</code> 148 号线</td>
+<td>2 次测试； EM 解析非 <code>WalletRepository</code>（普通 <code>EntityRepository</code> 模拟 — 满足声明的 <code>getRepository()</code> 返回类型，但未通过 <code>instanceof</code> 防护），因此 <code>getWalletRepository()</code> 抛出 <code>LogicException('Wallet repository is not available.')</code>，通过 <code>verifyBalance()</code> 和 <code>reconcile()</code> 执行。</td>
 </tr>
 </tbody>
 </table>
-<p>Skipped tests: <strong>3</strong> — each is a correct-behavior test that fails against current <code>src/</code> and is
-therefore skipped to keep the suite green. See BUG-3 and BUG-4 below.</p>
-<h2 id="3-bugs-found-no-source-changes-made">3. Bugs found (no source changes made)<a class="headerlink" href="#3-bugs-found-no-source-changes-made" title="Permanent link">&para;</a></h2>
-<h3 id="bug-1-amount-is-silently-coerced-with-int-fractionalstring-amounts-truncated-medium">BUG-1 — <code>amount</code> is silently coerced with <code>(int)</code> — fractional/string amounts truncated (Medium)<a class="headerlink" href="#bug-1-amount-is-silently-coerced-with-int-fractionalstring-amounts-truncated-medium" title="Permanent link">&para;</a></h3>
+<p>跳过的测试： <strong>3</strong> — 每个都是正确行为测试，但针对当前 <code>src/</code> 失败，并且是
+因此跳过保持套件绿色。请参阅下面的 BUG-3 和 BUG-4。</p>
+<h2 id="3">3. 发现错误（未更改源代码）<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-amount-int">BUG-1 — <code>amount</code> 被 <code>(int)</code> 默默强制 — 小数/字符串金额被截断（中）<a class="headerlink" href="#bug-1-amount-int" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Location: <code>src/Wallet/Controller/Manage/TransferController.php:36</code> (createAction) and <code>:83</code> (depositAction)</li>
-<li>Description: <code>$amount = (int) ($content['amount']);</code>. The only guard is <code>empty()</code> (presence) and <code>$amount &lt;= 0</code> (positivity); there is <strong>no integer-ness validation</strong>. A JSON <code>amount: 12.99</code> becomes <code>12</code>, <code>amount: "12abc"</code> becomes <code>12</code>, and <code>amount: "1e3"</code> becomes <code>1</code> (1000 silently reduced to 1). Fractional values are truncated, not rejected.</li>
-<li>Impact: financial correctness — a client sending a decimal amount (e.g. <code>1.99</code>) has 0.99 silently dropped (99% under-credited/under-debited); the error is invisible to the caller. The pre-existing fuzz test <code>tests/Wallet/Integration/WalletApiRegressionTest.php:427</code> even codifies the truncation (<code>'float amount' =&gt; [['...', 50.5], 201] // casts to int 50, passes</code>), so the risk is known and accepted but still dangerous for real payment amounts.</li>
-<li>Reproduction: <code>POST /api/v1/manage/transfers</code> with <code>{"fromWalletId":1,"toWalletId":2,"amount":1.99}</code> → the service is called with <code>amount = 1</code> and the wallet is debited 1 cent, not 1.99.</li>
-<li>Proposed fix: validate the raw value is a non-negative integer before casting — reject unless <code>is_int($content['amount'])</code> or a string matching <code>/^\d+$/</code> (400 on floats/fractional/exponential strings), then cast.</li>
+<li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:36</code>（createAction）和<code>:83</code>（depositAction）</li>
+<li>描述：<code>$amount = (int) ($content['amount']);</code>。唯一的保护是<code>empty()</code>（存在）和<code>$amount &lt;= 0</code>（积极）； <strong>没有整数性验证</strong>。 JSON <code>amount: 12.99</code> 变为 <code>12</code>，<code>amount: "12abc"</code> 变为 <code>12</code>，<code>amount: "1e3"</code> 变为 <code>1</code>（1000 默默减少为 1）。小数值会被截断，而不是被拒绝。</li>
+<li>影响：财务正确性 — 客户发送小数金额（例如 <code>1.99</code>），其 0.99 悄然下降（99% 贷方不足/借方不足）；该错误对于调用者来说是不可见的。预先存在的模糊测试<code>tests/Wallet/Integration/WalletApiRegressionTest.php:427</code>甚至编码了截断（<code>'float amount' =&gt; [['...', 50.5], 201] // casts to int 50, passes</code>），因此风险是已知并接受的，但对于实际支付金额来说仍然是危险的。</li>
+<li>复制：<code>POST /api/v1/manage/transfers</code> 与 <code>{"fromWalletId":1,"toWalletId":2,"amount":1.99}</code> → 使用 <code>amount = 1</code> 调用服务，钱包将被扣除 1 美分，而不是 1.99。</li>
+<li>建议的修复：在转换之前验证原始值是否为非负整数 - 拒绝，除非 <code>is_int($content['amount'])</code> 或匹配 <code>/^\d+$/</code> 的字符串（浮点数/小数/指数字符串上为 400），然后进行转换。</li>
 </ul>
-<h3 id="bug-2-http-status-derived-from-exception-message-text-str_ends_with-not-found-mediumlow">BUG-2 — HTTP status derived from exception message text (<code>str_ends_with(..., 'not found')</code>) (Medium/Low)<a class="headerlink" href="#bug-2-http-status-derived-from-exception-message-text-str_ends_with-not-found-mediumlow" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-str_ends_with-not-found-http">BUG-2 — 从异常消息文本 (<code>str_ends_with(..., 'not found')</code>) 派生的 HTTP 状态（中/低）<a class="headerlink" href="#bug-2-str_ends_with-not-found-http" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Location: <code>src/Wallet/Controller/Manage/TransferController.php:69</code> (createAction) and <code>:110</code> (depositAction)</li>
-<li>Description: <code>$status = str_ends_with($e-&gt;getMessage(), 'not found') ? 404 : 500;</code> — the 404-vs-500 decision is made by sniffing the exception <em>message</em>. Any <code>RuntimeException</code> whose message happens to end in <code>not found</code> is reported as a 404 client error, even a genuine server fault (e.g. a DBAL/SQL message ending in <code>... not found</code>, or a message built from untrusted input).</li>
-<li>Impact: server-side failures are masked as 404s (misleading to clients, logs, and monitoring; 4xx responses are generally not retried), and the mapping cannot distinguish a real "wallet not found" from any other runtime failure.</li>
-<li>Reproduction: service throws <code>new \RuntimeException('Connection refused: schema not found')</code> → the endpoint returns 404 instead of 500.</li>
-<li>Proposed fix: introduce a dedicated domain exception (e.g. <code>WalletNotFoundException</code>) for the not-found cases in <code>TransferService</code>, and map 404 from the exception type; let all other <code>RuntimeException</code>s fall through to 500.</li>
+<li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:69</code>（createAction）和<code>:110</code>（depositAction）</li>
+<li>描述：<code>$status = str_ends_with($e-&gt;getMessage(), 'not found') ? 404 : 500;</code> — 404-vs-500 决定是通过嗅探异常<em>消息</em>来做出的。任何消息恰好以 <code>not found</code> 结尾的 <code>RuntimeException</code> 都会被报告为 404 客户端错误，甚至是真正的服务器故障（例如以 <code>... not found</code> 结尾的 DBAL/SQL 消息，或从不受信任的输入构建的消息）。</li>
+<li>影响：服务器端故障被屏蔽为 404（误导客户端、日志和监控；通常不会重试 4xx 响应），并且映射无法区分真正的“未找到钱包”与任何其他运行时故障。</li>
+<li>再现：服务抛出 <code>new \RuntimeException('Connection refused: schema not found')</code> → 端点返回 404 而不是 500。</li>
+<li>建议的修复：针对 <code>TransferService</code> 中未找到的情况引入专用域异常（例如 <code>WalletNotFoundException</code>），并从异常类型映射 404；让所有其他 <code>RuntimeException</code> 降到 500。</li>
 </ul>
-<h3 id="bug-3-empty-treats-amount-0-as-missing-returning-the-wrong-validation-message-low">BUG-3 — <code>empty()</code> treats <code>amount = 0</code> as "missing", returning the wrong validation message (Low)<a class="headerlink" href="#bug-3-empty-treats-amount-0-as-missing-returning-the-wrong-validation-message-low" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-empty-amount-0">BUG-3 — <code>empty()</code> 将 <code>amount = 0</code> 视为“缺失”，返回错误的验证消息（低）<a class="headerlink" href="#bug-3-empty-amount-0" title="Permanent link">&para;</a></h3>
 <ul>
 <li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:32</code> 和 <code>:79</code></li>
 <li>描述：存在检查 <code>empty($content['amount'])</code> 对于 <code>0</code>、<code>"0"</code> 和 <code>false</code> 评估为 true，因此带有 <code>amount: 0</code> 的请求会被 <code>'fromWalletId, toWalletId, and amount are required'</code>（存款：<code>'toWalletId and amount are required'</code>）而不是 <code>'Amount must be positive'</code> 拒绝。 HTTP 代码仍然是 400，但该消息具有误导性。</li>
@@ -1710,7 +1710,7 @@ therefore skipped to keep the suite green. See BUG-3 and BUG-4 below.</p>
 </ul>
 <h2 id="4">4. 注释<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>database is locked</code> /瞬态数据库错误是已记录的共享<code>var/test.db</code>问题；重试时，完整的 <code>tests/Wallet</code> 运行是干净的。这两个新的测试文件是纯单元测试（无数据库）。</li>
+<li><code>database is locked</code> /暂时性数据库错误是已记录的共享<code>var/test.db</code>问题；重试时，完整的 <code>tests/Wallet</code> 运行是干净的。这两个新的测试文件是纯单元测试（无数据库）。</li>
 <li>新的单元测试使用 <code>new \ReflectionProperty(...)-&gt;setValue(...)</code>，而不使用已弃用的 <code>ReflectionProperty::setAccessible()</code>（PHP 8.5 要求）；他们在 <code>phpunit.dist.xml</code> 下产生零弃用/通知/警告。</li>
 <li>没有更改 <code>src/</code> 文件。跳过的3个测试记录了BUG-3（创建+存款）和BUG-4；套房保持绿色。</li>
 </ul>
