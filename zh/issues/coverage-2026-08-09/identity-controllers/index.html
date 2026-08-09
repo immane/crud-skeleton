@@ -1180,7 +1180,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -1584,10 +1584,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-f-createusercommand-role" class="md-nav__link">
+  <a href="#bug-f-minor-robustness-createusercommand-drops-a-non-array-role-value" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug F（次要/稳健性）- CreateUserCommand 删除非数组 --role 值
+        Bug F (minor / robustness) — CreateUserCommand drops a non-array --role value
       
     </span>
   </a>
@@ -1600,10 +1600,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#skipped-tests-all-keep-the-suite-green" class="md-nav__link">
     <span class="md-ellipsis">
       
-        跳过测试（全部保持套件绿色）
+        Skipped tests (all keep the suite green)
       
     </span>
   </a>
@@ -1611,10 +1611,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#result" class="md-nav__link">
     <span class="md-ellipsis">
       
-        结果
+        Result
       
     </span>
   </a>
@@ -1789,60 +1789,60 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 </ul>
 <h3 id="bug-e-createusercommand">Bug E — <code>CreateUserCommand</code> 接受空电子邮件/用户名并创建损坏的帐户<a class="headerlink" href="#bug-e-createusercommand" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>CreateUserCommand.php</code> 70–86（仅验证密码）。</li>
-<li><strong>说明：</strong> 该命令验证密码是否非空 (70–74)，但从不验证电子邮件/用户名参数。对于 <code>email: ''</code>，命令继续：<code>findByEmail('')</code> → <code>null</code>，然后将 <code>User</code> 与 <code>email = ''</code> 保持在一起并返回 <code>SUCCESS</code>（已验证：<code>persist()</code> 被调用并且命令退出 0）。 <code>getUserIdentifier()</code> 然后回退到 <code>'anonymous'</code>。</li>
-<li><strong>影响：</strong> 电子邮件/用户名为空的垃圾帐户；使用相同的空电子邮件进行第二次运行会遇到数据库唯一约束并崩溃，并显示未捕获的 <code>UniqueConstraintViolationException</code> 而不是友好的失败消息。</li>
-<li><strong>复制：</strong> <code>php bin/console app:identity:user:create '' emptymail 'Password123!'</code> → 使用 <code>email=""</code> 创建帐户并退出 0。</li>
-<li><strong>建议的修复：</strong> 添加镜像密码检查的守卫，例如<code>if ($email === '') { $io-&gt;error('Email cannot be empty.'); return Command::FAILURE; }</code> （与用户名相同）在存储库查找之前。</li>
-<li><strong>测试：</strong> <code>CreateUserCommandCoverageTest::testExecuteWithEmptyEmailShouldFail</code> 被 <strong>跳过</strong>（断言 <code>Command::FAILURE</code> 且无 <code>persist</code>；当前 src 保留并返回 <code>SUCCESS</code>）。</li>
+<li><strong>File/lines:</strong> <code>CreateUserCommand.php</code> 70–86 (only the password is validated).</li>
+<li><strong>Description:</strong> the command validates that the password is non-empty (70–74) but never validates the email/username arguments. With <code>email: ''</code> the command proceeds: <code>findByEmail('')</code> → <code>null</code>, then persists a <code>User</code> with <code>email = ''</code> and returns <code>SUCCESS</code> (verified: <code>persist()</code> is called and the command exits 0). <code>getUserIdentifier()</code> then falls back to <code>'anonymous'</code>.</li>
+<li><strong>Impact:</strong> junk accounts with empty email/username; a second run with the same empty email hits the DB unique constraint and crashes with an uncaught <code>UniqueConstraintViolationException</code> instead of a friendly failure message.</li>
+<li><strong>Reproduction:</strong> <code>php bin/console app:identity:user:create '' emptymail 'Password123!'</code> → creates an account with <code>email=""</code> and exits 0.</li>
+<li><strong>Proposed fix:</strong> add guards mirroring the password check, e.g. <code>if ($email === '') { $io-&gt;error('Email cannot be empty.'); return Command::FAILURE; }</code> (and the same for username) before the repository lookups.</li>
+<li><strong>Tests:</strong> <code>CreateUserCommandCoverageTest::testExecuteWithEmptyEmailShouldFail</code> is <strong>skipped</strong> (asserts <code>Command::FAILURE</code> and no <code>persist</code>; current src persists and returns <code>SUCCESS</code>).</li>
 </ul>
-<h3 id="bug-f-createusercommand-role">Bug F（次要/稳健性）- <code>CreateUserCommand</code> 删除非数组 <code>--role</code> 值<a class="headerlink" href="#bug-f-createusercommand-role" title="Permanent link">&para;</a></h3>
+<h3 id="bug-f-minor-robustness-createusercommand-drops-a-non-array-role-value">Bug F (minor / robustness) — <code>CreateUserCommand</code> drops a non-array <code>--role</code> value<a class="headerlink" href="#bug-f-minor-robustness-createusercommand-drops-a-non-array-role-value" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>CreateUserCommand.php</code> 94–96 (<code>$roleInputs = is_array($rolesOption) ? $rolesOption : []</code>)。</li>
-<li><strong>描述：</strong> 当 <code>getOption('role')</code> 不是数组时，角色将被默默丢弃。真正的 CLI (<code>ArgvInput</code>) 总是将单个 <code>--role=X</code> 规范化为 <code>VALUE_IS_ARRAY</code> 选项的 <code>['X']</code>（已验证），因此正常使用没问题 — 但 <code>CommandTester</code>/<code>ArrayInput</code> 以及任何传递普通字符串的编程调用会默默地失去所有角色。</li>
-<li><strong>影响：</strong>低；对于传递字符串的调用者，角色将被默默忽略。编写测试或嵌入命令时会造成混乱。</li>
-<li><strong>复制：</strong> <code>new CommandTester($cmd)-&gt;execute([... '--role' =&gt; 'ROLE_EDITOR'])</code> → 创建的用户只有<code>ROLE_USER</code>。</li>
-<li><strong>建议的修复：</strong> 防御性正常化，例如<code>$roleInputs = is_array($rolesOption) ? $rolesOption : [$rolesOption];</code> 并过滤非字符串（第 136 行已经跳过它们）。</li>
-<li><strong>测试：</strong> <code>CreateUserCommandCoverageTest::testExecuteSkipsNonStringAndEmptyRoleOptionValues</code> 覆盖跳过；此处记录了差异，没有测试断言固定行为。</li>
+<li><strong>File/line:</strong> <code>CreateUserCommand.php</code> 94–96 (<code>$roleInputs = is_array($rolesOption) ? $rolesOption : []</code>).</li>
+<li><strong>Description:</strong> when <code>getOption('role')</code> is not an array the roles are silently discarded. The real CLI (<code>ArgvInput</code>) always normalizes a single <code>--role=X</code> into <code>['X']</code> for <code>VALUE_IS_ARRAY</code> options (verified), so normal usage is fine — but <code>CommandTester</code>/<code>ArrayInput</code> and any programmatic invocation that passes a plain string lose every role silently.</li>
+<li><strong>Impact:</strong> low; roles are silently ignored for callers that pass a string. Confusing when writing tests or embedding the command.</li>
+<li><strong>Reproduction:</strong> <code>new CommandTester($cmd)-&gt;execute([... '--role' =&gt; 'ROLE_EDITOR'])</code> → created user has only <code>ROLE_USER</code>.</li>
+<li><strong>Proposed fix:</strong> normalize defensively, e.g. <code>$roleInputs = is_array($rolesOption) ? $rolesOption : [$rolesOption];</code> and filter non-strings (line 136 already skips them).</li>
+<li><strong>Tests:</strong> <code>CreateUserCommandCoverageTest::testExecuteSkipsNonStringAndEmptyRoleOptionValues</code> covers the skipping; the discrepancy is documented here, no test asserts the fixed behavior.</li>
 </ul>
-<h2 id="_4">跳过测试（全部保持套件绿色）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="skipped-tests-all-keep-the-suite-green">Skipped tests (all keep the suite green)<a class="headerlink" href="#skipped-tests-all-keep-the-suite-green" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>测试</th>
-<th>错误</th>
-<th>断言（固定）行为</th>
+<th>Test</th>
+<th>Bug</th>
+<th>Asserted (fixed) behavior</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code></td>
-<td>一个</td>
-<td>畸形身体 → 400</td>
+<td>A</td>
+<td>malformed body → 400</td>
 </tr>
 <tr>
 <td><code>AuthControllerCoverageTest::testLogoutWithMalformedJsonShouldNotThrow</code></td>
-<td>一个</td>
-<td>畸形体→204，禁止投掷</td>
+<td>A</td>
+<td>malformed body → 204, no throw</td>
 </tr>
 <tr>
 <td><code>AuthControllerCoverageTest::testLoginWithNumericUsernameShouldSucceed</code></td>
-<td>d</td>
-<td>数字用户名登录 → 200</td>
+<td>D</td>
+<td>numeric-username login → 200</td>
 </tr>
 <tr>
 <td><code>CreateUserCommandCoverageTest::testExecuteWithEmptyEmailShouldFail</code></td>
-<td>电子</td>
-<td>空电子邮件 → <code>Command::FAILURE</code>，不坚持</td>
+<td>E</td>
+<td>empty email → <code>Command::FAILURE</code>, no persist</td>
 </tr>
 </tbody>
 </table>
-<p>单独验证（未跳过）其中每个都针对当前 <code>src/</code> 失败，然后重新跳过。</p>
-<h2 id="_5">结果<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>Verified individually (un-skipped) that each of these fails against the current <code>src/</code>, then re-skipped.</p>
+<h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>
 <ul>
-<li>4 个新测试文件，<strong>26 个测试，71 个断言，4 个记录的跳过，退出 0</strong>（无弃用/通知/警告）。</li>
-<li>所有五个目标文件现在都处于 <strong>100% 行覆盖率</strong>（使用 Xdebug + Clover 在现有 + 新测试的组合上进行测量）。</li>
-<li>记录了 6 个发现（Bug A–F），没有固定（每个约束 - 没有 <code>src/</code> 更改）。</li>
+<li>4 new test files, <strong>26 tests, 71 assertions, 4 documented skips, exit 0</strong> (no deprecations/notices/warnings).</li>
+<li>All five target files now at <strong>100% line coverage</strong> (measured with Xdebug + Clover on the combined existing + new tests).</li>
+<li>6 findings documented (Bugs A–F), none fixed (per constraint — no <code>src/</code> changes).</li>
 </ul>
 
 
