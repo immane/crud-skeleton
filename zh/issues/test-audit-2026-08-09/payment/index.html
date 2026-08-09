@@ -1180,7 +1180,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1522,10 +1522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -1740,7 +1740,7 @@
 <td><code>Service/MockGatewayTest.php::testPayNotifyRefundAndResponse</code> + <code>::testNotifyRejectsInvalidSecret</code></td>
 <td>B2（重复）：MockGateway 是一个测试替身，其全部表面由每个集成支付/通知/退款以及 webhook 测试执行</td>
 <td>中等</td>
-<td><code>PaymentApiIntegrationTest::testManageAndAppInvoiceApiFlow</code> + <code>::testWebhookInvalidSecretReturnsFailure</code>； <code>PaymentTradeIntegrationTest::testOrderPaidViaMockGatewayAndNotifyWebhook</code>； <code>PaymentNotifyControllerTest</code></td>
+<td><code>PaymentApiIntegrationTest::testManageAndAppInvoiceApiFlow</code> + <code>::testWebhookInvalidSecretReturnsFailure</code>; <code>PaymentTradeIntegrationTest::testOrderPaidViaMockGatewayAndNotifyWebhook</code>； <code>PaymentNotifyControllerTest</code></td>
 </tr>
 <tr>
 <td><code>Service/PaymentGatewayRegistryTest.php::testRegistryResolvesGatewayNames</code> + <code>::testUnknownGatewayThrows</code></td>
@@ -1870,44 +1870,44 @@ PaymentAdjustment 文件和控制器文件），主要是基于模拟的单元�
 层已经保护。</p>
 <h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>PaymentAdjustmentIntegrationTest → PaymentAdjustmentMultiGatewayIntegrationTest</strong>：4 个标记的测试是后面更多测试的场景级重复
-  全面的多网关文件。不要直接删除，而是合并任何
-  场景的细微差别（网关故障测试中的 200-vs-400 钱包金额）
-  MultiGateway 文件并删除旧文件的重复项。保留
-  <code>testDeductedInvoiceRejectsPartialRefund</code>（仅限全额退款警卫）。</li>
-<li><strong>InvoiceServiceTest → InvoiceServiceIntegrationTest</strong>：此覆盖范围活动
-  文件重新断言集成文件证明的工作流防护异常
-  真正的状态机。 4 个独特的单位分支（负金额、
-  扣除-超出、网关/交易类型选项、不允许失败）更好
-  在<code>InvoiceServiceIntegrationTest.php</code>中表示为集成场景；
-  然后删除剩余的 5 个防护测试。</li>
-<li><strong>控制器单元文件（应用程序/管理/Webhook）→ PaymentApiIntegrationTest +
-  PaymentTradeIntegrationTest</strong>：HTTP 层已经拥有这些路由
-  （策略：“不要仅仅为了提高线路覆盖率而添加控制器测试”）。任意
-  真正未覆盖的分支机构（例如管理cancel-404、退款金额/原因
-  缺少）应添加到 <code>PaymentApiIntegrationTest</code> 而不是保留为
-  模拟服务单元测试。</li>
+<li><strong>PaymentAdjustmentIntegrationTest → PaymentAdjustmentMultiGatewayIntegrationTest</strong>: the 4 flagged tests are scenario-level duplicates of the later, more
+  comprehensive multi-gateway file. Rather than delete outright, merge any
+  scenario nuance (the 200-vs-400 walletAmount in the gateway-failure test) into
+  the MultiGateway file and drop the older file's duplicates. Keep
+  <code>testDeductedInvoiceRejectsPartialRefund</code> (only full-refund-only guard).</li>
+<li><strong>InvoiceServiceTest → InvoiceServiceIntegrationTest</strong>: this coverage-campaign
+  file re-asserts workflow-guard exceptions that the integration file proves with
+  the real state machine. The 4 unique unit branches (negative amount,
+  deduction-exceeds, gateway/tradeType options, fail-not-allowed) are better
+  expressed as integration scenarios in <code>InvoiceServiceIntegrationTest.php</code>;
+  the remaining 5 guard tests are then deleted.</li>
+<li><strong>Controller unit files (App/Manage/Webhook) → PaymentApiIntegrationTest +
+  PaymentTradeIntegrationTest</strong>: the HTTP layer already owns these routes
+  (strategy: "Do not add controller tests merely to raise line coverage"). Any
+  genuinely uncovered branch (e.g. manage cancel-404, refund amount/reason
+  missing) should be added to <code>PaymentApiIntegrationTest</code> instead of kept as a
+  mocked-service unit test.</li>
 </ul>
-<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
 <ol>
-<li>确认审核未对<code>src/</code>或<code>tests/</code>进行任何更改（仅限本报告）
-   是在 <code>docs/issues/test-audit-2026-08-09/</code> 下编写的）。</li>
-<li>在删除任何测试之前，暂时使用 <code>--filter</code> 覆盖测试来证明
-   当候选人从套件中删除时（即
-   “覆盖”测试才是真正的安全网）：
+<li>Confirm the audit made no changes under <code>src/</code> or <code>tests/</code> (only this report
+   was written under <code>docs/issues/test-audit-2026-08-09/</code>).</li>
+<li>Before deleting any test, temporarily <code>--filter</code> the covering test to prove
+   it still fails when the candidate is removed from the suite (i.e. the
+   "covered by" test is the real safety net):
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --filter PaymentApiIntegrationTest
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --filter PaymentAdjustmentMultiGatewayIntegrationTest
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --filter PaymentTradeIntegrationTest
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --filter InvoiceServiceIntegrationTest
 </code></pre></div></li>
-<li>删除批次应该是每个文件的原子性，并在
-   CI 环境 (PostgreSQL) 加上 <code>composer phpstan</code> 和
-   <code>composer rector:types:check</code> 根据策略的强制命令。</li>
-<li>保留每对重复的至少一个，直到覆盖营销活动行
-   有意识地重新协商目标；删除重复项会降低测量值
-   即使行为保护不变，覆盖范围也相同。</li>
-<li>如果模块被跳过，请勿删除任何跳过/错误记录测试
-   未来的测试；今天这些都不存在了。</li>
+<li>Deletion batches should be atomic per file and re-run the full suite on the
+   CI environment (PostgreSQL) plus <code>composer phpstan</code> and
+   <code>composer rector:types:check</code> per the strategy's mandatory commands.</li>
+<li>Keep at least one of each duplicated pair until the coverage-campaign line
+   target is consciously re-negotiated; deleting a duplicate lowers measured
+   coverage even when behavioral protection is unchanged.</li>
+<li>Do not delete any skipped/bug-documenting test if the module gains skipped
+   tests in the future; none exist today.</li>
 </ol>
 
 

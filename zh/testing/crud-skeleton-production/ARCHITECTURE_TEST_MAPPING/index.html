@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#architecture-test-mapping" class="md-skip">
           跳转至
         </a>
       
@@ -1184,7 +1184,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1362,7 +1362,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1503,83 +1503,83 @@
   
 
 
-<h1 id="_1">架构测试映射<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="architecture-test-mapping">Architecture Test Mapping<a class="headerlink" href="#architecture-test-mapping" title="Permanent link">&para;</a></h1>
 <table>
 <thead>
 <tr>
-<th>模块/边界</th>
-<th>责任</th>
-<th>主要测试层</th>
-<th>所需的回归焦点</th>
+<th>Module / boundary</th>
+<th>Responsibility</th>
+<th>Primary test layers</th>
+<th>Required regression focus</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Core</code></td>
-<td>可重用的CRUD、表达式/查询引擎、响应和异常基础设施</td>
-<td>单元，HTTP 集成</td>
-<td>格式错误的表达式、过滤器组合、分页、序列化、区域设置、翻译错误</td>
+<td>reusable CRUD, expression/query engine, response and exception infrastructure</td>
+<td>unit, HTTP integration</td>
+<td>malformed expression, filter composition, pagination, serialization, locale, translated errors</td>
 </tr>
 <tr>
 <td><code>Identity</code></td>
-<td>身份验证、授权、用户/配置文件生命周期、OTP</td>
-<td>单元，HTTP 集成</td>
-<td>令牌轮换/重用、角色/所有者边界、凭据丢失/无效、配置文件生命周期</td>
+<td>authentication, authorization, user/profile lifecycle, OTP</td>
+<td>unit, HTTP integration</td>
+<td>token rotation/reuse, role/owner boundaries, missing/invalid credentials, profile lifecycle</td>
 </tr>
 <tr>
 <td><code>Common</code> + <code>Storage</code></td>
-<td>CMS 数据和上传驱动程序</td>
-<td>单元，Doctrine/HTTP 集成</td>
-<td>public/app/manage 可见性、父范围、文件验证、删除/失败时的物理清理</td>
+<td>CMS data and upload drivers</td>
+<td>unit, Doctrine/HTTP integration</td>
+<td>public/app/manage visibility, parent scope, file validation, physical cleanup on delete/failure</td>
 </tr>
 <tr>
 <td><code>Trade</code></td>
-<td>目录、价格管道、订单工作流程、贸易发件箱</td>
-<td>单元、集成、HTTP</td>
-<td>快照、报价/订单等效、工作流程防护、取消/付款/退款效果、发件箱重试</td>
+<td>catalog, price pipeline, order workflow, Trade outbox</td>
+<td>unit, integration, HTTP</td>
+<td>snapshot, quote/order equivalence, workflow guards, cancellation/payment/refund effects, outbox retries</td>
 </tr>
 <tr>
 <td><code>Promotion</code></td>
-<td>DSL解析/评估和定价规则</td>
-<td>单位，学说整合</td>
-<td>无效 DSL、时间/商店/会员/SKU 范围、堆叠和最优价格选择</td>
+<td>DSL parsing/evaluation and pricing rules</td>
+<td>unit, Doctrine integration</td>
+<td>invalid DSL, time/store/member/SKU scope, stacking and best-price selection</td>
 </tr>
 <tr>
 <td><code>Wallet</code></td>
-<td>余额、转账、扣除、对账</td>
-<td>单位、事务集成、HTTP</td>
-<td>整数美分、资金不足、重复引用、乐观锁定、审计修复</td>
+<td>balances, transfers, deductions, reconciliation</td>
+<td>unit, transaction integration, HTTP</td>
+<td>integer cents, insufficient funds, duplicate references, optimistic locking, audit repair</td>
 </tr>
 <tr>
 <td><code>Payment</code></td>
-<td>发票生命周期、网关/调整合同、webhook</td>
-<td>单元、集成、HTTP</td>
-<td>明确金额、无效网关/结果、回调重播、退款限制、交易传播</td>
+<td>invoice lifecycle, gateway/adjustment contracts, webhook</td>
+<td>unit, integration, HTTP</td>
+<td>explicit amounts, invalid gateway/result, callback replay, refund limits, Trade propagation</td>
 </tr>
 <tr>
 <td><code>Wechat</code></td>
-<td>登录身份扩展和外部支付适配器</td>
-<td>单元、适配器合约、HTTP</td>
-<td>格式错误的提供商响应、用户绑定、缺少付款人身份、签名/提供商失败</td>
+<td>login identity extension and external payment adapter</td>
+<td>unit, adapter contract, HTTP</td>
+<td>malformed provider response, user binding, missing payer identity, signature/provider failures</td>
 </tr>
 <tr>
 <td><code>Store</code></td>
-<td>商店背景、会员资格、订单接受、收件箱/发件箱</td>
-<td>单元、集成、HTTP</td>
-<td>上下文欺骗、员工边界、重复或延迟的贸易活动、取消订单</td>
+<td>store context, membership, order acceptance, inbox/outbox</td>
+<td>unit, integration, HTTP</td>
+<td>context spoofing, staff boundaries, duplicate or delayed Trade events, cancellation ordering</td>
 </tr>
 <tr>
 <td><code>Inventory</code></td>
-<td>材料、配方、储备/释放、分类账</td>
-<td>单元、集成、处理程序测试</td>
-<td>需求聚合、库存政策、重复/逆转事件、发布/到期；启用前类似生产的并发性</td>
+<td>materials, recipe, reserve/release, ledger</td>
+<td>unit, integration, handler tests</td>
+<td>demand aggregation, stock policy, duplicate/reversed events, release/expiry; production-like concurrency before enablement</td>
 </tr>
 </tbody>
 </table>
-<p>当行为由以下人员拥有时，跨模块测试属于 <code>tests/Integration/</code>
-交互而不是单个模块。模块测试可能会使用假货
-相邻模块，但关键路径必须保留至少一个集成
-与真实边界进行测试。</p>
+<p>Cross-module tests belong in <code>tests/Integration/</code> when the behaviour is owned by
+the interaction rather than a single module. Module tests may use fakes for
+neighbouring modules, but the critical path must retain at least one integration
+test with the real boundary.</p>
 
 
 

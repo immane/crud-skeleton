@@ -1180,7 +1180,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1767,7 +1767,7 @@
 <li><strong>文件/行：</strong> <code>src/Store/Service/StoreContextResolver.php:37</code></li>
 <li><strong>描述：</strong> <code>$request-&gt;headers-&gt;get('X-Store-Channel', 'api')</code> 逐字返回标头；显式存在但为空的标头会产生通道 <code>''</code> 而不是 <code>'api'</code>。</li>
 <li><strong>影响：</strong> 对于此类客户端，<code>StoreContext-&gt;channel</code> 变为 <code>''</code>，这可能会破坏下游的通道条件逻辑。</li>
-<li><strong>复制：</strong>发送<code>X-Store-Code: xuhui</code>和<code>X-Store-Channel:</code>（空）- <code>resolve()-&gt;channel === ''</code>。</li>
+<li><strong>复制：</strong>发送<code>X-Store-Code: xuhui</code>和<code>X-Store-Channel:</code>（空）-<code>resolve()-&gt;channel === ''</code>。</li>
 <li><strong>建议的修复：</strong> 使用 <code>$request-&gt;headers-&gt;get('X-Store-Channel') ?: 'api'</code>。</li>
 </ul>
 <h2 id="_5">跳过测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>

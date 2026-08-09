@@ -27,7 +27,7 @@
     
     
       
-        <title>存储命令/存储库/实体 - 测试覆盖率和错误报告 - CRUD Skeleton</title>
+        <title>Store Command / Repository / Entity — Test Coverage & Bug Report - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#-" class="md-skip">
+        <a href="#store-command-repository-entity-test-coverage-bug-report" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              存储命令/存储库/实体 - 测试覆盖率和错误报告
+              Store Command / Repository / Entity — Test Coverage &amp; Bug Report
             
           </span>
         </div>
@@ -1180,7 +1180,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1478,10 +1478,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#files-added" class="md-nav__link">
     <span class="md-ellipsis">
       
-        添加的文件
+        Files added
       
     </span>
   </a>
@@ -1489,10 +1489,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#coverage-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        覆盖结果
+        Coverage results
       
     </span>
   </a>
@@ -1500,10 +1500,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#how-to-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        如何运行
+        How to run
       
     </span>
   </a>
@@ -1511,22 +1511,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#bugs-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        发现错误
+        Bugs found
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="发现错误">
+    <nav class="md-nav" aria-label="Bugs found">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-defer" class="md-nav__link">
+  <a href="#bug-1-defer-has-no-claim-ownershipavailability-guard-medium-concurrency" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 1 - defer()没有声明所有权/可用性保护（中，并发）
+        Bug 1 — defer() has no claim-ownership/availability guard (medium, concurrency)
       
     </span>
   </a>
@@ -1534,10 +1534,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2" class="md-nav__link">
+  <a href="#bug-2-unbounded-retry-no-dead-letter-or-max-attempts-medium-operational" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 2 — 无限制重试/无死信或最大尝试次数（中等，可操作）
+        Bug 2 — unbounded retry / no dead-letter or max-attempts (medium, operational)
       
     </span>
   </a>
@@ -1583,7 +1583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         跳过测试
@@ -1624,56 +1624,56 @@
   
 
 
-<h1 id="-">存储命令/存储库/实体 - 测试覆盖率和错误报告<a class="headerlink" href="#-" title="Permanent link">&para;</a></h1>
-<p>日期：2026-08-09
-范围：<code>app:store:outbox:publish</code> 命令、<code>StoreOutboxMessageRepository</code> 和商店发件箱/已消费/取消实体。
-遵循的规则：<strong><code>src/</code> 下没有文件被修改</strong> — 仅在 <code>tests/</code> 下添加了测试文件以及此报告。</p>
-<h2 id="_1">添加的文件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h1 id="store-command-repository-entity-test-coverage-bug-report">Store Command / Repository / Entity — Test Coverage &amp; Bug Report<a class="headerlink" href="#store-command-repository-entity-test-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<p>Date: 2026-08-09
+Scope: <code>app:store:outbox:publish</code> command, <code>StoreOutboxMessageRepository</code>, and the Store outbox/consumed/cancellation entities.
+Rule followed: <strong>no files under <code>src/</code> were modified</strong> — only test files were added under <code>tests/</code>, plus this report.</p>
+<h2 id="files-added">Files added<a class="headerlink" href="#files-added" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>类型</th>
-<th>它涵盖什么</th>
+<th>File</th>
+<th>Type</th>
+<th>What it covers</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Store/Command/PublishOutboxCommandTest.php</code></td>
-<td>单元（模拟回购/EM/总线，<code>CommandTester</code>）</td>
-<td><code>execute()</code> 的所有 6 个分支：无消息、空 id 跳过、声明失败跳过、不支持的主题延迟、所有 4 个主题成功调度+markPublished（信封/类型/版本/aggregateId/有效负载断言）、调度抛出延迟。</td>
+<td>unit (mocked repo/EM/bus, <code>CommandTester</code>)</td>
+<td>All 6 branches of <code>execute()</code>: no messages, null id skip, claim-failure skip, unsupported-topic defer, successful dispatch+markPublished for all 4 topics (envelope/type/version/aggregateId/payload asserted), dispatch-throws defer.</td>
 </tr>
 <tr>
 <td><code>tests/Store/Repository/StoreOutboxMessageRepositoryTest.php</code></td>
-<td>集成 (<code>KernelTestCase</code> + <code>DatabaseBootstrapTrait</code>)</td>
-<td><code>findUnpublished</code> 过滤/顺序/限制，<code>claim</code> 真/假路径（已声明、已发布、尚未可用、缺少 id）、<code>defer</code> 尝试/lastError/availableAt 累积、已发布的 defer-noop、<code>recordAttempt</code> 后重新可用。</td>
+<td>integration (<code>KernelTestCase</code> + <code>DatabaseBootstrapTrait</code>)</td>
+<td><code>findUnpublished</code> filtering/order/limit, <code>claim</code> true/false paths (already-claimed, published, not-yet-available, missing id), <code>defer</code> attempts/lastError/availableAt accumulation, defer-noop for published, re-availability after <code>recordAttempt</code>.</td>
 </tr>
 <tr>
 <td><code>tests/Store/Entity/StoreOutboxMessageLifecycleTest.php</code></td>
-<td>单位</td>
-<td>之前未发现 <code>getId()</code> （第 65 行）和 <code>getOccurredAt()</code> （第 72 行），默认 <code>availableAt == occurredAt</code>，显式 <code>occurredAt</code> 构造函数参数。</td>
+<td>unit</td>
+<td>Previously uncovered <code>getId()</code> (line 65) and <code>getOccurredAt()</code> (line 72), default <code>availableAt == occurredAt</code>, explicit <code>occurredAt</code> constructor arg.</td>
 </tr>
 <tr>
 <td><code>tests/Store/Entity/StoreConsumedEventLifecycleTest.php</code></td>
-<td>单位</td>
-<td>之前未发现<code>getId()</code>（第44行）。</td>
+<td>unit</td>
+<td>Previously uncovered <code>getId()</code> (line 44).</td>
 </tr>
 <tr>
 <td><code>tests/Store/Entity/StoreTradeOrderCancellationTest.php</code></td>
-<td>单位</td>
-<td><code>getTradeOrderUuid()</code> (36)、<code>getStoreUuid()</code> (37)、<code>getCancelledAt()</code> (38)。</td>
+<td>unit</td>
+<td><code>getTradeOrderUuid()</code> (36), <code>getStoreUuid()</code> (37), <code>getCancelledAt()</code> (38).</td>
 </tr>
 </tbody>
 </table>
-<p>没有修改现有的测试文件；没有触及 <code>src/</code> 文件。</p>
-<h2 id="_2">覆盖结果<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>使用 <code>tests/Store</code> 套件 + 添加的文件（Xdebug、<code>phpunit.dist.xml</code> 配置）进行测量。</p>
+<p>No existing test file was modified; no <code>src/</code> file was touched.</p>
+<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
+<p>Measured with <code>tests/Store</code> suite + the added files (Xdebug, <code>phpunit.dist.xml</code> config).</p>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>之前</th>
-<th>之后</th>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
 </tr>
 </thead>
 <tbody>
@@ -1704,8 +1704,8 @@
 </tr>
 </tbody>
 </table>
-<p>所有五个目标文件均达到 <strong>~100%</strong> 行覆盖率。</p>
-<h2 id="_3">如何运行<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>All five target files reach <strong>~100%</strong> line coverage.</p>
+<h2 id="how-to-run">How to run<a class="headerlink" href="#how-to-run" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/Nayuki/Development/PHP/crud-skeleton
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>off<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>tests/Store/Command/PublishOutboxCommandTest.php<span class="w"> </span><span class="se">\</span>
@@ -1716,24 +1716,24 @@
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span>--no-coverage
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># =&gt; OK (23 tests, 129 assertions)</span>
 </code></pre></div>
-<p>注意：存储库/集成测试与套件的其余部分和 CI/暂存过程共享 <code>var/test.db</code>。如果运行报告 <code>database is locked</code>、<code>no such table</code> 或 <code>Premature end</code>，请等待 10-15 秒并重新运行（这是记录的共享数据库行为，而不是测试缺陷）。在编写此报告时，在同一工作区中运行的并发覆盖会间歇性地删除/重新创建共享模式，从而在<em>其他</em>存储测试文件中产生暂时性错误；上面的五个文件单独显示为绿色。</p>
-<h2 id="_4">发现错误<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>下面的所有 <code>src/</code> 错误<strong>仅记录</strong> - 未应用任何修复。</p>
-<h3 id="bug-1-defer">Bug 1 - <code>defer()</code>没有声明所有权/可用性保护（中，并发）<a class="headerlink" href="#bug-1-defer" title="Permanent link">&para;</a></h3>
+<p>Note: the repository/integration tests share <code>var/test.db</code> with the rest of the suite and the CI/staging process. If a run reports <code>database is locked</code>, <code>no such table</code>, or <code>Premature end</code>, wait 10–15 s and rerun (this is the documented shared-DB behavior, not a test defect). While this report was being written, a concurrent coverage run in the same workspace intermittently dropped/recreated the shared schema, producing transient errors in <em>other</em> Store test files; the five files above are green in isolation.</p>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<p>All <code>src/</code> bugs below are <strong>documented only</strong> — no fix was applied.</p>
+<h3 id="bug-1-defer-has-no-claim-ownershipavailability-guard-medium-concurrency">Bug 1 — <code>defer()</code> has no claim-ownership/availability guard (medium, concurrency)<a class="headerlink" href="#bug-1-defer-has-no-claim-ownershipavailability-guard-medium-concurrency" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/Repository/StoreOutboxMessageRepository.php:47-61</code></li>
-<li><strong>描述：</strong> DQL <code>WHERE</code> 仅匹配 <code>id</code> 和 <code>publishedAt IS NULL</code>。它<strong>不需要</strong>需要 <code>availableAt &lt;= :now</code>，因此它不会验证调用者是否仍然拥有 <code>claim()</code> 设置的声明窗口。</li>
-<li><strong>影响：</strong>在多工作人员部署中，工作人员 A 声明消息 M (<code>availableAt = now+1m</code>)，其调度很慢（&gt;1 分钟）并且稍后抛出；同时，工人 B 重新声明了 M。A 的晚期 <code>defer(M)</code> 仍然匹配（M 未发布），因此它递增 <code>attempts</code> 并覆盖 <code>availableAt</code>，破坏 B 的声明状态。重试元数据被损坏，并且消息可能会相对于其真实所有者无序地延迟/重试。</li>
-<li><strong>复制：</strong> 索赔 M；睡眠 61 秒；工人 B 主张 M（返回 true）；工人 A 的 <code>dispatch</code> 抛出； A 调用 <code>defer(M)</code> — 成功并覆盖 B 的 <code>availableAt</code>。</li>
-<li><strong>建议的修复：</strong> 将 <code>andWhere('message.availableAt &lt;= :now')</code> 添加到 <code>defer()</code> （镜像 <code>claim()</code>），或者要求调用者传递声明的 <code>until</code> 并对其进行匹配。</li>
+<li><strong>File/line:</strong> <code>src/Store/Repository/StoreOutboxMessageRepository.php:47-61</code></li>
+<li><strong>Description:</strong> the DQL <code>WHERE</code> only matches <code>id</code> and <code>publishedAt IS NULL</code>. It does <strong>not</strong> require <code>availableAt &lt;= :now</code>, so it does not verify that the caller still owns the claim window set by <code>claim()</code>.</li>
+<li><strong>Impact:</strong> in a multi-worker deployment, worker A claims message M (<code>availableAt = now+1m</code>), its dispatch is slow (&gt;1 min) and later throws; worker B has meanwhile re-claimed M. A's late <code>defer(M)</code> still matches (M is unpublished), so it increments <code>attempts</code> and overwrites <code>availableAt</code>, clobbering B's claim state. Retry metadata becomes corrupted and a message can be deferred/retried out of order relative to its real owner.</li>
+<li><strong>Reproduction:</strong> claim M; sleep 61 s; worker B claims M (returns true); worker A's <code>dispatch</code> throws; A calls <code>defer(M)</code> — succeeds and overwrites B's <code>availableAt</code>.</li>
+<li><strong>Proposed fix:</strong> add <code>andWhere('message.availableAt &lt;= :now')</code> to <code>defer()</code> (mirroring <code>claim()</code>), or require the caller to pass the claimed <code>until</code> and match on it.</li>
 </ul>
-<h3 id="bug-2">Bug 2 — 无限制重试/无死信或最大尝试次数（中等，可操作）<a class="headerlink" href="#bug-2" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-unbounded-retry-no-dead-letter-or-max-attempts-medium-operational">Bug 2 — unbounded retry / no dead-letter or max-attempts (medium, operational)<a class="headerlink" href="#bug-2-unbounded-retry-no-dead-letter-or-max-attempts-medium-operational" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/Repository/StoreOutboxMessageRepository.php:51</code> (<code>message.attempts + 1</code>), <code>src/Store/Command/PublishOutboxCommand.php:53,61</code></li>
-<li><strong>描述：</strong> <code>defer()</code> 无限期地递增<code>attempts</code>； <code>findUnpublished()</code> 永远不会过滤 <code>attempts</code>，并且不存在死信路径。</li>
-<li><strong>影响：</strong> 永久失败的消息（总线永久关闭，不受支持的主题）每 5 分钟永久重试一次，并永远在 <code>store_outbox_message</code> 中累积行，从而增加表并在不可见的情况下进行重试。</li>
-<li><strong>复制：</strong>插入一条包含不支持主题的消息并重复运行 <code>app:store:outbox:publish</code> — <code>attempts</code> 无限增长。</li>
-<li><strong>建议的修复：</strong> 限制重试（例如，在最大 <code>attempts</code> 处停止 <code>findUnpublished</code>，或在 N 次尝试后将行移至死信表）并显示错误。</li>
+<li><strong>File/line:</strong> <code>src/Store/Repository/StoreOutboxMessageRepository.php:51</code> (<code>message.attempts + 1</code>), <code>src/Store/Command/PublishOutboxCommand.php:53,61</code></li>
+<li><strong>Description:</strong> <code>defer()</code> increments <code>attempts</code> indefinitely; <code>findUnpublished()</code> never filters on <code>attempts</code>, and there is no dead-letter path.</li>
+<li><strong>Impact:</strong> a permanently failing message (bus permanently down, unsupported topic) is retried forever every 5 minutes and accumulates rows in <code>store_outbox_message</code> forever, growing the table and churning retries with no visibility.</li>
+<li><strong>Reproduction:</strong> insert a message with an unsupported topic and run <code>app:store:outbox:publish</code> repeatedly — <code>attempts</code> grows without bound.</li>
+<li><strong>Proposed fix:</strong> cap retries (e.g. stop <code>findUnpublished</code> at a max <code>attempts</code>, or move rows to a dead-letter table after N attempts) and surface the error.</li>
 </ul>
 <h3 id="bug-3-typeversion">Bug 3 - 脆弱的信封 <code>type</code>/<code>version</code> 推导（低，稳健性）<a class="headerlink" href="#bug-3-typeversion" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1758,7 +1758,7 @@
 <li><strong>影响：</strong> 在实践中无法访问（<code>findUnpublished()</code> 返回的实体始终具有数据库 ID），但分支隐藏了编程错误而不是显示它。</li>
 <li><strong>建议的修复：</strong> 当消息没有 id 时记录或抛出而不是默默地跳过。</li>
 </ul>
-<h2 id="_5">跳过测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_1">跳过测试<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p><strong>无。</strong> 为这五个文件编写的每个正确行为测试都通过了当前的 <code>src/</code> 代码；没有 <code>src</code> 错误强制跳过。 <code>claim()</code>/<code>defer()</code>/<code>findUnpublished()</code> 的功能性单工作语义和命令的 happy-path/error-path 分支均已验证且绿色。</p>
 <h2 id="src-bug">测试说明（不是 src bug）<a class="headerlink" href="#src-bug" title="Permanent link">&para;</a></h2>
 <p>在模拟 <code>MessageBusInterface</code> 时，发现 <code>dispatch()</code> 有一个不可为 null 的 <code>Envelope</code> 返回类型：使用 <code>with()</code> 配置但没有 <code>willReturn*</code> 的模拟返回 <code>null</code>，PHP 引擎将其转换为模拟调用<em>内部</em>的 <code>TypeError</code> - 命令的 <code>catch (\Throwable)</code> 然后将其视为调度失败并推迟。这是标准的 PHPUnit/默认值行为，不是命令中的缺陷；测试必须从调度存根返回一个真实的 <code>Envelope</code> （添加的命令 test 会这样做）。</p>

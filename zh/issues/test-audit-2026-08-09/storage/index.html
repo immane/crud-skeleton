@@ -1180,7 +1180,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1635,11 +1635,11 @@
 </tr>
 <tr>
 <td><code>StorageServiceTest::testQiniuStoresAndDeletesWithSdkStubs</code></td>
-<td>Happy-path <code>store()</code> URL 构造、<code>delete()</code> 成功以及裸域 <code>$key === ''</code> 防护 (<code>QiniuStorage.php:47-49</code>) — 最后一个没有涉及到其他地方。</td>
+<td>Happy-path <code>store()</code> URL 构造、<code>delete()</code> 成功以及裸域 <code>$key === ''</code> 防护 (<code>QiniuStorage.php:47-49</code>) — 最后一个没有涉及其他任何地方。</td>
 </tr>
 <tr>
 <td><code>StorageServiceTest::testQiniuStoreAndDeleteErrorsAreReported</code></td>
-<td>唯一报道上传/删除错误传播 (<code>QiniuStorage.php:32-34,58-60</code>)。</td>
+<td>独家报道上传/删除错误传播 (<code>QiniuStorage.php:32-34,58-60</code>)。</td>
 </tr>
 <tr>
 <td><code>QiniuStorageTest::testStoreFallsBackToNameWhenSdkResultHasNoKey</code></td>
@@ -1740,9 +1740,9 @@
 </table>
 <h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
-<li>基线：<code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Storage</code> → 预计 20 次测试，75 次断言，跳过 1 次，退出 0。</li>
+<li>基线：<code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Storage</code>→预计 20 个测试，75 个断言，1 个跳过，退出 0。</li>
 <li>应用 4 次删除 + 1 次合并后：重新运行 <code>phpunit tests/Storage</code> → 预计 15 个测试（回退、跳过 bug 文档、删除未配置/sdk 测试），仍然退出 0。</li>
-<li>覆盖率健全性：<code>XDEBUG_MODE=coverage .../phpunit tests/Storage --coverage-html var/coverage</code> 并确认 <code>src/Storage/</code> 保持在 ~100% 行（删除的测试与保留的测试共享其覆盖的行）。</li>
+<li>覆盖率健全性：<code>XDEBUG_MODE=coverage .../phpunit tests/Storage --coverage-html var/coverage</code> 并确认 <code>src/Storage/</code> 保持在 ~100% 行（删除的测试与保留的测试共享其覆盖行）。</li>
 <li>确认保留的缺少 SDK/未配置的测试仍在 CI 上执行（未安装 SDK）： <code>StorageServiceTest::testQiniuRequiresSdkWhenConfigured</code> 和 <code>testQiniuRequiresConfiguration</code> 不得因类泄漏而跳过 — 串行运行整个套件，而不仅仅是 <code>tests/Storage</code>。</li>
 <li>脆弱性说明（不是冗余）：<code>LocalStorageCoverageTest::testDeleteThrowsWhenFileCannotBeUnlinked</code>依赖于<code>chmod 0555</code>阻塞<code>unlink()</code>；当 CI 以 root 身份运行时，它会失败。请密切关注它，但它是删除失败分支的唯一覆盖范围。</li>
 </ol>

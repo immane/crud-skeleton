@@ -1180,7 +1180,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1633,7 +1633,7 @@
 </tr>
 <tr>
 <td><code>tests/Common/Controller/CommentControllerTest.php</code></td>
-<td>具有重写 <code>getUser()</code> 的匿名子类的单元 (<code>TestCase</code>) + 一个 <code>FakeCommentService</code> 测试双精度</td>
+<td>具有覆盖 <code>getUser()</code> 的匿名子类的单元 (<code>TestCase</code>) + 一个 <code>FakeCommentService</code> 测试双精度</td>
 <td><code>App\Common\Controller\App\CommentController</code> 第 50 行（<code>defaultCreateValues()</code> 的非 <code>User</code> 分支）</td>
 </tr>
 <tr>
@@ -1655,7 +1655,7 @@
 </table>
 <h3 id="_2">技术注意事项<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>ContentController</strong> 没有自己的控制器逻辑 - 它是一个瘦特征控制器 (<code>use ApiView, DetailApiViewMixin, ListApiViewMixin</code>)。它唯一自己的可执行代码是构造函数，因此只需将 HTTP 请求路由到它即可 100% 覆盖。测试命中 <code>/api/v1/app/contents</code> （列表）和 <code>/api/v1/app/contents/{id}</code> （详细信息），它们依次执行 <code>ListApiViewMixin::listAction</code> / <code>DetailApiViewMixin::detailAction</code> 特征代码。在每次读取之前，<code>Content</code> 行会通过测试<code>EntityManager</code> 保留下来。</li>
+<li><strong>ContentController</strong> 没有自己的控制器逻辑 - 它是一个瘦特征控制器 (<code>use ApiView, DetailApiViewMixin, ListApiViewMixin</code>)。它唯一自己的可执行代码是构造函数，因此只需将 HTTP 请求路由到它即可 100% 覆盖。测试命中 <code>/api/v1/app/contents</code> （列表）和 <code>/api/v1/app/contents/{id}</code> （详细信息），它们依次执行 <code>ListApiViewMixin::listAction</code> / <code>DetailApiViewMixin::detailAction</code> 特征代码。在每次读取之前，<code>Content</code> 行会通过测试 <code>EntityManager</code> 保留下来。</li>
 <li><strong>CommentController 第 50 行</strong> 是 <code>defaultCreateValues()</code> 的匿名用户后备。它无法通过 HTTP 访问，因为 <code>config/packages/security.yaml</code> 阻止 <code>IS_AUTHENTICATED_FULLY</code> 后面的所有 <code>/api</code> 路由，因此必须对其进行单元测试。匿名子类覆盖 <code>AbstractController::getUser()</code> 和 <code>FakeCommentService</code> （一个实现 <code>CommentServiceInterface</code> 的真实类，因为 PHPUnit 12 不模拟 PHPDoc 声明的 <code>wrapInTransaction()</code>）运行完整的 <code>CreateApiViewMixin::createAction()</code> 路径。 <code>setRequestStack()</code>/<code>setSerializer()</code>/<code>setTranslator()</code> 的注入与现有的 <code>MediaControllerUploadTest</code> 完全相同。</li>
 <li><strong><code>Content::getTags()</code>（第103行）/<code>Category::getChildren()</code>（第121行）</strong>是惰性<code>if ($this-&gt;tags === null)</code>分支。它们的执行方式是通过 <code>ReflectionProperty::setValue()</code> <strong>不</strong> <code>setAccessible()</code> （有意避免 PHP 8.5 已弃用的调用）和 <code>newInstanceWithoutConstructor()</code> 将属性清空。</li>
 </ul>
