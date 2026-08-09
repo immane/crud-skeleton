@@ -1761,7 +1761,7 @@
 <li><code>OrderWorkflowListener</code>的<strong>时间戳副作用</strong> - <code>cancel→cancelledAt</code>、<code>pay→paidAt</code>（仅当为空时设置）、<code>fulfill→fulfilledAt</code>（仅当为空时）、<code>complete→completedAt</code>、<code>refund→refundedAt</code>（仅当为空时）； <code>submit/confirm/store_*</code> 不设置。</li>
 <li><strong>Guard 探针</strong> — 证明 <code>config/packages/workflow.yaml</code> 声明无 Guard 规则：工作流程单独允许在没有金额/用户/钱包的订单上使用 <code>pay</code>，没有 <code>fulfilledAt</code> 的 <code>complete</code> 以及没有原因的 <code>refund</code>。</li>
 </ol>
-<p><strong>HTTP 集成测试（真实的 SQLite 模式）：</strong></p>
+<p><strong>HTTP 集成测试（真实 SQLite 模式）：</strong></p>
 <ol>
 <li>带有时间戳断言的愉快路径 <code>draft→pending→confirmed→paid→fulfilled→completed→refunded</code> 到 <code>/do/{transition}</code>。</li>
 <li>商店分支：通过<code>/do</code>的<code>store_submit→store_accept→confirm→pay</code>和<code>store_submit→store_reject→cancel</code>；草稿中的 <code>store_accept</code> 被拒绝。</li>
@@ -1835,7 +1835,7 @@
 <li><strong><code>pending → awaiting_store_acceptance</code>？</strong> 不是转换 - <code>store_submit</code> 仅来自 <code>draft</code>（文档 <code>context.md</code> §7.1 图是一个简化）。根据实际 <code>workflow.yaml</code> 进行测试。</li>
 <li><strong>从 <code>paid</code>/<code>fulfilled</code> 退款（任务短语“已付款/…→已退款”）？</strong> 该配置仅允许 <code>refund: from: completed</code>。 <code>refundAction</code>正确守护<code>can('refund')</code>；来自 <code>paid</code> 的直接 <code>do/refund</code> 被拒绝。由 <code>testRefundEndpointRejectsNonCompletedOrder</code> + <code>invalidTransitionProvider</code> 确认。</li>
 <li><strong>管理 <code>refundAction</code> 发票分支跳过工作流程转换</strong> - 不是错误：<code>InvoiceService::refund()</code> 调度 <code>InvoiceRefundedEvent</code> 且 <code>OrderInvoiceListener::onInvoiceRefunded()</code> 应用 <code>refund</code> 转换（由现有 <code>TradePaymentIntegrationTest</code> 覆盖）。</li>
-<li><strong><code>/todo</code> 分页/查询参数</strong> — <code>list(null, null, false)</code> 有意评估请求；不发送任何过滤器参数，并且 <code>assertPrivilegedQueryParameters</code> 允许普通的管理 GET。只是 mixin 中的可扩展性 TODO，而不是正确性错误。</li>
+<li><strong><code>/todo</code> 分页/查询参数</strong> — <code>list(null, null, false)</code> 有意评估请求；不发送任何过滤器参数，并且 <code>assertPrivilegedQueryParameters</code> 允许普通的管理 GET。 mixin 中只有可扩展性 TODO，而不是正确性错误。</li>
 </ul>
 <h2 id="_7">最终测试运行<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \

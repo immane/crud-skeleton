@@ -1855,7 +1855,7 @@
 <h3 id="bug-5-500-html-404-json">BUG-5 — 系统端点为未知实体返回 500 HTML（不是 404 JSON） — <strong>中</strong><a class="headerlink" href="#bug-5-500-html-404-json" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>位置：</strong> <code>src/Core/EventListener/ExceptionInterceptor.php:21</code> (<code>EFFECTIVE_PATTERN = '/^\/(api)\/.*$/'</code>); <code>src/Core/Controller/System/EntityController.php:66-67</code>（<code>getClassMetadata</code> 对于未知的 FQCN 抛出异常）。</li>
-<li><strong>描述：</strong>拦截器仅处理 <code>/api/*</code> 路径，因此 <code>/system/entities/{name}</code> 上的 <code>MappingException</code> （未知实体）会绕过 JSON 错误信封并呈现 Symfony 的 HTML 错误页面 (500)。 <code>docs/ai/context.md</code> §12 中的文档暗示这些是 API 式系统端点；消费者获得 HTML。</li>
+<li><strong>描述：</strong>拦截器仅处理 <code>/api/*</code> 路径，因此 <code>/system/entities/{name}</code> 上的 <code>MappingException</code> （未知实体）会绕过 JSON 错误信封并呈现 Symfony 的 HTML 错误页面 (500)。 <code>docs/ai/context.md</code> §12 中的文档暗示这些是 API 风格的系统端点；消费者获得 HTML。</li>
 <li><strong>影响：</strong> 系统端点没有 JSON 错误契约；错误的实体名称是 500（服务器错误）而不是 404。</li>
 <li><strong>复制：</strong> <code>GET /system/entities/App/Does/Not/Exist</code> → <code>500 text/html</code> 与 <code>Doctrine\Persistence\Mapping\MappingException: Class 'App\Does\Not\Exist' does not exist</code>。</li>
 <li><strong>建议的修复：</strong> 将拦截器模式扩展到 <code>/system</code> （或在 <code>EntityController::retrieveAction()</code> 和 <code>warning(…, 404, …, 404)</code> 中捕获 <code>MappingException</code>）。</li>

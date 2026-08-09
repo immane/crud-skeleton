@@ -1664,7 +1664,7 @@
   预订 (79–82)，取消 <code>awaiting_inventory</code> 订单发布
   <code>inventory.reservation.release.requested.v1</code> 具有完整的相关负载 (79–91)。</li>
 <li><code>TradeOrderCancelledHandlerConcurrencyTest.php</code> (1 次测试) — 内的第二个 <code>findOneBy</code>
-  交易返回消费事件→提前返回（54）。</li>
+  交易返回消费事件 → 提前返回 (54)。</li>
 <li><code>InventoryReservationOutcomeCoverageTest.php</code>（19 次测试）— 已确认：无效信封 (35)，
   缺少 <code>confirmedAt</code> (39)，因未知订单/商店不匹配/tradeOrderUuid 而被忽略
   不匹配/reservationId 不匹配/非<code>awaiting_inventory</code> 状态 (63)。拒绝：无效
@@ -1784,7 +1784,7 @@
 <ul>
 <li><strong>文件/行：</strong> <code>src/Store/MessageHandler/InventoryReservationReleasedHandler.php:34-47</code>。</li>
 <li><strong>说明：</strong>释放的handler只持久化一个<code>StoreConsumedEvent</code>；它从不抬头
-  商店订单，从不验证 <code>reservationId</code> 是否匹配（与已确认/已拒绝的订单不同）
+  商店订单，从不验证 <code>reservationId</code> 是否匹配（与已确认/拒绝的订单不同）
   处理程序的相关性检查），并且从不向 Trade 发布任何确认（
   商店订单已被 <code>TradeOrderCancelledHandler</code> 标记为取消）。</li>
 <li><strong>影响：</strong> 未知或从未取消的预订的释放事件会被默默标记

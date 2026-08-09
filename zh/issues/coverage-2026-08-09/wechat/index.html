@@ -1582,9 +1582,9 @@
 
 <h1 id="100">微信模块 — 覆盖率约 100% 并报告错误<a class="headerlink" href="#100" title="Permanent link">&para;</a></h1>
 <p>日期：2026-08-09
-范围：<code>src/Wechat/**</code>（+通过网关执行的<code>src/Payment/**</code>面向微信的部分）
+范围：<code>src/Wechat/**</code>（+通过网关执行的<code>src/Payment/**</code>中面向微信的部分）
 跑步者：<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code>
-规则：<strong><code>src/</code> 下无任何更改</strong> — 仅在 <code>tests/</code> 下添加的测试以及此报告。</p>
+规则：<strong><code>src/</code> 下没有任何更改</strong> — 仅在 <code>tests/</code> 下添加的测试以及此报告。</p>
 <h2 id="_1">之前→之后的覆盖范围<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1642,7 +1642,7 @@
 </tr>
 </tbody>
 </table>
-<p>现在微信模块中的每个可执行行都被覆盖（使用 Xdebug + Clover XML 进行验证）。</p>
+<p>现在微信模块中的每个可执行行都已覆盖（使用 Xdebug + Clover XML 进行验证）。</p>
 <h2 id="18-39">添加测试文件（18 个测试，39 个断言）<a class="headerlink" href="#18-39" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>tests/Wechat/Entity/WechatUserCoverageTest.php</code> — <code>getId()</code>； <code>prePersist()</code> 当 <code>createdAt</code> 未初始化时（通过 <code>ReflectionClass::newInstanceWithoutConstructor()</code>，不弃用 <code>setAccessible()</code>）； <code>prePersist()</code> 保留现有的<code>createdAt</code>。</li>
@@ -1652,7 +1652,7 @@
 <li><code>tests/Wechat/Controller/LoginControllerCoverageTest.php</code> — <code>miniappPhone</code> 成功 (204)，<code>bindPhone</code> 运行时异常 → 400，<code>oauthCallback</code> 运行时异常 → 401。</li>
 <li><code>tests/Wechat/Service/Gateway/WechatPayGatewayNotifyBugTest.php</code> — <strong>跳过</strong>；请参阅下面的错误 1。</li>
 </ul>
-<p>运行中显示的 26 个 <code>PHPUnit Notices</code> 是预先存在的（旧 <code>WechatPayGatewayTest</code> 中的模拟对象无期望）；所有新测试都不会触发通知/弃用/警告。套件保持绿色（<code>OK</code>，78 项测试，1 项跳过）。</p>
+<p>运行中显示的 26 个 <code>PHPUnit Notices</code> 是预先存在的（旧 <code>WechatPayGatewayTest</code> 中的模拟对象无预期）；所有新测试都不会触发通知/弃用/警告。套件保持绿色（<code>OK</code>，78 项测试，1 项跳过）。</p>
 <h2 id="_2">发现错误<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h3 id="bug-1-high-v3">Bug 1 (HIGH) - 微信支付 v3 通知永远不会成功<a class="headerlink" href="#bug-1-high-v3" title="Permanent link">&para;</a></h3>
 <ul>

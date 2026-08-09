@@ -1783,7 +1783,7 @@
 <li><strong>影响：</strong></li>
 <li><code>availableTransitionsAction</code>：<code>getEnabledTransitions(null)</code>引发未捕获的<code>TypeError</code> → <strong>500</strong>而不是404。</li>
 <li><code>doTransitionAction</code>：<code>TypeError</code>被<code>catch (\Throwable)</code>吞没 → <strong>200警告</strong>包含令人困惑的“必须是对象类型”消息而不是404。</li>
-<li><strong>复制：</strong> GET/POST 具有未知 ID 的工作流程路线。</li>
+<li><strong>复制：</strong> GET/POST 具有未知 ID 的工作流程路由。</li>
 <li><strong>证据：</strong> <code>WorkflowApiViewMixinTest::testAvailableTransitionsActionMissingEntityThrowsTypeError</code> 和 <code>testDoTransitionActionMissingEntityWarnsAboutTypeError</code> 锁定当前（错误）行为。</li>
 <li><strong>建议的修复：</strong> 镜像 <code>Trade/Controller/Manage/OrderController::transitionsAction()</code>/<code>doTransitionAction()</code>：
   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">if (!$entity) {</span>
@@ -1794,7 +1794,7 @@
 <h3 id="bug-3-todoaction">Bug 3 - <code>todoAction</code> 不会重新索引过滤后的数组（低/修饰）<a class="headerlink" href="#bug-3-todoaction" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Core/View/WorkflowApiViewMixin.php:37-42</code>。</li>
-<li><strong>描述：</strong> <code>array_filter()</code> 保留原始数组键。当前导（或非连续）实体没有启用的转换时，幸存数组有间隙，并且 JSON 序列化程序在 <code>data</code> 有效负载中发出 <strong>对象</strong> (<code>{"1": {...}}</code>) 而不是 <strong>数组</strong> (<code>[{...}]</code>)。</li>
+<li><strong>说明：</strong> <code>array_filter()</code> 保留原始数组键。当前导（或非连续）实体没有启用的转换时，幸存数组有间隙，并且 JSON 序列化程序在 <code>data</code> 有效负载中发出 <strong>对象</strong> (<code>{"1": {...}}</code>) 而不是 <strong>数组</strong> (<code>[{...}]</code>)。</li>
 <li><strong>影响：</strong> 待办事项列表的客户端形状不一致/不正确。</li>
 <li><strong>复制：</strong>两个实体，其中第一个实体没有启用转换 - <code>data</code> 变为 <code>{"1": {...}}</code>。</li>
 <li><strong>建议的修复：</strong> <code>return $this-&gt;success(array_values($entities));</code> （<code>src/Trade/Controller/Manage/OrderController.php:291</code> 处的等效 <code>OrderController::todoAction()</code> 已经执行此操作）。</li>

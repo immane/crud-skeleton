@@ -1793,7 +1793,7 @@
 </tbody>
 </table>
 <h2 id="_2">保留 — 项目符号列表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p><strong>实用工具</strong>
+<p><strong>实用程序</strong>
 - <code>ArrayCommonExtendedTest</code> — 真正的 ExpressionLanguage <code>filter/map/reduce</code> 行为；这些助手被验证的唯一地方。
 - <code>ArrayCommonTest</code> — 小但包含 <code>testMergeMatchesCurrentLegacyBehavior</code>，一个真正的回归保护，用于令人惊讶的 <code>array_merge($arrays)</code> 包装。
 - <code>FixJSONTest</code> — <code>getJSONType</code>/<code>fixJSON</code> 的基本覆盖范围，均用于 <code>RestController</code> 和 <code>CreateApiViewMixin</code>。
@@ -2093,7 +2093,7 @@
 <li><strong>覆盖范围敏感的删除</strong> — 删除这些会降低仅这些测试所触及的线路的覆盖范围，并且 90% 的线路门可能会触发：</li>
 <li><code>SerializerContextFactoryTest</code> — <code>SerializerContextFactory</code>仅被<code>services.yaml</code> +此测试引用；删除它会发现该类。</li>
 <li><code>FilterDateTimeTest</code> — <code>FilterDateTime::get()</code> 仅在此处执行。</li>
-<li>Dead utils（<code>Math</code>、<code>StringCase</code>、<code>Location</code>、<code>RsaClient</code>、<code>Utils\ArrayCollection</code>、<code>Serializer\Normalizer\CircularReferenceHandler</code>、<code>ObjectCallback</code>）除了测试之外从任何地方的 <code>src/</code> 引用。仅在 <code>src/</code> 清理的同时进行修剪（添加 <code>@codeCoverageIgnore</code> 或删除死类），或者在维护者签字后接受覆盖范围下降。</li>
+<li>Dead utils（<code>Math</code>、<code>StringCase</code>、<code>Location</code>、<code>RsaClient</code>、<code>Utils\ArrayCollection</code>、<code>Serializer\Normalizer\CircularReferenceHandler</code>、<code>ObjectCallback</code>）除了测试之外从任何地方的 <code>src/</code> 引用。仅在 <code>src/</code> 清理的同时进行修剪（添加 <code>@codeCoverageIgnore</code> 或删除死类），或者在维护者签字后接受覆盖率下降。</li>
 <li>根据 <code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code> / <code>testSetNormalizerForwardsToNormalizerAwareDecorated</code> 验证两个 <code>FlatNormalizerExtendedTest</code> <code>assertTrue(true)</code> 删除（它们断言实际的转发合同并保持 <code>setSerializer</code>/<code>setNormalizer</code> 被覆盖）。</li>
 <li>不要与其他数据库引导集成测试并行运行<code>RestControllerPaginationIntegrationTest</code>（<code>var/test.db</code>模式拆卸竞赛）。</li>
 <li>断言已记录的 <code>src/</code> 错误（位置 L-2、Math M-1/M-2、OpenApi BUG-7）的跳过测试必须保留 — 它们是有意保留的。</li>
