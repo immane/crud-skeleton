@@ -1526,7 +1526,7 @@
   <a href="#bug-2-localstoragedelete-e_warning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #2（次要）- LocalStorage::delete() 在取消链接失败时发出未抑制的 E_WARNING
+        Bug #2（次要） - LocalStorage::delete() 在取消链接失败时发出未抑制的 E_WARNING
       
     </span>
   </a>
@@ -1686,7 +1686,7 @@
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="x">}</span>
 </code></pre></div></li>
 </ul>
-<h3 id="bug-2-localstoragedelete-e_warning">Bug #2（次要）- <code>LocalStorage::delete()</code> 在取消链接失败时发出未抑制的 E_WARNING<a class="headerlink" href="#bug-2-localstoragedelete-e_warning" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-localstoragedelete-e_warning">Bug #2（次要） - <code>LocalStorage::delete()</code> 在取消链接失败时发出未抑制的 E_WARNING<a class="headerlink" href="#bug-2-localstoragedelete-e_warning" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Storage/Service/LocalStorage.php:64</code> (<code>if (is_file($realPath) &amp;&amp; !unlink($realPath))</code>)。</li>
 <li><strong>描述：</strong> <code>unlink()</code> 在没有 <code>@</code> 或错误处理程序的情况下调用。当删除失败（例如，权限被拒绝）时，PHP 在第 65 行抛出预期的 <code>RuntimeException</code> 之前发出 <code>unlink(...): Permission denied</code>。</li>

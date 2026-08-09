@@ -4690,7 +4690,7 @@ Fuiou 和 Huifu 仅作为未来网关适配器经过验证的遗留架构输入�
 <p>如需退款：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">$gateway-&gt;refund($invoice, $gatewayRefundAmount, $gatewayPaidAmount, $reason, $options);</span>
 </code></pre></div>
-<p><code>Invoice::amount</code> 仍然是应付业务总额。网关付款/退款金额是在应用通用付款调整后由<code>InvoiceService</code>计算的。</p>
+<p><code>Invoice::amount</code> 仍然是应付业务总额。网关支付/退款金额是在应用通用支付调整后由<code>InvoiceService</code>计算的。</p>
 <h3 id="62">6.2 网关及调整注册<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
 <p>网关和调整提供程序实现必须通过标记迭代器进行注册。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">services</span><span class="p">:</span>
@@ -4775,7 +4775,7 @@ Fuiou 和 Huifu 仅作为未来网关适配器经过验证的遗留架构输入�
 <hr />
 <h2 id="7-webhook">7. Webhook 设计<a class="headerlink" href="#7-webhook" title="Permanent link">&para;</a></h2>
 <h3 id="71">7.1 路线<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
-<p>Webhook 端点特意位于 <code>/api/v1</code> 业务路由之外，因为它们是由提供者调用的。</p>
+<p>Webhook 端点有意位于 <code>/api/v1</code> 业务路由之外，因为它们是由提供者调用的。</p>
 <table>
 <thead>
 <tr>
@@ -5597,7 +5597,7 @@ Fuiou 和 Huifu 仅作为未来网关适配器经过验证的遗留架构输入�
 <tbody>
 <tr>
 <td><code>PaymentApiIntegrationTest</code></td>
-<td>应用程序/管理发票列表/明细/支付/退款端点</td>
+<td>应用/管理发票清单/明细/支付/退款端点</td>
 </tr>
 <tr>
 <td><code>PaymentWebhookIntegrationTest</code></td>

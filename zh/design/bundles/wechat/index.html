@@ -3007,7 +3007,7 @@
 <tr>
 <td><strong>不说话</strong></td>
 <td><code>User.php</code></td>
-<td>通过OneToOne关联WechatUser，现有用户为零</td>
+<td>通过OneToOne关联WechatUser，现有用户零</td>
 </tr>
 </tbody>
 </table>
@@ -3372,7 +3372,7 @@
 </tr>
 </tbody>
 </table>
-<p>JSAPI 需要付款人openid，通过 <code>WechatUserRepository</code> 从 <code>$invoice-&gt;getPayer()</code> 获取：
+<p>JSAPI 需要付款人 openid，通过 <code>WechatUserRepository</code> 从 <code>$invoice-&gt;getPayer()</code> 获取：
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="x">$wechatUser = $this-&gt;wechatUserRepository-&gt;findByUser($invoice-&gt;getPayer());</span>
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="x">$openid = $wechatUser-&gt;getOpenid();</span>
 </code></pre></div></p>
