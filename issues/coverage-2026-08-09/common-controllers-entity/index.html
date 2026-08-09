@@ -1,0 +1,1499 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/common-controllers-entity/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Common Module Controllers & Entities — Coverage & Bug Report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#common-module-controllers-entities-coverage-bug-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Common Module Controllers &amp; Entities — Coverage &amp; Bug Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Test files added">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notes-on-technique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes on technique
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-contentsettitleaddtagremovetag-do-not-refresh-updatedat-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 1 — Content::setTitle()/addTag()/removeTag() do not refresh updatedAt (LOW)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-app-comment-create-accepts-a-parent-from-a-different-entity-scope-medium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 2 — App comment create accepts a parent from a different entity scope (MEDIUM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-non-bugs-investigated-and-cleared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified NON-bugs (investigated and cleared)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skipped-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped items
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-test-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final test run
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="common-module-controllers-entities-coverage-bug-report">Common Module Controllers &amp; Entities — Coverage &amp; Bug Report<a class="headerlink" href="#common-module-controllers-entities-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Date: 2026-08-09</li>
+<li>Scope: <code>src/Common/Controller/App/ContentController.php</code>, <code>src/Common/Controller/App/CommentController.php</code>, <code>src/Common/Entity/Content.php</code>, <code>src/Common/Entity/Category.php</code></li>
+<li>Task: raise line coverage of the two App controllers to ~100% and close the remaining uncovered entity lines; find bugs.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+</ul>
+<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
+<p>All new files use <code>declare(strict_types=1);</code> and live in <code>App\Tests\Common\Controller</code> / <code>App\Tests\Common\Entity</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Type</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Common/Controller/ContentControllerTest.php</code></td>
+<td>WebTestCase HTTP (JWT auth via <code>IntegrationWebTestCase::createAuthenticatedClient()</code> + <code>DatabaseBootstrapTrait</code>)</td>
+<td><code>App\Common\Controller\App\ContentController</code> (was 0%, constructor line 19) — list / detail / 404 / auth-required</td>
+</tr>
+<tr>
+<td><code>tests/Common/Controller/CommentControllerTest.php</code></td>
+<td>unit (<code>TestCase</code>) with an anonymous subclass overriding <code>getUser()</code> + a <code>FakeCommentService</code> test double</td>
+<td><code>App\Common\Controller\App\CommentController</code> line 50 (the non-<code>User</code> branch of <code>defaultCreateValues()</code>)</td>
+</tr>
+<tr>
+<td><code>tests/Common/Controller/CommentParentScopeIntegrationTest.php</code></td>
+<td>WebTestCase HTTP</td>
+<td>documents Bug 2 (skipped correct-behaviour test)</td>
+</tr>
+<tr>
+<td><code>tests/Common/Entity/ContentEntityCoverageTest.php</code></td>
+<td>unit (<code>TestCase</code>)</td>
+<td><code>App\Common\Entity\Content</code> line 103 (<code>getTags()</code> lazy re-init) + Bug 1 skipped tests</td>
+</tr>
+<tr>
+<td><code>tests/Common/Entity/CategoryEntityCoverageTest.php</code></td>
+<td>unit (<code>TestCase</code>)</td>
+<td><code>App\Common\Entity\Category</code> line 121 (<code>getChildren()</code> lazy re-init)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notes-on-technique">Notes on technique<a class="headerlink" href="#notes-on-technique" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>ContentController</strong> has no controller logic of its own — it is a thin trait controller (<code>use ApiView, DetailApiViewMixin, ListApiViewMixin</code>). Its only own executable code is the constructor, so it is covered 100% simply by routing HTTP requests to it. Tests hit <code>/api/v1/app/contents</code> (list) and <code>/api/v1/app/contents/{id}</code> (detail), which in turn execute the <code>ListApiViewMixin::listAction</code> / <code>DetailApiViewMixin::detailAction</code> trait code. A <code>Content</code> row is persisted through the test <code>EntityManager</code> before each read.</li>
+<li><strong>CommentController line 50</strong> is the anonymous-user fallback of <code>defaultCreateValues()</code>. It is not reachable over HTTP because <code>config/packages/security.yaml</code> blocks all <code>/api</code> routes behind <code>IS_AUTHENTICATED_FULLY</code>, so it must be unit-tested. The anonymous subclass overrides <code>AbstractController::getUser()</code> and a <code>FakeCommentService</code> (a real class implementing <code>CommentServiceInterface</code>, since PHPUnit 12 does not mock PHPDoc-declared <code>wrapInTransaction()</code>) runs the full <code>CreateApiViewMixin::createAction()</code> path. <code>setRequestStack()</code>/<code>setSerializer()</code>/<code>setTranslator()</code> are injected exactly like the existing <code>MediaControllerUploadTest</code>.</li>
+<li><strong><code>Content::getTags()</code> (line 103) / <code>Category::getChildren()</code> (line 121)</strong> are the lazy <code>if ($this-&gt;tags === null)</code> branches. They are exercised by nulling the property through <code>ReflectionProperty::setValue()</code> <strong>without</strong> <code>setAccessible()</code> (the PHP 8.5-deprecated call is deliberately avoided) and by <code>newInstanceWithoutConstructor()</code>.</li>
+</ul>
+<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
+<p>Baseline uncovered lines (from <code>var/uncovered-map.txt</code>, generated 2026-08-09 07:39) vs. status after the new tests. Verified by running</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php vendor/bin/phpunit \
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    tests/Common/Controller/ContentControllerTest.php \
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    tests/Common/Controller/CommentControllerTest.php \
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    tests/Common/Entity/ContentEntityCoverageTest.php \
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    tests/Common/Entity/CategoryEntityCoverageTest.php \
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    --coverage-clover /tmp/cov.xml
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Baseline uncovered</th>
+<th>After new tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>App\Common\Controller\App\ContentController</code> (was 0%)</td>
+<td>19</td>
+<td><strong>covered</strong> (constructor 2/2 = 100%)</td>
+</tr>
+<tr>
+<td><code>App\Common\Controller\App\CommentController</code> (was 92.31%)</td>
+<td>50</td>
+<td><strong>covered</strong> (line 50 hit by the unit test)</td>
+</tr>
+<tr>
+<td><code>App\Common\Entity\Content</code> (was 96.88%)</td>
+<td>103</td>
+<td><strong>covered</strong></td>
+</tr>
+<tr>
+<td><code>App\Common\Entity\Category</code> (was 97.92%)</td>
+<td>121</td>
+<td><strong>covered</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Combined with the pre-existing suite (<code>tests/Common/Entity/*Test.php</code> covers the getter/setter/prePersist body; <code>tests/Integration/AppApiRegressionTest.php</code> covers <code>CommentController::commonFilter()</code> lines 29–33 and the <code>User</code> branch of <code>defaultCreateValues()</code>), the four files reach ~100% across the full suite. <code>var/uncovered-map.txt</code> lists no other <code>Common/</code> files with uncovered lines, so there is nothing else in scope.</p>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-contentsettitleaddtagremovetag-do-not-refresh-updatedat-low">Bug 1 — <code>Content::setTitle()</code>/<code>addTag()</code>/<code>removeTag()</code> do not refresh <code>updatedAt</code> (LOW)<a class="headerlink" href="#bug-1-contentsettitleaddtagremovetag-do-not-refresh-updatedat-low" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Common/Entity/Content.php:65-70</code> (<code>setTitle</code>), <code>:108-120</code> (<code>addTag</code>/<code>removeTag</code>).</li>
+<li><strong>Description:</strong> Every other setter in the file (<code>setBody()</code> line 77-83, <code>setCategory()</code> line 90-95) calls <code>$this-&gt;touch()</code> on mutation, and <strong>every</strong> setter in the sibling Common entities — <code>Category</code>, <code>Comment</code>, <code>Page</code>, <code>Setting</code>, <code>Tag</code>, <code>Media</code>, <code>Picture</code> — follows the same "touch on every mutation" convention. <code>Content::setTitle()</code> is the only setter in the module that mutates a field <strong>without</strong> touching, and the tag-collection mutators don't either.</li>
+<li><strong>Impact:</strong> A title-only edit (e.g. <code>PUT /api/v1/manage/contents/{id}</code> with only <code>title</code>, or <code>$content-&gt;setTitle(...)</code> in code) leaves <code>updatedAt</code> unchanged, so API consumers/DBs that rely on <code>updatedAt</code> to detect changes miss the mutation. <code>updatedAt</code> is therefore not a reliable change indicator for <code>Content</code>, unlike every other entity in the module. (The existing <code>ContentTest::testSettersAreFluentAndTouchUpdatesTimestamp</code> masks this by chaining <code>setTitle(...)-&gt;setBody(...)</code>, so the touch is attributed to <code>setBody</code>.)</li>
+<li><strong>Reproduction:</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">$content = new Content(&#39;before&#39;);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">$content-&gt;setTitle(&#39;after&#39;);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">var_dump($content-&gt;getUpdatedAt()); // null — bug: setBody() would set a DateTimeImmutable</span>
+</code></pre></div></li>
+<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Common\Entity\ContentEntityCoverageTest::testSetTitleTouchesUpdatedAt</code> and <code>::testAddTagTouchesUpdatedAt</code> assert <code>updatedAt</code> is set after <code>setTitle</code>/<code>addTag</code>; they <strong>fail</strong> against the current code and are therefore <strong>skipped</strong>.</li>
+<li><strong>Proposed fix:</strong> add <code>$this-&gt;touch();</code> to <code>setTitle()</code>, <code>addTag()</code>, and <code>removeTag()</code>, mirroring <code>setBody()</code> and the other entities.</li>
+</ul>
+<h3 id="bug-2-app-comment-create-accepts-a-parent-from-a-different-entity-scope-medium">Bug 2 — App comment create accepts a <code>parent</code> from a different entity scope (MEDIUM)<a class="headerlink" href="#bug-2-app-comment-create-accepts-a-parent-from-a-different-entity-scope-medium" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Common/Controller/App/CommentController.php:22</code> (<code>protected array $acceptedCreateProperties = ['parent'];</code>), combined with <code>CreateApiViewMixin::createAction()</code> (<code>src/Core/View/CreateApiViewMixin.php:118-124</code>) forwarding <code>parent</code> straight into <code>CommentService::update()</code>. There is no validation of the parent's <code>entityType</code>/<code>entityId</code> anywhere in the flow (<code>CommentService</code> is an empty <code>BaseService</code> subclass; <code>Comment</code> has no constraints on the parent relation).</li>
+<li><strong>Description:</strong> <code>POST /api/v1/app/comments</code> accepts any integer <code>parent</code> id. <code>update()</code> (<code>src/Core/Service/Concern/BaseServiceMutationTrait.php:70-89</code>) only resolves the ManyToOne target by id; it never verifies that the parent comment shares the same <code>entityType</code>/<code>entityId</code> as the new comment.</li>
+<li><strong>Impact:</strong> A client can build a "reply" whose <code>entityType</code>/<code>entityId</code> point at content A while its <code>parent</code> belongs to content B. <code>CommentRepository::findByEntity()</code> (which drives approved-thread listing per entity) will then render the reply under A's thread even though its parent lives under B — orphaned/cross-entity threads that cannot be traversed consistently, and the moderation state of one entity's thread leaks into another's.</li>
+<li><strong>Reproduction:</strong> create a parent comment on <code>Page/1</code> (approved), then <code>POST /api/v1/app/comments</code> with <code>{"entityType":"Content","entityId":99,"parent":&lt;parentId&gt;}</code> → returns 201 instead of rejecting the mismatch.</li>
+<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Common\Controller\CommentParentScopeIntegrationTest::testReplyParentMustBelongToSameEntityScope</code> asserts a 400 for the cross-entity reply; it <strong>fails</strong> against the current code (201) and is therefore <strong>skipped</strong>.</li>
+<li><strong>Proposed fix:</strong> in <code>CommentController::processCreateContent()</code> (or in the service) reject when <code>parent</code> is set and <code>parent.entityType !== entityType || parent.entityId !== entityId</code> (return 400), mirroring the entity-scope constraint already enforced by <code>CommentRepository::findByEntity()</code>.</li>
+</ul>
+<h2 id="verified-non-bugs-investigated-and-cleared">Verified NON-bugs (investigated and cleared)<a class="headerlink" href="#verified-non-bugs-investigated-and-cleared" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>CommentController::defaultCreateValues()</code> line 50 (non-<code>User</code> branch) is unreachable over HTTP</strong> — <code>security.yaml</code> gates every <code>/api</code> route behind <code>IS_AUTHENTICATED_FULLY</code>, so <code>getUser()</code> always returns a real <code>User</code> in the API flow. The branch is defensive dead code; it is now covered by the unit test but is not a bug.</li>
+<li><strong><code>CommentController::commonFilter()</code> returning <code>['author' =&gt; $this-&gt;getUser()]</code></strong> — the App list/detail endpoints intentionally scope comments to the current user. Whether pending comments should be excluded from the App list is a product decision; the current behaviour (author-filter only) is consistent with the existing integration suite (<code>testAppCommentPendingNotVisibleInAppList</code> explicitly asserts pending comments DO appear), so the test named <code>testAppCommentListOnlyReturnsApproved</code> is simply mis-named, not buggy.</li>
+<li><strong><code>Content</code>/<code>Category</code> lazy collection re-init and <code>prePersist</code></strong> — <code>getTags()</code>/<code>getChildren()</code> returning a fresh <code>ArrayCollection</code> when the property is null is consistent with how the repositories/list views consume the collections; no correctness issue found.</li>
+</ul>
+<h2 id="skipped-items">Skipped items<a class="headerlink" href="#skipped-items" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>App\Tests\Common\Entity\ContentEntityCoverageTest::testSetTitleTouchesUpdatedAt</code> — <strong>skipped</strong> (asserts correct behaviour; fails on Bug 1).</li>
+<li><code>App\Tests\Common\Entity\ContentEntityCoverageTest::testAddTagTouchesUpdatedAt</code> — <strong>skipped</strong> (asserts correct behaviour; fails on Bug 1).</li>
+<li><code>App\Tests\Common\Controller\CommentParentScopeIntegrationTest::testReplyParentMustBelongToSameEntityScope</code> — <strong>skipped</strong> (asserts correct behaviour; fails on Bug 2).</li>
+</ul>
+<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    tests/Common/Controller/ContentControllerTest.php \
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    tests/Common/Controller/CommentControllerTest.php \
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    tests/Common/Controller/CommentParentScopeIntegrationTest.php \
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    tests/Common/Entity/ContentEntityCoverageTest.php \
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    tests/Common/Entity/CategoryEntityCoverageTest.php --no-coverage
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>OK, but some tests were skipped!
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>Tests: 15, Assertions: 30, Skipped: 3.
+</code></pre></div>
+<p>15 test cases (5 ContentController HTTP, 2 CommentController unit, 1 CommentParentScope skipped integration, 3 + 2 skipped Content entity, 3 Category entity), 0 failures/errors/notices/warnings/deprecations, 3 skipped (Bug 1 ×2 and Bug 2 documentation). A full <code>tests/Common/Controller</code> + <code>tests/Common/Entity</code> run stays green (77 tests, 235 assertions, 3 skipped).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

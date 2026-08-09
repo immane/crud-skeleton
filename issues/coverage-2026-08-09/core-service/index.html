@@ -1,0 +1,1549 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/core-service/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core/Service + Core/Controller/RestController — Coverage to ~100% - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#coreservice-corecontrollerrestcontroller-coverage-to-100" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core/Service + Core/Controller/RestController — Coverage to ~100%
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#result-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Result summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added-all-green-no-deprecationsnoticeswarnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added (all green, no deprecations/notices/warnings)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-baseservicemutationtraitphp137-mutable-datetime-assigned-to-immutable-typed-setters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 1 — BaseServiceMutationTrait.php:137 — mutable DateTime assigned to immutable-typed setters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-baseservicereadlisttraitphp254-sorter-comparator-never-returns-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 2 — BaseServiceReadListTrait.php:254 — sorter comparator never returns 0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-baseservicereadlisttraitphp242-243-255-256-dead-catch-exception-around-legacy-evaluator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 3 — BaseServiceReadListTrait.php:242-243, 255-256 — dead catch (\Exception) around legacy evaluator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-4-baseservicereadlisttraitphp132-134-unreachable-is_string-guard-in-joiner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 4 — BaseServiceReadListTrait.php:132-134 — unreachable !is_string guard in $joiner
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-5-baseservicemutationtraitphp58-59-157-158-178-179-unreachable-is_objectobject-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 5 — BaseServiceMutationTrait.php:58-59, 157-158, 178-179 — unreachable !is_object($object) checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minor-design-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minor / design notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skipped-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caveats
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="coreservice-corecontrollerrestcontroller-coverage-to-100">Core/Service + Core/Controller/RestController — Coverage to ~100%<a class="headerlink" href="#coreservice-corecontrollerrestcontroller-coverage-to-100" title="Permanent link">&para;</a></h1>
+<p><strong>Date:</strong> 2026-08-09
+<strong>Scope:</strong> <code>Core/Service/*</code> + <code>Core/Controller/RestController</code>
+<strong>Constraint:</strong> no changes under <code>src/</code>; only test files added under <code>tests/</code>.</p>
+<h2 id="result-summary">Result summary<a class="headerlink" href="#result-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Core/Service/ExpressionService.php</code></td>
+<td>62.5%</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td><code>src/Core/Service/LegacyEvaluator.php</code></td>
+<td>91.67%</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td><code>src/Core/Service/DefaultServiceLocator.php</code></td>
+<td>84.21%</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td><code>src/Core/Service/Concern/BaseServiceInfrastructureTrait.php</code></td>
+<td>80.23%</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td><code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code></td>
+<td>94.08%</td>
+<td><strong>99.34%</strong></td>
+</tr>
+<tr>
+<td><code>src/Core/Service/Concern/BaseServiceMutationTrait.php</code></td>
+<td>90.98%</td>
+<td><strong>97.54%</strong></td>
+</tr>
+<tr>
+<td><code>src/Core/Controller/RestController.php</code></td>
+<td>94.01%</td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The only remaining uncovered lines (ReadList <code>133</code>, Mutation <code>59</code>, <code>158</code>, <code>179</code>) are
+provably <strong>unreachable dead code</strong> (see Bugs 4 &amp; 5) and cannot be exercised by any valid test.</p>
+<h2 id="test-files-added-all-green-no-deprecationsnoticeswarnings">Test files added (all green, no deprecations/notices/warnings)<a class="headerlink" href="#test-files-added-all-green-no-deprecationsnoticeswarnings" title="Permanent link">&para;</a></h2>
+<ol>
+<li><code>tests/Core/Service/ExpressionServiceCoverageTest.php</code> (4 tests)</li>
+<li>cache-hit rebuild path (<code>createQuery</code> + parameter wrappers), garbage cache entry fall-through,
+     cache-store (<code>set</code> with name/value pairs), <code>ArrayCollection</code> → array parameter conversion.</li>
+<li><code>tests/Core/Service/LegacyEvaluatorCoverageTest.php</code> (1 test)</li>
+<li><code>$language === null</code> → <code>evaluate()</code>/<code>evaluateBool()</code> return <code>false</code>.</li>
+<li><code>tests/Core/Service/DefaultServiceLocatorCoverageTest.php</code> (4 tests)</li>
+<li><code>getRequestStack()</code> present/missing, <code>getSerializer()</code> legacy-service-name fallback and both-missing → <code>null</code>.</li>
+<li><code>tests/Core/Service/BaseServiceInfrastructureTraitCoverageTest.php</code> (17 tests)</li>
+<li><code>listResultToCollection()</code> QueryBuilder non-empty/empty results; container-backed lazy EM; EM-unavailable
+     exception; repository default + alternate-class resolution; container logger / logger exception /
+     missing-logger fallback; serializer cached from locator / locator exception fallback to container /
+     container exception fallback to built-in serializer; <code>wrapInTransaction()</code> fallback (with and without
+     <code>flush()</code>), commit path, rollback path, and inactive-transaction skip-rollback path.</li>
+<li><code>tests/Core/Service/BaseServiceMutationTraitCoverageTest.php</code> (14 tests, 1 skipped)</li>
+<li>unknown data key <code>continue</code>; <code>ManyToOne</code>/<code>OneToMany</code> with <code>targetEntity: null</code> <code>continue</code>;
+     to-one and to-many relation-not-found <code>NotFoundHttpException</code>; direct <code>DateTimeInterface</code> value
+     assignment; <code>ReflectionException</code> from a throwing property attribute → <code>return false</code>;
+     generic setter exception rethrow; <code>UniqueConstraintViolationException</code> → <code>ValidatorException('Duplication entries')</code>;
+     generic flush exception rethrow; date-like mapping true/false via property named types; untyped property.</li>
+<li><strong>1 skipped</strong> documenting the immutable-datetime src bug (Bug 1).</li>
+<li><code>tests/Core/Service/BaseServiceReadListTraitCoverageTest.php</code> (5 tests)</li>
+<li><code>list()</code> with empty root aliases → <code>ValidatorException</code>; multi-segment <code>@select</code> join generation
+     (<code>$joins</code> map + <code>leftJoin</code>); legacy in-memory filter failure → empty result; legacy sorter success
+     (comparator <code>? 1 : -1</code> both branches); legacy sorter failure → <code>return 0</code> (order preserved).</li>
+<li><code>tests/Core/Controller/RestControllerCoverage2Test.php</code> (12 tests)</li>
+<li><code>resolveService()</code> throw (no container / service missing) + success; <code>getService()</code> throw + declared-service
+     success; <code>getRequestStack()</code>/<code>getSerializer()</code>/<code>getTranslator()</code> unavailable throws; <code>@expands</code>
+     <code>entity.</code>-prefixed chain shift; expands getter exception silently swallowed; <code>@display</code> traversing
+     intermediate arrays; <code>@display</code> expression-object evaluation exception swallowed.</li>
+<li><code>tests/Core/Controller/RestControllerPaginationIntegrationTest.php</code> (1 test, integration)</li>
+<li><code>pagination()</code> against a real <code>QueryBuilder</code>/<code>DoctrinePaginator</code> (needs real EM + schema; see Caveats).</li>
+</ol>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-baseservicemutationtraitphp137-mutable-datetime-assigned-to-immutable-typed-setters">Bug 1 — <code>BaseServiceMutationTrait.php:137</code> — mutable DateTime assigned to immutable-typed setters<a class="headerlink" href="#bug-1-baseservicemutationtraitphp137-mutable-datetime-assigned-to-immutable-typed-setters" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Description:</strong> When updating a date-like field the trait always builds a mutable <code>new \DateTime((string) $val)</code>
+  and passes it to the setter, regardless of the property/setter type.</li>
+<li><strong>Impact:</strong> For entities with a <code>\DateTimeImmutable</code> typed property/setter (e.g. <code>#[ORM\Column(type: 'datetime_immutable')]</code>),
+  <code>update()</code> throws a <code>TypeError: must be of type DateTimeImmutable, DateTime given</code>. Immutable datetime fields
+  cannot be updated through the generic service.</li>
+<li><strong>Reproduction:</strong> Entity with <code>private ?\DateTimeImmutable $created;</code> + <code>setCreated(\DateTimeImmutable)</code>; call
+  <code>$service-&gt;update($entity, ['created' =&gt; '2026-02-02 08:00:00'])</code> → <code>TypeError</code> (confirmed while writing
+  <code>BaseServiceMutationTraitCoverageTest</code>). Skipped test: <code>testUpdateWithImmutableDateTimeTypedPropertyIsBroken</code>.</li>
+<li><strong>Proposed fix:</strong> Inspect the setter/property type (the trait already knows <code>isDateLikeMapping</code>) and construct
+  <code>\DateTimeImmutable</code> when the target type is immutable, or normalize through <code>\DateTime::createFromInterface()</code> /
+  the appropriate class.</li>
+</ul>
+<h3 id="bug-2-baseservicereadlisttraitphp254-sorter-comparator-never-returns-0">Bug 2 — <code>BaseServiceReadListTrait.php:254</code> — sorter comparator never returns <code>0</code><a class="headerlink" href="#bug-2-baseservicereadlisttraitphp254-sorter-comparator-never-returns-0" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Description:</strong> <code>return $this-&gt;getLegacyEvaluator()-&gt;evaluateBool($sorter, ...) ? 1 : -1;</code> has no <code>0</code> case, so
+  the comparator reports <code>x &lt; y</code> for equal keys (both <code>(x,y)</code> and <code>(y,x)</code> return <code>-1</code>).</li>
+<li><strong>Impact:</strong> Violates the <code>usort</code> comparator contract (must be antisymmetric). Ties produce unstable/undefined
+  ordering; a malformed sorter silently degrades instead of preserving order.</li>
+<li><strong>Reproduction:</strong> <code>@sort</code> comparing ids of two equal-id entities — comparator returns <code>-1</code> for both argument orders.</li>
+<li><strong>Proposed fix:</strong> Compute a comparable scalar (e.g. <code>$a = evaluateBool(...)</code> / <code>$b = ...</code>) and return
+  <code>$a === $b ? 0 : ($a ? 1 : -1)</code>, or return <code>0</code> when the boolean is identical.</li>
+</ul>
+<h3 id="bug-3-baseservicereadlisttraitphp242-243-255-256-dead-catch-exception-around-legacy-evaluator">Bug 3 — <code>BaseServiceReadListTrait.php:242-243, 255-256</code> — dead <code>catch (\Exception)</code> around legacy evaluator<a class="headerlink" href="#bug-3-baseservicereadlisttraitphp242-243-255-256-dead-catch-exception-around-legacy-evaluator" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Description:</strong> <code>LegacyEvaluator::evaluate()</code> already catches every <code>\Exception</code> internally and returns <code>false</code>,
+  so the <code>catch (\Exception $e) { return false; }</code> / <code>return 0;</code> blocks never fire. Only <code>\Error</code>s (e.g. undefined
+  method on the entity inside the expression) escape — and those are not caught by <code>catch (\Exception)</code>.</li>
+<li><strong>Impact:</strong> The defensive catch gives false confidence; an <code>\Error</code> from an entity getter during in-memory
+  filtering/sorting propagates as an unhandled 500 instead of being suppressed. Dead code.</li>
+<li><strong>Reproduction:</strong> Inject a legacy evaluator that throws inside <code>evaluateBool()</code>; the <code>catch</code> is never reached
+  because <code>evaluate()</code> already swallowed the exception. (Coverage tests exercise the blocks by injecting a
+  subclass whose <code>evaluateBool()</code> throws directly.)</li>
+<li><strong>Proposed fix:</strong> Either catch <code>\Throwable</code> (if in-memory evaluation must never fail) or remove the dead catch.</li>
+</ul>
+<h3 id="bug-4-baseservicereadlisttraitphp132-134-unreachable-is_string-guard-in-joiner">Bug 4 — <code>BaseServiceReadListTrait.php:132-134</code> — unreachable <code>!is_string</code> guard in <code>$joiner</code><a class="headerlink" href="#bug-4-baseservicereadlisttraitphp132-134-unreachable-is_string-guard-in-joiner" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Description:</strong> <code>$joiner = function(?string &amp;$expression, ...)</code> binds by reference. In strict mode, passing a
+  non-string (e.g. an array <code>@groupBy[]</code> / <code>@order[]</code>) throws <code>TypeError</code> at the call site <em>before</em> the guard
+  <code>if (!is_string($expression)) return;</code> runs. The guard is unreachable (verified in a sandbox).</li>
+<li><strong>Impact:</strong> Malformed query params cause a 500 <code>TypeError</code> instead of a graceful validation error; the guard is
+  misleading dead code.</li>
+<li><strong>Reproduction:</strong> Request with <code>@groupBy</code> as an array → <code>TypeError</code> on <code>$joiner($groupBy, ...)</code>.</li>
+<li><strong>Proposed fix:</strong> Validate <code>@select/@groupBy/@order</code> are strings before invoking <code>$joiner</code>, or widen the
+  parameter to <code>mixed &amp;$expression</code>.</li>
+</ul>
+<h3 id="bug-5-baseservicemutationtraitphp58-59-157-158-178-179-unreachable-is_objectobject-checks">Bug 5 — <code>BaseServiceMutationTrait.php:58-59, 157-158, 178-179</code> — unreachable <code>!is_object($object)</code> checks<a class="headerlink" href="#bug-5-baseservicemutationtraitphp58-59-157-158-178-179-unreachable-is_objectobject-checks" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Description:</strong> Three <code>if (!is_object($object)) throw new RuntimeException('Object became invalid during update')</code>
+  blocks are unreachable: <code>update()</code> already throws <code>ValidatorException</code> when <code>$object</code> is not an object (lines
+  40-48), and nothing reassigns <code>$object</code> to a non-object afterwards (the author even added
+  <code>@phpstan-ignore function.alreadyNarrowedType</code>).</li>
+<li><strong>Impact:</strong> Dead code; misleading signal that the object can change type mid-update. These 3 lines are the reason
+  <code>BaseServiceMutationTrait</code> cannot reach 100% line coverage.</li>
+<li><strong>Reproduction:</strong> None (unreachable).</li>
+<li><strong>Proposed fix:</strong> Remove the redundant checks (lines 58-59, 157-159, 178-180).</li>
+</ul>
+<h3 id="minor-design-notes">Minor / design notes<a class="headerlink" href="#minor-design-notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>ExpressionService::buildFilter()</code> returns a <code>Doctrine\ORM\Query</code> on a cache hit but a <code>QueryBuilder</code> on a cache
+  miss (documented <code>Query|QueryBuilder</code>). Callers only use <code>getDQL()</code>/parameters so it is harmless today, but the
+  inconsistent return type is a latent contract issue. Cache-hit path also trusts <code>parameters</code> to be iterable
+  (an invalid cached entry with a non-array <code>parameters</code> would <code>TypeError</code> in <code>array_map</code>).</li>
+<li><code>RestController::expandObjectToMetadata()</code> depth guard <code>0 === $level</code> (line 192) never fires for the default
+  <code>$level = -1</code> (decrementing <code>-1, -2, …</code> never equals <code>0</code>); recursion is bounded only by chain length.</li>
+<li><code>BaseServiceMutationTrait::update()</code> relation processing calls <code>$object-&gt;$getter() ?? new ArrayCollection()</code>
+  (line 103); a getter returning a plain array would fail on <code>-&gt;map()</code>. Doctrine collections are unaffected.</li>
+<li><code>BaseServiceInfrastructureTrait::getLogger()</code>/<code>getEntityManager()</code> container-fallback branches are only
+  reachable when a custom <code>ServiceLocatorInterface</code> returns <code>null</code> for the accessor; with <code>DefaultServiceLocator</code>
+  the constructor always populates <code>$this-&gt;logger</code>/<code>$this-&gt;em</code> directly.</li>
+</ul>
+<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>BaseServiceMutationTraitCoverageTest::testUpdateWithImmutableDateTimeTypedPropertyIsBroken</code> — skipped (src Bug 1).</li>
+</ul>
+<h2 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>RestControllerPaginationIntegrationTest</code> boots the Symfony kernel and, via <code>DatabaseBootstrapTrait</code>,
+  <strong>drops and recreates the shared sqlite schema at <code>var/test.db</code></strong>. Do not run it in parallel with other
+  integration tests that bootstrap the same DB file; it is safe when run alone or sequentially.</li>
+<li>Coverage numbers above were measured with: existing <code>tests/Core/Service</code> + <code>tests/Core/Controller</code> +
+  <code>tests/Integration/CoreServiceIntegrationTest.php</code> + <code>tests/Integration/BaseServiceIntegrationTest.php</code>
+  plus the new test files, <code>XDEBUG_MODE=coverage</code>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

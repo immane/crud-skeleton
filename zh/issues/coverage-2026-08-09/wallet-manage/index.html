@@ -1,0 +1,1466 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/coverage-2026-08-09/wallet-manage/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>钱包管理 — 覆盖范围和错误报告 - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              钱包管理 — 覆盖范围和错误报告
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 覆盖结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.添加测试文件（全部在tests/下，全绿色）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 发现错误（未更改源代码）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 发现错误（未更改源代码）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-amount-int" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BUG-1 — amount 被 (int) 默默强制 — 小数/字符串金额被截断（中）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-str_ends_with-not-found-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BUG-2 — 从异常消息文本 (str_ends_with(..., 'not found')) 派生的 HTTP 状态（中/低）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-empty-amount-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BUG-3 — empty() 将 amount = 0 视为“缺失”，返回错误的验证消息（低）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-4-201" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BUG-4 — 幂等重放返回内部不一致的 201 主体（中）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-5-walletservicereconcile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BUG-5 — WalletService::reconcile() 不是原子的（低）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 注释
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">钱包管理 — 覆盖范围和错误报告<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<ul>
+<li>日期：2026-08-09</li>
+<li>范围：<code>src/Wallet/Controller/Manage/TransferController.php</code>、<code>src/Wallet/Service/WalletService.php</code>（<code>var/uncovered-map.txt</code>中最后两个未覆盖的钱包文件）</li>
+<li>遵守约束：<strong>未修改 <code>src/</code> 文件</strong> — 仅添加 <code>tests/</code> 下的测试文件和此报告。</li>
+</ul>
+<h2 id="1">1. 覆盖结果<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>通过运行完整的 <code>tests/Wallet</code> 套件来测量覆盖率
+<code>--coverage-filter src/Wallet</code>（PHP 8.5.1、PHPUnit 12.5.30）。列出的两个文件
+<code>var/uncovered-map.txt</code> 是唯一剩余的未覆盖的钱包条目；现在两者都处于 100%。</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>之前</th>
+<th>之后</th>
+<th>添加行</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Wallet/Controller/Manage/TransferController.php</code></td>
+<td>95.24%</td>
+<td><strong>100%</strong> (63/63)</td>
+<td>67、106、108</td>
+</tr>
+<tr>
+<td><code>src/Wallet/Service/WalletService.php</code></td>
+<td>98.70%</td>
+<td><strong>100%</strong> (77/77)</td>
+<td>148</td>
+</tr>
+</tbody>
+</table>
+<p><code>var/uncovered-map.txt</code> 中没有出现其他 <code>Wallet/...</code> 条目 — 地图已被扫描并且
+其他一切（实体、存储库、<code>TransferService</code>、<code>TransactionService</code>、支付 DTO、
+应用程序/管理<code>WalletController</code>/<code>TransactionController</code>）已经完全覆盖。</p>
+<p>完整的 <code>tests/Wallet</code> 套件结果：<code>OK (182 tests, 524 assertions, 2 skipped)</code> — 2 被跳过
+属于本报告（如下）；预先存在的数据库集成测试顺利通过。</p>
+<h2 id="2tests">2.添加测试文件（全部在<code>tests/</code>下，全绿色）<a class="headerlink" href="#2tests" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>覆盖目标</th>
+<th>笔记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Wallet/Controller/Manage/TransferControllerTest.php</code></td>
+<td><code>TransferController</code>第67、106、108行+全分支矩阵</td>
+<td>24 项测试；模拟 <code>TransferServiceInterface</code> + <code>#[AllowMockObjectsWithoutExpectations]</code> + <code>setRequestStack/setSerializer/setTranslator</code> （交易 <code>OrderControllerTest</code> 模式）。涵盖创建/存款保护条款（缺少字段、非正/负/非数字金额、无效 JSON）、愉快路径（断言服务接收 int-cast 钱包 ID、响应负载）以及每个异常分支：<code>InsufficientFundsException</code>→402、<code>WalletFrozenException</code>→403（存款 106）、<code>SameWalletTransferException</code>→400、普通 <code>\InvalidArgumentException</code>→400（创建 67、存款 108）、 <code>RuntimeException</code>消息结尾-<code>not found</code>→404，其他<code>RuntimeException</code>→500。</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Service/WalletServiceCoverageTest.php</code></td>
+<td><code>WalletService</code> 148 号线</td>
+<td>2 次测试； EM 解析非 <code>WalletRepository</code>（普通 <code>EntityRepository</code> 模拟 — 满足声明的 <code>getRepository()</code> 返回类型，但未通过 <code>instanceof</code> 防护），因此 <code>getWalletRepository()</code> 抛出 <code>LogicException('Wallet repository is not available.')</code>，通过 <code>verifyBalance()</code> 和 <code>reconcile()</code> 执行。</td>
+</tr>
+</tbody>
+</table>
+<p>跳过的测试： <strong>3</strong> — 每个都是正确行为测试，但针对当前 <code>src/</code> 失败，并且是
+因此跳过保持套件绿色。请参阅下面的 BUG-3 和 BUG-4。</p>
+<h2 id="3">3. 发现错误（未更改源代码）<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-amount-int">BUG-1 — <code>amount</code> 被 <code>(int)</code> 默默强制 — 小数/字符串金额被截断（中）<a class="headerlink" href="#bug-1-amount-int" title="Permanent link">&para;</a></h3>
+<ul>
+<li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:36</code>（createAction）和<code>:83</code>（depositAction）</li>
+<li>描述：<code>$amount = (int) ($content['amount']);</code>。唯一的保护是<code>empty()</code>（存在）和<code>$amount &lt;= 0</code>（积极）； <strong>没有整数性验证</strong>。 JSON <code>amount: 12.99</code> 变为 <code>12</code>，<code>amount: "12abc"</code> 变为 <code>12</code>，<code>amount: "1e3"</code> 变为 <code>1</code>（1000 默默减少为 1）。小数值会被截断，而不是被拒绝。</li>
+<li>影响：财务正确性 — 客户发送小数金额（例如 <code>1.99</code>），其 0.99 悄然下降（99% 贷方不足/借方不足）；该错误对于调用者来说是不可见的。预先存在的模糊测试<code>tests/Wallet/Integration/WalletApiRegressionTest.php:427</code>甚至编码了截断（<code>'float amount' =&gt; [['...', 50.5], 201] // casts to int 50, passes</code>），因此风险是已知并接受的，但对于实际支付金额来说仍然是危险的。</li>
+<li>复制：<code>POST /api/v1/manage/transfers</code> 与 <code>{"fromWalletId":1,"toWalletId":2,"amount":1.99}</code> → 使用 <code>amount = 1</code> 调用服务，钱包将被扣除 1 美分，而不是 1.99。</li>
+<li>建议的修复：在转换之前验证原始值是否为非负整数 - 拒绝，除非 <code>is_int($content['amount'])</code> 或匹配 <code>/^\d+$/</code> 的字符串（浮点数/小数/指数字符串上为 400），然后进行转换。</li>
+</ul>
+<h3 id="bug-2-str_ends_with-not-found-http">BUG-2 — 从异常消息文本 (<code>str_ends_with(..., 'not found')</code>) 派生的 HTTP 状态（中/低）<a class="headerlink" href="#bug-2-str_ends_with-not-found-http" title="Permanent link">&para;</a></h3>
+<ul>
+<li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:69</code>（createAction）和<code>:110</code>（depositAction）</li>
+<li>描述：<code>$status = str_ends_with($e-&gt;getMessage(), 'not found') ? 404 : 500;</code> — 404-vs-500 决定是通过嗅探异常<em>消息</em>来做出的。任何消息恰好以 <code>not found</code> 结尾的 <code>RuntimeException</code> 都会被报告为 404 客户端错误，甚至是真正的服务器故障（例如以 <code>... not found</code> 结尾的 DBAL/SQL 消息，或从不受信任的输入构建的消息）。</li>
+<li>影响：服务器端故障被屏蔽为 404（误导客户端、日志和监控；通常不会重试 4xx 响应），并且映射无法区分真正的“未找到钱包”与任何其他运行时故障。</li>
+<li>再现：服务抛出 <code>new \RuntimeException('Connection refused: schema not found')</code> → 端点返回 404 而不是 500。</li>
+<li>建议的修复：针对 <code>TransferService</code> 中未找到的情况引入专用域异常（例如 <code>WalletNotFoundException</code>），并从异常类型映射 404；让所有其他 <code>RuntimeException</code> 降到 500。</li>
+</ul>
+<h3 id="bug-3-empty-amount-0">BUG-3 — <code>empty()</code> 将 <code>amount = 0</code> 视为“缺失”，返回错误的验证消息（低）<a class="headerlink" href="#bug-3-empty-amount-0" title="Permanent link">&para;</a></h3>
+<ul>
+<li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:32</code> 和 <code>:79</code></li>
+<li>描述：存在检查 <code>empty($content['amount'])</code> 对于 <code>0</code>、<code>"0"</code> 和 <code>false</code> 评估为 true，因此带有 <code>amount: 0</code> 的请求会被 <code>'fromWalletId, toWalletId, and amount are required'</code>（存款：<code>'toWalletId and amount are required'</code>）而不是 <code>'Amount must be positive'</code> 拒绝。 HTTP 代码仍然是 400，但该消息具有误导性。</li>
+<li>影响：令人困惑的验证错误；对于文字值 <code>0</code> 来说，数量正分支（将给出准确的消息）是无法到达的。</li>
+<li>复制：<code>POST /api/v1/manage/transfers</code> 和 <code>amount: 0</code>（有效 ID）→ 正文消息表示这些字段是必填字段。</li>
+<li>建议的修复：拆分检查 - 要求存在 <code>array_key_exists</code>/<code>isset</code>（或独立检查每个 <code>fromWalletId</code>/<code>toWalletId</code>/<code>amount</code>）并对解析的整数应用正性检查，因此 <code>0</code> 到达“金额必须为正”分支。</li>
+<li>测试：<code>testCreateActionZeroAmountShouldReportAmountNotPositive</code> / <code>testDepositActionZeroAmountShouldReportAmountNotPositive</code>（跳过，断言正确的行为）。</li>
+</ul>
+<h3 id="bug-4-201">BUG-4 — 幂等重放返回内部不一致的 201 主体（中）<a class="headerlink" href="#bug-4-201" title="Permanent link">&para;</a></h3>
+<ul>
+<li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:53-54</code>（createAction）和<code>:98-99</code>（depositAction）；根本原因在 <code>src/Wallet/Service/TransferService.php:53-57</code> / <code>:169-174</code></li>
+<li>描述：在幂等重放时（请求携带已存在的 <code>referenceId</code>）<code>TransferService</code> 返回<strong>存储的</strong>交易，同时忽略新请求的金额。控制器从整数 <code>amount</code> 字段 (<code>'amount' =&gt; $amount</code>) 的 <strong>请求</strong> 构建响应，但从 <code>amountFloat</code> 和 <code>transactionId</code> 的 <strong>存储事务</strong> 构建响应。不同数量的重播会产生例如<code>"amount": 99999</code> 与 <code>"amountFloat": 500.0</code> 一起位于同一 201 正文中。</li>
+<li>影响：无双花（即幂等点），但任何读取响应 <code>amount</code> 字段的客户端/审计都会得到与返回的交易和 <code>amountFloat</code> 不一致的值；监督和簿记可能会被误导。</li>
+<li>复制：通过<code>referenceId = REF-1</code>转账，金额50000（201）；使用 <code>amount = 99999</code> 重播相同的 <code>referenceId</code> → 201 使用 <code>data.amount = 99999</code> 但使用 <code>data.amountFloat = 500.0</code> 和原始 <code>transactionId</code>。 （现有集成测试 <code>testTransferApiIdempotency</code> 重新发送<em>相同</em>数量，因此不会暴露差异。）</li>
+<li>建议的修复：从返回的交易（<code>$result-&gt;transaction-&gt;getAmount()</code> 和 <code>$result-&gt;transaction</code> 的钱包 ID）构建成功负载，而不是回显请求值，或者让 <code>TransferService</code> 显示实际应用的金额/ID。</li>
+<li>测试：<code>testCreateActionIdempotentReplayEchoesStoredAmount</code>（跳过，断言响应金额等于存储的交易金额）。</li>
+</ul>
+<h3 id="bug-5-walletservicereconcile">BUG-5 — <code>WalletService::reconcile()</code> 不是原子的（低）<a class="headerlink" href="#bug-5-walletservicereconcile" title="Permanent link">&para;</a></h3>
+<ul>
+<li>地点：<code>src/Wallet/Service/WalletService.php:124-125</code></li>
+<li>描述：<code>$this-&gt;em-&gt;persist($tx); $this-&gt;em-&gt;flush();</code> 在每个钱包循环内运行，没有包装交易。如果钱包 <em>n</em> 的协调抛出（例如数据库错误、<code>getExpectedBalance</code> 失败），则已刷新的钱包 <em>1..n-1</em> 的调整仍然保留 - 仅部分应用协调。</li>
+<li>影响：协调运行失败会留下部分调整存款（由于协调是幂等的，因此可以在重新运行时恢复，但对于操作工具来说令人惊讶，它会增加 <code>totalDeposited</code>/预期余额，直到重新运行完成为止）。</li>
+<li>复制：两个钱包，其中第二个在 <code>getExpectedBalance()</code>/<code>flush()</code> 期间失败 → 尽管命令失败，第一个钱包的调整交易仍被提交。</li>
+<li>建议的修复：将循环包装在单个事务中（<code>beginTransaction</code>/<code>commit</code>、<code>rollback</code> 在 catch 中），以便协调是全有或全无，或者至少记录/发出部分状态。</li>
+</ul>
+<h2 id="4">4. 注释<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>database is locked</code> /暂时性数据库错误是已记录的共享<code>var/test.db</code>问题；重试时，完整的 <code>tests/Wallet</code> 运行是干净的。这两个新的测试文件是纯单元测试（无数据库）。</li>
+<li>新的单元测试使用 <code>new \ReflectionProperty(...)-&gt;setValue(...)</code>，而不使用已弃用的 <code>ReflectionProperty::setAccessible()</code>（PHP 8.5 要求）；他们在 <code>phpunit.dist.xml</code> 下产生零弃用/通知/警告。</li>
+<li>没有更改 <code>src/</code> 文件。跳过的3个测试记录了BUG-3（创建+存款）和BUG-4；套房保持绿色。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1614 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/store-trade-integration/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Store ↔ Trade ↔ Inventory — Cross-Module E2E Integration Coverage & Bug Report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#store-trade-inventory-cross-module-e2e-integration-coverage-bug-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Store ↔ Trade ↔ Inventory — Cross-Module E2E Integration Coverage &amp; Bug Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added-3-files-11-tests-10-passing-1-documented-skip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added (3 files, 11 tests: 10 passing + 1 documented skip)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inventory_enabled-toggling-documented-per-the-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        INVENTORY_ENABLED toggling (documented per the task)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-e2e-harness-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the E2E harness does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-results-xdebug-this-suite-only-coverage-filter-srcstoresrctradesrcinventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage results (Xdebug, this suite only, --coverage-filter src/Store|src/Trade|src/Inventory)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-test-exercises-happy-bad-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each test exercises (happy + bad paths)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-documented-only-no-source-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found (documented only — no source changed)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found (documented only — no source changed)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-medium-store-rejection-does-not-cancel-the-trade-order-it-stalls-in-store_rejected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 1 (MEDIUM) — Store rejection does NOT cancel the Trade order; it stalls in store_rejected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-medium-documented-todo-release-before-reserve-is-a-poison-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 2 (MEDIUM, documented TODO) — release-before-reserve is a poison message
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-low-previously-documented-storeorder-snapshot-idempotency-is-key-order-sensitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 3 (LOW, previously documented) — StoreOrder snapshot idempotency is key-order sensitive
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skipped-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observations-not-bugs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observations (not bugs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-test-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final test run
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="store-trade-inventory-cross-module-e2e-integration-coverage-bug-report">Store ↔ Trade ↔ Inventory — Cross-Module E2E Integration Coverage &amp; Bug Report<a class="headerlink" href="#store-trade-inventory-cross-module-e2e-integration-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Date: 2026-08-09</li>
+<li>Scope: the full cross-module message paths <strong>Trade → Store → Trade</strong> and <strong>Trade → Store → Inventory → Store → Trade</strong> (inbox/outbox/Messenger), driven through the real HTTP API + real outbox publish commands.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong> — only new test files under <code>tests/</code> plus this report.</li>
+<li>Runner: <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;files&gt; --no-coverage</code>.</li>
+</ul>
+<h2 id="test-files-added-3-files-11-tests-10-passing-1-documented-skip">Test files added (3 files, 11 tests: 10 passing + 1 documented skip)<a class="headerlink" href="#test-files-added-3-files-11-tests-10-passing-1-documented-skip" title="Permanent link">&para;</a></h2>
+<p>All under <code>tests/Integration/</code>, namespace <code>App\Tests\Integration</code>, <code>declare(strict_types=1);</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Kind</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Integration/StoreTradeFlowTestCase.php</code></td>
+<td>Abstract base (extends <code>IntegrationWebTestCase</code>, uses <code>DatabaseBootstrapTrait</code>)</td>
+<td>Shared table cleanup, the <strong>synchronous MessageBus</strong> helper that routes every Store/Trade/Inventory integration message to the real registered handler, and the real <code>app:trade:outbox:publish</code> / <code>app:store:outbox:publish</code> / <code>app:inventory:outbox:publish</code> runners built on <code>CommandTester</code> against the real SQLite DB.</td>
+</tr>
+<tr>
+<td><code>tests/Integration/StoreTradeFlowTest.php</code></td>
+<td><code>StoreTradeFlowTest</code> (inventory disabled, the default) — 8 tests</td>
+<td>Full Trade→Store acceptance (<code>202 → awaiting_store_acceptance → StoreOrder accepted → store_accepted → confirmed</code>), Store rejection via the real Staff HTTP endpoint, store-becomes-unavailable race, unknown store code 400, inbox dedup, cross-eventId idempotency, cancellation tombstone, out-of-order tombstone flow.</td>
+</tr>
+<tr>
+<td><code>tests/Integration/StoreTradeInventoryEnabledFlowTest.php</code></td>
+<td><code>StoreTradeInventoryEnabledFlowTest</code> (INVENTORY_ENABLED=1) — 2 tests + 1 skipped</td>
+<td>Full reservation accept → release-on-cancel chain (request → confirmed → accepted → cancelled → release request → released → stock restored) and reservation-rejection propagation to <code>store_rejected</code>. Plus a skipped correct-behaviour test for the release-before-reserve gap.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inventory_enabled-toggling-documented-per-the-task">INVENTORY_ENABLED toggling (documented per the task)<a class="headerlink" href="#inventory_enabled-toggling-documented-per-the-task" title="Permanent link">&para;</a></h2>
+<p><code>StoreTradeInventoryEnabledFlowTest::setUpBeforeClass()</code> sets <strong>before any kernel boot</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">$_ENV[&#39;INVENTORY_ENABLED&#39;] = &#39;1&#39;;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">$_SERVER[&#39;INVENTORY_ENABLED&#39;] = &#39;1&#39;;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">putenv(&#39;INVENTORY_ENABLED=1&#39;);</span>
+</code></pre></div>
+<p><code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:28</code> reads the toggle via
+<code>#[Autowire('%env(bool:INVENTORY_ENABLED)%')]</code>, which Symfony resolves at runtime
+from <code>$_ENV</code> / <code>$_SERVER</code> / <code>getenv()</code>. Because <code>IntegrationWebTestCase::createKernel()</code>
+boots with <code>APP_DEBUG=true</code> (no compiled-container caching) and each test calls
+<code>ensureKernelShutdown()</code>, every kernel boot in the class sees <code>INVENTORY_ENABLED=1</code>
+and the handler requests a reservation instead of auto-accepting. The toggling
+<strong>persists for the whole PHPUnit process</strong>, so this file must be run in isolation
+(<code>phpunit tests/Integration/StoreTradeFlowTest.php tests/Integration/StoreTradeInventoryEnabledFlowTest.php</code>)
+and is documented as such on the class. The two files run in one invocation so the
+shared <code>var/test.db</code> is bootstrapped exactly once (<code>DatabaseBootstrapTrait</code> static flag).</p>
+<h2 id="what-the-e2e-harness-does">What the E2E harness does<a class="headerlink" href="#what-the-e2e-harness-does" title="Permanent link">&para;</a></h2>
+<p>The production relay is exercised for real:</p>
+<ol>
+<li>HTTP <code>POST /api/v1/app/orders</code> with a trusted <code>X-Store-Code</code> header → <code>202</code>, Trade order in <code>awaiting_store_acceptance</code>, <code>trade.order.created.v1</code> in the Trade outbox.</li>
+<li><code>app:trade:outbox:publish</code> runs against the real DB; its <code>MessageBusInterface</code> is a synchronous <code>MessageBus([HandleMessageMiddleware(HandlersLocator([...]))])</code> mapping each message class to the <strong>real</strong> registered handler. So the claim/publish/<code>markPublished</code>/flush code path AND the handler both execute.</li>
+<li><code>app:store:outbox:publish</code> / <code>app:inventory:outbox:publish</code> likewise, in the order the real relay would use.</li>
+<li>Store/Trade statuses are asserted at every step.</li>
+</ol>
+<p>The sync bus maps: <code>TradeOrderCreatedMessage|TradeOrderCancelledMessage → Store\MessageHandler\*</code>, <code>StoreOrderAcceptedMessage|StoreOrderRejectedMessage → Trade\MessageHandler\*</code>, <code>InventoryReservationRequestedMessage|InventoryReservationReleaseRequestedMessage → Inventory\MessageHandler\*</code>, <code>InventoryReservationConfirmedMessage|InventoryReservationRejectedMessage|InventoryReservationReleasedMessage → Store\MessageHandler\*</code>.</p>
+<h2 id="coverage-results-xdebug-this-suite-only-coverage-filter-srcstoresrctradesrcinventory">Coverage results (Xdebug, this suite only, <code>--coverage-filter src/Store|src/Trade|src/Inventory</code>)<a class="headerlink" href="#coverage-results-xdebug-this-suite-only-coverage-filter-srcstoresrctradesrcinventory" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Methods</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Store/MessageHandler/TradeOrderCreatedHandler.php</code></td>
+<td>25.0% (1/4)</td>
+<td><strong>90.91% (70/77)</strong></td>
+</tr>
+<tr>
+<td><code>Store/MessageHandler/TradeOrderCancelledHandler.php</code></td>
+<td>50.0% (1/2)</td>
+<td><strong>84.31% (43/51)</strong></td>
+</tr>
+<tr>
+<td><code>Store/MessageHandler/InventoryReservationConfirmedHandler.php</code></td>
+<td>50.0%</td>
+<td><strong>83.87% (26/31)</strong></td>
+</tr>
+<tr>
+<td><code>Store/MessageHandler/InventoryReservationRejectedHandler.php</code></td>
+<td>50.0%</td>
+<td><strong>83.87% (26/31)</strong></td>
+</tr>
+<tr>
+<td><code>Store/MessageHandler/InventoryReservationReleasedHandler.php</code></td>
+<td>50.0%</td>
+<td><strong>86.36% (19/22)</strong></td>
+</tr>
+<tr>
+<td><code>Store/Service/StoreOrderService.php</code></td>
+<td>25.0% (2/8)</td>
+<td><strong>81.90% (86/105)</strong></td>
+</tr>
+<tr>
+<td><code>Store/Service/StoreContextResolver.php</code></td>
+<td>50.0%</td>
+<td><strong>92.86% (13/14)</strong></td>
+</tr>
+<tr>
+<td><code>Store/Command/PublishOutboxCommand.php</code></td>
+<td>50.0%</td>
+<td><strong>80.65% (25/31)</strong></td>
+</tr>
+<tr>
+<td><code>Trade/MessageHandler/StoreOrderAcceptedHandler.php</code></td>
+<td>50.0%</td>
+<td><strong>84.62% (11/13)</strong></td>
+</tr>
+<tr>
+<td><code>Trade/MessageHandler/StoreOrderRejectedHandler.php</code></td>
+<td>50.0%</td>
+<td><strong>84.62% (11/13)</strong></td>
+</tr>
+<tr>
+<td><code>Trade/Command/PublishOutboxCommand.php</code></td>
+<td>50.0%</td>
+<td><strong>83.87% (26/31)</strong></td>
+</tr>
+<tr>
+<td><code>Trade/Service/OrderService.php</code></td>
+<td>20.0% (2/10)</td>
+<td>36.41% (67/184) (create-order + pricing path)</td>
+</tr>
+<tr>
+<td><code>Trade/EventListener/OrderWorkflowListener.php</code></td>
+<td>33.3%</td>
+<td>64.71% (33/51)</td>
+</tr>
+<tr>
+<td><code>Trade/Controller/App/OrderController.php</code></td>
+<td>33.3% (4/12)</td>
+<td>52.43% (54/103)</td>
+</tr>
+<tr>
+<td><code>Inventory/MessageHandler/InventoryReservationRequestedHandler.php</code></td>
+<td>33.3%</td>
+<td><strong>81.25% (91/112)</strong></td>
+</tr>
+<tr>
+<td><code>Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php</code></td>
+<td>40.0%</td>
+<td><strong>78.79% (52/66)</strong></td>
+</tr>
+<tr>
+<td><code>Inventory/Service/InventoryService.php</code></td>
+<td>25.0% (3/12)</td>
+<td><strong>73.05% (187/256)</strong></td>
+</tr>
+<tr>
+<td><code>Inventory/Command/PublishOutboxCommand.php</code></td>
+<td>—</td>
+<td>exercised (confirmed/rejected/released publish)</td>
+</tr>
+<tr>
+<td><code>Trade/Service/TradeOutboxService.php</code>, <code>Store/Service/StoreOutboxService.php</code>, <code>Inventory/Service/InventoryOutboxService.php</code></td>
+<td>100%</td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>These percentages are from the new files in isolation; the whole-suite figures are
+higher because the pre-existing suites already covered many of these classes.</p>
+<h2 id="what-each-test-exercises-happy-bad-paths">What each test exercises (happy + bad paths)<a class="headerlink" href="#what-each-test-exercises-happy-bad-paths" title="Permanent link">&para;</a></h2>
+<p><strong><code>StoreTradeFlowTest</code> (inventory disabled)</strong></p>
+<ol>
+<li><code>testFullTradeToStoreAcceptanceThroughHttpAndOutboxCommands</code> — <code>202</code> → <code>awaiting_store_acceptance</code> → <code>trade.order.created.v1</code> outbox → <code>app:trade:outbox:publish</code> (sync bus, output "Published 1") → StoreOrder <code>accepted</code> + <code>store.order.accepted.v1</code> outbox → <code>app:store:outbox:publish</code> → Trade <code>store_accepted</code> → idempotent second publish ("Published 0") → HTTP <code>confirm</code> → <code>confirmed</code>.</li>
+<li><code>testStoreRejectionLeavesTradeOrderInStoreRejectedUntilExplicitCancel</code> — real Staff <code>POST /store/stores/{uuid}/orders/{uuid}/reject</code> (with membership grant) → <code>store.order.rejected.v1</code> outbox → publish → Trade order <strong><code>store_rejected</code></strong> (see Bug 1) → explicit HTTP <code>cancel</code> → <code>cancelled</code>.</li>
+<li><code>testStoreBecomingUnavailableAfterPlacementRejectsTheOrder</code> — order placed while store active, store suspended before the Trade outbox is relayed → Store handler emits <code>store.order.rejected.v1</code> (<code>STORE_UNAVAILABLE</code>) → publish → Trade <code>store_rejected</code>.</li>
+<li><code>testUnknownStoreCodeReturnsBadRequestAndCreatesNoOrder</code> — unknown <code>X-Store-Code</code> → HTTP <code>400</code>, no Trade outbox, no Store order.</li>
+<li><code>testDuplicateEventDeliveryIsDeduplicatedByInbox</code> — same event delivered twice to <code>TradeOrderCreatedHandler</code> → one StoreOrder, one <code>store.order.accepted.v1</code> outbox, one <code>store_consumed_event</code> row.</li>
+<li><code>testStoreOrderAlreadyProcessedIsIdempotentAcrossEventIds</code> — identical payload under two eventIds → <code>createFromTradeOrderSnapshot</code> idempotency holds → one StoreOrder, one accepted outbox.</li>
+<li><code>testCancellationForUnknownStoreOrderPersistsTombstoneAndIsIdempotent</code> — cancellation for a never-created Store order → <code>store_trade_order_cancellation</code> tombstone persisted, duplicate delivery ignored, no Store order.</li>
+<li><code>testOutOfOrderCancellationTombstoneIsHonoredWhenOrderCreatedLater</code> — HTTP cancel before the Trade created-event reaches Store; cancelled message delivered first (out-of-order) → tombstone; then <code>app:trade:outbox:publish</code> → StoreOrder created as <code>cancelled</code>, no reservation, no outbox.</li>
+</ol>
+<p><strong><code>StoreTradeInventoryEnabledFlowTest</code> (INVENTORY_ENABLED=1)</strong></p>
+<ol>
+<li><code>testInventoryReservationAcceptAndReleaseOnTradeCancellation</code> — full chain: <code>202</code> → trade publish → StoreOrder <code>awaiting_inventory</code> + <code>inventory.reservation.requested.v1</code> → store publish → reservation <code>confirmed</code>, stock <code>10 → 8 available</code>, <code>inventory.reservation.confirmed.v1</code> → inventory publish → StoreOrder <code>accepted</code> + <code>store.order.accepted.v1</code> → store publish → Trade <code>store_accepted</code> → HTTP cancel → <code>cancelled</code> + <code>trade.order.cancelled.v1</code> → trade publish → StoreOrder <code>cancelled</code> + <code>inventory.reservation.release.requested.v1</code> → store publish → reservation <code>released</code>, stock restored to <code>10 available</code>, <code>inventory.reservation.released.v1</code> → inventory publish.</li>
+<li><code>testReservationRejectionPropagatesToTradeStoreRejected</code> — no recipe/material for the spec → reservation rejected <code>SPECIFICATION_NOT_STOCKABLE</code> → StoreOrder <code>rejected</code> → <code>store.order.rejected.v1</code> → Trade <code>store_rejected</code>.</li>
+</ol>
+<h2 id="bugs-found-documented-only-no-source-changed">Bugs found (documented only — no source changed)<a class="headerlink" href="#bugs-found-documented-only-no-source-changed" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-medium-store-rejection-does-not-cancel-the-trade-order-it-stalls-in-store_rejected">Bug 1 (MEDIUM) — Store rejection does NOT cancel the Trade order; it stalls in <code>store_rejected</code><a class="headerlink" href="#bug-1-medium-store-rejection-does-not-cancel-the-trade-order-it-stalls-in-store_rejected" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/MessageHandler/StoreOrderRejectedHandler.php:37-41</code> (applies only <code>store_reject</code>); state machine <code>config/packages/workflow.yaml</code> (<code>store_rejected</code> is a non-terminal place, <code>cancel</code> from it is a user action).</li>
+<li><strong>Description:</strong> after the Store rejects, <code>StoreOrderRejectedHandler</code> applies <code>store_reject</code> and stops. The Trade order becomes <code>store_rejected</code>, which is <strong>not</strong> <code>cancelled</code>. The task's expected end-state "store rejects → trade order cancelled" therefore does not hold: the order sits in <code>store_rejected</code> until a user explicitly calls <code>POST /app/orders/{id}/cancel</code>. Nothing auto-cancels, no timeout, no compensation.</li>
+<li><strong>Impact:</strong> a rejected order stays "open" in reporting/status lists and can still be mutated via the generic <code>/do/{transition}</code> (the workflow permits <code>cancel</code>), and <code>store_rejected</code> orders never reach the terminal <code>cancelled</code> state on their own. Cross-module compensation is asymmetric: Store-side rejection is terminal, Trade-side is not.</li>
+<li><strong>Reproduction:</strong> <code>StoreTradeFlowTest::testStoreRejectionLeavesTradeOrderInStoreRejectedUntilExplicitCancel</code> — asserts <code>store_rejected</code> after the rejection is relayed, then shows an explicit cancel is required to reach <code>cancelled</code>.</li>
+<li><strong>Proposed fix:</strong> have <code>StoreOrderRejectedHandler</code> apply <code>store_reject</code> <strong>and</strong> <code>cancel</code> (or make the workflow's <code>store_reject</code> transition go straight to <code>cancelled</code>) so a Store rejection lands the Trade order in a terminal state, or clearly document <code>store_rejected</code> as the intended terminal state.</li>
+</ul>
+<h3 id="bug-2-medium-documented-todo-release-before-reserve-is-a-poison-message">Bug 2 (MEDIUM, documented TODO) — release-before-reserve is a poison message<a class="headerlink" href="#bug-2-medium-documented-todo-release-before-reserve-is-a-poison-message" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php:39-42</code> (<code>findOneByReservationId</code> → <code>null</code> → throws <code>InvalidArgumentException('Reservation was not found.')</code>).</li>
+<li><strong>Description:</strong> if a Trade cancellation is relayed while the <code>inventory.reservation.requested</code> is still in flight, the Store <code>TradeOrderCancelledHandler</code> records <code>inventory.reservation.release.requested.v1</code> for a reservation that does not exist yet. The Inventory release handler throws, so the message is retried 3× then lands in the <code>failed</code> transport (it would only self-heal if a later retry happens after the reservation request is processed — with the default retry strategy there is no guarantee).</li>
+<li><strong>Impact:</strong> the cancellation path can produce a failed message and, more importantly, the release never completes for the reservation once it is created later, leaving stock reserved indefinitely.</li>
+<li><strong>Reproduction:</strong> <code>StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully</code> — <strong>skipped</strong> because it asserts the correct behaviour (dispatch the release request ahead of the reservation request; expect no throw and no reservation created). Fails against current src. <code>docs/ai/context.md</code> §22.1 already lists "release-before-reserve handling" as not-yet-implemented.</li>
+<li><strong>Proposed fix:</strong> treat a missing reservation as an out-of-order event (no-op + consumed-event record, or a tombstone) rather than throwing, so the release is naturally idempotent once the reservation arrives.</li>
+</ul>
+<h3 id="bug-3-low-previously-documented-storeorder-snapshot-idempotency-is-key-order-sensitive">Bug 3 (LOW, previously documented) — StoreOrder snapshot idempotency is key-order sensitive<a class="headerlink" href="#bug-3-low-previously-documented-storeorder-snapshot-idempotency-is-key-order-sensitive" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Store/Service/StoreOrderService.php:180</code> (<code>matchesSnapshot</code> uses <code>===</code> on the <code>order_snapshot</code> JSON array).</li>
+<li><strong>Description:</strong> the E2E cross-eventId idempotency test (<code>testStoreOrderAlreadyProcessedIsIdempotentAcrossEventIds</code>) passes because the relayed payload is byte-identical. But a redelivered <code>trade.order.created</code> whose JSON key order differs (e.g. a different producer serialization) is treated as a snapshot conflict → <code>LogicException</code> → poison message. Already documented in <code>docs/issues/coverage-2026-08-09/store-command-repo-entity.md</code> and skipped in <code>tests/Store/Service/StoreOrderServiceTest.php::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code>.</li>
+<li><strong>Proposed fix:</strong> compare snapshots with a canonical, key-order-insensitive normalization (e.g. <code>ksort</code> recursively) or hash.</li>
+</ul>
+<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>App\Tests\Integration\StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully</code> — asserts the correct behaviour (a release request that arrives before its reservation must not throw). Fails against current src (Bug 2). Skipped to keep the suite green; the gap is a documented TODO (<code>context.md</code> §22.1).</li>
+</ul>
+<h2 id="observations-not-bugs">Observations (not bugs)<a class="headerlink" href="#observations-not-bugs" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>InventoryOutboxMessage</code> API asymmetry:</strong> unlike <code>StoreOutboxMessage</code> / <code>TradeOutboxMessage</code>, the inventory outbox entity exposes only <code>getId()</code>/<code>getEventId()</code>/<code>isPublished()</code>/<code>markPublished()</code>/<code>recordAttempt()</code> — no <code>getTopic()</code>/<code>getPayload()</code>. Tests had to use the array-returning <code>findUnpublishedForPublishing()</code>. Cosmetic; nothing in <code>src/</code> reads those getters today.</li>
+<li>The real Store/Trade publish commands drive the handlers to completion <strong>only</strong> when the bus is synchronous. In production the messages are routed to the <code>async</code> (Doctrine) transport by <code>config/packages/messenger.yaml</code>, so the command marks them published while a separate <code>worker</code> consumes them — the E2E sync-bus harness is the test-time equivalent and exercises the exact same command + handler code.</li>
+</ul>
+<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    tests/Integration/StoreTradeFlowTest.php \
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    tests/Integration/StoreTradeInventoryEnabledFlowTest.php --no-coverage
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>OK, but some tests were skipped!
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Tests: 11, Assertions: 112, Skipped: 1.
+</code></pre></div>
+<p>(The shared <code>var/test.db</code> occasionally shows transient <code>no such table</code> / <code>database is locked</code> errors when concurrent runners drop/recreate the schema — wait 10–15 s and re-run, per the project convention. This suite bootstraps the schema on first run and is green in isolation.)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

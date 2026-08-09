@@ -2495,7 +2495,7 @@
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">&quot;allowNegativeStock&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
 </code></pre></div>
-<p>管理读取 API 可能会针对明确请求的情况返回此虚拟视图
+<p>管理读取 API 可能会为显式请求返回此虚拟视图
 材料/商店对。列表 API 仅返回持久化的行。真正的平衡被创造出来
 仅通过写操作：初始库存、调整、负库存时保留
 是允许的，或者其他未来的股票突变。</p>
@@ -3237,9 +3237,9 @@ available_at, id)</code> 索引到期未发布的行。</p>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">&quot;allowNegativeStock&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>quantityDelta</code> 已签名。负调整不得驱动手头低于保留值
+<p><code>quantityDelta</code> 已签名。负调整不得驱动现有量低于保留值
 数量，除非<code>allowNegativeStock=true</code>；否则它已经失效了
-确认预订。对于相同的管理引用，操作是幂等的
+确认预订。对于同一个管理引用，操作是幂等的
 当提供参考时。</p>
 <hr />
 <h2 id="8">8. 文件结构<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>

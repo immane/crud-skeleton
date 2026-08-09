@@ -1,0 +1,1584 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/coverage-2026-08-09/core-parser-listener/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>核心解析器/序列化器/事件监听器 - 覆盖范围和错误报告 - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#-" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              核心解析器/序列化器/事件监听器 - 覆盖范围和错误报告
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#229" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.添加测试文件（29个测试，全部纯单元测试，绿色）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 发现错误
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 发现错误">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-flatnormalizer-json-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 FlatNormalizer 破坏了看起来像 JSON 的字符串属性 — HIGH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-flatnormalizer-id__tostring__metadata-medium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 FlatNormalizer 丢弃除 id/__toString/__metadata 之外的所有关系字段 — MEDIUM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-localelistener-accept-language-q-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 LocaleListener 无法解析带有可选空格/大小写的有效 Accept-Language q 值形式 — LOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-expressiondqlparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-expressionquerybuilderassembler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 ExpressionQueryBuilderAssembler 默默地吞下连接失败 — 低/中
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-openapienricherlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 OpenApiEnricherListener — 轻微的稳健性问题 — 低
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 套件状态
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 建议的后续行动
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="-">核心解析器/序列化器/事件监听器 - 覆盖范围和错误报告<a class="headerlink" href="#-" title="Permanent link">&para;</a></h1>
+<ul>
+<li><strong>日期：</strong> 2026-08-09</li>
+<li><strong>范围：</strong> <code>src/Core/Parser/*</code>、<code>src/Core/Serializer/Normalizer/FlatNormalizer.php</code>、<code>src/Core/EventListener/{OpenApiEnricherListener,LocaleListener}.php</code></li>
+<li><strong>约束：</strong> <code>src/</code>下没有变化；仅测试+此报告。</li>
+<li><strong>基线：</strong> <code>var/uncovered-map.txt</code> / <code>var/coverage2/</code> HTML 报告。</li>
+</ul>
+<h2 id="1">1. 总结<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>之前</th>
+<th>之后</th>
+<th>剩余未覆盖线路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Core/Parser/ExpressionDqlParser.php</code></td>
+<td>92.38%</td>
+<td><strong>98.21%</strong> (219/223)</td>
+<td>317、394、488、541（无法访问的死代码，请参阅§3.4）</td>
+</tr>
+<tr>
+<td><code>src/Core/Parser/ExpressionQueryBuilderAssembler.php</code></td>
+<td>90.77%</td>
+<td><strong>100%</strong> (65/65)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>src/Core/Serializer/Normalizer/FlatNormalizer.php</code></td>
+<td>80.30%</td>
+<td><strong>100%</strong> (66/66)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>src/Core/EventListener/OpenApiEnricherListener.php</code></td>
+<td>98.44%</td>
+<td><strong>100%</strong> (128/128)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>src/Core/EventListener/LocaleListener.php</code></td>
+<td>97.06%</td>
+<td><strong>100%</strong> (34/34)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>使用完整的测试套件进行测量：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/phpunit \
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  --coverage-filter src/Core/Parser/ExpressionDqlParser.php \
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  --coverage-filter src/Core/Parser/ExpressionQueryBuilderAssembler.php \
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  --coverage-filter src/Core/Serializer/Normalizer/FlatNormalizer.php \
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  --coverage-filter src/Core/EventListener/OpenApiEnricherListener.php \
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  --coverage-filter src/Core/EventListener/LocaleListener.php
+</code></pre></div>
+<h2 id="229">2.添加测试文件（29个测试，全部纯单元测试，绿色）<a class="headerlink" href="#229" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>测试</th>
+<th>覆盖线路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Core/Parser/ExpressionDqlParserCoverageTest.php</code></td>
+<td>10</td>
+<td>10 117、146–147、154–155、172、277、307、351–352、437、501、529</td>
+</tr>
+<tr>
+<td><code>tests/Core/Parser/ExpressionQueryBuilderAssemblerCoverageTest.php</code></td>
+<td>4</td>
+<td>79–80、111–112、118、123</td>
+</tr>
+<tr>
+<td><code>tests/Core/Serializer/Normalizer/FlatNormalizerCoverageTest.php</code></td>
+<td>10</td>
+<td>10 42、50、58、61–62、64、97、99、127、147、169–170、180</td>
+</tr>
+<tr>
+<td><code>tests/Core/EventListener/OpenApiEnricherListenerCoverageTest.php</code></td>
+<td>4</td>
+<td>111, 118</td>
+</tr>
+<tr>
+<td><code>tests/Core/EventListener/LocaleListenerCoverageTest.php</code></td>
+<td>1</td>
+<td>57</td>
+</tr>
+</tbody>
+</table>
+<p>使用的值得注意的技术（没有 <code>setAccessible()</code>，没有反射弃用）：</p>
+<ul>
+<li><code>ExpressionDqlParser</code> 针对模拟的 <code>Symfony\Component\ExpressionLanguage\ExpressionLanguage</code> 进行单元测试，以执行真实解析器无法生成的 <code>parse()</code> / <code>getNodes()</code> 异常包装（第 146–147 行、154–155 行）。</li>
+<li><code>validateFragments()</code> 的 Unreachable-by-public-API 分支通过 <code>ReflectionProperty::setValue()</code> 写入私有状态来执行（自 PHP 8.1 起允许，不再有 <code>setAccessible()</code>），例如精心制作的 <code>where</code> 字符串，具有未知别名（第 501 行）和空连接路径（第 529 行）。</li>
+<li>运算符覆盖范围：<code>in</code>（不支持的二进制操作 → 277）、一元 <code>-</code>（<code>entity.getId() == -5</code> → 307）、<code>[1, 2]</code> 数组文字（通用遍历分支 351-352）。</li>
+<li><code>FlatNormalizer</code>：带有<code>__toString()</code>的Doctrine-ORM对象（使用<code>Doctrine\ORM\Mapping\ClassMetadata</code>，第50行）；装饰标准化器故障路径 (58/61–64)；关系 <code>__metadata()</code> 与 <code>__metadata</code> 属性 (97/99)； JSON字符串属性解码（127）； <code>denormalize()</code> 逻辑异常防护 (147); <code>setSerializer()</code>/<code>setNormalizer()</code> 转发存根实现 <code>NormalizerAwareInterface</code>/<code>SerializerInterface</code>+<code>NormalizerInterface</code> (169–170, 180)。</li>
+<li><code>OpenApiEnricherListener</code> 和 <code>LocaleListener</code> 使用真实的 <code>Request</code>/<code>Response</code>/<code>*Event</code> 对象进行练习。</li>
+</ul>
+<p>运行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  tests/Core/Parser/ExpressionDqlParserCoverageTest.php \
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  tests/Core/Parser/ExpressionQueryBuilderAssemblerCoverageTest.php \
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  tests/Core/Serializer/Normalizer/FlatNormalizerCoverageTest.php \
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  tests/Core/EventListener/OpenApiEnricherListenerCoverageTest.php \
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  tests/Core/EventListener/LocaleListenerCoverageTest.php --no-coverage
+</code></pre></div>
+<p>结果：29 次测试、49 次断言、0 次失败、0 次错误、0 次弃用。 （“PHPUnit 通知”是现有测试已经发出的存储库范围内的“没有为模拟配置期望”通知，例如 <code>ExpressionQueryBuilderAssemblerFullTest</code>。）</p>
+<h2 id="3">3. 发现错误<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="31-flatnormalizer-json-high">3.1 FlatNormalizer 破坏了看起来像 JSON 的字符串属性 — HIGH<a class="headerlink" href="#31-flatnormalizer-json-high" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>地点：</strong> <code>src/Core/Serializer/Normalizer/FlatNormalizer.php:124-130</code></li>
+<li><strong>描述：</strong> 通过属性访问器读取的每个非数字字符串属性都通过 <code>json_decode()</code> 传递。如果字符串恰好是有效的 JSON，则属性值将自动替换为解码后的 PHP 值 — 无论属性是 JSON 列还是普通文本字段。</li>
+<li><strong>影响：</strong> 规范化 API 输出中的类型损坏：纯文本注释 <code>"true"</code> 变为布尔值 <code>true</code>，<code>"null"</code> 变为 <code>null</code>，<code>"{}"</code> / <code>"[]"</code> 变为空数组，<code>"123.0"</code>...（数字字符串被排除，但 <code>"1e2"</code> → <code>100</code> 不是）。 API 的使用者接收到错误的类型并失去数据保真度。无法选择退出某个列。</li>
+<li><strong>复制：</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$obj = new class { public string $note = &#39;true&#39;; public string $empty = &#39;{}&#39;; };</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">(new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor()))</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    -&gt;normalize($obj, &#39;json&#39;);</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">// [&#39;note&#39; =&gt; true, &#39;empty&#39; =&gt; []]   ← strings replaced by non-strings</span>
+</code></pre></div></li>
+<li><strong>建议的修复：</strong> 仅在已知属性是 JSON 列时进行 JSON 解码（例如，由配置的列允许列表或通过上下文传递的 <code>json</code> 学说映射提示驱动），或者在解码值不是数组/对象时保留字符串；不要对每个字符串字段进行全面解码。</li>
+</ul>
+<h3 id="32-flatnormalizer-id__tostring__metadata-medium">3.2 FlatNormalizer 丢弃除 id/__toString/__metadata 之外的所有关系字段 — MEDIUM<a class="headerlink" href="#32-flatnormalizer-id__tostring__metadata-medium" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>位置：</strong> <code>src/Core/Serializer/Normalizer/FlatNormalizer.php:106-108</code> （+ <code>reduceTransform</code> 位于 88-103）</li>
+<li><strong>描述：</strong>当原始属性值是具有 <code>getId()</code> （关系）的对象时，该属性的装饰规范化器的基线（可能包含 <code>name</code>、<code>slug</code>、<code>price</code> 等）被 <code>reduceTransform($raw)</code> <strong>批量覆盖</strong>，它仅发出 <code>id</code>、<code>__toString</code>、<code>__metadata</code>。</li>
+<li><strong>影响：</strong> 相关实体有效负载被简化为一个 id（可能还有一个标签），默默地删除装饰规范化器生成的所有其他字段。如果 API 预计返回这些字段（例如产品上的类别 <code>name</code>），则响应不完整。</li>
+<li><strong>复制：</strong> 装饰规范化器返回 <code>['related' =&gt; ['id' =&gt; 9, 'name' =&gt; 'Pizza', 'price' =&gt; 9.99]]</code>；相关对象具有 <code>getId()</code> → 输出关系变为 <code>['id' =&gt; 9, '__toString' =&gt; 'Pizza']</code>（<code>name</code>/<code>price</code> 丢失）。</li>
+<li><strong>建议的修复：</strong> 将简化表示与基线合并（<code>array_merge</code>、<code>id</code>/<code>__toString</code>/<code>__metadata</code> 键到修饰输出上，或仅填充缺失的键），以便现有关系字段保留。</li>
+</ul>
+<h3 id="33-localelistener-accept-language-q-low">3.3 LocaleListener 无法解析带有可选空格/大小写的有效 Accept-Language q 值形式 — LOW<a class="headerlink" href="#33-localelistener-accept-language-q-low" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>地点：</strong> <code>src/Core/EventListener/LocaleListener.php:78-82</code></li>
+<li><strong>描述：</strong> <code>parseAcceptLanguage()</code> 在确切的标记 <code>;q=</code> 上进行拆分。 RFC 7230/7231 允许在 <code>;</code>/<code>=</code> 分隔符和不区分大小写的参数名称周围使用可选空格。像 <code>zh-CN; q=1.0, en; q=0.5</code> 这样的标头（<code>;</code> 之后的空格，由某些客户端发出）不会被分割，因此 <code>lang</code> 变成 <code>"zh-CN; q=1.0"</code>，失败 <code>resolveLocale()</code>，并且请求会默默地回退到默认区域设置 <code>en</code>。 <code>fr;Q=1.0</code> 相同。</li>
+<li><strong>影响：</strong> 格式良好的浏览器/代理可能会提供错误的语言。 （已确认：<code>zh-CN; q=1.0, en; q=0.5</code> 产生区域设置 <code>en</code> 而不是 <code>zh</code>。）</li>
+<li><strong>复制：</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$request-&gt;headers-&gt;set(&#39;Accept-Language&#39;, &#39;zh-CN; q=1.0, en; q=0.5&#39;);</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === &#39;en&#39;  (expected &#39;zh&#39;)</span>
+</code></pre></div></li>
+<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空格/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
+</ul>
+<h3 id="34-expressiondqlparser">3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低<a class="headerlink" href="#34-expressiondqlparser" title="Permanent link">&para;</a></h3>
+<p>无法提高到 100% 的四条线是任何公众意见都无法达到的。每个都是一个防御分支，其守卫永远不会失败：</p>
+<table>
+<thead>
+<tr>
+<th>线路</th>
+<th>守卫</th>
+<th>为什么无法访问</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>317</td>
+<td>317 <code>if (empty($matches[1])) throw 'Invalid attribute access'</code></td>
+<td>312 处的守卫正则表达式 (<code>/^entity(\.get[A-Z]\w+\(\))+$/</code>) 已经保证 ≥1 次捕获，因此 <code>$matches[1]</code> 永远不会为空。</td>
+</tr>
+<tr>
+<td>394</td>
+<td>394 <code>throw 'matches pattern parameter was not compiled'</code></td>
+<td><code>compileMatchOperand()</code> 首先在右操作数上调用 <code>recursiveCompile()</code>，它总是在查找循环运行之前将参数插入到 <code>$this-&gt;parameters</code> 中；循环总是能找到它。</td>
+</tr>
+<tr>
+<td>488</td>
+<td>488 <code>if (count($segments) === 0) throw 'Empty path'</code></td>
+<td><code>explode('.', $path)</code> 为每个可能的字符串至少返回一个元素。</td>
+</tr>
+<tr>
+<td>541</td>
+<td>541 <code>if (strpos($token, ':') === 0) continue</code></td>
+<td>537 处的 where-token 正则表达式 (<code>[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*)+</code>) 永远无法生成以 <code>:</code> 开头的匹配项，因此冒号前缀跳过永远不会触发。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关于 541 的注释：</strong> 这也是一个潜在的正确性气味 - 因为正则表达式以字母开头，<code>:filter_parameter_1</code> 不会被此防护排除，它根本不会匹配（没有点）。更重要的是，正则表达式 <strong>确实</strong> 匹配字符串文字内的点路径（例如 JSON-ish where 子句），这将使 <code>validateFragments()</code> 抛出不相关的文本。值得后续正则表达式强化（例如 <code>:</code> / 引用处理的负向后查找）。</p>
+<h3 id="35-expressionquerybuilderassembler">3.5 ExpressionQueryBuilderAssembler 默默地吞下连接失败 — 低/中<a class="headerlink" href="#35-expressionquerybuilderassembler" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>地点：</strong> <code>src/Core/Parser/ExpressionQueryBuilderAssembler.php:116-126</code></li>
+<li><strong>描述：</strong> <code>leftJoin()</code> 失败被捕获并忽略 (<code>catch (\Exception $e) { /* ignore join errors */ }</code>)，并且重复的连接别名会被静默跳过 (117-119)。如果联接路径无效，则程序集“成功”，而 WHERE 子句仍引用缺少的联接别名。</li>
+<li><strong>影响：</strong> 错误稍后会出现，如查询执行时出现模糊的 DQL“别名未连接”失败，或者当别名被重复用于不同的路径时，查询会默默地返回与预期不同的结果。</li>
+<li><strong>建议的修复：</strong> 至少记录吞没的异常；考虑对无效的连接路径重新抛出 <code>ValidatorException</code> （与类的其他验证一致），并在别名冲突时出错（或重命名），而不是跳过。</li>
+</ul>
+<h3 id="36-openapienricherlistener">3.6 OpenApiEnricherListener — 轻微的稳健性问题 — 低<a class="headerlink" href="#36-openapienricherlistener" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>src/Core/EventListener/OpenApiEnricherListener.php:110-112</code> — <code>$content === false</code> 无法访问（仅当使用 <code>getContent(true)</code> 时才可访问，但事实并非如此）；空字符串守卫是真正的路径。</li>
+<li><code>:115</code> — 正文以 <code>{</code>（前导模板文本）开头的 HTML <code>/api/doc</code> 响应将被错误分类为原始 JSON 和 <code>json_decode</code>d；今天无害但脆弱。</li>
+<li><code>:196</code> — <code>$t['name']</code> 在不检查键是否存在的情况下取消引用； <code>tags</code> 条目缺少 <code>name</code> 的规范（例如自定义工具）将引发未定义键警告/通知。</li>
+<li><code>:134-138</code> — <code>if (is_string($newJson))</code> 块缩进错误（功能上正确，但令人困惑）。</li>
+</ul>
+<p>没有测试被标记为跳过：我编写的所有“正确行为”测试都通过了当前源。 §3.4 中的 4 个枯枝是故意不被覆盖的（它们是无法到达的）；尝试强制它们需要反射注入的假 AST 节点，而这在实践中是不可能发生的。</p>
+<h2 id="4">4. 套件状态<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<ul>
+<li>5 个新测试文件：<strong>绿色</strong>（29 个测试/49 个断言，无失败/错误/弃用）。</li>
+<li>包含新测试和覆盖范围的全套套件：<strong>2019 年测试，0 次失败，7 次跳过</strong>（预先存在的跳过，这些文件中没有）。上述覆盖率测量结果来自本次运行。</li>
+<li>在此沙箱中没有覆盖的“单独”完整运行还显示了预先存在的数据库集成失败（<code>Doctrine\DBAL\Exception\TableNotFoundException</code> - SQLite 架构未在此环境中加载，例如 <code>common_content</code>、<code>users</code>）。这些是与此任务无关的环境/设置错误；它们出现在 <code>tests/**/Integration/*</code> 和 <code>tests/**/Controller/*Repository*</code> 测试中并早于这些更改。目标单元测试不涉及数据库。</li>
+</ul>
+<h2 id="5">5. 建议的后续行动<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<ol>
+<li>修复 <code>FlatNormalizer</code> 中的 §3.1（JSON 字符串损坏）和 §3.2（关系字段丢失）——两者都会更改 API 响应负载。</li>
+<li>使用适当的分词器强化 §3.3（<code>Accept-Language</code> 解析）。</li>
+<li>清理 §3.4 死分支或添加 <code>@codeCoverageIgnore</code>/ 注释，以便覆盖率审计停止标记它们。</li>
+<li>使 <code>ExpressionQueryBuilderAssembler</code> 连接失败可见（第 3.5 节）。</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

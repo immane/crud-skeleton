@@ -1,0 +1,1555 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/inventory-controllers-service/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Inventory Controllers & Services — Coverage & Bug Report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#inventory-controllers-services-coverage-bug-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Inventory Controllers &amp; Services — Coverage &amp; Bug Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coverage results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-each-group-of-tests-covers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each group of tests covers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-quantitymultiply-contains-unreachable-padding-code-low-dead-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 1 — Quantity::multiply() contains unreachable padding code (LOW / dead code)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-inventoryservicereserve-idempotency-hash-is-timezone-sensitive-medium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 2 — InventoryService::reserve() idempotency hash is timezone-sensitive (MEDIUM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-stockcontroller-injects-a-service-it-never-uses-low-dead-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 3 — StockController injects a service it never uses (LOW / dead dependency)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-4-inventoryservicerelease-partially-mutates-the-reservation-in-memory-before-failing-low-robustness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 4 — InventoryService::release() partially mutates the reservation in memory before failing (LOW / robustness)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skipped-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="inventory-controllers-services-coverage-bug-report">Inventory Controllers &amp; Services — Coverage &amp; Bug Report<a class="headerlink" href="#inventory-controllers-services-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Date: 2026-08-09</li>
+<li>Scope: Inventory management controllers, Inventory service layer, Inventory entities, outbox command</li>
+<li><code>src/Inventory/Controller/Manage/RecipeController.php</code></li>
+<li><code>src/Inventory/Controller/Manage/StockController.php</code></li>
+<li><code>src/Inventory/Service/InventoryService.php</code></li>
+<li><code>src/Inventory/Service/Quantity.php</code></li>
+<li><code>src/Inventory/Service/SpecificationRecipeService.php</code></li>
+<li><code>src/Inventory/Entity/InventoryReservation.php</code>, <code>InventoryStock.php</code>, <code>Material.php</code></li>
+<li><code>src/Inventory/Command/PublishOutboxCommand.php</code></li>
+<li>Task: raise line coverage of these files to ~100% and find bugs.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+</ul>
+<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
+<p>All new files use <code>declare(strict_types=1);</code> and only ADD coverage — nothing in <code>tests/Inventory/*</code> was modified.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Namespace</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Inventory/Controller/Manage/RecipeControllerTest.php</code></td>
+<td><code>App\Tests\Inventory\Controller\Manage</code></td>
+<td><code>RecipeController</code> (unit, mocked service)</td>
+</tr>
+<tr>
+<td><code>tests/Inventory/Controller/Manage/StockControllerTest.php</code></td>
+<td><code>App\Tests\Inventory\Controller\Manage</code></td>
+<td><code>StockController</code> (unit, mocked services)</td>
+</tr>
+<tr>
+<td><code>tests/Inventory/Service/QuantityCoverageTest.php</code></td>
+<td><code>App\Tests\Inventory\Service</code></td>
+<td><code>Quantity</code> normalize/multiply edge cases</td>
+</tr>
+<tr>
+<td><code>tests/Inventory/Service/SpecificationRecipeServiceTest.php</code></td>
+<td><code>App\Tests\Inventory\Service</code></td>
+<td><code>SpecificationRecipeService</code> (integration, real DB)</td>
+</tr>
+<tr>
+<td><code>tests/Inventory/Entity/InventoryEntityCoverageTest.php</code></td>
+<td><code>App\Tests\Inventory\Entity</code></td>
+<td>entity branch gaps (unit)</td>
+</tr>
+<tr>
+<td><code>tests/Inventory/Command/PublishOutboxCommandTest.php</code></td>
+<td><code>App\Tests\Inventory\Command</code></td>
+<td><code>PublishOutboxCommand</code> (unit, mocked repo/bus)</td>
+</tr>
+<tr>
+<td><code>tests/Inventory/Integration/InventoryServiceCoverageTest.php</code></td>
+<td><code>App\Tests\Inventory\Integration</code></td>
+<td><code>InventoryService</code> failure/idempotency paths (integration, <code>DatabaseBootstrapTrait</code> + <code>WebTestCase</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Controller unit tests follow the existing <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> pattern: mocked collaborators, <code>#[AllowMockObjectsWithoutExpectations]</code>, and <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> injection. DB tests reuse <code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>. No <code>ReflectionProperty::setAccessible()</code> is used anywhere.</p>
+<p>For the three one-line create hooks on <code>RecipeController</code> (<code>defaultCreateValues</code>, <code>processCreateContent</code>, <code>afterCreated</code> at lines 35/44/49) the tests invoke them via <code>ReflectionMethod::invoke()</code> (no <code>setAccessible()</code>, which is deprecated in PHP 8.5). These hooks are only reachable through <code>UpdateApiViewMixin</code>'s create-mode (<code>@mode=mixed</code>) path, which is not wired up by this controller's own <code>createAction</code>; direct invocation is the only way to exercise them without modifying <code>src/</code>.</p>
+<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
+<p>Baseline from <code>var/uncovered-map.txt</code> (generated 2026-08-09). After-values verified by running the combined Inventory suite with <code>XDEBUG_MODE=coverage</code> and diffing the <code>count="0"</code> statement lines from the Clover report:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Inventory/** --coverage-clover /tmp/inv-final.xml
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Baseline</th>
+<th>After new tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RecipeController</code> (was 79.31%)</td>
+<td>35,44,49,73,76,83</td>
+<td><strong>100% — all covered</strong></td>
+</tr>
+<tr>
+<td><code>StockController</code> (was 93.1%)</td>
+<td>58,59</td>
+<td><strong>100% — all covered</strong></td>
+</tr>
+<tr>
+<td><code>SpecificationRecipeService</code> (was 93.33%)</td>
+<td>35</td>
+<td><strong>100% — all covered</strong></td>
+</tr>
+<tr>
+<td><code>InventoryService</code> (was 94.16%)</td>
+<td>78,101,102,105,112,117,143,159,167,212,284,289,331,341,379</td>
+<td><strong>100% — all covered</strong></td>
+</tr>
+<tr>
+<td><code>Quantity</code> (was 96.15%)</td>
+<td>14,26,75</td>
+<td><strong>98.72% — 14,26 covered; line 75 is dead code (see Bug 1)</strong></td>
+</tr>
+<tr>
+<td><code>InventoryReservation</code> (was 97.14%)</td>
+<td>91</td>
+<td><strong>100% — covered</strong></td>
+</tr>
+<tr>
+<td><code>InventoryStock</code> (was 96.3%)</td>
+<td>91</td>
+<td><strong>100% — covered</strong></td>
+</tr>
+<tr>
+<td><code>Material</code> (was 97.56%)</td>
+<td>190</td>
+<td><strong>100% — covered</strong></td>
+</tr>
+<tr>
+<td><code>PublishOutboxCommand</code> (was 97.22%)</td>
+<td>32</td>
+<td><strong>100% — covered</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-each-group-of-tests-covers">What each group of tests covers<a class="headerlink" href="#what-each-group-of-tests-covers" title="Permanent link">&para;</a></h3>
+<p><strong><code>InventoryServiceCoverageTest</code></strong> (the biggest win — all 15 baseline-uncovered lines):</p>
+<ul>
+<li><strong>78</strong> — <code>adjustStock</code> rejects <code>0.000000</code> delta and blank reason.</li>
+<li><strong>105</strong> — repeated <code>adjustStock</code> with the same <code>referenceId</code> is idempotent: the existing stock is returned and the on-hand balance is not re-applied.</li>
+<li><strong>101/102</strong> — a ledger entry whose stock row has been removed (orphan ledger) makes the idempotent <code>adjustStock</code> fail loudly with <code>Adjustment ledger does not have a stock balance.</code>.</li>
+<li><strong>112</strong> — <code>allowNegativeStock</code> parameter applied to an <em>existing</em> stock inside <code>adjustStock</code>.</li>
+<li><strong>117</strong> — adjusting on-hand below the confirmed-reserved quantity is rejected.</li>
+<li><strong>143 / 159</strong> — <code>setStockAllowNegative</code> with a missing material in both the pre-check branch (<code>false</code>) and the transaction branch (<code>true</code>).</li>
+<li><strong>167</strong> — <code>setStockAllowNegative</code> updates an existing stock row.</li>
+<li><strong>212</strong> — a second <code>reserve</code> for a <code>storeOrderUuid</code> that already has a reservation raises <code>InventoryReservationConflictException</code>.</li>
+<li><strong>284 / 289</strong> — <code>release</code> fails explicitly when a reservation line's material, or its stock row, is missing.</li>
+<li><strong>331 / 341</strong> — <code>reserve</code> rejects an empty item list and duplicate/malformed line IDs.</li>
+<li><strong>379</strong> — a recipe whose line material is inactive yields a <code>MATERIAL_INACTIVE</code> rejection.</li>
+</ul>
+<p><strong><code>SpecificationRecipeServiceTest</code></strong> — <strong>35</strong> (duplicate <code>specificationUuid</code>) plus the missing/inactive-material branch, against the real DB.</p>
+<p><strong><code>RecipeControllerTest</code></strong> — every <code>createAction</code> branch: 201 with and without an integer <code>sort</code> (83), missing specification / empty lines (62), line missing <code>materialUuid</code>/<code>quantityPerUnit</code> (73), non-integer <code>sort</code> (76), and the service-throws → 400 path (92); the three create hooks (35/44/49) via reflection.</p>
+<p><strong><code>StockControllerTest</code></strong> — <code>detailAction</code> success + 404, <code>adjustAction</code> payload validation (44), success (57) and the <code>catch</code> (58/59), <code>policyAction</code> validation (68), success and <code>catch</code> (77).</p>
+<p><strong><code>QuantityCoverageTest</code></strong> — <strong>14</strong> (malformed decimal strings incl. 7-fraction-digit inputs, exponents, empty) and <strong>26</strong> (<code>positive=true</code> with zero/negative). The small-product <code>multiply</code> cases (<code>0.000000</code>, <code>0.000001 × n</code>) document the padding area.</p>
+<p><strong><code>InventoryEntityCoverageTest</code></strong> — <code>InventoryReservation::getId()</code> (91), <code>InventoryStock::setAllowNegativeStock(false)</code> with a negative available balance (91), <code>Material</code> setters rejecting blank code/name/unit (190).</p>
+<p><strong><code>PublishOutboxCommandTest</code></strong> — <strong>32</strong> (claim returns false → <code>continue</code>), plus the confirmed/rejected/released dispatch successes, the unsupported-topic deferral, and the transport-failure retry path.</p>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-quantitymultiply-contains-unreachable-padding-code-low-dead-code">Bug 1 — <code>Quantity::multiply()</code> contains unreachable padding code (LOW / dead code)<a class="headerlink" href="#bug-1-quantitymultiply-contains-unreachable-padding-code-low-dead-code" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Inventory/Service/Quantity.php:74-75</code></li>
+<li><strong>Description:</strong> <code>if (strlen($result) &lt;= 12) { $result = str_pad($result, 13, '0', STR_PAD_LEFT); }</code> can never be true. <code>Quantity::parts()</code> always returns the digits of a normalized value, which is at least <code>'0.000000'</code> → a 7-char digit string. The long-multiplication accumulator is built from <code>(string)$carry . $partial . str_repeat('0', $position)</code> where <code>$partial</code> is exactly <code>len(strrev(leftDigits)) = 7</code> chars; the running result therefore never has fewer than 14 characters by the final digit position. Verified empirically: every operand pair (including all-zero operands) yields a raw accumulator of length ≥ 14.</li>
+<li><strong>Impact:</strong> None functionally — dead code. It is the only statement left uncovered in <code>Quantity</code> (98.72%), and it cannot be covered through the public API because there is no input that makes the guard true.</li>
+<li><strong>Reproduction:</strong> instrumented copy of <code>multiply()</code> — <code>strlen($result)</code> is always ≥ 14 for <code>0.000000×0.000000</code>, <code>1×0.000001</code>, <code>2×3</code>, <code>0.5×0.25</code>, <code>10×0.000001</code>, etc.</li>
+<li><strong>Proposed fix:</strong> delete lines 74-75 (the split logic on lines 77-81 already handles the minimum-width case correctly, as the <code>0.5 × 0.25 = 0.125000</code> test proves).</li>
+</ul>
+<h3 id="bug-2-inventoryservicereserve-idempotency-hash-is-timezone-sensitive-medium">Bug 2 — <code>InventoryService::reserve()</code> idempotency hash is timezone-sensitive (MEDIUM)<a class="headerlink" href="#bug-2-inventoryservicereserve-idempotency-hash-is-timezone-sensitive-medium" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Inventory/Service/InventoryService.php:186-193</code> (specifically <code>'expiresAt' =&gt; $expiresAt?-&gt;format(DATE_ATOM)</code>)</li>
+<li><strong>Description:</strong> The idempotency hash embeds <code>expiresAt</code> serialized with <code>DATE_ATOM</code>, which keeps the original timezone offset. The same instant expressed in a different offset (e.g. <code>2026-07-27T00:00:00+00:00</code> vs <code>2026-07-27T08:00:00+08:00</code> — identical timestamps) produces a <strong>different hash</strong> (verified: <code>032530aa…</code> vs <code>47da849e…</code>).</li>
+<li><strong>Impact:</strong> A producer that retries the same reservation request (at-least-once delivery after a timeout) with <code>expiresAt</code> written in a different offset hits the <code>hash_equals</code> guard at line 205 and gets a spurious <code>InventoryReservationConflictException</code> ("Reservation ID was reused with a different request") instead of the original reservation, breaking idempotency for a semantically identical retry. The reservation/release message handlers in the same module round-trip <code>expiresAt</code> through ISO strings, so this is reachable from the messaging path.</li>
+<li><strong>Reproduction:</strong> <code>reserve(reservationId, store, trade, order, items, new DateTimeImmutable('2026-07-27T00:00:00+00:00'))</code> then retry with <code>new DateTimeImmutable('2026-07-27T08:00:00+08:00')</code> — same instant, different hashes.</li>
+<li><strong>Proposed fix:</strong> normalize <code>expiresAt</code> to UTC before hashing, e.g. <code>$expiresAt?-&gt;setTimezone(new \DateTimeZone('UTC'))-&gt;format(DATE_ATOM)</code>, so the hash is offset-independent.</li>
+</ul>
+<h3 id="bug-3-stockcontroller-injects-a-service-it-never-uses-low-dead-dependency">Bug 3 — <code>StockController</code> injects a service it never uses (LOW / dead dependency)<a class="headerlink" href="#bug-3-stockcontroller-injects-a-service-it-never-uses-low-dead-dependency" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Inventory/Controller/Manage/StockController.php:24</code> (<code>protected readonly InventoryStockServiceInterface $service</code>)</li>
+<li><strong>Description:</strong> The constructor property <code>$service</code> is never referenced; every action delegates to the <code>$inventory</code> (<code>InventoryServiceInterface</code>) dependency instead. The unused <code>InventoryStockService</code>/<code>InventoryStockServiceInterface</code> remains wired in DI.</li>
+<li><strong>Impact:</strong> Dead dependency — no functional effect, but the DI wiring and the interface are misleading: a reader expects the <code>service</code> property to back the list/detail endpoints, when in fact those are served by <code>InventoryService::getStockView()</code>.</li>
+<li><strong>Proposed fix:</strong> remove the unused constructor parameter (and its service wiring), leaving <code>StockController</code> with a single <code>InventoryServiceInterface</code> dependency.</li>
+</ul>
+<h3 id="bug-4-inventoryservicerelease-partially-mutates-the-reservation-in-memory-before-failing-low-robustness">Bug 4 — <code>InventoryService::release()</code> partially mutates the reservation in memory before failing (LOW / robustness)<a class="headerlink" href="#bug-4-inventoryservicerelease-partially-mutates-the-reservation-in-memory-before-failing-low-robustness" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Inventory/Service/InventoryService.php:277-290</code></li>
+<li><strong>Description:</strong> <code>$reservation-&gt;release()</code> (line 277) flips the in-memory status to <code>RELEASED</code> and sets <code>releasedAt</code> before the loop can throw <code>Reservation material was not found.</code> (284) or <code>Reservation stock was not found.</code> (289). <code>wrapInTransaction</code> rolls the DB back, but the managed entity keeps its <code>RELEASED</code> in-memory state; Doctrine does not refresh/revert managed entities on rollback.</li>
+<li><strong>Impact:</strong> In the failure path the entity is left reporting <code>released</code> while the DB still holds <code>confirmed</code> and the reserved quantities remain allocated. If the exception is caught in the same request/worker and the entity manager is subsequently flushed, the half-applied release would be committed without releasing the stock — a reserved-quantity leak. Only reachable when the reservation/material/stock data is already inconsistent (e.g. a material row removed while a reservation is confirmed), which is why the existing green tests never exercised it.</li>
+<li><strong>Reproduction:</strong> persist a confirmed reservation whose line references a material that does not exist, then call <code>release()</code> — it throws at line 284 <em>after</em> <code>$reservation-&gt;release()</code> already returned <code>true</code>; <code>$reservation-&gt;getStatus()</code> reports <code>released</code> although nothing was persisted.</li>
+<li><strong>Proposed fix:</strong> pre-validate all lines (material + stock lookups) before calling <code>$reservation-&gt;release()</code>, or wrap the failure in a <code>$this-&gt;entityManager-&gt;refresh($reservation)</code> / re-fetch so the entity cannot retain the half-applied state.</li>
+</ul>
+<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
+<p>None. Every new test passes against the current <code>src/</code> (43 tests, 142 assertions, green). No correct-behavior test had to be skipped due to a <code>src/</code> bug — the InventoryService/controller code behaves as documented for all covered paths. The bugs above are found by inspection/analysis and, for Bug 1 and Bug 2, verified empirically, but none of them cause a failure of a correct-behavior test that needed to be recorded as skipped.</p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Transient SQLite <code>database is locked</code> errors were observed when integration classes that drop/recreate <code>var/test.db</code> run back-to-back; per the project convention, waiting 10–15 s and re-running resolved them (all runs ended green).</li>
+<li>The full <code>tests/Inventory</code> directory shows pre-existing flakiness in <code>InventoryReservationRequestedHandlerIntegrationTest</code> when all Inventory tests run together (unrelated to these changes); the new files are green both individually and together.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

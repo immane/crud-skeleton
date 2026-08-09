@@ -1,0 +1,1584 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/core-parser-listener/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core Parser / Serializer / EventListener — Coverage & Bug Report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#core-parser-serializer-eventlistener-coverage-bug-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core Parser / Serializer / EventListener — Coverage &amp; Bug Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-test-files-added-29-tests-all-pure-unit-tests-green" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Test files added (29 tests, all pure unit tests, green)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-bugs-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Bugs found
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Bugs found">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-flatnormalizer-corrupts-string-attributes-that-look-like-json-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 FlatNormalizer corrupts string attributes that look like JSON — HIGH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-flatnormalizer-discards-all-relation-fields-except-id__tostring__metadata-medium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 FlatNormalizer discards all relation fields except id/__toString/__metadata — MEDIUM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-localelistener-does-not-parse-valid-accept-language-q-value-forms-with-optional-whitespace-case-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 LocaleListener does not parse valid Accept-Language q-value forms with optional whitespace / case — LOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-expressiondqlparser-unreachable-defensive-branches-dead-code-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 ExpressionDqlParser — unreachable defensive branches (dead code) — LOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-expressionquerybuilderassembler-swallows-join-failures-silently-lowmedium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 ExpressionQueryBuilderAssembler swallows join failures silently — LOW/MEDIUM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-openapienricherlistener-minor-robustness-issues-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 OpenApiEnricherListener — minor robustness issues — LOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-suite-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Suite status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-suggested-follow-ups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Suggested follow-ups
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="core-parser-serializer-eventlistener-coverage-bug-report">Core Parser / Serializer / EventListener — Coverage &amp; Bug Report<a class="headerlink" href="#core-parser-serializer-eventlistener-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<ul>
+<li><strong>Date:</strong> 2026-08-09</li>
+<li><strong>Scope:</strong> <code>src/Core/Parser/*</code>, <code>src/Core/Serializer/Normalizer/FlatNormalizer.php</code>, <code>src/Core/EventListener/{OpenApiEnricherListener,LocaleListener}.php</code></li>
+<li><strong>Constraint:</strong> no changes under <code>src/</code>; tests only + this report.</li>
+<li><strong>Baseline:</strong> <code>var/uncovered-map.txt</code> / <code>var/coverage2/</code> HTML reports.</li>
+</ul>
+<h2 id="1-summary">1. Summary<a class="headerlink" href="#1-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
+<th>Remaining uncovered lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Core/Parser/ExpressionDqlParser.php</code></td>
+<td>92.38%</td>
+<td><strong>98.21%</strong> (219/223)</td>
+<td>317, 394, 488, 541 (unreachable dead code, see §3.4)</td>
+</tr>
+<tr>
+<td><code>src/Core/Parser/ExpressionQueryBuilderAssembler.php</code></td>
+<td>90.77%</td>
+<td><strong>100%</strong> (65/65)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>src/Core/Serializer/Normalizer/FlatNormalizer.php</code></td>
+<td>80.30%</td>
+<td><strong>100%</strong> (66/66)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>src/Core/EventListener/OpenApiEnricherListener.php</code></td>
+<td>98.44%</td>
+<td><strong>100%</strong> (128/128)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>src/Core/EventListener/LocaleListener.php</code></td>
+<td>97.06%</td>
+<td><strong>100%</strong> (34/34)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Measured with the full test suite:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/phpunit \
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  --coverage-filter src/Core/Parser/ExpressionDqlParser.php \
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  --coverage-filter src/Core/Parser/ExpressionQueryBuilderAssembler.php \
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  --coverage-filter src/Core/Serializer/Normalizer/FlatNormalizer.php \
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  --coverage-filter src/Core/EventListener/OpenApiEnricherListener.php \
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  --coverage-filter src/Core/EventListener/LocaleListener.php
+</code></pre></div>
+<h2 id="2-test-files-added-29-tests-all-pure-unit-tests-green">2. Test files added (29 tests, all pure unit tests, green)<a class="headerlink" href="#2-test-files-added-29-tests-all-pure-unit-tests-green" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tests</th>
+<th>Lines covered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Core/Parser/ExpressionDqlParserCoverageTest.php</code></td>
+<td>10</td>
+<td>117, 146–147, 154–155, 172, 277, 307, 351–352, 437, 501, 529</td>
+</tr>
+<tr>
+<td><code>tests/Core/Parser/ExpressionQueryBuilderAssemblerCoverageTest.php</code></td>
+<td>4</td>
+<td>79–80, 111–112, 118, 123</td>
+</tr>
+<tr>
+<td><code>tests/Core/Serializer/Normalizer/FlatNormalizerCoverageTest.php</code></td>
+<td>10</td>
+<td>42, 50, 58, 61–62, 64, 97, 99, 127, 147, 169–170, 180</td>
+</tr>
+<tr>
+<td><code>tests/Core/EventListener/OpenApiEnricherListenerCoverageTest.php</code></td>
+<td>4</td>
+<td>111, 118</td>
+</tr>
+<tr>
+<td><code>tests/Core/EventListener/LocaleListenerCoverageTest.php</code></td>
+<td>1</td>
+<td>57</td>
+</tr>
+</tbody>
+</table>
+<p>Notable techniques used (no <code>setAccessible()</code>, no Reflection deprecations):</p>
+<ul>
+<li><code>ExpressionDqlParser</code> is unit-tested against a mocked <code>Symfony\Component\ExpressionLanguage\ExpressionLanguage</code> to exercise the <code>parse()</code> / <code>getNodes()</code> exception wraps (lines 146–147, 154–155) that a real parser cannot produce.</li>
+<li>Unreachable-by-public-API branches of <code>validateFragments()</code> are exercised by writing private state through <code>ReflectionProperty::setValue()</code> (allowed since PHP 8.1, no <code>setAccessible()</code>), e.g. a crafted <code>where</code> string with an unknown alias (line 501) and an empty join path (line 529).</li>
+<li>Operator coverage: <code>in</code> (unsupported binary op → 277), unary <code>-</code> (<code>entity.getId() == -5</code> → 307), <code>[1, 2]</code> array literal (generic traversal branch 351–352).</li>
+<li><code>FlatNormalizer</code>: Doctrine-ORM object with <code>__toString()</code> (uses <code>Doctrine\ORM\Mapping\ClassMetadata</code>, line 50); decorated-normalizer failure paths (58/61–64); relation <code>__metadata()</code> vs <code>__metadata</code> property (97/99); JSON-string attribute decode (127); <code>denormalize()</code> LogicException guard (147); <code>setSerializer()</code>/<code>setNormalizer()</code> forwarding stubs implementing <code>NormalizerAwareInterface</code>/<code>SerializerInterface</code>+<code>NormalizerInterface</code> (169–170, 180).</li>
+<li><code>OpenApiEnricherListener</code> and <code>LocaleListener</code> exercised with real <code>Request</code>/<code>Response</code>/<code>*Event</code> objects.</li>
+</ul>
+<p>Run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  tests/Core/Parser/ExpressionDqlParserCoverageTest.php \
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  tests/Core/Parser/ExpressionQueryBuilderAssemblerCoverageTest.php \
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  tests/Core/Serializer/Normalizer/FlatNormalizerCoverageTest.php \
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  tests/Core/EventListener/OpenApiEnricherListenerCoverageTest.php \
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  tests/Core/EventListener/LocaleListenerCoverageTest.php --no-coverage
+</code></pre></div>
+<p>Result: 29 tests, 49 assertions, 0 failures, 0 errors, 0 deprecations. (The "PHPUnit Notices" are the repo-wide "no expectations configured for mock" notices already emitted by existing tests, e.g. <code>ExpressionQueryBuilderAssemblerFullTest</code>.)</p>
+<h2 id="3-bugs-found">3. Bugs found<a class="headerlink" href="#3-bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="31-flatnormalizer-corrupts-string-attributes-that-look-like-json-high">3.1 FlatNormalizer corrupts string attributes that look like JSON — HIGH<a class="headerlink" href="#31-flatnormalizer-corrupts-string-attributes-that-look-like-json-high" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Location:</strong> <code>src/Core/Serializer/Normalizer/FlatNormalizer.php:124-130</code></li>
+<li><strong>Description:</strong> Every non-numeric string attribute read via the property accessor is passed through <code>json_decode()</code>. If the string happens to be valid JSON, the attribute value is silently replaced with the decoded PHP value — regardless of whether the attribute is a JSON column or an ordinary text field.</li>
+<li><strong>Impact:</strong> Type corruption in normalized API output: a plain-text note <code>"true"</code> becomes boolean <code>true</code>, <code>"null"</code> becomes <code>null</code>, <code>"{}"</code> / <code>"[]"</code> become empty arrays, <code>"123.0"</code>… (numeric strings are excluded, but <code>"1e2"</code> → <code>100</code> is not). Consumers of the API receive wrong types and lose data fidelity. There is no way to opt a column out.</li>
+<li><strong>Reproduction:</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$obj = new class { public string $note = &#39;true&#39;; public string $empty = &#39;{}&#39;; };</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">(new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor()))</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    -&gt;normalize($obj, &#39;json&#39;);</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">// [&#39;note&#39; =&gt; true, &#39;empty&#39; =&gt; []]   ← strings replaced by non-strings</span>
+</code></pre></div></li>
+<li><strong>Proposed fix:</strong> Only JSON-decode when the attribute is known to be a JSON column (e.g. driven by a configured column allow-list or a <code>json</code> Doctrine mapping hint passed via context), or keep the string when the decoded value is not an array/object; do not blanket-decode every string field.</li>
+</ul>
+<h3 id="32-flatnormalizer-discards-all-relation-fields-except-id__tostring__metadata-medium">3.2 FlatNormalizer discards all relation fields except id/__toString/__metadata — MEDIUM<a class="headerlink" href="#32-flatnormalizer-discards-all-relation-fields-except-id__tostring__metadata-medium" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Location:</strong> <code>src/Core/Serializer/Normalizer/FlatNormalizer.php:106-108</code> (+ <code>reduceTransform</code> at 88-103)</li>
+<li><strong>Description:</strong> When a raw attribute value is an object with <code>getId()</code> (a relation), the decorated normalizer's baseline for that attribute (which may contain <code>name</code>, <code>slug</code>, <code>price</code>, etc.) is <strong>overwritten wholesale</strong> by <code>reduceTransform($raw)</code>, which emits only <code>id</code>, <code>__toString</code>, <code>__metadata</code>.</li>
+<li><strong>Impact:</strong> Related-entity payloads are reduced to an id (and possibly a label), silently dropping every other field the decorated normalizer produced. If the API is expected to return those fields (e.g. category <code>name</code> on a product), the response is incomplete.</li>
+<li><strong>Reproduction:</strong> decorated normalizer returns <code>['related' =&gt; ['id' =&gt; 9, 'name' =&gt; 'Pizza', 'price' =&gt; 9.99]]</code>; the related object has <code>getId()</code> → output relation becomes <code>['id' =&gt; 9, '__toString' =&gt; 'Pizza']</code> (<code>name</code>/<code>price</code> lost).</li>
+<li><strong>Proposed fix:</strong> Merge the reduced representation with the baseline (<code>array_merge</code> the <code>id</code>/<code>__toString</code>/<code>__metadata</code> keys onto the decorated output, or only fill missing keys), so existing relation fields survive.</li>
+</ul>
+<h3 id="33-localelistener-does-not-parse-valid-accept-language-q-value-forms-with-optional-whitespace-case-low">3.3 LocaleListener does not parse valid Accept-Language q-value forms with optional whitespace / case — LOW<a class="headerlink" href="#33-localelistener-does-not-parse-valid-accept-language-q-value-forms-with-optional-whitespace-case-low" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Location:</strong> <code>src/Core/EventListener/LocaleListener.php:78-82</code></li>
+<li><strong>Description:</strong> <code>parseAcceptLanguage()</code> splits on the exact token <code>;q=</code>. RFC 7230/7231 permits optional whitespace around the <code>;</code>/<code>=</code> separators and case-insensitive parameter names. A header like <code>zh-CN; q=1.0, en; q=0.5</code> (space after <code>;</code>, emitted by some clients) is not split, so <code>lang</code> becomes <code>"zh-CN; q=1.0"</code>, fails <code>resolveLocale()</code>, and the request silently falls back to the default locale <code>en</code>. Same for <code>fr;Q=1.0</code>.</li>
+<li><strong>Impact:</strong> Well-formed browsers/proxies can be served the wrong language. (Confirmed: <code>zh-CN; q=1.0, en; q=0.5</code> yields locale <code>en</code> instead of <code>zh</code>.)</li>
+<li><strong>Reproduction:</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$request-&gt;headers-&gt;set(&#39;Accept-Language&#39;, &#39;zh-CN; q=1.0, en; q=0.5&#39;);</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === &#39;en&#39;  (expected &#39;zh&#39;)</span>
+</code></pre></div></li>
+<li><strong>Proposed fix:</strong> Normalize each item first (collapse whitespace / lowercase <code>q</code>), e.g. <code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> instead of a literal <code>explode(';q=', ...)</code>, and also trim the language tag.</li>
+</ul>
+<h3 id="34-expressiondqlparser-unreachable-defensive-branches-dead-code-low">3.4 ExpressionDqlParser — unreachable defensive branches (dead code) — LOW<a class="headerlink" href="#34-expressiondqlparser-unreachable-defensive-branches-dead-code-low" title="Permanent link">&para;</a></h3>
+<p>The four lines that cannot be raised to 100% are unreachable by any public input. Each is a defensive branch whose guard can never fail:</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Guard</th>
+<th>Why unreachable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>317</td>
+<td><code>if (empty($matches[1])) throw 'Invalid attribute access'</code></td>
+<td>The guard regex at 312 (<code>/^entity(\.get[A-Z]\w+\(\))+$/</code>) already guarantees ≥1 capture, so <code>$matches[1]</code> is never empty.</td>
+</tr>
+<tr>
+<td>394</td>
+<td><code>throw 'matches pattern parameter was not compiled'</code></td>
+<td><code>compileMatchOperand()</code> calls <code>recursiveCompile()</code> on the right operand first, which always inserts the parameter into <code>$this-&gt;parameters</code> before the lookup loop runs; the loop always finds it.</td>
+</tr>
+<tr>
+<td>488</td>
+<td><code>if (count($segments) === 0) throw 'Empty path'</code></td>
+<td><code>explode('.', $path)</code> returns at least one element for every possible string.</td>
+</tr>
+<tr>
+<td>541</td>
+<td><code>if (strpos($token, ':') === 0) continue</code></td>
+<td>The where-token regex at 537 (<code>[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*)+</code>) can never produce a match starting with <code>:</code>, so the colon-prefix skip never triggers.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note on 541:</strong> this is also a latent correctness smell — because the regex starts at a letter, <code>:filter_parameter_1</code> is <em>not</em> excluded by this guard, it simply never matches (no dot). More importantly the regex <strong>does</strong> match dotted paths inside string literals (e.g. a JSON-ish where clause), which would make <code>validateFragments()</code> throw on unrelated text. Worth a follow-up regex hardening (e.g. negative lookbehind for <code>:</code> / quote handling).</p>
+<h3 id="35-expressionquerybuilderassembler-swallows-join-failures-silently-lowmedium">3.5 ExpressionQueryBuilderAssembler swallows join failures silently — LOW/MEDIUM<a class="headerlink" href="#35-expressionquerybuilderassembler-swallows-join-failures-silently-lowmedium" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Location:</strong> <code>src/Core/Parser/ExpressionQueryBuilderAssembler.php:116-126</code></li>
+<li><strong>Description:</strong> <code>leftJoin()</code> failures are caught and ignored (<code>catch (\Exception $e) { /* ignore join errors */ }</code>), and duplicate join aliases are silently skipped (117-119). If a join path is invalid, assembly "succeeds" while the WHERE clause still references the missing join alias.</li>
+<li><strong>Impact:</strong> Errors surface later, as an obscure DQL "alias is not joined" failure at query execution, or the query silently returns different results than intended when an alias is reused for a different path.</li>
+<li><strong>Proposed fix:</strong> At minimum log the swallowed exception; consider rethrowing a <code>ValidatorException</code> for invalid join paths (consistent with the class's other validation), and error (or rename) on alias collision instead of skipping.</li>
+</ul>
+<h3 id="36-openapienricherlistener-minor-robustness-issues-low">3.6 OpenApiEnricherListener — minor robustness issues — LOW<a class="headerlink" href="#36-openapienricherlistener-minor-robustness-issues-low" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>src/Core/EventListener/OpenApiEnricherListener.php:110-112</code> — <code>$content === false</code> is unreachable (only reachable when <code>getContent(true)</code> is used, which it never is); empty-string guard is the real path.</li>
+<li><code>:115</code> — an HTML <code>/api/doc</code> response whose body starts with <code>{</code> (leading template text) would be misclassified as raw JSON and <code>json_decode</code>d; harmless today but fragile.</li>
+<li><code>:196</code> — <code>$t['name']</code> is dereferenced without checking the key exists; a spec whose <code>tags</code> entries lack <code>name</code> (e.g. custom tooling) would raise an undefined-key warning/notice.</li>
+<li><code>:134-138</code> — the <code>if (is_string($newJson))</code> block is mis-indented (functionally correct, but confusing).</li>
+</ul>
+<p>No test was marked skipped: all "correct behavior" tests I wrote pass against the current source. The 4 dead branches in §3.4 were intentionally left uncovered (they are unreachable); attempting to force them would require reflection-injected fake AST nodes that cannot occur in practice.</p>
+<h2 id="4-suite-status">4. Suite status<a class="headerlink" href="#4-suite-status" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The 5 new test files: <strong>green</strong> (29 tests / 49 assertions, no failures/errors/deprecations).</li>
+<li>Full suite with the new tests and coverage: <strong>2019 tests, 0 failures, 7 skipped</strong> (pre-existing skips, none in these files). Coverage measurements above come from this run.</li>
+<li>A <em>separate</em> full run without coverage in this sandbox additionally shows pre-existing DB integration failures (<code>Doctrine\DBAL\Exception\TableNotFoundException</code> — the SQLite schema is not loaded in this environment, e.g. <code>common_content</code>, <code>users</code>). These are environment/setup errors unrelated to this task; they occur in <code>tests/**/Integration/*</code> and <code>tests/**/Controller/*Repository*</code> tests and predate these changes. The targeted unit tests do not touch the DB.</li>
+</ul>
+<h2 id="5-suggested-follow-ups">5. Suggested follow-ups<a class="headerlink" href="#5-suggested-follow-ups" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Fix §3.1 (JSON string corruption) and §3.2 (relation field loss) in <code>FlatNormalizer</code> — both change API response payloads.</li>
+<li>Harden §3.3 (<code>Accept-Language</code> parsing) with a proper tokenizer.</li>
+<li>Clean up the §3.4 dead branches or add a <code>@codeCoverageIgnore</code>/comment so coverage audits stop flagging them.</li>
+<li>Make <code>ExpressionQueryBuilderAssembler</code> join failures visible (§3.5).</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

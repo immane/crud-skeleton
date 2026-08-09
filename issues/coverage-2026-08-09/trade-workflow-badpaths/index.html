@@ -1,0 +1,1598 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/trade-workflow-badpaths/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Trade Order Workflow — State Machine & Bad-Path Coverage Report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#trade-order-workflow-state-machine-bad-path-coverage-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Trade Order Workflow — State Machine &amp; Bad-Path Coverage Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-group-covers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each group covers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#finding-1-the-order-workflow-has-no-guard-rules-dotransition-lets-an-admin-run-the-whole-paid-lifecycle-without-payment-medium-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 1 — The order workflow has NO guard rules; /do/{transition} lets an admin run the whole paid lifecycle without payment (MEDIUM-HIGH)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-2-orderservicepayrefundfulfill-do-not-apply-the-workflow-transition-low-design-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 2 — OrderService::pay/refund/fulfill do not apply the workflow transition (LOW / design split)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-3-dotransitionaction-forwards-arbitrary-request-body-fields-to-update-enabling-order-data-tampering-medium-previously-documented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 3 — doTransitionAction forwards arbitrary request-body fields to update(), enabling order-data tampering (MEDIUM — previously documented)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-4-app-submitconfirm-propagate-workflowdb-failures-as-http-500-medium-previously-documented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 4 — App submit/confirm propagate workflow/DB failures as HTTP 500 (MEDIUM — previously documented)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-5-status-reset-endpoint-is-dead-code-and-would-not-work-on-orders-low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 5 — status-reset endpoint is dead code and would not work on orders (LOW)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-6-order-entity-has-no-status_-constants-for-the-store-states-info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 6 — Order entity has no STATUS_ constants for the store states (INFO)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-7-raw-exception-messages-returned-to-api-clients-low-codebase-wide-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding 7 — Raw exception messages returned to API clients (LOW — codebase-wide convention)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skipped-items-correct-behaviour-tests-that-fail-against-current-src" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped items (correct-behaviour tests that fail against current src)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-non-bugs-investigated-and-cleared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified non-bugs (investigated and cleared)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-test-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final test run
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="trade-order-workflow-state-machine-bad-path-coverage-report">Trade Order Workflow — State Machine &amp; Bad-Path Coverage Report<a class="headerlink" href="#trade-order-workflow-state-machine-bad-path-coverage-report" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Date: 2026-08-09</li>
+<li>Scope: <code>config/packages/workflow.yaml</code> (order state machine), <code>src/Trade/Entity/Order.php</code>, <code>src/Trade/Service/OrderService.php</code>, <code>src/Trade/EventListener/OrderWorkflowListener.php</code>, <code>src/Trade/Controller/App/OrderController.php</code>, <code>src/Trade/Controller/Manage/OrderController.php</code>, plus the HTTP endpoints they expose.</li>
+<li>Task: exhaustively exercise every order workflow transition (all states, guards, bad paths), find bugs.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+</ul>
+<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
+<p>All new files use <code>declare(strict_types=1);</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Namespace</th>
+<th>Kind</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Trade/Workflow/OrderWorkflowStateMachineTest.php</code></td>
+<td><code>App\Tests\Trade\Workflow</code></td>
+<td><code>KernelTestCase</code> (real container service <code>state_machine.order</code>, no DB)</td>
+<td>The full order state machine: every transition from every state, invalid/duplicate/unknown transitions, enabled-transition listing, listener timestamp side-effects, guard absence probes</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/OrderWorkflowApiTest.php</code></td>
+<td><code>App\Tests\Trade\Integration</code></td>
+<td><code>WebTestCase</code> + <code>IntegrationWebTestCase</code> + <code>DatabaseBootstrapTrait</code></td>
+<td>End-to-end HTTP: manage <code>pay/fulfill/refund/todo/transitions/do/{transition}</code>, app <code>submit/confirm/cancel</code>, guard rejections, not-found, duplicate/unknown transitions, wallet transfers, status-reset route</td>
+</tr>
+</tbody>
+</table>
+<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
+<p>Generated with <code>XDEBUG_MODE=coverage</code> over both files (clover merged). Incremental line coverage on <code>src/Trade/**</code> exercised by the two new files:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Lines (covered/total)</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Trade/EventListener/OrderWorkflowListener.php</code></td>
+<td>86/102</td>
+<td><strong>84.3%</strong></td>
+</tr>
+<tr>
+<td><code>src/Trade/Entity/Order.php</code></td>
+<td>108/184</td>
+<td><strong>58.7%</strong></td>
+</tr>
+<tr>
+<td><code>src/Trade/Controller/Manage/OrderController.php</code></td>
+<td>95/302</td>
+<td>31.5%</td>
+</tr>
+<tr>
+<td><code>src/Trade/Controller/App/OrderController.php</code></td>
+<td>63/206</td>
+<td>30.6%</td>
+</tr>
+<tr>
+<td><code>src/Trade/Service/OrderService.php</code></td>
+<td>89/368</td>
+<td>24.2%</td>
+</tr>
+<tr>
+<td><code>src/Trade/Event/*</code> (OrderPaid/Fulfilled/Completed/Cancelled/Refunded)</td>
+<td>10/10</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td><code>src/Trade/Service/Pricing/*</code> (calculator pipeline)</td>
+<td>50/118</td>
+<td>42.4%</td>
+</tr>
+<tr>
+<td><strong>Total <code>src/Trade/**</code> exercised</strong></td>
+<td>604/2004</td>
+<td>30.1%</td>
+</tr>
+</tbody>
+</table>
+<p>Combined suite: <strong>123 tests, 555 assertions, 1 intentional skip</strong> — green (<code>OK, but some tests were skipped!</code>).</p>
+<blockquote>
+<p>Coverage notes: the two files target the workflow + its HTTP surface, so the low <code>Total src/Trade</code> figure is expected — commands, repositories, DTOs, message handlers and outbox (covered elsewhere) are not the subject. <code>OrderWorkflowListener</code> and the five domain events are now essentially fully covered.</p>
+</blockquote>
+<h2 id="what-each-group-covers">What each group covers<a class="headerlink" href="#what-each-group-covers" title="Permanent link">&para;</a></h2>
+<p><strong>Workflow state machine unit tests (no DB):</strong></p>
+<ol>
+<li><strong>Every enabled transition from every state</strong> (<code>enabledTransitionsProvider</code>, <code>validTransitionProvider</code>) — the exact arcs from <code>config/packages/workflow.yaml</code>:</li>
+<li><code>draft</code> → <code>submit</code>/<code>store_submit</code>/<code>cancel</code></li>
+<li><code>pending</code> → <code>confirm</code>/<code>cancel</code></li>
+<li><code>awaiting_store_acceptance</code> → <code>store_accept</code>/<code>store_reject</code>/<code>cancel</code></li>
+<li><code>store_accepted</code> → <code>confirm</code>/<code>cancel</code>; <code>store_rejected</code> → <code>cancel</code></li>
+<li><code>confirmed</code> → <code>pay</code>/<code>cancel</code>; <code>paid</code> → <code>fulfill</code>; <code>fulfilled</code> → <code>complete</code>; <code>completed</code> → <code>refund</code></li>
+<li><code>cancelled</code>/<code>refunded</code> are terminal (no enabled transitions)</li>
+<li><strong>Bad paths</strong> (<code>invalidTransitionProvider</code>, ~39 cases) — applying a non-enabled transition throws <code>NotEnabledTransitionException</code> and leaves the status unchanged; unknown transition names throw <code>UndefinedTransitionException</code>; <code>can()</code> is false for them; duplicate <code>submit</code>/<code>pay</code> are rejected.</li>
+<li><strong>Timestamp side-effects</strong> of <code>OrderWorkflowListener</code> — <code>cancel→cancelledAt</code>, <code>pay→paidAt</code> (set only when null), <code>fulfill→fulfilledAt</code> (only when null), <code>complete→completedAt</code>, <code>refund→refundedAt</code> (only when null); <code>submit/confirm/store_*</code> set none.</li>
+<li><strong>Guard probes</strong> — proves <code>config/packages/workflow.yaml</code> declares NO guard rules: the workflow alone permits <code>pay</code> on an order with no amount/user/wallet, <code>complete</code> without <code>fulfilledAt</code>, and <code>refund</code> without a reason.</li>
+</ol>
+<p><strong>HTTP integration tests (real SQLite schema):</strong></p>
+<ol>
+<li>Happy path <code>draft→pending→confirmed→paid→fulfilled→completed→refunded</code> through <code>/do/{transition}</code> with timestamp assertions.</li>
+<li>Store branch: <code>store_submit→store_accept→confirm→pay</code> and <code>store_submit→store_reject→cancel</code> via <code>/do</code>; <code>store_accept</code> from draft is rejected.</li>
+<li>Cancel from all six cancellable states; <code>cancel</code> rejected after <code>paid</code>.</li>
+<li>Duplicate <code>submit</code>/<code>refund</code> rejected with state unchanged; unknown transition rejected; <code>/do</code> on a missing order → 404.</li>
+<li><code>/transitions</code> endpoint lists the exact enabled set per state (data-driven across all states); 404 on missing order.</li>
+<li><code>/todo</code> returns orders with enabled transitions and excludes terminal (<code>cancelled</code>, <code>refunded</code>) orders.</li>
+<li><code>/pay</code> — guard rejections (draft → 400, missing <code>systemWalletId</code> → 400, missing order → 404, order without user/wallet → 400), wallet-transfer success (balances move 3000 user→system, <code>paidAt</code>+<code>paymentMethod</code> set, status <code>paid</code>), second payment rejected.</li>
+<li><code>/fulfill</code> — wrong status → 400, not found → 404, success stores <code>trackingNumber</code>/<code>shippingAddress</code> + <code>fulfilledAt</code>, status <code>fulfilled</code>.</li>
+<li><code>/refund</code> — wrong status → 400, missing <code>reason</code> → 400, not found → 404, wallet-refund success (balances restored, <code>refundedAt</code>+<code>refundReason</code> set, status <code>refunded</code>).</li>
+<li>App endpoints — create/submit/confirm/cancel happy path, duplicate submit → 400, cancel after paid → 400, cross-user → 404, not found → 404.</li>
+<li>Status-reset: <code>PUT /manage/orders/{id}/status-reset</code> returns <strong>404</strong> — the reset route is dead code for orders (see Finding 5).</li>
+</ol>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="finding-1-the-order-workflow-has-no-guard-rules-dotransition-lets-an-admin-run-the-whole-paid-lifecycle-without-payment-medium-high">Finding 1 — The order workflow has NO guard rules; <code>/do/{transition}</code> lets an admin run the whole paid lifecycle without payment (MEDIUM-HIGH)<a class="headerlink" href="#finding-1-the-order-workflow-has-no-guard-rules-dotransition-lets-an-admin-run-the-whole-paid-lifecycle-without-payment-medium-high" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>config/packages/workflow.yaml</code> (order section) — no <code>guard:</code> on any transition; <code>src/Trade/Controller/Manage/OrderController.php:308-339</code> (<code>doTransitionAction</code>).</li>
+<li><strong>Description:</strong> The workflow defines arcs only. The installed Symfony Workflow <code>Transition</code> value object no longer has a guard API (<code>vendor/symfony/workflow/Transition.php</code>), so guard expressions are impossible. The only enforcement is <code>OrderService</code> status checks (<code>pay</code> requires <code>confirmed</code>, <code>refund</code> requires <code>completed</code>, <code>fulfill</code> requires <code>paid</code>) plus controller <code>can()</code> calls. The generic <code>POST /manage/orders/{id}/do/{transition}</code> endpoint calls <code>can()</code> only — so a <code>ROLE_ADMIN</code> can move any order <code>draft→paid</code> (<code>do/submit</code>, <code>do/confirm</code>, <code>do/pay</code>), <code>→fulfilled</code>, <code>→completed</code>, <code>→refunded</code> with no wallet, no invoice, and no money movement.</li>
+<li><strong>Impact:</strong> An order can be marked paid/fulfilled/completed/refunded without any actual payment; financial-state integrity depends entirely on every caller remembering to use the wallet endpoints rather than <code>/do</code>. This is the demo script's own happy path (<code>scripts/tests/demo-trade-workflow.php</code> step 1 uses <code>do/pay</code>), so it is intended for demos — but it is a real data-integrity hole for production.</li>
+<li><strong>Reproduction:</strong> <code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code> (passes by design) and <code>OrderWorkflowStateMachineTest::testWorkflowLayerAllowsPayWithoutAmountWalletOrUser</code> (passes — proves no guard).</li>
+<li><strong>Proposed fix:</strong> do not expose money transitions (<code>pay</code>/<code>refund</code>) through <code>/do/{transition}</code> — restrict <code>/do</code> to non-monetary transitions (<code>submit</code>, <code>store_*</code>, <code>confirm</code>, <code>fulfill</code>, <code>complete</code>) or require a payment reference for <code>pay</code>/<code>refund</code>. Alternatively re-add guard expressions as workflow event-listeners/blockers (guards as an API no longer exist in this Symfony version).</li>
+</ul>
+<h3 id="finding-2-orderservicepayrefundfulfill-do-not-apply-the-workflow-transition-low-design-split">Finding 2 — OrderService::pay/refund/fulfill do not apply the workflow transition (LOW / design split)<a class="headerlink" href="#finding-2-orderservicepayrefundfulfill-do-not-apply-the-workflow-transition-low-design-split" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/Service/OrderService.php:146-265</code> (<code>pay</code>, <code>refund</code>, <code>fulfill</code>).</li>
+<li><strong>Description:</strong> These methods validate the current status, perform the wallet transfer / set business fields (<code>paidAt</code>, <code>refundedAt</code>, <code>fulfilledAt</code>, <code>trackingNumber</code>, <code>paymentMethod</code>, <code>refundReason</code>), but <strong>never</strong> call <code>$this-&gt;workflow-&gt;apply(...)</code>. The status change happens only in the controllers (<code>Manage/OrderController::payAction/fulfillAction/refundAction</code> call <code>workflow-&gt;apply()</code> inside <code>wrapInTransaction</code>). <code>OrderWorkflowListener</code> deliberately preserves a pre-set <code>paidAt</code>/<code>fulfilledAt</code>/<code>refundedAt</code> (only sets when null), which confirms the split design.</li>
+<li><strong>Impact:</strong> Any caller that uses <code>OrderService::pay()</code> directly (a future command/worker/saga) will set <code>paidAt</code> while the order stays <code>confirmed</code> — an inconsistent state. The status checks in the methods are the only guard, and they don't protect against a direct caller skipping the transition.</li>
+<li><strong>Reproduction:</strong> unit-level — <code>OrderService::pay()</code> on a confirmed order sets <code>paidAt</code> and leaves <code>status === 'confirmed'</code> (covered by existing <code>OrderServiceTest</code>).</li>
+<li><strong>Proposed fix:</strong> either have <code>OrderService::pay/refund/fulfill</code> apply the matching workflow transition themselves, or document loudly that callers must pair each service call with the workflow transition.</li>
+</ul>
+<h3 id="finding-3-dotransitionaction-forwards-arbitrary-request-body-fields-to-update-enabling-order-data-tampering-medium-previously-documented">Finding 3 — <code>doTransitionAction</code> forwards arbitrary request-body fields to <code>update()</code>, enabling order-data tampering (MEDIUM — previously documented)<a class="headerlink" href="#finding-3-dotransitionaction-forwards-arbitrary-request-body-fields-to-update-enabling-order-data-tampering-medium-previously-documented" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/Controller/Manage/OrderController.php:329</code>.</li>
+<li><strong>Description:</strong> <code>/do/{transition}</code> passes the whole decoded body to <code>OrderService::update()</code>, which applies any settable property via the serializer (no whitelist, unlike <code>updateAction()</code> which restricts to <code>notes</code>/<code>metadata</code>).</li>
+<li><strong>Impact:</strong> <code>POST /manage/orders/{id}/do/submit {"totalAmount": 1}</code> rewrites the order total; the same holds for <code>currency</code>, <code>paidAt</code>, etc. Bypasses the ordinary update whitelist.</li>
+<li><strong>Reproduction:</strong> <code>OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code> — <strong>skipped</strong> because it asserts the correct behaviour (tampered <code>totalAmount</code> must NOT persist) and currently fails. Full detail in <code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> (Bug 2).</li>
+</ul>
+<h3 id="finding-4-app-submitconfirm-propagate-workflowdb-failures-as-http-500-medium-previously-documented">Finding 4 — App <code>submit</code>/<code>confirm</code> propagate workflow/DB failures as HTTP 500 (MEDIUM — previously documented)<a class="headerlink" href="#finding-4-app-submitconfirm-propagate-workflowdb-failures-as-http-500-medium-previously-documented" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition</code>), used by <code>submitAction</code>/<code>confirmAction</code>.</li>
+<li><strong>Description:</strong> Unlike <code>cancelAction</code>/<code>paymentAction</code> (which <code>try/catch</code> and return 400), <code>applyUserOrderTransition()</code> performs <code>workflow-&gt;apply()</code> inside <code>wrapInTransaction</code> with no <code>catch</code>; a failure escapes as an unhandled 500 instead of the API's <code>400 {code,message}</code> contract.</li>
+<li><strong>Reproduction:</strong> covered conceptually by <code>OrderWorkflowApiTest::testAppSubmitOnAlreadySubmittedOrderIsRejected</code> (guard path returns 400 cleanly) — the 500 path needs a mid-transaction throw and is pinned in <code>tests/Trade/Controller/App/OrderControllerTest.php</code> (skipped correct-behaviour test). Full detail in <code>trade-controllers.md</code> (Bug 1).</li>
+</ul>
+<h3 id="finding-5-status-reset-endpoint-is-dead-code-and-would-not-work-on-orders-low">Finding 5 — <code>status-reset</code> endpoint is dead code and would not work on orders (LOW)<a class="headerlink" href="#finding-5-status-reset-endpoint-is-dead-code-and-would-not-work-on-orders-low" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Core/View/WorkflowApiViewMixin.php:104-109</code> (<code>resetMarkingAction</code>).</li>
+<li><strong>Description:</strong> No controller uses <code>WorkflowApiViewMixin</code> (verified by grep — only the mixin file itself and its unit test reference it), so <code>PUT /manage/orders/{id}/status-reset</code> is not a route on the order controllers and returns <strong>404</strong> (<code>OrderWorkflowApiTest::testStatusResetRouteIsNotRegisteredOnOrderControllers</code>). Even if wired up, <code>resetMarkingAction()</code> calls <code>$entity-&gt;setStatus([])</code> — an array into <code>Order::setStatus(string)</code> → <code>TypeError</code> — and the route placeholder <code>{id}</code> does not match the <code>$entity</code> argument name. (The placeholder mismatch is already flagged in <code>docs/issues/coverage-2026-08-09/core-view.md</code>.)</li>
+<li><strong>Impact:</strong> The documented "reset" workflow flow does not exist for orders; the mixin is latent broken code.</li>
+<li><strong>Proposed fix:</strong> either delete the mixin or fix it (<code>$entity-&gt;setStatus(Order::STATUS_DRAFT)</code> + argument named <code>$id</code>), and add the route to the order controllers if reset is actually wanted.</li>
+</ul>
+<h3 id="finding-6-order-entity-has-no-status_-constants-for-the-store-states-info">Finding 6 — Order entity has no STATUS_ constants for the store states (INFO)<a class="headerlink" href="#finding-6-order-entity-has-no-status_-constants-for-the-store-states-info" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/Entity/Order.php:19-26</code>.</li>
+<li><strong>Description:</strong> <code>Order::STATUS_*</code> covers only <code>draft/pending/confirmed/paid/fulfilled/completed/cancelled/refunded</code>. The store states <code>awaiting_store_acceptance</code>, <code>store_accepted</code>, <code>store_rejected</code> are bare string literals across <code>OrderService</code>, controllers and message handlers.</li>
+<li><strong>Impact:</strong> typos/renames are not caught by static analysis; inconsistent with the constant-based statuses.</li>
+<li><strong>Proposed fix:</strong> add <code>STATUS_AWAITING_STORE_ACCEPTANCE</code>, <code>STATUS_STORE_ACCEPTED</code>, <code>STATUS_STORE_REJECTED</code> and use them.</li>
+</ul>
+<h3 id="finding-7-raw-exception-messages-returned-to-api-clients-low-codebase-wide-convention">Finding 7 — Raw exception messages returned to API clients (LOW — codebase-wide convention)<a class="headerlink" href="#finding-7-raw-exception-messages-returned-to-api-clients-low-codebase-wide-convention" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> every <code>catch (\Throwable $e)</code> in both order controllers returns <code>$e-&gt;getMessage()</code> verbatim (e.g. <code>Manage/OrderController.php:180,205,231,274,335</code>).</li>
+<li><strong>Impact:</strong> internal wallet/gateway/DB messages leak to clients. Noted only — this is the established convention across the codebase (see <code>trade-controllers.md</code> Finding 3).</li>
+</ul>
+<h2 id="skipped-items-correct-behaviour-tests-that-fail-against-current-src">Skipped items (correct-behaviour tests that fail against current src)<a class="headerlink" href="#skipped-items-correct-behaviour-tests-that-fail-against-current-src" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>App\Tests\Trade\Integration\OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code> — <strong>skipped</strong>; asserts <code>totalAmount</code> in a <code>/do/submit</code> body must NOT persist. Fails against current code (Finding 3). (Mirrors the already-skipped unit test in <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code>.)</li>
+<li>(Reference only) <code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> and <code>...Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> — previously skipped in <code>trade-controllers.md</code>; not duplicated here.</li>
+</ul>
+<h2 id="verified-non-bugs-investigated-and-cleared">Verified non-bugs (investigated and cleared)<a class="headerlink" href="#verified-non-bugs-investigated-and-cleared" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Workflow allows <code>pay</code> from <code>store_accepted</code>?</strong> No — <code>confirm</code> must come first (<code>confirm: from: [pending, store_accepted]</code>); <code>pay</code> is only from <code>confirmed</code>. Covered by <code>invalidTransitionProvider</code> + integration happy path.</li>
+<li><strong><code>pending → awaiting_store_acceptance</code>?</strong> Not a transition — <code>store_submit</code> is from <code>draft</code> only (the docs <code>context.md</code> §7.1 diagram is a simplification). Tested per the actual <code>workflow.yaml</code>.</li>
+<li><strong>Refund from <code>paid</code>/<code>fulfilled</code> (task phrasing "paid/…→refunded")?</strong> The config only allows <code>refund: from: completed</code>. <code>refundAction</code> correctly guards on <code>can('refund')</code>; direct <code>do/refund</code> from <code>paid</code> is rejected. Confirmed by <code>testRefundEndpointRejectsNonCompletedOrder</code> + <code>invalidTransitionProvider</code>.</li>
+<li><strong>Manage <code>refundAction</code> invoice branch skipping the workflow transition</strong> — not a bug: <code>InvoiceService::refund()</code> dispatches <code>InvoiceRefundedEvent</code> and <code>OrderInvoiceListener::onInvoiceRefunded()</code> applies the <code>refund</code> transition (covered by existing <code>TradePaymentIntegrationTest</code>).</li>
+<li><strong><code>/todo</code> pagination/query params</strong> — <code>list(null, null, false)</code> intentionally evaluates the request; no filter params are sent, and <code>assertPrivilegedQueryParameters</code> allows plain admin GETs. Only a scalability TODO in the mixin, not a correctness bug.</li>
+</ul>
+<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    tests/Trade/Workflow/OrderWorkflowStateMachineTest.php \
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    tests/Trade/Integration/OrderWorkflowApiTest.php --no-coverage
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>OK, but some tests were skipped!
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Tests: 123, Assertions: 555, Skipped: 1.
+</code></pre></div>
+<p>(Individual runs are identical; the shared <code>var/test.db</code> occasionally shows transient <code>no such table</code>/<code>database is locked</code> failures when concurrent test runners in this environment drop/recreate the schema — wait 10-15 s and re-run, per the project convention.)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

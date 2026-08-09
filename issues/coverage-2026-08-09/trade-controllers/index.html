@@ -1,0 +1,1545 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/trade-controllers/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Trade Order Controllers — Coverage & Bug Report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#trade-order-controllers-coverage-bug-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Trade Order Controllers — Coverage &amp; Bug Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Test files added">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-a-fake-service-was-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a fake service was needed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coverage results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-each-group-of-tests-covers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each group of tests covers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-the-security-container-is-wired-for-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the security container is wired for unit tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-app-submitactionconfirmaction-let-workflowdb-failures-bubble-up-as-http-500-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 1 — App submitAction/confirmAction let workflow/DB failures bubble up as HTTP 500 (HIGH)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-manage-dotransitionaction-forwards-arbitrary-request-fields-to-update-allowing-order-data-tampering-medium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 2 — Manage doTransitionAction forwards arbitrary request fields to update(), allowing order-data tampering (MEDIUM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-raw-exception-messages-returned-to-api-clients-low-consistent-with-codebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 3 — Raw exception messages returned to API clients (LOW / consistent with codebase)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skipped-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped items
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-non-bugs-investigated-and-cleared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified NON-bugs (investigated and cleared)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-test-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final test run
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="trade-order-controllers-coverage-bug-report">Trade Order Controllers — Coverage &amp; Bug Report<a class="headerlink" href="#trade-order-controllers-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Date: 2026-08-09</li>
+<li>Scope: <code>src/Trade/Controller/App/OrderController.php</code>, <code>src/Trade/Controller/Manage/OrderController.php</code></li>
+<li>Task: raise line coverage of both controllers to ~100% and find bugs.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+</ul>
+<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
+<p>All new files use <code>declare(strict_types=1);</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Namespace</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Trade/Controller/App/OrderControllerTest.php</code></td>
+<td><code>App\Tests\Trade\Controller\App</code></td>
+<td><code>App\Trade\Controller\App\OrderController</code></td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/OrderControllerServiceFake.php</code></td>
+<td><code>App\Tests\Trade\Controller</code></td>
+<td>support double (see note below)</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> (extended)</td>
+<td><code>App\Tests\Trade\Controller\Manage</code></td>
+<td><code>App\Trade\Controller\Manage\OrderController</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-a-fake-service-was-needed">Why a fake service was needed<a class="headerlink" href="#why-a-fake-service-was-needed" title="Permanent link">&para;</a></h3>
+<p><code>OrderServiceInterface</code> declares <code>wrapInTransaction()</code> <strong>only via a <code>@method</code> PHPDoc tag</strong>, and PHPUnit 12 no longer generates mock methods for PHPDoc-declared methods (<code>createMock()</code> yields a mock without <code>wrapInTransaction</code> — verified). The controllers call <code>$this-&gt;service-&gt;wrapInTransaction(...)</code> in <code>payAction</code>/<code>fulfillAction</code>/<code>refundAction</code>/<code>cancelAction</code>/<code>doTransitionAction</code>, so those paths could not be exercised with a plain mock.</p>
+<p><code>OrderControllerServiceFake</code> implements <code>OrderServiceInterface</code> and delegates every real interface method to a backing PHPUnit mock (so <code>$service-&gt;method('get')-&gt;with(...)-&gt;willReturn(...)</code> keeps working exactly as in the existing tests) while adding a real <code>wrapInTransaction()</code> that either invokes the callback (<code>invokeTransaction = true</code>) or behaves like a no-op. The existing Manage <code>OrderControllerTest::setUp()</code> now builds the controller with <code>new OrderController(new OrderControllerServiceFake($this-&gt;service), ...)</code>; all 15 pre-existing tests still pass unchanged.</p>
+<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
+<p>Baseline uncovered lines (from <code>var/uncovered-map.txt</code>, generated 2026-08-09 07:39) vs. status after the new tests. Verified by running</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php vendor/bin/phpunit \
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    tests/Trade/Controller/App/OrderControllerTest.php \
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    tests/Trade/Controller/Manage/OrderControllerTest.php \
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    --coverage-clover /tmp/cov.xml
+</code></pre></div>
+<p>and diffing the <code>count="0"</code> statement lines against the baseline list. Every baseline-uncovered line is now executed by the new unit tests.</p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th>Baseline uncovered lines</th>
+<th>After new tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>App\Trade\Controller\App\OrderController</code> (was 78.64%)</td>
+<td>41,80,81,88,90,91,92,95,98,99,100,101,102,112,182,200,201,211,216,220,228,229</td>
+<td><strong>all 22 lines covered</strong></td>
+</tr>
+<tr>
+<td><code>App\Trade\Controller\Manage\OrderController</code> (was 84.77%)</td>
+<td>66,67,74,76,77,78,81,84,85,86,87,88,176,177,183,204,205,230,231,264,270,271,277</td>
+<td><strong>all 23 lines covered</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Coverage already provided by the existing integration suite (create success paths, ownership-pass, cancel/payment success, list/detail, transitions, todo, etc.) was not duplicated.</p>
+<h3 id="what-each-group-of-tests-covers">What each group of tests covers<a class="headerlink" href="#what-each-group-of-tests-covers" title="Permanent link">&para;</a></h3>
+<p><strong>App controller</strong></p>
+<ul>
+<li><code>commonFilter()</code> line 41 (<code>['id' =&gt; -1]</code> for anonymous users) via <code>listAction()</code> with a <code>null</code> token (<code>testListActionWithoutUserUsesMinusOneIdFilter</code>).</li>
+<li><code>createAction</code> 201 (no store), 202 (store context), and the <code>catch</code> path 80–81 (price engine throws).</li>
+<li><code>quoteAction</code> — empty items (88,90,91,92), success including custom currency + meta (95,98,99,100), and failure (101,102).</li>
+<li><code>itemsAction</code> not-found branch (112).</li>
+<li><code>cancelAction</code> not-found (182) and transaction-failure branch (200,201) via <code>workflow-&gt;apply</code> throwing inside the fake transaction.</li>
+<li><code>paymentAction</code> — not-found (211), cross-user ownership (216), workflow guard (220), gateway failure (228,229), and success forwarding for <code>mock</code>/<code>wallet</code>/<code>wechat</code> (data provider) asserting the method + options reach <code>createPayment</code>.</li>
+</ul>
+<p><strong>Manage controller</strong></p>
+<ul>
+<li><code>createAction</code> <code>catch</code> (66,67).</li>
+<li><code>quoteAction</code> — empty items (74,76,77,78), success (81,84,85,86), failure (87,88).</li>
+<li><code>payAction</code> success path through the transaction closure (176,177,183) — wallet pay + workflow apply + update + 200.</li>
+<li><code>paymentAction</code> success (203) and failure (204,205).</li>
+<li><code>fulfillAction</code> failure (230,231) with <code>service-&gt;fulfill</code> throwing inside the transaction.</li>
+<li><code>refundAction</code> wallet paths — missing <code>systemWalletId</code> (264) and full wallet-refund success (270,271,277).</li>
+</ul>
+<h3 id="how-the-security-container-is-wired-for-unit-tests">How the security container is wired for unit tests<a class="headerlink" href="#how-the-security-container-is-wired-for-unit-tests" title="Permanent link">&para;</a></h3>
+<p><code>AbstractController::getUser()</code> needs a container exposing <code>security.token_storage</code>. The App tests inject a mocked <code>ContainerInterface</code> whose <code>has()/get()</code> serve a mocked <code>TokenStorageInterface</code> + <code>TokenInterface</code>, so <code>getCurrentUser()</code> returns a <code>User</code> mock with a configurable id (or <code>null</code> for the anonymous case). The existing Manage tests never call <code>getUser()</code>, so they are unaffected.</p>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-app-submitactionconfirmaction-let-workflowdb-failures-bubble-up-as-http-500-high">Bug 1 — App <code>submitAction</code>/<code>confirmAction</code> let workflow/DB failures bubble up as HTTP 500 (HIGH)<a class="headerlink" href="#bug-1-app-submitactionconfirmaction-let-workflowdb-failures-bubble-up-as-http-500-high" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition()</code>), used by <code>submitAction</code> (123-132) and <code>confirmAction</code> (134-143).</li>
+<li><strong>Description:</strong> Unlike <code>cancelAction</code> (194-202) and <code>paymentAction</code> (226-230), which wrap <code>wrapInTransaction(...)</code>/<code>workflow-&gt;apply(...)</code> in <code>try/catch</code> and return a 400 warning, <code>applyUserOrderTransition()</code> performs the transition inside <code>wrapInTransaction()</code> with <strong>no <code>try/catch</code></strong>. Any exception (workflow <code>NotEnabledTransitionException</code>, DB failure, listener error) propagates out of the action.</li>
+<li><strong>Impact:</strong> A failed submit/confirm returns an unhandled exception → HTTP 500 (Symfony exception handling) instead of the consistent <code>400 {"code":400,"message":...}</code> JSON every other mutation on the same controller returns. API clients see an inconsistent contract; in dev the raw exception may be exposed.</li>
+<li><strong>Reproduction:</strong> (verified with a probe test) — owner matched, <code>workflow-&gt;can($order,'submit') === true</code>, then <code>workflow-&gt;apply($order,'submit')</code> throws. Result: <code>submitAction()</code> <strong>throws</strong> <code>RuntimeException('submit boom')</code>; <code>cancelAction()</code>/<code>paymentAction()</code> in the same file return a 400 warning for the equivalent failure.</li>
+<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> asserts a 400 response; it <strong>fails</strong> against the current code and is therefore <strong>skipped</strong> (see Skipped items).</li>
+<li><strong>Proposed fix:</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">try {</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    $this-&gt;service-&gt;wrapInTransaction(function () use ($order, $transition) {</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">        $this-&gt;workflow-&gt;apply($order, $transition);</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    });</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">} catch (\Throwable $e) {</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">    return $this-&gt;warning($e-&gt;getMessage(), 400, &#39;&#39;, 400);</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="x">}</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="x">return $this-&gt;success($order, $successMessage);</span>
+</code></pre></div></li>
+</ul>
+<h3 id="bug-2-manage-dotransitionaction-forwards-arbitrary-request-fields-to-update-allowing-order-data-tampering-medium">Bug 2 — Manage <code>doTransitionAction</code> forwards arbitrary request fields to <code>update()</code>, allowing order-data tampering (MEDIUM)<a class="headerlink" href="#bug-2-manage-dotransitionaction-forwards-arbitrary-request-fields-to-update-allowing-order-data-tampering-medium" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> <code>src/Trade/Controller/Manage/OrderController.php:322-332</code> (specifically <code>:329</code> <code>$this-&gt;service-&gt;update($entity, $content);</code>).</li>
+<li><strong>Description:</strong> The <code>/do/{transition}</code> endpoint passes the <strong>entire decoded request body</strong> to <code>OrderService::update()</code>. <code>BaseServiceMutationTrait::update()</code> (<code>src/Core/Service/Concern/BaseServiceMutationTrait.php:38+</code>) applies <strong>any settable property</strong> of the entity via the serializer (<code>object_to_populate</code>), not just a whitelist. By contrast, <code>updateAction()</code> (105-112) explicitly restricts mutations to <code>notes</code> and <code>metadata</code>.</li>
+<li><strong>Impact:</strong> A <code>ROLE_ADMIN</code> caller can mutate protected order data — e.g. <code>totalAmount</code>, <code>currency</code>, <code>paidAt</code>, <code>trackingNumber</code> — simply by including it in the transition body: <code>POST /manage/orders/{id}/do/complete {..., "totalAmount": 1}</code> permanently rewrites the order total (the later <code>workflow-&gt;apply()</code> only rewrites <code>status</code>). This bypasses the field whitelist enforced by the ordinary update endpoint and lets a transition call change pricing data.</li>
+<li><strong>Reproduction:</strong> <code>Order</code> exposes <code>totalAmount</code> + <code>setTotalAmount()</code>; after the reflection loop in <code>update()</code>, the remaining keys are deserialized onto the entity, so <code>totalAmount</code> is set. The controller's <code>can()</code> guard runs before the update and only checks the transition, not the payload fields.</li>
+<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Trade\Controller\Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> asserts the update payload excludes <code>totalAmount</code>; it <strong>fails</strong> against the current code and is therefore <strong>skipped</strong>.</li>
+<li><strong>Proposed fix:</strong> whitelist the fields accepted by <code>doTransitionAction</code> (e.g. <code>notes</code>, <code>reason</code>, <code>trackingNumber</code>, <code>shippingAddress</code>) before calling <code>update()</code>, mirroring <code>updateAction()</code>. Additionally, run <code>workflow-&gt;apply()</code> first and then persist only the safe fields, so status/total can never be tampered with through the transition body.</li>
+</ul>
+<h3 id="bug-3-raw-exception-messages-returned-to-api-clients-low-consistent-with-codebase">Bug 3 — Raw exception messages returned to API clients (LOW / consistent with codebase)<a class="headerlink" href="#bug-3-raw-exception-messages-returned-to-api-clients-low-consistent-with-codebase" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File/line:</strong> every <code>catch (\Throwable $e)</code> block in both controllers returns <code>$e-&gt;getMessage()</code> verbatim: App <code>createAction:81</code>, <code>quoteAction:102</code>, <code>cancelAction:201</code>, <code>paymentAction:229</code>; Manage <code>createAction:67</code>, <code>quoteAction:88</code>, <code>payAction:180</code>, <code>paymentAction:205</code>, <code>fulfillAction:231</code>, <code>refundAction:274</code>, <code>doTransitionAction:335</code>.</li>
+<li><strong>Description:</strong> Internal exception messages (DB constraints, wallet/gateway internals, serializer errors) are exposed to API clients in the <code>message</code> field.</li>
+<li><strong>Impact:</strong> Information disclosure / confusing client errors. Note this is a codebase-wide convention (the same pattern exists in <code>src/Core/View/*</code>), so it is recorded here only as a note, not treated as a regression.</li>
+<li><strong>Proposed fix:</strong> log the real exception and return a stable, user-safe message (e.g. <code>ApiViewMessages::UNKNOWN_ERROR</code> / the existing <code>RestController::UNKNOWN_ERROR</code>).</li>
+</ul>
+<h2 id="skipped-items">Skipped items<a class="headerlink" href="#skipped-items" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> — <strong>skipped</strong> because it asserts the correct behaviour (submit/confirm failures must return a 400 JSON warning like cancel/payment) and would <strong>fail</strong> against the current code (Bug 1).</li>
+<li><code>App\Tests\Trade\Controller\Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> — <strong>skipped</strong> because it asserts the correct behaviour (transition bodies must not mutate arbitrary order fields) and would <strong>fail</strong> against the current code (Bug 2).</li>
+</ul>
+<h2 id="verified-non-bugs-investigated-and-cleared">Verified NON-bugs (investigated and cleared)<a class="headerlink" href="#verified-non-bugs-investigated-and-cleared" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Manage <code>refundAction</code> invoice branch (259-260)</strong> — it returns after <code>refundPayment()</code> without applying the <code>refund</code> workflow transition in the controller. This is <strong>not</strong> a bug: <code>InvoiceService::refund()</code> dispatches <code>InvoiceRefundedEvent</code>, and <code>Trade\EventListener\OrderInvoiceListener::onInvoiceRefunded()</code> applies the <code>refund</code> transition and sets <code>refundedAt</code>. Confirmed by the existing integration test <code>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</code> (order ends in <code>STATUS_REFUNDED</code>).</li>
+<li><strong>App <code>createAction</code> store-context 202 path</strong> — order status is not left as a plain draft: <code>OrderService::createOrder()</code> applies the <code>store_submit</code> transition and records the <code>trade.order.created.v1</code> outbox message in the same transaction (<code>src/Trade/Service/OrderService.php:111-140</code>).</li>
+<li><strong>Invalid payment methods on <code>paymentAction</code></strong> — the controller forwards any string, but validation happens service-side: <code>InvoiceService::pay()</code> resolves the method through the gateway registry and throws on unknown methods (caught → 400). Covered by the App unit tests asserting <code>mock</code>/<code>wallet</code>/<code>wechat</code> are forwarded.</li>
+<li><strong><code>doTransitionAction</code> "can() fails" path returning HTTP 200</strong> — this is asserted by the existing integration tests (<code>testOrderCannotCancelAfterPaid</code> expects 200 + non-zero code), so it is intentional.</li>
+<li><strong><code>wrapInTransaction</code> availability on <code>OrderServiceInterface</code></strong> — it is a <code>@method</code>-only declaration, so <code>createMock()</code> cannot generate it under PHPUnit 12; the fake service was introduced for this reason (this is a test-infrastructure note, not a product bug).</li>
+</ul>
+<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    tests/Trade/Controller/App/OrderControllerTest.php \
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    tests/Trade/Controller/Manage/OrderControllerTest.php --no-coverage
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>OK, but some tests were skipped!
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>Tests: 44, Assertions: 165, Skipped: 2.
+</code></pre></div>
+<p>44 test cases (18 App cases incl. 3 payment-method data-provider cases, 26 Manage cases incl. the 15 pre-existing ones), 0 failures/errors/notices/warnings/deprecations, 2 skipped (Bug 1 and Bug 2 documentation).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

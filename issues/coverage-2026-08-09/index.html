@@ -1,0 +1,1727 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Coverage Campaign 2026-08-09 — Master Summary - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#coverage-campaign-2026-08-09-master-summary" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Coverage Campaign 2026-08-09 — Master Summary
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-module-coverage-before-after" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-module coverage (before → after)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#report-index-one-detailed-report-per-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Report index (one detailed report per agent)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consolidated-bug-list-deduplicated-by-severity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consolidated bug list (deduplicated, by severity)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consolidated bug list (deduplicated, by severity)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CRITICAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HIGH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#medium" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MEDIUM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#low" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LOW
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-uncovered-lines-46-why-they-are-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remaining uncovered lines (46) — why they are not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-campaign-ran" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the campaign ran
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-follow-ups-outside-this-campaigns-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggested follow-ups (outside this campaign's scope)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="coverage-campaign-2026-08-09-master-summary">Coverage Campaign 2026-08-09 — Master Summary<a class="headerlink" href="#coverage-campaign-2026-08-09-master-summary" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Date: 2026-08-09
+Campaign: <strong>24 parallel sub-agents</strong> wrote new tests to push line coverage toward 100% and hunt for bugs across all modules. <strong>No <code>src/</code> file was modified.</strong>
+Constraint honored: only <code>tests/</code> (96 new files + 6 extended) and <code>docs/issues/coverage-2026-08-09/</code> were added.</p>
+</blockquote>
+<h2 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHPUnit tests</td>
+<td>1749</td>
+<td><strong>2686</strong> (+937)</td>
+</tr>
+<tr>
+<td>Assertions</td>
+<td>5755</td>
+<td><strong>9264</strong> (+3509)</td>
+</tr>
+<tr>
+<td>Line coverage</td>
+<td>90.18%</td>
+<td><strong>99.46%</strong> (8511/8557 lines)</td>
+</tr>
+<tr>
+<td>Method coverage</td>
+<td>—</td>
+<td>98.54% (1683/1708)</td>
+</tr>
+<tr>
+<td>Class coverage</td>
+<td>—</td>
+<td>95.68% (288/301)</td>
+</tr>
+<tr>
+<td>Errors / Failures</td>
+<td>0</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>Skipped</td>
+<td>0</td>
+<td>38 (each documents a bug or untestable line)</td>
+</tr>
+<tr>
+<td>Deprecations</td>
+<td>6 (pre-existing)</td>
+<td>6 (pre-existing, unchanged)</td>
+</tr>
+</tbody>
+</table>
+<p>The remaining 46 uncovered lines are <strong>provably unreachable dead code</strong>, <strong>deprecated-PHP constructs that cannot be exercised without raising a deprecation</strong>, or <strong>broken code paths</strong> (documented in the per-module reports; see "Remaining uncovered lines" below).</p>
+<h2 id="per-module-coverage-before-after">Per-module coverage (before → after)<a class="headerlink" href="#per-module-coverage-before-after" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Before</th>
+<th>After</th>
+<th>Key agents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td>82.12%</td>
+<td><strong>~99–100%</strong></td>
+<td>core-utils-di, core-view, core-service, core-parser-listener, core-integration-extra</td>
+</tr>
+<tr>
+<td>Trade</td>
+<td>85.13%</td>
+<td><strong>~100%</strong> (all target files)</td>
+<td>trade-command-repo, trade-handler-listener, trade-controllers, trade-workflow-badpaths</td>
+</tr>
+<tr>
+<td>Store</td>
+<td>80.30%</td>
+<td><strong>100%</strong> (all target files)</td>
+<td>store-command-repo-entity, store-handlers, store-service-controllers, store-trade-integration</td>
+</tr>
+<tr>
+<td>Payment</td>
+<td>93.00%</td>
+<td><strong>100%</strong> (controllers/service/entity)</td>
+<td>payment-controllers, payment-trade-integration</td>
+</tr>
+<tr>
+<td>Identity</td>
+<td>93.77%</td>
+<td><strong>100%</strong> (controllers/service/security)</td>
+<td>identity-security, identity-controllers</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>94.37%</td>
+<td><strong>100%</strong> (repos/handlers/controllers/service)</td>
+<td>inventory-repos-handlers, inventory-controllers-service</td>
+</tr>
+<tr>
+<td>Promotion</td>
+<td>95.51%</td>
+<td><strong>100%</strong> (DSL + services)</td>
+<td>promotion-dsl</td>
+</tr>
+<tr>
+<td>Wechat</td>
+<td>95.86%</td>
+<td><strong>100%</strong> (all target files)</td>
+<td>wechat</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>98.13%</td>
+<td><strong>100%</strong></td>
+<td>storage</td>
+</tr>
+<tr>
+<td>Common</td>
+<td>99.25%</td>
+<td><strong>100%</strong></td>
+<td>common-controllers-entity</td>
+</tr>
+<tr>
+<td>Wallet</td>
+<td>99.43%</td>
+<td><strong>100%</strong></td>
+<td>wallet-manage</td>
+</tr>
+</tbody>
+</table>
+<h2 id="report-index-one-detailed-report-per-agent">Report index (one detailed report per agent)<a class="headerlink" href="#report-index-one-detailed-report-per-agent" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Report</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>core-utils-di.md</code></td>
+<td>RsaClient (MD5/broken sigs), Location (missing lib, broken getAddress), Math (rand crashes on PHP 8.5), Inflect, DI Configuration/CoreExtension, CircularReferenceHandler</td>
+</tr>
+<tr>
+<td><code>core-view.md</code></td>
+<td>WorkflowApiViewMixin (resetMarking route bug), Create/Update/Delete/Detail mixins, ApiViewMessages</td>
+</tr>
+<tr>
+<td><code>core-service.md</code></td>
+<td>ExpressionService, LegacyEvaluator, DefaultServiceLocator, BaseService traits (immutable-DateTime bug, sorter contract), RestController</td>
+</tr>
+<tr>
+<td><code>core-parser-listener.md</code></td>
+<td>ExpressionDqlParser, ExpressionQueryBuilderAssembler, FlatNormalizer (JSON-string corruption), OpenApiEnricherListener, LocaleListener</td>
+</tr>
+<tr>
+<td><code>core-integration-extra.md</code></td>
+<td>Dynamic query API, /system endpoints, locale detection, exception interceptor, /api/doc.json enrichment, access log, pagination</td>
+</tr>
+<tr>
+<td><code>trade-command-repo.md</code></td>
+<td>Trade PublishOutboxCommand, TradeOutboxMessageRepository, Specification/Product repositories, TradeOutboxMessage entity</td>
+</tr>
+<tr>
+<td><code>trade-handler-listener.md</code></td>
+<td>StoreOrderAccepted/RejectedHandler, OrderInvoiceListener, OrderWorkflowListener, OrderService (invoice reuse bug)</td>
+</tr>
+<tr>
+<td><code>trade-controllers.md</code></td>
+<td>App/Manage OrderController (submit/confirm 500 bug, doTransition tampering)</td>
+</tr>
+<tr>
+<td><code>trade-workflow-badpaths.md</code></td>
+<td>Order state machine exhaustively (90 unit + 33 API tests), guard absence findings</td>
+</tr>
+<tr>
+<td><code>store-command-repo-entity.md</code></td>
+<td>Store PublishOutboxCommand, StoreOutboxMessageRepository, Store entities</td>
+</tr>
+<tr>
+<td><code>store-handlers.md</code></td>
+<td>Store message handlers (poison messages, dedup integrity, inventory request bug)</td>
+</tr>
+<tr>
+<td><code>store-service-controllers.md</code></td>
+<td>StoreOrderService (snapshot idempotency), StoreMembershipService, StoreContextResolver, Staff/Manage controllers, Store entity</td>
+</tr>
+<tr>
+<td><code>store-trade-integration.md</code></td>
+<td>End-to-end Store↔Trade↔Inventory flows (accept/reject/cancel/release, tombstone, INVENTORY_ENABLED)</td>
+</tr>
+<tr>
+<td><code>payment-controllers.md</code></td>
+<td>Payment controllers (message leak, markPaid gateway check, refund options, parseAmount), InvoiceService, Invoice entity</td>
+</tr>
+<tr>
+<td><code>payment-trade-integration.md</code></td>
+<td>Order pay/refund/notify E2E (stuck-payment bug, direct-refund order-still-paid bug)</td>
+</tr>
+<tr>
+<td><code>identity-security.md</code></td>
+<td>RedisOtpStorage (exists() error-truthy), TokenManager, JwtAuthenticator, User entity</td>
+</tr>
+<tr>
+<td><code>identity-controllers.md</code></td>
+<td>OtpController, AuthController (json_decode 500, numeric-username login bug), OtpService, CreateUserCommand</td>
+</tr>
+<tr>
+<td><code>inventory-repos-handlers.md</code></td>
+<td>RecipeLine/ReservationLine repositories, reservation handlers (impossible dates, EM closed on failure)</td>
+</tr>
+<tr>
+<td><code>inventory-controllers-service.md</code></td>
+<td>Recipe/Stock controllers, InventoryService (timezone-sensitive idempotency), Quantity, PublishOutboxCommand</td>
+</tr>
+<tr>
+<td><code>promotion-dsl.md</code></td>
+<td>DSL Parser/Evaluator (tiered unparseable, and/or block swallowing), PromotionCalculator/Service/TemplateService</td>
+</tr>
+<tr>
+<td><code>storage.md</code></td>
+<td>LocalStorage (E_WARNING), QiniuStorage (delete doesn't verify domain), Qiniu settings command</td>
+</tr>
+<tr>
+<td><code>wallet-manage.md</code></td>
+<td>TransferController (amount truncation, 404-by-message-sniffing), WalletService reconcile</td>
+</tr>
+<tr>
+<td><code>wechat.md</code></td>
+<td>WechatPayGateway notify (broken — request never passed to EasyWeChat), WechatService code2Session, WechatAuthService identity collision, WechatUserService</td>
+</tr>
+</tbody>
+</table>
+<h2 id="consolidated-bug-list-deduplicated-by-severity">Consolidated bug list (deduplicated, by severity)<a class="headerlink" href="#consolidated-bug-list-deduplicated-by-severity" title="Permanent link">&para;</a></h2>
+<h3 id="critical">CRITICAL<a class="headerlink" href="#critical" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong><code>RsaClient</code> signs with MD5</strong> — <code>src/Core/Utils/RsaClient.php:51,99</code>. MD5 is forgeable and disabled under FIPS. Fix: <code>OPENSSL_ALGO_SHA256</code>. (core-utils-di, R-1)</li>
+<li><strong><code>Location</code> depends on <code>php-curl-class</code>, which is not installed</strong> — <code>src/Core/Utils/Location.php:5,18,33,50</code>. Every call fatals <code>Class "Curl\Curl" not found</code> (the <code>catch (\ErrorException)</code> does not catch <code>Error</code>). Fix: add the package to <code>composer.json</code> or inject an HTTP client. (core-utils-di, L-1)</li>
+</ol>
+<h3 id="high">HIGH<a class="headerlink" href="#high" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>WeChat Pay v3 notify can never succeed</strong> — <code>src/Wechat/Service/Payment/WechatPayGateway.php:102-126</code>. The incoming request is never passed to EasyWeChat; <code>serve()</code> reads an empty <code>fromGlobals()</code> request → every real callback fails. Fix: <code>$app-&gt;setRequestFromSymfonyRequest($request)</code> before <code>serve()</code>. (wechat, Bug 1)</li>
+<li><strong><code>Math::mt_rand()</code>/<code>Math::rand()</code> always throw on PHP 8.5</strong> — <code>src/Core/Utils/Math.php:85,91</code>. One-arg <code>rand()</code>/<code>mt_rand()</code> is an error in PHP 8.5. Fix: <code>rand(0, $x)</code> / <code>mt_rand(0, $x)</code>. (core-utils-di, M-1)</li>
+<li><strong><code>sign()</code> base64-encodes an undefined variable on failure</strong> — <code>src/Core/Utils/RsaClient.php:51-59</code>. <code>openssl_sign()</code> result ignored → warning + bogus signature. Fix: check the return value. (core-utils-di, R-2)</li>
+<li><strong>App <code>submit</code>/<code>confirm</code> bubble failures as HTTP 500</strong> — <code>src/Trade/Controller/App/OrderController.php:158-166</code>. No try/catch around workflow/DB failures. Fix: wrap in try/catch and return the <code>warning()</code> 400 envelope. (trade-controllers, Bug 1)</li>
+<li><strong><code>BaseService::$user</code> is null for all HTTP requests</strong> — <code>src/Core/Service/BaseService.php:77</code> + <code>BaseServiceReadListTrait.php:270</code>. The singleton resolves the principal once outside request scope, so <code>@dql/@sort/@hints</code> and the <code>@filter</code> in-memory fallback always 403 even for admins. (core-integration-extra, Bug 1)</li>
+<li><strong><code>@expands</code> sets a dynamic <code>__metadata</code> property → PHP 8.5 deprecation</strong> — <code>src/Core/Controller/RestController.php:198</code>. Breaks <code>failOnDeprecation</code>. (core-integration-extra, Bug 2)</li>
+<li><strong>Payment retries get stuck: <code>createPayment()</code> reuses a failed/cancelled invoice</strong> — <code>src/Trade/Service/OrderService.php:280-302</code> + <code>src/Payment/Service/InvoiceService.php:67-70</code>. After a failed notify the invoice is <code>failed</code>; <code>start_pay</code> never re-enables it, so the order is permanently stuck in <code>confirmed</code>. Fix: only reuse the invoice when status ∈ {pending, paying}. (payment-trade-integration, BUG-001)</li>
+<li><strong>Order data tampering via <code>/do/{transition}</code></strong> — <code>src/Trade/Controller/Manage/OrderController.php:329</code> forwards the raw request body to <code>update()</code>, letting an admin mutate <code>totalAmount</code>/arbitrary fields, bypassing the whitelist. Fix: whitelist fields (or only accept a fixed transition payload). (trade-controllers, Bug 2; also trade-workflow-badpaths)</li>
+</ol>
+<h3 id="medium">MEDIUM<a class="headerlink" href="#medium" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong><code>FlatNormalizer</code> silently JSON-decodes string values</strong> — <code>src/Core/Serializer/Normalizer/FlatNormalizer.php:124-130</code>. Non-numeric strings that are valid JSON (<code>"true"</code>, <code>"null"</code>, <code>"{}"</code>) are decoded into non-strings, corrupting API output types. (core-parser-listener, Bug 1)</li>
+<li><strong><code>markPaid</code> never verifies the notifying gateway matches the invoice</strong> — <code>src/Payment/Service/InvoiceService.php:182</code>. Lookup is by <code>outTradeNo</code> only. Fix: require <code>$result-&gt;payment === $invoice-&gt;getPayment()</code>. (payment-controllers, BUG-2)</li>
+<li><strong>Direct invoice refund leaves the order <code>paid</code></strong> — <code>src/Trade/EventListener/OrderInvoiceListener.php:73-77</code>. Money is returned but the order never transitions to <code>refunded</code>. (payment-trade-integration, BUG-002)</li>
+<li><strong>Store rejection does not cancel the Trade order</strong> — <code>src/Trade/MessageHandler/StoreOrderRejectedHandler.php:37</code>. The order stays <code>store_rejected</code> and requires an explicit user cancel. (store-trade-integration, Bug 1)</li>
+<li><strong>Outbox <code>defer()</code> has no claim-ownership guard</strong> — <code>src/Store/Repository/StoreOutboxMessageRepository.php:47-61</code> (and Trade equivalent). Stale workers can clobber a concurrent claim's retry state. Fix: add <code>availableAt &lt;= :now</code> to the <code>defer</code> update. (store-command-repo-entity, Bug 1)</li>
+<li><strong>Poison outbox messages retry forever</strong> — Trade/Store <code>PublishOutboxCommand</code> + repositories: no max-attempts cap, no dead-lettering; <code>attempts</code> grows unboundedly. (trade-command-repo, Bug 1; store-command-repo-entity, Bug 2)</li>
+<li><strong>Store publishes inventory reservation requests Inventory can never accept</strong> — <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php</code> inventoryItems accepts <code>catalogReference = ''</code>, but Inventory requires a UUID → poison message, order stuck in <code>awaiting_inventory</code>. (store-handlers, Bug 1)</li>
+<li><strong>Deterministically-invalid <code>trade.order.created</code> payloads become poison messages</strong> — the consumed event is persisted before deep validation; deterministic failures roll back → infinite retry → <code>failed</code> transport. (store-handlers, Bug 2)</li>
+<li><strong><code>InventoryReservationReleaseRequestedHandler</code> throws for release-before-reserve</strong> — <code>src/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php:41</code>. A release arriving before the reservation exists becomes a poison message (documented TODO in context.md §22.1). (store-trade-integration, Bug 2)</li>
+<li><strong><code>InventoryService::reserve()</code> idempotency hash is timezone-sensitive</strong> — <code>src/Inventory/Service/InventoryService.php:186-193</code> uses <code>DATE_ATOM</code> with offset, so a same-instant retry with a different offset gets a spurious conflict exception. (inventory-controllers-service, Bug 2)</li>
+<li><strong>Any inventory handler failure closes the shared EntityManager</strong> — <code>wrapInTransaction()</code> calls <code>close()</code> on exception, breaking subsequent writes in the same request. (inventory-repos-handlers, Bug 3)</li>
+<li><strong><code>OrderInvoiceListener::onInvoicePaid</code> never verifies the payer</strong> — <code>src/Trade/EventListener/OrderInvoiceListener.php:38-63</code> only checks amount/currency; a mismatched-payer paid invoice marks the order paid. (trade-handler-listener, Bug 2)</li>
+<li><strong><code>OtpService::maskPhone()</code> leaks short phone numbers</strong> — <code>src/Identity/Service/OtpService.php:109-116</code> keeps all digits for 5–7-char phones in logs. (identity-controllers, Bug C)</li>
+<li><strong>Numeric usernames can never log in</strong> — <code>src/Identity/Controller/AuthController.php:82-89</code> never falls back to <code>findByIdentifier()</code>. (identity-controllers, Bug D)</li>
+<li><strong><code>CreateUserCommand</code> persists accounts with empty email/username</strong> — <code>src/Identity/Command/CreateUserCommand.php:70-86</code>. (identity-controllers, Bug E)</li>
+<li><strong>Unguarded <code>json_decode(..., JSON_THROW_ON_ERROR)</code> → HTTP 500</strong> on empty/malformed bodies across auth/otp controllers. Fix: wrap in try/catch and return a 400 warning. (identity-controllers, Bug A)</li>
+<li><strong><code>verify_phone</code> reports <code>phone_verified=true</code> for non-existent users</strong> — <code>src/Identity/Controller/AuthController.php:294-300</code>, <code>OtpController.php:93-99</code>, inconsistent with login's 401. (identity-controllers, Bug B)</li>
+<li><strong><code>StoreOrderService::matchesSnapshot()</code> uses order-sensitive <code>===</code></strong> — <code>src/Store/Service/StoreOrderService.php:180</code> breaks idempotency when snapshot key order differs. (store-service-controllers, Bug 1)</li>
+<li><strong>Staff <code>acceptAction()</code> accepts an empty <code>reservationId</code></strong> and silently clears a real reservation in the outbox event. (store-service-controllers, Bug 2)</li>
+<li><strong><code>QiniuStorage::delete()</code> does not verify the path belongs to the configured domain</strong> — any URL is forwarded as a remote-delete key. Fix: prefix-check against <code>domain.'/'</code>. (storage, Bug 1)</li>
+<li><strong><code>RedisOtpStorage::exists()</code> returns <code>true</code> on a RESP error</strong> — <code>Predis\Response\Error</code> casts truthy, inconsistent with other safe defaults. (identity-security, Bug 1)</li>
+<li><strong><code>type: tiered</code> promotions can never be parsed</strong> — keyword/identifier collision in the DSL lexer; tiered templates can't round-trip. (promotion-dsl, Bug 1)</li>
+<li><strong><code>and:</code>/<code>or:</code> blocks swallow sibling conditions</strong> — <code>(a OR b) AND c</code> parses as <code>a OR b OR c</code>, false-positive matches. (promotion-dsl, Bug 2)</li>
+<li><strong><code>TransferController</code> truncates non-integer amounts</strong> — <code>(int)</code> cast makes <code>"1e3"</code> → 1 cent. (wallet-manage, BUG-1)</li>
+<li><strong>Transfer 404/500 decided by sniffing exception message text</strong> — <code>str_ends_with($e-&gt;getMessage(), 'not found')</code>; server errors masked as 404. (wallet-manage, BUG-2)</li>
+<li><strong><code>WorkflowApiViewMixin::resetMarkingAction</code> route placeholder mismatch</strong> — <code>/{id}/status-reset</code> vs <code>$entity</code> arg → endpoint always 500; also never loads the entity. (core-view, Bug 1)</li>
+<li><strong>Store dedup has no payload-hash integrity check</strong> — eventId-only dedup; reuse with a different payload is accepted on the Store side (Inventory side throws integrity errors). (store-handlers, Bug 3)</li>
+<li><strong><code>matches /regex/</code> → 500 on SQLite</strong> — no REGEXP function (works on MySQL only). Document as a portability issue. (core-integration-extra, Bug 4)</li>
+<li><strong><code>/system/entities/{unknown}</code> → 500 HTML MappingException</strong> instead of 404 JSON (interceptor only handles <code>/api/*</code>). (core-integration-extra, Bug 5)</li>
+<li><strong>App comment create accepts a <code>parent</code> from a different entity scope</strong> — <code>src/Common/Controller/App/CommentController.php:22</code>, enabling orphaned cross-entity threads. (common-controllers-entity, Bug 2)</li>
+<li><strong><code>createPayment</code> reuse bug also surfaced by E2E</strong> (see Bug 9) — cross-reference between trade-handler-listener and payment-trade-integration.</li>
+</ol>
+<h3 id="low">LOW<a class="headerlink" href="#low" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>Content::setTitle()/addTag()/removeTag()</code> don't <code>touch()</code> → stale <code>updatedAt</code>. (common-controllers-entity, Bug 1)</li>
+<li><code>getSignContent()</code> string-casts arrays/objects → <code>a=Array</code> + warning. (core-utils-di, R-3)</li>
+<li><code>openssl_free_key()</code> deprecated since PHP 8.0 → file-path keys raise deprecations. (core-utils-di, R-4)</li>
+<li><code>Math::lcg_value()</code> → <code>lcg_value()</code> deprecated since 8.4. (core-utils-di, M-2)</li>
+<li><code>Location::getAddress()</code> calls <code>getResponse()</code> on a string → fatal Error. (core-utils-di, L-2)</li>
+<li><code>Location</code> dereferences JSON without checking <code>status</code>/null → warnings + confusing returns. (core-utils-di, L-3)</li>
+<li><code>Location</code> error contract inconsistent (<code>null</code> vs <code>$e-&gt;getMessage()</code>). (core-utils-di, L-4)</li>
+<li><code>WorkflowApiViewMixin::todoAction</code> doesn't reindex <code>array_filter</code> keys → JSON object instead of array. (core-view, Bug 3)</li>
+<li>Outbox successful publish doesn't clear <code>attempts</code>/<code>lastError</code> — published rows carry stale failure metadata. (trade-command-repo, Bug 2)</li>
+<li>Outbox envelope <code>aggregateType</code> hardcoded <code>'trade_order'</code>; entity has no getter. (trade-command-repo, Bug 3)</li>
+<li>Outbox <code>str_replace('.v1')</code> strips version from anywhere + hardcoded <code>version=1</code>. (store-command-repo-entity, Bug 3)</li>
+<li>Outbox publish relies on a single trailing <code>flush()</code> outside <code>finally</code> — mid-loop exceptions lose <code>markPublished()</code> → duplicate dispatch. (store-command-repo-entity, Bug 4)</li>
+<li><code>grantMemberAction</code> catches <code>\Throwable</code> and masks programming errors as 400. (store-service-controllers, Bug 3)</li>
+<li><code>grant()</code> silently reactivates revoked memberships. (store-service-controllers, Bug 4)</li>
+<li>Empty <code>X-Store-Channel</code> overrides the <code>'api'</code> default. (store-service-controllers, Bug 5)</li>
+<li><code>LocalStorage::delete()</code> emits unsuppressed <code>E_WARNING</code> on unlink failure (trips <code>failOnWarning</code>). (storage, Bug 2)</li>
+<li><code>code2Session</code> uses the access-token client → extra <code>/cgi-bin/token</code> call per login. (wechat, Bug 2)</li>
+<li>WeChat auto-generated identity (username/email from openid suffix) can collide → 500 at scale. (wechat, Bug 3)</li>
+<li><code>promotion-dsl</code> minor findings: trailing-dot path error, unused <code>priority: desc</code> flag, <code>simulate()</code> vs pipeline mismatch, multiple <code>when:</code> inconsistency, unreachable EOL branches. (promotion-dsl, Bugs 3–7)</li>
+<li><code>BaseServiceMutationTrait</code> passes a mutable <code>new \DateTime</code> to <code>\DateTimeImmutable</code> setters → <code>TypeError</code>. (core-service, Bug 1)</li>
+<li><code>BaseServiceReadListTrait</code> sorter comparator never returns <code>0</code> — violates <code>usort</code> contract. (core-service, Bug 2)</li>
+<li>Dead code / unreachable defensive branches documented in: BaseServiceReadListTrait (catch Exception, <code>!is_string</code> joiner guard), BaseServiceMutationTrait (<code>!is_object</code> checks), ExpressionDqlParser (317,394,488,541), Inventory Quantity line 75, Inflect line 135, <code>availableTransitions</code>/<code>doTransition</code> entity-not-found guards. (core-service, core-parser-listener, inventory-controllers-service, core-utils-di, core-view)</li>
+<li><code>ParseAmount</code> misparses scientific-notation strings. (payment-controllers, BUG-4)</li>
+<li>Webhook masks transient invoice-not-found as permanent <code>FAIL</code> 400 → providers stop retrying. (payment-controllers, BUG-5)</li>
+<li><code>markPaid</code> overwrites the invoice <code>payment</code> field from the result. (payment-controllers, BUG-2)</li>
+<li>Refund forwards raw request body as gateway <code>$options</code> → attacker-controlled refund keys. (payment-controllers, BUG-3)</li>
+<li>No workflow guards in <code>workflow.yaml</code> — the <code>/do/{transition}</code> endpoint lets an admin run the whole lifecycle with zero payment (all enforcement lives in OrderService). (trade-workflow-badpaths)</li>
+<li><code>OrderService::pay/refund/fulfill</code> set fields/timestamps but never apply the workflow transition — status only changes via controllers. (trade-workflow-badpaths)</li>
+<li>Release handler accepts impossible calendar dates (<code>2026-02-30</code>); the <code>new \DateTimeImmutable()</code> check is a no-op. (inventory-repos-handlers, Bug 1)</li>
+<li>Oversized quantities pass handler validation then crash inside <code>Quantity::normalize()</code> (decimal(20,6) overflow). (inventory-repos-handlers, Bug 4)</li>
+<li><code>release()</code> mutates the reservation to RELEASED in memory before the missing material/stock throws → half-applied state after rollback. (inventory-controllers-service, Bug 4)</li>
+<li><code>default_locale: zh</code> never becomes the active locale — effective default is English. (core-integration-extra, Bug 6)</li>
+<li><code>OpenApiEnricherListener::detectTag()</code> prefix checks miss method-prefixed operationIds → Store endpoints left untagged. (core-integration-extra, Bug 7)</li>
+</ol>
+<h2 id="remaining-uncovered-lines-46-why-they-are-not-covered">Remaining uncovered lines (46) — why they are not covered<a class="headerlink" href="#remaining-uncovered-lines-46-why-they-are-not-covered" title="Permanent link">&para;</a></h2>
+<p>The residual uncovered lines are one of four categories, all documented in the per-module reports:</p>
+<ol>
+<li><strong>Deprecated PHP constructs</strong> that raise deprecations if executed (would break <code>failOnDeprecation</code>): <code>RsaClient</code> openssl_free_key branches, <code>Math::lcg_value()</code>.</li>
+<li><strong>Broken code paths</strong> that cannot be exercised without a fatal error: <code>Location::getAddress()</code> (broken by design), <code>Math::mt_rand()/rand()</code> one-arg calls (crash on PHP 8.5).</li>
+<li><strong>Provably unreachable defensive/dead code</strong> (guards that can never fire given the call graph): <code>BaseServiceReadListTrait</code> dead <code>catch</code>, <code>BaseServiceMutationTrait</code> <code>!is_object</code> checks, <code>ExpressionDqlParser</code> unreachable error branches, <code>Inflect</code> fall-through, <code>Quantity</code> padding branch, <code>TokenManager</code> redundant blacklist check, <code>RedisOtpStorage</code> error path, RsaClient sub-modulus-size guards.</li>
+<li><strong>Config/DI plumbing</strong> that only runs at container compile time (<code>CoreExtension::load</code>, <code>Configuration</code>), which the suite exercises but Xdebug's HTML report partially attributes to compile-time.</li>
+</ol>
+<p>Fully eliminating the remaining lines requires either removing the dead code or refactoring the broken paths — both are <code>src/</code> changes and were out of scope by design.</p>
+<h2 id="how-the-campaign-ran">How the campaign ran<a class="headerlink" href="#how-the-campaign-ran" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Baseline</strong>: full suite (1749 tests, 90.18% lines) via <code>var/coverage2</code>.</li>
+<li><strong>24 sub-agents</strong> in 3 waves, one report per agent, each instructed to (a) never touch <code>src/</code>, (b) target the uncovered lines listed in <code>var/uncovered-map.txt</code>, (c) follow project test conventions, and (d) document bugs with file:line + proposed fixes and keep the suite green (correct-behavior tests that fail on a real src bug are marked <code>markTestSkipped</code> with a reference to the report).</li>
+<li><strong>Consolidation</strong>: full serial run → 2686 tests green; fixed one cross-test environment leak (<code>INVENTORY_ENABLED</code> restored in <code>tearDownAfterClass</code> of <code>StoreTradeInventoryEnabledFlowTest</code>); added <code>#[AllowMockObjectsWithoutExpectations]</code> to new mock-heavy test classes.</li>
+<li><strong>Final coverage</strong>: <code>var/coverage-final/</code> (99.46% lines).</li>
+</ul>
+<h2 id="suggested-follow-ups-outside-this-campaigns-scope">Suggested follow-ups (outside this campaign's scope)<a class="headerlink" href="#suggested-follow-ups-outside-this-campaigns-scope" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Fix the CRITICAL/HIGH src bugs listed above (they are all low-risk, well-scoped fixes).</li>
+<li>Remove the documented dead code (or add <code>@codeCoverageIgnore</code>) to reach a literal 100%.</li>
+<li>Consider splitting <code>var/test.db</code> per process (the <code>when@test</code> hardcoded URL in <code>config/packages/doctrine.yaml</code>) so parallel test runs never contend on schema drop/create.</li>
+<li>Add a <code>max_attempts</code>/dead-letter policy to the Trade/Store/Inventory outbox publishers.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

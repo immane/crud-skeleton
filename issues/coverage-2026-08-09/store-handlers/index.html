@@ -1,0 +1,1559 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/coverage-2026-08-09/store-handlers/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Store MessageHandlers — coverage to ~100% and bug report - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#store-messagehandlers-coverage-to-100-and-bug-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Store MessageHandlers — coverage to ~100% and bug report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-before-after" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage before → after
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-files-added-6-files-43-tests-43-passing-0-skipped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test files added (6 files, 43 tests: 43 passing + 0 skipped)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bugs-found-reported-only-no-source-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bugs found (reported only — no source changed)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bugs found (reported only — no source changed)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-medium-store-publishes-inventory-reservation-requests-inventory-can-never-accept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 1 (MEDIUM) — Store publishes inventory reservation requests Inventory can never accept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-medium-deterministically-invalid-tradeordercreated-payloads-become-poison-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 2 (MEDIUM) — deterministically-invalid trade.order.created payloads become poison messages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-3-lowmedium-store-side-dedup-has-no-payload-hash-integrity-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 3 (LOW/MEDIUM) — Store-side dedup has no payload-hash integrity check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-4-low-confirmedatrejectedatreleasedat-are-required-but-never-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 4 (LOW) — confirmedAt/rejectedAt/releasedAt are required but never used
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-5-low-release-acknowledgements-are-consumed-blindly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug 5 (LOW) — release acknowledgements are consumed blindly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="store-messagehandlers-coverage-to-100-and-bug-report">Store MessageHandlers — coverage to ~100% and bug report<a class="headerlink" href="#store-messagehandlers-coverage-to-100-and-bug-report" title="Permanent link">&para;</a></h1>
+<p>Date: 2026-08-09
+Scope: <code>src/Store/MessageHandler/*</code> (5 handlers)
+Runner: <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code>
+Rule: <strong>no changes under <code>src/</code></strong> — only tests added under <code>tests/</code> plus this report.</p>
+<h2 id="coverage-before-after">Coverage before → after<a class="headerlink" href="#coverage-before-after" title="Permanent link">&para;</a></h2>
+<p>Verified with Xdebug coverage (<code>XDEBUG_MODE=coverage ... --coverage-clover</code>) against the
+new <code>tests/Store/MessageHandler/*</code> suite combined with the pre-existing
+<code>tests/Store/Integration/TradeOrderCreatedHandlerTest.php</code> and
+<code>tests/Store/Integration/InventoryReservationOutcomeHandlerTest.php</code> (54 tests, 132
+assertions, all green, no deprecations/notices/warnings).</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TradeOrderCancelledHandler.php</code></td>
+<td>64.71% (33/51)</td>
+<td><strong>100%</strong> (51/51)</td>
+</tr>
+<tr>
+<td><code>InventoryReservationConfirmedHandler.php</code></td>
+<td>87.10% (27/31)</td>
+<td><strong>100%</strong> (31/31)</td>
+</tr>
+<tr>
+<td><code>InventoryReservationRejectedHandler.php</code></td>
+<td>83.87% (26/31)</td>
+<td><strong>100%</strong> (31/31)</td>
+</tr>
+<tr>
+<td><code>InventoryReservationReleasedHandler.php</code></td>
+<td>90.91% (20/22)</td>
+<td><strong>100%</strong> (22/22)</td>
+</tr>
+<tr>
+<td><code>TradeOrderCreatedHandler.php</code></td>
+<td>90.91% (70/77)</td>
+<td><strong>100%</strong> (77/77)</td>
+</tr>
+</tbody>
+</table>
+<p>Every line listed in <code>var/uncovered-map.txt</code> for these handlers is now executed
+(41,49,54,67,68,70,79–91; 35,39,48,63; 35,39,43,48,63; 32,40; 47,52,65,80,107,127,137).</p>
+<h2 id="test-files-added-6-files-43-tests-43-passing-0-skipped">Test files added (6 files, 43 tests: 43 passing + 0 skipped)<a class="headerlink" href="#test-files-added-6-files-43-tests-43-passing-0-skipped" title="Permanent link">&para;</a></h2>
+<p>All in <code>tests/Store/MessageHandler/</code>, namespace <code>App\Tests\Store\MessageHandler</code>,
+<code>declare(strict_types=1);</code>. DB-backed classes use <code>DatabaseBootstrapTrait</code> +
+<code>IntegrationWebTestCase</code>; concurrency-only branches use mock unit tests (the in-transaction
+re-dedup lines can't be reached sequentially, only via two concurrent checks).</p>
+<ul>
+<li><code>TradeOrderCancelledHandlerTest.php</code> (10 tests) — the biggest win. Invalid envelope
+  (wrong type / version / non-string eventId / non-array payload / missing fields → line 41),
+  duplicate eventId ignored (49), tombstone idempotency for an unknown order (70), conflicting
+  tombstone store → <code>LogicException</code> (67–68), cancel of a <code>pending_validation</code> order with no
+  reservation (79–82), cancel of an <code>awaiting_inventory</code> order publishing
+  <code>inventory.reservation.release.requested.v1</code> with full correlation payload (79–91).</li>
+<li><code>TradeOrderCancelledHandlerConcurrencyTest.php</code> (1 test) — second <code>findOneBy</code> inside the
+  transaction returns a consumed event → early return (54).</li>
+<li><code>InventoryReservationOutcomeCoverageTest.php</code> (19 tests) — Confirmed: invalid envelope (35),
+  missing <code>confirmedAt</code> (39), ignored for unknown order / store mismatch / tradeOrderUuid
+  mismatch / reservationId mismatch / non-<code>awaiting_inventory</code> status (63). Rejected: invalid
+  envelope (35), missing/type-mismatched required fields (39), duplicate event ignored (43),
+  ignored for unknown order / store mismatch / terminal status (63). Released: invalid
+  envelope / missing <code>releasedAt</code> / missing <code>reservationId</code> (32), non-UUID reservation id
+  consumed.</li>
+<li><code>InventoryReservationOutcomeConcurrencyTest.php</code> (3 tests) — in-transaction re-dedup early
+  return for Confirmed (48), Rejected (48), Released (40).</li>
+<li><code>TradeOrderCreatedHandlerCoverageTest.php</code> (9 tests) — missing store snapshot / snapshot
+  without <code>uuid</code> (47), conflicting cancellation tombstone → <code>LogicException</code> (65), duplicate
+  created event with a <strong>different</strong> eventId leaves the existing order untouched (80),
+  unavailable store + missing <code>orderUuid</code> → <code>InvalidArgumentException</code> (107), and with an
+  inventory-enabled handler: empty items (127), zero-quantity item (137), item missing
+  <code>catalogReference</code> (137), non-integer quantity (137).</li>
+<li><code>TradeOrderCreatedHandlerConcurrencyTest.php</code> (1 test) — in-transaction re-dedup early
+  return (52).</li>
+</ul>
+<p>Notes: final <code>StoreTradeOrderCancellationRepository</code> cannot be doubled by PHPUnit, so the
+concurrency unit tests construct a real instance over a mocked <code>ManagerRegistry</code> (its query
+methods are never reached on the early-return path). The unit tests carry
+<code>#[AllowMockObjectsWithoutExpectations]</code> (the existing suite's convention for mock-only tests)
+so no PHPUnit notices are emitted under <code>failOnNotice="true"</code>.</p>
+<h2 id="bugs-found-reported-only-no-source-changed">Bugs found (reported only — no source changed)<a class="headerlink" href="#bugs-found-reported-only-no-source-changed" title="Permanent link">&para;</a></h2>
+<p>No correct-behavior test failed, so nothing needed to be marked skipped; the findings below
+are robustness/correctness gaps surfaced by reading each handler end-to-end against its
+producer (Trade) and consumer (Inventory).</p>
+<h3 id="bug-1-medium-store-publishes-inventory-reservation-requests-inventory-can-never-accept">Bug 1 (MEDIUM) — Store publishes inventory reservation requests Inventory can never accept<a class="headerlink" href="#bug-1-medium-store-publishes-inventory-reservation-requests-inventory-can-never-accept" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:132-137</code>
+  (<code>inventoryItems()</code>) — requires only <code>is_string($item['catalogReference'] ?? null)</code>.</li>
+<li><strong>Description:</strong> Trade serialises <code>catalogReference</code> as
+  <code>$item-&gt;getSpecification()?-&gt;getUuid() ?? ''</code> (<code>src/Trade/Service/OrderService.php:128</code>), so
+  a specification-less order item produces <code>catalogReference = ''</code>. The Store handler accepts
+  that (empty string is a string), builds the <code>inventory.reservation.requested.v1</code> outbox
+  payload, but the Inventory consumer (<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:119-120</code>)
+  requires <code>catalogReference</code> to match a UUID and throws <code>InvalidArgumentException</code>.</li>
+<li><strong>Impact:</strong> the reservation request is a poison message (3 retries, then the <code>failed</code>
+  transport), and the Store order is permanently stuck in <code>awaiting_inventory</code> — the
+  confirmation can never arrive. A trade order with any specification-less line can never be
+  accepted by the Store projection while <code>INVENTORY_ENABLED=1</code>.</li>
+<li><strong>Reproduction:</strong> create a Trade order whose item has no specification (specification deleted
+  / null); observe <code>trade.order.created</code> → Store order <code>awaiting_inventory</code>, outbox request with
+  <code>items[0].catalogReference = ''</code>; the Inventory <code>InventoryReservationRequestedHandler</code> throws
+  <code>Invalid inventory reservation request item.</code> on every delivery.</li>
+<li><strong>Proposed fix:</strong> validate <code>catalogReference</code> (and <code>lineId</code>) against the UUID format (and
+  non-empty) in <code>inventoryItems()</code>, failing deterministically at the Store boundary; and/or make
+  Trade emit a stable UUID reference for specification-less items instead of <code>''</code>.</li>
+</ul>
+<h3 id="bug-2-medium-deterministically-invalid-tradeordercreated-payloads-become-poison-messages">Bug 2 (MEDIUM) — deterministically-invalid <code>trade.order.created</code> payloads become poison messages<a class="headerlink" href="#bug-2-medium-deterministically-invalid-tradeordercreated-payloads-become-poison-messages" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:37-38</code> (shallow
+  envelope validation), <code>:56-61</code> (<code>StoreConsumedEvent</code> persisted inside the transaction),
+  <code>:106-107</code> (<code>recordRejected()</code> orderUuid throw), <code>:126-137</code> (<code>inventoryItems()</code> throws),
+  plus <code>src/Store/Service/StoreOrderService.php:84-86,110-111</code> (<code>LogicException</code> on snapshot
+  conflict).</li>
+<li><strong>Description:</strong> only <code>is_string($eventId) &amp;&amp; is_array($payload)</code> is validated up front. Any
+  deeper failure (missing <code>orderUuid</code> in <code>recordRejected()</code>, empty/invalid items, conflicting
+  snapshot) throws <strong>inside</strong> <code>wrapInTransaction</code>, which rolls back the already-persisted
+  <code>StoreConsumedEvent</code>. The event is therefore never marked consumed and is retried (3×) with no
+  chance of success before landing in the <code>failed</code> transport. Contrast the cancellation handler,
+  which validates the full envelope (type/version/eventId/payload/orderUuid/storeUuid/cancelledAt/
+  timestamp) before any persistence.</li>
+<li><strong>Impact:</strong> a single malformed-but-structurally-valid <code>trade.order.created</code> event blocks
+  order acceptance for that trade order, requires manual <code>failed</code>-transport intervention, and
+  re-runs the whole transaction (re-creating and rolling back a Store order) on every retry.</li>
+<li><strong>Reproduction:</strong> dispatch <code>trade.order.created</code> with a payload containing a valid <code>store.uuid</code>
+  but no <code>orderUuid</code> and a non-existent store → <code>InvalidArgumentException: Trade order event does
+  not include an order UUID.</code> on every redelivery; <code>store_consumed_event</code> never contains the
+  eventId.</li>
+<li><strong>Proposed fix:</strong> move deterministic structural validation (orderUuid present, items well-formed
+  when inventory is enabled, store snapshot shape) ahead of the transaction, or consume-and-record
+  a terminal <code>StoreConsumedEvent</code> for invalid envelopes instead of throwing.</li>
+</ul>
+<h3 id="bug-3-lowmedium-store-side-dedup-has-no-payload-hash-integrity-check">Bug 3 (LOW/MEDIUM) — Store-side dedup has no payload-hash integrity check<a class="headerlink" href="#bug-3-lowmedium-store-side-dedup-has-no-payload-hash-integrity-check" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/TradeOrderCancelledHandler.php:48,53</code>,
+  <code>TradeOrderCreatedHandler.php:40,51</code>, <code>InventoryReservationConfirmedHandler.php:42,47</code>,
+  <code>InventoryReservationRejectedHandler.php:42,47</code>, <code>InventoryReservationReleasedHandler.php:34,39</code>.</li>
+<li><strong>Description:</strong> all five handlers dedup by <code>eventId</code> alone (<code>findOneBy(['eventId' =&gt; ...])</code>)
+  and silently return on a hit. The Inventory handlers (<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:181-192</code>,
+  <code>InventoryReservationReleaseRequestedHandler.php:122-133</code>) additionally compare the payload
+  hash and raise <code>InventoryMessageIntegrityException</code> when an eventId is reused with a different
+  payload.</li>
+<li><strong>Impact:</strong> if a producer reuses an eventId with a modified payload (a redelivery, or a
+  tampered/corrupted message), the Store silently ignores the new payload instead of flagging
+  the integrity violation; the two sides behave differently for the same fault.</li>
+<li><strong>Reproduction:</strong> deliver <code>inventory.reservation.confirmed</code> with eventId <code>E</code>, then deliver it
+  again with eventId <code>E</code> and a different <code>storeOrderUuid</code>. Store: silently consumed (order never
+  accepted). Inventory (same scenario on its own handlers): <code>InventoryMessageIntegrityException</code>.</li>
+<li><strong>Proposed fix:</strong> store <code>hash('sha256', json_encode($envelope))</code> (already computed for the
+  <code>StoreConsumedEvent</code>) and <code>hash_equals()</code> it on dedup, throwing an integrity exception on
+  mismatch, mirroring the Inventory side.</li>
+</ul>
+<h3 id="bug-4-low-confirmedatrejectedatreleasedat-are-required-but-never-used">Bug 4 (LOW) — <code>confirmedAt</code>/<code>rejectedAt</code>/<code>releasedAt</code> are required but never used<a class="headerlink" href="#bug-4-low-confirmedatrejectedatreleasedat-are-required-but-never-used" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File / line:</strong> <code>InventoryReservationConfirmedHandler.php:37-40</code>,
+  <code>InventoryReservationRejectedHandler.php:37-40</code>, <code>InventoryReservationReleasedHandler.php:30-31</code>;
+  <code>src/Store/Entity/StoreOrder.php:129-130</code>.</li>
+<li><strong>Description:</strong> the three outcome handlers require an ISO-8601 timestamp field to be present
+  (a non-string payload throws) but never parse it, validate its format, or persist it.
+  <code>StoreOrder::accept()/reject()</code> stamp <code>acceptedAt</code>/<code>rejectedAt</code> with processing time
+  (<code>new \DateTimeImmutable()</code>), not the event timestamp. A confirmation with
+  <code>confirmedAt: 'not-a-date'</code> is accepted and the order is accepted anyway.</li>
+<li><strong>Impact:</strong> audit timestamps on the Store order reflect when the Store processed the outcome,
+  not when Inventory confirmed/rejected (can be hours off for delayed messages), and the event's
+  timestamp is discarded. Invalid timestamps are accepted silently.</li>
+<li><strong>Reproduction:</strong> <code>InventoryReservationConfirmedHandler</code> accepts
+  <code>['reservationId' =&gt; ..., ..., 'confirmedAt' =&gt; 'garbage']</code> and marks the order accepted; the
+  resulting <code>store.order.accepted.v1</code> payload carries <code>acceptedAt = &lt;now&gt;</code> instead of the
+  confirmed time.</li>
+<li><strong>Proposed fix:</strong> validate the timestamp format and/or surface it — e.g. <code>StoreOrder::accept()</code>
+  gains an optional <code>$acceptedAt</code>, the handlers pass the parsed event timestamp, and the accepted/
+  rejected outbox payloads use it.</li>
+</ul>
+<h3 id="bug-5-low-release-acknowledgements-are-consumed-blindly">Bug 5 (LOW) — release acknowledgements are consumed blindly<a class="headerlink" href="#bug-5-low-release-acknowledgements-are-consumed-blindly" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/InventoryReservationReleasedHandler.php:34-47</code>.</li>
+<li><strong>Description:</strong> the released handler only persists a <code>StoreConsumedEvent</code>; it never looks up
+  the Store order, never verifies the <code>reservationId</code> matches one (unlike the Confirmed/Rejected
+  handlers' correlation checks), and never publishes any acknowledgement back to Trade (the
+  Store order was already marked cancelled by <code>TradeOrderCancelledHandler</code>).</li>
+<li><strong>Impact:</strong> a release event for an unknown or never-cancelled reservation is silently marked
+  consumed, and the cancellation flow produces no terminal outbox message from the Store side,
+  so Trade has no Store-side acknowledgement that inventory release completed.</li>
+<li><strong>Reproduction:</strong> deliver <code>inventory.reservation.released</code> with a random <code>reservationId</code>; the
+  event is consumed (<code>store_consumed_event</code> row) with no Store-order validation and no outbox
+  message.</li>
+<li><strong>Proposed fix:</strong> correlate the <code>reservationId</code> against a Store order (as the Confirmed/
+  Rejected handlers do), and decide whether the Store should emit a <code>store.order.cancelled.v1</code>
+  (or similar) acknowledgement after release completes.</li>
+</ul>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The pre-existing <code>tests/Store/Integration/TradeOrderCreatedHandlerTest.php</code> and
+  <code>tests/Store/Integration/InventoryReservationOutcomeHandlerTest.php</code> already covered the
+  happy paths and several branches; the new tests deliberately add only the missing branches
+  (no duplication).</li>
+<li>Bugs are reported only — <strong>no source files were modified</strong>.</li>
+<li>The two skipped-test scenarios contemplated by the task did not arise: no correct-behavior
+  test fails, so the suite is fully green (54 tests, 132 assertions) with 0 skips.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

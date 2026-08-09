@@ -1,0 +1,1707 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/coverage-2026-08-09/core-utils-di/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core Utils / DependencyInjection / Serializer Normalizer - 覆盖范围和错误报告 - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#core-utils-dependencyinjection-serializer-normalizer-" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core Utils / DependencyInjection / Serializer Normalizer - 覆盖范围和错误报告
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        添加测试文件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        覆盖结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        发现错误
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="发现错误">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-r-1-rsa-md5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug R-1 — RSA 签名使用加密损坏的 MD5（严重）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-r-2-openssl_sign-sign-base64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug R-2 — 当 openssl_sign() 失败时，sign() 对未定义的变量进行 base64 编码（高）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-r-3-getsigncontent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug R-3 — getSignContent() 字符串转换任意值（中）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-r-4-openssl_free_key-php-80" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug R-4 — openssl_free_key() 自 PHP 8.0（低）起已弃用
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-m-1-mathmt_rand-mathrand-php-85" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug M-1 - Math::mt_rand() 和 Math::rand() 总是在 PHP 8.5 上抛出（高）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-m-2-mathlcg_value-php-84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug M-2 — Math::lcg_value() 委托自 PHP 8.4 以来已弃用的函数（低）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-l-1-location-php-curl-classphp-curl-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug L-1 — Location 依赖于 php-curl-class/php-curl-class，但未安装（严重）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-l-2-getaddress-getresponse-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug L-2 — getAddress() 在字符串上调用 getResponse() (HIGH)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-l-3-json-statusvalidity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug L-3 — JSON 响应在不检查 status/validity 的情况下取消引用（中）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-l-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug L-4 — 三种方法之间的错误契约不一致（低）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-i-1-inflectpluralize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bug I-1 — Inflect::pluralize() 失败是死代码（低）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#location-blocker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        可测试性发现 — Location （用于完全覆盖的 BLOCKER）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        仍然存在未覆盖的线（都是故意的）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        跳过的项目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        命令参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="core-utils-dependencyinjection-serializer-normalizer-">Core Utils / DependencyInjection / Serializer Normalizer - 覆盖范围和错误报告<a class="headerlink" href="#core-utils-dependencyinjection-serializer-normalizer-" title="Permanent link">&para;</a></h1>
+<ul>
+<li>日期：2026-08-09</li>
+<li>范围：<code>src/Core/Utils/{RsaClient,Location,Math,Inflect}.php</code>、<code>src/Core/DependencyInjection/{Configuration,CoreExtension}.php</code>、<code>src/Core/Serializer/Normalizer/CircularReferenceHandler.php</code></li>
+<li>任务：将线路覆盖率提高到约 100% 并查找错误。</li>
+<li>遵守约束：<strong><code>src/</code> 下的任何内容均未修改</strong>。仅添加了 <code>tests/</code> 下的新测试文件和此报告。</li>
+</ul>
+<h2 id="_1">添加测试文件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>全部使用<code>declare(strict_types=1);</code>和<code>extends \PHPUnit\Framework\TestCase</code>（纯单元测试，无DB）：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>被测类</th>
+<th>它涵盖什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Core/Utils/RsaClientTest.php</code></td>
+<td><code>RsaClient</code></td>
+<td>使用 <code>openssl_pkey_new()</code> 生成并通过公钥属性注入的真实 RSA 密钥对。涵盖 <code>rsaSign</code>/<code>rsaVerifySign</code>、<code>sign</code>/<code>verifySign</code>、<code>getSignContent</code>（ksort + 空值跳过）、<code>checkEmpty</code>、<code>getPrivateKey</code>/<code>getPublicKey</code> 快乐 + 错误路径（内联 PEM、原始 Base64 包装、文件路径、丢失文件 → <code>false</code>）、<code>getPrivateKenLen</code>/<code>getPublicKenLen</code> 以及完整加密/解密往返以及返回非字符串/缺失键错误。</td>
+</tr>
+<tr>
+<td><code>tests/Core/Utils/LocationTest.php</code></td>
+<td><code>Location</code></td>
+<td>通过 <code>Curl\Curl</code><strong> 的 </strong>仅测试存根驱动 <code>getLocation</code>/<code>getDistance</code> （成功 + <code>\ErrorException</code> 捕获路径）（请参阅可测试性说明）。</td>
+</tr>
+<tr>
+<td><code>tests/Core/Utils/MathCoverageTest.php</code></td>
+<td><code>Math</code></td>
+<td><code>acosh</code>、<code>asinh</code>、<code>atanh</code>、<code>getrandmax</code>、<code>mt_getrandmax</code>、<code>mt_srand</code>、<code>srand</code>（种子决定论）。</td>
+</tr>
+<tr>
+<td><code>tests/Core/Utils/InflectCoverageTest.php</code></td>
+<td><code>Inflect</code></td>
+<td><code>singularize()</code> 落入分支（没有规则匹配的单词）；确认 <code>pluralize()</code> 包罗万象。</td>
+</tr>
+<tr>
+<td><code>tests/Core/DependencyInjection/ConfigurationTest.php</code></td>
+<td><code>Configuration</code></td>
+<td><code>getConfigTreeBuilder()</code> 返回一个 <code>TreeBuilder('core')</code>，根名为 <code>core</code>，空配置进程到 <code>[]</code>，未知选项被拒绝。</td>
+</tr>
+<tr>
+<td><code>tests/Core/DependencyInjection/CoreExtensionTest.php</code></td>
+<td><code>CoreExtension</code></td>
+<td><code>load([], new ContainerBuilder())</code>加载<code>services.yaml</code>，注册所有6个服务定义，携带正确的类/标签/装饰器元数据，在重复的<code>load()</code>之间幂等。</td>
+</tr>
+<tr>
+<td><code>tests/Core/Serializer/Normalizer/CircularReferenceHandlerTest.php</code></td>
+<td><code>CircularReferenceHandler</code></td>
+<td>标量 id → <code>['id'=&gt;…]</code>，非标量 id（对象/数组）→ <code>null</code>，缺少 <code>getId</code> → <code>\Exception</code>。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">覆盖结果<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><code>var/uncovered-map.txt</code> 的基线与新测试后的状态（在受影响的文件上使用 <code>phpunit --coverage-html</code> 进行验证）：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>基线未发现</th>
+<th>之后</th>
+<th>笔记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Utils/RsaClient</code></td>
+<td>0%（~110 行）</td>
+<td><strong>90.13% (137/152)</strong></td>
+<td>其余 15 行已弃用或无法访问（见下文）</td>
+</tr>
+<tr>
+<td><code>Utils/Location</code></td>
+<td>0% (15,18–24,30,33–39,44–45,47,50–56)</td>
+<td><strong>69.57% (16/23)</strong></td>
+<td>剩下的 7 行都属于损坏的 <code>getAddress</code> (Bug L-2)</td>
+</tr>
+<tr>
+<td><code>Utils/Math</code></td>
+<td>53,55,58,72,78,84,85,86,91,102</td>
+<td><strong>95.16% (59/62)</strong></td>
+<td>其余 78、85、91 是弃用 + 两个错误（错误 M-1/M-2）</td>
+</tr>
+<tr>
+<td><code>Utils/Inflect</code></td>
+<td>135, 158</td>
+<td><strong>95.65% (22/23)</strong></td>
+<td>剩余 135 是死代码（Bug I-1）</td>
+</tr>
+<tr>
+<td><code>DependencyInjection/Configuration</code></td>
+<td>0% (17, 19)</td>
+<td><strong>100%</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DependencyInjection/CoreExtension</code></td>
+<td>0% (19, 20)</td>
+<td><strong>100%</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/CircularReferenceHandler</code></td>
+<td>0% (12,13,14,17)</td>
+<td><strong>100%</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>完整的新测试运行：<strong>63 个测试，93 个断言，0 个失败/错误/通知/警告/弃用，4 个跳过</strong>（每个跳过记录一个错误或不可测试的行；请参阅跳过的项目）。</p>
+<h2 id="_3">发现错误<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="bug-r-1-rsa-md5">Bug R-1 — RSA 签名使用加密损坏的 MD5（严重）<a class="headerlink" href="#bug-r-1-rsa-md5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:51</code> (<code>openssl_sign(..., OPENSSL_ALGO_MD5)</code>) 和 <code>:99</code> (<code>openssl_verify(..., OPENSSL_ALGO_MD5)</code>)。</li>
+<li><strong>说明：</strong> 所有签名/验证操作均使用 MD5 作为摘要算法。</li>
+<li><strong>影响：</strong> MD5被破坏（碰撞/伪造攻击）；签名不防篡改。 FIPS 140-2/3 环境通常会禁用 MD5，因此 <code>openssl_sign</code>/<code>openssl_verify</code> 在这些环境中会默默失败。该类是一个支付/RSA 签名助手，这使其成为一个安全缺陷。</li>
+<li><strong>复制：</strong> <code>(new RsaClient())</code> 具有有效的密钥 - <code>openssl_get_md5_methods()</code> 仍然在 PHP 8.5 上列出 <code>md5</code>，因此它可以工作，但只是因为环境允许 MD5。</li>
+<li><strong>建议的修复：</strong> 使用 <code>OPENSSL_ALGO_SHA256</code> （或使用 <code>SHA-256</code> 与 <code>openssl</code> CLI 兼容的对等点）。</li>
+</ul>
+<h3 id="bug-r-2-openssl_sign-sign-base64">Bug R-2 — 当 <code>openssl_sign()</code> 失败时，<code>sign()</code> 对未定义的变量进行 base64 编码（高）<a class="headerlink" href="#bug-r-2-openssl_sign-sign-base64" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:51-59</code>。</li>
+<li><strong>说明：</strong> <code>openssl_sign()</code>的返回值被忽略。当它失败时（例如 <code>getPrivateKey()</code> 返回一个真实但无效的包装字符串，或者环境拒绝 MD5），<code>$sign</code> 永远不会被分配，并且第 58 行的 <code>base64_encode($sign)</code> 在未定义的变量上运行。</li>
+<li><strong>影响：</strong> PHP警告+伪造签名（<code>base64_encode(null)</code>），默默掩盖失败；对于 <code>failOnWarning</code> CI，这是调用站点的硬故障。</li>
+<li><strong>复制：</strong> <code>$c = new RsaClient(); $c-&gt;rsaPrivateKey = 'garbage'; echo $c-&gt;sign('data');</code> — <code>getPrivateKey()</code> 将垃圾包装到真实的 PEM 中，<code>openssl_sign</code> 返回 <code>false</code>，<code>base64_encode($sign)</code> 对未定义的 <code>$sign</code> 发出警告。</li>
+<li><strong>建议的修复：</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">if (!openssl_sign((string) $data, $sign, $res, OPENSSL_ALGO_SHA256)) {</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">    return &#39;&#39;;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">}</span>
+</code></pre></div></li>
+</ul>
+<h3 id="bug-r-3-getsigncontent">Bug R-3 — <code>getSignContent()</code> 字符串转换任意值（中）<a class="headerlink" href="#bug-r-3-getsigncontent" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:75</code> 和 <code>:77</code> (<code>$stringToBeSigned .= "$k" . "=" . "$v";</code>)。</li>
+<li><strong>描述：</strong>插值将每个值转换为字符串。数组变成文字 <code>Array</code> （加上 PHP 警告）；对象调用 <code>__toString()</code> 或抛出。</li>
+<li><strong>影响：</strong>当参数值是非标量时错误的签名内容和/或警告；签名的有效负载不再与调用者的纯数据进行往返。</li>
+<li><strong>复制：</strong> <code>$c-&gt;getSignContent(['a' =&gt; ['nested']])</code> → <code>"a=Array"</code> + 警告。</li>
+<li><strong>建议的修复：</strong> 在连接之前验证 <code>$k</code>/<code>$v</code> 是标量（或 JSON 编码的复杂值）；至少检查<code>is_scalar($v)</code>。</li>
+</ul>
+<h3 id="bug-r-4-openssl_free_key-php-80">Bug R-4 — <code>openssl_free_key()</code> 自 PHP 8.0（低）起已弃用<a class="headerlink" href="#bug-r-4-openssl_free_key-php-80" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:55</code> 和 <code>:104</code>。</li>
+<li><strong>说明：</strong> <code>openssl_free_key()</code> 自 PHP 8.0 起已弃用（无操作）； <code>OpenSSLAsymmetricKey</code> 对象会自动释放。</li>
+<li><strong>影响：</strong> 每个从 <strong>文件路径</strong> 加载密钥的 <code>sign()</code>/<code>verifySign()</code> 都会发出弃用通知（破坏 <code>failOnDeprecation</code> CI）。因此，第 54-56 行和第 103-105 行无法在不触发弃用的情况下被覆盖——它们仍然未被覆盖。</li>
+<li><strong>复制：</strong> <code>$c-&gt;rsaPrivateKeyFilePath = 'key.pem'; $c-&gt;sign('data');</code> → <code>Function openssl_free_key() is deprecated since 8.0</code>。</li>
+<li><strong>建议的修复：</strong> 删除两个 <code>if ($res instanceof \OpenSSLAsymmetricKey) { openssl_free_key($res); }</code> 块。</li>
+</ul>
+<h3 id="bug-m-1-mathmt_rand-mathrand-php-85">Bug M-1 - <code>Math::mt_rand()</code> 和 <code>Math::rand()</code> 总是在 PHP 8.5 上抛出（高）<a class="headerlink" href="#bug-m-1-mathmt_rand-mathrand-php-85" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Math.php:85</code> (<code>return mt_rand($x);</code>) 和 <code>:91</code> (<code>return rand($x);</code>)。</li>
+<li><strong>描述：</strong> <code>mt_rand()</code>/<code>rand()</code> 的单参数形式（单个参数被视为 max）在 PHP 8.3 中已被弃用，现在在 PHP 8.5 中是一个错误：两个本机函数 <strong>都需要两个参数</strong>。</li>
+<li><strong>影响：</strong> <code>Math::mt_rand($n)</code> / <code>Math::rand($n)</code> 的任何调用者都会因未捕获的 <code>ArgumentCountError</code> 而崩溃。</li>
+<li><strong>复制：</strong>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">Math::rand(10); // ArgumentCountError: rand() expects exactly 2 arguments, 1 given</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">Math::mt_rand(10); // ArgumentCountError: mt_rand() expects exactly 2 arguments, 1 given</span>
+</code></pre></div></li>
+<li><strong>建议的修复：</strong> <code>return mt_rand(0, $x);</code> 和 <code>return rand(0, $x);</code> （与预期的“仅最大”签名匹配）。</li>
+</ul>
+<h3 id="bug-m-2-mathlcg_value-php-84">Bug M-2 — <code>Math::lcg_value()</code> 委托自 PHP 8.4 以来已弃用的函数（低）<a class="headerlink" href="#bug-m-2-mathlcg_value-php-84" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Math.php:78</code> (<code>return lcg_value();</code>)。</li>
+<li><strong>描述：</strong> 自 PHP 8.4 起，<code>lcg_value()</code> 已被弃用，取而代之的是 <code>\Random\Randomizer::getFloat()</code>。</li>
+<li><strong>影响：</strong> 调用 <code>Math::lcg_value()</code> 会引发弃用（破坏 <code>failOnDeprecation</code> CI）；如果不弃用，则无法覆盖该行。</li>
+<li><strong>复制：</strong> <code>Math::lcg_value();</code> → <code>Function lcg_value() is deprecated since 8.4</code>。</li>
+<li><strong>建议的修复：</strong> 重新实现为 <code>Randomizer::getFloat()</code> 或 <code>Math::random(0, 1)</code>。</li>
+</ul>
+<h3 id="bug-l-1-location-php-curl-classphp-curl-class">Bug L-1 — <code>Location</code> 依赖于 <code>php-curl-class/php-curl-class</code>，但未安装（严重）<a class="headerlink" href="#bug-l-1-location-php-curl-classphp-curl-class" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:5</code> (<code>use Curl\Curl;</code>)、<code>:18</code>、<code>:33</code>、<code>:50</code> (<code>new Curl();</code>)。</li>
+<li><strong>描述：</strong>该类从 <code>php-curl-class/php-curl-class</code> 包实例化 <code>Curl\Curl</code>，但该包<strong>未在 <code>composer.json</code> 中声明，也不存在于 <code>vendor/</code></strong> 中（<code>class_exists('Curl\Curl')</code> → <code>false</code>）。</li>
+<li><strong>影响：</strong> 每次调用 <code>getLocation()</code>、<code>getAddress()</code> 或 <code>getDistance()</code> 都会抛出 <code>Error: Class "Curl\Curl" not found</code>。因为抛出的 <code>Error</code> 不是 <code>\ErrorException</code>，所以 <code>catch (\ErrorException)</code> 块<strong>不会</strong>捕获它 - 这些方法在真实应用程序中完全被破坏。</li>
+<li><strong>复制：</strong> <code>Location::getLocation('x');</code> → <code>Error: Class "Curl\Curl" not found</code>。</li>
+<li><strong>建议的修复：</strong> 将 <code>php-curl-class/php-curl-class</code> 添加到 <code>composer.json</code>，或者重构为可注入的 HTTP 客户端（请参阅可测试性说明），以便测试可以对其进行存根。</li>
+</ul>
+<h3 id="bug-l-2-getaddress-getresponse-high">Bug L-2 — <code>getAddress()</code> 在字符串上调用 <code>getResponse()</code> (HIGH)<a class="headerlink" href="#bug-l-2-getaddress-getresponse-high" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:35</code> (<code>$data = json_decode($data-&gt;getResponse());</code>)。</li>
+<li><strong>描述：</strong>方法不一致：<code>getLocation()</code>（第20行）和<code>getDistance()</code>（第52行）执行<code>json_decode($data)</code>，其中<code>$data</code>是<code>Curl::get()</code>返回的<strong>字符串主体</strong>（在php-curl-class中确认：<code>exec()</code>返回<code>$this-&gt;response</code>）。 <code>getAddress()</code> 而是在该字符串上调用 <code>$data-&gt;getResponse()</code>。</li>
+<li><strong>影响：</strong> 字符串上的 <code>$data-&gt;getResponse()</code> 会引发 <code>Error: Call to a member function getResponse() on string</code>，它不是 <code>\ErrorException</code>，因此第 38 行的 <code>catch</code> 永远不会触发，并且该方法会致命。</li>
+<li><strong>复制：</strong>任何 <code>getAddress($lat, $lng)</code> 调用。</li>
+<li><strong>建议的修复：</strong> 镜像其他两种方法：
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$data = $curl-&gt;get($api_url);</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">$data = json_decode($data);</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">return $data-&gt;result-&gt;address ?? null;</span>
+</code></pre></div>
+  （注意：即使在此修复之后，<code>getAddress()</code> 也会在出错时返回 <code>$e-&gt;getMessage()</code>，而其他两种方法会返回 <code>null</code> — Bug L-4。）</li>
+</ul>
+<h3 id="bug-l-3-json-statusvalidity">Bug L-3 — JSON 响应在不检查 <code>status</code>/validity 的情况下取消引用（中）<a class="headerlink" href="#bug-l-3-json-statusvalidity" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:22</code>、<code>:37</code>、<code>:54</code>。</li>
+<li><strong>描述：</strong>在<code>json_decode</code>之后，代码访问<code>$data-&gt;result-&gt;location</code>（等），而不检查<code>json_last_error()</code>、API <code>status</code>字段或空结果。腾讯错误正文 (<code>{"status":310,"message":"..."}</code>) 生成 <code>$data-&gt;result === null</code>，<code>null-&gt;location</code> 引发“尝试读取 null 属性”警告 (PHP 8) 并返回 <code>null</code>。</li>
+<li><strong>影响：</strong> 警告 + 令人困惑的 <code>null</code>/<code>false</code> 返回而不是结构化错误；掩盖 API 故障。</li>
+<li><strong>复制：</strong> 存根响应 <code>{"status":310,"message":"QUERY_FAULT"}</code> （或任何非 200 状态）→ 警告 + <code>null</code>。</li>
+<li><strong>建议修复：</strong> <code>if (json_decode(...) === null || ($data-&gt;status ?? 0) !== 0) return null;</code> 在属性访问之前。</li>
+</ul>
+<h3 id="bug-l-4">Bug L-4 — 三种方法之间的错误契约不一致（低）<a class="headerlink" href="#bug-l-4" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:24</code> (<code>return null;</code>)、<code>:39</code> (<code>return $e-&gt;getMessage();</code>)、<code>:56</code> (<code>return null;</code>)。</li>
+<li><strong>描述：</strong> <code>getLocation</code>/<code>getDistance</code> 失败时返回 <code>null</code>，但 <code>getAddress</code> 返回异常消息字符串。</li>
+<li><strong>影响：</strong>调用者无法统一检测失败； <code>getAddress</code> 出错时返回真实字符串。</li>
+<li><strong>建议的修复：</strong> 使所有三个在失败时返回 <code>null</code>。</li>
+</ul>
+<h3 id="bug-i-1-inflectpluralize">Bug I-1 — <code>Inflect::pluralize()</code> 失败是死代码（低）<a class="headerlink" href="#bug-i-1-inflectpluralize" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>文件/行：</strong> <code>src/Core/Utils/Inflect.php:135</code> (<code>return $string;</code>)。</li>
+<li><strong>说明：</strong> 最终的复数规则 <code>'/$' =&gt; "s"</code> (<code>:54</code>) 匹配每个字符串，因此 <code>pluralize()</code> 始终返回转换后的值，并且第 135 行的尾随 <code>return $string;</code> 永远无法执行。</li>
+<li><strong>影响：</strong>功能上无影响；该线路永久未被覆盖（无法测试）。</li>
+<li><strong>复制：</strong> <code>Inflect::pluralize('apple')</code> → <code>'apples'</code> （永远不会失败）。</li>
+<li><strong>建议的修复：</strong> 删除无法访问的 <code>return $string;</code> （或删除包罗万象的规则，如果无意的话）。</li>
+</ul>
+<h2 id="location-blocker">可测试性发现 — <code>Location</code> （用于完全覆盖的 BLOCKER）<a class="headerlink" href="#location-blocker" title="Permanent link">&para;</a></h2>
+<p><code>Location</code> 是一个静态类，它对 <code>new Curl()</code>（第 18、33、50 行）和 <code>const</code> 值中的腾讯 URL 进行硬编码。它<strong>不可依赖注入</strong>，因此在没有网络或 <code>Curl\Curl</code> 类存在的情况下无法执行真实的类。此外，该软件包<strong>未安装</strong>，因此真正的方法根本无法运行。</p>
+<p>为了保持套件绿色并仍然证明解码/JSON路径，<code>LocationTest</code>在测试文件中定义了一个<strong>仅测试的<code>Curl\Curl</code></strong>双精度（否则类名无法解析），其<code>get()</code>返回可配置的响应正文字符串 - 忠实匹配php-curl-class的<code>exec()</code>合同。这会产生 <code>getLocation</code>/<code>getDistance</code> 成功 + 错误路径的覆盖范围。 <code>getAddress</code> 故意<strong>不</strong>覆盖：忠实的存根使其抛出 Bug L-2 中描述的 <code>\Error</code>，并且根据任务规则，没有测试可以断言损坏的行为。</p>
+<p>建议重构以实现完整的可测试性：
+1. 通过构造函数/静态 setter 而不是 <code>new Curl()</code> 注入 HTTP 客户端（<code>Curl</code> 或 Symfony <code>HttpClientInterface</code>）。
+2. 使 API 基本 URL + 键可配置（构造函数或常量 → 参数），以便测试可以指向虚假端点。
+3. 返回类型化的 DTO/<code>null</code> 而不是原始 JSON 对象。</p>
+<h2 id="_4">仍然存在未覆盖的线（都是故意的）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>RsaClient.php</code> 54, 55, 103, 104 — <code>openssl_free_key()</code> 自 PHP 8.0 起已弃用；覆盖会发出弃用信息（Bug R-4）。</li>
+<li><code>RsaClient.php</code> 230, 272, 313, 355 — <code>$partLen &lt; 1</code> 防护：需要 RSA 密钥 &lt; 88 位（加密）/ &lt; 8 位（解密）； <code>openssl_pkey_new()</code> 最小值为 512 位 → 无法访问。</li>
+<li><code>RsaClient.php</code> 237, 279, 320, 362 — <code>$key === false</code> 在 <code>get*KenLen()</code> 已经验证了相同的密钥之后进行防护 → 逻辑上无法访问的防御代码。</li>
+<li><code>RsaClient.php</code> 247, 289, 330 — <code>openssl_*_encrypt/decrypt</code> 失败分支；使用计算大小的有效密钥无法访问（块始终适合模数）。</li>
+<li><code>Math.php</code> 78 — <code>lcg_value()</code> 自 8.4 起已弃用（Bug M-2）。</li>
+<li><code>Math.php</code> 85, 91 — <code>mt_rand()</code>/<code>rand()</code> 单参数调用总是在 PHP 8.5 上抛出（Bug M-1）。</li>
+<li><code>Inflect.php</code> 135 — 死代码（Bug I-1）。</li>
+<li><code>Location.php</code> 30, 33, 34, 35, 37, 38, 39 — 全部位于损坏的 <code>getAddress()</code> 内（Bug L-2）。</li>
+</ul>
+<h2 id="_5">跳过的项目<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>MathCoverageTest::testMtRand</code> — <strong>skipped</strong> (<code>See report — bug M-1</code>)：断言正确的行为（<code>[0, max]</code>中的 int），该行为不能成立，因为 <code>Math::mt_rand()</code> 总是抛出 <code>ArgumentCountError</code>。</li>
+<li><code>MathCoverageTest::testRand</code> — <strong>跳过</strong> (<code>See report — bug M-1</code>)：与 <code>Math::rand()</code> 相同。</li>
+<li><code>MathCoverageTest::testLcgValue</code> — <strong>跳过</strong> (<code>See report — bug M-2</code>)：覆盖它会发出弃用信息。</li>
+<li><code>LocationTest::testGetAddressIsBrokenByStringMethodCall</code> — <strong>跳过</strong> (<code>See report — bug L-2</code>)：getAddress 已损坏；没有测试断言错误的行为。</li>
+</ul>
+<h2 id="_6">命令参考<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># run all new tests for this scope</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>off<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>tests/Core/Utils/RsaClientTest.php<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>tests/Core/Utils/LocationTest.php<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>tests/Core/Utils/MathCoverageTest.php<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>tests/Core/Utils/InflectCoverageTest.php<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>tests/Core/DependencyInjection<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>tests/Core/Serializer/Normalizer/CircularReferenceHandlerTest.php<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span>--no-coverage
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># verify coverage of the touched files</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span>tests/Core/Utils<span class="w"> </span>tests/Core/DependencyInjection<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span>tests/Core/Serializer/Normalizer/CircularReferenceHandlerTest.php<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span>--coverage-html<span class="w"> </span>var/coverage-check-utils-di<span class="w"> </span>--no-progress
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
