@@ -1,0 +1,2254 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/test-audit-2026-08-09/identity/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Identity module test audit (2026-08-09) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#identity-module-test-audit-2026-08-09" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Identity module test audit (2026-08-09)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-candidates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DELETE CANDIDATES
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERGE SUGGESTIONS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="identity-module-test-audit-2026-08-09">Identity module test audit (2026-08-09)<a class="headerlink" href="#identity-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Read-only audit of <code>tests/Identity/</code> (33 files, 281 test methods) for
+unnecessary / redundant tests. No <code>src/</code> or <code>tests/</code> file was modified; this
+report is the only artifact. Classification scheme: <strong>A = KEEP</strong>,
+<strong>B = DELETE CANDIDATE</strong> (1 coverage-chasing, 2 duplicate, 3
+implementation-detail, 4 redundant-regression, 5 near-empty), <strong>C = MERGE</strong>.
+Skipped tests that document known bugs are KEEP (per
+<code>docs/issues/coverage-2026-08-09/README.md</code>).</p>
+</blockquote>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Command/CreateUserCommandTest.php</code></td>
+<td>4</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Command/CreateUserCommandCoverageTest.php</code></td>
+<td>5</td>
+<td>KEEP (1 skipped bug test)</td>
+</tr>
+<tr>
+<td><code>Controller/App/ProfileControllerTest.php</code></td>
+<td>8</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/App/UserControllerTest.php</code></td>
+<td>3</td>
+<td>KEEP (3 candidates, MED)</td>
+</tr>
+<tr>
+<td><code>Controller/AuthControllerTest.php</code></td>
+<td>20</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/AuthControllerCoverageTest.php</code></td>
+<td>9</td>
+<td>KEEP (2 skipped bug tests)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/ProfileControllerTest.php</code></td>
+<td>2</td>
+<td>DELETE CANDIDATE (2)</td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerTest.php</code></td>
+<td>4</td>
+<td>DELETE CANDIDATE (4)</td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest.php</code></td>
+<td>9</td>
+<td>DELETE CANDIDATE (8; 1 skipped bug test KEEP)</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest.php</code></td>
+<td>21</td>
+<td>KEEP (8 candidates)</td>
+</tr>
+<tr>
+<td><code>Entity/RefreshTokenTest.php</code></td>
+<td>3</td>
+<td>KEEP (2 candidates, MED)</td>
+</tr>
+<tr>
+<td><code>Entity/UserAdditionalTest.php</code></td>
+<td>5</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Entity/UserTest.php</code></td>
+<td>12</td>
+<td>KEEP (3 candidates, MED)</td>
+</tr>
+<tr>
+<td><code>EventListener/UserProfileListenerTest.php</code></td>
+<td>4</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Integration/AuthBlackBoxIntegrationTest.php</code></td>
+<td>4</td>
+<td>KEEP (merge)</td>
+</tr>
+<tr>
+<td><code>Integration/AuthIntegrationTest.php</code></td>
+<td>7</td>
+<td>KEEP (3 candidates, MED; merge)</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest.php</code></td>
+<td>39</td>
+<td>KEEP core; 15 candidates (14 cross-module + 1 dup)</td>
+</tr>
+<tr>
+<td><code>Repository/ProfileRepositoryTest.php</code></td>
+<td>7</td>
+<td>KEEP (1 candidate, LOW)</td>
+</tr>
+<tr>
+<td><code>Repository/RefreshTokenRepositoryTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Repository/UserRepositoryTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Security/JwtAuthenticatorAdditionalTest.php</code></td>
+<td>3</td>
+<td>KEEP (1 candidate, HIGH)</td>
+</tr>
+<tr>
+<td><code>Security/JwtAuthenticatorTest.php</code></td>
+<td>7</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Security/TokenManagerAdditionalTest.php</code></td>
+<td>14</td>
+<td>KEEP (2 candidates, MED)</td>
+</tr>
+<tr>
+<td><code>Security/TokenManagerTest.php</code></td>
+<td>16</td>
+<td>KEEP (1 candidate HIGH, 2 MED)</td>
+</tr>
+<tr>
+<td><code>Service/LocalCacheOtpStorageTest.php</code></td>
+<td>4</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Service/NullOtpStorageTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Service/OtpServiceCoverageTest.php</code></td>
+<td>3</td>
+<td>KEEP (PII masking contract)</td>
+</tr>
+<tr>
+<td><code>Service/OtpServiceTest.php</code></td>
+<td>9</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest.php</code></td>
+<td>11</td>
+<td>KEEP (8 candidates, MED)</td>
+</tr>
+<tr>
+<td><code>Service/RedisOtpStorageTest.php</code></td>
+<td>6</td>
+<td>KEEP (1 skipped bug test)</td>
+</tr>
+<tr>
+<td><code>Service/UserServiceTest.php</code></td>
+<td>28</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Sms/AliyunSmsProviderLiveBranchTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Sms/AliyunSmsProviderTest.php</code></td>
+<td>2</td>
+<td>KEEP</td>
+</tr>
+</tbody>
+</table>
+<p>Counts are <code>public function test*</code> methods. <code>UserApiIntegrationTest</code> (39) is a
+roll-up: register (6), app profile/password (8), manage user CRUD (9),
+Trade specifications (4), Wallet deposit/transfer/reconcile (10),
+manage/user 404s (2). 14 of its 39 tests are cross-module (Wallet/Trade).</p>
+<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>The following behavior is critical and must not be deleted:</p>
+<ul>
+<li><strong>Token lifecycle / rotation / reuse (critical path #1, identity invariant):</strong>
+  <code>TokenManagerTest</code> (rotation revokes old + issues new, reuse detection revokes
+  all, tampered/expired/malformed token rejection, TTL, base64url),
+  <code>TokenManagerAdditionalTest</code> (constructor key failure paths, signed-token
+  validation branches, rotate rollback/no-rollback on flush failure),
+  <code>RefreshTokenRepositoryTest</code> (findValidByHash, revokeAllForUser,
+  removeExpired), <code>RefreshTokenTest</code> (isExpired/revoke semantics).</li>
+<li><strong>Authenticator:</strong> <code>JwtAuthenticatorTest</code> (supports, missing/invalid token,
+  user resolution, user-not-found), <code>JwtAuthenticatorAdditionalTest</code> (translated
+  failure message, non-numeric <code>sub</code> edge).</li>
+<li><strong>Auth endpoints:</strong> <code>AuthControllerTest</code> + <code>AuthControllerCoverageTest</code>
+  (login by email/phone/username, unverified-phone 403, refresh 400/401,
+  logout revocation variants, register, OTP verify paths). Includes the two
+  skipped Bug A / Bug D regression tests.</li>
+<li><strong>OTP service + storage contracts:</strong> <code>OtpServiceTest</code>, <code>OtpServiceCoverageTest</code>
+  (PII masking), <code>LocalCacheOtpStorageTest</code>, <code>NullOtpStorageTest</code>,
+  <code>RedisOtpStorageTest</code> (incl. skipped Bug #1 regression).</li>
+<li><strong>User/Profile services:</strong> <code>UserServiceTest</code> (register validation,
+  changePassword, updateProfile), <code>ProfileServiceTest::testJoinAsMember*</code>.</li>
+<li><strong>Repositories:</strong> <code>UserRepositoryTest</code>, <code>ProfileRepositoryTest</code> (real DQL
+  against DB), <code>RefreshTokenRepositoryTest</code>.</li>
+<li><strong>Commands:</strong> <code>CreateUserCommandTest</code> + <code>CreateUserCommandCoverageTest</code>
+  (normalization, role parsing, duplicate guards, skipped Bug E test).</li>
+<li><strong>Listeners:</strong> <code>UserProfileListenerTest</code>.</li>
+<li><strong>App/Manage controllers:</strong> <code>App/ProfileControllerTest</code>, plus the core of
+  <code>UserApiIntegrationTest</code> (manage user CRUD, change-password E2E with login
+  re-check, profile update, admin-boundary 403, 404s).</li>
+<li><strong>SMS:</strong> <code>AliyunSmsProviderTest</code>, <code>AliyunSmsProviderLiveBranchTest</code>.</li>
+<li><strong>All 5 skipped bug-repro tests</strong> (Bug A × 2, Bug D, Bug E, RedisOtpStorage
+  Bug #1) are KEEP per the coverage campaign policy.</li>
+</ul>
+<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<p><code>File::method</code> uses the short test-class name. Confidence is about the
+deletion recommendation, not about whether the test passes.</p>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Security/TokenManagerTest::testDecodeAccessTokenEmptyStringReturnsNull</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>TokenManagerTest::testDecodeInvalidTokenReturnsNull</code> (line 68) already asserts <code>decodeAccessToken('') === null</code></td>
+</tr>
+<tr>
+<td><code>Security/TokenManagerTest::testDecodeAccessTokenWithWrongSegmentCountReturnsNull</code></td>
+<td>B2 DUPLICATE</td>
+<td>MED</td>
+<td>same wrong-segment-count guard already exercised by <code>decodeAccessToken('a.b')</code> in <code>testDecodeInvalidTokenReturnsNull</code>; extra inputs (<code>'one'</code>, 4-segment) are redundant variants</td>
+</tr>
+<tr>
+<td><code>Security/TokenManagerTest::testBase64UrlDecodeHandlesPadding</code></td>
+<td>B4 REDUNDANT-REGRESSION</td>
+<td>MED</td>
+<td>round-trip contract already asserted by <code>testBase64UrlEncodeDecode</code></td>
+</tr>
+<tr>
+<td><code>Security/TokenManagerAdditionalTest::testRevokeAllForUserDelegatesToRepository</code></td>
+<td>B2 DUPLICATE</td>
+<td>MED</td>
+<td>the same <code>revokeAllForUser($user)</code> invocation is already asserted in <code>TokenManagerTest::testReuseDetectionRevokesAllTokens</code></td>
+</tr>
+<tr>
+<td><code>Security/TokenManagerAdditionalTest::testUnencryptedKeyWithWrongPassphraseStillLoads</code></td>
+<td>B3 IMPLEMENTATION-DETAIL</td>
+<td>MED</td>
+<td>self-documented as exercising an unreachable dev-fallback branch (identity-security report); no observable contract</td>
+</tr>
+<tr>
+<td><code>Security/JwtAuthenticatorAdditionalTest::testOnAuthenticationSuccessReturnsNullToContinue</code></td>
+<td>B5 NEAR-EMPTY</td>
+<td>HIGH</td>
+<td>asserts <code>assertNull()</code> on a method that unconditionally returns <code>null</code> (<code>JwtAuthenticator.php:65-69</code>)</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testUuidMatchesV4Format</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td>exact same regex assertion already in <code>ProfileTest::testConstructorInitializesCoreFields</code> (lines 18-21)</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testNicknameAccessors</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>tautological set/get on a plain string field (no logic)</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testAvatarAccessors</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>tautological set/get on a plain string field</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testMetadataAccessors</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>tautological set/get on a plain array field</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testSetJoinedAt</code> / <code>testSetJoinedAtNull</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>trivial set/get round-trip with null reset</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testDefaultProfileFieldsAreNull</code></td>
+<td>B2 DUPLICATE</td>
+<td>MED</td>
+<td>re-asserts the initial-null state already asserted inside the three accessor tests above</td>
+</tr>
+<tr>
+<td><code>Entity/ProfileTest::testAllLevelsCanBeSet</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>set/get round-trip over every constant; no validation logic asserted</td>
+</tr>
+<tr>
+<td><code>Entity/UserTest::testPhoneAccessors</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>trivial accessor + defaults; real phone semantics live in controller/repository tests</td>
+</tr>
+<tr>
+<td><code>Entity/UserTest::testPasswordAccessors</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>trivial set/get</td>
+</tr>
+<tr>
+<td><code>Entity/UserTest::testIdDefaultsToNull</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>trivial default assertion</td>
+</tr>
+<tr>
+<td><code>Entity/RefreshTokenTest::testConstructorAndGetters</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>mostly accessor round-trip; behavioral bits (default <code>isRevoked()===false</code>) already covered in <code>testRevokeAndMetadataMutators</code></td>
+</tr>
+<tr>
+<td><code>Entity/RefreshTokenTest::testRevokeAndMetadataMutators</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td><code>setReplacedBy</code>/<code>setIpAddress</code>/<code>setUserAgent</code> are trivial setters; <code>revoke()</code> semantics covered by repository tests</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/ProfileControllerTest::testControllerIsInstantiable</code></td>
+<td>B5 NEAR-EMPTY</td>
+<td>HIGH</td>
+<td>asserts <code>instanceof</code> on a freshly constructed controller; docblock itself admits it only checks "instantiation and basic wiring"</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/ProfileControllerTest::testAcceptedPropertiesAreDefined</code></td>
+<td>B3 IMPLEMENTATION-DETAIL</td>
+<td>HIGH</td>
+<td>reflection over private property <em>names</em>; asserts nothing observable</td>
+</tr>
+<tr>
+<td><code>Controller/App/UserControllerTest</code> (all 3: <code>testChangePasswordRejectsUnauthenticatedUser</code>, <code>testProfileRejectsUnauthenticatedUser</code>, <code>testUpdateProfileRejectsUnauthenticatedUser</code>)</td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>three copies of the identical <code>Not authenticated → 401</code> guard (<code>App/UserController.php:31,55,67</code>); collapse into one guard-level test or cover the shared <code>getUser()</code> check once</td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerTest::testRequestOtpRequiresPhone</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testRequestOtpRequiresPhone</code> — identical logic (<code>OtpController</code> is a byte-for-byte copy of <code>AuthController::requestOtp/verifyOtp</code>)</td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerTest::testRequestOtpReturnsTooManyRequestsWhenServiceThrows</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testRequestOtpRateLimitedReturnsTooManyRequests</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerTest::testVerifyOtpLoginReturnsTokens</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testVerifyOtpLoginSuccessReturnsTokens</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerTest::testVerifyOtpVerifyPhoneSetsFlagAndFlushes</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneMarksPhoneVerified</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testRequestOtpRejectsInvalidPurpose</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testRequestOtpRejectsInvalidPurpose</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testRequestOtpSuccessReturnsNoContent</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testRequestOtpSuccessReturnsNoContent</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testVerifyOtpRequiresPhoneAndOtp</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testVerifyOtpRequiresPhoneAndOtp</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testVerifyOtpRejectsInvalidPurpose</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testVerifyOtpRejectsInvalidPurpose</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testVerifyOtpRejectsInvalidOtp</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerTest::testVerifyOtpInvalidCodeReturnsUnauthorized</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testVerifyOtpLoginRejectsUnknownUser</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerCoverageTest::testVerifyOtpLoginRejectsUnknownUser</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testVerifyOtpLoginRejectsUnverifiedPhone</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerCoverageTest::testVerifyOtpLoginRejectsUnverifiedPhone</code></td>
+</tr>
+<tr>
+<td><code>Controller/OtpControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code></td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest::testNewReturnsProfileInstance</code></td>
+<td>B5 NEAR-EMPTY</td>
+<td>MED</td>
+<td>trivial <code>instanceof</code>; the generic <code>BaseServiceMutationTrait::new()</code> contract is covered by <code>tests/Core/Service/BaseServiceMutationTraitTest::testNew*</code></td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest::testGetCallsRepositoryFind</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>thin delegation to <code>EntityRepository::find</code>; generic get semantics covered by Core <code>BaseService*Test</code></td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest::testGetReturnsNullForMissingId</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>same delegation, null case</td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest::testGetWithArrayCriteria</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>same delegation via <code>findOneBy</code></td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest::testUpdatePersistsAndFlushes</code> / <code>testUpdateProfileFields</code> / <code>testUpdateClearsProfileFields</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>generic <code>update()</code> + persist/flush already covered by Core <code>BaseServiceMutationTraitTest</code> and <code>tests/Integration/BaseServiceIntegrationTest::testUpdateGetListAndRemoveFlow</code>; the serializer mock applies setters itself, so the assertions mostly re-verify the mock</td>
+</tr>
+<tr>
+<td><code>Service/ProfileServiceTest::testRemovePersistsAndFlushes</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>MED</td>
+<td>generic <code>remove()</code> covered by Core <code>BaseServiceMutationTraitTest::testRemove*</code></td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testUpdateProfileShortPasswordRejected</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><strong>identical</strong> request to <code>testChangePasswordShortNew</code> (same endpoint <code>/api/v1/app/users/change-password</code>, same payload <code>currentPassword='P@ssw0rd', newPassword='ab'</code>, same 400 assertion); only the fixture username differs</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testTransferSameWalletRejected</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>tests/Wallet/Integration/WalletApiRegressionTest::testTransferApiSameWallet</code> (same endpoint, same 400)</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testTransferMissingFields</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferApiMissingFields</code> plus <code>testBlindTransferInputs</code> datasets <code>missing fromWalletId</code> / <code>missing toWalletId</code> / <code>missing amount</code></td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testTransferNegativeAmountRejected</code></td>
+<td>B2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testBlindTransferInputs</code> dataset <code>negative amount</code> (same payload, 400)</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testDepositFundsToWallet</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td>Wallet deposit semantics owned by <code>tests/Wallet/</code> (<code>TransferControllerTest</code> depositAction success + <code>WalletServiceTest</code>/<code>TransferServiceTest</code>); no exact API-level deposit duplicate found, so MED</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testDepositNegativeAmountRejected</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td>negative-amount rejection covered by <code>TransferControllerTest</code> depositAction branches and <code>testBlindTransferInputs</code> (transfers); MED</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testDepositToNonexistentWallet</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td>404-not-found behavior covered by <code>WalletApiRegressionTest::testTransferNonexistentSourceWallet</code>; deposit variant only, MED</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testDepositMissingFields</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td>deposit missing-field 400 covered by <code>TransferControllerTest</code> depositAction validation tests; MED</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testBalanceVerification</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td><code>/manage/wallets/balance</code> reconcile contract covered at service layer by <code>WalletServiceTest</code>/<code>WalletServiceCoverageTest</code>; API-level variant, MED</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testReconcileAfterDepositProducesZero</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td>reconcile-zero semantics covered by <code>WalletServiceTest::testReconcile*</code>; API-level variant, MED</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testAppListSpecifications</code> / <code>testAppSpecificationsByProduct</code> / <code>testAppSpecificationDetail</code> / <code>testManageSpecificationDetail</code></td>
+<td>B2 DUPLICATE (cross-module)</td>
+<td>MED</td>
+<td>specification endpoints are Trade module scope; manage spec detail covered by <code>tests/Trade/Integration/TradeApiIntegrationTest::testSpecificationList/Update/Delete</code>; app-spec routes not found elsewhere so MED</td>
+</tr>
+<tr>
+<td><code>Integration/AuthIntegrationTest::testEmptyCredentialsReturnBadRequest</code></td>
+<td>B2 DUPLICATE</td>
+<td>MED</td>
+<td>400-missing-fields already asserted in <code>AuthBlackBoxIntegrationTest::testLoginRejectsMissingFieldsAndWrongPassword</code> (first half)</td>
+</tr>
+<tr>
+<td><code>Integration/AuthIntegrationTest::testLoginFailsWithInvalidPassword</code></td>
+<td>B2 DUPLICATE</td>
+<td>MED</td>
+<td>401-wrong-password already asserted in <code>AuthBlackBoxIntegrationTest::testLoginRejectsMissingFieldsAndWrongPassword</code> (second half)</td>
+</tr>
+<tr>
+<td><code>Integration/AuthIntegrationTest::testFullAuthFlow</code> (partial)</td>
+<td>B2 DUPLICATE</td>
+<td>MED</td>
+<td>refresh-rotation + reuse-detection sequence overlaps <code>AuthBlackBoxIntegrationTest::testRefreshTokenReuseDetectionRevokesAllActiveTokens</code>; the unique bits are logout+revoked-usage and the <code>assertNotSame</code> rotation check — merge, don't drop wholesale</td>
+</tr>
+<tr>
+<td><code>Repository/ProfileRepositoryTest::testProfileStoresNickname</code></td>
+<td>B2 DUPLICATE</td>
+<td>LOW</td>
+<td>findById + read-back of a field, re-testing <code>testFindByIdReturnsProfile</code>'s query path</td>
+</tr>
+<tr>
+<td><code>Service/OtpServiceTest::testHashOtpIsDeterministic</code> / <code>testHashOtpProducesDifferentHashes</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>LOW</td>
+<td>hash determinism is implied by the verify-flow tests; tautological</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testRegisterMissingFields</code> / <code>testRegisterShortPassword</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>LOW</td>
+<td>the same rules are asserted at unit (<code>UserServiceTest::testRegisterEmptyFieldsThrows</code> / <code>testRegisterShortPasswordThrows</code>) and controller (<code>AuthControllerTest::testRegisterWithInvalidArgumentsReturnsBadRequest</code>) layers; HTTP layer adds only status-mapping</td>
+</tr>
+<tr>
+<td><code>Integration/UserApiIntegrationTest::testChangePasswordMissingFields</code> / <code>testManageChangePasswordShort</code></td>
+<td>B1 COVERAGE-CHASING</td>
+<td>LOW</td>
+<td>400 outcomes mirror <code>UserServiceTest::testChangePasswordEmptyFieldsThrows</code> / <code>testAdminChangePasswordShortThrows</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note on the OtpController pair (HIGH).</strong> <code>src/Identity/Controller/OtpController.php</code>
+is a copy-paste of <code>AuthController::requestOtp/verifyOtp</code> (identical bodies,
+<code>/api/auth/otp/request</code> + <code>/api/auth/otp/verify</code>). <code>debug:router</code> registers
+both controllers for the same two paths; the <code>sys-auth-*</code> routes sort before the
+<code>sys-auth-otp-*</code> routes, so <strong>OtpController is shadowed/unreachable dead code</strong>
+and its tests only exercise an offline copy of the live AuthController logic.
+The whole OtpController test surface is therefore redundant while the duplicate
+controller still exists. The one exception is
+<code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code>
+(skipped, Bug A) — that documentation must be preserved (move its description to
+<code>AuthControllerCoverageTest</code>, since AuthController carries the same unguarded
+<code>json_decode</code>), so the skipped test itself is KEEP.</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>OtpControllerTest</code> + <code>OtpControllerCoverageTest</code> → fold into the AuthController
+  OTP tests</strong> after the shadowed <code>OtpController</code> is removed from <code>src/</code> (a
+  <code>src/</code> change, out of scope here). All 13 runnable OTP tests are already
+  covered by the AuthController pair.</li>
+<li><strong><code>Integration/AuthIntegrationTest</code> + <code>Integration/AuthBlackBoxIntegrationTest</code> → one
+  auth black-box file.</strong> They overlap on refresh-rotation/reuse-detection and on
+  the 400/401 login-denial cases; consolidating removes ~3 duplicated tests and
+  keeps the end-to-end logout + reuse-revokes-all assertions.</li>
+<li><strong><code>Integration/UserApiIntegrationTest</code> → relocate the 10 Wallet tests and 4
+  Trade specification tests to <code>tests/Wallet/</code> and <code>tests/Trade/</code></strong> where the
+  owning module suites live. The file keeps its Identity scope (register,
+  profile, password, manage-user CRUD, ownership/404 edges).</li>
+<li><strong><code>Entity/ProfileTest</code> accessor tests → collapse into a single table-driven
+  set/get + touch test</strong> (nickname/avatar/metadata/joinedAt), dropping the
+  duplicated <code>testUuidMatchesV4Format</code> and <code>testDefaultProfileFieldsAreNull</code>.</li>
+<li><strong><code>ProfileServiceTest</code> generic CRUD (<code>new/get/update/remove</code>) → drop the
+  delegation-only tests</strong> and keep <code>testJoinAsMember*</code> (the only Profile-specific
+  logic); the generic machinery is owned by <code>tests/Core/Service/BaseService*</code>.</li>
+<li><strong><code>Controller/App/UserControllerTest</code> → one guard test</strong> for the shared
+  "unauthenticated → 401" path instead of three identical copies.</li>
+</ul>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Before acting on any recommendation, verify locally (project PHP 8.4+ runtime):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span>Identity
+</code></pre></div>
+<ul>
+<li>To confirm a HIGH-confidence DUPLICATE is safe to remove, run the covering test
+  with the candidate excluded (e.g. temporarily use <code>--filter</code> to run only the
+  covering test), then delete the candidate and re-run the Identity filter green.</li>
+<li>For the OtpController claim, re-run <code>bin/console debug:router | grep otp</code> to
+  confirm the <code>sys-auth-*</code> routes still shadow <code>sys-auth-otp-*</code>; if route order
+  ever changes, re-evaluate before deleting.</li>
+<li>For the Wallet/Trade cross-module candidates, run
+  <code>--filter 'Wallet|Trade'</code> to confirm the owning suites pass without the
+  Identity-file copies.</li>
+<li>Never delete a skipped (<code>markTestSkipped</code>) test — each documents a known bug
+  (Bug A, B, D, E, RedisOtpStorage Bug #1) and is part of the KEEP baseline.</li>
+<li>After any deletion, confirm the Identity line-coverage budget for
+  <code>src/Identity/</code> does not drop below the 90% gate; the removed tests are all
+  covered by surviving tests or the Core/Wallet/Trade suites, so this should hold.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

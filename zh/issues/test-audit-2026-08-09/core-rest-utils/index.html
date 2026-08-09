@@ -1,0 +1,2163 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/test-audit-2026-08-09/core-rest-utils/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>核心（Utils/Listener/Controller/Serializer）测试审核（2026-08-09） - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#utilslistenercontrollerserializer2026-08-09" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              核心（Utils/Listener/Controller/Serializer）测试审核（2026-08-09）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产验证概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试策略
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统演练和测试接缝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    业务不变量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构测试映射
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    失效模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    发布验证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    人工智能开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        摘要 — 表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保留 — 项目符号列表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除候选人 — 表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证步骤
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="utilslistenercontrollerserializer2026-08-09">核心（Utils/Listener/Controller/Serializer）测试审核（2026-08-09）<a class="headerlink" href="#utilslistenercontrollerserializer2026-08-09" title="Permanent link">&para;</a></h1>
+<p><code>tests/Core/Utils</code>、<code>tests/Core/EventListener</code>、<code>tests/Core/Controller</code>（root + <code>System/</code>）、<code>tests/Core/Serializer</code>（+ <code>Normalizer/</code>）、<code>tests/Core/Exception</code>、<code>tests/Core/DependencyInjection</code> 的只读审核。针对 <code>src/Core/*</code> 和集成套件 (<code>tests/Integration/Core*ApiTest</code>) 进行交叉引用。</p>
+<p>背景：2026 年 8 月 9 日的覆盖率活动（参见 <code>docs/issues/coverage-2026-08-09/README.md</code>）添加了许多 <code>*CoverageTest</code> / <code>*ExtendedTest</code> / <code>*Coverage2Test</code> 文件，将线路覆盖率推至 99.46%。一些重复的行为已经被预先存在的测试锁定，或者仅断言该行运行。根据策略，跳过的记录 <code>src/</code> 错误（位置 L-2，数学 M-1/M-2）的测试是<strong>保留</strong>。</p>
+<h2 id="_1">摘要 — 表<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Utils/ArrayCollectionTest.php</code></td>
+<td>11</td>
+<td>11 KEEP（一些琐碎的初始情况→修剪）</td>
+</tr>
+<tr>
+<td><code>Utils/ArrayCommonTest.php</code></td>
+<td>3</td>
+<td>合并到扩展</td>
+</tr>
+<tr>
+<td><code>Utils/ArrayCommonExtendedTest.php</code></td>
+<td>11</td>
+<td>11保持</td>
+</tr>
+<tr>
+<td><code>Utils/FilterDateTimeTest.php</code></td>
+<td>1</td>
+<td>删除候选者（近空包装器，死实用程序）</td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONTest.php</code></td>
+<td>11</td>
+<td>11保持（基础）</td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest.php</code></td>
+<td>10</td>
+<td>10部分删除（5 个碱基重复）</td>
+</tr>
+<tr>
+<td><code>Utils/InflectTest.php</code></td>
+<td>2</td>
+<td>删除（完全包含在扩展中）</td>
+</tr>
+<tr>
+<td><code>Utils/InflectExtendedTest.php</code></td>
+<td>15</td>
+<td>15保持</td>
+</tr>
+<tr>
+<td><code>Utils/InflectCoverageTest.php</code></td>
+<td>3</td>
+<td>删除候选者（简单，往返的重复）</td>
+</tr>
+<tr>
+<td><code>Utils/LocationTest.php</code></td>
+<td>5（跳过 1）</td>
+<td>KEEP（文档损坏类+L-2 bug）</td>
+</tr>
+<tr>
+<td><code>Utils/MathTest.php</code></td>
+<td>13</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>Utils/MathExtendedTest.php</code></td>
+<td>25</td>
+<td>25部分删除（2 同义反复/重复）</td>
+</tr>
+<tr>
+<td><code>Utils/MathCoverageTest.php</code></td>
+<td>8（跳过 3）</td>
+<td>KEEP（跳过文档 M-1/M-2）</td>
+</tr>
+<tr>
+<td><code>Utils/RsaClientTest.php</code></td>
+<td>25</td>
+<td>25 KEEP（仅真正的加密覆盖范围）</td>
+</tr>
+<tr>
+<td><code>Utils/StringCaseTest.php</code></td>
+<td>1</td>
+<td>合并到扩展</td>
+</tr>
+<tr>
+<td><code>Utils/StringCaseExtendedTest.php</code></td>
+<td>13</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>Utils/UUIDTest.php</code></td>
+<td>2</td>
+<td>删除（1 个精确重复 + 1 个包含）</td>
+</tr>
+<tr>
+<td><code>Utils/UUIDExtendedTest.php</code></td>
+<td>15</td>
+<td>15保持</td>
+</tr>
+<tr>
+<td><code>EventListener/AccessLogListenerTest.php</code></td>
+<td>18</td>
+<td>18保持</td>
+</tr>
+<tr>
+<td><code>EventListener/ControllerListenerTest.php</code></td>
+<td>1</td>
+<td>删除（扩展的重复）</td>
+</tr>
+<tr>
+<td><code>EventListener/ControllerListenerExtendedTest.php</code></td>
+<td>5</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>EventListener/ExceptionInterceptorTest.php</code></td>
+<td>1</td>
+<td>删除（扩展的重复）</td>
+</tr>
+<tr>
+<td><code>EventListener/ExceptionInterceptorExtendedTest.php</code></td>
+<td>11</td>
+<td>11保持</td>
+</tr>
+<tr>
+<td><code>EventListener/LocaleListenerTest.php</code></td>
+<td>13</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>EventListener/LocaleListenerCoverageTest.php</code></td>
+<td>1</td>
+<td>删除（LocaleListenerTest 的重复）</td>
+</tr>
+<tr>
+<td><code>EventListener/OpenApiEnricherListenerCoverageTest.php</code></td>
+<td>4</td>
+<td>KEEP（其他地方未涵盖的守卫；4 个中的 2 个是同一分支）</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerTest.php</code></td>
+<td>11</td>
+<td>11保持</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerExtendedTest.php</code></td>
+<td>11</td>
+<td>11保持</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest.php</code></td>
+<td>12</td>
+<td>12部分删除（3 个精确重复）</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test.php</code></td>
+<td>13</td>
+<td>KEEP（注释 4 实现细节 getter 测试）</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerPaginationIntegrationTest.php</code></td>
+<td>1</td>
+<td>KEEP（唯一的真实数据库路径）</td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest.php</code></td>
+<td>5</td>
+<td>部分删除（扩展的 2 个副本）</td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerExtendedTest.php</code></td>
+<td>10</td>
+<td>10保持</td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerTest.php</code></td>
+<td>3</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest.php</code></td>
+<td>5</td>
+<td>部分删除（4 个同义反复）</td>
+</tr>
+<tr>
+<td><code>Serializer/CircularReferenceHandlerTest.php</code></td>
+<td>2</td>
+<td>KEEP（弱后备断言）</td>
+</tr>
+<tr>
+<td><code>Serializer/ObjectCallbackTest.php</code></td>
+<td>2</td>
+<td>KEEP（测试无线类）</td>
+</tr>
+<tr>
+<td><code>Serializer/SerializerContextFactoryTest.php</code></td>
+<td>1</td>
+<td>DELETE（即使 SUT 是无操作也会通过）</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/CircularReferenceHandlerTest.php</code></td>
+<td>5</td>
+<td>KEEP（测试孤立的重复类）</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerExtendedTest.php</code></td>
+<td>9</td>
+<td>部分删除（2 近空 <code>assertTrue(true)</code>）</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerCoverageTest.php</code></td>
+<td>12</td>
+<td>12 KEEP（独特的分支+ JSON 字符串损坏错误文档）</td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionTest.php</code></td>
+<td>2</td>
+<td>删除（包含在扩展中）</td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionExtendedTest.php</code></td>
+<td>7</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>DependencyInjection/ConfigurationTest.php</code></td>
+<td>4</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>DependencyInjection/CoreExtensionTest.php</code></td>
+<td>3</td>
+<td>保持</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">保留 — 项目符号列表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><strong>实用程序</strong>
+- <code>ArrayCommonExtendedTest</code> — 真正的 ExpressionLanguage <code>filter/map/reduce</code> 行为；这些助手被验证的唯一地方。
+- <code>ArrayCommonTest</code> — 小但包含 <code>testMergeMatchesCurrentLegacyBehavior</code>，一个真正的回归保护，用于令人惊讶的 <code>array_merge($arrays)</code> 包装。
+- <code>FixJSONTest</code> — <code>getJSONType</code>/<code>fixJSON</code> 的基本覆盖范围，均用于 <code>RestController</code> 和 <code>CreateApiViewMixin</code>。
+- <code>InflectExtendedTest</code> — 实质性变形规则表（不规则/不可数/x-ch-sh/往返）。 <code>Inflect::singularize</code> 用于<code>BaseServiceMutationTrait</code>。
+- <code>LocationTest</code> — 唯一可以运行 <code>Location</code> 的工具（不存在其 <code>php-curl-class</code> 依赖项）；跳过的 <code>testGetAddressIsBrokenByStringMethodCall</code> 记录了 bug L-2。保留，包括。跳过。
+- <code>MathCoverageTest</code> — 三个 <code>markTestSkipped</code> 案例记录了真正的错误 M-1（<code>mt_rand()/rand()</code> 在 PHP 8.5 上的单参数崩溃）和 M-2（<code>lcg_value()</code> 弃用）。
+- <code>MathTest</code> — <code>random</code>、<code>abs</code>、<code>round</code>、<code>locationDistance</code> 的真实边界断言，精确常量相等。
+- <code>RsaClientTest</code> — 唯一真正的 RSA 签名/验证/加密往返覆盖范围；记录 MD5 签名和未定义变量错误 (R-1/R-2)。没有跳过，全部断言当前行为。
+- <code>StringCaseExtendedTest</code> — 全破折号→骆驼行为矩阵。
+- <code>UUIDExtendedTest</code> — v3/v4/v5 格式位、命名空间、确定性、空格拒绝； <code>UUID</code> 用于每个模块。
+- <code>UUIDTest::testV4ProducesValidUuid</code> 行为被包含，但在删除文件之前是无害的（请参阅删除）。</p>
+<p><strong>事件监听器</strong>
+- <code>AccessLogListenerTest</code> — 彻底且独特：方法白名单、身份验证路径主体隐藏、截断、二进制/空主体、匿名/用户名解析。
+- <code>ControllerListenerExtendedTest</code>、<code>ExceptionInterceptorExtendedTest</code>、<code>LocaleListenerTest</code> — 实质性分支表。
+- <code>OpenApiEnricherListenerCoverageTest</code> — 四个提前返回的守卫不被 <code>CoreOpenApiEnricherApiTest</code> 行使（它只到达快乐路径）。注意：<code>testJsonContentWithoutPathsReturnsEarly</code>和<code>testJsonArrayContentWithoutPathsReturnsEarly</code>击中了<em>相同</em><code>!is_array($spec) || !isset($spec['paths'])</code>守卫——折叠这两个。</p>
+<p><strong>控制器</strong>
+- <code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> — 信封形状，<code>@display</code>（复杂/减少/表达式），<code>@expands</code>，分页切片，204。
+- <code>RestControllerCoverage2Test</code> — 独特的错误/边缘分支（<code>resolveService</code>、扩展链移位、静默吸气剂/表达式吞咽）。四个依赖项获取器异常测试（<code>getRequestStack</code>/<code>getSerializer</code>/<code>getTranslator</code>/<code>getService</code>）是薄的实现细节——在合并后考虑。
+- <code>RestControllerPaginationIntegrationTest</code> — 仅测试通过真正的 QueryBuilder + DoctrinePaginator 驱动 <code>pagination()</code>。 KEEP（不要与数据库引导测试并行）。
+- <code>EntityControllerExtendedTest</code>、<code>RouterControllerTest</code> — 修剪重复项后保留。
+- <code>CoreExtensionTest</code> / <code>ConfigurationTest</code> — 验证<code>services.yaml</code>/<code>Configuration</code>中的DI接线；真正有用的合同测试。</p>
+<p><strong>序列化器/异常/DI</strong>
+- <code>FlatNormalizerCoverageTest</code> - 独特的分支（装饰失败回退，<code>__metadata</code>减少，JSON字符串解码 - 记录JSON字符串损坏错误，覆盖报告中的错误11），序列化器/规范化器转发。
+- <code>Normalizer/CircularReferenceHandlerTest</code> — 保留只是因为它仍然记录了<em>可能</em>被未来连线引用的类的契约；请注意，该类今天是孤立类（<code>src/</code>/<code>config/</code> 中没有任何内容引用 <code>App\Core\Serializer\Normalizer\CircularReferenceHandler</code>）。
+- <code>MessageHttpExceptionExtendedTest</code> — 保留为规范文件。
+- <code>Serializer/CircularReferenceHandlerTest</code> — keep（这是实际连接在<code>config/packages/serializer.yaml</code>中的处理程序）。</p>
+<h2 id="_3">删除候选人 — 表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件::方法</th>
+<th>原因</th>
+<th>信心</th>
+<th>涵盖范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Utils/UUIDTest::testV4cHasNoDashes</code></td>
+<td>2 DUPLICATE — 相同的断言 (<code>assertSame(32, strlen(...))</code> + <code>assertStringNotContainsString('-', ...)</code>)</td>
+<td>高</td>
+<td><code>Utils/UUIDExtendedTest::testV4cNoDashes</code></td>
+</tr>
+<tr>
+<td><code>Utils/UUIDTest::testV4ProducesValidUuid</code></td>
+<td>1 覆盖范围追踪 — <code>v4()</code> 然后 <code>is_valid()</code> 由格式/版本位测试暗示</td>
+<td>中等</td>
+<td><code>Utils/UUIDExtendedTest::testV4FormatIsCorrect</code>、<code>testIsValidWithStandardUuid</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectTest::testPluralizeAndSingularize</code></td>
+<td>2 DUPLICATE — 相同的单词，相同的预期字符串</td>
+<td>高</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeRegular</code> + <code>testSingularizeRegular</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectTest::testPluralizeIf</code></td>
+<td>2 DUPLICATE — 相同的输入/输出</td>
+<td>高</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeIfSingular</code> + <code>testPluralizeIfPlural</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectCoverageTest::testSingularizeReturnsInputWhenNoRuleMatches</code></td>
+<td>1 覆盖范围追踪 — 仅访问失败的 <code>return $string</code></td>
+<td>中等</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeAndSingularizeRoundTrip</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectCoverageTest::testPluralizeCatchesAllStringsWithFinalRule</code></td>
+<td>1 覆盖范围追踪 — 记录 <code>pluralize('test')</code> 已执行的包罗万象的 <code>'/$/' =&gt; 's'</code> 规则</td>
+<td>中等</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeRegular</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testFixJsonWithEmptyString</code></td>
+<td>2 重复 — 均为 <code>assertSame('', FixJSON::fixJSON(''))</code></td>
+<td>高</td>
+<td><code>Utils/FixJSONTest::testFixJsonHandlesEmpty</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testGetJsonTypeWithNullLiteral</code></td>
+<td>2 个重复 — 均为 <code>assertFalse(FixJSON::getJSONType('null'))</code></td>
+<td>高</td>
+<td><code>Utils/FixJSONTest::testGetJsonTypeNull</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testGetJsonTypeWithLeadingWhitespaceAndArray</code></td>
+<td>2 DUPLICATE — 相同的分支/断言（<code>'array'</code> 表示 <code>"  \n[..]"</code>）</td>
+<td>高</td>
+<td><code>Utils/FixJSONTest::testGetJsonTypeWithLeadingWhitespaceArray</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testFixJsonAlreadyValid</code></td>
+<td>2 DUPLICATE — 有效的 JSON 传递</td>
+<td>高</td>
+<td><code>Utils/FixJSONTest::testFixJsonPreservesDoubleQuotes</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testGetJsonTypeWithNestedObject</code></td>
+<td>2 DUPLICATE — 与基础 <code>testGetJsonTypeObject</code> 相同的 <code>'object'</code> 分支</td>
+<td>中等</td>
+<td><code>Utils/FixJSONTest::testGetJsonTypeObject</code></td>
+</tr>
+<tr>
+<td><code>Utils/MathExtendedTest::testRandomInRange</code></td>
+<td>2 DUPLICATE — 与基础 <code>testRandomRange</code> 相同的函数/分支（范围 5-10 与 10-20）</td>
+<td>中高</td>
+<td><code>Utils/MathTest::testRandomRange</code></td>
+</tr>
+<tr>
+<td><code>Utils/MathExtendedTest::testAllConstants</code></td>
+<td>1 覆盖率追逐 — <code>assertGreaterThan(&gt;0/&gt;1/&gt;2)</code> 阈值是同义反复；通过错误的常量值</td>
+<td>高</td>
+<td>—（弱）</td>
+</tr>
+<tr>
+<td><code>Utils/FilterDateTimeTest::testGetReturnsDateTimeInstance</code></td>
+<td>5 NEAR-EMPTY / 1 COVERAGE-CHASING — <code>get()</code> 实际上是一个未使用的 util</td>
+<td>上的 <code>new \DateTime($time, $timezone)</code>中等</td>
+<td>—（死实用程序；请参阅验证步骤）</td>
+</tr>
+<tr>
+<td><code>EventListener/ControllerListenerTest::testLogsOnlyForWriteMethods</code></td>
+<td>2 DUPLICATE — POST≡PUT 在同一个 <code>/(PUT|POST)/i</code> 分支</td>
+<td>高</td>
+<td><code>ControllerListenerExtendedTest::testLogsForPutMethod</code> + <code>testSkipsLoggingForGetMethod</code></td>
+</tr>
+<tr>
+<td><code>EventListener/ExceptionInterceptorTest::testProdEnvironmentSetsResponseForApiPath</code></td>
+<td>2 DUPLICATE — 扩展</td>
+<td>中的超集断言中高</td>
+<td><code>ExceptionInterceptorExtendedTest::testResponseJsonStructure</code> + <code>testUsesExceptionCodeAsHttpStatusWhenInRange</code></td>
+</tr>
+<tr>
+<td><code>EventListener/LocaleListenerCoverageTest::testMissingAcceptLanguageLeavesPreSetLocaleIntact</code></td>
+<td>2 DUPLICATE — 相同的 <code>$acceptLanguage === null</code> 提前返回分支；仅初始区域设置不同</td>
+<td>高</td>
+<td><code>LocaleListenerTest::testNoHeaderOrQueryKeepsDefaultLocale</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerTest::testSuccessWith204ReturnsEmptyResponse</code></td>
+<td>2 DUPLICATE — 相同的 204/空内容断言</td>
+<td>高</td>
+<td><code>RestControllerExtendedTest::testSuccessWith204Status</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testSuccessWithPostRequestNoPagination</code></td>
+<td>2 DUPLICATE — 相同的方法名称 + 相同的断言（POST → 无 <code>paginator</code>）</td>
+<td>高</td>
+<td><code>RestControllerExtendedTest::testSuccessWithPostRequestNoPagination</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testDisplayReduceOnArray</code></td>
+<td>2 重复 — 相同的 <code>@display=reduce</code> → <code>{id,__toString}</code> 分支</td>
+<td>高</td>
+<td><code>RestControllerTest::testDisplayReduceProducesIdAndToString</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testDisplayExpressionObject</code></td>
+<td>2 DUPLICATE — 相同的 <code>@display={"val":"entity.getId()"}</code> 表达式分支</td>
+<td>高</td>
+<td><code>RestControllerTest::testExpressionEvaluationInDisplay</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testPaginationOnGetRequest</code></td>
+<td>2 DUPLICATE — 同一页/限制切片断言</td>
+<td>中高</td>
+<td><code>RestControllerTest::testPaginationUsesBuiltInPaginationOnGet</code>、<code>RestControllerExtendedTest::testSuccessWithArrayCollection</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetRequestStackThrowsWhenNotInjected</code></td>
+<td>3 实现细节 — 断言受保护 getter 的异常文本</td>
+<td>中等</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetSerializerThrowsWhenNotInjected</code></td>
+<td>3 实施细节 — 相同</td>
+<td>中等</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetTranslatorThrowsWhenNotInjected</code></td>
+<td>3 实施细节 — 相同</td>
+<td>中等</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetServiceThrowsWhenServicePropertyMissing</code></td>
+<td>3 实施细节 — 相同</td>
+<td>中等</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest::testRetrieveActionHandlesSlashReplacementInEntityName</code></td>
+<td>2 DUPLICATE — 相同的 <code>str_replace('/', '\\', ...)</code> 分支；扩展版本更严格（断言 <code>getClassMetadata</code> arg）</td>
+<td>高</td>
+<td><code>EntityControllerExtendedTest::testRetrieveActionReplacesAllSlashesInEntityName</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest::testRetrieveActionReturnsAssociationMappings</code></td>
+<td>2 DUPLICATE — 4 类型表的 ManyToOne/OneToOne 子集</td>
+<td>中高</td>
+<td><code>EntityControllerExtendedTest::testRetrieveActionWithAllAssociationTypes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest::testListActionReturnsEmptyArrayWhenNoEntities</code></td>
+<td>2 DUPLICATE — 相同的空元数据模拟 + <code>listAction()</code> 路径</td>
+<td>中等</td>
+<td><code>EntityControllerExtendedTest::testSuccessResponseStructureForListAction</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithRoutesHavingDifferentMethods</code></td>
+<td>1 覆盖范围追逐 — <code>listAction()</code> 是 <code>success($router-&gt;getRouteCollection()-&gt;all())</code>；不同的路线 <code>methods</code> 运行零新代码</td>
+<td>中高</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithRoutesHavingDefaults</code></td>
+<td>1 覆盖范围追逐 — 相同但不同的默认设置</td>
+<td>中高</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithComplexRouteRequirements</code></td>
+<td>1 覆盖范围追逐——相同但不同的要求</td>
+<td>中高</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithManyRoutes</code></td>
+<td>1 COVERAGE-CHASING — 具有 50 条路线的相同代码路径；断言 Symfony <code>RouteCollection</code> 行为，而不是控制器</td>
+<td>中高</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Serializer/SerializerContextFactoryTest::testCreateBuildsExpectedContext</code></td>
+<td>1 COVERAGE-CHASING - 输入等于预期输出，因此即使 <code>create()</code> 是返回 <code>$options</code><strong> 的无操作，它也</strong>通过；从不执行强制转换/默认逻辑</td>
+<td>高</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerExtendedTest::testSetSerializerDoesNotThrow</code></td>
+<td>5 近乎空 — 仅 <code>assertTrue(true)</code></td>
+<td>高</td>
+<td><code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code></td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerExtendedTest::testSetNormalizerDoesNotThrow</code></td>
+<td>5 近乎空 — 仅 <code>assertTrue(true)</code></td>
+<td>高</td>
+<td><code>FlatNormalizerCoverageTest::testSetNormalizerForwardsToNormalizerAwareDecorated</code></td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionTest::testMessageErrorHttpExceptionDefaults</code></td>
+<td>2 重复 — 403 + message + redirectUrl 均在 Extended</td>
+<td>中断言高</td>
+<td><code>MessageHttpExceptionExtendedTest::testMessageErrorHttpExceptionStatusCode</code> + <code>testMessageErrorHttpExceptionHeadersWithRedirectUrl</code></td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionTest::testMessageSuccessHttpExceptionDefaults</code></td>
+<td>2 DUPLICATE — 200 + message + redirectUrl 均在 Extended</td>
+<td>中断言高</td>
+<td><code>MessageHttpExceptionExtendedTest::testMessageSuccessHttpExceptionStatusCode</code> + <code>testMessageSuccessHttpExceptionHeadersWithRedirectUrl</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>合并候选（将 <code>Extended</code>/<code>Coverage</code> 文件合并回其库中，仅保留上面列出的非重复案例）：</p>
+<ol>
+<li><code>FixJSONTest</code> + <code>FixJSONExtendedTest</code> → 一个<code>FixJSONTest</code>。</li>
+<li><code>ArrayCommonTest</code> + <code>ArrayCommonExtendedTest</code> → 一个<code>ArrayCommonTest</code>。</li>
+<li><code>MathTest</code> + <code>MathExtendedTest</code> + <code>MathCoverageTest</code> → 一个 <code>MathTest</code> （保留三个跳过的 bug 文档）。</li>
+<li><code>StringCaseTest</code> + <code>StringCaseExtendedTest</code> → 一个<code>StringCaseTest</code>。</li>
+<li><code>UUIDTest</code> + <code>UUIDExtendedTest</code> → 一个<code>UUIDExtendedTest</code>（如果需要，保留<code>testV4ProducesValidUuid</code>）。</li>
+<li><code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> + <code>RestControllerCoverageTest</code> + <code>RestControllerCoverage2Test</code> → 一个 <code>RestControllerTest</code> （5 个文件的分割纯粹是战役残留）。</li>
+<li><code>EntityControllerTest</code> + <code>EntityControllerExtendedTest</code> → 一个<code>EntityControllerTest</code>。</li>
+<li><code>RouterControllerTest</code> + <code>RouterControllerExtendedTest</code> → 1 个<code>RouterControllerTest</code>（仅保留空/非空信封盒）。</li>
+<li><code>MessageHttpExceptionTest</code> + <code>MessageHttpExceptionExtendedTest</code> → 一个文件（扩展）。</li>
+<li><code>ControllerListenerTest</code> + <code>ControllerListenerExtendedTest</code> → 一个文件（扩展）。</li>
+<li><code>ExceptionInterceptorTest</code> + <code>ExceptionInterceptorExtendedTest</code> → 一个文件（扩展）。</li>
+<li><code>InflectExtendedTest</code> + <code>InflectCoverageTest</code> → 删除库后的一个文件。</li>
+<li><code>OpenApiEnricherListenerCoverageTest</code> — 将 <code>testJsonContentWithoutPathsReturnsEarly</code> + <code>testJsonArrayContentWithoutPathsReturnsEarly</code> 合二为一。</li>
+</ol>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>每次删除后运行（每个 TEST_STRATEGY 的 PHP 8.4+ 运行时）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Core/Utils<span class="w"> </span>tests/Core/EventListener<span class="w"> </span>tests/Core/Controller<span class="w"> </span>tests/Core/Serializer<span class="w"> </span>tests/Core/Exception<span class="w"> </span>tests/Core/DependencyInjection
+</code></pre></div>
+<p>然后是全门：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>composer<span class="w"> </span>phpstan
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>composer<span class="w"> </span>rector:types:check
+</code></pre></div>
+<p>覆盖范围警告（批量删除之前很重要）：</p>
+<ul>
+<li><strong>安全删除</strong>（没有覆盖率回归，因为重复项会覆盖行）：所有 <code>2 DUPLICATE</code> 行（UUID v4c、Inflect、FixJSON、RestController 204/post/reduce/expr、EntityController斜杠/assoc、MessageHttpException、LocaleListener Missing-header、ControllerListener、ExceptionInterceptor）。</li>
+<li><strong>覆盖范围敏感的删除</strong> — 删除这些会降低仅这些测试所触及的线路的覆盖范围，并且 90% 的线路门可能会触发：</li>
+<li><code>SerializerContextFactoryTest</code> — <code>SerializerContextFactory</code>仅被<code>services.yaml</code> +此测试引用；删除它会发现该类。</li>
+<li><code>FilterDateTimeTest</code> — <code>FilterDateTime::get()</code> 仅在此处执行。</li>
+<li>Dead utils（<code>Math</code>、<code>StringCase</code>、<code>Location</code>、<code>RsaClient</code>、<code>Utils\ArrayCollection</code>、<code>Serializer\Normalizer\CircularReferenceHandler</code>、<code>ObjectCallback</code>）除了测试之外从任何地方的 <code>src/</code> 引用。仅在 <code>src/</code> 清理的同时进行修剪（添加 <code>@codeCoverageIgnore</code> 或删除死类），或者在维护者签字后接受覆盖率下降。</li>
+<li>根据 <code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code> / <code>testSetNormalizerForwardsToNormalizerAwareDecorated</code> 验证两个 <code>FlatNormalizerExtendedTest</code> <code>assertTrue(true)</code> 删除（它们断言实际的转发合同并保持 <code>setSerializer</code>/<code>setNormalizer</code> 被覆盖）。</li>
+<li>不要与其他数据库引导集成测试并行运行<code>RestControllerPaginationIntegrationTest</code>（<code>var/test.db</code>模式拆卸竞赛）。</li>
+<li>断言已记录的 <code>src/</code> 错误（位置 L-2、Math M-1/M-2、OpenApi BUG-7）的跳过测试必须保留 — 它们是有意保留的。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

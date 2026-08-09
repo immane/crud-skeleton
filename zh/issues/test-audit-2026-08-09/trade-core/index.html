@@ -1,0 +1,2097 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/test-audit-2026-08-09/trade-core/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09） - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#traderepo2026-08-09" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产验证概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试策略
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统演练和测试接缝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    业务不变量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构测试映射
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    失效模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    发布验证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    人工智能开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保留
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除候选者
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证步骤
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="traderepo2026-08-09">Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09）<a class="headerlink" href="#traderepo2026-08-09" title="Permanent link">&para;</a></h1>
+<p><code>tests/Trade/Entity</code>、<code>tests/Trade/Service</code>、<code>tests/Trade/Service/Pricing</code>、的只读审计
+<code>tests/Trade/Pricing</code>、<code>tests/Trade/Workflow</code>、<code>tests/Trade/Repository</code>、
+<code>tests/Trade/Command</code>和<code>tests/Trade/EventListener</code>。交叉阅读反对
+<code>src/Trade/</code> 和集成套件 (<code>tests/Trade/Integration/OrderWorkflowApiTest.php</code>,
+<code>TradeRepoFullTest.php</code>、<code>TradeRepositoryIntegrationTest.php</code>）。</p>
+<p>所有结果均假设标记为删除的文件在确认为零后被删除
+<code>src/Trade/</code> 的覆盖范围增量（请参阅验证步骤）。跳过已知记录的测试
+bug (<code>docs/issues/coverage-2026-08-09/README.md</code>) 被保留。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>测试/贸易/实体/OrderTest.php</td>
+<td>18</td>
+<td>18 KEEP 核心（构造函数默认值、货币/货币、集合、生命周期）；删除 8 个简单的访问器/常量测试</td>
+</tr>
+<tr>
+<td>测试/贸易/实体/OrderItemTest.php</td>
+<td>12</td>
+<td>12保留快照/价格/数量逻辑；删除 ~4 个简单的二传手/流畅度测试 + 1 个重复</td>
+</tr>
+<tr>
+<td>测试/贸易/实体/ProductTest.php</td>
+<td>11</td>
+<td>11 KEEP状态验证+收集/生命周期；删除 ~5 个简单的访问器测试</td>
+</tr>
+<tr>
+<td>测试/贸易/实体/SpecificationTest.php</td>
+<td>11</td>
+<td>11保持价格/状态验证；删除 ~6 个简单的访问器测试</td>
+</tr>
+<tr>
+<td>测试/贸易/实体/TradeOutboxMessageTest.php</td>
+<td>5</td>
+<td>删除候选者：4/5 普通访问器；保持 availableAt==occurredAt 不变</td>
+</tr>
+<tr>
+<td>测试/贸易/服务/OrderServiceTest.php</td>
+<td>13</td>
+<td>KEEP（核心定价管道+支付/退款/履行行为）</td>
+</tr>
+<tr>
+<td>测试/贸易/服务/OrderServicePaymentsTest.php</td>
+<td>28</td>
+<td>28 KEEP付款/退款/创建订单编排+商店提交；删除 ~6 次防守/impl 测试</td>
+</tr>
+<tr>
+<td>测试/贸易/服务/定价/PriceCalculationResultTest.php</td>
+<td>5</td>
+<td>MERGE 候选者（简单的 DTO，由 PricingTest 复制）</td>
+</tr>
+<tr>
+<td>测试/贸易/定价/PricingTest.php</td>
+<td>17</td>
+<td>17保留计算器/管道逻辑；删除 ~5 个琐碎的上下文/结果测试</td>
+</tr>
+<tr>
+<td>测试/贸易/工作流程/OrderWorkflowStateMachineTest.php</td>
+<td>26</td>
+<td>26 KEEP 转移矩阵 + 保护缺失探针；删除 ~13 个重复的链/时间戳测试</td>
+</tr>
+<tr>
+<td>测试/贸易/存储库/ProductRepositoryTest.php</td>
+<td>2</td>
+<td>删除文件（简单的 <code>find()</code> 委托；集成中涵盖了真正的存储库逻辑）</td>
+</tr>
+<tr>
+<td>测试/贸易/存储库/SpecificationRepositoryTest.php</td>
+<td>4</td>
+<td>KEEP <code>findByIdForUpdate</code>（锁定SQL）；删除 <code>findById</code> 平凡对</td>
+</tr>
+<tr>
+<td>测试/贸易/存储库/TradeOutboxMessageRepositoryTest.php</td>
+<td>13</td>
+<td>KEEP（真实数据库发件箱语义 + 命令；2 个跳过的错误文档测试）</td>
+</tr>
+<tr>
+<td>测试/贸易/命令/PublishOutb​​oxCommandTest.php</td>
+<td>8</td>
+<td>合并/重复候选者与 TradeOutboxMessageRepositoryTest</td>
+</tr>
+<tr>
+<td>测试/Trade/EventListener/OrderWorkflowListenerTest.php</td>
+<td>15</td>
+<td>15 KEEP 发件箱记录分支测试；时间戳测试重复状态机文件</td>
+</tr>
+<tr>
+<td>测试/Trade/EventListener/OrderInvoiceListenerTest.php</td>
+<td>21</td>
+<td>21 KEEP（核心发票→订单传播；跳过付款人错误测试）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>定价和快照行为</strong> - <code>OrderServiceTest::testPricingCalculations</code>（5-case DP），
+  <code>testCalculatePricesDelegatesToPipeline/WithCustomCurrency/WithEmptyItems</code>；
+  <code>OrderItemTest::testPrePersist*</code>（快照人口+价格计算）；
+  <code>PricingTest</code> 计算器测试 (<code>BasePriceCalculator</code> not-found/deleted/inactive/
+  产品不可用抛出，默认数量，<code>QuantityCalculator</code>，<code>TotalAggregator</code>，
+  <code>PipelineExecutionOrder</code>、<code>PipelineHandlesMultipleItemsWithDifferentPrices</code>)。</li>
+<li><strong>货币流动</strong> — <code>OrderServiceTest::testPayTransfersFromUserWalletAndMarksPayment</code>，
+  <code>testRefundTransfersToUserWalletAndMarksRefund</code>，状态守卫
+  （<code>testPayRejectsNonConfirmedOrder</code>、<code>testRefundRejectsNonCompletedOrder</code>、
+  <code>testFulfillRejectsNonPaidOrder</code>), <code>testFulfillStoresShippingData</code>。</li>
+<li><strong>支付编排</strong> — <code>OrderServicePaymentsTest</code>: <code>createOrder</code> 商店提交/发件箱
+  路径，<code>createPayment</code>（重用/新发票），<code>refundPayment</code>（剩余金额），
+  <code>cancel</code> 变体，以及 <code>testCreatePaymentReusesInvoiceRegardlessOfItsStatus</code>
+  （今天通过，引脚已知 Bug #1）。 <code>testCreatePaymentCreatesFreshInvoiceWhenExistingInvoiceIsNotPayable</code>（跳过）= 保留。</li>
+<li><strong>工作流程矩阵 + 警卫发现</strong> — <code>OrderWorkflowStateMachineTest</code>：
+  <code>testEnabledTransitionsMatchWorkflowConfig</code>（所有 11 个州），
+  <code>testApplyingValidTransitionMovesToTargetState</code> (15), <code>testApplyingInvalidTransitionThrowsAndLeavesStateUnchanged</code>
+  (~40)，未知转换/<code>can()</code> 探针，<code>testNoTransitionInWorkflowConfigDeclaresAGuard</code>
+  和三个 <code>testWorkflowLayerAllows*</code> 探针（文档 Bug #68：workflow.yaml 中没有防护），
+  <code>testOrderEntityExposesMarkingViaGetStatusSetStatus</code>。</li>
+<li><strong>发件箱存储库（真实数据库）</strong> — <code>TradeOutboxMessageRepositoryTest</code>：<code>findUnpublished</code>
+  （过滤/排序/限制），<code>claim</code>（双重声明，已发布，未来<code>availableAt</code>，未知id），
+  <code>defer</code>（attempts/lastError/availableAt，累积，已发布），这两个
+  <code>testPublishOutboxCommand*AgainstRealDatabase</code>命令测试，两个都跳过
+  <code>markTestSkipped</code> bug-doc 测试（Bug #1 没有最大尝试次数，Bug #2 元数据未清除）。</li>
+<li><strong>听众</strong> — <code>OrderInvoiceListenerTest</code>（全部 21 个，包括 <code>testPaidIgnoresInvoicePaidByADifferentPayer</code>
+  跳过 Bug #22、金额/货币不匹配防护、退款/取消/传播失败）；
+  <code>OrderWorkflowListenerTest::testCancelTransitionRecordsOutboxMessageWhenStoreMetadataPresent</code>
+  以及三个存储元数据跳过变体 + <code>testNonCancelTransitionDoesNotRecordOutboxEvenWithStoreMetadata</code>
+  （独特的发件箱记录分支）。</li>
+<li><strong>实体域规则</strong> — <code>OrderTest::testCurrencyIsUpperCase</code> (strtoupper),
+  <code>testOrderItemRelationships</code>/<code>testAddOrderItemDoesNotDuplicate</code>，
+  <code>testPrePersist</code>/<code>testTouch</code>； <code>ProductTest::testStatusValidation</code>,
+  <code>testSpecificationRelationships</code>/<code>testAddSpecificationDoesNotDuplicate</code>，
+  <code>testPrePersistInitializesCreatedAtWhenConstructorWasSkipped</code>/<code>KeepsCreatedAtWhenAlreadySet</code>；
+  <code>SpecificationTest::testPriceValidation</code>/<code>testStatusValidation</code>；
+  <code>OrderItemTest::testQuantityValidation</code>、<code>testCostAndProfit</code>。</li>
+<li><strong>存储库锁定</strong> — <code>SpecificationRepositoryTest::testFindByIdForUpdateReturnsSpecification</code>
+  和 <code>ReturnsNullForUnknownId</code> （悲观写入 SQL 是真实的、数据库支持的行为）。</li>
+</ul>
+<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>原因代码：1=覆盖范围追踪、2=重复、3=实施详细信息、4=冗余回归、5=接近空。</p>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TradeOutboxMessageTest::testGetIdReturnsInjectedId</td>
+<td>1 (reflection on trivial <code>getId()</code>)</td>
+<td>High</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TradeOutboxMessageTest::testMarkPublishedCanBeCalledTwice</td>
+<td>1 (idempotency of a one-line setter, no logic)</td>
+<td>High</td>
+<td>TradeOutboxMessageTest::testMarkPublishedSetsPublishedAt</td>
+</tr>
+<tr>
+<td>TradeOutboxMessageTest::testConstructorInitializesFields</td>
+<td>1 (pure constructor/accessor round-trip)</td>
+<td>Medium</td>
+<td>TradeOutboxMessageTest::testConstructorMakesAvailableAtEqualToOccurredAt</td>
+</tr>
+<tr>
+<td>TradeOutboxMessageTest::testMarkPublishedSetsPublishedAt</td>
+<td>2</td>
+<td>Medium</td>
+<td>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase (asserts <code>getPublishedAt()</code> non-null)</td>
+</tr>
+<tr>
+<td>OrderTest::testStatusConstants</td>
+<td>1 (tautological <code>CONST === 'draft'</code> etc., no behavior)</td>
+<td>High</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderTest::testNotes / testMetadata / testPaymentMethod / testTrackingNumber / testShippingAddress / testRefundReason</td>
+<td>1 (pure setter/getter round-trips)</td>
+<td>Medium</td>
+<td>OrderTest::testConstructorInitializesCoreFields (null defaults)</td>
+</tr>
+<tr>
+<td>OrderTest::testTimestamps / testNewTimestamps</td>
+<td>1 (trivial DateTime set/reset round-trips)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderTest::testToString</td>
+<td>1 (formatting only, no branch)</td>
+<td>Low</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderItemTest::testQuantityCannotBeNegative</td>
+<td>2 (same guard as sibling)</td>
+<td>High</td>
+<td>OrderItemTest::testQuantityValidation (both assert <code>InvalidArgumentException</code> on <code>setQuantity</code> &lt; 1)</td>
+</tr>
+<tr>
+<td>OrderItemTest::testSetProfitDirectly / testMetadata</td>
+<td>1 (trivial accessors)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderItemTest::testSettersAreFluent</td>
+<td>3 (fluent-chain implementation detail)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderItemTest::testToString</td>
+<td>1</td>
+<td>Low</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ProductTest::testSettersAreFluentAndTouchTimestamp</td>
+<td>3 (fluency + incidental touch)</td>
+<td>Medium</td>
+<td>ProductTest::testConstructorInitializesCoreFields</td>
+</tr>
+<tr>
+<td>ProductTest::testDescriptionCanBeNull / testIsDeleted / testMetadata</td>
+<td>1 (trivial accessors)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ProductTest::testToString</td>
+<td>1</td>
+<td>Low</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SpecificationTest::testSort / testIsDeleted / testProductAssociation / testTouch</td>
+<td>1 (trivial accessors; <code>touch</code> covered by Order/Product tests)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SpecificationTest::testSettersAreFluent</td>
+<td>3</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SpecificationTest::testToString / testToStringWithNullProduct</td>
+<td>1</td>
+<td>Low</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PriceCalculationResultTest (whole file: constructor, meta default, 3× fromContext)</td>
+<td>2</td>
+<td>Medium</td>
+<td>PricingTest::testResultConstructor, PricingTest::testResultFromContext; DTO has no logic (src/Trade/Service/Pricing/PriceCalculationResult.php is a value object)</td>
+</tr>
+<tr>
+<td>PricingTest::testContextInitializesCorrectly / testContextDefaultCurrency / testContextMalleableState</td>
+<td>1 (plain public-property DTO init)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PricingTest::testResultFromContext / testResultConstructor</td>
+<td>2</td>
+<td>Medium</td>
+<td>PriceCalculationResultTest::testFromContextCopiesMeta + testConstructorInitializesFields</td>
+</tr>
+<tr>
+<td>OrderServicePaymentsTest::testPayRejectsUserWithoutPersistedId / testPayRejectsWalletWithoutPersistedId / testRefundRejectsUserWithoutPersistedId / testRefundRejectsWalletWithoutPersistedId</td>
+<td>1 (defensive "no persisted ID" guards, unreachable via normal create→persist flow)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderServicePaymentsTest::testCalculatePricesAcceptsTraversableCalculators</td>
+<td>3 (<code>ArrayIterator</code> vs array is an impl detail of <code>getSortedCalculators()</code>)</td>
+<td>Medium</td>
+<td>OrderServiceTest::testCalculatePricesWithEmptyItems</td>
+</tr>
+<tr>
+<td>OrderServicePaymentsTest::testCreateOrderWithStoreContextThrowsWhenWorkflowMissing / WhenOutboxMissing</td>
+<td>1 (defensive wiring guards)</td>
+<td>Low</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testHappyPathChainDraftToRefunded</td>
+<td>2</td>
+<td>Medium</td>
+<td>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions (same chain, asserts statuses + timestamps E2E)</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testStoreBranchChainDraftToCancelledViaReject</td>
+<td>2</td>
+<td>Medium</td>
+<td>OrderWorkflowApiTest::testStoreBranchRejectThenCancelViaDoTransitions</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testStoreBranchChainAwaitingAcceptToConfirmed</td>
+<td>2</td>
+<td>Medium</td>
+<td>OrderWorkflowApiTest::testStoreBranchAcceptThenConfirmViaDoTransitions</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testDuplicateSubmitTransitionIsRejected</td>
+<td>2</td>
+<td>Medium</td>
+<td>OrderWorkflowApiTest::testDuplicateSubmitViaDoIsRejectedAndStateUnchanged</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testCancelIsRejectedFromPaid</td>
+<td>2</td>
+<td>Medium</td>
+<td>OrderWorkflowApiTest::testCancelIsRejectedAfterPaid</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testApplyingUnknownTransitionThrowsUndefinedTransitionException</td>
+<td>2</td>
+<td>Low</td>
+<td>OrderWorkflowApiTest::testUnknownTransitionViaDoIsRejected</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testPayTransitionSetsPaidAtWhenNull</td>
+<td>2</td>
+<td>High</td>
+<td>OrderWorkflowListenerTest::testPayTransitionSetsPaidAt</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testPayTransitionPreservesExistingPaidAt</td>
+<td>2 (identical name/assertion)</td>
+<td>High</td>
+<td>OrderWorkflowListenerTest::testPayTransitionPreservesExistingPaidAt</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testFulfillTransitionSetsFulfilledAtWhenNull</td>
+<td>2</td>
+<td>High</td>
+<td>OrderWorkflowListenerTest::testFulfillTransitionSetsFulfilledAt</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testCompleteTransitionSetsCompletedAt</td>
+<td>2</td>
+<td>High</td>
+<td>OrderWorkflowListenerTest::testCompleteTransitionSetsCompletedAt</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testCancelTransitionSetsCancelledAt</td>
+<td>2</td>
+<td>High</td>
+<td>OrderWorkflowListenerTest::testCancelTransitionSetsCancelledAt</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testRefundTransitionSetsRefundedAtWhenNull</td>
+<td>2</td>
+<td>High</td>
+<td>OrderWorkflowListenerTest::testRefundTransitionSetsRefundedAt</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testSubmitConfirmAndStoreTransitionsDoNotSetTimestamps</td>
+<td>2</td>
+<td>Medium</td>
+<td>OrderWorkflowListenerTest::testSubmitTransitionDoesNotThrow + testNonCancelTransitionDoesNotRecordOutboxEvenWithStoreMetadata</td>
+</tr>
+<tr>
+<td>OrderWorkflowStateMachineTest::testStoreRejectDoesNotSetTimestamp</td>
+<td>2</td>
+<td>Low</td>
+<td>OrderWorkflowListenerTest::testSubmitTransitionDoesNotThrow (same no-op branch)</td>
+</tr>
+<tr>
+<td>ProductRepositoryTest (whole file)</td>
+<td>1+3 (<code>findById</code> is one-line <code>find()</code> delegation; null case trivial)</td>
+<td>Medium</td>
+<td>TradeRepoFullTest::testProductRepoFindNotDeletedAndFindActive, TradeRepositoryIntegrationTest::testProductRepositoryFindNotDeleted/FindDeleted — the repo's actual logic (<code>findNotDeleted</code>/<code>findActive</code>) is already covered there</td>
+</tr>
+<tr>
+<td>SpecificationRepositoryTest::testFindByIdReturnsSpecification / testFindByIdReturnsNullForUnknownId</td>
+<td>1 (trivial <code>find()</code> delegation)</td>
+<td>Medium</td>
+<td>TradeRepoFullTest::testSpecRepoFindByProductAndFindActiveByProduct</td>
+</tr>
+<tr>
+<td>PublishOutboxCommandTest::testExecuteDefersWhenDispatchThrows</td>
+<td>2</td>
+<td>High</td>
+<td>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandDefersOnDispatchFailureAgainstRealDatabase (same failure→defer, asserted on persisted row)</td>
+</tr>
+<tr>
+<td>PublishOutboxCommandTest::testExecuteDefersUnsupportedTopic</td>
+<td>2</td>
+<td>Medium</td>
+<td>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase (unsupported topic → defer + lastError, persisted)</td>
+</tr>
+<tr>
+<td>PublishOutboxCommandTest::testExecutePublishesCancelledMessage</td>
+<td>2</td>
+<td>Medium</td>
+<td>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase (cancelled dispatch + publishedAt)</td>
+</tr>
+<tr>
+<td>PublishOutboxCommandTest::testExecuteHandlesMixedMessagesInSingleRun</td>
+<td>2</td>
+<td>Medium</td>
+<td>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase (created+cancelled+unsupported in one run)</td>
+</tr>
+<tr>
+<td>PublishOutboxCommandTest::testExecutePublishesNothingWhenNoMessages</td>
+<td>1 (mock-only empty path)</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PublishOutboxCommandTest::testExecuteSkipsMessageWhenClaimFails / testExecuteSkipsMessageWhenIdIsNull</td>
+<td>1 (defensive branches)</td>
+<td>Medium</td>
+<td>TradeOutboxMessageRepositoryTest::testClaim* (claim semantics already covered on real DB)</td>
+</tr>
+</tbody>
+</table>
+<p>关于 <code>OrderWorkflowStateMachineTest</code> 时间戳测试的注意事项（第 27-36 行）：可以保留任一文件，
+但时间戳行为在 <code>OrderWorkflowListenerTest</code> 中断言是相同的。推荐：
+保留<code>OrderWorkflowStateMachineTest</code>的转换矩阵/保护探针并删除其Section-5
+时间戳重复；接线仍然由 happy-path 链验证。保留发件箱录音
+在 <code>OrderWorkflowListenerTest</code> 中进行测试（唯一）。不要删除两个副本。</p>
+<p>注意 <code>PublishOutboxCommandTest::testExecutePublishesCreatedMessageWithFullEnvelope</code>：它断言
+仅集成测试的完整信封（eventId/type/version/occurredAt/correlationId）
+部分检查；在删除之前，将这些信封字段断言折叠到
+<code>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase</code>。</p>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong><code>OrderServicePaymentsTest.php</code> → <code>OrderServiceTest.php</code></strong> — 均测试 <code>src/Trade/Service/OrderService.php</code>
+   使用相同的基于反射的构造助手。这次分裂是竞选人为的（文件
+   标头甚至显示“OrderServiceTest 未执行的分支”）。合并为一个文件。</li>
+<li><strong><code>PriceCalculationResultTest.php</code> → <code>tests/Trade/Pricing/PricingTest.php</code></strong> — 结果DTO
+   是一个值对象（<code>PriceCalculationResult::fromContext</code>是一个普通副本）；保留元复制
+   断言，删除重复的构造函数断言。</li>
+<li><strong><code>PublishOutboxCommandTest.php</code> → <code>TradeOutboxMessageRepositoryTest.php</code></strong> — 仅模拟命令
+   测试重复真实数据库命令测试；将信封字段断言折叠到积分中
+   测试并删除模拟文件。</li>
+<li><strong><code>OrderWorkflowStateMachineTest</code> 第 5 节时间戳测试 ↔ <code>OrderWorkflowListenerTest</code></strong> —
+   保留一层以防止时间戳副作用（参见上面的注释）。</li>
+</ol>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>从存储库根运行。 <code>src/</code>和<code>tests/</code>为只读；仅写入报告文件。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">PHP</span><span class="o">=</span>/opt/homebrew/opt/php@8.5/bin/php
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># 1. Baseline: full suite + Trade coverage BEFORE any deletion</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PHP</span><span class="s2">&quot;</span><span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-html<span class="w"> </span>var/coverage-before-trade-audit
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># 2. Record Trade-only baseline numbers</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s2">&quot;</span><span class="nv">$PHP</span><span class="s2">&quot;</span><span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade<span class="w"> </span>&gt;<span class="w"> </span>/tmp/trade-suite-before.txt
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># 3. AFTER deleting the flagged methods/files, re-run the same two commands.</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1">#    Gate: tests/Trade/ 100% green; trade assertion count drops; no failure appears.</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1">#    Gate: src/Trade coverage is ZERO-delta vs baseline (the flagged tests must not be</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">#    the only coverers of any src/Trade line):</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PHP</span><span class="s2">&quot;</span><span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-filter<span class="w"> </span>src/Trade<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span>--coverage-html<span class="w"> </span>var/coverage-after-trade-audit
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># 4. Per-file sanity for the duplicates cited as HIGH confidence:</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s2">&quot;</span><span class="nv">$PHP</span><span class="s2">&quot;</span><span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Workflow<span class="w"> </span>tests/Trade/EventListener<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span>tests/Trade/Command<span class="w"> </span>tests/Trade/Repository<span class="w"> </span>tests/Trade/Entity<span class="w"> </span>tests/Trade/Service<span class="w"> </span>tests/Trade/Pricing
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># 5. Full serial suite on the CI database flavour (PostgreSQL) to prove no ordering leak:</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s2">&quot;</span><span class="nv">$PHP</span><span class="s2">&quot;</span><span class="w"> </span>./vendor/bin/phpunit
+</code></pre></div>
+<p>比较 <code>var/coverage-before-trade-audit</code> 与 <code>var/coverage-after-trade-audit</code> 的 <code>src/Trade</code>
+（期望相同的行/方法号）。如果 <code>src/Trade</code> 线路失去覆盖范围，则该测试不是
+多余的——恢复它。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

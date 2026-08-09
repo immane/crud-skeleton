@@ -1,0 +1,2193 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/test-audit-2026-08-09/trade-controllers-integration/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Trade (controllers/integration/handlers) test audit (2026-08-09) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#trade-controllersintegrationhandlers-test-audit-2026-08-09" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Trade (controllers/integration/handlers) test audit (2026-08-09)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary-file-tests-verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary — File | Tests | Verdict
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-candidates-filemethod-reason-confidence-covered-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DELETE CANDIDATES — File::method | Reason | Confidence | Covered by
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DELETE CANDIDATES — File::method | Reason | Confidence | Covered by">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#teststradeintegrationtradeapiintegrationtestphp-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/Trade/Integration/TradeApiIntegrationTest.php (26)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teststradeintegrationtraderepositoryintegrationtestphp-4-whole-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/Trade/Integration/TradeRepositoryIntegrationTest.php (4 — whole file)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teststradeintegrationtradepaymentintegrationtestphp-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/Trade/Integration/TradePaymentIntegrationTest.php (1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teststradeintegrationtradeordercancelwithinvoiceintegrationtestphp-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/Trade/Integration/TradeOrderCancelWithInvoiceIntegrationTest.php (2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teststradecontrollermanageordercontrollertestphp-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/Trade/Controller/Manage/OrderControllerTest.php (6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teststradecontrollermanageorderitemcontrollertestphp-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tests/Trade/Controller/Manage/OrderItemControllerTest.php (1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-suggestions-note-merging-reduces-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERGE SUGGESTIONS (note: merging reduces runtime)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="trade-controllersintegrationhandlers-test-audit-2026-08-09">Trade (controllers/integration/handlers) test audit (2026-08-09)<a class="headerlink" href="#trade-controllersintegrationhandlers-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<p>Read-only audit of <code>tests/Trade/Controller/</code>, <code>tests/Trade/Integration/</code>, <code>tests/Trade/MessageHandler/</code>
+(13 test files + 1 support fake, 191 test methods). Goal: identify UNNECESSARY / REDUNDANT tests
+that are candidates for later deletion. Nothing under <code>src/</code> or <code>tests/</code> was modified.</p>
+<p>Context used: <code>TEST_STRATEGY.md</code> ("one behaviour should normally have one primary layer",
+"Do not add controller tests merely to raise line coverage"), <code>BUSINESS_INVARIANTS.md</code>
+regression rule (assert public or persisted outcome), and the 2026-08-09 coverage campaign
+reports (skipped tests that document bugs are KEEP, but the same bug asserted in several
+places is redundant).</p>
+<h2 id="summary-file-tests-verdict">Summary — File | Tests | Verdict<a class="headerlink" href="#summary-file-tests-verdict" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Trade/Integration/TradeApiIntegrationTest.php</code></td>
+<td>76</td>
+<td><strong>REDUCE</strong> — 26 redundant workflow/cancel/pay/fulfill/refund/transitions/todo tests duplicate <code>OrderWorkflowApiTest</code> (and itself); keep only unique endpoint coverage</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/OrderWorkflowApiTest.php</code></td>
+<td>33</td>
+<td><strong>KEEP</strong> — canonical workflow HTTP coverage (canonical full flow, data-driven cancel/transitions/todo); 1 redundant skipped tamper twin</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/TradePaymentIntegrationTest.php</code></td>
+<td>4</td>
+<td><strong>REDUCE (1)</strong> — <code>testAppOrderTransitionFailures</code> fully duplicated; app submit/confirm re-asserted (merge)</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/TradeOrderCancelWithInvoiceIntegrationTest.php</code></td>
+<td>4</td>
+<td><strong>KEEP</strong> — order↔invoice cancel propagation is unique; 2 marginal listener-path tests (low/med candidates)</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/TradeRepoFullTest.php</code></td>
+<td>4</td>
+<td><strong>KEEP</strong> — surviving repository-coverage file (strongest assertions)</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/TradeRepositoryIntegrationTest.php</code></td>
+<td>4</td>
+<td><strong>DELETE FILE</strong> — every method duplicated by <code>TradeRepoFullTest</code> with stronger assertions</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Integration/TradeStoreOrderEventTest.php</code></td>
+<td>1</td>
+<td><strong>KEEP</strong> — unique outbox lineId invariant</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/App/OrderControllerTest.php</code></td>
+<td>16</td>
+<td><strong>KEEP</strong> — fast unit branches integration cannot reach; skipped bug test (Bug 1) kept</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/Manage/OrderControllerTest.php</code></td>
+<td>26</td>
+<td><strong>REDUCE</strong> — 9× near-identical 404 unit tests (merge), 5 guard-message duplicates of integration, 1 redundant skipped tamper twin</td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/Manage/OrderItemControllerTest.php</code></td>
+<td>4</td>
+<td><strong>REDUCE (1)</strong> — <code>testRepositoryFindByOrder</code> is a repository test duplicated by <code>TradeRepoFullTest</code></td>
+</tr>
+<tr>
+<td><code>tests/Trade/Controller/Manage/SpecificationAllControllerTest.php</code></td>
+<td>4</td>
+<td><strong>KEEP</strong> — only coverage of the standalone <code>/manage/specifications</code> resource</td>
+</tr>
+<tr>
+<td><code>tests/Trade/MessageHandler/StoreOrderAcceptedHandlerTest.php</code></td>
+<td>8</td>
+<td><strong>KEEP</strong> — cheap unit tests for two distinct handlers</td>
+</tr>
+<tr>
+<td><code>tests/Trade/MessageHandler/StoreOrderRejectedHandlerTest.php</code></td>
+<td>7</td>
+<td><strong>KEEP</strong> — incl. Bug-14 behavior pin</td>
+</tr>
+</tbody>
+</table>
+<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>Everything not listed in the DELETE candidates table, including:</p>
+<ul>
+<li><strong>All skipped tests documenting known bugs</strong> (do not delete): <code>OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code>,
+  <code>App/OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code>,
+  <code>Manage/OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code>
+  (keep exactly ONE of the two tamper twins — see DELETE table) plus out-of-scope skips.</li>
+<li><strong><code>OrderWorkflowApiTest</code></strong> — the authoritative HTTP layer for the order state machine:
+  data-driven cancel-from-every-state, per-state <code>/transitions</code> listing, <code>/todo</code> semantics,
+  wallet-transfer pay/refund success, guard rejections with exact messages. This is the
+  NAME-covering survivor for the Trade API workflow tests.</li>
+<li><strong><code>TradeRepoFullTest</code></strong> — survivor for repository queries (<code>findNotDeleted</code>/<code>findActive</code>,
+  <code>findByProduct</code>/<code>findActiveByProduct</code>, <code>findById</code>, <code>findByUser</code>, <code>findByOrder</code>) with
+  precise inclusion/exclusion assertions.</li>
+<li><strong><code>TradeStoreOrderEventTest::testDuplicateSpecificationItemsUseDistinctOrderLineIds</code></strong>
+  — unique invariant (distinct <code>lineId</code> for duplicate lines in one outbox event).</li>
+<li><strong><code>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</code></strong>
+  — the only full lifecycle through a REAL invoice + <code>OrderInvoiceListener</code> (mock
+  autoPaid → refund via invoice events); also pins the documented "refundAction skips the
+  workflow transition is not a bug" decision.</li>
+<li><strong><code>TradeOrderCancelWithInvoiceIntegrationTest::testManageCancelOrderCancelsLinkedInvoiceAndReleasesDeduction</code></strong>
+  — unique: order cancel → linked invoice cancelled + wallet deduction released.</li>
+<li><strong><code>TradeApiIntegrationTest</code></strong> unique endpoints (surviving after the redundant workflow
+  tests are removed): product/specification CRUD (nested <code>/manage/products/{id}/specifications</code>),
+  batch-update modes, pagination, app product inactive/deleted filters, order-items
+  subresource (manage + app ownership 404), <code>testManageOrderCreateWithUserId</code>,
+  <code>testOrderItemSnapshotsAreCreated</code>, app order metadata/receiver round-trip.</li>
+<li><strong><code>App/OrderControllerTest</code></strong> and the non-listed <code>Manage/OrderControllerTest</code> methods —
+  fast unit tests covering controller branches (price-engine throw, transaction-closure
+  throws, cross-user ownership, payment-method forwarding) that integration cannot reach.</li>
+</ul>
+<h2 id="delete-candidates-filemethod-reason-confidence-covered-by">DELETE CANDIDATES — File::method | Reason | Confidence | Covered by<a class="headerlink" href="#delete-candidates-filemethod-reason-confidence-covered-by" title="Permanent link">&para;</a></h2>
+<p>Reason codes: 1=COVERAGE-CHASING, 2=DUPLICATE, 3=IMPLEMENTATION-DETAIL, 4=REDUNDANT-REGRESSION, 5=NEAR-EMPTY.</p>
+<h3 id="teststradeintegrationtradeapiintegrationtestphp-26"><code>tests/Trade/Integration/TradeApiIntegrationTest.php</code> (26)<a class="headerlink" href="#teststradeintegrationtradeapiintegrationtestphp-26" title="Permanent link">&para;</a></h3>
+<p>All duplicate tests run the full kernel+DB bootstrap (≈6.4 s file) to re-assert behaviour
+that <code>OrderWorkflowApiTest</code> (surviving) asserts more precisely (exact status codes +
+messages + state unchanged).</p>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderWorkflowFullFlow</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code></td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderWorkflowCompleteFullFlow</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code> (asserts <code>completedAt</code>)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testWorkflowCompleteFullFlowTimestamps</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code> (asserts <code>paidAt</code>/<code>fulfilledAt</code>/<code>completedAt</code>/<code>refundedAt</code>)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderRefundFromCompleted</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code> (chain includes <code>refund</code> → <code>refunded</code>)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testWorkflowRefundSetsRefundedAt</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code></td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testWorkflowCancelSetsCancelledAt</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testCancelFromEveryCancellableState</code> (asserts <code>cancelledAt</code> for every state)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderCancelFromDraft</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testCancelFromEveryCancellableState</code> (draft case)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderCancelFromPending</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testCancelFromEveryCancellableState</code> (pending case)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderCancelFromConfirmed</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testCancelFromEveryCancellableState</code> (confirmed case)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderCannotCancelAfterPaid</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testCancelIsRejectedAfterPaid</code> (same 200 + non-zero code + state stays <code>paid</code>)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderTransitionsEndpoint</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testTransitionsEndpointListsEnabledTransitionsPerState</code> (data-driven, all 9 states)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderTodoList</code></td>
+<td>1/5</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testTodoEndpointReturnsOnlyOrdersWithEnabledTransitions</code> (asserts precise membership; this test only asserts HTTP 200 + code 0)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderFulfill</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testFulfillEndpointSuccessStoresTrackingAndMarksFulfilled</code></td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderFulfillWithoutOptionalData</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td>same-file twin <code>testManageOrderFulfill</code> + <code>OrderWorkflowApiTest::testFulfillEndpointSuccessStoresTrackingAndMarksFulfilled</code>; only delta = omitted optional fields</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderFulfillWrongStatus</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testFulfillEndpointRejectsNonPaidOrder</code> (same 400)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderPayRequiresSystemWallet</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testPayEndpointRejectsOrderWithoutWallet</code> (both send a wallet id on an order with no user → same 400 abort)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderPayMissingSystemWallet</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testPayEndpointRequiresSystemWalletId</code> (same 400)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderPayWrongStatus</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testPayEndpointRejectsDraftOrder</code> (same 400)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderRefundRequiresSystemWallet</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td><code>Manage/OrderControllerTest::testRefundActionReturnsErrorWhenSystemWalletIdMissing</code> (unit, same message)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderRefundMissingReason</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testRefundEndpointRequiresReason</code> (same <code>reason is required.</code> 400)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testManageOrderRefundWrongStatus</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testRefundEndpointRejectsNonCompletedOrder</code> (same 400)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testAppOrderCancelWrongUser</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testAppEndpointsHideOtherUsersOrders</code> (same 404)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testAppOrderCancelAfterPaidNotAllowed</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testAppCancelAfterPaidIsRejected</code> (same 400 + message)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testNonDraftOrderCannotBeUpdated</code></td>
+<td>2/4</td>
+<td>HIGH</td>
+<td>same-file twin <code>testManageOrderCannotBeUpdatedAfterSubmit</code> (L830, identical scenario)</td>
+</tr>
+<tr>
+<td><code>TradeApiIntegrationTest::testOrderCannotRefundFromDraft</code></td>
+<td>1</td>
+<td>MEDIUM</td>
+<td>workflow layer: <code>OrderWorkflowStateMachineTest::testApplyingInvalidTransitionThrowsAndLeavesStateUnchanged</code> (<code>draft-&gt;refund</code> in <code>invalidTransitionProvider</code>); HTTP assert is weak (200 + <code>code != 0</code> only)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: <code>testAppOrderCancelFromDraft</code> is NOT listed — the app <code>/cancel</code> endpoint from draft
+is only exercised here (OrderWorkflowApi cancels app orders after confirm), so it stays.</p>
+</blockquote>
+<h3 id="teststradeintegrationtraderepositoryintegrationtestphp-4-whole-file"><code>tests/Trade/Integration/TradeRepositoryIntegrationTest.php</code> (4 — whole file)<a class="headerlink" href="#teststradeintegrationtraderepositoryintegrationtestphp-4-whole-file" title="Permanent link">&para;</a></h3>
+<p>Every method is covered by <code>TradeRepoFullTest</code>, which uses the same seed data style but
+asserts inclusion/exclusion precisely instead of <code>assertNotEmpty()</code>/<code>assertIsArray()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TradeRepositoryIntegrationTest::testProductRepositoryFindNotDeleted</code></td>
+<td>1/2</td>
+<td>HIGH</td>
+<td><code>TradeRepoFullTest::testProductRepoFindNotDeletedAndFindActive</code></td>
+</tr>
+<tr>
+<td><code>TradeRepositoryIntegrationTest::testProductRepositoryFindDeleted</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>TradeRepoFullTest::testProductRepoFindNotDeletedAndFindActive</code> (asserts deleted excluded)</td>
+</tr>
+<tr>
+<td><code>TradeRepositoryIntegrationTest::testSpecificationRepositoryFindByProduct</code></td>
+<td>1/2</td>
+<td>HIGH</td>
+<td><code>TradeRepoFullTest::testSpecRepoFindByProductAndFindActiveByProduct</code></td>
+</tr>
+<tr>
+<td><code>TradeRepositoryIntegrationTest::testOrderRepositoryFindByUser</code></td>
+<td>1/2</td>
+<td>HIGH</td>
+<td><code>TradeRepoFullTest::testOrderRepoFindByUser</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="teststradeintegrationtradepaymentintegrationtestphp-1"><code>tests/Trade/Integration/TradePaymentIntegrationTest.php</code> (1)<a class="headerlink" href="#teststradeintegrationtradepaymentintegrationtestphp-1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TradePaymentIntegrationTest::testAppOrderTransitionFailures</code></td>
+<td>2</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testAppSubmitOnNotFoundOrderReturns404</code> + <code>testAppSubmitOnAlreadySubmittedOrderIsRejected</code> + <code>testAppEndpointsHideOtherUsersOrders</code> (each of the 4 scenarios maps 1:1)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="teststradeintegrationtradeordercancelwithinvoiceintegrationtestphp-2"><code>tests/Trade/Integration/TradeOrderCancelWithInvoiceIntegrationTest.php</code> (2)<a class="headerlink" href="#teststradeintegrationtradeordercancelwithinvoiceintegrationtestphp-2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TradeOrderCancelWithInvoiceIntegrationTest::testInvoiceCancelledEventUpdatesOrderPaymentStatus</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td>unit <code>OrderInvoiceListenerTest::testCancelledUpdatesOrderPaymentStatus</code> + <code>tests/Integration/PaymentTradeIntegrationTest::testInvoiceCancellationForPendingInvoiceKeepsOrderConfirmed</code></td>
+</tr>
+<tr>
+<td><code>TradeOrderCancelWithInvoiceIntegrationTest::testInvoiceMarkedFailedEventUpdatesOrderPaymentStatus</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td>unit <code>OrderInvoiceListenerTest::testFailedUpdatesOrderPaymentStatus</code> + <code>tests/Integration/PaymentTradeIntegrationTest::testPaymentCannotBeRetriedAfterFailedNotify</code></td>
+</tr>
+<tr>
+<td><code>TradeOrderCancelWithInvoiceIntegrationTest::testManageCancelOrderWithoutInvoiceStillWorks</code></td>
+<td>1</td>
+<td>MEDIUM</td>
+<td><code>OrderWorkflowApiTest::testCancelFromEveryCancellableState</code>; only delta is asserting <code>invoiceId</code> stays null on a never-paid order</td>
+</tr>
+</tbody>
+</table>
+<h3 id="teststradecontrollermanageordercontrollertestphp-6"><code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> (6)<a class="headerlink" href="#teststradecontrollermanageordercontrollertestphp-6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> (skipped)</td>
+<td>4</td>
+<td>HIGH</td>
+<td><code>OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code> (identical tamper regression, verbatim twins; keep the integration one per <code>BUSINESS_INVARIANTS</code> regression rule "assert the public or persisted outcome")</td>
+</tr>
+<tr>
+<td><code>OrderControllerTest::testPayActionReturnsErrorWhenCannotPay</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td><code>OrderWorkflowApiTest::testPayEndpointRejectsDraftOrder</code> (same <code>Order cannot be paid in current status.</code>)</td>
+</tr>
+<tr>
+<td><code>OrderControllerTest::testPaymentActionReturnsErrorWhenCannotPay</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td><code>OrderWorkflowApiTest::testPayEndpointRejectsDraftOrder</code> (same message via <code>/payment</code>)</td>
+</tr>
+<tr>
+<td><code>OrderControllerTest::testRefundActionReturnsErrorWhenReasonMissing</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td><code>OrderWorkflowApiTest::testRefundEndpointRequiresReason</code> (same <code>reason is required.</code>)</td>
+</tr>
+<tr>
+<td><code>OrderControllerTest::testUpdateActionReturnsErrorWhenNotDraft</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td><code>TradeApiIntegrationTest::testManageOrderCannotBeUpdatedAfterSubmit</code> (integration 400)</td>
+</tr>
+<tr>
+<td><code>OrderControllerTest::testDeleteActionReturnsErrorWhenNotDraft</code></td>
+<td>2</td>
+<td>MEDIUM</td>
+<td><code>TradeApiIntegrationTest::testNonDraftOrderCannotBeDeleted</code> (integration 400)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="teststradecontrollermanageorderitemcontrollertestphp-1"><code>tests/Trade/Controller/Manage/OrderItemControllerTest.php</code> (1)<a class="headerlink" href="#teststradecontrollermanageorderitemcontrollertestphp-1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OrderItemControllerTest::testRepositoryFindByOrder</code></td>
+<td>2/3</td>
+<td>HIGH</td>
+<td><code>TradeRepoFullTest::testOrderItemRepoFindByOrder</code> (identical <code>findByOrder</code>/<code>findById</code> assertions); also misplaced — a repository test inside a controller test class</td>
+</tr>
+</tbody>
+</table>
+<h2 id="merge-suggestions-note-merging-reduces-runtime">MERGE SUGGESTIONS (note: merging reduces runtime)<a class="headerlink" href="#merge-suggestions-note-merging-reduces-runtime" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><strong>Consolidate the Trade API full-flow tests into ONE table-driven test.</strong>
+   <code>TradeApiIntegrationTest</code> re-runs create→submit→confirm→pay→fulfill→complete→refund up to 5×
+   (and cancel 3×) with per-test kernel+DB bootstrap (~6.4 s file). Keep a single data-driven
+   full-flow in <code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code> (already
+   the strongest) and delete the 26 flagged <code>TradeApiIntegrationTest</code> tests — the file keeps
+   only its unique product/spec/batch/app/items coverage. Expected runtime saving: roughly half
+   of TradeApiIntegrationTest's ≈6.4 s, plus reduced DB contention on the shared <code>var/test.db</code>.</p>
+</li>
+<li>
+<p><strong>Delete <code>TradeRepositoryIntegrationTest.php</code> and let <code>TradeRepoFullTest</code> remain the sole
+   repository-coverage file.</strong> Same seed style, stronger assertions. Saves a full
+   <code>bootTestDatabase()</code> per class.</p>
+</li>
+<li>
+<p><strong>Collapse the 9 near-identical not-found unit tests in <code>Manage/OrderControllerTest</code>
+   (<code>testDeleteActionReturns404WhenOrderNotFound</code>, <code>testPayActionReturns404WhenOrderNotFound</code>,
+   <code>testPaymentActionReturns404WhenOrderNotFound</code>, <code>testFulfillActionReturns404WhenOrderNotFound</code>,
+   <code>testRefundActionReturns404WhenOrderNotFound</code>, <code>testTransitionsActionReturns404WhenOrderNotFound</code>,
+   <code>testDoTransitionActionReturns404WhenOrderNotFound</code>, <code>testItemsActionReturns404WhenOrderNotFound</code>,
+   <code>testUpdateActionReturns404WhenOrderNotFound</code>) into ONE data-driven test</strong> keyed by
+   (action, HTTP method, uri). These are ~9× boilerplate asserting the same
+   <code>get() → null → 404 'Order not found.'</code> contract. (Runtime impact small — unit — but it
+   removes ~90 duplicated lines.)</p>
+</li>
+<li>
+<p><strong><code>TradePaymentIntegrationTest::testAppUserCanSubmitConfirmAndPayOwnOrder</code></strong> re-asserts the
+   app submit/confirm steps already covered by <code>OrderWorkflowApiTest::testAppUserSubmitConfirmAndCancelOwnOrder</code>;
+   keep only the invoice-based pay step (autoPaid mock) as the unique delta, or fold it into the
+   surviving app-flow test.</p>
+</li>
+</ol>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Follow the strategy's mandatory commands and the 2026-08-09 report conventions:</p>
+<ol>
+<li>Baseline: run the two biggest files and capture timings before edits:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/TradeApiIntegrationTest.php<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>--no-coverage
+</code></pre></div></li>
+<li>Apply deletions, then re-run the survivors in isolation first:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>tests/Trade/Integration/TradeRepoFullTest.php<span class="w"> </span>--no-coverage
+</code></pre></div></li>
+<li>Prove no <code>src/Trade</code> coverage regression: capture clover before/after on the affected areas
+   and diff the <code>count="0"</code> statements (the campaign's own technique):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;Trade|OrderWorkflow|OrderItem|Specification&#39;</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;Trade|OrderWorkflow|OrderItem|Specification&#39;</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml
+</code></pre></div>
+   Expected result: <code>OrderWorkflowApiTest</code> keeps the state-machine lines covered; <code>TradeRepoFullTest</code>
+   keeps the repository lines covered; the deleted <code>TradeRepositoryIntegrationTest</code> adds no unique lines.</li>
+<li>Full suite on CI PostgreSQL must stay green (2686 → fewer tests, same line coverage ≥ 90%):
+   <code>composer phpstan</code>, <code>composer rector:types:check</code>, full <code>phpunit</code> run.</li>
+<li>Confirm exactly ONE skipped doTransition-tamper regression remains (the integration twin in
+   <code>OrderWorkflowApiTest</code>), and update <code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> /
+   <code>trade-workflow-badpaths.md</code> if the referenced unit test is removed.</li>
+<li>Confirm the skipped Bug-1 test (<code>App/OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code>)
+   and all other bug-documenting skips are untouched.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

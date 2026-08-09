@@ -1,0 +1,1864 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/test-audit-2026-08-09/wechat/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Wechat module test audit (2026-08-09) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wechat-module-test-audit-2026-08-09" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Wechat module test audit (2026-08-09)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-candidates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DELETE CANDIDATES
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERGE SUGGESTIONS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="wechat-module-test-audit-2026-08-09">Wechat module test audit (2026-08-09)<a class="headerlink" href="#wechat-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<p>Scope: <code>tests/Wechat/**</code> (14 files, 78 tests, 1 skipped), cross-read against <code>src/Wechat/**</code>,
+<code>tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code>, and
+<code>tests/Core/Service/BaseServiceCoverageTest.php</code>. READ-ONLY — nothing under <code>src/</code> or <code>tests/</code> was modified.</p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Controller/App/WechatUserControllerTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/LoginControllerCoverageTest.php</code></td>
+<td>3</td>
+<td>MERGE into <code>LoginControllerTest</code></td>
+</tr>
+<tr>
+<td><code>Controller/LoginControllerTest.php</code></td>
+<td>10</td>
+<td>9 KEEP, 1 DELETE</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/WechatUserControllerTest.php</code></td>
+<td>2</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserCoverageTest.php</code></td>
+<td>3</td>
+<td>1 DELETE, 2 MERGE into <code>WechatUserTest</code></td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserTest.php</code></td>
+<td>6</td>
+<td>3 KEEP, 3 DELETE</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest.php</code></td>
+<td>3</td>
+<td>3 DELETE</td>
+</tr>
+<tr>
+<td><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></td>
+<td>3</td>
+<td>1 DELETE, 2 MERGE into <code>WechatPayGatewayTest</code></td>
+</tr>
+<tr>
+<td><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></td>
+<td>1 (skipped)</td>
+<td>KEEP (documents Bug 1)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WechatPayGatewayTest.php</code></td>
+<td>16</td>
+<td>12 KEEP, 2 DELETE, 2 MERGE</td>
+</tr>
+<tr>
+<td><code>Service/WechatAuthServiceTest.php</code></td>
+<td>6</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceCoverageTest.php</code></td>
+<td>6</td>
+<td>4 KEEP, 2 DELETE</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest.php</code></td>
+<td>14</td>
+<td>11 KEEP, 3 DELETE</td>
+</tr>
+<tr>
+<td><code>Service/WechatUserServiceTest.php</code></td>
+<td>2</td>
+<td>2 DELETE</td>
+</tr>
+</tbody>
+</table>
+<p>Totals: <strong>60 KEEP / MERGE (content retained), 18 DELETE CANDIDATES</strong> (11 HIGH, 7 MEDIUM confidence). No test documents an unfixed bug except <code>WechatPayGatewayNotifyBugTest</code>, which is KEPT.</p>
+<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>Behavioral tests with genuine branch or contract value:</p>
+<ul>
+<li><strong><code>Controller/LoginControllerTest.php</code></strong> — success, missing-input (400) and WeChat-error (401) paths for miniapp login, oauth url, oauth callback, and miniapp phone. Each hits a distinct branch.</li>
+<li><strong><code>Controller/App/WechatUserControllerTest.php</code></strong> — <code>commonFilter()</code> owner-scoping is the only Wechat-specific logic in the App controller (lines 35-39): both user and anonymous branches plus filter delegation.</li>
+<li><strong><code>Controller/Manage/WechatUserControllerTest.php</code></strong> — asserts the admin controller does <strong>not</strong> add owner scoping (inherited empty <code>commonFilter</code>); the only test asserting the admin vs app boundary.</li>
+<li><strong><code>Entity/WechatUserTest.php</code></strong> — <code>testConstructorSetsRequiredFields</code> (constructor + <code>__toString</code> contract), <code>testOpenidCanBeUpdated</code> (setter <code>touch()</code> side effect), <code>testMetadata</code> (field composition).</li>
+<li><strong><code>Service/WechatAuthServiceTest.php</code></strong> — existing/new-user paths for both providers and both <code>bindPhone</code> outcomes; fully covers <code>WechatAuthService</code> and was already 100% pre-campaign (no coverage churn here).</li>
+<li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>, <code>getPhoneNumber</code>, <code>getOAuthUser</code> success/error/null-profile branches, <code>getOAuthRedirectUrl</code> (appid + scope), lazy-cache of miniapp/official apps.</li>
+<li><strong><code>Service/WechatServiceCoverageTest.php</code></strong> — the four <code>getPayApp()</code> config-branch tests (platform cert / pub-key / both / neither; <code>WechatService.php:84-89</code>) are the <strong>only</strong> coverage of those config branches and assert real EasyWeChat config keys.</li>
+<li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — native/jsapi success, description/<code>'Payment'</code> fallbacks, refund status computation (SUCCESS full/partial vs pending), all three <code>notify()</code> error/success paths, and <code>getNotifySuccessResponse</code> fallback body.</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></strong> — <code>testPayNativeClientWithoutPostJsonSupportThrows</code> and <code>testPayNativeClientReturningInvalidResponseThrows</code> are the only coverage of the <code>postJson()</code> defensive branches (<code>WechatPayGateway.php:199,204</code>).</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></strong> — KEEP. Skipped regression documenting Bug 1 (notify never propagates the request to EasyWeChat; <code>serve()</code> reads an empty request). Per instructions, skipped tests documenting bugs are KEEP.</li>
+<li><strong><code>Controller/LoginControllerCoverageTest.php</code></strong> — all 3 tests are the only coverage of <code>miniappPhone</code> success (204), <code>bindPhone</code> error → 400, and <code>oauthCallback</code> RuntimeException → 401. Content retained (see MERGE).</li>
+</ul>
+<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Entity/WechatUserTest::testSettersAndGetters</code></td>
+<td>1 — trivial accessor round-trips, no logic; the only non-trivial assertion (<code>updatedAt</code> non-null) duplicates <code>testOpenidCanBeUpdated</code></td>
+<td>HIGH</td>
+<td><code>Entity/WechatUserTest::testOpenidCanBeUpdated</code></td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserTest::testConstants</code></td>
+<td>1 — tautology: <code>assertSame('miniapp', APP_TYPE_MINIAPP)</code> compares a constant to its own literal</td>
+<td>HIGH</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserTest::testToStringWithNullId</code></td>
+<td>2 — exact duplicate</td>
+<td>HIGH</td>
+<td><code>Entity/WechatUserTest::testConstructorSetsRequiredFields</code> (asserts <code>'WechatUser#0 miniapp oTest1234'</code>, same <code>#0</code> prefix for a non-persisted entity)</td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserCoverageTest::testGetIdReturnsNullBeforePersist</code></td>
+<td>1 — <code>getId()</code> is <code>return $this-&gt;id</code> with <code>?int $id = null</code>; asserts a default</td>
+<td>HIGH</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest::testRepositoryIsProperlyInitialized</code></td>
+<td>5 — <code>assertInstanceOf</code> on the object built in <code>setUp</code>; tautology</td>
+<td>HIGH</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatUserServiceTest::testCanBeInstantiatedWithContainer</code></td>
+<td>5 — instantiates a 5-line logic-less <code>BaseService</code> subclass (<code>WechatUserService.php:12-17</code>) and asserts it is an instance of itself</td>
+<td>HIGH</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest::testConstructorStoresConfiguration</code></td>
+<td>5 — <code>assertInstanceOf(WechatService::class, $this-&gt;service)</code> immediately after the constructor already ran in <code>setUp</code></td>
+<td>HIGH</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/LoginControllerTest::testMiniappLoginEmptyBody</code></td>
+<td>2 — exact duplicate branch</td>
+<td>HIGH</td>
+<td><code>Controller/LoginControllerTest::testMiniappLoginMissingJsCode</code> (both drive <code>$jsCode === ''</code> → 400, same assertion)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WechatPayGatewayTest::testGetName</code></td>
+<td>2 — exact duplicate assertion</td>
+<td>HIGH</td>
+<td><code>Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest::testWechatGatewayIsRegistered</code> (<code>assertSame(Invoice::PAYMENT_WECHAT, $gateway::getName())</code>); also self-referential (<code>'wechat' === 'wechat'</code>)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WechatPayGatewayTest::testPayUnsupportedTradeTypeThrows</code></td>
+<td>2 — exact duplicate branch</td>
+<td>HIGH</td>
+<td><code>Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest::testWechatGatewayPayThrowsForUnsupportedTradeType</code> (same <code>InvalidArgumentException</code> for <code>tradeType 'unsupported'</code>, <code>WechatPayGateway.php:93</code>)</td>
+</tr>
+<tr>
+<td><code>Service/Gateway/WechatPayGatewayCoverageTest::testPayJsapiWithPayerButNoWechatUserThrows</code></td>
+<td>2 — exact duplicate branch</td>
+<td>HIGH</td>
+<td><code>Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest::testWechatGatewayPayJsapiRequiresWechatUser</code> (real payer, no <code>wechat_user</code> row → <code>findByUser</code> null → <code>RuntimeException 'WeChat user not found'</code>, <code>WechatPayGateway.php:60-63</code>); the integration test is the owning layer for this persistence boundary</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest::testFindByOpenidReturnsNullWhenNoMatch</code></td>
+<td>3 — mocks <code>QueryBuilder</code>/<code>Query</code> so it only proves delegation to Doctrine <code>findOneBy</code>; asserts nothing about persisted state</td>
+<td>MEDIUM</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest::testFindByUserReturnsNullWhenNoMatch</code></td>
+<td>3 — same as above</td>
+<td>MEDIUM</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatUserServiceTest::testNewCreatesEntityInstance</code></td>
+<td>2 — tests generic <code>BaseService::new()</code> through a logic-less subclass</td>
+<td>MEDIUM</td>
+<td><code>Core/Service/BaseServiceCoverageTest::testNewOnStdClass</code> (same <code>new()</code> behavior, generic fixture)</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest::testSetMiniAppOverridesCachedInstance</code></td>
+<td>3 — exercises the <code>@internal For testing</code> injection seam (<code>setMiniApp</code>, <code>WechatService.php:99-102</code>), not production behavior</td>
+<td>MEDIUM</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest::testSetOfficialAccountOverridesCachedInstance</code></td>
+<td>3 — same internal testing seam</td>
+<td>MEDIUM</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceCoverageTest::testSetPayAppOverridesCachedInstance</code></td>
+<td>3 — same internal testing seam (<code>setPayApp</code>, <code>WechatService.php:115-118</code>)</td>
+<td>MEDIUM</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceCoverageTest::testGetPayAppReturnsCachedInstance</code></td>
+<td>2 — third repetition of the same lazy-cache behavior already asserted for the other two accessors</td>
+<td>MEDIUM</td>
+<td><code>Service/WechatServiceTest::testGetMiniAppReturnsCachedInstance</code> (identical <code>assertSame($a, $b)</code> on consecutive accessor calls)</td>
+</tr>
+</tbody>
+</table>
+<p>Confidence rules: HIGH used only where the covering test exercises the identical code path/assertion (exact citation above). MEDIUM covers layer/wrong-layer and internal-seam arguments.</p>
+<p>Coverage-gate implication (not a blocker, but required follow-up if these are deleted):
+- <code>WechatUserServiceTest</code> is the only coverage of <code>WechatUserService.php</code> (0% → 100% in the campaign). Deleting it drops the file to 0%; it should be <code>@codeCoverageIgnore</code>d (a <code>src/</code> change) or the deletion paired with that.
+- Deleting <code>WechatUserRepositoryTest</code> drops the only coverage of <code>WechatUserRepository.php</code>; <code>findOneBy</code> delegation is best proven by the owning integration layer instead (see Verification).
+- <code>WechatUserCoverageTest::testGetIdReturnsNullBeforePersist</code> is the only caller of <code>getId()</code>; its return line falls uncovered unless the follow-up also ignores the trivial getter.</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<p>Consolidate same-class coverage-file splits created by the 2026-08-09 campaign back into their primary files (contents are KEEP; only file placement changes):</p>
+<ol>
+<li><code>Controller/LoginControllerCoverageTest.php</code> → fold its 3 tests into <code>Controller/LoginControllerTest.php</code> (identical <code>setUp</code>, helpers already present). One file per class.</li>
+<li><code>Entity/WechatUserCoverageTest.php</code> → fold <code>testPrePersistInitializesCreatedAtWhenUnset</code> and <code>testPrePersistKeepsExistingCreatedAt</code> into <code>Entity/WechatUserTest.php</code> (real <code>prePersist</code> lifecycle branches, same fixture). Delete <code>testGetIdReturnsNullBeforePersist</code> (see above).</li>
+<li><code>Service/WechatServiceCoverageTest.php</code> → fold the four <code>getPayApp()</code> config-branch tests into <code>Service/WechatServiceTest.php</code>. Keep them as one table-driven set; drop <code>testSetPayAppOverridesCachedInstance</code> and <code>testGetPayAppReturnsCachedInstance</code>.</li>
+<li><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code> → fold the two <code>postJson()</code> defensive-branch tests into <code>Service/Payment/WechatPayGatewayTest.php</code>; delete <code>testPayJsapiWithPayerButNoWechatUserThrows</code>.</li>
+<li><code>Service/Payment/WechatPayGatewayTest.php</code> — merge <code>testGetNotifySuccessResponse</code> and <code>testNotifySuccessResponseIsJson</code> into one test (both cover the success response; fold the <code>Content-Type</code> assertion into the primary).</li>
+</ol>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Baseline: <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Wechat</code> → 78 tests, 1 skipped, all green.</li>
+<li>For each HIGH-confidence DUPLICATE candidate, confirm the covering test exists and asserts the same branch: re-run the named covering files, e.g.
+   <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code> (covers gateway name, unsupported-trade-type, and jsapi-no-wechat-user).</li>
+<li>After the (future, non-read-only) deletion, verify no Wechat line loses coverage except the explicitly flagged trivial/delegation lines:
+   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-text tests/Wechat</code> and check <code>src/Wechat/**</code> per file.</li>
+<li>Confirm merge moves are pure file placement: run the merged files and assert test count/assertions are unchanged and the suite stays at 0 failures / 1 skipped.</li>
+<li>Run the full suite once (<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code>) to catch cross-test coupling before and after changes.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

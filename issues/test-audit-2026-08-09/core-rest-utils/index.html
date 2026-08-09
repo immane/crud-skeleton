@@ -1,0 +1,2163 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/test-audit-2026-08-09/core-rest-utils/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core (Utils/Listener/Controller/Serializer) test audit (2026-08-09) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#core-utilslistenercontrollerserializer-test-audit-2026-08-09" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core (Utils/Listener/Controller/Serializer) test audit (2026-08-09)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary — table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-bullet-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP — bullet list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-candidates-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DELETE CANDIDATES — table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERGE SUGGESTIONS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="core-utilslistenercontrollerserializer-test-audit-2026-08-09">Core (Utils/Listener/Controller/Serializer) test audit (2026-08-09)<a class="headerlink" href="#core-utilslistenercontrollerserializer-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<p>Read-only audit of <code>tests/Core/Utils</code>, <code>tests/Core/EventListener</code>, <code>tests/Core/Controller</code> (root + <code>System/</code>), <code>tests/Core/Serializer</code> (+ <code>Normalizer/</code>), <code>tests/Core/Exception</code>, <code>tests/Core/DependencyInjection</code>. Cross-referenced against <code>src/Core/*</code> and the integration suite (<code>tests/Integration/Core*ApiTest</code>).</p>
+<p>Context: the 2026-08-09 coverage campaign (see <code>docs/issues/coverage-2026-08-09/README.md</code>) added many <code>*CoverageTest</code> / <code>*ExtendedTest</code> / <code>*Coverage2Test</code> files pushing line coverage to 99.46%. Several duplicate behavior already locked by pre-existing tests, or assert only that lines run. Skipped tests that document <code>src/</code> bugs (Location L-2, Math M-1/M-2) are <strong>KEEP</strong> by policy.</p>
+<h2 id="summary-table">Summary — table<a class="headerlink" href="#summary-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Utils/ArrayCollectionTest.php</code></td>
+<td>11</td>
+<td>KEEP (some trivial init cases → trim)</td>
+</tr>
+<tr>
+<td><code>Utils/ArrayCommonTest.php</code></td>
+<td>3</td>
+<td>MERGE into Extended</td>
+</tr>
+<tr>
+<td><code>Utils/ArrayCommonExtendedTest.php</code></td>
+<td>11</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Utils/FilterDateTimeTest.php</code></td>
+<td>1</td>
+<td>DELETE candidate (near-empty wrapper, dead util)</td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONTest.php</code></td>
+<td>11</td>
+<td>KEEP (base)</td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest.php</code></td>
+<td>10</td>
+<td>PARTIAL-DELETE (5 dup of base)</td>
+</tr>
+<tr>
+<td><code>Utils/InflectTest.php</code></td>
+<td>2</td>
+<td>DELETE (fully subsumed by Extended)</td>
+</tr>
+<tr>
+<td><code>Utils/InflectExtendedTest.php</code></td>
+<td>15</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Utils/InflectCoverageTest.php</code></td>
+<td>3</td>
+<td>DELETE candidate (trivial, dup of round-trip)</td>
+</tr>
+<tr>
+<td><code>Utils/LocationTest.php</code></td>
+<td>5 (1 skipped)</td>
+<td>KEEP (documents broken class + L-2 bug)</td>
+</tr>
+<tr>
+<td><code>Utils/MathTest.php</code></td>
+<td>13</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Utils/MathExtendedTest.php</code></td>
+<td>25</td>
+<td>PARTIAL-DELETE (2 tautological / dup)</td>
+</tr>
+<tr>
+<td><code>Utils/MathCoverageTest.php</code></td>
+<td>8 (3 skipped)</td>
+<td>KEEP (skips document M-1/M-2)</td>
+</tr>
+<tr>
+<td><code>Utils/RsaClientTest.php</code></td>
+<td>25</td>
+<td>KEEP (only real crypto coverage)</td>
+</tr>
+<tr>
+<td><code>Utils/StringCaseTest.php</code></td>
+<td>1</td>
+<td>MERGE into Extended</td>
+</tr>
+<tr>
+<td><code>Utils/StringCaseExtendedTest.php</code></td>
+<td>13</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Utils/UUIDTest.php</code></td>
+<td>2</td>
+<td>DELETE (1 exact dup + 1 subsumed)</td>
+</tr>
+<tr>
+<td><code>Utils/UUIDExtendedTest.php</code></td>
+<td>15</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>EventListener/AccessLogListenerTest.php</code></td>
+<td>18</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>EventListener/ControllerListenerTest.php</code></td>
+<td>1</td>
+<td>DELETE (dup of Extended)</td>
+</tr>
+<tr>
+<td><code>EventListener/ControllerListenerExtendedTest.php</code></td>
+<td>5</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>EventListener/ExceptionInterceptorTest.php</code></td>
+<td>1</td>
+<td>DELETE (dup of Extended)</td>
+</tr>
+<tr>
+<td><code>EventListener/ExceptionInterceptorExtendedTest.php</code></td>
+<td>11</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>EventListener/LocaleListenerTest.php</code></td>
+<td>13</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>EventListener/LocaleListenerCoverageTest.php</code></td>
+<td>1</td>
+<td>DELETE (dup of LocaleListenerTest)</td>
+</tr>
+<tr>
+<td><code>EventListener/OpenApiEnricherListenerCoverageTest.php</code></td>
+<td>4</td>
+<td>KEEP (guards not covered elsewhere; 2 of the 4 are the same branch)</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerTest.php</code></td>
+<td>11</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerExtendedTest.php</code></td>
+<td>11</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest.php</code></td>
+<td>12</td>
+<td>PARTIAL-DELETE (3 exact dups)</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test.php</code></td>
+<td>13</td>
+<td>KEEP (note 4 IMPLEMENTATION-DETAIL getter tests)</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerPaginationIntegrationTest.php</code></td>
+<td>1</td>
+<td>KEEP (unique real-DB path)</td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest.php</code></td>
+<td>5</td>
+<td>PARTIAL-DELETE (2 dups of Extended)</td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerExtendedTest.php</code></td>
+<td>10</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest.php</code></td>
+<td>5</td>
+<td>PARTIAL-DELETE (4 tautological)</td>
+</tr>
+<tr>
+<td><code>Serializer/CircularReferenceHandlerTest.php</code></td>
+<td>2</td>
+<td>KEEP (weak fallback assertion)</td>
+</tr>
+<tr>
+<td><code>Serializer/ObjectCallbackTest.php</code></td>
+<td>2</td>
+<td>KEEP (tests unwired class)</td>
+</tr>
+<tr>
+<td><code>Serializer/SerializerContextFactoryTest.php</code></td>
+<td>1</td>
+<td>DELETE (passes even if SUT is a no-op)</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/CircularReferenceHandlerTest.php</code></td>
+<td>5</td>
+<td>KEEP (tests orphaned duplicate class)</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerExtendedTest.php</code></td>
+<td>9</td>
+<td>PARTIAL-DELETE (2 NEAR-EMPTY <code>assertTrue(true)</code>)</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerCoverageTest.php</code></td>
+<td>12</td>
+<td>KEEP (unique branches + JSON-string-corruption bug doc)</td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionTest.php</code></td>
+<td>2</td>
+<td>DELETE (subsumed by Extended)</td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionExtendedTest.php</code></td>
+<td>7</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>DependencyInjection/ConfigurationTest.php</code></td>
+<td>4</td>
+<td>KEEP</td>
+</tr>
+<tr>
+<td><code>DependencyInjection/CoreExtensionTest.php</code></td>
+<td>3</td>
+<td>KEEP</td>
+</tr>
+</tbody>
+</table>
+<h2 id="keep-bullet-list">KEEP — bullet list<a class="headerlink" href="#keep-bullet-list" title="Permanent link">&para;</a></h2>
+<p><strong>Utils</strong>
+- <code>ArrayCommonExtendedTest</code> — real ExpressionLanguage <code>filter/map/reduce</code> behavior; the only place these helpers are validated.
+- <code>ArrayCommonTest</code> — small but includes <code>testMergeMatchesCurrentLegacyBehavior</code>, a genuine regression guard for the surprising <code>array_merge($arrays)</code> wrapping.
+- <code>FixJSONTest</code> — base coverage of <code>getJSONType</code>/<code>fixJSON</code>, both used in <code>RestController</code> and <code>CreateApiViewMixin</code>.
+- <code>InflectExtendedTest</code> — the substantive inflector rule table (irregular/uncountable/x-ch-sh/round-trip). <code>Inflect::singularize</code> is used in <code>BaseServiceMutationTrait</code>.
+- <code>LocationTest</code> — the only harness that can run <code>Location</code> (its <code>php-curl-class</code> dependency is absent); the skipped <code>testGetAddressIsBrokenByStringMethodCall</code> documents bug L-2. KEEP, incl. the skip.
+- <code>MathCoverageTest</code> — the three <code>markTestSkipped</code> cases document real bugs M-1 (<code>mt_rand()/rand()</code> one-arg crash on PHP 8.5) and M-2 (<code>lcg_value()</code> deprecation).
+- <code>MathTest</code> — real boundary assertions for <code>random</code>, <code>abs</code>, <code>round</code>, <code>locationDistance</code>, exact constant equality.
+- <code>RsaClientTest</code> — the only real RSA sign/verify/encrypt round-trip coverage; documents the MD5-signing and undefined-variable bugs (R-1/R-2). None skipped, all assert current behavior.
+- <code>StringCaseExtendedTest</code> — full dash→camel behavior matrix.
+- <code>UUIDExtendedTest</code> — v3/v4/v5 format bits, namespaces, determinism, whitespace rejection; <code>UUID</code> is used across every module.
+- <code>UUIDTest::testV4ProducesValidUuid</code> behavior is subsumed, but harmless until deletion of the file (see DELETE).</p>
+<p><strong>EventListener</strong>
+- <code>AccessLogListenerTest</code> — thorough and unique: method whitelist, auth-path body hiding, truncation, binary/empty bodies, anon/username resolution.
+- <code>ControllerListenerExtendedTest</code>, <code>ExceptionInterceptorExtendedTest</code>, <code>LocaleListenerTest</code> — the substantive branch tables.
+- <code>OpenApiEnricherListenerCoverageTest</code> — the four early-return guards are not exercised by <code>CoreOpenApiEnricherApiTest</code> (which only hits the happy path). Note: <code>testJsonContentWithoutPathsReturnsEarly</code> and <code>testJsonArrayContentWithoutPathsReturnsEarly</code> hit the <em>same</em> <code>!is_array($spec) || !isset($spec['paths'])</code> guard — collapse those two.</p>
+<p><strong>Controller</strong>
+- <code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> — envelope shape, <code>@display</code> (complex/reduce/expr), <code>@expands</code>, pagination slices, 204.
+- <code>RestControllerCoverage2Test</code> — unique error/edge branches (<code>resolveService</code>, expand chain-shift, silent getter/expression swallow). The four dependency-getter exception tests (<code>getRequestStack</code>/<code>getSerializer</code>/<code>getTranslator</code>/<code>getService</code>) are thin IMPLEMENTATION-DETAIL — consider after merge.
+- <code>RestControllerPaginationIntegrationTest</code> — only test that drives <code>pagination()</code> through a real QueryBuilder + DoctrinePaginator. KEEP (do not parallelize with DB-bootstrapping tests).
+- <code>EntityControllerExtendedTest</code>, <code>RouterControllerTest</code> — retain after trimming dups.
+- <code>CoreExtensionTest</code> / <code>ConfigurationTest</code> — verify the DI wiring in <code>services.yaml</code>/<code>Configuration</code>; genuinely useful contract tests.</p>
+<p><strong>Serializer / Exception / DI</strong>
+- <code>FlatNormalizerCoverageTest</code> — unique branches (decorated-failure fallback, <code>__metadata</code> reduce, JSON-string decode — which documents the JSON-string-corruption bug, bug 11 in the coverage report), serializer/normalizer forwarding.
+- <code>Normalizer/CircularReferenceHandlerTest</code> — KEEP only because it still documents the contract of a class that <em>may</em> be referenced by future wiring; note the class is orphaned today (nothing in <code>src/</code>/<code>config/</code> references <code>App\Core\Serializer\Normalizer\CircularReferenceHandler</code>).
+- <code>MessageHttpExceptionExtendedTest</code> — keep as the canonical file.
+- <code>Serializer/CircularReferenceHandlerTest</code> — keep (this is the handler actually wired in <code>config/packages/serializer.yaml</code>).</p>
+<h2 id="delete-candidates-table">DELETE CANDIDATES — table<a class="headerlink" href="#delete-candidates-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Utils/UUIDTest::testV4cHasNoDashes</code></td>
+<td>2 DUPLICATE — identical assertions (<code>assertSame(32, strlen(...))</code> + <code>assertStringNotContainsString('-', ...)</code>)</td>
+<td>High</td>
+<td><code>Utils/UUIDExtendedTest::testV4cNoDashes</code></td>
+</tr>
+<tr>
+<td><code>Utils/UUIDTest::testV4ProducesValidUuid</code></td>
+<td>1 COVERAGE-CHASING — <code>v4()</code> then <code>is_valid()</code> is implied by format/version-bit tests</td>
+<td>Medium</td>
+<td><code>Utils/UUIDExtendedTest::testV4FormatIsCorrect</code>, <code>testIsValidWithStandardUuid</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectTest::testPluralizeAndSingularize</code></td>
+<td>2 DUPLICATE — same words, same expected strings</td>
+<td>High</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeRegular</code> + <code>testSingularizeRegular</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectTest::testPluralizeIf</code></td>
+<td>2 DUPLICATE — same inputs/outputs</td>
+<td>High</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeIfSingular</code> + <code>testPluralizeIfPlural</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectCoverageTest::testSingularizeReturnsInputWhenNoRuleMatches</code></td>
+<td>1 COVERAGE-CHASING — only visits the fall-through <code>return $string</code></td>
+<td>Medium</td>
+<td>behavior implied by <code>Utils/InflectExtendedTest::testPluralizeAndSingularizeRoundTrip</code></td>
+</tr>
+<tr>
+<td><code>Utils/InflectCoverageTest::testPluralizeCatchesAllStringsWithFinalRule</code></td>
+<td>1 COVERAGE-CHASING — documents the catch-all <code>'/$/' =&gt; 's'</code> rule already exercised by <code>pluralize('test')</code></td>
+<td>Medium</td>
+<td><code>Utils/InflectExtendedTest::testPluralizeRegular</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testFixJsonWithEmptyString</code></td>
+<td>2 DUPLICATE — both <code>assertSame('', FixJSON::fixJSON(''))</code></td>
+<td>High</td>
+<td><code>Utils/FixJSONTest::testFixJsonHandlesEmpty</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testGetJsonTypeWithNullLiteral</code></td>
+<td>2 DUPLICATE — both <code>assertFalse(FixJSON::getJSONType('null'))</code></td>
+<td>High</td>
+<td><code>Utils/FixJSONTest::testGetJsonTypeNull</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testGetJsonTypeWithLeadingWhitespaceAndArray</code></td>
+<td>2 DUPLICATE — same branch/assertion (<code>'array'</code> for <code>"  \n[..]"</code>)</td>
+<td>High</td>
+<td><code>Utils/FixJSONTest::testGetJsonTypeWithLeadingWhitespaceArray</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testFixJsonAlreadyValid</code></td>
+<td>2 DUPLICATE — valid-JSON passthrough</td>
+<td>High</td>
+<td><code>Utils/FixJSONTest::testFixJsonPreservesDoubleQuotes</code></td>
+</tr>
+<tr>
+<td><code>Utils/FixJSONExtendedTest::testGetJsonTypeWithNestedObject</code></td>
+<td>2 DUPLICATE — same <code>'object'</code> branch as base <code>testGetJsonTypeObject</code></td>
+<td>Medium</td>
+<td><code>Utils/FixJSONTest::testGetJsonTypeObject</code></td>
+</tr>
+<tr>
+<td><code>Utils/MathExtendedTest::testRandomInRange</code></td>
+<td>2 DUPLICATE — same function/branch as base <code>testRandomRange</code> (bounds 5–10 vs 10–20)</td>
+<td>Medium-High</td>
+<td><code>Utils/MathTest::testRandomRange</code></td>
+</tr>
+<tr>
+<td><code>Utils/MathExtendedTest::testAllConstants</code></td>
+<td>1 COVERAGE-CHASING — <code>assertGreaterThan(&gt;0/&gt;1/&gt;2)</code> thresholds are tautologies; passes with wrong constant values</td>
+<td>High</td>
+<td>— (weak)</td>
+</tr>
+<tr>
+<td><code>Utils/FilterDateTimeTest::testGetReturnsDateTimeInstance</code></td>
+<td>5 NEAR-EMPTY / 1 COVERAGE-CHASING — <code>get()</code> is literally <code>new \DateTime($time, $timezone)</code> on an otherwise-unused util</td>
+<td>Medium</td>
+<td>— (dead util; see verification steps)</td>
+</tr>
+<tr>
+<td><code>EventListener/ControllerListenerTest::testLogsOnlyForWriteMethods</code></td>
+<td>2 DUPLICATE — POST≡PUT in the same <code>/(PUT|POST)/i</code> branch</td>
+<td>High</td>
+<td><code>ControllerListenerExtendedTest::testLogsForPutMethod</code> + <code>testSkipsLoggingForGetMethod</code></td>
+</tr>
+<tr>
+<td><code>EventListener/ExceptionInterceptorTest::testProdEnvironmentSetsResponseForApiPath</code></td>
+<td>2 DUPLICATE — superset assertions in Extended</td>
+<td>Medium-High</td>
+<td><code>ExceptionInterceptorExtendedTest::testResponseJsonStructure</code> + <code>testUsesExceptionCodeAsHttpStatusWhenInRange</code></td>
+</tr>
+<tr>
+<td><code>EventListener/LocaleListenerCoverageTest::testMissingAcceptLanguageLeavesPreSetLocaleIntact</code></td>
+<td>2 DUPLICATE — same <code>$acceptLanguage === null</code> early-return branch; only initial locale differs</td>
+<td>High</td>
+<td><code>LocaleListenerTest::testNoHeaderOrQueryKeepsDefaultLocale</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerTest::testSuccessWith204ReturnsEmptyResponse</code></td>
+<td>2 DUPLICATE — identical 204/empty-content assertions</td>
+<td>High</td>
+<td><code>RestControllerExtendedTest::testSuccessWith204Status</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testSuccessWithPostRequestNoPagination</code></td>
+<td>2 DUPLICATE — same method name + identical assertions (POST → no <code>paginator</code>)</td>
+<td>High</td>
+<td><code>RestControllerExtendedTest::testSuccessWithPostRequestNoPagination</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testDisplayReduceOnArray</code></td>
+<td>2 DUPLICATE — same <code>@display=reduce</code> → <code>{id,__toString}</code> branch</td>
+<td>High</td>
+<td><code>RestControllerTest::testDisplayReduceProducesIdAndToString</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testDisplayExpressionObject</code></td>
+<td>2 DUPLICATE — same <code>@display={"val":"entity.getId()"}</code> expression branch</td>
+<td>High</td>
+<td><code>RestControllerTest::testExpressionEvaluationInDisplay</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverageTest::testPaginationOnGetRequest</code></td>
+<td>2 DUPLICATE — same page/limit slice assertions</td>
+<td>Medium-High</td>
+<td><code>RestControllerTest::testPaginationUsesBuiltInPaginationOnGet</code>, <code>RestControllerExtendedTest::testSuccessWithArrayCollection</code></td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetRequestStackThrowsWhenNotInjected</code></td>
+<td>3 IMPLEMENTATION-DETAIL — asserts exception text of a protected getter</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetSerializerThrowsWhenNotInjected</code></td>
+<td>3 IMPLEMENTATION-DETAIL — same</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetTranslatorThrowsWhenNotInjected</code></td>
+<td>3 IMPLEMENTATION-DETAIL — same</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/RestControllerCoverage2Test::testGetServiceThrowsWhenServicePropertyMissing</code></td>
+<td>3 IMPLEMENTATION-DETAIL — same</td>
+<td>Medium</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest::testRetrieveActionHandlesSlashReplacementInEntityName</code></td>
+<td>2 DUPLICATE — same <code>str_replace('/', '\\', ...)</code> branch; Extended version is stricter (asserts <code>getClassMetadata</code> arg)</td>
+<td>High</td>
+<td><code>EntityControllerExtendedTest::testRetrieveActionReplacesAllSlashesInEntityName</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest::testRetrieveActionReturnsAssociationMappings</code></td>
+<td>2 DUPLICATE — ManyToOne/OneToOne subset of the 4-type table</td>
+<td>Medium-High</td>
+<td><code>EntityControllerExtendedTest::testRetrieveActionWithAllAssociationTypes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/EntityControllerTest::testListActionReturnsEmptyArrayWhenNoEntities</code></td>
+<td>2 DUPLICATE — same empty-metadata mock + <code>listAction()</code> path</td>
+<td>Medium</td>
+<td><code>EntityControllerExtendedTest::testSuccessResponseStructureForListAction</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithRoutesHavingDifferentMethods</code></td>
+<td>1 COVERAGE-CHASING — <code>listAction()</code> is <code>success($router-&gt;getRouteCollection()-&gt;all())</code>; varying Route <code>methods</code> runs zero new code</td>
+<td>Medium-High</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithRoutesHavingDefaults</code></td>
+<td>1 COVERAGE-CHASING — same, varying defaults</td>
+<td>Medium-High</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithComplexRouteRequirements</code></td>
+<td>1 COVERAGE-CHASING — same, varying requirements</td>
+<td>Medium-High</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Controller/System/RouterControllerExtendedTest::testListActionWithManyRoutes</code></td>
+<td>1 COVERAGE-CHASING — same code path with 50 routes; asserts Symfony <code>RouteCollection</code> behavior, not the controller</td>
+<td>Medium-High</td>
+<td><code>RouterControllerTest::testListActionReturnsAllRoutes</code></td>
+</tr>
+<tr>
+<td><code>Serializer/SerializerContextFactoryTest::testCreateBuildsExpectedContext</code></td>
+<td>1 COVERAGE-CHASING — input equals expected output, so it <strong>passes even if <code>create()</code> were a no-op returning <code>$options</code></strong>; never exercises the cast/default logic</td>
+<td>High</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerExtendedTest::testSetSerializerDoesNotThrow</code></td>
+<td>5 NEAR-EMPTY — <code>assertTrue(true)</code> only</td>
+<td>High</td>
+<td><code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code></td>
+</tr>
+<tr>
+<td><code>Serializer/Normalizer/FlatNormalizerExtendedTest::testSetNormalizerDoesNotThrow</code></td>
+<td>5 NEAR-EMPTY — <code>assertTrue(true)</code> only</td>
+<td>High</td>
+<td><code>FlatNormalizerCoverageTest::testSetNormalizerForwardsToNormalizerAwareDecorated</code></td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionTest::testMessageErrorHttpExceptionDefaults</code></td>
+<td>2 DUPLICATE — 403 + message + redirectUrl all asserted in Extended</td>
+<td>High</td>
+<td><code>MessageHttpExceptionExtendedTest::testMessageErrorHttpExceptionStatusCode</code> + <code>testMessageErrorHttpExceptionHeadersWithRedirectUrl</code></td>
+</tr>
+<tr>
+<td><code>Exception/MessageHttpExceptionTest::testMessageSuccessHttpExceptionDefaults</code></td>
+<td>2 DUPLICATE — 200 + message + redirectUrl all asserted in Extended</td>
+<td>High</td>
+<td><code>MessageHttpExceptionExtendedTest::testMessageSuccessHttpExceptionStatusCode</code> + <code>testMessageSuccessHttpExceptionHeadersWithRedirectUrl</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<p>Merge candidates (consolidate <code>Extended</code>/<code>Coverage</code> files back into their base, keeping only the non-duplicated cases listed above):</p>
+<ol>
+<li><code>FixJSONTest</code> + <code>FixJSONExtendedTest</code> → one <code>FixJSONTest</code>.</li>
+<li><code>ArrayCommonTest</code> + <code>ArrayCommonExtendedTest</code> → one <code>ArrayCommonTest</code>.</li>
+<li><code>MathTest</code> + <code>MathExtendedTest</code> + <code>MathCoverageTest</code> → one <code>MathTest</code> (keep the three skipped bug-docs).</li>
+<li><code>StringCaseTest</code> + <code>StringCaseExtendedTest</code> → one <code>StringCaseTest</code>.</li>
+<li><code>UUIDTest</code> + <code>UUIDExtendedTest</code> → one <code>UUIDExtendedTest</code> (keep <code>testV4ProducesValidUuid</code> if desired).</li>
+<li><code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> + <code>RestControllerCoverageTest</code> + <code>RestControllerCoverage2Test</code> → one <code>RestControllerTest</code> (the 5-file split is pure campaign residue).</li>
+<li><code>EntityControllerTest</code> + <code>EntityControllerExtendedTest</code> → one <code>EntityControllerTest</code>.</li>
+<li><code>RouterControllerTest</code> + <code>RouterControllerExtendedTest</code> → one <code>RouterControllerTest</code> (keep only the empty/non-empty envelope cases).</li>
+<li><code>MessageHttpExceptionTest</code> + <code>MessageHttpExceptionExtendedTest</code> → one file (Extended).</li>
+<li><code>ControllerListenerTest</code> + <code>ControllerListenerExtendedTest</code> → one file (Extended).</li>
+<li><code>ExceptionInterceptorTest</code> + <code>ExceptionInterceptorExtendedTest</code> → one file (Extended).</li>
+<li><code>InflectExtendedTest</code> + <code>InflectCoverageTest</code> → one file after the base is deleted.</li>
+<li><code>OpenApiEnricherListenerCoverageTest</code> — collapse <code>testJsonContentWithoutPathsReturnsEarly</code> + <code>testJsonArrayContentWithoutPathsReturnsEarly</code> into one.</li>
+</ol>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Run after every deletion (PHP 8.4+ runtime per TEST_STRATEGY):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Core/Utils<span class="w"> </span>tests/Core/EventListener<span class="w"> </span>tests/Core/Controller<span class="w"> </span>tests/Core/Serializer<span class="w"> </span>tests/Core/Exception<span class="w"> </span>tests/Core/DependencyInjection
+</code></pre></div>
+<p>Then the full gate:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>composer<span class="w"> </span>phpstan
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>composer<span class="w"> </span>rector:types:check
+</code></pre></div>
+<p>Coverage caveats (important before batch-deleting):</p>
+<ul>
+<li><strong>Safe deletes</strong> (no coverage regression because the duplicate keeps the lines covered): all <code>2 DUPLICATE</code> rows (UUID v4c, Inflect, FixJSON, RestController 204/post/reduce/expr, EntityController slash/assoc, MessageHttpException, LocaleListener missing-header, ControllerListener, ExceptionInterceptor).</li>
+<li><strong>Coverage-sensitive deletes</strong> — deleting these drops coverage of lines that only these tests touch, and the 90% line gate may trip:</li>
+<li><code>SerializerContextFactoryTest</code> — <code>SerializerContextFactory</code> is only referenced by <code>services.yaml</code> + this test; deleting it uncovers the class.</li>
+<li><code>FilterDateTimeTest</code> — <code>FilterDateTime::get()</code> is exercised only here.</li>
+<li>Dead utils (<code>Math</code>, <code>StringCase</code>, <code>Location</code>, <code>RsaClient</code>, <code>Utils\ArrayCollection</code>, <code>Serializer\Normalizer\CircularReferenceHandler</code>, <code>ObjectCallback</code>) are referenced from <code>src/</code> nowhere except tests. Prune only alongside a <code>src/</code> cleanup (add <code>@codeCoverageIgnore</code> or remove the dead class) or accept the coverage drop with maintainer sign-off.</li>
+<li>Verify the two <code>FlatNormalizerExtendedTest</code> <code>assertTrue(true)</code> deletions against <code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code> / <code>testSetNormalizerForwardsToNormalizerAwareDecorated</code> (they assert the actual forwarding contract and keep <code>setSerializer</code>/<code>setNormalizer</code> covered).</li>
+<li>Do not run <code>RestControllerPaginationIntegrationTest</code> in parallel with other DB-bootstrapping integration tests (<code>var/test.db</code> schema teardown race).</li>
+<li>Skipped tests asserting documented <code>src/</code> bugs (Location L-2, Math M-1/M-2, OpenApi BUG-7) must remain — they are intentional KEEP.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1864 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/test-audit-2026-08-09/wechat/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>微信模块测试审核(2026-08-09) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2026-08-09" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              微信模块测试审核(2026-08-09)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产验证概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试策略
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统演练和测试接缝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    业务不变量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构测试映射
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    失效模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    发布验证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    人工智能开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保留
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除候选者
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证步骤
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="2026-08-09">微信模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
+<p>范围：<code>tests/Wechat/**</code>（14 个文件，78 个测试，跳过 1 个），针对 <code>src/Wechat/**</code> 交叉读取，
+<code>tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code>，以及
+<code>tests/Core/Service/BaseServiceCoverageTest.php</code>。只读 — <code>src/</code> 或 <code>tests/</code> 下的任何内容都没有被修改。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Controller/App/WechatUserControllerTest.php</code></td>
+<td>3</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>Controller/LoginControllerCoverageTest.php</code></td>
+<td>3</td>
+<td>合并到 <code>LoginControllerTest</code></td>
+</tr>
+<tr>
+<td><code>Controller/LoginControllerTest.php</code></td>
+<td>10</td>
+<td>10 9 保留，1 删除</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/WechatUserControllerTest.php</code></td>
+<td>2</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserCoverageTest.php</code></td>
+<td>3</td>
+<td>1 删除，2 合并到 <code>WechatUserTest</code></td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserTest.php</code></td>
+<td>6</td>
+<td>3 保留，3 删除</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest.php</code></td>
+<td>3</td>
+<td>3 删除</td>
+</tr>
+<tr>
+<td><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></td>
+<td>3</td>
+<td>1 删除，2 合并到 <code>WechatPayGatewayTest</code></td>
+</tr>
+<tr>
+<td><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></td>
+<td>1（跳过）</td>
+<td>保留（文档 Bug 1）</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WechatPayGatewayTest.php</code></td>
+<td>16</td>
+<td>16 12 个保留、2 个删除、2 个合并</td>
+</tr>
+<tr>
+<td><code>Service/WechatAuthServiceTest.php</code></td>
+<td>6</td>
+<td>保持</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceCoverageTest.php</code></td>
+<td>6</td>
+<td>4 保留，2 删除</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest.php</code></td>
+<td>14</td>
+<td>14 11 保留，3 删除</td>
+</tr>
+<tr>
+<td><code>Service/WechatUserServiceTest.php</code></td>
+<td>2</td>
+<td>2 删除</td>
+</tr>
+</tbody>
+</table>
+<p>总计：<strong>60 个保留/合并（保留内容），18 个删除候选</strong>（11 个高置信度，7 个中置信度）。除了 KEPT 之外，没有测试记录未修复的错误。</p>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>具有真正分支或合同价值的行为测试：</p>
+<ul>
+<li><strong><code>Controller/LoginControllerTest.php</code></strong> — 小应用程序登录、oauth url、oauth 回调和小应用程序电话的成功、缺失输入 (400) 和微信错误 (401) 路径。每个都击中一个不同的分支。</li>
+<li><strong><code>Controller/App/WechatUserControllerTest.php</code></strong> — <code>commonFilter()</code> 所有者作用域是应用程序控制器中唯一特定于微信的逻辑（第 35-39 行）：用户分支和匿名分支以及过滤器委托。</li>
+<li><strong><code>Controller/Manage/WechatUserControllerTest.php</code></strong> — 断言管理控制器<strong>不</strong>添加所有者范围（继承空<code>commonFilter</code>）；断言管理与应用程序边界的唯一测试。</li>
+<li><strong><code>Entity/WechatUserTest.php</code></strong> — <code>testConstructorSetsRequiredFields</code>（构造函数 + <code>__toString</code> 合约）、<code>testOpenidCanBeUpdated</code>（setter <code>touch()</code> 副作用）、<code>testMetadata</code>（字段组合）。</li>
+<li><strong><code>Service/WechatAuthServiceTest.php</code></strong> — 两个提供商和两个 <code>bindPhone</code> 结果的现有/新用户路径；完全覆盖 <code>WechatAuthService</code>，并且在活动前已经 100%（这里没有覆盖范围流失）。</li>
+<li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>、<code>getPhoneNumber</code>、<code>getOAuthUser</code>成功/错误/空配置文件分支、<code>getOAuthRedirectUrl</code>（appid +范围）、小型应用程序/官方应用程序的延迟缓存。</li>
+<li><strong><code>Service/WechatServiceCoverageTest.php</code></strong> — 四个 <code>getPayApp()</code> 配置分支测试（平台证书/pub-key/两者/两者都不是；<code>WechatService.php:84-89</code>）是这些配置分支的<strong>唯一</strong>覆盖范围并断言真正的 EasyWeChat 配置密钥。</li>
+<li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — 本机/jsapi 成功、描述/<code>'Payment'</code> 后备、退款状态计算（成功全部/部分与待定）、所有三个 <code>notify()</code> 错误/成功路径以及 <code>getNotifySuccessResponse</code> 后备主体。</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></strong> — <code>testPayNativeClientWithoutPostJsonSupportThrows</code> 和 <code>testPayNativeClientReturningInvalidResponseThrows</code> 是 <code>postJson()</code> 防御分支 (<code>WechatPayGateway.php:199,204</code>) 的唯一覆盖范围。</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></strong> — 保留。跳过记录 Bug 1 的回归（notify 永远不会将请求传播到 EasyWeChat；<code>serve()</code> 读取空请求）。根据说明，跳过记录错误的测试将被保留。</li>
+<li><strong><code>Controller/LoginControllerCoverageTest.php</code></strong> — 所有 3 个测试都是 <code>miniappPhone</code> 成功 (204)、<code>bindPhone</code> 错误 → 400 和 <code>oauthCallback</code> RuntimeException → 401 的唯一覆盖范围。保留内容（请参阅合并）。</li>
+</ul>
+<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>文件::方法</th>
+<th>原因</th>
+<th>信心</th>
+<th>涵盖范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Entity/WechatUserTest::testSettersAndGetters</code></td>
+<td>1 — 简单的访问器往返，没有逻辑；唯一不平凡的断言（<code>updatedAt</code> 非空）重复 <code>testOpenidCanBeUpdated</code></td>
+<td>高</td>
+<td><code>Entity/WechatUserTest::testOpenidCanBeUpdated</code></td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserTest::testConstants</code></td>
+<td>1 — 同义反复：<code>assertSame('miniapp', APP_TYPE_MINIAPP)</code> 将常量与其自身的文字进行比较</td>
+<td>高</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserTest::testToStringWithNullId</code></td>
+<td>2 — 完全重复</td>
+<td>高</td>
+<td><code>Entity/WechatUserTest::testConstructorSetsRequiredFields</code>（断言<code>'WechatUser#0 miniapp oTest1234'</code>，与非持久实体的<code>#0</code>前缀相同）</td>
+</tr>
+<tr>
+<td><code>Entity/WechatUserCoverageTest::testGetIdReturnsNullBeforePersist</code></td>
+<td>1 — <code>getId()</code> 是 <code>return $this-&gt;id</code> 与 <code>?int $id = null</code>；断言默认</td>
+<td>高</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest::testRepositoryIsProperlyInitialized</code></td>
+<td>5 — <code>assertInstanceOf</code> 位于 <code>setUp</code> 中构建的对象上；同义反复</td>
+<td>高</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatUserServiceTest::testCanBeInstantiatedWithContainer</code></td>
+<td>5 — 实例化一个 5 行无逻辑 <code>BaseService</code> 子类 (<code>WechatUserService.php:12-17</code>) 并断言它是其自身的实例</td>
+<td>高</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest::testConstructorStoresConfiguration</code></td>
+<td>5 — <code>assertInstanceOf(WechatService::class, $this-&gt;service)</code> 在构造函数已经在 <code>setUp</code> 中运行之后立即执行</td>
+<td>高</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Controller/LoginControllerTest::testMiniappLoginEmptyBody</code></td>
+<td>2 — 精确重复分支</td>
+<td>高</td>
+<td><code>Controller/LoginControllerTest::testMiniappLoginMissingJsCode</code> （都驱动 <code>$jsCode === ''</code> → 400，相同的断言）</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WechatPayGatewayTest::testGetName</code></td>
+<td>2 — 精确重复断言</td>
+<td>高</td>
+<td><code>Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest::testWechatGatewayIsRegistered</code> (<code>assertSame(Invoice::PAYMENT_WECHAT, $gateway::getName())</code>);也是自我指涉 (<code>'wechat' === 'wechat'</code>)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WechatPayGatewayTest::testPayUnsupportedTradeTypeThrows</code></td>
+<td>2 — 精确重复分支</td>
+<td>高</td>
+<td><code>Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest::testWechatGatewayPayThrowsForUnsupportedTradeType</code>（与 <code>tradeType 'unsupported'</code>、<code>WechatPayGateway.php:93</code> 相同的 <code>InvalidArgumentException</code>）</td>
+</tr>
+<tr>
+<td><code>Service/Gateway/WechatPayGatewayCoverageTest::testPayJsapiWithPayerButNoWechatUserThrows</code></td>
+<td>2 — 精确重复分支</td>
+<td>高</td>
+<td><code>Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest::testWechatGatewayPayJsapiRequiresWechatUser</code>（真实付款人，无<code>wechat_user</code>行→<code>findByUser</code>为空→<code>RuntimeException 'WeChat user not found'</code>，<code>WechatPayGateway.php:60-63</code>）；集成测试是这个持久性边界的所属层</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest::testFindByOpenidReturnsNullWhenNoMatch</code></td>
+<td>3 — 模拟 <code>QueryBuilder</code>/<code>Query</code>，因此它仅证明对 Doctrine <code>findOneBy</code> 的委托；对持久状态没有任何断言</td>
+<td>中</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Repository/WechatUserRepositoryTest::testFindByUserReturnsNullWhenNoMatch</code></td>
+<td>3 — 同上</td>
+<td>中</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatUserServiceTest::testNewCreatesEntityInstance</code></td>
+<td>2 — 通过无逻辑子类测试通用 <code>BaseService::new()</code></td>
+<td>中</td>
+<td><code>Core/Service/BaseServiceCoverageTest::testNewOnStdClass</code> （与 <code>new()</code> 行为相同，通用固定装置）</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest::testSetMiniAppOverridesCachedInstance</code></td>
+<td>3 — 练习<code>@internal For testing</code>注入接缝（<code>setMiniApp</code>、<code>WechatService.php:99-102</code>），而不是生产行为</td>
+<td>中</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceTest::testSetOfficialAccountOverridesCachedInstance</code></td>
+<td>3 — 相同的内部测试缝</td>
+<td>中</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceCoverageTest::testSetPayAppOverridesCachedInstance</code></td>
+<td>3 — 相同的内部测试接缝 (<code>setPayApp</code>、<code>WechatService.php:115-118</code>)</td>
+<td>中</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>Service/WechatServiceCoverageTest::testGetPayAppReturnsCachedInstance</code></td>
+<td>2 — 第三次重复已为其他两个访问器断言的相同惰性缓存行为</td>
+<td>中</td>
+<td><code>Service/WechatServiceTest::testGetMiniAppReturnsCachedInstance</code>（连续访问器调用时与 <code>assertSame($a, $b)</code> 相同）</td>
+</tr>
+</tbody>
+</table>
+<p>置信度规则：仅当覆盖测试执行相同的代码路径/断言时才使用 HIGH（上面的确切引用）。 MEDIUM 涵盖了层/错误层和内部接缝参数。</p>
+<p>覆盖门影响（不是阻碍因素，但如果删除这些内容则需要采取后续行动）：
+- <code>WechatUserServiceTest</code> 是 <code>WechatUserService.php</code> 的唯一覆盖范围（活动中为 0% → 100%）。删除它会将文件降至 0%；它应该是 <code>@codeCoverageIgnore</code>d （<code>src/</code> 更改）或与之配对的删除。
+- 删除<code>WechatUserRepositoryTest</code>会删除<code>WechatUserRepository.php</code>的唯一覆盖范围； <code>findOneBy</code> 委托最好由拥有的集成层来证明（请参阅验证）。
+- <code>WechatUserCoverageTest::testGetIdReturnsNullBeforePersist</code>是<code>getId()</code>的唯一调用者；它的返回线不会被覆盖，除非后续也忽略了平凡的吸气剂。</p>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>将 2026 年 8 月 9 日活动创建的同类覆盖文件拆分合并回其主文件（内容保留；仅文件位置更改）：</p>
+<ol>
+<li><code>Controller/LoginControllerCoverageTest.php</code> → 将其 3 个测试折叠到 <code>Controller/LoginControllerTest.php</code> 中（相同的 <code>setUp</code>，助手已经存在）。每类一个文件。</li>
+<li><code>Entity/WechatUserCoverageTest.php</code> → 将<code>testPrePersistInitializesCreatedAtWhenUnset</code>和<code>testPrePersistKeepsExistingCreatedAt</code>折叠到<code>Entity/WechatUserTest.php</code>中（真正的<code>prePersist</code>生命周期分支，相同的fixture）。删除<code>testGetIdReturnsNullBeforePersist</code>（见上文）。</li>
+<li><code>Service/WechatServiceCoverageTest.php</code> → 将四个 <code>getPayApp()</code> 配置分支测试折叠到 <code>Service/WechatServiceTest.php</code> 中。将它们作为一个表驱动的集合；删除 <code>testSetPayAppOverridesCachedInstance</code> 和 <code>testGetPayAppReturnsCachedInstance</code>。</li>
+<li><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code> → 将两个<code>postJson()</code>防御分支测试折叠到<code>Service/Payment/WechatPayGatewayTest.php</code>中；删除<code>testPayJsapiWithPayerButNoWechatUserThrows</code>。</li>
+<li><code>Service/Payment/WechatPayGatewayTest.php</code> — 将 <code>testGetNotifySuccessResponse</code> 和 <code>testNotifySuccessResponseIsJson</code> 合并到一个测试中（两者都涵盖成功响应；将 <code>Content-Type</code> 断言折叠到主断言中）。</li>
+</ol>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<ol>
+<li>基线：<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Wechat</code> → 78 个测试，1 个跳过，全绿色。</li>
+<li>对于每个高置信度重复候选，确认覆盖测试存在并断言相同的分支：重新运行指定的覆盖文件，例如
+   <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code>（包括网关名称、unsupported-trade-type、jsapi-no-wechat-user）。
+3.（将来，非只读）删除后，验证除明确标记的琐碎/委托行外，没有微信行失去覆盖范围：
+   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-text tests/Wechat</code> 并检查每个文件的 <code>src/Wechat/**</code>。</li>
+<li>确认合并移动是纯粹的文件放置：运行合并的文件并断言测试计数/断言未更改，并且套件保持 0 次失败/1 次跳过。</li>
+<li>运行完整套件一次 (<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code>) 以捕获更改前后的交叉测试耦合。</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

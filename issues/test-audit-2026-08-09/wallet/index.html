@@ -1,0 +1,2061 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/issues/test-audit-2026-08-09/wallet/">
+      
+      
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Wallet module test audit (2026-08-09) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wallet-module-test-audit-2026-08-09" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Wallet module test audit (2026-08-09)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary — table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-candidates-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DELETE CANDIDATES — table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERGE SUGGESTIONS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="wallet-module-test-audit-2026-08-09">Wallet module test audit (2026-08-09)<a class="headerlink" href="#wallet-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<p>Read-only audit of <code>tests/Wallet/</code> (183 PHPUnit tests, 524 assertions, 3 skipped) to identify
+unnecessary/redundant tests that are candidates for later deletion. No <code>src/</code> or <code>tests/</code> file was
+modified. Verdicts follow the project strategy (<code>docs/testing/crud-skeleton-production/TEST_STRATEGY.md</code>
+— one behaviour per primary layer; no controller tests purely for line coverage) and the coverage-campaign
+context (<code>docs/issues/coverage-2026-08-09/README.md</code>, <code>wallet-manage.md</code>).</p>
+<p>Suite state verified: <code>php ./vendor/bin/phpunit tests/Wallet</code> → <code>OK, but there were issues! Tests: 183,
+Assertions: 524, Skipped: 3, Notices: 16</code> (the 16 notices are pre-existing).</p>
+<h2 id="summary-table">Summary — table<a class="headerlink" href="#summary-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests/Wallet/Entity/WalletTest.php</code></td>
+<td>13</td>
+<td>MIXED — keep constructor defaults, status markers, <code>__toString</code>, money-as-cents conversion; delete trivial accessor round-trips and the duplicate zero-boundary test</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Entity/WalletTransactionTest.php</code></td>
+<td>17</td>
+<td>MIXED — keep type/status validation, <code>markCompleted</code>/<code>markFailed</code>, one-cent boundary; delete trivial accessors, the tautological UUID test, and the duplicate large-boundary test</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Entity/WalletPaymentDeductionTest.php</code></td>
+<td>2</td>
+<td>KEEP — state-machine markers (<code>markApplied/Released/Refunded/Failed</code>) and the invoice-payer constructor guard</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Service/WalletServiceTest.php</code></td>
+<td>11</td>
+<td>MIXED — keep <code>reconcile()</code> branch logic (idempotency, <code>skipped_negative</code>); consolidate <code>verifyBalance</code> trio and the defensive-guard pairs</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Service/WalletServiceCoverageTest.php</code></td>
+<td>2</td>
+<td>DELETE — coverage-chasing of one defensive guard; the two tests duplicate each other</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Service/TransferServiceTest.php</code></td>
+<td>20</td>
+<td>MIXED — keep all deposit tests (no integration deposit coverage), rollback, EM-closed recovery, lock-ordering; delete transfer guard/happy-path duplicates covered by the Integration suite</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Service/Payment/WalletGatewayTest.php</code></td>
+<td>10</td>
+<td>MIXED — keep payer/wallet-required and partial-refund tests; delete notify/systemWalletId/full-refund duplicates covered by <code>WalletGatewayIntegrationTest</code></td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Service/Payment/WalletBalanceAdjustmentProviderTest.php</code></td>
+<td>6</td>
+<td>KEEP — adapter contract (supports/apply/applied/release/refund) with distinct error branches</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Integration/TransferServiceTest.php</code></td>
+<td>16</td>
+<td>KEEP — primary layer for transfer money movement (persisted-state assertions)</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Integration/WalletApiRegressionTest.php</code></td>
+<td>17 (+9 data sets)</td>
+<td>KEEP — primary HTTP layer (routing, auth, payload, owner scoping, idempotency, fuzz)</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Integration/WalletGatewayIntegrationTest.php</code></td>
+<td>4</td>
+<td>KEEP — primary gateway integration (pay+refund moves funds)</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Integration/WalletPaymentDeductionServiceIntegrationTest.php</code></td>
+<td>12</td>
+<td>KEEP — deduction lifecycle, idempotency, validation branches, failed-transfer marking</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Integration/WalletRepositoryTest.php</code></td>
+<td>9</td>
+<td>KEEP — pessimistic lock + findBy* contract</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Integration/WalletTransactionRepositoryTest.php</code></td>
+<td>13</td>
+<td>KEEP — repository query contract (minor <code>findPendingEmpty</code>/<code>findByWalletEmpty</code> overlaps noted below)</td>
+</tr>
+<tr>
+<td><code>tests/Wallet/Controller/Manage/TransferControllerTest.php</code></td>
+<td>22 (3 skipped)</td>
+<td>MIXED — most create/deposit branch tests duplicate the HTTP layer; keep the 3 skipped bug-documentation tests</td>
+</tr>
+</tbody>
+</table>
+<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>Critical invariants these tests protect — do not delete:</p>
+<ul>
+<li><strong>Integer cents / money conversion</strong>: <code>WalletTest::testBalanceAsFloatWithCents</code>, <code>WalletTransactionTest::testAmountBoundaryOneCent</code> (and the large-boundary variant if kept), <code>WalletPaymentDeductionTest</code> amount/currency assertions.</li>
+<li><strong>Idempotency</strong>: <code>Service/TransferServiceTest::testDepositIdempotent</code>, <code>Integration/TransferServiceTest::testIdempotencyByReferenceId</code>, <code>::testSameReferenceIdDifferentParamsReturnsExisting</code>, <code>WalletApiRegressionTest::testTransferApiIdempotency</code>, <code>WalletPaymentDeductionServiceIntegrationTest::testApplyReleaseAndRefundAreIdempotent</code>, <code>::testReleasedDeductionPreventsReapply</code>.</li>
+<li><strong>Optimistic/pessimistic locking &amp; concurrency</strong>: <code>WalletRepositoryTest::testFindByIdForUpdatePessimisticLock</code>, <code>Service/TransferServiceTest::testTransferDeadlockSafeOrder</code> (white-box but protects the no-deadlock invariant), <code>Integration/TransferServiceTest::testConcurrentTransfersDoNotDoubleSpend</code>.</li>
+<li><strong>Transactional rollback / no partial state</strong>: <code>Service/TransferServiceTest::testDepositRollbackOnError</code>, <code>::testDepositEmClosedRecovery</code>, <code>::testTransferEmClosedRecovery</code>, <code>Integration/TransferServiceTest::testBalanceUnchangedAfterFailedTransfer</code>, <code>WalletPaymentDeductionServiceIntegrationTest::testApplyMarksDeductionFailedWhenTransferFails</code>.</li>
+<li><strong>Reconciliation</strong>: <code>WalletServiceTest::testReconcileExcessBalanceByDeposit</code>, <code>::testReconcileNegativeDiffSkipped</code>, <code>::testReconcileIdempotent</code>, <code>::testReconcileMultipleWallets</code>; HTTP <code>UserApiIntegrationTest::testBalanceVerification</code> / <code>::testReconcileAfterDepositProducesZero</code>.</li>
+<li><strong>Skipped tests documenting known bugs (KEEP per campaign rules)</strong>: <code>TransferControllerTest::testCreateActionZeroAmountShouldReportAmountNotPositive</code>, <code>::testDepositActionZeroAmountShouldReportAmountNotPositive</code> (BUG-3 <code>empty()</code>), <code>::testCreateActionIdempotentReplayEchoesStoredAmount</code> (BUG-4). <code>WalletApiRegressionTest::blindTransferProvider</code> <code>'float amount' =&gt; 201</code> also documents BUG-1 truncation.</li>
+<li><strong>Validation guards</strong>: <code>WalletTransactionTest::testConstructorInvalidTypeThrowsException</code>/<code>testSetInvalidStatus</code>/<code>testAllValidTypes</code>/<code>testAllValidStatuses</code>, <code>WalletPaymentDeductionTest::testRequiresInvoicePayer</code>, all <code>WalletPaymentDeductionServiceIntegrationTest</code> validation tests.</li>
+<li><strong>Owner/HTTP scoping</strong>: <code>WalletApiRegressionTest::testAppWalletsAndTransactionsAreScopedToCurrentUser</code>, <code>::testTransferRequiresAuth</code>.</li>
+<li><strong>Full gateway/HTTP money flow</strong>: <code>WalletGatewayIntegrationTest::testWalletPaymentAndRefund</code> (asserts payer and system wallet balances after pay and refund), <code>UserApiIntegrationTest::testDepositFundsToWallet</code>, <code>::testTransferBetweenWallets</code>.</li>
+<li><strong>Unique unit branches without a higher-layer duplicate</strong>: <code>WalletGatewayTest::testPayRequiresPayer</code>/<code>::testRefundRequiresPayer</code>/<code>::testPayRequiresWalletForPayer</code>/<code>::testRefundRequiresWalletForPayer</code>/<code>::testRefundReturnsPartialRefundedStatus</code>; <code>Service/TransferServiceTest::testTransferSourceNotFound</code> (Integration only covers target-not-found); all deposit tests in <code>Service/TransferServiceTest</code>.</li>
+</ul>
+<h2 id="delete-candidates-table">DELETE CANDIDATES — table<a class="headerlink" href="#delete-candidates-table" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WalletServiceCoverageTest::testGetWalletRepositoryThrowsWhenRepositoryIsNotWalletRepository</code></td>
+<td>1 COVERAGE-CHASING + 2 DUPLICATE</td>
+<td>HIGH</td>
+<td>Tests a defensive <code>instanceof</code> guard at <code>src/Wallet/Service/WalletService.php:148</code> that is unreachable in practice (Doctrine always resolves <code>WalletRepository</code>); the two tests in the file hit the same line</td>
+</tr>
+<tr>
+<td><code>WalletServiceCoverageTest::testGetWalletRepositoryThrowsForUnrelatedRepository</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td>Same guard, same <code>LogicException</code>, different entry point — exact duplicate of <code>testGetWalletRepositoryThrowsWhenRepositoryIsNotWalletRepository</code></td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferAmountNotPositive</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testTransferZeroAmount</code>, <code>::testTransferNegativeAmount</code> (same <code>InvalidArgumentException</code>, message <code>positive</code>)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferSameWallet</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testTransferSameWalletThrows</code> (<code>SameWalletTransferException</code>)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferSourceFrozen</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testTransferFromFrozenWallet</code> (<code>WalletFrozenException</code>)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferTargetFrozen</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testTransferToFrozenWallet</code> (<code>WalletFrozenException</code>)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferCurrencyMismatch</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testTransferCurrencyMismatch</code> (same <code>RuntimeException</code> "Currency mismatch")</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferInsufficientFunds</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testTransferInsufficientFunds</code> (+ HTTP <code>WalletApiRegressionTest::testTransferApiInsufficientFunds</code>)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferIdempotent</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/TransferServiceTest::testIdempotencyByReferenceId</code> (+ HTTP <code>WalletApiRegressionTest::testTransferApiIdempotency</code>)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferTargetNotFound</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>Integration/TransferServiceTest::testTransferNonexistentWallet</code> (target wallet missing)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferHappyPath</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>Integration/TransferServiceTest::testBasicTransfer</code> (same completed status, amount, from/to balances, persisted)</td>
+</tr>
+<tr>
+<td><code>Service/TransferServiceTest::testTransferRollbackOnError</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>Integration/TransferServiceTest::testBalanceUnchangedAfterFailedTransfer</code> (rollback effect asserted on persisted state, stronger than mock <code>rollback()</code> call)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WalletGatewayTest::testNotifyRejectsExternalCallbacks</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/WalletGatewayIntegrationTest::testWalletGatewayRejectsExternalNotify</code> (same empty <code>Request</code> → <code>PaymentVerificationException</code>)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WalletGatewayTest::testPayRequiresSystemWalletId</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>Integration/WalletGatewayIntegrationTest::testWalletGatewayRequiresSystemWallet</code> (pay without <code>systemWalletId</code> → <code>InvalidArgumentException</code>)</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WalletGatewayTest::testGetNameAndGetNotifySuccessResponse</code></td>
+<td>1 COVERAGE-CHASING + 2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>getName()</code> returns a constant; <code>getNotifySuccessResponse</code> duplicate of <code>Integration/WalletGatewayIntegrationTest::testGetNotifySuccessResponseReturnsTextResponse</code> (same 200 / "OK")</td>
+</tr>
+<tr>
+<td><code>Service/Payment/WalletGatewayTest::testRefundReturnsRefundedStatus</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>Integration/WalletGatewayIntegrationTest::testWalletPaymentAndRefund</code> (full refund asserted <code>STATUS_REFUNDED</code> with persisted balances)</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTest::testBalanceBoundaryZero</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td>Exact duplicate of <code>testConstructorInitializesDefaults</code> assertions (balance <code>0</code>, <code>getBalanceAsFloat()</code> <code>0.0</code>)</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTest::testBalanceBoundaryLarge</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same <code>/100</code> conversion as <code>testBalanceAsFloatWithCents</code> (one boundary test suffices for the money invariant)</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTest::testConstructorCurrencyUppercase</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same <code>strtoupper</code> logic as <code>testSetCurrency</code> (constructor vs setter)</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTest::testPrePersistWhenCreatedFromReflection</code> + <code>testPrePersistKeepsExistingCreatedAt</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Both exercise the two branches of the same <code>prePersist()</code> <code>if (!isset($this-&gt;createdAt))</code> lifecycle guard; merge into one parameterized test</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTest::testSetUser</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Trivial <code>setUser()</code>/<code>getUser()</code> round-trip, no logic</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTest::testSetLabel</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Trivial <code>setLabel()</code>/<code>getLabel()</code> round-trip, no logic</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testUuidPersistenceAcrossOperations</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>HIGH</td>
+<td>Tautological — <code>uuid</code> has no setter and cannot change</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testAmountBoundaryLarge</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same <code>/100</code> conversion as <code>testAmountBoundaryOneCent</code></td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testPrePersist</code> + <code>testPrePersistKeepsExisting</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Two branches of the same <code>prePersist()</code> guard; merge into one</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testSetFromAndToWallet</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Trivial set/get round-trip</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testSetReferenceId</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Trivial set/get round-trip</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testSetDescription</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Trivial set/get round-trip</td>
+</tr>
+<tr>
+<td><code>Entity/WalletTransactionTest::testSetMetadata</code></td>
+<td>1 COVERAGE-CHASING</td>
+<td>MEDIUM</td>
+<td>Trivial set/get round-trip</td>
+</tr>
+<tr>
+<td><code>WalletServiceTest::testVerifyBalanceZero</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same <code>matches=true</code> branch as <code>testVerifyBalanceMatches</code> with only the magnitude changed (mock values forwarded into the result array)</td>
+</tr>
+<tr>
+<td><code>WalletServiceTest::testReconcileEmptyWallets</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same "0 reconciled, 0 adjustments" outcome as <code>testReconcileBalancedWallet</code> (empty loop vs balanced wallet); table-drive together</td>
+</tr>
+<tr>
+<td><code>WalletServiceTest::testReconcileSkipsNonWalletEntities</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same <code>continue</code> guard at <code>WalletService.php:87</code> as <code>testReconcileSkipsWalletWithoutId</code>; defensive guard coverage</td>
+</tr>
+<tr>
+<td><code>WalletServiceTest::testReconcileSkipsWalletWithoutId</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td>Same guard as above; duplicate of <code>testReconcileSkipsNonWalletEntities</code></td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionRejectsMissingFields</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferApiMissingFields</code> (400) + <code>UserApiIntegrationTest::testTransferMissingFields</code> (400)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionRejectsInvalidJson</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferInvalidJson</code> (400)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionInsufficientFunds</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferApiInsufficientFunds</code> (402) + <code>UserApiIntegrationTest::testTransferBetweenWallets</code> (402)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionWalletFrozen</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferApiFrozenWallet</code> (403)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionSameWallet</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferApiSameWallet</code> (400) + <code>UserApiIntegrationTest::testTransferSameWalletRejected</code> (400)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionRuntimeNotFoundMapsTo404</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>WalletApiRegressionTest::testTransferNonexistentSourceWallet</code> (404)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionSuccess</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>WalletApiRegressionTest::testTransferApiSuccess</code> (201 + code/status/amount/amountFloat/balances) + <code>UserApiIntegrationTest::testTransferBetweenWallets</code></td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionRejectsNegativeAmount</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>WalletApiRegressionTest::blindTransferProvider</code> <code>'negative amount'</code> → 400 + <code>UserApiIntegrationTest::testTransferNegativeAmountRejected</code> (400)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionRejectsNonNumericAmount</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>WalletApiRegressionTest::blindTransferProvider</code> <code>'string amount'</code> / <code>'wrong types'</code> → 400</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionRuntimeErrorMapsTo500</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>WalletApiRegressionTest::testTransferCurrencyMismatch</code> (500) exercises the generic-<code>RuntimeException</code> → 500 mapping</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testCreateActionInvalidArgument</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>WalletApiRegressionTest::blindTransferProvider</code> <code>'wrong types'</code> → 400 exercises the <code>InvalidArgumentException</code> → 400 mapping</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testDepositActionSuccess</code></td>
+<td>2 DUPLICATE</td>
+<td>MEDIUM</td>
+<td><code>UserApiIntegrationTest::testDepositFundsToWallet</code> (201, <code>type</code> deposit, <code>toWalletBalanceAfter</code>, <code>amountFloat</code>)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testDepositActionRejectsMissingFields</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>UserApiIntegrationTest::testDepositMissingFields</code> (400)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testDepositActionRejectsNonPositiveAmount</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>UserApiIntegrationTest::testDepositNegativeAmountRejected</code> (400)</td>
+</tr>
+<tr>
+<td><code>Controller/Manage/TransferControllerTest::testDepositActionRuntimeNotFoundMapsTo404</code></td>
+<td>2 DUPLICATE</td>
+<td>HIGH</td>
+<td><code>UserApiIntegrationTest::testDepositToNonexistentWallet</code> (404)</td>
+</tr>
+</tbody>
+</table>
+<p>Note on the controller rows: the HTTP tests assert status codes (and partly response bodies); the unit
+controller tests additionally assert the response envelope. Deleting them is safe only if the HTTP layer
+is the primary owner of the API contract (per TEST_STRATEGY). See merge suggestion 7.</p>
+<p>Lower-priority (leave for a later pass, not recommended for immediate deletion):
+<code>WalletTransactionRepositoryTest::testFindPendingEmpty</code> (overlaps <code>testFindPendingExcludesCompleted</code>),
+<code>WalletRepositoryTest::testFindByUserEmpty</code> / <code>testFindByUserAndCurrencyNotFound</code> (trivial empty results),
+<code>WalletApiRegressionTest::testTransferApiMissingFields</code> (overlaps <code>blindTransferProvider</code> missing-field cases).</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong><code>WalletServiceCoverageTest</code></strong> — collapse to a single test (or delete the whole file; it exists only for line 148 of <code>WalletService.php</code>).</li>
+<li><strong><code>WalletServiceTest::testVerifyBalanceMatches</code> / <code>testVerifyBalanceMismatch</code> / <code>testVerifyBalanceZero</code></strong> — table-drive into one test (matches/mismatch/zero rows).</li>
+<li><strong><code>WalletServiceTest::testReconcileEmptyWallets</code> + <code>testReconcileBalancedWallet</code></strong> and <strong><code>testReconcileSkipsNonWalletEntities</code> + <code>testReconcileSkipsWalletWithoutId</code></strong> — merge each pair into one table-driven test.</li>
+<li><strong><code>WalletTest::testPrePersistWhenCreatedFromReflection</code> + <code>testPrePersistKeepsExistingCreatedAt</code></strong> and <strong><code>WalletTransactionTest::testPrePersist</code> + <code>testPrePersistKeepsExisting</code></strong> — merge into one parameterized lifecycle test each.</li>
+<li><strong><code>WalletTest::testConstructorCurrencyUppercase</code> + <code>testSetCurrency</code></strong> — merge (single uppercasing case matrix).</li>
+<li><strong><code>Entity</code> boundary tests</strong> — keep one cents/float boundary test per entity (one-cent boundary) and drop the large-value variants; both exercise the same <code>amount/100</code> line.</li>
+<li><strong><code>TransferControllerTest</code></strong> — if the HTTP suite is kept as primary owner, fold the response-envelope assertions (<code>code</code>/<code>message</code>/<code>data</code> shape) into <code>WalletApiRegressionTest</code>/<code>UserApiIntegrationTest</code> and delete the corresponding unit tests; retain only the 3 skipped bug-documentation tests.</li>
+</ol>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Confirm the current baseline before deleting anything:
+   <code>cd /Volumes/Nayuki/Development/PHP/crud-skeleton &amp;&amp; /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Wallet</code>
+   Expected: <code>Tests: 183, Assertions: 524, Skipped: 3</code> (16 pre-existing PHPUnit notices are unrelated).</li>
+<li>After any deletion, re-run the same command and confirm the count drops exactly by the number of removed
+   non-skipped tests and that <code>Skipped: 3</code> is unchanged (the 3 bug-documentation skips must remain).</li>
+<li>Because the duplicates are cross-layer, also run the full suite to ensure the higher-layer owners still
+   pass and that no <code>src/Wallet</code> line becomes uncovered below the 90% gate:
+   <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code></li>
+<li>For the coverage-chasing entities (accessors, <code>prePersist</code>, <code>WalletServiceCoverageTest</code>), verify removal
+   does not drop <code>src/Wallet</code> line coverage below the gate:
+   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-html var/coverage</code>.
+   The campaign reached 99.46% project-wide with large headroom, so the flagged trivial tests should be safe
+   to drop; any surprising dip should be reviewed before committing.</li>
+<li>No changes under <code>src/</code> or <code>tests/</code> were made by this audit; deletion is a separate follow-up task.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
