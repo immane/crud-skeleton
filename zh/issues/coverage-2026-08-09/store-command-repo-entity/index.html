@@ -1749,7 +1749,7 @@
 <li><strong>描述：</strong> <code>markPublished()</code> 改变托管实体，但唯一的 <code>flush()</code> 在循环之后运行（第 64 行），并且不受 <code>finally</code> 或事务保护。 <code>claim()</code>/<code>defer()</code> 是绕过工作单元的 DQL 批量更新，使加载的实体在内存中留下陈旧的 <code>availableAt</code>。循环中任何意外的异常 - 例如<code>findUnpublished()</code>、<code>claim()</code> 或 <code>defer()</code> 抛出数据库错误（这些都不在每条消息 <code>try/catch</code> 内） - 在 <code>flush()</code> 之前中止 <code>execute()</code>，因此较早的 <code>markPublished()</code> 突变会默默丢失。</li>
 <li><strong>影响：</strong> 成功发送的消息将在下次运行时重新发送（重复发送）。消费者通过消费事件去重实现幂等，因此可以容忍重复，但设计存在重复交付和不一致的部分批次的风险（一些消息标记为在数据库中发布，另一些则没有）。</li>
 <li><strong>复制：</strong> 模拟存储库，因此 <code>claim()</code> 在第一条消息成功分派后抛出第二条消息； <code>flush()</code> 永远不会运行，并且第一条消息不会按发布的方式保留。</li>
-<li><strong>建议的修复：</strong> 将每个调度包装在其自己的事务中（或按消息刷新），和/或将刷新放在 <code>finally</code> 中；可以选择在 <code>findUnpublished</code> 上使用 <code>Query::HINT_READ_ONLY</code>，这样批量更新和 UoW 就不会出现分歧。</li>
+<li><strong>建议的修复：</strong> 将每个调度包装在自己的事务中（或按消息刷新），和/或将刷新放在 <code>finally</code> 中；可以选择在 <code>findUnpublished</code> 上使用 <code>Query::HINT_READ_ONLY</code>，这样批量更新和 UoW 就不会出现分歧。</li>
 </ul>
 <h3 id="bug-5-id-null">Bug 5 — <code>$id === null</code> 默默地丢弃一条消息（可以忽略不计，实际上已失效）<a class="headerlink" href="#bug-5-id-null" title="Permanent link">&para;</a></h3>
 <ul>

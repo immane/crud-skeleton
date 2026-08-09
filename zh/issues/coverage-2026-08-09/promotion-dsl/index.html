@@ -1724,7 +1724,7 @@
 <ul>
 <li><strong>文件/行：</strong> <code>src/Promotion/Service/Dsl/Parser.php:37-39</code> 允许重复 <code>when:</code> 部分； <code>src/Promotion/Service/PromotionService.php:150-158</code> (<code>findWhenNode()</code>) 仅返回<strong>第一个</strong>； <code>src/Promotion/Service/PromotionTemplateService.php:81-92</code> (<code>simulate()</code>) 仅报告<strong>最后</strong>。</li>
 <li><strong>描述：</strong> 有两个 <code>when:</code> 块，实际评估仅强制执行第一个，而 <code>simulate()</code> 仅显示最后一个。没有错误，也没有两者的结合。</li>
-<li><strong>影响：</strong>第一个 <code>when:</code> 之后写入的条件在生产中会被默默忽略，从而改变促销实际匹配的内容。</li>
+<li><strong>影响：</strong>第一个 <code>when:</code> 之后写入的条件在生产中会被默默忽略，从而更改促销实际匹配的内容。</li>
 <li><strong>复制：</strong> <code>ParserBugReproTest::testParserAllowsMultipleWhenSections</code> 显示两个在解析中幸存下来的 <code>when</code> 节点。</li>
 <li><strong>建议的修复：</strong> 在解析时拒绝第二个 <code>when:</code> 部分，或者使两个 <code>findWhenNode()</code>/<code>simulate()</code> 遵循所有 <code>when:</code> 节点（并将它们放在一起）。</li>
 </ul>

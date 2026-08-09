@@ -1485,10 +1485,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#153" class="md-nav__link">
+  <a href="#153-operational-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.3 运营指标
+        15.3 Operational Metrics
       
     </span>
   </a>
@@ -3100,10 +3100,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#153" class="md-nav__link">
+  <a href="#153-operational-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.3 运营指标
+        15.3 Operational Metrics
       
     </span>
   </a>
@@ -4711,7 +4711,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 <tr>
 <td>店铺生意拒绝</td>
 <td>发布拒绝事件</td>
-<td>带有原因代码/相关性的信息</td>
+<td>Info with reason code/correlation</td>
 </tr>
 <tr>
 <td>事件架构违规</td>
@@ -4725,7 +4725,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 </tr>
 <tr>
 <td>快照不匹配</td>
-<td>不要改变现有的 StoreOrder</td>
+<td>Do not mutate existing StoreOrder</td>
 <td>严重警报</td>
 </tr>
 <tr>
@@ -4742,7 +4742,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 </code></pre></div>
 <p>日志不得包含客户电话/地址详细信息、付款秘密、原始网关
 有效负载或完整项目快照，除非为了安全诊断而明确编辑。</p>
-<h3 id="153">15.3 运营指标<a class="headerlink" href="#153" title="Permanent link">&para;</a></h3>
+<h3 id="153-operational-metrics">15.3 Operational Metrics<a class="headerlink" href="#153-operational-metrics" title="Permanent link">&para;</a></h3>
 <p>目标部署至少导出：</p>
 <ul>
 <li>发件箱积压计数和最早的未发布年龄。</li>
@@ -4821,7 +4821,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 </tr>
 <tr>
 <td>贸易两次获得商店受理</td>
-<td>仅一种合法的工作流程转换</td>
+<td>One legal workflow transition only</td>
 </tr>
 <tr>
 <td>交易接受超时竞赛 商店接受</td>
@@ -4870,11 +4870,11 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 </ol>
 <h3 id="4_1">第 4 阶段：履行和库存整合<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h3>
 <ol>
-<li>定义库存预留事件合同。</li>
+<li>Define Inventory reservation event contracts.</li>
 <li>Gate Store接受预订确认。
 3.添加商店履行操作和相应的贸易事件消费者，其中
-   商业工作流程转换仍由 Trade 拥有。
-4.添加取消/解除补偿。</li>
+   商业工作流程转换仍由 Trade 拥有。</li>
+<li>Add cancellation/release compensation.</li>
 </ol>
 <h3 id="5_1">第 5 阶段：服务提取准备就绪<a class="headerlink" href="#5_1" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4929,7 +4929,7 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 </tr>
 <tr>
 <td>拒绝/超时</td>
-<td>Trade 在商店拒绝或接受超时时取消未付款的订单</td>
+<td>Trade 在商店拒绝或接受超时时取消未付款订单</td>
 </tr>
 <tr>
 <td>授权</td>

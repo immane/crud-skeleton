@@ -3327,23 +3327,27 @@
 <a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   ├── issues/                   # Audit &amp; coverage reports (coverage-2026-08-09/, test-audit-2026-08-09/)
 <a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>├── tests/                        # 300 PHPUnit test files: 2686 tests, 9264 assertions, 99.46% line coverage
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>├── README.md                     # English README
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>├── README.zh-cn.md               # Chinese (Simplified) README
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>├── README.zh-hant.md             # Chinese (Traditional) README
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>├── README.ja.md                  # Japanese README
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>├── docker/
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>└── .github/workflows/
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run; tests job runs on PostgreSQL 16
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>├── tests/                        # 303 PHPUnit test files, organized by layer:
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│   ├── UnitTest/                 #   189 files — pure unit tests (no kernel/DB), App\Tests\UnitTest\...
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│   ├── Integration/              #   71 files — kernel/DB/HTTP tests + helpers (DatabaseBootstrapTrait, IntegrationWebTestCase), App\Tests\Integration\...
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│   └── LowValue/                 #   43 files — deprecated/low-value tests, excluded from default run, App\Tests\LowValue\...
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│                                 主套件 = UnitTest + Integration（2274 tests）；低价值可 --group low-value 显式运行
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>├── README.md                     # English README
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>├── README.zh-cn.md               # Chinese (Simplified) README
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>├── README.zh-hant.md             # Chinese (Traditional) README
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>├── README.ja.md                  # Japanese README
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>├── mkdocs.yml                    # MkDocs Material config
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>├── docker/
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>└── .github/workflows/
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run; tests job runs on PostgreSQL 16
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
@@ -4763,29 +4767,22 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <h2 id="17-testing">17. Testing<a class="headerlink" href="#17-testing" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5 (brianium/paratest available for parallel runs)</li>
+<li><strong>Layout</strong>: tests are organized by layer, not by module — <code>tests/UnitTest/</code> (pure unit tests, no kernel/DB), <code>tests/Integration/</code> (kernel + DB + HTTP tests, plus helpers <code>DatabaseBootstrapTrait</code>/<code>IntegrationWebTestCase</code>/<code>IntegrationKernelTestCase</code>/<code>StoreTradeFlowTestCase</code>), <code>tests/LowValue/</code> (deprecated/low-value tests excluded from the default run). Namespace <code>App\Tests\</code> mirrors the layout: <code>App\Tests\UnitTest\...</code>, <code>App\Tests\Integration\...</code>, <code>App\Tests\LowValue\...</code>. Test-support resources: <code>tests/bootstrap.php</code> and JWT test keys under <code>tests/Identity/Security/</code> (referenced by <code>.env.test</code> and CI).</li>
+<li><strong>Low-value exclusion mechanism</strong>: <code>phpunit.dist.xml</code> defines the "Project Test Suite" (UnitTest + Integration dirs) and a separate "Low Value" suite; a global <code>&lt;exclude&gt;&lt;group&gt;low-value&lt;/group&gt;&lt;/exclude&gt;</code> removes every test carrying <code>#[Group('low-value')]</code> (class- or method-level) from the default run — covering both whole LowValue files and individual flagged methods inside kept files (from the 2026-08-09 test audit). Run them explicitly with <code>php bin/phpunit --group low-value</code> (423 tests).</li>
 <li><strong>DB</strong>: local tests default to SQLite <code>var/test.db</code> (paratest uses per-worker SQLite files); CI tests job runs on <strong>PostgreSQL 16</strong>; <code>migrations.yml</code> validates the migration chain on <strong>MySQL 8.4</strong></li>
 <li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>99.46% lines (8511/8557)</strong> from latest local Xdebug run (2026-08-09)</li>
-<li><strong>Test count</strong>: <strong>2686 tests</strong>, <strong>9264 assertions</strong> (300 test files), suite runtime ≈ 52 s serial</li>
-<li><strong>Skipped</strong>: 38 tests — each is <code>markTestSkipped</code> because it documents a real <code>src/</code> bug (see §23 and <code>docs/issues/coverage-2026-08-09/</code>); <strong>never delete them</strong> without fixing the underlying bug first</li>
-<li><strong>PHPUnit Notices</strong>: 186 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more</li>
+<li><strong>Test count</strong>: <strong>2220 tests / 7936 assertions</strong> in the default suite (UnitTest + Integration), plus <strong>477 low-value tests</strong> excluded by default; 34 skipped tests document real <code>src/</code> bugs (see §23 and <code>docs/issues/coverage-2026-08-09/</code>); <strong>never delete or un-skip them</strong> without fixing the underlying bug</li>
+<li><strong>Suite runtime</strong>: serial ≈ 59 s (kernel-bootstrapping integration tests dominate). Run parallel with paratest for ~2.3× speedup: <code>PARATEST=1 php vendor/bin/paratest --processes 8 --runner WrapperRunner</code> (≈26 s; per-worker SQLite isolation is handled by <code>tests/bootstrap.php</code>)</li>
+<li><strong>PHPUnit Notices</strong>: 160 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more</li>
 <li><strong>Memory</strong>: <code>phpunit.dist.xml</code> sets test-process <code>memory_limit=512M</code> (OpenAPI integration builds the full spec in-process)</li>
 <li><strong>Test-quality contract</strong>: <code>docs/testing/crud-skeleton-production/</code> (TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION) governs what evidence a change requires before merge/release</li>
 <li><strong>Static analysis</strong>: PHPStan Level 8 with zero errors in its configured scope (<code>src/</code>, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via <code>@template TEntity</code> on <code>BaseServiceInterface</code>/<code>BaseService</code> + <code>@extends</code> on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with <code>composer rector:types</code>; CI enforces <code>composer rector:types:check</code> as a dry-run.</li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
-<li><strong>Key test groups</strong> (per-module distribution from 2026-08-09 baseline):</li>
-<li><code>tests/Trade/</code>: 391 tests (16.8 s — slowest group; full-flow HTTP tests overlap <code>OrderWorkflowApiTest</code>, see test-audit)</li>
-<li><code>tests/Promotion/</code>: 360 tests (Entity, DSL lexer/parser/evaluator, Strategies, Engine, Calculator, App/Manage controllers, real SQLite pipeline integration with Doctrine + OrderService)</li>
-<li><code>tests/Core/</code>: 638 tests (BaseService traits, RestController, Parser, Serializer, LocaleListener, Utils, System controllers — all PHPStan Level 8 compliant)</li>
-<li><code>tests/Identity/</code>: 281 tests (Auth, OTP, Token, Black box, UserService, UserController, UserApiIntegration, Profile entity, ProfileController)</li>
-<li><code>tests/Integration/</code>: 158 tests (13.1 s — second-slowest; cross-module kernel-bootstrapping tests)</li>
-<li><code>tests/Store/</code>: 153 tests (entities/services, Trade → Store → Trade integration, outbox/inbox, concurrency)</li>
-<li><code>tests/Wallet/</code>: 173 tests (Entity, Integration, Transfer Service, WalletService, Payment/Gateway, API regression)</li>
-<li><code>tests/Common/</code>: 129 tests (Entity, Integration, Batch update, media upload/delete, Picture CRUD)</li>
-<li><code>tests/Inventory/</code>: 109 tests (Entity, Service, Integration, Message, API, Handler)</li>
-<li><code>tests/Wechat/</code>: 78 tests (Entity, Service, AuthService, Payment/Gateway, Controller, Repository)</li>
-<li><code>tests/Payment/</code>: 76 tests (Gateway, Registry, Adjustment/Provider, Invoice, Multi-gateway integration)</li>
-<li><code>tests/Storage/</code>: 20 tests (LocalStorage, QiniuStorage stub-isolated subprocess tests, registry, Qiniu settings command)</li>
+<li><strong>Key test groups</strong> (after the 2026-08-09 layer re-organization; module folders now live under each layer):</li>
+<li><code>tests/UnitTest/</code>: 189 files — pure unit tests (entities, utils, DSL, strategies, mock-based services/controllers, workflow state machine, listeners)</li>
+<li><code>tests/Integration/</code>: 71 files — kernel+DB+HTTP (module integration flows, API regressions, outbox/inbox, concurrency, cross-module flows, health/metrics/rate-limit endpoints) plus the 4 shared helpers; Trade integration remains the slowest area (see test-audit)</li>
+<li><code>tests/LowValue/</code>: 43 files — flagged by the 2026-08-09 audit as duplicates/coverage-chasing; excluded from default runs (<code>--group low-value</code> to execute)</li>
 <li><code>scripts/tests/api-smoke.sh</code>: real HTTP auth/catalog/wallet/order/payment smoke; strict 401/403/404 checks</li>
 <li><code>scripts/tests/store-smoke.sh</code>: real HTTP Store-scoped order, Trade Outbox, Messenger consumer, Store Outbox, and <code>store_accepted</code> assertion</li>
 <li><code>scripts/tests/inventory-smoke.sh</code>: Inventory-scoped smoke (only when <code>INVENTORY_ENABLED=1</code>)</li>

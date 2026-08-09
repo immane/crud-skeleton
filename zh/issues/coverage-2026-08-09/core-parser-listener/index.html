@@ -1768,7 +1768,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === &#39;en&#39;  (expected &#39;zh&#39;)</span>
 </code></pre></div></li>
-<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空格/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
+<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空白/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
 </ul>
 <h3 id="34-expressiondqlparser">3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低<a class="headerlink" href="#34-expressiondqlparser" title="Permanent link">&para;</a></h3>
 <p>无法提高到 100% 的四条线是任何公众意见都无法达到的。每个都是一个防御分支，其守卫永远不会失败：</p>

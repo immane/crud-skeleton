@@ -1753,7 +1753,7 @@
 </ul>
 <h2 id="_4">观察结果（不是错误）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>User::setProfile()</code>（第153-160行）不会分离先前分配的配置文件。在<code>setProfile($a)</code>和<code>setProfile($b)</code>之后，<code>$a-&gt;getUser()</code>仍然指向<code>$user</code>。如果刷新两个配置文件，则可能会违反 OneToOne <code>user_id</code> 唯一约束。正常流程仅设置一次配置文件，因此严重性较低； <code>setProfile(null)</code>/detach 步骤将使更换更加安全。 （失败的测试未涵盖 - 为修复程序记录。）</li>
+<li><code>User::setProfile()</code>（第153-160行）不会分离先前分配的配置文件。在<code>setProfile($a)</code>和<code>setProfile($b)</code>之后，<code>$a-&gt;getUser()</code>仍然指向<code>$user</code>。如果两个配置文件都被刷新，则可能会违反 OneToOne <code>user_id</code> 唯一约束。正常流程仅设置一次配置文件，因此严重性较低； <code>setProfile(null)</code>/detach 步骤将使更换更加安全。 （失败的测试未涵盖 - 为修复程序记录。）</li>
 <li><code>JwtAuthenticator::supports()</code>（第33行）区分大小写（<code>'Bearer '</code>）； <code>Authorization: bearer xyz</code> 未被识别。许多 JWT 堆栈接受不区分大小写的方案名称；次要的。</li>
 <li><code>TokenManager::rotateRefreshToken()</code> 重用检测（第 249-253 行）有意仅将<em>旋转替换</em>令牌视为盗窃；根据设计，手动撤销（例如注销）且没有替换的令牌会产生“无效或过期”，而不是“检测到重用”。</li>
 <li><code>RedisOtpStorage</code>构造函数不执行I/O（Predis惰性客户端）；配置错误的 DSN 仅在第一个命令时失败，而不是在构建时失败。</li>
