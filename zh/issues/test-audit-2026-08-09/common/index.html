@@ -558,6 +558,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -822,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/identity/" class="md-nav__link">
         
   
@@ -1063,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1152,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1180,7 +1236,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1550,10 +1606,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#notes-non-blocking-observations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注释/非阻塞观察
+        Notes / non-blocking observations
       
     </span>
   </a>
@@ -1561,10 +1617,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -1841,9 +1897,9 @@
 </tr>
 <tr>
 <td>ContentControllerTest::testDetailMissingReturns404</td>
+<td>ContentControllerTest::testDetailMissingReturns404</td>
 <td>2/1</td>
 <td>中</td>
-<td>DetailApiViewMixinTest::testDetailMissingEntityReturnsNotFound</td>
 </tr>
 <tr>
 <td>ContentControllerTest::testListRequiresAuthentication</td>
@@ -1957,27 +2013,27 @@
 </ul>
 <h2 id="_6">合并建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ol>
-<li><code>CommonBatchUpdateTest</code>（7 个测试）→ 一个断言持久字段值的表驱动测试，
-   不仅仅是 HTTP 200。</li>
-<li><code>CommonRepoTest</code>（7个测试）→ 1个参数化<code>persist → findById → findAll</code>映射测试
-   （或删除以支持 <code>CommonModulesIntegrationTest</code> CRUD 覆盖）。</li>
-<li><code>CommonRepoFullTest::testContentFindLatest*</code> → 折叠成<code>ContentRepositoryIntegrationTest</code>
-   （已经断言排序/限制）。</li>
-<li><code>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults</code> → 折叠成
-   <code>MediaTest</code> （或删除；<code>MediaTest</code> 已覆盖它）。</li>
-<li><code>CommentControllerTest</code>（如果保留）→ 将两个单元测试折叠到 HTTP 级别的覆盖范围中
-   <code>AppApiRegressionTest</code> 而不是维护大量模拟的第二个副本。</li>
+<li><code>CommonBatchUpdateTest</code> (7 tests) → one table-driven test asserting persisted field values,
+   not just HTTP 200.</li>
+<li><code>CommonRepoTest</code> (7 tests) → one parameterized <code>persist → findById → findAll</code> mapping test
+   (or delete in favour of <code>CommonModulesIntegrationTest</code> CRUD coverage).</li>
+<li><code>CommonRepoFullTest::testContentFindLatest*</code> → fold into <code>ContentRepositoryIntegrationTest</code>
+   (already asserts ordering/limit).</li>
+<li><code>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults</code> → fold into
+   <code>MediaTest</code> (or delete; <code>MediaTest</code> already covers it).</li>
+<li><code>CommentControllerTest</code> (if kept) → fold the two unit tests into the HTTP-level coverage in
+   <code>AppApiRegressionTest</code> rather than maintaining a mock-heavy second copy.</li>
 </ol>
-<h2 id="_7">注释/非阻塞观察<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="notes-non-blocking-observations">Notes / non-blocking observations<a class="headerlink" href="#notes-non-blocking-observations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>ContentTest::testSettersAreFluentAndTouchUpdatesTimestamp</code> 通过只是因为 <code>setBody()</code>
-  触摸<code>updatedAt</code>；它没有捕获 <code>setTitle()</code> 缺失 - <code>touch()</code> 错误。这是一个
-  覆盖盲点，不是多余的测试 - 中跳过的测试
-  <code>ContentEntityCoverageTest</code> 而是记录该错误。不要将此测试视为证据
-  错误已修复。</li>
-<li>该模块中没有标记跳过的测试；所有跳过记录活动错误并保留。</li>
+<li><code>ContentTest::testSettersAreFluentAndTouchUpdatesTimestamp</code> passes only because <code>setBody()</code>
+  touches <code>updatedAt</code>; it does NOT catch the <code>setTitle()</code> missing-<code>touch()</code> bug. This is a
+  coverage blind spot, not a redundant test — the skipped tests in
+  <code>ContentEntityCoverageTest</code> document the bug instead. Do not treat this test as proof the
+  bug is fixed.</li>
+<li>No skipped test in this module was flagged; all skips document campaign bugs and are KEEP.</li>
 </ul>
-<h2 id="_8">验证步骤<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/Nayuki/Development/PHP/crud-skeleton
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Common/<span class="w">   </span><span class="c1"># 131 tests, 0 failures (baseline)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># After deleting HIGH-confidence candidates only:</span>
@@ -1985,9 +2041,9 @@
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Confirm remaining coverage: run with Xdebug and diff var/coverage for src/Common</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-text<span class="w"> </span>--filter<span class="w"> </span>Common
 </code></pre></div>
-<p>删除高置信度集（11 个测试）不得将 <code>src/Common</code> 行覆盖率降低到低于
-90%门； <code>Category::getChildren()</code>/<code>Content::getTags()</code> 惰性初始化分支是唯一的
-他们行使的路线，这些是只能通过反射才能到达的防守后卫。</p>
+<p>Deleting the HIGH-confidence set (11 tests) must not lower <code>src/Common</code> line coverage below the
+90% gate; the <code>Category::getChildren()</code>/<code>Content::getTags()</code> lazy-init branches are the only
+lines they exercise, and those are defensive guards reachable only via reflection.</p>
 
 
 
@@ -2047,6 +2103,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

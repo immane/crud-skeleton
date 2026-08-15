@@ -558,6 +558,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -822,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/identity/" class="md-nav__link">
         
   
@@ -1063,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1152,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1180,7 +1236,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1534,10 +1590,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-expands-__metadata-php-85-failondeprecation" class="md-nav__link">
+  <a href="#bug-2-expands-creates-a-dynamic-__metadata-property-php-85-deprecation-breaks-failondeprecation-high" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-2 — @expands 创建动态 __metadata 属性 → PHP 8.5 弃用 → 破坏 failOnDeprecation — 高
+        BUG-2 — @expands creates a dynamic __metadata property → PHP 8.5 deprecation → breaks failOnDeprecation — HIGH
       
     </span>
   </a>
@@ -1545,10 +1601,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-select-http-500-400" class="md-nav__link">
+  <a href="#bug-3-malformed-select-array-returns-http-500-instead-of-400-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-3 — 格式错误的 @select（数组）返回 HTTP 500 而不是 400 — 中
+        BUG-3 — malformed @select (array) returns HTTP 500 instead of 400 — MEDIUM
       
     </span>
   </a>
@@ -1556,10 +1612,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-matches-sqlite-regexp" class="md-nav__link">
+  <a href="#bug-4-matches-with-a-regex-literal-crashes-on-sqlite-no-regexp-function-medium-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-4 — matches 带有正则表达式文字在 SQLite 上崩溃（无 REGEXP 函数） — 中等（环境）
+        BUG-4 — matches with a regex literal crashes on SQLite (no REGEXP function) — MEDIUM (environment)
       
     </span>
   </a>
@@ -1567,10 +1623,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-5-500-html-404-json" class="md-nav__link">
+  <a href="#bug-5-system-endpoints-return-500-html-not-404-json-for-unknown-entities-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-5 — 系统端点为未知实体返回 500 HTML（不是 404 JSON） — 中
+        BUG-5 — System endpoints return 500 HTML (not 404 JSON) for unknown entities — MEDIUM
       
     </span>
   </a>
@@ -1578,10 +1634,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-6-default_locale-zh" class="md-nav__link">
+  <a href="#bug-6-default_locale-zh-does-not-become-the-active-locale-effective-default-is-english-low" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-6 — default_locale: zh 不会成为活动区域设置 — 有效默认值为英语 — 低
+        BUG-6 — default_locale: zh does not become the active locale — effective default is English — LOW
       
     </span>
   </a>
@@ -1818,50 +1874,50 @@
 <h2 id="4">4. 发现错误<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <h3 id="bug-1-jwt-http-baseserviceuser-null-403">BUG-1 — 对于 JWT 身份验证的 HTTP 请求，BaseService::$user 始终为 null → 所有管理员控制的查询参数 403 — <strong>高</strong><a class="headerlink" href="#bug-1-jwt-http-baseserviceuser-null-403" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Service/BaseService.php:77</code> (<code>$this-&gt;user = $token ? $token-&gt;getUser() : null;</code>)，由 <code>src/Core/Service/Concern/BaseServiceReadListTrait.php:119-120</code>（过滤器后备管理门）、<code>:270-271</code> (<code>assertPrivilegedQueryParameters</code>)、<code>:291-295</code> (<code>hasAdminRole</code>) 使用。</li>
-<li><strong>描述：</strong> <code>BaseService::$user</code> 在构建时<em><em>从 <code>security.token_storage</code> 得到解决。服务类是容器单例，并且在每个请求令牌上下文之外实例化，因此对于 HTTP 请求，<code>$user</code> 永久为 <code>null</code>。经验证明的根本原因是：在请求期间，令牌存储</em>确实</em>包含经过身份验证的用户（角色<code>ROLE_ADMIN,ROLE_USER</code>），但容器缓存的服务实例具有<code>user=null</code>，而同时构建的<code>new CategoryService($container)</code>具有<code>user=ROLE_ADMIN,ROLE_USER</code>。</li>
-<li><strong>影响：</strong> <code>@dql</code>、<code>@sort</code>、<code>@hints</code> 始终抛出 <code>AccessDeniedHttpException</code> (403)，即使对于 ROLE_ADMIN 用户也是如此；无法编译为 DQL 的 <code>@filter</code> 表达式（需要内存中 <code>LegacyEvaluator</code> 回退）也始终为 403，而不是回退。记录的动态查询权限系统无法通过 HTTP 使用。次要影响：对于价格管道上下文，<code>src/Trade/Service/OrderService.php:55</code> 读取相同的 <code>$this-&gt;user</code>。</li>
-<li><strong>复制：</strong> 使用 ROLE_ADMIN JWT，<code>GET /api/v1/manage/categories?@dql=SELECT c.id FROM App\Common\Entity\Category c</code> → <code>403 {code:403, message:"@dql is restricted to administrators.", class:"…AccessDeniedHttpException"}</code>。</li>
-<li><strong>建议的修复：</strong> 在请求时从令牌存储解析用户（例如注入 <code>TokenStorageInterface</code> 并读取 <code>list()</code>/<code>hasAdminRole()</code> 内的用户），或标记 BaseService 子类请求范围；不要将主体缓存在长期存在的单例中。</li>
-<li><strong>测试：</strong> <code>testDqlRestrictedForEveryoneCurrently</code>、<code>testSortRestrictedForEveryoneCurrently</code>、<code>testHintsRestrictedForEveryoneCurrently</code>、<code>testInvalidFilterFallsToAdminGateCurrently</code>（回归、通过）； <code>testDqlAllowedForAdminReturnsFilteredResults</code>、<code>testSortAllowedForAdminSortsInMemory</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/Service/BaseService.php:77</code> (<code>$this-&gt;user = $token ? $token-&gt;getUser() : null;</code>), consumed by <code>src/Core/Service/Concern/BaseServiceReadListTrait.php:119-120</code> (filter fallback admin gate), <code>:270-271</code> (<code>assertPrivilegedQueryParameters</code>), <code>:291-295</code> (<code>hasAdminRole</code>).</li>
+<li><strong>Description:</strong> <code>BaseService::$user</code> is resolved <strong>once at construction</strong> from <code>security.token_storage</code>. The service classes are container singletons and are instantiated outside the per-request token context, so <code>$user</code> is permanently <code>null</code> for HTTP requests. Root cause proven empirically: during the request the token storage <em>does</em> contain the authenticated user (roles <code>ROLE_ADMIN,ROLE_USER</code>), but the container-cached service instance has <code>user=null</code>, while <code>new CategoryService($container)</code> built at the same moment has <code>user=ROLE_ADMIN,ROLE_USER</code>.</li>
+<li><strong>Impact:</strong> <code>@dql</code>, <code>@sort</code>, <code>@hints</code> always throw <code>AccessDeniedHttpException</code> (403) even for ROLE_ADMIN users; <code>@filter</code> expressions that cannot compile to DQL (needing the in-memory <code>LegacyEvaluator</code> fallback) also always 403 instead of falling back. The documented dynamic-query privilege system is unusable over HTTP. Secondary impact: <code>src/Trade/Service/OrderService.php:55</code> reads the same <code>$this-&gt;user</code> for the price-pipeline context.</li>
+<li><strong>Reproduction:</strong> with a ROLE_ADMIN JWT, <code>GET /api/v1/manage/categories?@dql=SELECT c.id FROM App\Common\Entity\Category c</code> → <code>403 {code:403, message:"@dql is restricted to administrators.", class:"…AccessDeniedHttpException"}</code>.</li>
+<li><strong>Proposed fix:</strong> resolve the user from the token storage at request time (e.g. inject <code>TokenStorageInterface</code> and read the user inside <code>list()</code>/<code>hasAdminRole()</code>), or mark BaseService subclasses request-scoped; do not cache the principal in a long-lived singleton.</li>
+<li><strong>Tests:</strong> <code>testDqlRestrictedForEveryoneCurrently</code>, <code>testSortRestrictedForEveryoneCurrently</code>, <code>testHintsRestrictedForEveryoneCurrently</code>, <code>testInvalidFilterFallsToAdminGateCurrently</code> (regression, pass); <code>testDqlAllowedForAdminReturnsFilteredResults</code>, <code>testSortAllowedForAdminSortsInMemory</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-2-expands-__metadata-php-85-failondeprecation">BUG-2 — <code>@expands</code> 创建动态 <code>__metadata</code> 属性 → PHP 8.5 弃用 → 破坏 <code>failOnDeprecation</code> — <strong>高</strong><a class="headerlink" href="#bug-2-expands-__metadata-php-85-failondeprecation" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-expands-creates-a-dynamic-__metadata-property-php-85-deprecation-breaks-failondeprecation-high">BUG-2 — <code>@expands</code> creates a dynamic <code>__metadata</code> property → PHP 8.5 deprecation → breaks <code>failOnDeprecation</code> — <strong>HIGH</strong><a class="headerlink" href="#bug-2-expands-creates-a-dynamic-__metadata-property-php-85-deprecation-breaks-failondeprecation-high" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Controller/RestController.php:198</code> (<code>$node-&gt;__metadata = $node;</code>)。</li>
-<li><strong>描述：</strong> 扩展将动态属性附加到实体。在 PHP 8.2+ 上，这已被弃用 (<code>Creation of dynamic property …::__metadata is deprecated</code>)。存储库的 <code>phpunit.dist.xml</code> 设置 <code>failOnDeprecation="true"</code>，因此使用 <code>@expands</code> 的<strong>任何</strong>请求都会将套件变为红色。</li>
-<li><strong>影响：</strong> <code>@expands</code> 在 CI 中实际上是不可测试/不安全的，应被视为已损坏。 （另外观察到：在此设置中，序列化的扩展关系返回了 <code>null</code>，因此扩展没有可见的有效负载效果。）</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories?@expands=["parent"]</code> → 从 <code>RestController.php:198</code> 弃用。</li>
-<li><strong>建议的修复：</strong> 在可以扩展的实体上声明类型化 <code>public mixed $__metadata = null;</code> （或使用 <code>#[AllowDynamicProperties]</code>/外部映射），并使 <code>expandObjects</code>/<code>expandObjectToMetadata</code> 仅附加序列化器所需的元数据。</li>
-<li><strong>测试：</strong> <code>testExpandsReturnsMetadataWithoutDeprecation</code> （<strong>跳过</strong>，引用此错误）。</li>
+<li><strong>Location:</strong> <code>src/Core/Controller/RestController.php:198</code> (<code>$node-&gt;__metadata = $node;</code>).</li>
+<li><strong>Description:</strong> Expansion attaches a dynamic property to entities. On PHP 8.2+ this is deprecated (<code>Creation of dynamic property …::__metadata is deprecated</code>). The repo’s <code>phpunit.dist.xml</code> sets <code>failOnDeprecation="true"</code>, so <strong>any</strong> request using <code>@expands</code> turns the suite red.</li>
+<li><strong>Impact:</strong> <code>@expands</code> is effectively untestable/unsafe in CI and should be considered broken. (Observed additionally: the serialized expanded relation came back <code>null</code> in this setup, so expansion had no visible payload effect.)</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories?@expands=["parent"]</code> → deprecation from <code>RestController.php:198</code>.</li>
+<li><strong>Proposed fix:</strong> declare a typed <code>public mixed $__metadata = null;</code> on the entities that may be expanded (or use a <code>#[AllowDynamicProperties]</code>/external map), and make <code>expandObjects</code>/<code>expandObjectToMetadata</code> only attach the metadata the serializer needs.</li>
+<li><strong>Tests:</strong> <code>testExpandsReturnsMetadataWithoutDeprecation</code> (<strong>skipped</strong>, references this bug).</li>
 </ul>
-<h3 id="bug-3-select-http-500-400">BUG-3 — 格式错误的 <code>@select</code>（数组）返回 HTTP 500 而不是 400 — <strong>中</strong><a class="headerlink" href="#bug-3-select-http-500-400" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-malformed-select-array-returns-http-500-instead-of-400-medium">BUG-3 — malformed <code>@select</code> (array) returns HTTP 500 instead of 400 — <strong>MEDIUM</strong><a class="headerlink" href="#bug-3-malformed-select-array-returns-http-500-instead-of-400-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code> (<code>if (!is_string($select)) throw new ValidatorException('@select must be a string.');</code>)，通过 <code>src/Core/View/ListApiViewMixin.php:listAction()</code> 未捕获（无 try/catch）进入 <code>ExceptionInterceptor</code>。</li>
-<li><strong>描述：</strong> <code>@select[]=a&amp;@select[]=b</code> 使 <code>$select</code> 成为一个数组； <code>ValidatorException</code> 不是 <code>HttpException</code>，代码为 0，因此 <code>ExceptionInterceptor</code> 将其映射到 <strong>500</strong>，而不是 400。</li>
-<li><strong>影响：</strong> 对于格式错误的请求，客户端会收到 500（服务器错误）。</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories?@select[]=entity.id&amp;@select[]=entity.name</code> → <code>500 {"message":"@select must be a string.","class":"…ValidatorException"}</code>。</li>
-<li><strong>建议的修复：</strong> 在 <code>ListApiViewMixin::listAction()</code> 中捕获 <code>ValidatorException</code> 并返回 <code>warning(…, 400, …, 400)</code>，或者使读取列表特征抛出 <code>BadRequestHttpException</code>。</li>
-<li><strong>测试：</strong> <code>testArraySelectReturns500Currently</code>（回归，通过）； <code>testArraySelectReturns400</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code> (<code>if (!is_string($select)) throw new ValidatorException('@select must be a string.');</code>), surfaced uncaught through <code>src/Core/View/ListApiViewMixin.php:listAction()</code> (no try/catch) into the <code>ExceptionInterceptor</code>.</li>
+<li><strong>Description:</strong> <code>@select[]=a&amp;@select[]=b</code> makes <code>$select</code> an array; the <code>ValidatorException</code> is not an <code>HttpException</code>, has code 0, so <code>ExceptionInterceptor</code> maps it to <strong>500</strong>, not 400.</li>
+<li><strong>Impact:</strong> clients get a 500 (server error) for a request that is simply malformed.</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories?@select[]=entity.id&amp;@select[]=entity.name</code> → <code>500 {"message":"@select must be a string.","class":"…ValidatorException"}</code>.</li>
+<li><strong>Proposed fix:</strong> catch <code>ValidatorException</code> in <code>ListApiViewMixin::listAction()</code> and return <code>warning(…, 400, …, 400)</code>, or make the read-list trait throw a <code>BadRequestHttpException</code>.</li>
+<li><strong>Tests:</strong> <code>testArraySelectReturns500Currently</code> (regression, pass); <code>testArraySelectReturns400</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-4-matches-sqlite-regexp">BUG-4 — <code>matches</code> 带有正则表达式文字在 SQLite 上崩溃（无 REGEXP 函数） — <strong>中等（环境）</strong><a class="headerlink" href="#bug-4-matches-sqlite-regexp" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4-matches-with-a-regex-literal-crashes-on-sqlite-no-regexp-function-medium-environment">BUG-4 — <code>matches</code> with a regex literal crashes on SQLite (no REGEXP function) — <strong>MEDIUM (environment)</strong><a class="headerlink" href="#bug-4-matches-with-a-regex-literal-crashes-on-sqlite-no-regexp-function-medium-environment" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Parser/ExpressionDqlParser.php</code> (<code>matches</code> → <code>REGEXP(%s, %s) = TRUE</code>)。</li>
-<li><strong>描述：</strong> <code>/pattern/flags</code> 编译为 <code>REGEXP()</code> 调用； SQLite 没有 <code>REGEXP</code> 函数，因此查询在执行时失败并带有 <code>no such function: REGEXP</code>。普通的 LIKE 风格 <code>matches "slug-1"</code> 效果很好。</li>
-<li><strong>影响：</strong> 正则表达式过滤适用于 MySQL，但在 SQLite 测试环境（以及任何 SQLite 部署）中需要 500 秒。</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories?@filter=entity.getSlug() matches "/^slug-1$/i"</code> → <code>500 {"message":"…no such function: REGEXP","class":"…DriverException"}</code>。</li>
-<li><strong>建议的修复：</strong> 通过数据库平台保护 REGEXP（例如，在测试中注册 SQLite REGEXP 用户函数/使用 <code>LIKE</code> 后备），或记录正则表达式匹配仅限 MySQL。</li>
-<li><strong>测试：</strong> <code>testRegexMatchesWorksOnCurrentDb</code>（<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/Parser/ExpressionDqlParser.php</code> (<code>matches</code> → <code>REGEXP(%s, %s) = TRUE</code>).</li>
+<li><strong>Description:</strong> <code>/pattern/flags</code> compiles to a <code>REGEXP()</code> call; SQLite has no <code>REGEXP</code> function, so the query fails at execution with <code>no such function: REGEXP</code>. Plain LIKE-style <code>matches "slug-1"</code> works fine.</li>
+<li><strong>Impact:</strong> regex filtering works on MySQL but 500s in the SQLite test environment (and on any SQLite deployment).</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories?@filter=entity.getSlug() matches "/^slug-1$/i"</code> → <code>500 {"message":"…no such function: REGEXP","class":"…DriverException"}</code>.</li>
+<li><strong>Proposed fix:</strong> guard REGEXP by DB platform (e.g. register an SQLite REGEXP user-function in tests / use <code>LIKE</code> fallback), or document that regex matching is MySQL-only.</li>
+<li><strong>Tests:</strong> <code>testRegexMatchesWorksOnCurrentDb</code> (<strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-5-500-html-404-json">BUG-5 — 系统端点为未知实体返回 500 HTML（不是 404 JSON） — <strong>中</strong><a class="headerlink" href="#bug-5-500-html-404-json" title="Permanent link">&para;</a></h3>
+<h3 id="bug-5-system-endpoints-return-500-html-not-404-json-for-unknown-entities-medium">BUG-5 — System endpoints return 500 HTML (not 404 JSON) for unknown entities — <strong>MEDIUM</strong><a class="headerlink" href="#bug-5-system-endpoints-return-500-html-not-404-json-for-unknown-entities-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/EventListener/ExceptionInterceptor.php:21</code> (<code>EFFECTIVE_PATTERN = '/^\/(api)\/.*$/'</code>); <code>src/Core/Controller/System/EntityController.php:66-67</code>（<code>getClassMetadata</code> 对于未知的 FQCN 抛出异常）。</li>
-<li><strong>描述：</strong>拦截器仅处理 <code>/api/*</code> 路径，因此 <code>/system/entities/{name}</code> 上的 <code>MappingException</code> （未知实体）会绕过 JSON 错误信封并呈现 Symfony 的 HTML 错误页面 (500)。 <code>docs/ai/context.md</code> §12 中的文档暗示这些是 API 风格的系统端点；消费者获得 HTML。</li>
-<li><strong>影响：</strong> 系统端点没有 JSON 错误契约；错误的实体名称是 500（服务器错误）而不是 404。</li>
-<li><strong>复制：</strong> <code>GET /system/entities/App/Does/Not/Exist</code> → <code>500 text/html</code> 与 <code>Doctrine\Persistence\Mapping\MappingException: Class 'App\Does\Not\Exist' does not exist</code>。</li>
-<li><strong>建议的修复：</strong> 将拦截器模式扩展到 <code>/system</code> （或在 <code>EntityController::retrieveAction()</code> 和 <code>warning(…, 404, …, 404)</code> 中捕获 <code>MappingException</code>）。</li>
-<li><strong>测试：</strong> <code>testMissingEntityReturns500HtmlCurrently</code>（回归，通过）； <code>testMissingEntityShouldReturn404Json</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/EventListener/ExceptionInterceptor.php:21</code> (<code>EFFECTIVE_PATTERN = '/^\/(api)\/.*$/'</code>); <code>src/Core/Controller/System/EntityController.php:66-67</code> (<code>getClassMetadata</code> throws for unknown FQCN).</li>
+<li><strong>Description:</strong> the interceptor only handles <code>/api/*</code> paths, so a <code>MappingException</code> (unknown entity) on <code>/system/entities/{name}</code> bypasses the JSON error envelope and renders Symfony’s HTML error page (500). The docs in <code>docs/ai/context.md</code> §12 imply these are API-ish system endpoints; consumers get HTML.</li>
+<li><strong>Impact:</strong> no JSON error contract for the System endpoints; a bad entity name is a 500 (server error) rather than a 404.</li>
+<li><strong>Reproduction:</strong> <code>GET /system/entities/App/Does/Not/Exist</code> → <code>500 text/html</code> with <code>Doctrine\Persistence\Mapping\MappingException: Class 'App\Does\Not\Exist' does not exist</code>.</li>
+<li><strong>Proposed fix:</strong> extend the interceptor pattern to <code>/system</code> (or catch <code>MappingException</code> in <code>EntityController::retrieveAction()</code> and <code>warning(…, 404, …, 404)</code>).</li>
+<li><strong>Tests:</strong> <code>testMissingEntityReturns500HtmlCurrently</code> (regression, pass); <code>testMissingEntityShouldReturn404Json</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-6-default_locale-zh">BUG-6 — <code>default_locale: zh</code> 不会成为活动区域设置 — 有效默认值为英语 — <strong>低</strong><a class="headerlink" href="#bug-6-default_locale-zh" title="Permanent link">&para;</a></h3>
+<h3 id="bug-6-default_locale-zh-does-not-become-the-active-locale-effective-default-is-english-low">BUG-6 — <code>default_locale: zh</code> does not become the active locale — effective default is English — <strong>LOW</strong><a class="headerlink" href="#bug-6-default_locale-zh-does-not-become-the-active-locale-effective-default-is-english-low" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>位置：</strong> <code>config/packages/translation.yaml:2</code> (<code>default_locale: zh</code>);框架 <code>Symfony\Component\HttpKernel\EventListener\LocaleListener</code> 仅将<em>默认</em>语言环境设置为优先级 100，并且在没有显式 <code>_locale</code> 的情况下绝不会激活它；应用程序的自定义 <code>App\Core\EventListener\LocaleListener</code> （优先级 20）仅覆盖匹配的 <code>?_locale</code>/Accept-Language。</li>
 <li><strong>描述：</strong>没有区域设置提示，活动请求区域设置保持 <code>en</code> （PHP <code>Request</code> 默认） - 在 <code>reqDefaultLocale=zh</code> 时验证 <code>reqLocale=en</code>/<code>translatorLocale=en</code>。因此，<code>default_locale: zh</code> 只为翻译器提供缺失键的后备（这可能会产生奇怪的 en-with-zh-fallback 混合）。 LocaleListener 文档块和 <code>docs/ai/context.md</code> 都声明回退 <code>en</code>，它与<em>有效</em>行为匹配，但与配置相矛盾。</li>
@@ -1992,6 +2048,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

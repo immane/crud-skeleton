@@ -16,7 +16,7 @@
         <link rel="prev" href="../payment/">
       
       
-        <link rel="next" href="../identity/">
+        <link rel="next" href="../exchange/">
       
       
         
@@ -562,6 +562,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -934,7 +962,7 @@
   <a href="#32" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 钱包交易
+        3.2 交易
       
     </span>
   </a>
@@ -945,7 +973,7 @@
   <a href="#33" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 钱包支付扣款
+        3.3 付款扣除
       
     </span>
   </a>
@@ -1007,6 +1035,17 @@
     <span class="md-ellipsis">
       
         4.4 传输结果 DTO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-withdrawservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 WithdrawService — 凭证支持的提款
       
     </span>
   </a>
@@ -1174,6 +1213,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#82-role_user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 应用程序（用户，ROLE_USER）
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1227,6 +1277,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1480,7 +1558,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1569,7 +1647,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1597,7 +1675,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1971,7 +2049,7 @@
   <a href="#32" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 钱包交易
+        3.2 交易
       
     </span>
   </a>
@@ -1982,7 +2060,7 @@
   <a href="#33" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 钱包支付扣款
+        3.3 付款扣除
       
     </span>
   </a>
@@ -2044,6 +2122,17 @@
     <span class="md-ellipsis">
       
         4.4 传输结果 DTO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-withdrawservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 WithdrawService — 凭证支持的提款
       
     </span>
   </a>
@@ -2211,6 +2300,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#82-role_user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 应用程序（用户，ROLE_USER）
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2291,8 +2391,8 @@
 <h2 id="1">1. 概述<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <p>钱包是一个用于管理用户余额的金融模块：</p>
 <ul>
-<li><strong>钱包</strong> 每个用户每种货币的余额以美分为单位，乐观锁定和冻结功能</li>
-<li><strong>WalletTransactions</strong> 具有 UUID、类型分类、状态跟踪和幂等性（通过 <code>referenceId</code>）</li>
+<li><strong>钱包</strong> 每个用户每种货币的余额以美分为单位，乐观锁定，冻结功能以及可用/持有余额分离</li>
+<li>通过 <code>referenceId</code> 进行具有 UUID、类型分类、状态跟踪和幂等性的 <strong>交易</strong></li>
 <li><strong>TransferService</strong> 具有钱包到钱包的原子传输、死锁预防和回滚恢复</li>
 <li><strong>存款</strong>系统注入资金端点，带有审计跟踪</li>
 <li><strong>余额验证</strong> — <code>GET /api/v1/manage/wallets/balance</code> 检查不变式：<code>SUM(wallets) == SUM(deposits + adjustments)</code></li>
@@ -2304,7 +2404,7 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>adjustment (TYPE_ADJUSTMENT) → reconciliation fix (one-sided credit)
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>transfer (TYPE_TRANSFER)   → zero-sum between wallets (debit + credit)
 </code></pre></div>
-<p><strong>不变</strong>：<code>SUM(all wallet balances) == SUM(all deposit + adjustment transactions)</code> 始终。</p>
+<p><strong>不变</strong>：始终<code>SUM(all wallet balances) == SUM(all deposit + adjustment transactions)</code>。</p>
 <h3 id="12">1.2 实体<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2321,12 +2421,12 @@
 <td>每种货币的用户余额（美分）、冻结支持、乐观锁定</td>
 </tr>
 <tr>
-<td><code>WalletTransaction</code></td>
+<td><code>Transaction</code></td>
 <td><code>wallet_transaction</code></td>
 <td>存款/取款/转账/手续费/退款/<strong>调整</strong>记录</td>
 </tr>
 <tr>
-<td><code>WalletPaymentDeduction</code></td>
+<td><code>PaymentDeduction</code></td>
 <td><code>wallet_payment_deduction</code></td>
 <td>钱包自有发票钱包余额扣除审计记录</td>
 </tr>
@@ -2341,16 +2441,16 @@
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>|   |-- WalletController.php             # CRUD + Balance + Reconcile
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>|-- Entity/
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>|   |-- Wallet.php
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>|   |-- WalletTransaction.php
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>|   |-- WalletPaymentDeduction.php       # Payment adjustment audit record
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>|   |-- Transaction.php
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>|   |-- PaymentDeduction.php       # Payment adjustment audit record
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>|-- Exception/
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>|   |-- InsufficientFundsException.php
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>|   |-- SameWalletTransferException.php
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>|   |-- WalletFrozenException.php
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>|-- Repository/
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>|   |-- WalletRepository.php             # + getTotalBalance()
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>|   |-- WalletTransactionRepository.php  # + getTotalDeposited(), getExpectedBalance()
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>|   |-- WalletPaymentDeductionRepository.php
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>|   |-- TransactionRepository.php  # + getTotalDeposited(), getExpectedBalance()
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>|   |-- PaymentDeductionRepository.php
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>|-- Service/
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    |-- Payment/
 <a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    |   |-- WalletBalanceAdjustmentProvider.php # Implements Payment adjustment provider
@@ -2360,6 +2460,12 @@
 <a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    |-- TransferService.php              # Core transfer + deposit logic
 <a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    |-- TransferServiceInterface.php     # Transfer + deposit contract
 <a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    |-- WalletService.php                # + verifyBalance(), reconcile()
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    |-- Withdraw/
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    |   |-- WithdrawService.php          # Voucher-backed withdrawal + reversal
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>    |   |-- WithdrawServiceInterface.php # Withdrawal contract
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    |   |-- WithdrawProviderInterface.php
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    |   |-- WithdrawProviderRegistry.php
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>    |   |-- ManualWithdrawProvider.php
 </code></pre></div>
 <hr />
 <h2 id="3">3.实体设计<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
@@ -2385,18 +2491,23 @@
 </tr>
 <tr>
 <td><code>currency</code></td>
-<td>字符串</td>
-<td>货币代码（例如 CNY、USD）</td>
+<td>字符串(32)</td>
+<td>帐户单位代码（见下文）</td>
 </tr>
 <tr>
 <td><code>balance</code></td>
 <td>int（bigint）</td>
-<td>余额（分）</td>
+<td><strong>总计</strong>余额（以美分为单位）(<code>balance = available + held</code>)</td>
+</tr>
+<tr>
+<td><code>held</code></td>
+<td>int（bigint）</td>
+<td>冻结金额以美分为单位；可用余额 = <code>balance - held</code></td>
 </tr>
 <tr>
 <td><code>version</code></td>
 <td>整数</td>
-<td><code>#[ORM\Version]</code>乐观锁</td>
+<td><code>#[ORM\Version]</code> 乐观锁</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -2410,10 +2521,12 @@
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 否 <code>setBalance()</code></strong> — 钱包余额只能通过 <code>TransferService</code> 更改（转账、存款、对账）。这可以防止直接突变绕过审计跟踪。</p>
-<p><strong>唯一约束</strong>：<code>(user_id, currency)</code>——每个用户每种货币一个钱包。</p>
+<p><strong>⚠️ 没有 <code>setBalance()</code> / 没有公共 <code>held</code> setter</strong> - 钱包余额和持有只能通过 <code>TransferService</code> 更改（转账、存款、持有、释放、对账）。这可以防止直接突变绕过审计跟踪。</p>
+<p><strong>可用与持有</strong>：<code>balance</code> 是总数； <code>held</code> 资金被冻结（托管、待提款）。 <code>available = balance - held</code>。 <code>TransferService::transfer()</code> 和 <code>hold()</code> 仅根据可用余额进行操作。持有不会更改总余额，也不会写入分类帐行 - 持有会在内部可用和持有的存储桶之间移动资金，因此对账 (<code>SUM(balance) == deposits - withdrawals</code>) 不受影响。持有的审计记录属于拥有的生命周期实体（例如<code>WalletWithdrawal</code>），而不是分类账。</p>
+<p><strong>唯一约束</strong>：<code>(user_id, currency)</code>——每个账户每个用户一个钱包。</p>
+<p><strong>帐户代码单位</strong>：<code>currency</code> 是帐户鉴别符，而不是严格的 ISO 4217 代码。简单的 ISO 代码（例如 <code>CNY</code>、<code>USD</code>）标识默认余额钱包；扩展代码（例如<code>CNY.ESCROW</code>、<code>CNY.COMMISSION</code>、<code>POINTS</code>）标识托管、佣金或积分等类别帐户。默认余额钱包必须使用纯 ISO 代码 - 发票付款解析 (<code>findByUserAndCurrency(payerId, invoice.currency)</code>) 依赖于此，并且绝不能与类别帐户匹配。如果稍后需要外汇或每种货币报告，请引入显式的基础货币列，而不是解析这些代码。</p>
 <p><strong>方法</strong>：<code>isActive(): bool</code>、<code>isFrozen(): bool</code></p>
-<h3 id="32">3.2 钱包交易<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<h3 id="32">3.2 交易<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2451,7 +2564,7 @@
 <tr>
 <td><code>type</code></td>
 <td>字符串</td>
-<td><code>deposit</code>、<code>withdrawal</code>、<code>transfer</code>、<code>fee</code>、<code>refund</code>、<strong><code>adjustment</code></strong></td>
+<td><code>deposit</code>、<code>withdrawal</code>、<code>transfer</code>、<code>fee</code>、<code>refund</code>、<code>adjustment</code>、<strong><code>credit_reversal</code></strong>、<strong><code>debit_reversal</code></strong></td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -2477,7 +2590,57 @@
 </table>
 <p><strong>唯一约束</strong>：<code>referenceId</code>——防止重复交易。</p>
 <p><strong>方法</strong>：<code>markCompleted()</code>、<code>markFailed()</code></p>
-<h3 id="33">3.3 钱包支付扣款<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<p><strong>单边语义（契约）</strong>：<code>fromWallet</code>/<code>toWallet</code> null 是有意义的，而不是错误。</p>
+<table>
+<thead>
+<tr>
+<th>运动形态</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fromWallet = wallet</code>、<code>toWallet = wallet</code></td>
+<td>内部转移（零和，双方都在场）</td>
+</tr>
+<tr>
+<td><code>fromWallet = null</code>、<code>toWallet = wallet</code></td>
+<td><strong>单边信用</strong> — 资金从外部进入钱包系统，由<code>wallet_voucher</code>（存款）</td>
+</tr>
+<tr>
+<td><code>fromWallet = wallet</code>、<code>toWallet = null</code></td>
+<td><strong>单面借记</strong> — 资金离开钱包系统（提取，或存款的<code>credit_reversal</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>存款必须写<code>fromWallet = null</code>；逆转/撤回必须写<code>toWallet = null</code>。转让必须有双方。其他任何行为都属于违反合同的行为。 <code>credit_reversal</code> 用单边借方冲销贷方（存款）； <code>debit_reversal</code> 用单边贷方冲销借方（取款）。</p>
+<p><strong>双层账本（合约）</strong>：钱包移动和边界事件分开记录，不能混为一谈。</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>表</th>
+<th>答案</th>
+<th>阅读者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内部（运动日记）</td>
+<td><code>wallet_transaction</code></td>
+<td>每个钱包的余额如何变化</td>
+<td><code>getExpectedBalance(walletId)</code> — 每个钱包的对账</td>
+</tr>
+<tr>
+<td>边界（出处）</td>
+<td><code>wallet_voucher</code></td>
+<td>资金为何进入/离开系统（<code>fund_source</code>、<code>created_by</code>、反转状态）</td>
+<td>边界不变量 — <code>verifyBalance()</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>wallet_transaction</code> 和 <code>wallet_voucher</code> 都是为边界事件编写的。交易提供统一的每个钱包移动日记账（内部转账没有凭证，因此不能仅根据凭证构建日记账）；凭证提供出处和边界不变量。删除其中任何一个都会破坏相应的审计表面。</p>
+<h3 id="33">3.3 付款扣除<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
 <p>支付发票的钱包余额扣减归Wallet所有，因为该操作是通过钱包余额转账和冲销实现的。</p>
 <p><strong>表</strong>：<code>wallet_payment_deduction</code></p>
 <p><strong>用途</strong>：在所选网关处理剩余金额之前，记录应用于付款发票的钱包余额金额。</p>
@@ -2611,7 +2774,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pending -&gt; failed
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>applied -&gt; refunded
 </code></pre></div>
-<p><code>released</code>表示发票未支付，扣除的钱包余额已退回。 <code>refunded</code> 表示发票已付款，随后全额退款。</p>
+<p><code>released</code>表示发票未支付，扣除的钱包余额已退回。 <code>refunded</code> 表示发票已支付，随后全额退款。</p>
 <hr />
 <h2 id="4-transferservice">4. TransferService — 原子转账+存款<a class="headerlink" href="#4-transferservice" title="Permanent link">&para;</a></h2>
 <h3 id="41">4.1 合同<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
@@ -2643,7 +2806,7 @@
 <a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>4. Execute (within DB transaction)
 <a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>   -&gt; beginTransaction()
 <a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>   -&gt; DQL UPDATE: toWallet.balance += amount
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>   -&gt; Create WalletTransaction (type=deposit, fromWallet=null)
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>   -&gt; Create Transaction (type=deposit, fromWallet=null)
 <a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>   -&gt; commit()
 <a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>   |
 <a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>   -&gt; On failure: rollback(), EM recovery
@@ -2689,16 +2852,50 @@
 <h3 id="44-dto">4.4 传输结果 DTO<a class="headerlink" href="#44-dto" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">class TransferResult</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">{</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    public WalletTransaction $transaction;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    public Transaction $transaction;</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    public int $fromWalletBalanceAfter;  // 0 for deposits</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    public int $toWalletBalanceAfter;    // Post-operation</span>
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="x">}</span>
 </code></pre></div>
+<h3 id="45-withdrawservice">4.5 WithdrawService — 凭证支持的提款<a class="headerlink" href="#45-withdrawservice" title="Permanent link">&para;</a></h3>
+<p><code>WithdrawService</code> 是存款的镜子：资金<strong>离开</strong>钱包系统的单一门户。提款会写入由 <strong><code>DIRECTION_DEBIT</code> 凭证</strong>支持的<strong>单面借记</strong>（<code>fromWallet = wallet</code>、<code>toWallet = null</code>）。逆转是它的镜子——<strong>单面信用</strong>（<code>fromWallet = null</code>、<code>toWallet = wallet</code>、类型<code>debit_reversal</code>）将资金返回到源钱包。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>withdraw(voucherType, voucherId, walletId, amount, currency, referenceId, createdBy, reason)
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  |
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  v
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>1. Validation
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>   -&gt; amount &gt; 0, referenceId required
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>   -&gt; Idempotency: findByReferenceId -&gt; return existing voucher
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>   -&gt; Duplicate source: findByVoucherSource -&gt; reject
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>   -&gt; Provider whitelist: withdrawRegistry.forVoucherType -&gt; reject unsupported type
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  |
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  v
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>2. Within DB transaction (wrapInTransaction)
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>   -&gt; Lock wallet (SELECT ... FOR UPDATE)
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>   -&gt; Wallet exists, not frozen, currency matches
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>   -&gt; available balance &gt;= amount (InsufficientFundsException)
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>   -&gt; provider.authorize(voucher, options)
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>   -&gt; DQL UPDATE: wallet.balance -= amount
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>   -&gt; Create Transaction (type=withdrawal, fromWallet=wallet)
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>   -&gt; Voucher DIRECTION_DEBIT -&gt; markApplied(tx.uuid)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>reverse(voucherUuid, reason)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  |
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  v
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>1. Voucher must be APPLIED + DIRECTION_DEBIT
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>2. Within DB transaction
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>   -&gt; Lock wallet
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>   -&gt; DQL UPDATE: wallet.balance += amount
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>   -&gt; Create Transaction (type=debit_reversal, toWallet=wallet)
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>   -&gt; voucher-&gt;markReversed(tx.uuid, reason)
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>3. provider.reverse(voucher, reason) hook
+</code></pre></div>
+<p>这两个操作都是原子的（回滚+失败时的 EM 恢复）并且通过 <code>referenceId</code> 实现幂等。提供者标签为<code>wallet.withdraw_provider</code>； <code>ManualWithdrawProvider</code> 是内置的无操作授权。</p>
+<p><strong>权限控制由提供商拥有。</strong> 每个提供商都实现 <code>assertPermitted(array $options)</code> 并可以使用 <code>AccessDeniedException</code> 拒绝（映射到 HTTP 403）。手册提供者要求<code>ROLE_ADMIN</code>；如果没有活动的安全上下文（CLI/队列/系统调用），该调用将被视为受信任的内部调用者并被允许。外部提供商实施自己的规则。</p>
 <hr />
 <h2 id="5-walletservice">5. WalletService — 余额验证+对账<a class="headerlink" href="#5-walletservice" title="Permanent link">&para;</a></h2>
 <h3 id="51">5.1 验证余额()<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
 <p>检查会计不变量：
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>SUM(all wallet balances) == SUM(all deposit + adjustment transactions)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>SUM(all wallet balances) == SUM(all deposit + adjustment transactions)
 </code></pre></div></p>
 <p>返回<code>{totalBalance, totalDeposited, discrepancy, matches, walletCount}</code>。</p>
 <h3 id="52">5.2 协调()<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
@@ -2858,7 +3055,7 @@
 </tr>
 <tr>
 <td><code>apply()</code></td>
-<td>将付款人钱包余额转入系统钱包并保存 <code>WalletPaymentDeduction</code></td>
+<td>将付款人钱包余额转入系统钱包并保存 <code>PaymentDeduction</code></td>
 </tr>
 <tr>
 <td><code>applied()</code></td>
@@ -2875,56 +3072,56 @@
 </tbody>
 </table>
 <p>提供商仅向 Payment 返回通用付款调整数据：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">new PaymentAdjustmentResult(</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="x">    provider: &#39;wallet_balance&#39;,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">    amount: $deduction-&gt;getAmount(),</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">    currency: $deduction-&gt;getCurrency(),</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="x">    referenceId: $deduction-&gt;getReferenceId(),</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="x">    payload: [</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="x">        &#39;deductionId&#39; =&gt; $deduction-&gt;getUuid(),</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="x">    ],</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="x">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="x">new PaymentAdjustmentResult(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="x">    provider: &#39;wallet_balance&#39;,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="x">    amount: $deduction-&gt;getAmount(),</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="x">    currency: $deduction-&gt;getCurrency(),</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="x">    referenceId: $deduction-&gt;getReferenceId(),</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="x">    payload: [</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="x">        &#39;deductionId&#39; =&gt; $deduction-&gt;getUuid(),</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="x">    ],</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="x">);</span>
 </code></pre></div>
-<p>钱包交易 ID 可以存储在 <code>WalletPaymentDeduction</code> 中，但 Payment 不得依赖它们。</p>
+<p>钱包交易 ID 可以存储在 <code>PaymentDeduction</code> 中，但 Payment 不得依赖它们。</p>
 <h3 id="74">7.4 推演流程<a class="headerlink" href="#74" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>InvoiceService::pay(invoice, payment, options)
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  -&gt; PaymentAdjustmentRegistry finds WalletBalanceAdjustmentProvider
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  -&gt; WalletBalanceAdjustmentProvider::apply(context)
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>     -&gt; find payer wallet by payer id and invoice currency
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>     -&gt; transfer payer wallet -&gt; system wallet
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>     -&gt; persist WalletPaymentDeduction as applied
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>     -&gt; return PaymentAdjustmentResult(amount=walletAmount)
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>  -&gt; Payment computes gatewayAmount = invoice.amount - adjustmentTotal
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>  -&gt; Payment calls selected gateway with explicit gatewayAmount
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>InvoiceService::pay(invoice, payment, options)
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  -&gt; PaymentAdjustmentRegistry finds WalletBalanceAdjustmentProvider
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>  -&gt; WalletBalanceAdjustmentProvider::apply(context)
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>     -&gt; find payer wallet by payer id and invoice currency
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>     -&gt; transfer payer wallet -&gt; system wallet
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>     -&gt; persist PaymentDeduction as applied
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>     -&gt; return PaymentAdjustmentResult(amount=walletAmount)
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>  -&gt; Payment computes gatewayAmount = invoice.amount - adjustmentTotal
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>  -&gt; Payment calls selected gateway with explicit gatewayAmount
 </code></pre></div>
 <p>钱包全扣：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>walletAmount == invoice.amount
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  -&gt; WalletBalanceAdjustmentProvider applies transfer
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  -&gt; Payment marks invoice paid with payment = wallet
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  -&gt; no external gateway is called
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>walletAmount == invoice.amount
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  -&gt; WalletBalanceAdjustmentProvider applies transfer
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  -&gt; Payment marks invoice paid with payment = wallet
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>  -&gt; no external gateway is called
 </code></pre></div>
 <h3 id="75">7.5 释放和退款流程<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
 <p>发票付款前释放：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>gateway pay creation fails or invoice is cancelled
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  -&gt; Payment calls WalletBalanceAdjustmentProvider::release(result, reason)
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>  -&gt; Wallet transfers system wallet -&gt; payer wallet
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>  -&gt; WalletPaymentDeduction status becomes released
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>gateway pay creation fails or invoice is cancelled
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  -&gt; Payment calls WalletBalanceAdjustmentProvider::release(result, reason)
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>  -&gt; Wallet transfers system wallet -&gt; payer wallet
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>  -&gt; PaymentDeduction status becomes released
 </code></pre></div>
 <p>支付发票后退款：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>InvoiceService::refund(full invoice amount)
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  -&gt; Payment refunds external gateway amount first, if any
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  -&gt; Payment calls WalletBalanceAdjustmentProvider::refund(result, reason)
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>  -&gt; Wallet transfers system wallet -&gt; payer wallet
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>  -&gt; WalletPaymentDeduction status becomes refunded
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>InvoiceService::refund(full invoice amount)
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  -&gt; Payment refunds external gateway amount first, if any
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  -&gt; Payment calls WalletBalanceAdjustmentProvider::refund(result, reason)
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  -&gt; Wallet transfers system wallet -&gt; payer wallet
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  -&gt; PaymentDeduction status becomes refunded
 </code></pre></div>
 <p>第一阶段钱包扣款仅支持发票全额退款。外部网关金额和钱包扣除之间的部分退款分配超出了范围。</p>
 <h3 id="76-id">7.6 参考 ID<a class="headerlink" href="#76-id" title="Permanent link">&para;</a></h3>
 <p>钱包扣款转账必须使用稳定的幂等性引用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>invoice-adjustment-wallet-balance-{invoice.uuid}
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>invoice-adjustment-wallet-balance-release-{invoice.uuid}
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>invoice-adjustment-wallet-balance-refund-{invoice.uuid}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>invoice-adjustment-wallet-balance-{invoice.uuid}
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>invoice-adjustment-wallet-balance-release-{invoice.uuid}
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>invoice-adjustment-wallet-balance-refund-{invoice.uuid}
 </code></pre></div>
-<p>这些引用被传递到 <code>TransferServiceInterface::transfer()</code> 并存储在 <code>WalletPaymentDeduction</code> 中。</p>
+<p>这些引用被传递到 <code>TransferServiceInterface::transfer()</code> 并存储在 <code>PaymentDeduction</code> 中。</p>
 <hr />
 <h2 id="8-api">8. API 端点<a class="headerlink" href="#8-api" title="Permanent link">&para;</a></h2>
 <h3 id="81-role_admin">8.1 管理（管理员、ROLE_ADMIN）<a class="headerlink" href="#81-role_admin" title="Permanent link">&para;</a></h3>
@@ -2979,13 +3176,45 @@
 </tr>
 <tr>
 <td>发布</td>
-<td><code>/api/v1/manage/transfers</code></td>
+<td><code>/api/v1/manage/transactions</code></td>
 <td>执行钱包到钱包转账</td>
 </tr>
 <tr>
 <td><strong>发布</strong></td>
-<td><strong><code>/api/v1/manage/transfers/deposit</code></strong></td>
-<td><strong>带有审计跟踪的系统存款</strong></td>
+<td><strong><code>/api/v1/manage/vouchers/deposit</code></strong></td>
+<td><strong>凭证支持存款。 <code>voucherType</code> 可选（默认 <code>manual</code>；仅限管理区域）</strong></td>
+</tr>
+<tr>
+<td><strong>发布</strong></td>
+<td><strong><code>/api/v1/manage/vouchers/withdraw</code></strong></td>
+<td><strong>优惠券支持提款。 <code>voucherType</code> 可选（默认 <code>manual</code>；仅限管理区域）</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-role_user">8.2 应用程序（用户，ROLE_USER）<a class="headerlink" href="#82-role_user" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>发布</strong></td>
+<td><strong><code>/api/v1/app/vouchers/deposit</code></strong></td>
+<td><strong>自助存入自己的钱包。 <code>voucherType</code> 必需 — 由提供商的 <code>assertPermitted()</code> 强制执行的权限（例如，<code>manual</code> 需要 <code>ROLE_ADMIN</code>，但用户拒绝）</strong></td>
+</tr>
+<tr>
+<td><strong>发布</strong></td>
+<td><strong><code>/api/v1/app/vouchers/withdraw</code></strong></td>
+<td><strong>从自己的钱包中自助提款。 <code>voucherType</code> 必需 — 由提供商的 <code>assertPermitted()</code></strong></td>
+</tr>
+<tr>
+<td><strong>发布</strong></td>
+<td><strong><code>/api/v1/app/vouchers/{uuid}/reverse</code></strong></td>
+<td><strong>冲销自己的凭证（按指示存款或取款）</strong></td>
 </tr>
 </tbody>
 </table>
@@ -2999,7 +3228,7 @@
 </ul>
 <hr />
 <h2 id="10">10. 资金处理合同<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
-<p>与贸易模块相同的合约：</p>
+<p>与贸易模块相同的合同：</p>
 <table>
 <thead>
 <tr>
@@ -3042,7 +3271,7 @@
 <tbody>
 <tr>
 <td><code>tests/Wallet/Entity/</code></td>
-<td>钱包、WalletTransaction 单元测试</td>
+<td>钱包、交易单元测试</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/WalletServiceTest.php</code></td>
@@ -3125,6 +3354,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

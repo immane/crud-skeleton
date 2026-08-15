@@ -937,6 +937,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1181,6 +1209,34 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
   
 
     
@@ -2211,28 +2267,12 @@
 </blockquote>
 <hr />
 <h2 id="1-layer-architecture">1. Layer Architecture<a class="headerlink" href="#1-layer-architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Request/Response
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>      |
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>+-----v------------------------------------+
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|  HTTP Layer  (Controllers / View Mixins) |  &lt;-- Only layer touching Request/Response
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>+-----+------------------------------------+
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      |  (Service Interface only)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>+-----v------------------------------------+
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|  Service Layer                           |  &lt;-- All business logic, transactions, validation
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>+-----+------------------------------------+
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      |  (Repository only)
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>+-----v------------------------------------+
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|  Repository Layer                        |  &lt;-- Data access queries (Doctrine repositories)
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>+-----+------------------------------------+
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>      |  (Entities only)
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>+-----v------------------------------------+
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|  Entity Layer (Domain Model)             |  &lt;-- Pure data objects, no business logic
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>+-----+------------------------------------+
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>      |  (Doctrine ORM)
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>+-----v------------------------------------+
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|  Infrastructure (ORM, Cache, Serializer) |  &lt;-- Framework-provided
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>+------------------------------------------+
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    A["Request/Response"] --&gt; B["HTTP Layer&lt;br/&gt;(Controllers / View Mixins)&lt;br/&gt;Only layer touching Request/Response"]
+    B --&gt;|"(Service Interface only)"| C["Service Layer&lt;br/&gt;All business logic, transactions, validation"]
+    C --&gt;|"(Repository only)"| D["Repository Layer&lt;br/&gt;Data access queries (Doctrine repositories)"]
+    D --&gt;|"(Entities only)"| E["Entity Layer (Domain Model)&lt;br/&gt;Pure data objects, no business logic"]
+    E --&gt;|"(Doctrine ORM)"| F["Infrastructure (ORM, Cache, Serializer)&lt;br/&gt;Framework-provided"]</code></pre>
 <h3 id="11-layer-dependency-rules">1.1 Layer Dependency Rules<a class="headerlink" href="#11-layer-dependency-rules" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2315,17 +2355,17 @@
 <hr />
 <h2 id="2-vertical-slice-module-structure">2. Vertical Slice (Module) Structure<a class="headerlink" href="#2-vertical-slice-module-structure" title="Permanent link">&para;</a></h2>
 <p>Each business domain is a self-contained module under <code>src/</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>src/{Module}/
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>|-- Controller/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>|   |-- App/              # Public/read-only endpoints
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>|   |-- Manage/           # Admin CRUD endpoints
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>|-- Entity/               # Domain entities (Doctrine)
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>|-- Repository/           # Data access (ServiceEntityRepository)
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>|-- Service/              # Business logic (extends BaseService)
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>|-- Exception/            # Module-specific exceptions
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>|-- EventListener/        # Module-specific event subscribers
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>|-- Command/              # CLI commands
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>|-- Resources/config/     # Module-specific DI configuration
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/{Module}/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>|-- Controller/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/              # Public/read-only endpoints
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   |-- Manage/           # Admin CRUD endpoints
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>|-- Entity/               # Domain entities (Doctrine)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|-- Repository/           # Data access (ServiceEntityRepository)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|-- Service/              # Business logic (extends BaseService)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|-- Exception/            # Module-specific exceptions
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>|-- EventListener/        # Module-specific event subscribers
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|-- Command/              # CLI commands
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|-- Resources/config/     # Module-specific DI configuration
 </code></pre></div>
 <h3 id="21-mandatory-artifacts-per-module">2.1 Mandatory Artifacts per Module<a class="headerlink" href="#21-mandatory-artifacts-per-module" title="Permanent link">&para;</a></h3>
 <table>
@@ -2563,23 +2603,23 @@ own authorization and ownership rules.</p>
 - <code>EntityManager</code>, Logger, TokenStorage, RequestStack, Serializer, Validator</p>
 <h3 id="54-tagged-service-contract">5.4 Tagged Service Contract<a class="headerlink" href="#54-tagged-service-contract" title="Permanent link">&para;</a></h3>
 <p>Services implementing a pipeline interface are auto-tagged:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">App\Trade\Service\Pricing\</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/Trade/Service/Pricing/&#39;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;trade.price_calculator&#39;</span><span class="p p-Indicator">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">App\Trade\Service\Pricing\</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/Trade/Service/Pricing/&#39;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;trade.price_calculator&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>Sorted by <code>getPriority(): int</code> method, executed in priority order.</p>
 <hr />
 <h2 id="6-request-lifecycle">6. Request Lifecycle<a class="headerlink" href="#6-request-lifecycle" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Request
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  -&gt; public/index.php
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  -&gt; App\Kernel (MicroKernelTrait)
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  -&gt; config/routes.yaml (prefix routing + namespace scan)
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  -&gt; Security firewall (JwtAuthenticator intercepts ^/api)
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  -&gt; Controller action (mixin method)
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  -&gt; Service method (business logic)
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  -&gt; Doctrine EntityManager (persistence)
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  -&gt; RestController::success()/warning() (JSON response)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Request
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  -&gt; public/index.php
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  -&gt; App\Kernel (MicroKernelTrait)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  -&gt; config/routes.yaml (prefix routing + namespace scan)
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  -&gt; Security firewall (JwtAuthenticator intercepts ^/api)
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  -&gt; Controller action (mixin method)
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  -&gt; Service method (business logic)
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  -&gt; Doctrine EntityManager (persistence)
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  -&gt; RestController::success()/warning() (JSON response)
 </code></pre></div>
 <h3 id="61-route-registration">6.1 Route Registration<a class="headerlink" href="#61-route-registration" title="Permanent link">&para;</a></h3>
 <table>
@@ -2794,6 +2834,10 @@ own authorization and ownership rules.</p>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../javascripts/mermaid-init.js"></script>
       
     
   </body>

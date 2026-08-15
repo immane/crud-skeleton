@@ -562,6 +562,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1946,6 +1974,34 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
   
 
     
@@ -4242,7 +4298,7 @@ Wallet balance deduction belongs to Wallet as a provider implementation. Payment
 <p>Gateway adapters are responsible for converting cents into provider formats such as yuan decimal strings or fen integers.</p>
 <h3 id="38-adjustment-domain-boundary">3.8 Adjustment Domain Boundary<a class="headerlink" href="#38-adjustment-domain-boundary" title="Permanent link">&para;</a></h3>
 <p>Payment does not own wallet deduction internals. Payment owns only the invoice and the generic adjustment contract used to reduce the amount that must be processed by a gateway.</p>
-<p>Wallet balance deduction is a Wallet module concern because it is implemented through wallet balance transfer and reversal. The Wallet module MAY persist its own deduction entity, for example <code>WalletPaymentDeduction</code>, with wallet transaction ids, idempotency references, and operational metadata.</p>
+<p>Wallet balance deduction is a Wallet module concern because it is implemented through wallet balance transfer and reversal. The Wallet module MAY persist its own deduction entity, for example <code>PaymentDeduction</code>, with wallet transaction ids, idempotency references, and operational metadata.</p>
 <p>Business modules such as Trade should continue to react to invoice events and should not know adjustment or deduction internals.</p>
 <p>First-phase implementation supports only one wallet balance deduction per invoice and per currency through a Wallet-provided adjustment provider.</p>
 <h4 id="adjustment-result-contract">Adjustment Result Contract<a class="headerlink" href="#adjustment-result-contract" title="Permanent link">&para;</a></h4>
@@ -5887,6 +5943,10 @@ Wallet balance deduction belongs to Wallet as a provider implementation. Payment
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

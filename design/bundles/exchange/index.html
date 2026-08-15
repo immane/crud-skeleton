@@ -1,0 +1,3053 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/bundles/exchange/">
+      
+      
+        <link rel="prev" href="../wallet/">
+      
+      
+        <link rel="next" href="../identity/">
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Exchange (Pool-backed Economy) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#exchange-bundle-design" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Exchange (Pool-backed Economy)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-bundle-location-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Bundle Location &amp; Naming
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Data Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Data Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-exchangerate-rate-table-hybrid-effective-dated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 ExchangeRate — rate table (hybrid, effective-dated)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-pool-poolaccount-liquidity-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Pool + PoolAccount — liquidity pool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-pledge-collateral-pledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Pledge — collateral pledge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-mintrecord-issuance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 MintRecord — issuance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-exchangerecord-user-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 ExchangeRecord — user conversion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-redemptionrecord-redemption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 RedemptionRecord — redemption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-makerpolicy-market-maker-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 MakerPolicy — market maker policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-conversion-engine-currencyconverter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Conversion Engine (CurrencyConverter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Conversion Engine (CurrencyConverter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-read-only-transaction-agnostic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Read-only, transaction-agnostic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-precision-money-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Precision &amp; Money Math
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Precision &amp; Money Math">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Rounding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-direction-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Direction convention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Known limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-ledger-abstraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ledger Abstraction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-booking-flows-zero-sum-invariant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Booking Flows &amp; Zero-Sum Invariant
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Booking Flows &amp; Zero-Sum Invariant">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-pledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Pledge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-mint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Mint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-exchange-user-cny-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Exchange — user CNY → POINT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-redemption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Redemption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-market-maker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Market maker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-rate-lookup-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Rate Lookup Semantics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-database-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Database Migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-phased-rollout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Phased Rollout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-open-decisions-non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Open Decisions &amp; Non-Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-bundle-location-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Bundle Location &amp; Naming
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Data Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Data Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-exchangerate-rate-table-hybrid-effective-dated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 ExchangeRate — rate table (hybrid, effective-dated)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-pool-poolaccount-liquidity-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Pool + PoolAccount — liquidity pool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-pledge-collateral-pledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Pledge — collateral pledge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-mintrecord-issuance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 MintRecord — issuance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-exchangerecord-user-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 ExchangeRecord — user conversion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-redemptionrecord-redemption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 RedemptionRecord — redemption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-makerpolicy-market-maker-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 MakerPolicy — market maker policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-conversion-engine-currencyconverter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Conversion Engine (CurrencyConverter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Conversion Engine (CurrencyConverter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-read-only-transaction-agnostic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Read-only, transaction-agnostic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-precision-money-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Precision &amp; Money Math
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Precision &amp; Money Math">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Rounding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-direction-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Direction convention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Known limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-ledger-abstraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ledger Abstraction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-booking-flows-zero-sum-invariant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Booking Flows &amp; Zero-Sum Invariant
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Booking Flows &amp; Zero-Sum Invariant">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-pledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Pledge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-mint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Mint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-exchange-user-cny-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Exchange — user CNY → POINT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-redemption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Redemption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Invariants
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-market-maker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Market maker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-rate-lookup-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Rate Lookup Semantics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-database-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Database Migration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-phased-rollout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Phased Rollout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-open-decisions-non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Open Decisions &amp; Non-Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="exchange-bundle-design">Exchange Bundle Design<a class="headerlink" href="#exchange-bundle-design" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>The Exchange bundle (<code>src/ExchangeBundle/</code>) is a <strong>collateral-backed points/currency economy</strong>.
+It provides exchange rates, a conversion engine, liquidity pools, collateral pledges,
+point minting/issuance, user exchange (conversion) between units, and redemption — all
+against a market-maker-supervised pool. <strong>STATUS: DESIGN ONLY — not implemented.</strong></p>
+</blockquote>
+<hr />
+<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
+<p>The Exchange domain covers the full lifecycle of a custom, pool-backed unit (e.g. <code>POINT</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Pledge          Market maker pledges collateral (e.g. 1 CNY) into a pool → issuance ceiling
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Mint            POINT are minted up to the pledge ceiling (solvency-constrained)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Exchange        Users convert between units (CNY ↔ POINT, etc.) via the pool — zero-sum
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Redemption      Users redeem POINT back to collateral currency → POINT burned, ceiling lowered
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Market maker    Manages pledges, sets rates / spread, watches pool exposure
+</code></pre></div>
+<h3 id="11-scope">1.1 Scope<a class="headerlink" href="#11-scope" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>In scope (design)</th>
+<th>Out of scope (deferred)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rate table (effective-dated, hybrid model)</td>
+<td>Booking into <code>App\Wallet</code> ledger (P1+)</td>
+</tr>
+<tr>
+<td><code>CurrencyConverter</code> (bcmath, display-grade precision)</td>
+<td>External rate feed / auto-sync</td>
+</tr>
+<tr>
+<td>Pool, Pledge, Mint, Exchange, Redemption records</td>
+<td>JPY / 0-decimal currencies</td>
+</tr>
+<tr>
+<td>Market-maker policy (spread, limits)</td>
+<td>Payment / Trade pricing integration</td>
+</tr>
+<tr>
+<td>Zero-sum &amp; solvency invariants</td>
+<td>API surface (P3)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-bundle-location-naming">1.2 Bundle Location &amp; Naming<a class="headerlink" href="#12-bundle-location-naming" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Directory: <code>src/ExchangeBundle/</code></li>
+<li>Namespace: <code>App\ExchangeBundle</code> (in-repo; extractable to a standalone composer package later by renamespacing)</li>
+<li>Bundle class: <code>ExchangeBundle</code> (extends <code>Symfony\Component\HttpKernel\Bundle\AbstractBundle</code>)</li>
+</ul>
+<hr />
+<h2 id="2-file-structure">2. File Structure<a class="headerlink" href="#2-file-structure" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>src/ExchangeBundle/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>|-- ExchangeBundle.php
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>|-- DependencyInjection/
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>|   |-- ExchangeBundleExtension.php
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>|-- Domain/
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>|   |-- Rate/
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>|   |   |-- Entity/ExchangeRate.php
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>|   |   |-- Repository/ExchangeRateRepository.php
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>|   |   |-- Service/ExchangeRateService.php
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>|   |-- Converter/
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>|   |   |-- Service/CurrencyConverter.php
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>|   |   |-- Service/CurrencyConverterInterface.php
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>|   |   |-- Exception/ExchangeRateNotFoundException.php
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>|   |-- Ledger/
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>|   |   |-- LedgerInterface.php                # host-app ledger abstraction
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>|   |   |-- LedgerException.php
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>|   |-- Pool/
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>|   |   |-- Entity/Pool.php
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>|   |   |-- Entity/PoolAccount.php             # per-currency balance within a pool
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>|   |   |-- Repository/PoolRepository.php
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>|   |   |-- Service/PoolService.php
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>|   |-- Pledge/
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>|   |   |-- Entity/Pledge.php
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>|   |   |-- Repository/PledgeRepository.php
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>|   |   |-- Service/PledgeService.php
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>|   |-- Mint/
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>|   |   |-- Entity/MintRecord.php
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>|   |   |-- Repository/MintRecordRepository.php
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>|   |   |-- Service/MintService.php
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>|   |-- Exchange/
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>|   |   |-- Entity/ExchangeRecord.php
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>|   |   |-- Repository/ExchangeRecordRepository.php
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>|   |   |-- Service/ExchangeService.php
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>|   |-- Redemption/
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>|   |   |-- Entity/RedemptionRecord.php
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>|   |   |-- Repository/RedemptionRecordRepository.php
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>|   |   |-- Service/RedemptionService.php
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>|   |-- Maker/
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>|   |   |-- Entity/MakerPolicy.php
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>|   |   |-- Repository/MakerPolicyRepository.php
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>|   |   |-- Service/MakerPolicyService.php
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>|-- Resources/config/services.yaml
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>|-- Tests/
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>|   |-- Unit/
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>|   |   |-- Converter/CurrencyConverterTest.php
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>|   |   |-- Service/PledgeServiceTest.php
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>|   |   |-- Service/MintServiceTest.php
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>|   |   |-- Service/ExchangeServiceTest.php
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>|   |   |-- Service/RedemptionServiceTest.php
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>|   |-- Integration/
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>|   |   |-- Rate/ExchangeRateRepositoryTest.php
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>|   |   |-- Pool/PoolServiceTest.php
+</code></pre></div>
+<hr />
+<h2 id="3-data-model">3. Data Model<a class="headerlink" href="#3-data-model" title="Permanent link">&para;</a></h2>
+<h3 id="31-exchangerate-rate-table-hybrid-effective-dated">3.1 <code>ExchangeRate</code> — rate table (hybrid, effective-dated)<a class="headerlink" href="#31-exchangerate-rate-table-hybrid-effective-dated" title="Permanent link">&para;</a></h3>
+<p>Single table holds BOTH anchor rows (base = configured base currency) and direct-pair overrides.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>int PK auto</td>
+<td></td>
+</tr>
+<tr>
+<td><code>base_currency</code></td>
+<td>string(10)</td>
+<td>Anchor rows: <code>exchange.base_currency</code>; override rows: the <code>from</code> currency</td>
+</tr>
+<tr>
+<td><code>quote_currency</code></td>
+<td>string(10)</td>
+<td><code>CHECK base != quote</code></td>
+</tr>
+<tr>
+<td><code>rate</code></td>
+<td>decimal(20,8) string</td>
+<td><code>CHECK rate &gt; 0</code>; direction <code>1 base = rate quote</code></td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>string(50) null</td>
+<td><code>'manual'</code>, <code>'maker'</code>, <code>'feed'</code> (feed reserved)</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td>datetime_immutable</td>
+<td>effective start</td>
+</tr>
+<tr>
+<td><code>valid_to</code></td>
+<td>datetime_immutable null</td>
+<td>null = open-ended</td>
+</tr>
+<tr>
+<td><code>created_at</code> / <code>updated_at</code></td>
+<td>datetime_immutable</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Unique: <code>(base_currency, quote_currency, valid_from)</code></li>
+<li>Index: <code>(base_currency, quote_currency, valid_from)</code></li>
+<li>Write validation (via <code>ExchangeRateService::setRate</code>): rate &gt; 0, base != quote, interval valid, and <strong>no overlapping intervals</strong> for the same pair.</li>
+</ul>
+<h3 id="32-pool-poolaccount-liquidity-pool">3.2 <code>Pool</code> + <code>PoolAccount</code> — liquidity pool<a class="headerlink" href="#32-pool-poolaccount-liquidity-pool" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pool</code></td>
+<td>A pool identity: <code>code</code> (unique), <code>name</code>, <code>status</code>, <code>makerPolicy</code> (owning market maker)</td>
+</tr>
+<tr>
+<td><code>PoolAccount</code></td>
+<td>One row per currency held by the pool: <code>pool</code>, <code>currency</code>, <code>balance</code> (minor units), <code>outstanding</code> (issued-but-not-yet-redeemed units)</td>
+</tr>
+</tbody>
+</table>
+<p>Balances are delegated to the host ledger via <code>LedgerInterface</code> (see §6); <code>PoolAccount</code> keeps the exchange-specific accounting (outstanding, ceiling).</p>
+<h3 id="33-pledge-collateral-pledge">3.3 <code>Pledge</code> — collateral pledge<a class="headerlink" href="#33-pledge-collateral-pledge" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pool</code>, <code>pledgor</code></td>
+<td>pledgor is an opaque reference (string id/type) to keep the bundle host-agnostic</td>
+</tr>
+<tr>
+<td><code>collateral_currency</code>, <code>collateral_amount</code></td>
+<td>e.g. <code>CNY</code>, <code>1_0000</code> (minor units)</td>
+</tr>
+<tr>
+<td><code>coefficient</code></td>
+<td>decimal(20,8) — the anchored conversion coefficient (e.g. <code>100000000</code> = 1 CNY ⇒ 100,000,000 POINT)</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>active</code> / <code>released</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Issuance ceiling from a pledge: <code>collateral_amount × coefficient</code> (for POINT direction).</p>
+<h3 id="34-mintrecord-issuance">3.4 <code>MintRecord</code> — issuance<a class="headerlink" href="#34-mintrecord-issuance" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pledge</code>, <code>unit</code></td>
+<td>unit being minted (e.g. <code>POINT</code>)</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>units minted</td>
+</tr>
+<tr>
+<td><code>reference_id</code></td>
+<td>unique — idempotency key</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Constraint: <code>Σ minted(unit) − Σ redeemed(unit) ≤ Σ active pledges × coefficient</code>.</p>
+<h3 id="35-exchangerecord-user-conversion">3.5 <code>ExchangeRecord</code> — user conversion<a class="headerlink" href="#35-exchangerecord-user-conversion" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pool</code>, <code>user</code> (opaque ref), <code>from</code> / <code>to</code> (currency), <code>amount</code>, <code>result</code></td>
+<td>all in minor units</td>
+</tr>
+<tr>
+<td><code>rate</code></td>
+<td>decimal(20,8) string — the rate actually applied</td>
+</tr>
+<tr>
+<td><code>rate_path</code></td>
+<td><code>direct</code> / <code>inverse</code> / <code>cross</code> — for audit</td>
+</tr>
+<tr>
+<td><code>reference_id</code></td>
+<td>unique — idempotency key</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="36-redemptionrecord-redemption">3.6 <code>RedemptionRecord</code> — redemption<a class="headerlink" href="#36-redemptionrecord-redemption" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pool</code>, <code>user</code> (opaque ref), <code>unit</code>, <code>amount</code>, <code>payout_currency</code>, <code>payout_amount</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>reference_id</code></td>
+<td>unique</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Redemption burns units and pays collateral out of the pool within available balances.</p>
+<h3 id="37-makerpolicy-market-maker-policy">3.7 <code>MakerPolicy</code> — market maker policy<a class="headerlink" href="#37-makerpolicy-market-maker-policy" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maker</code> (opaque ref), <code>pool</code></td>
+<td>a market maker supervises a pool</td>
+</tr>
+<tr>
+<td><code>spread_bps</code></td>
+<td>spread in basis points applied on top of the mid rate</td>
+</tr>
+<tr>
+<td><code>fee_bps</code></td>
+<td>conversion fee in basis points</td>
+</tr>
+<tr>
+<td><code>max_exposure</code></td>
+<td>per-currency max exposure limit (risk guard)</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-conversion-engine-currencyconverter">4. Conversion Engine (<code>CurrencyConverter</code>)<a class="headerlink" href="#4-conversion-engine-currencyconverter" title="Permanent link">&para;</a></h2>
+<h3 id="41-api">4.1 API<a class="headerlink" href="#41-api" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">interface CurrencyConverterInterface</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    /** Convert amount (minor units of $from) to minor units of $to. */</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    public function convert(int $amount, string $from, string $to, ?\DateTimeImmutable $at = null): int;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">    /** Resolve the rate 1 $from = ? $to, as a decimal string. */</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">    public function rate(string $from, string $to, ?\DateTimeImmutable $at = null): string;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="x">}</span>
+</code></pre></div>
+<h3 id="42-algorithm">4.2 Algorithm<a class="headerlink" href="#42-algorithm" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Normalize both codes: <code>strtoupper</code>; extended codes (<code>CNY.ESCROW</code>) collapse to the main unit before the <code>.</code>.</li>
+<li>Same unit, or <code>amount === 0</code> → return <code>amount</code> unchanged.</li>
+<li>Resolve the rate — first hit wins:</li>
+<li><strong>Direct pair</strong>: effective <code>(from → to)</code> row.</li>
+<li><strong>Inverse pair</strong>: effective <code>(to → from)</code> row, take reciprocal.</li>
+<li><strong>Cross via base</strong>: <code>rate = rt / rb</code> where <code>rt = 1 base = ? to</code>, <code>rb = 1 base = ? from</code> (each itself resolved direct-or-inverse).</li>
+<li>Missing rate / unknown unit → <code>ExchangeRateNotFoundException</code>.</li>
+<li>Compute with bcmath at <strong>scale 16</strong>, round <strong>once</strong> at the end (see §5).</li>
+<li>The whole call shares a single <code>at</code> instant (captured once when <code>$at</code> is null) so multi-lookup resolution is consistent.</li>
+</ol>
+<h3 id="43-read-only-transaction-agnostic">4.3 Read-only, transaction-agnostic<a class="headerlink" href="#43-read-only-transaction-agnostic" title="Permanent link">&para;</a></h3>
+<p><code>CurrencyConverter</code> performs only <code>findEffective()</code> reads — it never begins a transaction, never flushes, never writes. Inside a caller's transaction it participates as ordinary SELECTs (no nesting, no savepoints, no side effects); the caller owns the transaction boundary.</p>
+<hr />
+<h2 id="5-precision-money-math">5. Precision &amp; Money Math<a class="headerlink" href="#5-precision-money-math" title="Permanent link">&para;</a></h2>
+<p>Amounts are <strong>integer minor units</strong> (cents, ×100) everywhere — consistent with <code>App\Wallet</code> and <code>App\Payment</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Precision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rate storage</td>
+<td><code>DECIMAL(20,8)</code>, mapped to PHP <code>string</code></td>
+</tr>
+<tr>
+<td>Intermediate math</td>
+<td>bcmath <code>scale 16</code></td>
+</tr>
+<tr>
+<td>Final result</td>
+<td>integer, rounded once via <code>bcRoundHalfUp</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="51-rounding">5.1 Rounding<a class="headerlink" href="#51-rounding" title="Permanent link">&para;</a></h3>
+<p>No floats. Implemented as string math:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">private function bcRoundHalfUp(string $value): int</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    $sign = $value[0] === &#39;-&#39; ? -1 : 1;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    $abs  = $sign &lt; 0 ? substr($value, 1) : $value;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    $rounded = bcadd($abs, &#39;0.5&#39;, 0);</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">    return $sign * (int) $rounded;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">}</span>
+</code></pre></div>
+<ul>
+<li>Half-up semantics (away from zero), exact for negatives (refund flows).</li>
+</ul>
+<h3 id="52-direction-convention">5.2 Direction convention<a class="headerlink" href="#52-direction-convention" title="Permanent link">&para;</a></h3>
+<p><code>rate(base, quote) = 1 base = rate quote</code> (per <strong>unit</strong>, not per cent). Because <code>from</code>/<code>to</code> both use the same ×100 exponent, <code>cents × rate</code> is already in <code>to</code>-cents:</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>direct <code>(from→to)</code></td>
+<td><code>X × rate</code></td>
+</tr>
+<tr>
+<td>inverse <code>(to→from)</code></td>
+<td><code>X ÷ rate</code></td>
+</tr>
+<tr>
+<td>cross via base</td>
+<td><code>X × rt / rb</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-known-limitations">5.3 Known limitations<a class="headerlink" href="#53-known-limitations" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>2-decimal fiat assumption</strong>: all supported units use ×100. JPY/KRW (0-decimal) are <strong>out of scope</strong>; a per-currency exponent map would be required before supporting them (<code>X × rate × 10^(exp_to − exp_from)</code>).</li>
+<li><strong>Dust</strong>: a coefficient like <code>1 CNY = 100,000,000 POINT</code> means <code>1 cent = 1,000,000 POINT</code>; converting POINT → CNY always leaves up to 1M POINT of residual. Display is fine; redemption must define dust handling (burn / accumulate / carry to next).</li>
+</ul>
+<hr />
+<h2 id="6-ledger-abstraction">6. Ledger Abstraction<a class="headerlink" href="#6-ledger-abstraction" title="Permanent link">&para;</a></h2>
+<p>The bundle stays host-agnostic by defining its own ledger contract; the host app provides the implementation (reusing <code>App\Wallet</code>'s atomic, idempotent <code>TransferService</code>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">interface LedgerInterface</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    /** Credit an account (mint / pool funding). Idempotent via $referenceId. */</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    public function credit(string $account, string $currency, int $amount, string $referenceId, string $memo): void;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    /** Debit an account (redemption / pool payout). */</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">    public function debit(string $account, string $currency, int $amount, string $referenceId, string $memo): void;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="x">    /** Atomic transfer between two accounts (exchange legs). */</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="x">    public function transfer(string $fromAccount, string $toAccount, string $currency, int $amount, string $referenceId, string $memo): void;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">    public function balance(string $account, string $currency): int;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="x">}</span>
+</code></pre></div>
+<ul>
+<li>In this app, the implementation adapts <code>App\Wallet</code> (wallets + <code>TransferService</code>, idempotent by <code>referenceId</code>).</li>
+<li>This avoids a <strong>second ledger</strong> and keeps the zero-sum guarantee in one place.</li>
+</ul>
+<hr />
+<h2 id="7-booking-flows-zero-sum-invariant">7. Booking Flows &amp; Zero-Sum Invariant<a class="headerlink" href="#7-booking-flows-zero-sum-invariant" title="Permanent link">&para;</a></h2>
+<p>Every conversion is booked as paired, equal-and-opposite entries against the pool → <strong>no money is created or destroyed outside of minting</strong>; per-currency total balances are conserved.</p>
+<h3 id="71-pledge">7.1 Pledge<a class="headerlink" href="#71-pledge" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>wrapInTransaction:
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Ledger.transfer(pledgor → pool[CNY], 1_0000, ref, &#39;pledge&#39;)   # collateral into pool
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  Pledge(active) + PoolAccount.outstanding/Ceiling updated
+</code></pre></div>
+<h3 id="72-mint">7.2 Mint<a class="headerlink" href="#72-mint" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>wrapInTransaction:
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  assert Σminted(unit) − Σredeemed(unit) ≤ Σactive_pledges × coefficient   # solvency
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  Ledger.credit(pool[POINT], Y, ref, &#39;mint&#39;)                                # mint into pool
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  MintRecord
+</code></pre></div>
+<h3 id="73-exchange-user-cny-point">7.3 Exchange — user CNY → POINT<a class="headerlink" href="#73-exchange-user-cny-point" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>wrapInTransaction:
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  Y = converter.convert(X, CNY, POINT, now)          # rate with spread applied by MakerPolicy
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Ledger.transfer(user[CNY]  → pool[CNY], X, ref)    # leg 1
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  Ledger.transfer(pool[POINT] → user[POINT], Y, ref) # leg 2
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  ExchangeRecord (rate, rate_path)
+</code></pre></div>
+<p>Zero-sum: <code>user.CNY −X / pool.CNY +X</code> and <code>pool.POINT −Y / user.POINT +Y</code> — the pool is the counterparty; CNY total and POINT total are each conserved.</p>
+<h3 id="74-redemption">7.4 Redemption<a class="headerlink" href="#74-redemption" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>wrapInTransaction:
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  Z = converter.convert(Y, POINT, CNY, now)
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  Ledger.transfer(user[POINT]  → pool[POINT], Y, ref)   # burn units
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  Ledger.transfer(pool[CNY]    → user[CNY], Z, ref)     # payout collateral
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>  RedemptionRecord; PoolAccount.outstanding reduced
+</code></pre></div>
+<h3 id="75-invariants">7.5 Invariants<a class="headerlink" href="#75-invariants" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Zero-sum</strong>: internal transfers never change any currency's aggregate balance across all accounts.</li>
+<li><strong>Solvency</strong>: <code>Σ issued(unit) − Σ redeemed(unit) ≤ Σ active pledges × coefficient</code>, and <code>pool[collateral] ≥ liabilities</code> in the collateral currency. Zero-sum keeps books balanced; pledges keep the pool solvent.</li>
+<li><strong>Spread is revenue, not a breach</strong>: <code>MakerPolicy.spread_bps</code> / <code>fee_bps</code> leave a small residual with the pool; the ledger still balances by construction.</li>
+</ul>
+<h3 id="76-market-maker">7.6 Market maker<a class="headerlink" href="#76-market-maker" title="Permanent link">&para;</a></h3>
+<p><code>MakerPolicyService</code>:
+- Owns the pool and its pledge ceiling.
+- Applies spread/fee to the mid rate during <code>ExchangeService</code> booking.
+- Guards <code>max_exposure</code> per currency before booking large conversions.
+- Owns rate updates (anchor rows + direct overrides) with effective dating.</p>
+<hr />
+<h2 id="8-rate-lookup-semantics">8. Rate Lookup Semantics<a class="headerlink" href="#8-rate-lookup-semantics" title="Permanent link">&para;</a></h2>
+<p><code>ExchangeRateRepository::findEffective(string $base, string $quote, \DateTimeImmutable $at)</code>:</p>
+<ul>
+<li><code>WHERE base = :base AND quote = :quote AND valid_from &lt;= :at AND (valid_to IS NULL OR valid_to &gt; :at)</code></li>
+<li><code>ORDER BY valid_from DESC LIMIT 1</code></li>
+</ul>
+<p>Lookup path (direct → inverse → cross) is <strong>fixed and auditable</strong> (<code>rate_path</code> on <code>ExchangeRecord</code>); a missing rate throws rather than silently degrading.</p>
+<hr />
+<h2 id="9-configuration">9. Configuration<a class="headerlink" href="#9-configuration" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># config/packages/exchange.yaml</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nt">exchange.base_currency</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;USD&#39;</span><span class="w">   </span><span class="c1"># anchor currency (configurable; &#39;CNY&#39; also sensible)</span>
+</code></pre></div>
+<p><code>CurrencyConverter</code> injects <code>exchange.base_currency</code> via <code>#[Autowire('%exchange.base_currency%')]</code>.</p>
+<p>Doctrine mapping for the bundle (<code>config/packages/doctrine.yaml</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">doctrine</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nt">orm</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">        </span><span class="nt">mappings</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">            </span><span class="nt">ExchangeBundle</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">                </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%kernel.project_dir%/src/ExchangeBundle/Domain/*/Entity&#39;</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">                </span><span class="nt">is_bundle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">                </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">App\ExchangeBundle\Domain</span>
+</code></pre></div>
+<hr />
+<h2 id="10-database-migration">10. Database Migration<a class="headerlink" href="#10-database-migration" title="Permanent link">&para;</a></h2>
+<p>Raw SQL DDL matching existing migration style (<code>migrations/Version2026XXXXXXXX.php</code>):</p>
+<ul>
+<li><code>exchange_rate</code> — CHECK (<code>rate &gt; 0</code>, <code>base != quote</code>), unique <code>(base_currency, quote_currency, valid_from)</code>, index on the same.</li>
+<li><code>exchange_pool</code>, <code>exchange_pool_account</code>, <code>exchange_pledge</code>, <code>exchange_mint_record</code>, <code>exchange_exchange_record</code>, <code>exchange_redemption_record</code>, <code>exchange_maker_policy</code>.</li>
+<li><code>reference_id</code> unique indexes on mint/exchange/redemption records (idempotency).</li>
+</ul>
+<hr />
+<h2 id="11-testing">11. Testing<a class="headerlink" href="#11-testing" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Unit (<code>CurrencyConverter</code>, fake rate repo)</strong>: same-unit short-circuit, direct pair, inverse pair, cross via base, half-up boundaries (incl. <code>.5</code>, negatives), unknown unit / no effective rate → exception.</li>
+<li><strong>Unit (services, fake <code>LedgerInterface</code>)</strong>: pledge ceiling math, mint solvency rejection, exchange double-entry balance effects, redemption payout limits, idempotency via <code>referenceId</code>.</li>
+<li><strong>Integration (real repo)</strong>: effective-dated lookup boundaries (<code>valid_from &lt;= at &lt; valid_to</code>), open-ended validity, latest-of-multiple versions, <code>setRate</code> overlap rejection.</li>
+</ul>
+<hr />
+<h2 id="12-phased-rollout">12. Phased Rollout<a class="headerlink" href="#12-phased-rollout" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Scope</th>
+<th>Depends on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P0</strong></td>
+<td>Bundle skeleton + Rate domain + <code>CurrencyConverter</code> (pure read-only)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td><code>LedgerInterface</code> + Pool + Pledge + Mint (issuance + solvency)</td>
+<td>P0</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>Exchange booking + Redemption (zero-sum double-entry)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td>Maker policy + Manage/App API + reconciliation/audit reporting</td>
+<td>P2</td>
+</tr>
+</tbody>
+</table>
+<p>Each phase is independently testable and reviewable. Booking into <code>App\Wallet</code> (the host <code>LedgerInterface</code> implementation) lands with P1.</p>
+<hr />
+<h2 id="13-open-decisions-non-goals">13. Open Decisions &amp; Non-Goals<a class="headerlink" href="#13-open-decisions-non-goals" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Bundle packaging</strong>: in-repo <code>App\ExchangeBundle</code> first; extractable later.</li>
+<li><strong>Redemption of <code>POINT</code> back to CNY</strong>: required → makes collateral mandatory. If points become one-way (earn/spend, never redeemed), the pledge layer reduces to an audit backstop.</li>
+<li><strong>Fixed anchor vs floating rate</strong>: <code>1 CNY = 100,000,000 POINT</code> as a hard-coded coefficient is a <em>fixed peg</em> (pledge ceiling, no rate lookup); floating rates use the rate table. Both are expressible — decide priority when booking lands.</li>
+<li><strong>JPY / 0-decimal currencies</strong>: not supported (requires per-currency exponent map).</li>
+<li><strong>External feed / auto-sync</strong>: reserved via <code>source</code>; not implemented.</li>
+<li><strong>No integration with <code>PaymentDeductionService</code> / Trade pricing</strong> in this design; <code>PaymentDeductionService</code> still enforces same-currency today.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>

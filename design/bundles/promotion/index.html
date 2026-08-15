@@ -558,6 +558,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -802,6 +830,34 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
   
 
     
@@ -2266,12 +2322,11 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <hr />
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
 <p>Promotion is an independent module that plugs into Trade's <code>PriceCalculatorInterface</code> chain:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>OrderService::calculatePrices()
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a> ├─ BasePriceCalculator (-100)       ← Trade built-in
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a> ├─ QuantityCalculator (50)          ← Trade built-in
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a> ├─ PromotionCalculator (60)         ← Promotion module (tagged trade.price_calculator)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a> └─ TotalAggregator (100)            ← Trade built-in
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    A["OrderService::calculatePrices()"] --&gt; B["BasePriceCalculator (-100)&lt;br/&gt;Trade built-in"]
+    A --&gt; C["QuantityCalculator (50)&lt;br/&gt;Trade built-in"]
+    A --&gt; D["PromotionCalculator (60)&lt;br/&gt;Promotion module (tagged trade.price_calculator)"]
+    A --&gt; E["TotalAggregator (100)&lt;br/&gt;Trade built-in"]</code></pre>
 <p>Key characteristics:</p>
 <ul>
 <li><strong>Custom DSL</strong>: Promotion conditions and actions are written in a structured,
@@ -2359,82 +2414,61 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 </table>
 <hr />
 <h2 id="2-multi-store-architecture">2. Multi-Store Architecture<a class="headerlink" href="#2-multi-store-architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│  PromotionTemplate (store-agnostic)                          │
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│  ┌────────────────────────────────────────────────────────┐  │
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  │ type: full_reduction                                   │  │
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  │ phase: inner                                           │  │
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  │                                                        │  │
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│  │ when:                                                  │  │
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│  │   cart.subtotal &gt;= config.threshold                    │  │
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│  │ do:                                                    │  │
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│  │   discount order config.amount                         │  │
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│  │                                                        │  │
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  │ priority: config.amount                                │  │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│  │ fields: threshold,amount                               │  │
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  └────────────────────────────────────────────────────────┘  │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  Owned by: developer / tech-ops                             │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>└──────────┬───────────────────────────────────────────────────┘
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>           │ 1:N
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>┌──────────▼───────────────────────────────────────────────────┐
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│  Promotion instances (one per store)                          │
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│                                                               │
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│  Store A:          Store B:           Store C:                │
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│  ┌───────────────┐ ┌───────────────┐ ┌───────────────┐       │
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│  │ threshold:200 │ │ threshold:300 │ │ threshold:150 │       │
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>│  │ amount:20     │ │ amount:50     │ │ amount:10     │       │
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>│  │ enabled:true  │ │ enabled:true  │ │ enabled:false │       │
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>│  │ start:7/1     │ │ start:7/15    │ │ start:null    │       │
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│  │ end:7/31      │ │ end:8/15      │ │ end:null      │       │
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│  └───────────────┘ └───────────────┘ └───────────────┘       │
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│  Owned by: operations / merchant                             │
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>└──────────────────────────────────────────────────────────────┘
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>PromotionCalculator receives a storeCode from the request/context,
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>evaluates only matching Promotion instances for the current store.
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Template["PromotionTemplate (store-agnostic)"]
+        Dsl["type: full_reduction&lt;br/&gt;phase: inner&lt;br/&gt;&lt;br/&gt;when:&lt;br/&gt;cart.subtotal &gt;= config.threshold&lt;br/&gt;do:&lt;br/&gt;discount order config.amount&lt;br/&gt;&lt;br/&gt;priority: config.amount&lt;br/&gt;fields: threshold,amount"]
+        TemplateOwner["Owned by: developer / tech-ops"]
+    end
+    subgraph Instances["Promotion instances (one per store)"]
+        StoreA["Store A&lt;br/&gt;threshold:200&lt;br/&gt;amount:20&lt;br/&gt;enabled:true&lt;br/&gt;start:7/1&lt;br/&gt;end:7/31"]
+        StoreB["Store B&lt;br/&gt;threshold:300&lt;br/&gt;amount:50&lt;br/&gt;enabled:true&lt;br/&gt;start:7/15&lt;br/&gt;end:8/15"]
+        StoreC["Store C&lt;br/&gt;threshold:150&lt;br/&gt;amount:10&lt;br/&gt;enabled:false&lt;br/&gt;start:null&lt;br/&gt;end:null"]
+        InstancesOwner["Owned by: operations / merchant"]
+    end
+    Template --&gt;|"1:N"| Instances
+    Note["PromotionCalculator receives a storeCode from the request/context,&lt;br/&gt;evaluates only matching Promotion instances for the current store."]</code></pre>
 <hr />
 <h2 id="3-file-structure">3. File Structure<a class="headerlink" href="#3-file-structure" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>src/Promotion/
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── Controller/
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── App/
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   └── PromotionController.php           # Public read: list active promotions
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   └── Manage/
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│       ├── PromotionController.php           # Admin CRUD
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│       └── PromotionTemplateController.php  # Admin CRUD + DSL validate on save
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>├── Entity/
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   ├── Promotion.php
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   └── PromotionTemplate.php
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>├── Repository/
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   ├── PromotionRepository.php
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   └── PromotionTemplateRepository.php
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>├── Service/
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│   ├── PromotionService.php                  # CRUD + engine: match, sort, apply
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│   ├── PromotionServiceInterface.php
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│   ├── PromotionTemplateService.php          # CRUD (DSL parse/validate on update)
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│   ├── PromotionTemplateServiceInterface.php
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│   ├── PromotionCalculator.php               # tagged trade.price_calculator, priority=60
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│   └── Dsl/
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>│       ├── Lexer.php                         # Tokenizer
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>│       ├── Parser.php                        # Tokens → AST
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>│       ├── AstNode.php                       # AST node classes (Condition, Action, ...)
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>│       ├── Evaluator.php                     # AST → bool (conditions) / void (actions)
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>│       └── DslSyntaxException.php            # Parse error with line:col
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>├── Strategy/
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>│   ├── PromotionStrategyInterface.php        # apply(AST, context): void
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>│   ├── FullReductionStrategy.php             # 满减
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>│   ├── DiscountStrategy.php                  # 折扣
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>│   ├── GiftStrategy.php                      # 满赠
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>│   ├── NthItemDiscountStrategy.php           # N件折扣
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>│   ├── TieredStrategy.php                    # 阶梯优惠
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>│   ├── FreeShippingStrategy.php              # 免运费
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>│   ├── MemberDiscountStrategy.php            # 会员折扣
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>│   └── CustomStrategy.php                    # Escape hatch (future ExpressionLanguage)
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>├── Exception/
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>│   └── PromotionException.php
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>└── Resources/
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    └── config/
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>        └── services_promotion.yaml           # Strategy registration (tagged)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/Promotion/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Controller/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   ├── App/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   │   └── PromotionController.php           # Public read: list active promotions
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   └── Manage/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│       ├── PromotionController.php           # Admin CRUD
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│       └── PromotionTemplateController.php  # Admin CRUD + DSL validate on save
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── Entity/
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── Promotion.php
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   └── PromotionTemplate.php
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── Repository/
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── PromotionRepository.php
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   └── PromotionTemplateRepository.php
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>├── Service/
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── PromotionService.php                  # CRUD + engine: match, sort, apply
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   ├── PromotionServiceInterface.php
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   ├── PromotionTemplateService.php          # CRUD (DSL parse/validate on update)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── PromotionTemplateServiceInterface.php
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── PromotionCalculator.php               # tagged trade.price_calculator, priority=60
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   └── Dsl/
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│       ├── Lexer.php                         # Tokenizer
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│       ├── Parser.php                        # Tokens → AST
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│       ├── AstNode.php                       # AST node classes (Condition, Action, ...)
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│       ├── Evaluator.php                     # AST → bool (conditions) / void (actions)
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│       └── DslSyntaxException.php            # Parse error with line:col
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├── Strategy/
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── PromotionStrategyInterface.php        # apply(AST, context): void
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   ├── FullReductionStrategy.php             # 满减
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│   ├── DiscountStrategy.php                  # 折扣
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│   ├── GiftStrategy.php                      # 满赠
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── NthItemDiscountStrategy.php           # N件折扣
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── TieredStrategy.php                    # 阶梯优惠
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ├── FreeShippingStrategy.php              # 免运费
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   ├── MemberDiscountStrategy.php            # 会员折扣
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│   └── CustomStrategy.php                    # Escape hatch (future ExpressionLanguage)
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>├── Exception/
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│   └── PromotionException.php
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>└── Resources/
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    └── config/
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        └── services_promotion.yaml           # Strategy registration (tagged)
 </code></pre></div>
 <p>Modified files:
 - <code>src/Trade/Service/Pricing/PriceCalculationContext.php</code> — add <code>$user</code>, <code>$storeCode</code>
@@ -2515,9 +2549,9 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 </tbody>
 </table>
 <p>Constants:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">public const PHASE_ALL = -1;</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">public const PHASE_INNER = 0;</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">public const PHASE_OUTER = 1;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">public const PHASE_ALL = -1;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">public const PHASE_INNER = 0;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">public const PHASE_OUTER = 1;</span>
 </code></pre></div></p>
 <h3 id="42-promotion">4.2 Promotion<a class="headerlink" href="#42-promotion" title="Permanent link">&para;</a></h3>
 <table>
@@ -2630,23 +2664,23 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <hr />
 <h2 id="5-dsl-design">5. DSL Design<a class="headerlink" href="#5-dsl-design" title="Permanent link">&para;</a></h2>
 <h3 id="51-structure">5.1 Structure<a class="headerlink" href="#51-structure" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a># Comment lines start with #
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>type: &lt;promotion_type&gt;       # Fast classifier for engine routing
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>phase: &lt;inner|outer&gt;         # Execution phase (default: inner)
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>when:
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  &lt;condition_1&gt;
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  &lt;condition_2&gt;
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>do:
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  &lt;action_1&gt;
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>  &lt;action_2&gt;
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>priority: &lt;expression&gt;       # Sort key (optional)
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>fields:
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>  &lt;name&gt;:&lt;type&gt;:&lt;label&gt;      # Config field declarations (optional)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a># Comment lines start with #
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>type: &lt;promotion_type&gt;       # Fast classifier for engine routing
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>phase: &lt;inner|outer&gt;         # Execution phase (default: inner)
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>when:
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  &lt;condition_1&gt;
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  &lt;condition_2&gt;
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>do:
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  &lt;action_1&gt;
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  &lt;action_2&gt;
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>priority: &lt;expression&gt;       # Sort key (optional)
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>fields:
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  &lt;name&gt;:&lt;type&gt;:&lt;label&gt;      # Config field declarations (optional)
 </code></pre></div>
 <h3 id="52-condition-syntax">5.2 Condition Syntax<a class="headerlink" href="#52-condition-syntax" title="Permanent link">&para;</a></h3>
 <h4 id="cart-level">Cart-level<a class="headerlink" href="#cart-level" title="Permanent link">&para;</a></h4>
@@ -2747,14 +2781,14 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 </tbody>
 </table>
 <h4 id="logic-combinators">Logic combinators<a class="headerlink" href="#logic-combinators" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>when:
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  and:
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    - cart.subtotal &gt;= config.threshold
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    - or:
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        - user.level &gt;= &quot;vip&quot;
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        - item.tags includes &quot;promo&quot;
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>  not:
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    item.tags includes &quot;excluded&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>when:
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  and:
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    - cart.subtotal &gt;= config.threshold
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    - or:
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        - user.level &gt;= &quot;vip&quot;
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        - item.tags includes &quot;promo&quot;
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  not:
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    item.tags includes &quot;excluded&quot;
 </code></pre></div>
 <h3 id="53-action-syntax">5.3 Action Syntax<a class="headerlink" href="#53-action-syntax" title="Permanent link">&para;</a></h3>
 <table>
@@ -2819,362 +2853,358 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 </tbody>
 </table>
 <h3 id="54-tiered-syntax">5.4 Tiered Syntax<a class="headerlink" href="#54-tiered-syntax" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>type: tiered
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>when:
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  cart.subtotal &gt;= config.from_1
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>do:
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  tiered:
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    - from: 100.00  less: 10.00
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    - from: 200.00  less: 30.00
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    - from: 500.00  less: 80.00
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>type: tiered
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>when:
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  cart.subtotal &gt;= config.from_1
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>do:
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  tiered:
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    - from: 100.00  less: 10.00
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    - from: 200.00  less: 30.00
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    - from: 500.00  less: 80.00
 </code></pre></div>
 <h3 id="55-priority">5.5 Priority<a class="headerlink" href="#55-priority" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>priority: config.priority       # Manual priority from instance config
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>priority: config.amount          # Sort by discount amount
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>priority: config.threshold desc  # Sort by threshold descending
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>priority: config.priority       # Manual priority from instance config
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>priority: config.amount          # Sort by discount amount
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>priority: config.threshold desc  # Sort by threshold descending
 </code></pre></div>
 <p>If omitted, priority is <code>0</code> (last).</p>
 <h3 id="56-fields">5.6 Fields<a class="headerlink" href="#56-fields" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>fields:
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  threshold:number:消费门槛(元)
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  amount:number:优惠金额(元)
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  gift_spec:spec:赠品规格
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>  min_qty:number:最低件数
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>fields:
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  threshold:number:消费门槛(元)
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  amount:number:优惠金额(元)
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  gift_spec:spec:赠品规格
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  min_qty:number:最低件数
 </code></pre></div>
 <p>Each field: <code>name:type:label</code>. Types: <code>number</code>, <code>spec</code>, <code>string</code>, <code>bool</code>.</p>
 <hr />
 <h2 id="6-complete-dsl-examples-all-7-types">6. Complete DSL Examples (All 7 Types)<a class="headerlink" href="#6-complete-dsl-examples-all-7-types" title="Permanent link">&para;</a></h2>
 <h3 id="61-full_reduction">6.1 满减 (full_reduction)<a class="headerlink" href="#61-full_reduction" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># Spend X, save Y
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># Spend X, save Y
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>type: full_reduction
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>phase: inner
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>when:
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  cart.subtotal &gt;= config.threshold
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>do:
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  discount order config.amount
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>priority: config.amount
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>fields:
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>  threshold:number:消费门槛(元)
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  amount:number:优惠金额(元)
+</code></pre></div>
+<h3 id="62-discount">6.2 折扣 (discount)<a class="headerlink" href="#62-discount" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a># Percentage discount on entire order
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>type: discount
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>phase: outer
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>when:
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>  cart.subtotal &gt;= config.threshold
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>do:
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>  discount order config.rate% max config.cap
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>priority: config.rate
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>fields:
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>  threshold:number:满额门槛(元)
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>  rate:number:折扣率(%)
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>  cap:number:最高优惠上限(元)
+</code></pre></div>
+<h3 id="63-gift">6.3 满赠 (gift)<a class="headerlink" href="#63-gift" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># Buy X, get free gift Y
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>type: full_reduction
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>type: gift
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>phase: inner
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>when:
 <a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>  cart.subtotal &gt;= config.threshold
 <a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
 <a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>do:
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  discount order config.amount
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  add gift spec:config.gift_spec_id count:config.gift_qty price:0.00
 <a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>priority: config.amount
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>fields:
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>  threshold:number:消费门槛(元)
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>  amount:number:优惠金额(元)
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>fields:
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>  threshold:number:满额门槛(元)
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>  gift_spec_id:spec:赠品规格
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>  gift_qty:number:赠品数量
 </code></pre></div>
-<h3 id="62-discount">6.2 折扣 (discount)<a class="headerlink" href="#62-discount" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a># Percentage discount on entire order
+<h3 id="64-n-nth_discount">6.4 N件折扣 (nth_discount)<a class="headerlink" href="#64-n-nth_discount" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a># Nth item at discounted price
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>type: discount
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>phase: outer
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>type: nth_discount
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>phase: inner
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
 <a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>when:
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  cart.subtotal &gt;= config.threshold
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  item.quantity &gt;= config.min_qty
 <a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
 <a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>do:
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  discount order config.rate% max config.cap
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  discount item config.position config.rate%
 <a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>priority: config.rate
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>priority: config.rate desc
 <a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>fields:
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  threshold:number:满额门槛(元)
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  rate:number:折扣率(%)
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  cap:number:最高优惠上限(元)
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  min_qty:number:最低件数
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  position:number:第几件
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  rate:number:折扣率(%)
 </code></pre></div>
-<h3 id="63-gift">6.3 满赠 (gift)<a class="headerlink" href="#63-gift" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># Buy X, get free gift Y
+<h3 id="65-tiered">6.5 阶梯优惠 (tiered)<a class="headerlink" href="#65-tiered" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># Tiered/ladder discount — highest-matching tier wins
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>type: gift
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>type: tiered
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>phase: inner
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
 <a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>when:
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>  cart.subtotal &gt;= config.threshold
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>  cart.subtotal &gt;= 100.00
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>do:
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>  add gift spec:config.gift_spec_id count:config.gift_qty price:0.00
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>fields:
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>  threshold:number:满额门槛(元)
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>  gift_spec_id:spec:赠品规格
-<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>  gift_qty:number:赠品数量
-</code></pre></div>
-<h3 id="64-n-nth_discount">6.4 N件折扣 (nth_discount)<a class="headerlink" href="#64-n-nth_discount" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># Nth item at discounted price
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>type: nth_discount
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>phase: inner
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>when:
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>  item.quantity &gt;= config.min_qty
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>do:
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>  discount item config.position config.rate%
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>priority: config.rate desc
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>fields:
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>  min_qty:number:最低件数
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>  position:number:第几件
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>  rate:number:折扣率(%)
-</code></pre></div>
-<h3 id="65-tiered">6.5 阶梯优惠 (tiered)<a class="headerlink" href="#65-tiered" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a># Tiered/ladder discount — highest-matching tier wins
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>type: tiered
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>phase: inner
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>when:
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>  cart.subtotal &gt;= 100.00
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>do:
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>  tiered:
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    - from: 100.00  less: 10.00
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    - from: 200.00  less: 30.00
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    - from: 500.00  less: 80.00
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>    - from: 1000.00  less: 200.00
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>priority: 1000
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>  tiered:
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    - from: 100.00  less: 10.00
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    - from: 200.00  less: 30.00
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    - from: 500.00  less: 80.00
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    - from: 1000.00  less: 200.00
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>priority: 1000
 </code></pre></div>
 <h3 id="66-free_shipping">6.6 免运费 (free_shipping)<a class="headerlink" href="#66-free_shipping" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a># Free shipping
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>type: free_shipping
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>phase: outer
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>when:
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  cart.subtotal &gt;= config.threshold
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>do:
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>  free shipping
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
-<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>priority: 0
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>fields:
-<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>  threshold:number:满额免运费(元)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># Free shipping
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>type: free_shipping
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>phase: outer
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>when:
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>  cart.subtotal &gt;= config.threshold
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>do:
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>  free shipping
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>priority: 0
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>fields:
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>  threshold:number:满额免运费(元)
 </code></pre></div>
 <h3 id="67-member_discount">6.7 会员折扣 (member_discount)<a class="headerlink" href="#67-member_discount" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a># Member-level discount
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>type: member_discount
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>phase: outer
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>when:
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>  user.level &gt;= config.min_level
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>do:
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>  member discount config.rate%
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>
-<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>priority: config.rate
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>fields:
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>  min_level:string:最低会员等级
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>  rate:number:折扣率(%)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a># Member-level discount
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>type: member_discount
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>phase: outer
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>when:
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>  user.level &gt;= config.min_level
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>do:
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>  member discount config.rate%
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>priority: config.rate
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>fields:
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>  min_level:string:最低会员等级
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>  rate:number:折扣率(%)
 </code></pre></div>
 <hr />
 <h2 id="7-dsl-lexer-and-parser">7. DSL Lexer and Parser<a class="headerlink" href="#7-dsl-lexer-and-parser" title="Permanent link">&para;</a></h2>
 <h3 id="71-architecture">7.1 Architecture<a class="headerlink" href="#71-architecture" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>POST /manage/promotion-templates { dsl: &quot;type: full_reduction\nwhen:\n  ...&quot; }
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  │
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  ├─ Lexer::tokenize(dsl)
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  │     Text → [TOKEN_EOL, KEYWORD_TYPE, COLON, STRING(&quot;full_reduction&quot;), ...]
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  │
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>  ├─ Parser::parse(tokens)
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>  │     Tokens → AstNode tree
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>  │     Syntax error? → DslSyntaxException(&quot;Unexpected token at line 3, col 10&quot;)
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>  │
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>  ├─ SemanticValidator::validate(ast)
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>  │     All config.* refs correspond to declared fields?
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>  │     All spec refs exist?
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>  │
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>  ├─ Serialize AST → JSON → store in promotion_template.astCache
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>  │
-<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>  └─ Return 200 or error
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    A["POST /manage/promotion-templates&lt;br/&gt;{ dsl: 'type: full_reduction ...' }"]
+    B["Lexer::tokenize(dsl)&lt;br/&gt;Text → [TOKEN_EOL, KEYWORD_TYPE, COLON, STRING('full_reduction'), ...]"]
+    C["Parser::parse(tokens)&lt;br/&gt;Tokens → AstNode tree&lt;br/&gt;Syntax error? → DslSyntaxException('Unexpected token at line 3, col 10')"]
+    D["SemanticValidator::validate(ast)&lt;br/&gt;All config.* refs correspond to declared fields?&lt;br/&gt;All spec refs exist?"]
+    E["Serialize AST → JSON → store in promotion_template.astCache"]
+    F["Return 200 or error"]
+    A --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F</code></pre>
 <h3 id="72-ast-node-types">7.2 AST Node Types<a class="headerlink" href="#72-ast-node-types" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>AstProgram
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  ├── type: string
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>  ├── phase: int
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>  ├── conditions: AstCondition[]
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>  │     ├── AstCondition      { op, left, right }
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>  │     ├── AstAnd            { children: AstCondition[] }
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>  │     ├── AstOr             { children: AstCondition[] }
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>  │     └── AstNot            { child: AstCondition }
-<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>  ├── actions: AstAction[]
-<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>  │     ├── AstDiscount       { target, value, isPercent, maxCap }
-<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>  │     ├── AstGift           { specRef, count, price }
-<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>  │     ├── AstNthDiscount    { position, rate }
-<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>  │     ├── AstTiered         { tiers: [{from, less}] }
-<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>  │     ├── AstFreeShipping   {}
-<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>  │     └── AstMemberDiscount { rate }
-<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>  ├── priority: AstExpression | null
-<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>  └── fields: AstFieldDeclaration[]
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    AstProgram["AstProgram&lt;br/&gt;type: string · phase: int"]
+    AstProgram --&gt; Cnds["conditions: AstCondition[]"]
+    AstProgram --&gt; Acts["actions: AstAction[]"]
+    AstProgram --&gt; Prio["priority: AstExpression / null"]
+    AstProgram --&gt; Flds["fields: AstFieldDeclaration[]"]
+    Cnds --&gt; C1["AstCondition { op, left, right }"]
+    Cnds --&gt; C2["AstAnd { children: AstCondition[] }"]
+    Cnds --&gt; C3["AstOr { children: AstCondition[] }"]
+    Cnds --&gt; C4["AstNot { child: AstCondition }"]
+    Acts --&gt; A1["AstDiscount { target, value, isPercent, maxCap }"]
+    Acts --&gt; A2["AstGift { specRef, count, price }"]
+    Acts --&gt; A3["AstNthDiscount { position, rate }"]
+    Acts --&gt; A4["AstTiered { tiers: [{from, less}] }"]
+    Acts --&gt; A5["AstFreeShipping {}"]
+    Acts --&gt; A6["AstMemberDiscount { rate }"]</code></pre>
 <h3 id="73-runtime-evaluator">7.3 Runtime Evaluator<a class="headerlink" href="#73-runtime-evaluator" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Evaluator::evaluateCondition(AstCondition $cond, PriceCalculationContext $ctx, array $config): bool
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  ├─ Resolve left operand (cart.subtotal → $ctx-&gt;getSubtotal())
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>  ├─ Resolve right operand (config.threshold → $config[&#39;threshold&#39;])
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>  ├─ Apply operator (&gt;=, &lt;=, ==, !=, in, includes)
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>  └─ Return bool
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
-<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>Evaluator::executeAction(AstAction $action, PriceCalculationContext $ctx, array $config): void
-<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>  ├─ Match action type → delegate to PromotionStrategyInterface
-<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>  └─ Strategy::apply(action, context, config) → mutate context
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Cond[Evaluator::evaluateCondition(...): bool]
+        direction LR
+        C1["Resolve left operand&lt;br/&gt;(cart.subtotal → $ctx-&gt;getSubtotal())"]
+        C2["Resolve right operand&lt;br/&gt;(config.threshold → $config['threshold'])"]
+        C3["Apply operator&lt;br/&gt;(&gt;=, &lt;=, ==, !=, in, includes)"]
+        C4["Return bool"]
+        C1 --&gt; C2 --&gt; C3 --&gt; C4
+    end
+    subgraph Act[Evaluator::executeAction(...): void]
+        direction LR
+        A1["Match action type → delegate to PromotionStrategyInterface"]
+        A2["Strategy::apply(action, context, config) → mutate context"]
+        A1 --&gt; A2
+    end</code></pre>
 <h3 id="74-strategy-registration">7.4 Strategy Registration<a class="headerlink" href="#74-strategy-registration" title="Permanent link">&para;</a></h3>
 <p>Each promotion type maps to a strategy class:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">        </span><span class="nt">App\Promotion\Strategy\PromotionStrategyInterface</span><span class="p">:</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;promotion.strategy&#39;</span><span class="p p-Indicator">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">        </span><span class="nt">App\Promotion\Strategy\PromotionStrategyInterface</span><span class="p">:</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;promotion.strategy&#39;</span><span class="p p-Indicator">]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="x">interface PromotionStrategyInterface</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="x">{</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="x">    public static function supportedType(): string;   // e.g. &#39;full_reduction&#39;</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="x">    public function apply(AstNode $action, PriceCalculationContext $context, array $config): void;</span>
-<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">interface PromotionStrategyInterface</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="x">{</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">    public static function supportedType(): string;   // e.g. &#39;full_reduction&#39;</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="x">    public function apply(AstNode $action, PriceCalculationContext $context, array $config): void;</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="x">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="x">// FullReductionStrategy.php</span>
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="x">#[AutoconfigureTag(&#39;promotion.strategy&#39;)]</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="x">class FullReductionStrategy implements PromotionStrategyInterface</span>
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="x">{</span>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="x">    public static function supportedType(): string</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="x">    {</span>
-<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="x">        return &#39;full_reduction&#39;;</span>
-<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="x">    }</span>
-<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
-<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="x">    public function apply(AstNode $action, PriceCalculationContext $context, array $config): void</span>
-<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="x">    {</span>
-<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="x">        $amount = (int)($action-&gt;value * 100); // convert to cents</span>
-<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="x">        $context-&gt;totalAmount = max(0, $context-&gt;totalAmount - $amount);</span>
-<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="x">    }</span>
-<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">// FullReductionStrategy.php</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">#[AutoconfigureTag(&#39;promotion.strategy&#39;)]</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="x">class FullReductionStrategy implements PromotionStrategyInterface</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="x">{</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="x">    public static function supportedType(): string</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="x">    {</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="x">        return &#39;full_reduction&#39;;</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="x">    }</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="x">    public function apply(AstNode $action, PriceCalculationContext $context, array $config): void</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="x">    {</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="x">        $amount = (int)($action-&gt;value * 100); // convert to cents</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="x">        $context-&gt;totalAmount = max(0, $context-&gt;totalAmount - $amount);</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="x">    }</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="x">}</span>
 </code></pre></div>
 <p>Engine resolves strategy by type at runtime — no ExpressionLanguage needed.</p>
 <hr />
 <h2 id="8-core-engine-design">8. Core Engine Design<a class="headerlink" href="#8-core-engine-design" title="Permanent link">&para;</a></h2>
 <h3 id="81-promotionservice">8.1 PromotionService<a class="headerlink" href="#81-promotionservice" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">interface PromotionServiceInterface extends BaseServiceInterface</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">{</span>
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="x">    /**</span>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="x">     * Find all available (enabled, passing all conditions, sorted by priority)</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="x">     * promotions for the current price calculation context.</span>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="x">     */</span>
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="x">    public function getAvailable(</span>
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="x">        PriceCalculationContext $context,</span>
-<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="x">        ?int $phase = null</span>
-<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="x">    ): array;</span>
-<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>
-<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="x">    /**</span>
-<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="x">     * Get the top-ranked available promotion, or null.</span>
-<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="x">     */</span>
-<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="x">    public function getFirstAvailable(</span>
-<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a><span class="x">        PriceCalculationContext $context,</span>
-<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="x">        ?int $phase = null</span>
-<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="x">    ): ?Promotion;</span>
-<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>
-<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="x">    /**</span>
-<a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a><span class="x">     * Apply a promotion&#39;s actions to mutate the context.</span>
-<a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a><span class="x">     */</span>
-<a id="__codelineno-22-23" name="__codelineno-22-23" href="#__codelineno-22-23"></a><span class="x">    public function apply(</span>
-<a id="__codelineno-22-24" name="__codelineno-22-24" href="#__codelineno-22-24"></a><span class="x">        Promotion $promotion,</span>
-<a id="__codelineno-22-25" name="__codelineno-22-25" href="#__codelineno-22-25"></a><span class="x">        PriceCalculationContext $context</span>
-<a id="__codelineno-22-26" name="__codelineno-22-26" href="#__codelineno-22-26"></a><span class="x">    ): void;</span>
-<a id="__codelineno-22-27" name="__codelineno-22-27" href="#__codelineno-22-27"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">interface PromotionServiceInterface extends BaseServiceInterface</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="x">{</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="x">    /**</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="x">     * Find all available (enabled, passing all conditions, sorted by priority)</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="x">     * promotions for the current price calculation context.</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="x">     */</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="x">    public function getAvailable(</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="x">        PriceCalculationContext $context,</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="x">        ?int $phase = null</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="x">    ): array;</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="x">    /**</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="x">     * Get the top-ranked available promotion, or null.</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="x">     */</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="x">    public function getFirstAvailable(</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="x">        PriceCalculationContext $context,</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="x">        ?int $phase = null</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="x">    ): ?Promotion;</span>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="x">    /**</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="x">     * Apply a promotion&#39;s actions to mutate the context.</span>
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="x">     */</span>
+<a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a><span class="x">    public function apply(</span>
+<a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="x">        Promotion $promotion,</span>
+<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a><span class="x">        PriceCalculationContext $context</span>
+<a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a><span class="x">    ): void;</span>
+<a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="82-condition-pipeline-getavailable">8.2 Condition Pipeline (getAvailable)<a class="headerlink" href="#82-condition-pipeline-getavailable" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>getAvailable(context)
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>  ├─ Query: enabled + time-window + storeCode match + (phase filter)
-<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>  ├─ For each Promotion:
-<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>  │   ├─ template.enabled == true?
-<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>  │   ├─ time:      startTime &lt;= now &lt;= endTime?
-<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>  │   ├─ specification: context items match promotion&#39;s target specs? (empty = all)
-<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>  │   ├─ DSL conditions: deserialize AST → Evaluator → bool
-<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>  │   └─ conflictResolution: handle exclusive/lock_item modes
-<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>  └─ Sort by priority from DSL (or 0 if none)
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    Start["getAvailable(context)"]
+    Query["Query: enabled + time-window + storeCode match + (phase filter)"]
+    Loop["For each Promotion:"]
+    C1["template.enabled == true?"]
+    C2["time: startTime &amp;lt;= now &amp;lt;= endTime?"]
+    C3["specification: context items match promotion's target specs?&lt;br/&gt;(empty = all)"]
+    C4["DSL conditions: deserialize AST → Evaluator → bool"]
+    C5["conflictResolution: handle exclusive/lock_item modes"]
+    Sort["Sort by priority from DSL (or 0 if none)"]
+
+    Start --&gt; Query --&gt; Loop --&gt; C1 --&gt; C2 --&gt; C3 --&gt; C4 --&gt; C5 --&gt; Sort</code></pre>
 <h3 id="83-promotion-application-apply">8.3 Promotion Application (apply)<a class="headerlink" href="#83-promotion-application-apply" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>apply(promotion, context)
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>  ├─ Get AST from template.astCache (deserialized)
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>  ├─ Get config from promotion.config
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>  ├─ Resolve strategy by template.type
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>  ├─ Execute each action in order:
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>  │   └─ Strategy::apply(actionAst, context, config)
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>  └─ Mark promotion as applied in context.meta[&#39;promotion&#39;]
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    Start["apply(promotion, context)"]
+    A["Get AST from template.astCache (deserialized)"]
+    B["Get config from promotion.config"]
+    C["Resolve strategy by template.type"]
+    D["Execute each action in order:&lt;br/&gt;Strategy::apply(actionAst, context, config)"]
+    E["Mark promotion as applied in context.meta['promotion']"]
+    Start --&gt; A --&gt; B --&gt; C --&gt; D --&gt; E</code></pre>
 <h3 id="84-chaining-loop">8.4 Chaining (Loop)<a class="headerlink" href="#84-chaining-loop" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">class PromotionCalculator implements PriceCalculatorInterface</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="x">{</span>
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="x">    private const MAX_ITERATIONS = 20;</span>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>
-<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="x">    public function calculate(PriceCalculationContext $context): void</span>
-<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="x">    {</span>
-<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="x">        $appliedIds = [];</span>
-<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="x">        for ($i = 0; $i &lt; self::MAX_ITERATIONS; $i++) {</span>
-<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="x">            $promotion = $this-&gt;promotionService-&gt;getFirstAvailable(</span>
-<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="x">                $context, PromotionTemplate::PHASE_INNER, $appliedIds</span>
-<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="x">            );</span>
-<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="x">            if ($promotion === null) break;</span>
-<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a>
-<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="x">            $this-&gt;promotionService-&gt;apply($promotion, $context);</span>
-<a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a>
-<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="x">            $innerApplied[] = [</span>
-<a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a><span class="x">                &#39;promotion_id&#39; =&gt; $promotion-&gt;getId(),</span>
-<a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="x">                &#39;promotion_name&#39; =&gt; $promotion-&gt;getName(),</span>
-<a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a><span class="x">                &#39;template_name&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getName(),</span>
-<a id="__codelineno-25-20" name="__codelineno-25-20" href="#__codelineno-25-20"></a><span class="x">                &#39;type&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getType(),</span>
-<a id="__codelineno-25-21" name="__codelineno-25-21" href="#__codelineno-25-21"></a><span class="x">                &#39;config&#39; =&gt; $promotion-&gt;getConfig(),</span>
-<a id="__codelineno-25-22" name="__codelineno-25-22" href="#__codelineno-25-22"></a><span class="x">                &#39;context_snapshot&#39; =&gt; [</span>
-<a id="__codelineno-25-23" name="__codelineno-25-23" href="#__codelineno-25-23"></a><span class="x">                    &#39;totalAmount&#39; =&gt; $context-&gt;totalAmount,</span>
-<a id="__codelineno-25-24" name="__codelineno-25-24" href="#__codelineno-25-24"></a><span class="x">                    &#39;items_count&#39; =&gt; count($context-&gt;items),</span>
-<a id="__codelineno-25-25" name="__codelineno-25-25" href="#__codelineno-25-25"></a><span class="x">                ],</span>
-<a id="__codelineno-25-26" name="__codelineno-25-26" href="#__codelineno-25-26"></a><span class="x">                &#39;iteration&#39; =&gt; $i,</span>
-<a id="__codelineno-25-27" name="__codelineno-25-27" href="#__codelineno-25-27"></a><span class="x">            ];</span>
-<a id="__codelineno-25-28" name="__codelineno-25-28" href="#__codelineno-25-28"></a>
-<a id="__codelineno-25-29" name="__codelineno-25-29" href="#__codelineno-25-29"></a><span class="x">            if ($promotion-&gt;getConflictMode() === &#39;exclusive&#39;) break;</span>
-<a id="__codelineno-25-30" name="__codelineno-25-30" href="#__codelineno-25-30"></a><span class="x">            if ($promotion-&gt;getConflictMode() === &#39;lock_item&#39;) {</span>
-<a id="__codelineno-25-31" name="__codelineno-25-31" href="#__codelineno-25-31"></a><span class="x">                $appliedIds[] = $promotion-&gt;getId();</span>
-<a id="__codelineno-25-32" name="__codelineno-25-32" href="#__codelineno-25-32"></a><span class="x">            }</span>
-<a id="__codelineno-25-33" name="__codelineno-25-33" href="#__codelineno-25-33"></a><span class="x">        }</span>
-<a id="__codelineno-25-34" name="__codelineno-25-34" href="#__codelineno-25-34"></a>
-<a id="__codelineno-25-35" name="__codelineno-25-35" href="#__codelineno-25-35"></a><span class="x">        // Phase OUTER: order-level promotions after inner loop</span>
-<a id="__codelineno-25-36" name="__codelineno-25-36" href="#__codelineno-25-36"></a><span class="x">        // (e.g., member discount, free shipping on total after inner promotions)</span>
-<a id="__codelineno-25-37" name="__codelineno-25-37" href="#__codelineno-25-37"></a><span class="x">        $outerPromotion = $this-&gt;promotionService-&gt;getFirstAvailable(</span>
-<a id="__codelineno-25-38" name="__codelineno-25-38" href="#__codelineno-25-38"></a><span class="x">            $context, PromotionTemplate::PHASE_OUTER</span>
-<a id="__codelineno-25-39" name="__codelineno-25-39" href="#__codelineno-25-39"></a><span class="x">        );</span>
-<a id="__codelineno-25-40" name="__codelineno-25-40" href="#__codelineno-25-40"></a><span class="x">        if ($outerPromotion) {</span>
-<a id="__codelineno-25-41" name="__codelineno-25-41" href="#__codelineno-25-41"></a><span class="x">            $this-&gt;promotionService-&gt;apply($outerPromotion, $context);</span>
-<a id="__codelineno-25-42" name="__codelineno-25-42" href="#__codelineno-25-42"></a><span class="x">            $context-&gt;meta[&#39;promotion&#39;] = [&#39;inner&#39; =&gt; $innerApplied, &#39;outer&#39; =&gt; [...]];</span>
-<a id="__codelineno-25-43" name="__codelineno-25-43" href="#__codelineno-25-43"></a><span class="x">        }</span>
-<a id="__codelineno-25-44" name="__codelineno-25-44" href="#__codelineno-25-44"></a><span class="x">    }</span>
-<a id="__codelineno-25-45" name="__codelineno-25-45" href="#__codelineno-25-45"></a>
-<a id="__codelineno-25-46" name="__codelineno-25-46" href="#__codelineno-25-46"></a><span class="x">    public static function getPriority(): int { return 60; }</span>
-<a id="__codelineno-25-47" name="__codelineno-25-47" href="#__codelineno-25-47"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="x">class PromotionCalculator implements PriceCalculatorInterface</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="x">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="x">    private const MAX_ITERATIONS = 20;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="x">    public function calculate(PriceCalculationContext $context): void</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="x">    {</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="x">        $appliedIds = [];</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="x">        for ($i = 0; $i &lt; self::MAX_ITERATIONS; $i++) {</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="x">            $promotion = $this-&gt;promotionService-&gt;getFirstAvailable(</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="x">                $context, PromotionTemplate::PHASE_INNER, $appliedIds</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="x">            );</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="x">            if ($promotion === null) break;</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="x">            $this-&gt;promotionService-&gt;apply($promotion, $context);</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="x">            $innerApplied[] = [</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="x">                &#39;promotion_id&#39; =&gt; $promotion-&gt;getId(),</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="x">                &#39;promotion_name&#39; =&gt; $promotion-&gt;getName(),</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="x">                &#39;template_name&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getName(),</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="x">                &#39;type&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getType(),</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="x">                &#39;config&#39; =&gt; $promotion-&gt;getConfig(),</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="x">                &#39;context_snapshot&#39; =&gt; [</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="x">                    &#39;totalAmount&#39; =&gt; $context-&gt;totalAmount,</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="x">                    &#39;items_count&#39; =&gt; count($context-&gt;items),</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="x">                ],</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="x">                &#39;iteration&#39; =&gt; $i,</span>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="x">            ];</span>
+<a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="x">            if ($promotion-&gt;getConflictMode() === &#39;exclusive&#39;) break;</span>
+<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="x">            if ($promotion-&gt;getConflictMode() === &#39;lock_item&#39;) {</span>
+<a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a><span class="x">                $appliedIds[] = $promotion-&gt;getId();</span>
+<a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a><span class="x">            }</span>
+<a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a><span class="x">        }</span>
+<a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a>
+<a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a><span class="x">        // Phase OUTER: order-level promotions after inner loop</span>
+<a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a><span class="x">        // (e.g., member discount, free shipping on total after inner promotions)</span>
+<a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a><span class="x">        $outerPromotion = $this-&gt;promotionService-&gt;getFirstAvailable(</span>
+<a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a><span class="x">            $context, PromotionTemplate::PHASE_OUTER</span>
+<a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a><span class="x">        );</span>
+<a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a><span class="x">        if ($outerPromotion) {</span>
+<a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a><span class="x">            $this-&gt;promotionService-&gt;apply($outerPromotion, $context);</span>
+<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a><span class="x">            $context-&gt;meta[&#39;promotion&#39;] = [&#39;inner&#39; =&gt; $innerApplied, &#39;outer&#39; =&gt; [...]];</span>
+<a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a><span class="x">        }</span>
+<a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a><span class="x">    }</span>
+<a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a>
+<a id="__codelineno-18-46" name="__codelineno-18-46" href="#__codelineno-18-46"></a><span class="x">    public static function getPriority(): int { return 60; }</span>
+<a id="__codelineno-18-47" name="__codelineno-18-47" href="#__codelineno-18-47"></a><span class="x">}</span>
 </code></pre></div>
 <hr />
 <h2 id="9-price-calculation-pipeline-integration">9. Price Calculation Pipeline Integration<a class="headerlink" href="#9-price-calculation-pipeline-integration" title="Permanent link">&para;</a></h2>
 <h3 id="91-pricecalculationcontext-changes">9.1 PriceCalculationContext Changes<a class="headerlink" href="#91-pricecalculationcontext-changes" title="Permanent link">&para;</a></h3>
 <p>Three new fields:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="x">class PriceCalculationContext</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="x">{</span>
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="x">    // ... existing fields ...</span>
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>
-<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="x">    /** User object for promotion condition evaluation (member level, etc.) */</span>
-<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="x">    public ?object $user = null;</span>
-<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>
-<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="x">    /** Store identifier for multi-store promotion filtering */</span>
-<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="x">    public ?string $storeCode = null;</span>
-<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="x">}</span>
-<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>
-<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="x">// Promotion results are written to context.meta[&#39;promotion&#39;] —</span>
-<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="x">// Trade never reads this structure, maintaining full decoupling.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="x">class PriceCalculationContext</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="x">{</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="x">    // ... existing fields ...</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="x">    /** User object for promotion condition evaluation (member level, etc.) */</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="x">    public ?object $user = null;</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="x">    /** Store identifier for multi-store promotion filtering */</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="x">    public ?string $storeCode = null;</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="x">}</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="x">// Promotion results are written to context.meta[&#39;promotion&#39;] —</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="x">// Trade never reads this structure, maintaining full decoupling.</span>
 </code></pre></div>
 <h3 id="92-orderservice-change">9.2 OrderService Change<a class="headerlink" href="#92-orderservice-change" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null, array $meta = []): PriceCalculationResult</span>
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="x">{</span>
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="x">    $context = new PriceCalculationContext($items, $currency);</span>
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="x">    $context-&gt;user = $this-&gt;user;</span>
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="x">    $context-&gt;storeCode = $storeCode;</span>
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="x">    $context-&gt;meta = $meta;    // ← bidirectional channel for calculators</span>
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="x">    // ... existing calculator chain ...</span>
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null, array $meta = []): PriceCalculationResult</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="x">{</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="x">    $context = new PriceCalculationContext($items, $currency);</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="x">    $context-&gt;user = $this-&gt;user;</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="x">    $context-&gt;storeCode = $storeCode;</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="x">    $context-&gt;meta = $meta;    // ← bidirectional channel for calculators</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="x">    // ... existing calculator chain ...</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="93-calculator-chain-final">9.3 Calculator Chain (Final)<a class="headerlink" href="#93-calculator-chain-final" title="Permanent link">&para;</a></h3>
 <table>
@@ -3311,114 +3341,111 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 </table>
 <hr />
 <h2 id="11-route-registration">11. Route Registration<a class="headerlink" href="#11-route-registration" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># config/routes.yaml</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="nt">api_promotion</span><span class="p">:</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/v1</span>
-<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
-<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../src/Promotion/Controller/</span>
-<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">App\Promotion\Controller</span>
-<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attribute</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># config/routes.yaml</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nt">api_promotion</span><span class="p">:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/v1</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../src/Promotion/Controller/</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">App\Promotion\Controller</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attribute</span>
 </code></pre></div>
 <hr />
 <h2 id="12-controller-design">12. Controller Design<a class="headerlink" href="#12-controller-design" title="Permanent link">&para;</a></h2>
 <h3 id="121-promotetemplatecontroller">12.1 PromoteTemplateController<a class="headerlink" href="#121-promotetemplatecontroller" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="x">#[Route(&#39;/manage/promotion-templates&#39;, name: &#39;manage-promotion-templates-&#39;)]</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="x">class PromotionTemplateController extends RestController</span>
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="x">{</span>
-<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="x">    use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
-<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="x">        CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
-<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>
-<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="x">    protected array $requiredCreateProperties = [&#39;name&#39;, &#39;type&#39;, &#39;dsl&#39;];</span>
-<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="x">    protected array $acceptedCreateProperties = [</span>
-<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;type&#39;, &#39;phase&#39;, &#39;enabled&#39;, &#39;dsl&#39;, &#39;fields&#39;,</span>
-<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="x">    ];</span>
-<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="x">    protected array $acceptedUpdateProperties = [</span>
-<a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;type&#39;, &#39;phase&#39;, &#39;enabled&#39;, &#39;dsl&#39;, &#39;fields&#39;,</span>
-<a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="x">    ];</span>
-<a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a>
-<a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="x">    public function __construct(</span>
-<a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a><span class="x">        protected readonly PromotionTemplateServiceInterface $service,</span>
-<a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a><span class="x">    ) {}</span>
-<a id="__codelineno-29-19" name="__codelineno-29-19" href="#__codelineno-29-19"></a>
-<a id="__codelineno-29-20" name="__codelineno-29-20" href="#__codelineno-29-20"></a><span class="x">    #[Route(&#39;/{id}/validate&#39;, name: &#39;validate&#39;, methods: [&#39;POST&#39;])]</span>
-<a id="__codelineno-29-21" name="__codelineno-29-21" href="#__codelineno-29-21"></a><span class="x">    public function validateAction(int $id): JsonResponse</span>
-<a id="__codelineno-29-22" name="__codelineno-29-22" href="#__codelineno-29-22"></a><span class="x">    {</span>
-<a id="__codelineno-29-23" name="__codelineno-29-23" href="#__codelineno-29-23"></a><span class="x">        /** @var PromotionTemplate $template */</span>
-<a id="__codelineno-29-24" name="__codelineno-29-24" href="#__codelineno-29-24"></a><span class="x">        $template = $this-&gt;service-&gt;get($id);</span>
-<a id="__codelineno-29-25" name="__codelineno-29-25" href="#__codelineno-29-25"></a><span class="x">        $result = $this-&gt;service-&gt;parseDsl($template-&gt;getDsl());</span>
-<a id="__codelineno-29-26" name="__codelineno-29-26" href="#__codelineno-29-26"></a><span class="x">        return $this-&gt;success($result);</span>
-<a id="__codelineno-29-27" name="__codelineno-29-27" href="#__codelineno-29-27"></a><span class="x">    }</span>
-<a id="__codelineno-29-28" name="__codelineno-29-28" href="#__codelineno-29-28"></a>
-<a id="__codelineno-29-29" name="__codelineno-29-29" href="#__codelineno-29-29"></a><span class="x">    #[Route(&#39;/{id}/dry-run&#39;, name: &#39;dry-run&#39;, methods: [&#39;POST&#39;])]</span>
-<a id="__codelineno-29-30" name="__codelineno-29-30" href="#__codelineno-29-30"></a><span class="x">    public function dryRunAction(int $id): JsonResponse</span>
-<a id="__codelineno-29-31" name="__codelineno-29-31" href="#__codelineno-29-31"></a><span class="x">    {</span>
-<a id="__codelineno-29-32" name="__codelineno-29-32" href="#__codelineno-29-32"></a><span class="x">        /** @var PromotionTemplate $template */</span>
-<a id="__codelineno-29-33" name="__codelineno-29-33" href="#__codelineno-29-33"></a><span class="x">        $template = $this-&gt;service-&gt;get($id);</span>
-<a id="__codelineno-29-34" name="__codelineno-29-34" href="#__codelineno-29-34"></a><span class="x">        $result = $this-&gt;service-&gt;simulate($template, /* sample context */);</span>
-<a id="__codelineno-29-35" name="__codelineno-29-35" href="#__codelineno-29-35"></a><span class="x">        return $this-&gt;success($result);</span>
-<a id="__codelineno-29-36" name="__codelineno-29-36" href="#__codelineno-29-36"></a><span class="x">    }</span>
-<a id="__codelineno-29-37" name="__codelineno-29-37" href="#__codelineno-29-37"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">#[Route(&#39;/manage/promotion-templates&#39;, name: &#39;manage-promotion-templates-&#39;)]</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="x">class PromotionTemplateController extends RestController</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="x">{</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="x">    use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="x">        CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="x">    protected array $requiredCreateProperties = [&#39;name&#39;, &#39;type&#39;, &#39;dsl&#39;];</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="x">    protected array $acceptedCreateProperties = [</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;type&#39;, &#39;phase&#39;, &#39;enabled&#39;, &#39;dsl&#39;, &#39;fields&#39;,</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="x">    ];</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="x">    protected array $acceptedUpdateProperties = [</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;type&#39;, &#39;phase&#39;, &#39;enabled&#39;, &#39;dsl&#39;, &#39;fields&#39;,</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="x">    ];</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="x">        protected readonly PromotionTemplateServiceInterface $service,</span>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="x">    ) {}</span>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="x">    #[Route(&#39;/{id}/validate&#39;, name: &#39;validate&#39;, methods: [&#39;POST&#39;])]</span>
+<a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a><span class="x">    public function validateAction(int $id): JsonResponse</span>
+<a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a><span class="x">    {</span>
+<a id="__codelineno-22-23" name="__codelineno-22-23" href="#__codelineno-22-23"></a><span class="x">        /** @var PromotionTemplate $template */</span>
+<a id="__codelineno-22-24" name="__codelineno-22-24" href="#__codelineno-22-24"></a><span class="x">        $template = $this-&gt;service-&gt;get($id);</span>
+<a id="__codelineno-22-25" name="__codelineno-22-25" href="#__codelineno-22-25"></a><span class="x">        $result = $this-&gt;service-&gt;parseDsl($template-&gt;getDsl());</span>
+<a id="__codelineno-22-26" name="__codelineno-22-26" href="#__codelineno-22-26"></a><span class="x">        return $this-&gt;success($result);</span>
+<a id="__codelineno-22-27" name="__codelineno-22-27" href="#__codelineno-22-27"></a><span class="x">    }</span>
+<a id="__codelineno-22-28" name="__codelineno-22-28" href="#__codelineno-22-28"></a>
+<a id="__codelineno-22-29" name="__codelineno-22-29" href="#__codelineno-22-29"></a><span class="x">    #[Route(&#39;/{id}/dry-run&#39;, name: &#39;dry-run&#39;, methods: [&#39;POST&#39;])]</span>
+<a id="__codelineno-22-30" name="__codelineno-22-30" href="#__codelineno-22-30"></a><span class="x">    public function dryRunAction(int $id): JsonResponse</span>
+<a id="__codelineno-22-31" name="__codelineno-22-31" href="#__codelineno-22-31"></a><span class="x">    {</span>
+<a id="__codelineno-22-32" name="__codelineno-22-32" href="#__codelineno-22-32"></a><span class="x">        /** @var PromotionTemplate $template */</span>
+<a id="__codelineno-22-33" name="__codelineno-22-33" href="#__codelineno-22-33"></a><span class="x">        $template = $this-&gt;service-&gt;get($id);</span>
+<a id="__codelineno-22-34" name="__codelineno-22-34" href="#__codelineno-22-34"></a><span class="x">        $result = $this-&gt;service-&gt;simulate($template, /* sample context */);</span>
+<a id="__codelineno-22-35" name="__codelineno-22-35" href="#__codelineno-22-35"></a><span class="x">        return $this-&gt;success($result);</span>
+<a id="__codelineno-22-36" name="__codelineno-22-36" href="#__codelineno-22-36"></a><span class="x">    }</span>
+<a id="__codelineno-22-37" name="__codelineno-22-37" href="#__codelineno-22-37"></a><span class="x">}</span>
 </code></pre></div>
 <p>DSL parsing is triggered inside <code>PromotionTemplateService::update()</code> before persisting.
 If parse fails, a 422 response is returned with error details including line:column.</p>
 <h3 id="122-promotioncontroller-manage">12.2 PromotionController (Manage)<a class="headerlink" href="#122-promotioncontroller-manage" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="x">#[Route(&#39;/manage/promotions&#39;, name: &#39;manage-promotions-&#39;)]</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="x">class PromotionController extends RestController</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="x">{</span>
-<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="x">    use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
-<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="x">        CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
-<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>
-<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="x">    protected array $requiredCreateProperties = [&#39;name&#39;, &#39;template&#39;, &#39;storeCode&#39;];</span>
-<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="x">    protected array $acceptedCreateProperties = [</span>
-<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;template&#39;, &#39;storeCode&#39;,</span>
-<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="x">        &#39;enabled&#39;, &#39;startTime&#39;, &#39;endTime&#39;, &#39;config&#39;, &#39;specifications&#39;, &#39;conflictMode&#39;,</span>
-<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="x">    ];</span>
-<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="x">    protected array $acceptedUpdateProperties = [</span>
-<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;template&#39;, &#39;storeCode&#39;,</span>
-<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a><span class="x">        &#39;enabled&#39;, &#39;startTime&#39;, &#39;endTime&#39;, &#39;config&#39;, &#39;specifications&#39;, &#39;conflictMode&#39;,</span>
-<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a><span class="x">    ];</span>
-<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a>
-<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a><span class="x">    public function __construct(</span>
-<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a><span class="x">        protected readonly PromotionServiceInterface $service,</span>
-<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a><span class="x">    ) {}</span>
-<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="x">#[Route(&#39;/manage/promotions&#39;, name: &#39;manage-promotions-&#39;)]</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="x">class PromotionController extends RestController</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="x">{</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="x">    use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="x">        CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="x">    protected array $requiredCreateProperties = [&#39;name&#39;, &#39;template&#39;, &#39;storeCode&#39;];</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="x">    protected array $acceptedCreateProperties = [</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;template&#39;, &#39;storeCode&#39;,</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="x">        &#39;enabled&#39;, &#39;startTime&#39;, &#39;endTime&#39;, &#39;config&#39;, &#39;specifications&#39;, &#39;conflictMode&#39;,</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a><span class="x">    ];</span>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="x">    protected array $acceptedUpdateProperties = [</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;template&#39;, &#39;storeCode&#39;,</span>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="x">        &#39;enabled&#39;, &#39;startTime&#39;, &#39;endTime&#39;, &#39;config&#39;, &#39;specifications&#39;, &#39;conflictMode&#39;,</span>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a><span class="x">    ];</span>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-23-19" name="__codelineno-23-19" href="#__codelineno-23-19"></a><span class="x">        protected readonly PromotionServiceInterface $service,</span>
+<a id="__codelineno-23-20" name="__codelineno-23-20" href="#__codelineno-23-20"></a><span class="x">    ) {}</span>
+<a id="__codelineno-23-21" name="__codelineno-23-21" href="#__codelineno-23-21"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="123-apppromotioncontroller">12.3 App/PromotionController<a class="headerlink" href="#123-apppromotioncontroller" title="Permanent link">&para;</a></h3>
 <p>Read-only; uses only <code>ApiView</code>, <code>DetailApiViewMixin</code>, <code>ListApiViewMixin</code>.
 <code>commonFilter()</code> restricts to <code>enabled = true</code> and time-window active, filterable by <code>?storeCode=</code>.</p>
 <hr />
 <h2 id="13-dsl-update-flow">13. DSL Update Flow<a class="headerlink" href="#13-dsl-update-flow" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>PUT /manage/promotion-templates/{id}
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>  body: { dsl: &quot;type: full_reduction\nwhen:\n  cart.subtotal &gt;= config.threshold\n...&quot; }
-<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
-<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>  1. Lexer tokenizes DSL text
-<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>  2. Parser builds AST
-<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>     ├─ Fail? → 422 { errors: [ {line:3, col:10, msg:&quot;Unexpected token &#39;=&#39;&quot;} ] }
-<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>     └─ Pass? → continue
-<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>  3. Semantic validator checks AST
-<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>     ├─ Fail? → 422 { errors: [ {field:&quot;config.missing_key&quot;, msg:&quot;...&quot;} ] }
-<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>     └─ Pass? → continue
-<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a>  4. Serialize AST → JSON
-<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>  5. Set template.dsl = raw text
-<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>  6. Set template.astCache = serialized AST
-<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>  7. Persist
-<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a>  8. Return 200 { data: { template, ast } }
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    A["PUT /manage/promotion-templates/{id}&lt;br/&gt;body: { dsl: 'type: full_reduction ...' }"]
+    B["1. Lexer tokenizes DSL text"]
+    C["2. Parser builds AST"]
+    C --&gt;|"Fail"| CErr["422 { errors: [{line:3, col:10, msg: 'Unexpected token ='}] }"]
+    C --&gt;|"Pass"| D["3. Semantic validator checks AST"]
+    D --&gt;|"Fail"| DErr["422 { errors: [{field: 'config.missing_key', msg: '...'}] }"]
+    D --&gt;|"Pass"| E["4. Serialize AST → JSON"]
+    E --&gt; F["5. Set template.dsl = raw text"]
+    F --&gt; G["6. Set template.astCache = serialized AST"]
+    G --&gt; H["7. Persist"]
+    H --&gt; I["8. Return 200 { data: { template, ast } }"]
+    A --&gt; B --&gt; C</code></pre>
 <hr />
 <h2 id="14-service-di">14. Service DI<a class="headerlink" href="#14-service-di" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># src/Promotion/Resources/config/services_promotion.yaml</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
-<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">        </span><span class="nt">App\Promotion\Strategy\PromotionStrategyInterface</span><span class="p">:</span>
-<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;promotion.strategy&#39;</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>
-<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">    </span><span class="nt">App\Promotion\Service\Dsl\</span><span class="p">:</span>
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../../Dsl/&#39;</span>
-<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>
-<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="w">    </span><span class="nt">App\Promotion\Strategy\</span><span class="p">:</span>
-<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../../Strategy/&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># src/Promotion/Resources/config/services_promotion.yaml</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">        </span><span class="nt">App\Promotion\Strategy\PromotionStrategyInterface</span><span class="p">:</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;promotion.strategy&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="nt">App\Promotion\Service\Dsl\</span><span class="p">:</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../../Dsl/&#39;</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">    </span><span class="nt">App\Promotion\Strategy\</span><span class="p">:</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../../Strategy/&#39;</span>
 </code></pre></div>
 <p><code>App\</code> autowiring covers the rest. <code>#[AutoconfigureTag('trade.price_calculator')]</code>
 on <code>PromotionCalculator</code> handles the pipeline tag.</p>
@@ -3673,6 +3700,10 @@ on <code>PromotionCalculator</code> handles the pipeline tag.</p>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

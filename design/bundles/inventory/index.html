@@ -562,6 +562,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -969,10 +997,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-inventorystock" class="md-nav__link">
+  <a href="#33-stock" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 InventoryStock
+        3.3 Stock
       
     </span>
   </a>
@@ -1002,10 +1030,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#36-inventoryreservation-and-reservationline" class="md-nav__link">
+  <a href="#36-reservation-and-reservationline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.6 InventoryReservation And ReservationLine
+        3.6 Reservation And ReservationLine
       
     </span>
   </a>
@@ -1013,10 +1041,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#37-inventoryledgerentry" class="md-nav__link">
+  <a href="#37-ledgerentry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.7 InventoryLedgerEntry
+        3.7 LedgerEntry
       
     </span>
   </a>
@@ -1363,6 +1391,34 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
   
 
     
@@ -2206,10 +2262,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-inventorystock" class="md-nav__link">
+  <a href="#33-stock" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 InventoryStock
+        3.3 Stock
       
     </span>
   </a>
@@ -2239,10 +2295,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#36-inventoryreservation-and-reservationline" class="md-nav__link">
+  <a href="#36-reservation-and-reservationline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.6 InventoryReservation And ReservationLine
+        3.6 Reservation And ReservationLine
       
     </span>
   </a>
@@ -2250,10 +2306,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#37-inventoryledgerentry" class="md-nav__link">
+  <a href="#37-ledgerentry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.7 InventoryLedgerEntry
+        3.7 LedgerEntry
       
     </span>
   </a>
@@ -2797,7 +2853,7 @@ in preview, production deployments MUST keep it <code>false</code>.</p>
 the resulting over-reservation or later negative on-hand quantity. The flag cannot
 silently bypass ledger entries or idempotency.</p>
 <h3 id="24-reads-never-materialize-balances">2.4 Reads Never Materialize Balances<a class="headerlink" href="#24-reads-never-materialize-balances" title="Permanent link">&para;</a></h3>
-<p>An absent <code>InventoryStock</code> record means a zero balance with the default local policy;</p>
+<p>An absent <code>Stock</code> record means a zero balance with the default local policy;</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;storeUuid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;store-uuid&quot;</span><span class="p">,</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;material&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;material-uuid&quot;</span><span class="p">,</span>
@@ -2843,7 +2899,7 @@ in a global order.</p>
 <td>Raw material or finished-good master data</td>
 </tr>
 <tr>
-<td><code>InventoryStock</code></td>
+<td><code>Stock</code></td>
 <td><code>inventory_stock</code></td>
 <td>Per-store material balance and local policy</td>
 </tr>
@@ -2858,7 +2914,7 @@ in a global order.</p>
 <td>Material quantity required for one Specification unit</td>
 </tr>
 <tr>
-<td><code>InventoryReservation</code></td>
+<td><code>Reservation</code></td>
 <td><code>inventory_reservation</code></td>
 <td>Idempotent request-level reservation aggregate</td>
 </tr>
@@ -2868,7 +2924,7 @@ in a global order.</p>
 <td>Immutable material demand and reserved quantities</td>
 </tr>
 <tr>
-<td><code>InventoryLedgerEntry</code></td>
+<td><code>LedgerEntry</code></td>
 <td><code>inventory_ledger_entry</code></td>
 <td>Append-only inventory audit trail</td>
 </tr>
@@ -2948,8 +3004,8 @@ finished goods so a Specification can be stocked directly or assembled from mate
 </table>
 <p>Inactive materials cannot be added to new recipes or new manual adjustments. Existing
 reservations and historical ledger rows remain readable.</p>
-<h3 id="33-inventorystock">3.3 InventoryStock<a class="headerlink" href="#33-inventorystock" title="Permanent link">&para;</a></h3>
-<p>One <code>InventoryStock</code> represents one material at one Store. It has a local FK to
+<h3 id="33-stock">3.3 Stock<a class="headerlink" href="#33-stock" title="Permanent link">&para;</a></h3>
+<p>One <code>Stock</code> represents one material at one Store. It has a local FK to
 <code>Material</code>, but stores only <code>storeUuid</code> for Store identity.</p>
 <table>
 <thead>
@@ -3072,8 +3128,8 @@ remaining explicit and cross-module safe. Material code validation MUST accept U
 If a human-readable SKU code is later needed, add an Inventory-owned
 <code>SpecificationMaterialMapping</code> through a separately versioned migration and event
 contract; do not read Trade tables as a fallback.</p>
-<h3 id="36-inventoryreservation-and-reservationline">3.6 InventoryReservation And ReservationLine<a class="headerlink" href="#36-inventoryreservation-and-reservationline" title="Permanent link">&para;</a></h3>
-<p><code>InventoryReservation</code> is the idempotent reservation aggregate. <code>reservationId</code> is
+<h3 id="36-reservation-and-reservationline">3.6 Reservation And ReservationLine<a class="headerlink" href="#36-reservation-and-reservationline" title="Permanent link">&para;</a></h3>
+<p><code>Reservation</code> is the idempotent reservation aggregate. <code>reservationId</code> is
 generated by Store before the request is published.</p>
 <table>
 <thead>
@@ -3149,8 +3205,8 @@ deactivated, or altered.</p>
 is either <code>confirmed</code> or <code>rejected</code>. <code>released</code>, <code>consumed</code>, and <code>rejected</code> are terminal.
 Duplicate release and consume requests are no-ops if they agree with the existing state;
 conflicting requests are operational errors and must not rewrite history.</p>
-<h3 id="37-inventoryledgerentry">3.7 InventoryLedgerEntry<a class="headerlink" href="#37-inventoryledgerentry" title="Permanent link">&para;</a></h3>
-<p>The ledger is append-only. It is the audit source for stock mutations; <code>InventoryStock</code>
+<h3 id="37-ledgerentry">3.7 LedgerEntry<a class="headerlink" href="#37-ledgerentry" title="Permanent link">&para;</a></h3>
+<p>The ledger is append-only. It is the audit source for stock mutations; <code>Stock</code>
 is the current balance projection.</p>
 <table>
 <thead>
@@ -3440,27 +3496,27 @@ attempts with delayed availability. It does not make stock decisions.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>InventoryReservationRequestedMessage</code></td>
+<td><code>ReservationRequestedMessage</code></td>
 <td>Store</td>
 <td>Inventory</td>
 </tr>
 <tr>
-<td><code>InventoryReservationConfirmedMessage</code></td>
+<td><code>ReservationConfirmedMessage</code></td>
 <td>Inventory</td>
 <td>Store</td>
 </tr>
 <tr>
-<td><code>InventoryReservationRejectedMessage</code></td>
+<td><code>ReservationRejectedMessage</code></td>
 <td>Inventory</td>
 <td>Store</td>
 </tr>
 <tr>
-<td><code>InventoryReservationReleaseRequestedMessage</code></td>
+<td><code>ReservationReleaseRequestedMessage</code></td>
 <td>Store</td>
 <td>Inventory</td>
 </tr>
 <tr>
-<td><code>InventoryReservationReleasedMessage</code></td>
+<td><code>ReservationReleasedMessage</code></td>
 <td>Inventory</td>
 <td>Store, if operational visibility needs it</td>
 </tr>
@@ -3569,12 +3625,12 @@ when a reference is supplied.</p>
 <a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>|   `-- LedgerController.php
 <a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>|-- Entity/
 <a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>|   |-- Material.php
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>|   |-- InventoryStock.php
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>|   |-- Stock.php
 <a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>|   |-- SpecificationRecipe.php
 <a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>|   |-- RecipeLine.php
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>|   |-- InventoryReservation.php
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>|   |-- Reservation.php
 <a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>|   |-- ReservationLine.php
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>|   |-- InventoryLedgerEntry.php
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>|   |-- LedgerEntry.php
 <a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>|   |-- InventoryConsumedEvent.php
 <a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>|   `-- InventoryOutboxMessage.php
 <a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>|-- Message/
@@ -3687,7 +3743,7 @@ local snapshots, not database joins.</p>
 <h2 id="11-implementation-sequence">11. Implementation Sequence<a class="headerlink" href="#11-implementation-sequence" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Add this bundle's service configuration, routes, message DTO routing, and migration.</li>
-<li>Implement Material, InventoryStock, recipes, repositories, and management APIs.</li>
+<li>Implement Material, Stock, recipes, repositories, and management APIs.</li>
 <li>Implement audited manual stock adjustment and virtual-zero read behavior.</li>
 <li>Implement reservation service, ledger, Inbox, Outbox, publisher, and tests.</li>
 <li>Add Store request/outcome behavior behind <code>INVENTORY_ENABLED</code>.</li>
@@ -3757,6 +3813,10 @@ order flow.</p>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

@@ -562,6 +562,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -826,6 +854,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/identity/" class="md-nav__link">
         
   
@@ -1067,7 +1123,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1156,7 +1212,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1184,7 +1240,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2005,10 +2061,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-20-migrations" class="md-nav__link">
+  <a href="#15-database-tables-24-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (20 Migrations)
+        15. Database Tables (24 Migrations)
       
     </span>
   </a>
@@ -2885,10 +2941,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-20-migrations" class="md-nav__link">
+  <a href="#15-database-tables-24-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (20 Migrations)
+        15. Database Tables (24 Migrations)
       
     </span>
   </a>
@@ -3188,7 +3244,7 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-08-09</p>
+<p>Context snapshot. Last updated: 2026-08-15</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
@@ -3200,7 +3256,8 @@
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
 - MkDocs Material + GitHub Pages documentation
-- <strong>i18n</strong>: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated</p>
+- <strong>i18n</strong>: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated
+- <strong>Wallet ledger</strong>: voucher-backed single-sided deposits/withdrawals (<code>wallet_voucher</code> boundary ledger) with provider-owned voucher-type permissions; <strong>Exchange</strong> bundle design (pool-backed points economy) at <code>docs/design/bundles/exchange.md</code></p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>├── public/index.php              # Front controller
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── public/.htaccess              # Apache rewrite rules + Authorization header forwarding
@@ -3263,91 +3320,94 @@
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│       # Planned phase 1: Payment Outbox -&gt; Trade Inbox; Payment Inbox is deferred.
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>├── src/Wallet/                   # Wallet module
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Entity/                   # Wallet, WalletTransaction, WalletPaymentDeduction
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Repository/               # + WalletPaymentDeductionRepository
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/TransferService.php     # Atomic transfer + deposit
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   ├── Service/Payment/WalletPaymentDeductionService.php    # Wallet-owned deduction lifecycle
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   ├── DTO/WalletPaymentDeductionRequest.php
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance, Manage CRUD/audit/reconcile
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>├── src/Wechat/                   # WeChat module
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   ├── Repository/WechatUserRepository.php
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Service/WechatUserService.php   # CRUD service
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   └── Controller/
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   └── Resources/config/services_storage.yaml
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│   ├── Repository/
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│   ├── Controller/App/           # Read-only endpoints
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│   └── Exception/
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>├── src/Inventory/                # Inventory module (material, stock, recipe, reservation)
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── Entity/                   # Material, InventoryStock, SpecificationRecipe, RecipeLine, InventoryReservation, ReservationLine, InventoryLedgerEntry, Inbox, Outbox
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   ├── Repository/
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│   ├── Service/                  # InventoryService (reserve/release/adjust), MaterialService
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│   ├── MessageHandler/           # Reservation request/release consumers with inbox idempotency
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│   ├── Command/                  # PublishOutboxCommand, ReleaseExpiredReservationsCommand
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   └── Controller/Manage/        # Material, Stock, Recipe, Reservation, Ledger admin APIs
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>├── config/
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>│   └── packages/
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│       ├── workflow.yaml         # Order state machine, including Store acceptance
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│       ├── messenger.yaml        # Trade/Store integration messages to async transport
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│       └── ...
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>├── migrations/                   # 20 migrations (latest: Inventory tables + store_trade_order_cancellation)
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>├── docs/
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>│   ├── ai/context.md             # This file
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>│   ├── design/                   # Design contracts (incl. security-hardening.md)
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion, store, inventory)
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│   ├── testing/                  # Test-quality contract: TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION, SYSTEM_WALKTHROUGH, AI_DEVELOPMENT_PROCESS (+ reusable framework-template/)
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   ├── issues/                   # Audit &amp; coverage reports (coverage-2026-08-09/, test-audit-2026-08-09/)
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>├── tests/                        # 303 PHPUnit test files, organized by layer:
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│   ├── UnitTest/                 #   189 files — pure unit tests (no kernel/DB), App\Tests\UnitTest\...
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│   ├── Integration/              #   71 files — kernel/DB/HTTP tests + helpers (DatabaseBootstrapTrait, IntegrationWebTestCase), App\Tests\Integration\...
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│   └── LowValue/                 #   43 files — deprecated/low-value tests, excluded from default run, App\Tests\LowValue\...
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│                                 主套件 = UnitTest + Integration（2224 tests）；低价值可 --group low-value 显式运行
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>├── README.md                     # English README
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>├── README.zh-cn.md               # Chinese (Simplified) README
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>├── README.zh-hant.md             # Chinese (Traditional) README
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>├── README.ja.md                  # Japanese README
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>├── docker/
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>└── .github/workflows/
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run; tests job runs on PostgreSQL 16
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Entity/                   # Wallet, Transaction, Voucher, VoucherComment, PaymentDeduction
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Repository/               # Wallet, Transaction, Voucher, VoucherComment, PaymentDeduction
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/Transfer/TransferService.php     # Atomic transfers (+ hold/release via `held`)
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/Deposit/                 # DepositService + provider registry (voucher-backed credit)
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/Withdraw/                # WithdrawService + provider registry (voucher-backed debit)
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   ├── Service/VoucherService.php, VoucherCommentService.php   # list/detail + append-only annotations
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   ├── Service/Payment/PaymentDeductionService.php    # Wallet-owned deduction lifecycle
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── DTO/PaymentDeductionRequest.php
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance + self deposit/withdraw; Manage CRUD/audit/reconcile/deposit/withdraw/reverse
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>├── src/Wechat/                   # WeChat module
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Repository/WechatUserRepository.php
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   ├── Service/WechatUserService.php   # CRUD service
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   └── Controller/
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   └── Resources/config/services_storage.yaml
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│   ├── Repository/
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│   ├── Controller/App/           # Read-only endpoints
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   └── Exception/
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>├── src/Inventory/                # Inventory module (material, stock, recipe, reservation)
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│   ├── Entity/                   # Material, Stock, SpecificationRecipe, RecipeLine, Reservation, ReservationLine, LedgerEntry, Inbox, Outbox
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│   ├── Repository/
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   ├── Service/                  # InventoryService (reserve/release/adjust), MaterialService
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   ├── MessageHandler/           # Reservation request/release consumers with inbox idempotency
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>│   ├── Command/                  # PublishOutboxCommand, ReleaseExpiredReservationsCommand
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│   └── Controller/Manage/        # Material, Stock, Recipe, Reservation, Ledger admin APIs
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>├── config/
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│   └── packages/
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│       ├── workflow.yaml         # Order state machine, including Store acceptance
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│       ├── messenger.yaml        # Trade/Store integration messages to async transport
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>│       └── ...
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>├── migrations/                   # 24 migrations (latest: wallet_voucher_comment, 2026-08-15)
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>├── docs/
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│   ├── ai/context.md             # This file
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   ├── design/                   # Design contracts (incl. security-hardening.md)
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion, store, inventory, exchange)
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>│   ├── testing/                  # Test-quality contract: TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION, SYSTEM_WALKTHROUGH, AI_DEVELOPMENT_PROCESS (+ reusable framework-template/)
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>│   ├── issues/                   # Audit &amp; coverage reports (coverage-2026-08-09/, test-audit-2026-08-09/)
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>├── tests/                        # 312 PHPUnit test files, organized by layer:
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│   ├── UnitTest/                 #   197 files — pure unit tests (no kernel/DB), App\Tests\UnitTest\...
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>│   ├── Integration/              #   72 files — kernel/DB/HTTP tests + helpers (DatabaseBootstrapTrait, IntegrationWebTestCase), App\Tests\Integration\...
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>│   └── LowValue/                 #   43 files — deprecated/low-value tests, excluded from default run, App\Tests\LowValue\...
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>│                                 主套件 = UnitTest + Integration（2311 tests）；低价值可 --group low-value 显式运行
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>├── README.md                     # English README
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>├── README.zh-cn.md               # Chinese (Simplified) README
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>├── README.zh-hant.md             # Chinese (Traditional) README
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>├── README.ja.md                  # Japanese README
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>├── mkdocs.yml                    # MkDocs Material config
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>├── docker/
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>└── .github/workflows/
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run; tests job runs on PostgreSQL 16
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
@@ -3600,11 +3660,11 @@
 <p><strong>Expression syntax</strong>: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>matches</code>, chained attributes, <code>Math</code>, <code>ArrayCommon</code>, <code>FilterDateTime</code> functions. Falls back to in-memory <code>LegacyEvaluator</code> when DQL compilation fails.</p>
 <h2 id="6-baseservice-architecture">6. BaseService Architecture<a class="headerlink" href="#6-baseservice-architecture" title="Permanent link">&para;</a></h2>
 <p><code>BaseServiceInterface</code> and <code>BaseService</code> use <code>@template TEntity of object</code> to propagate entity types through the service layer. Concrete services declare <code>@extends BaseService&lt;Entity&gt;</code> and interfaces declare <code>@extends BaseServiceInterface&lt;Entity&gt;</code>. This enables PHPStan to infer return types from <code>get()</code>, <code>new()</code>, and <code>update()</code> at call sites.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>BaseService&lt;Order&gt; (abstract, @template TEntity, @implements BaseServiceInterface&lt;TEntity&gt;)
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── BaseServiceInfrastructureTrait    # EM, Logger, Serializer, Validator, Transactions
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── BaseServiceReadListTrait&lt;TEntity&gt;          # get(mixed): TEntity|null, list(): mixed
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>└── BaseServiceMutationTrait&lt;TEntity&gt;          # new(): object, update(mixed): object|false, remove(): bool
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    base["BaseService&lt;Order&gt; (abstract, @template TEntity, @implements BaseServiceInterface&lt;TEntity&gt;)"]
+    base --&gt; infra["BaseServiceInfrastructureTrait # EM, Logger, Serializer, Validator, Transactions"]
+    base --&gt; readList["BaseServiceReadListTrait&lt;TEntity&gt; # get(mixed): TEntity|null, list(): mixed"]
+    base --&gt; mutation["BaseServiceMutationTrait&lt;TEntity&gt; # new(): object, update(mixed): object|false, remove(): bool"]</code></pre>
 <p>Key PHPDoc contracts:
 - <strong><code>get(mixed $criteria)</code></strong>: Accepts <code>TEntity|int|string|array&lt;string, mixed&gt;|QueryBuilder</code> → returns <code>TEntity|null</code>
 - <strong><code>list(array $params)</code></strong>: Returns <code>mixed</code> (QueryBuilder, Entity[], or scalar arrays depending on @select/@groupBy)
@@ -3614,11 +3674,13 @@
 - <strong><code>wrapInTransaction(callable $fn)</code></strong>: Transaction with commit/rollback</p>
 <h2 id="7-trade-module-order-lifecycle">7. Trade Module — Order Lifecycle<a class="headerlink" href="#7-trade-module-order-lifecycle" title="Permanent link">&para;</a></h2>
 <h3 id="71-state-machine-workflowyaml">7.1 State Machine (workflow.yaml)<a class="headerlink" href="#71-state-machine-workflowyaml" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>draft → pending → confirmed → paid → fulfilled → completed → refunded
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  │
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  └→ awaiting_store_acceptance → store_accepted → confirmed
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                               └→ store_rejected → cancelled
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    draft["draft"] --&gt; pending["pending"] --&gt; confirmed["confirmed"] --&gt; paid["paid"] --&gt; fulfilled["fulfilled"] --&gt; completed["completed"] --&gt; refunded["refunded"]
+    draft --&gt; awaiting["awaiting_store_acceptance"]
+    awaiting --&gt; accepted["store_accepted"]
+    accepted --&gt; confirmed
+    awaiting --&gt; rejected["store_rejected"]
+    rejected --&gt; cancelled["cancelled"]</code></pre>
 <h3 id="72-orderservice-methods">7.2 OrderService Methods<a class="headerlink" href="#72-orderservice-methods" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3840,20 +3902,20 @@
 </table>
 <h2 id="8-payment-module">8. Payment Module<a class="headerlink" href="#8-payment-module" title="Permanent link">&para;</a></h2>
 <h3 id="81-invoice-system">8.1 Invoice System<a class="headerlink" href="#81-invoice-system" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Invoice (pending→paying→paid→refunded)
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  ├── payment: &#39;wallet&#39;|&#39;wechat&#39;|&#39;mock&#39;
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  ├── scene: &#39;order&#39;|&#39;deposit&#39;|&#39;wallet_topup&#39;
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  ├── amount/currency (cents)
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  └── payer (User, nullable)
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    invoice["Invoice (pending→paying→paid→refunded)"]
+    invoice --&gt; payment["payment: 'wallet'|'wechat'|'mock'"]
+    invoice --&gt; scene["scene: 'order'|'deposit'|'wallet_topup'"]
+    invoice --&gt; amount["amount/currency (cents)"]
+    invoice --&gt; payer["payer (User, nullable)"]</code></pre>
 <h3 id="82-paymentgatewayinterface-gateway-registry-pattern">8.2 PaymentGatewayInterface — Gateway Registry Pattern<a class="headerlink" href="#82-paymentgatewayinterface-gateway-registry-pattern" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">interface PaymentGatewayInterface {</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    static getName(): string;           // e.g. &#39;wallet&#39;, &#39;wechat&#39;, &#39;mock&#39;</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    pay(Invoice, int $amount, array $options): PaymentResult;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    notify(Request $request): PaymentNotifyResult;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    refund(Invoice, int $amount, int $paidAmount, string $reason, array $options): PaymentRefundResult;</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    getNotifySuccessResponse(PaymentNotifyResult $result): Response;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">interface PaymentGatewayInterface {</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    static getName(): string;           // e.g. &#39;wallet&#39;, &#39;wechat&#39;, &#39;mock&#39;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    pay(Invoice, int $amount, array $options): PaymentResult;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    notify(Request $request): PaymentNotifyResult;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">    refund(Invoice, int $amount, int $paidAmount, string $reason, array $options): PaymentRefundResult;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">    getNotifySuccessResponse(PaymentNotifyResult $result): Response;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="x">}</span>
 </code></pre></div>
 <p>Gateways receive <strong>explicit payment/refund amounts</strong> and MUST NOT inspect deduction or adjustment options. <code>Invoice::amount</code> remains the gross business payable amount; the gateway amount is computed by <code>InvoiceService</code> after applying payment adjustments.</p>
 <p>Gateways are auto-tagged <code>payment.gateway</code> via <code>_instanceof</code> rule. <code>PaymentGatewayRegistry</code> uses <code>#[AutowireIterator('payment.gateway')]</code> for auto-discovery.</p>
@@ -3998,31 +4060,53 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td><code>/app/transactions/{id}</code></td>
 <td>Current user's transaction detail only</td>
 </tr>
+<tr>
+<td>POST</td>
+<td><code>/app/vouchers/deposit</code></td>
+<td>Self-service deposit into own wallet (<code>voucherType</code> required, provider-permissioned)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/app/vouchers/withdraw</code></td>
+<td>Self-service withdrawal out of own wallet (<code>voucherType</code> required)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/app/vouchers/{uuid}/reverse</code></td>
+<td>Reverse own voucher (deposit or withdrawal by direction)</td>
+</tr>
 </tbody>
 </table>
-<p>Manage keeps global audit endpoints: <code>GET /manage/wallets/balance</code> and <code>POST /manage/wallets/reconcile</code>.</p>
+<p>Manage keeps global audit endpoints: <code>GET /manage/wallets/balance</code>, <code>POST /manage/wallets/reconcile</code>, <code>POST /manage/vouchers/deposit|withdraw</code> (voucher-backed funding/payout, <code>voucherType</code> defaults to <code>manual</code>) and <code>POST /manage/vouchers/{uuid}/reverse</code>.</p>
 <h2 id="9-wechat-module">9. Wechat Module<a class="headerlink" href="#9-wechat-module" title="Permanent link">&para;</a></h2>
 <h3 id="91-wechatuser-entity-onetoone-user">9.1 WechatUser Entity (OneToOne → User)<a class="headerlink" href="#91-wechatuser-entity-onetoone-user" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>WechatUser (wechat_user) ──OnetoOne──&gt; User (users)
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  openid (unique), unionid, sessionKey
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  nickname, avatar, sex, province, city, country
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  appType (&#39;miniapp&#39; | &#39;official&#39;)
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  rawData (json)
-</code></pre></div>
+<pre class="mermaid"><code>flowchart LR
+    wechatUser["WechatUser (wechat_user)&lt;br/&gt;openid (unique), unionid, sessionKey&lt;br/&gt;nickname, avatar, sex, province, city, country&lt;br/&gt;appType ('miniapp' | 'official')&lt;br/&gt;rawData (json)"]
+    user["User (users)"]
+    wechatUser -- "OneToOne" --&gt; user</code></pre>
 <p><strong>User.php is NOT modified</strong> — WechatUser extends identity via OneToOne with CASCADE delete.</p>
 <h3 id="92-login-flow">9.2 Login Flow<a class="headerlink" href="#92-login-flow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Mini Program: wx.login() → js_code → POST /api/wechat/miniapp/login
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  → WechatService.code2Session() → {openid, unionid, session_key}
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  → WechatAuthService.authenticateFromMiniApp()
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    ├─ findByOpenid(openid) → hit → update sessionKey → return User
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    └─ miss → new User() + new WechatUser() → flush → return User
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  → TokenManager.createTokens() → {access_token, refresh_token, expires_in}
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>Official Account: redirect → oauth code → POST /api/wechat/oauth/callback
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  → WechatService.getOAuthUser(code) → {openid, nickname, avatar, ...}
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>  → WechatAuthService.authenticateFromOfficialAccount()
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  → TokenManager.createTokens() → JWT
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Mini[Mini Program]
+        direction LR
+        M1["wx.login() → js_code → POST /api/wechat/miniapp/login"]
+        M2["WechatService.code2Session() → {openid, unionid, session_key}"]
+        M3["WechatAuthService.authenticateFromMiniApp()"]
+        M3 --&gt;|"hit"| M4["findByOpenid(openid) → update sessionKey → return User"]
+        M3 --&gt;|"miss"| M5["new User() + new WechatUser() → flush → return User"]
+        M6["TokenManager.createTokens() → {access_token, refresh_token, expires_in}"]
+        M1 --&gt; M2 --&gt; M3
+        M4 --&gt; M6
+        M5 --&gt; M6
+    end
+    subgraph OA[Official Account]
+        direction LR
+        O1["redirect → oauth code → POST /api/wechat/oauth/callback"]
+        O2["WechatService.getOAuthUser(code) → {openid, nickname, avatar, ...}"]
+        O3["WechatAuthService.authenticateFromOfficialAccount()"]
+        O4["TokenManager.createTokens() → JWT"]
+        O1 --&gt; O2 --&gt; O3 --&gt; O4
+    end</code></pre>
 <p>New users get random password (cannot password-login), synthetic email/username from openid.</p>
 <h3 id="93-wechatpaygateway">9.3 WechatPayGateway<a class="headerlink" href="#93-wechatpaygateway" title="Permanent link">&para;</a></h3>
 <p>Implements <code>PaymentGatewayInterface</code> with <code>getName() → 'wechat'</code>:
@@ -4343,7 +4427,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Idempotency</strong></td>
 <td>Wallet</td>
-<td><code>referenceId</code> unique constraint on WalletTransaction</td>
+<td><code>referenceId</code> unique constraint on Transaction</td>
 </tr>
 <tr>
 <td><strong>Pipeline</strong></td>
@@ -4358,7 +4442,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Optimistic locking</strong></td>
 <td>Wallet</td>
-<td><code>#[ORM\Version]</code> on Wallet</td>
+<td><code>SELECT … FOR UPDATE</code> pessimistic locking + manual <code>version</code> counter (<code>SET version = version + 1</code>); no <code>#[ORM\Version]</code> attribute</td>
 </tr>
 <tr>
 <td><strong>Post-response enrichment</strong></td>
@@ -4388,7 +4472,27 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Idempotent deposit</strong></td>
 <td>Wallet</td>
-<td><code>POST /transfers/deposit</code> with <code>referenceId</code> — duplicate requests return existing transaction</td>
+<td><code>POST /api/v1/manage/vouchers/deposit</code> with <code>referenceId</code> — duplicate requests return existing transaction</td>
+</tr>
+<tr>
+<td><strong>Voucher-backed deposit/withdrawal</strong></td>
+<td>Wallet</td>
+<td>Single-sided credit/debit entries backed by <code>wallet_voucher</code>: deposit = <code>fromWallet = null</code> (TYPE_DEPOSIT), withdrawal = <code>toWallet = null</code> (TYPE_WITHDRAWAL); reversal returns funds to the source wallet (<code>credit_reversal</code> / <code>debit_reversal</code>)</td>
+</tr>
+<tr>
+<td><strong>Provider-owned voucher permission</strong></td>
+<td>Wallet</td>
+<td><code>assertPermitted()</code> on deposit/withdraw providers decides who may use a voucher type (<code>manual</code> requires ROLE_ADMIN; CLI/queue calls are trusted); controllers map <code>AccessDeniedException</code> → 403</td>
+</tr>
+<tr>
+<td><strong>Immutable wallet currency</strong></td>
+<td>Wallet</td>
+<td><code>Wallet::setCurrency()</code> throws after persistence — the unit of account cannot change once created</td>
+</tr>
+<tr>
+<td><strong>Concurrent idempotency</strong></td>
+<td>Wallet</td>
+<td>Unique-violation on <code>referenceId</code> is caught and re-queried, returning the existing deposit/withdraw/transfer instead of a 500</td>
 </tr>
 <tr>
 <td><strong>Gateway registry</strong></td>
@@ -4403,7 +4507,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Deduction owned by Wallet</strong></td>
 <td>Wallet</td>
-<td>Wallet balance deduction lives in Wallet (<code>WalletPaymentDeduction</code> entity, <code>WalletPaymentDeductionService</code>, <code>WalletBalanceAdjustmentProvider</code>). Payment owns only the generic adjustment contract</td>
+<td>Wallet balance deduction lives in Wallet (<code>PaymentDeduction</code> entity, <code>PaymentDeductionService</code>, <code>WalletBalanceAdjustmentProvider</code>). Payment owns only the generic adjustment contract</td>
 </tr>
 <tr>
 <td><strong>OneToOne extension</strong></td>
@@ -4478,7 +4582,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Per-stock negative inventory</strong></td>
 <td>Inventory</td>
-<td>Each InventoryStock has allowNegativeStock flag; independent per store/material pair</td>
+<td>Each Stock has allowNegativeStock flag; independent per store/material pair</td>
 </tr>
 <tr>
 <td><strong>Outbox claim pattern</strong></td>
@@ -4574,7 +4678,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </table>
 <h3 id="144-schema-configuration-configpackagesnelmio_api_docyaml">14.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#144-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
 <p>44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="15-database-tables-20-migrations">15. Database Tables (20 Migrations)<a class="headerlink" href="#15-database-tables-20-migrations" title="Permanent link">&para;</a></h2>
+<h2 id="15-database-tables-24-migrations">15. Database Tables (24 Migrations)<a class="headerlink" href="#15-database-tables-24-migrations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -4642,6 +4746,22 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td>20260726000000</td>
 <td>Inventory tables (material, stock, recipe, recipe_line, reservation, reservation_line, ledger_entry, inbox, outbox) + <code>store_trade_order_cancellation</code></td>
+</tr>
+<tr>
+<td>20260815000000</td>
+<td><code>wallet.currency</code> widened to VARCHAR(32) (unit-of-account codes like <code>CNY.ESCROW</code>)</td>
+</tr>
+<tr>
+<td>20260815010000</td>
+<td><code>wallet.held</code> column (frozen/available balance separation)</td>
+</tr>
+<tr>
+<td>20260815020000</td>
+<td><code>wallet_voucher</code> (boundary ledger: credit/debit vouchers, unique <code>reference_id</code> + <code>(voucher_type, voucher_id)</code>, FK to <code>wallet</code>)</td>
+</tr>
+<tr>
+<td>20260815030000</td>
+<td><code>wallet_voucher_comment</code> (append-only annotations on vouchers, FK cascade)</td>
 </tr>
 </tbody>
 </table>
@@ -4723,6 +4843,10 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td>Inventory module design (materials, stock, recipes, reservations, inbox/outbox)</td>
 </tr>
 <tr>
+<td><code>docs/design/bundles/exchange.md</code></td>
+<td>Exchange bundle design (pool-backed points economy: effective-dated rates, bcmath conversion, pledge/mint/exchange/redemption)</td>
+</tr>
+<tr>
 <td><code>docs/openapi/order-payment-flow.md</code></td>
 <td>Frontend order/payment/cancel/refund API integration guide, including WeChat Mini Program pay</td>
 </tr>
@@ -4768,20 +4892,20 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <ul>
 <li><strong>Framework</strong>: PHPUnit 12.5 (brianium/paratest available for parallel runs)</li>
 <li><strong>Layout</strong>: tests are organized by layer, not by module — <code>tests/UnitTest/</code> (pure unit tests, no kernel/DB), <code>tests/Integration/</code> (kernel + DB + HTTP tests, plus helpers <code>DatabaseBootstrapTrait</code>/<code>IntegrationWebTestCase</code>/<code>IntegrationKernelTestCase</code>/<code>StoreTradeFlowTestCase</code>), <code>tests/LowValue/</code> (deprecated/low-value tests excluded from the default run). Namespace <code>App\Tests\</code> mirrors the layout: <code>App\Tests\UnitTest\...</code>, <code>App\Tests\Integration\...</code>, <code>App\Tests\LowValue\...</code>. Test-support resources: <code>tests/bootstrap.php</code> and JWT test keys under <code>tests/Identity/Security/</code> (referenced by <code>.env.test</code> and CI).</li>
-<li><strong>Low-value exclusion mechanism</strong>: <code>phpunit.dist.xml</code> defines the "Project Test Suite" (UnitTest + Integration dirs) and a separate "Low Value" suite; a global <code>&lt;exclude&gt;&lt;group&gt;low-value&lt;/group&gt;&lt;/exclude&gt;</code> removes every test carrying <code>#[Group('low-value')]</code> (class- or method-level) from the default run — covering both whole LowValue files and individual flagged methods inside kept files (from the 2026-08-09 test audit). Run them explicitly with <code>php bin/phpunit --group low-value</code> (477 tests).</li>
+<li><strong>Low-value exclusion mechanism</strong>: <code>phpunit.dist.xml</code> defines the "Project Test Suite" (UnitTest + Integration dirs) and a separate "Low Value" suite; a global <code>&lt;exclude&gt;&lt;group&gt;low-value&lt;/group&gt;&lt;/exclude&gt;</code> removes every test carrying <code>#[Group('low-value')]</code> (class- or method-level) from the default run — covering both whole LowValue files and individual flagged methods inside kept files (from the 2026-08-09 test audit). Run them explicitly with <code>php bin/phpunit --group low-value</code> (~480 tests).</li>
 <li><strong>DB</strong>: local tests default to SQLite <code>var/test.db</code> (paratest uses per-worker SQLite files); CI tests job runs on <strong>PostgreSQL 16</strong>; <code>migrations.yml</code> validates the migration chain on <strong>MySQL 8.4</strong></li>
 <li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>99.46% lines (8511/8557)</strong> from latest local Xdebug run (2026-08-09)</li>
-<li><strong>Test count</strong>: <strong>2224 tests / 7951 assertions</strong> in the default suite (UnitTest + Integration), plus <strong>477 low-value tests</strong> excluded by default; 34 skipped tests document real <code>src/</code> bugs (see §23 and <code>docs/issues/coverage-2026-08-09/</code>); <strong>never delete or un-skip them</strong> without fixing the underlying bug</li>
+<li><strong>Test count</strong>: <strong>2311 tests / 8374 assertions</strong> in the default suite (UnitTest + Integration), plus ~480 low-value tests excluded by default; 31 skipped tests document real <code>src/</code> bugs (see §23 and <code>docs/issues/coverage-2026-08-09/</code>); <strong>never delete or un-skip them</strong> without fixing the underlying bug</li>
 <li><strong>Suite runtime</strong>: serial ≈ 59 s (kernel-bootstrapping integration tests dominate). Run parallel with paratest for ~2.3× speedup: <code>PARATEST=1 php vendor/bin/paratest --processes 8 --runner WrapperRunner</code> (≈26 s; per-worker SQLite isolation is handled by <code>tests/bootstrap.php</code>)</li>
-<li><strong>PHPUnit Notices</strong>: 160 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more</li>
+<li><strong>PHPUnit Notices</strong>: 159 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more</li>
 <li><strong>Memory</strong>: <code>phpunit.dist.xml</code> sets test-process <code>memory_limit=512M</code> (OpenAPI integration builds the full spec in-process)</li>
 <li><strong>Test-quality contract</strong>: <code>docs/testing/crud-skeleton-production/</code> (TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION) governs what evidence a change requires before merge/release</li>
 <li><strong>Static analysis</strong>: PHPStan Level 8 with zero errors in its configured scope (<code>src/</code>, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via <code>@template TEntity</code> on <code>BaseServiceInterface</code>/<code>BaseService</code> + <code>@extends</code> on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with <code>composer rector:types</code>; CI enforces <code>composer rector:types:check</code> as a dry-run.</li>
 <li><strong>Local PHP note</strong>: default <code>php</code> may point to PHP 7.4; use Homebrew PHP 8.5 at <code>/opt/homebrew/opt/php@8.5/bin/php</code> for local Symfony/PHPUnit commands.</li>
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
 <li><strong>Key test groups</strong> (after the 2026-08-09 layer re-organization; module folders now live under each layer):</li>
-<li><code>tests/UnitTest/</code>: 189 files — pure unit tests (entities, utils, DSL, strategies, mock-based services/controllers, workflow state machine, listeners)</li>
-<li><code>tests/Integration/</code>: 71 files — kernel+DB+HTTP (module integration flows, API regressions, outbox/inbox, concurrency, cross-module flows, health/metrics/rate-limit endpoints) plus the 4 shared helpers; Trade integration remains the slowest area (see test-audit)</li>
+<li><code>tests/UnitTest/</code>: 197 files — pure unit tests (entities, utils, DSL, strategies, mock-based services/controllers, workflow state machine, listeners)</li>
+<li><code>tests/Integration/</code>: 72 files — kernel+DB+HTTP (module integration flows, API regressions, outbox/inbox, concurrency, cross-module flows, health/metrics/rate-limit endpoints) plus the 4 shared helpers; Trade integration remains the slowest area (see test-audit)</li>
 <li><code>tests/LowValue/</code>: 43 files — flagged by the 2026-08-09 audit as duplicates/coverage-chasing; excluded from default runs (<code>--group low-value</code> to execute)</li>
 <li><code>scripts/tests/api-smoke.sh</code>: real HTTP auth/catalog/wallet/order/payment smoke; strict 401/403/404 checks</li>
 <li><code>scripts/tests/store-smoke.sh</code>: real HTTP Store-scoped order, Trade Outbox, Messenger consumer, Store Outbox, and <code>store_accepted</code> assertion</li>
@@ -4867,9 +4991,9 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <h3 id="191-architecture">19.1 Architecture<a class="headerlink" href="#191-architecture" title="Permanent link">&para;</a></h3>
 <p>7 services in <code>compose.yaml</code>: <strong>nginx</strong> (reverse proxy), <strong>app</strong> (PHP-FPM 8.4), <strong>worker</strong> (Messenger async consumer), <strong>scheduler</strong> (Trade/Store Outbox relay; Payment joins when its Outbox is implemented), <strong>database</strong> (MySQL 8), <strong>redis</strong> (Redis 7 Alpine), <strong>mailer</strong> (Mailpit).</p>
 <h3 id="192-development-zero-config">19.2 Development (zero-config)<a class="headerlink" href="#192-development-zero-config" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
 </code></pre></div>
 <ul>
 <li><code>compose.override.yaml</code> auto-loads — sets <code>APP_ENV=dev</code>, <code>APP_DEBUG=1</code>, source mount</li>
@@ -4932,6 +5056,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <li><code>RestController</code> subclasses get <code>RequestStack</code>, <code>SerializerInterface</code>, <code>TranslatorInterface</code> via <code>#[Required]</code> setter injection</li>
 <li><code>PaymentGatewayInterface</code> implementations auto-tagged <code>payment.gateway</code>, collected via <code>#[AutowireIterator]</code></li>
 <li><code>PaymentAdjustmentProviderInterface</code> implementations auto-tagged <code>payment.adjustment_provider</code>, collected via <code>#[AutowireIterator]</code></li>
+<li><code>DepositProviderInterface</code> / <code>WithdrawProviderInterface</code> implementations auto-tagged <code>wallet.deposit_provider</code> / <code>wallet.withdraw_provider</code>, collected via <code>#[AutowireIterator]</code> in the respective registries (voucher-type whitelist; <code>assertPermitted()</code> enforces per-provider permission)</li>
 <li><code>MediaStorageInterface</code> implementations tagged <code>media.storage</code>, collected via <code>#[AutowireIterator]</code>; <code>LocalStorage</code>/<code>QiniuStorage</code> are explicitly wired in <code>src/Storage/Resources/config/services_storage.yaml</code> because they need scalar/config/repository constructor arguments</li>
 <li><code>PriceCalculatorInterface</code> implementations auto-tagged <code>trade.price_calculator</code>, sorted by <code>getPriority()</code> — pipeline: BasePriceCalculator(-100) → QuantityCalculator(50) → <strong>TotalAggregator(55)</strong> (establishes subtotal) → <strong>PromotionCalculator(60)</strong> (applies order-level adjustments on the real subtotal)</li>
 <li><code>PromotionCalculator</code> (<code>App\Promotion\Service\PromotionCalculator</code>) implements <code>PriceCalculatorInterface</code>, tagged <code>trade.price_calculator</code> at priority 60, applies promotions after the subtotal is aggregated</li>
@@ -4962,7 +5087,7 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 <td>Raw material or finished good. code is unique, immutably frozen upon stock mutation</td>
 </tr>
 <tr>
-<td><code>InventoryStock</code></td>
+<td><code>Stock</code></td>
 <td>Per-store per-material balance with onHandQuantity, reservedQuantity, allowNegativeStock flag</td>
 </tr>
 <tr>
@@ -4974,7 +5099,7 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 <td>Quantity of a material required per unit of the parent Specification</td>
 </tr>
 <tr>
-<td><code>InventoryReservation</code></td>
+<td><code>Reservation</code></td>
 <td>Idempotent reservation aggregate with status: requested, confirmed, rejected, released, consumed</td>
 </tr>
 <tr>
@@ -4982,7 +5107,7 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 <td>Immutable snapshot of material demand and reserved quantity per reservation</td>
 </tr>
 <tr>
-<td><code>InventoryLedgerEntry</code></td>
+<td><code>LedgerEntry</code></td>
 <td>Append-only audit trail for every stock mutation</td>
 </tr>
 <tr>
@@ -4996,15 +5121,15 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 </tbody>
 </table>
 <h3 id="223-integration-flow">22.3 Integration Flow<a class="headerlink" href="#223-integration-flow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Trade order created
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  → Store validates + creates StoreOrder
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  → Store publishes inventory.reservation.requested.v1 (if INVENTORY_ENABLED)
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  → Inventory resolves recipe or direct finished material
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>  → Inventory reserves stock atomically (checks allowNegativeStock per stock)
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>  → Inventory publishes confirmed or rejected outcome
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>  → Store accepts (confirmed) or rejects (rejected) StoreOrder
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>  → Store publishes store.order.accepted.v1 or store.order.rejected.v1
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>  → Trade applies workflow transition
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Trade order created
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  → Store validates + creates StoreOrder
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  → Store publishes inventory.reservation.requested.v1 (if INVENTORY_ENABLED)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  → Inventory resolves recipe or direct finished material
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  → Inventory reserves stock atomically (checks allowNegativeStock per stock)
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  → Inventory publishes confirmed or rejected outcome
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  → Store accepts (confirmed) or rejects (rejected) StoreOrder
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  → Store publishes store.order.accepted.v1 or store.order.rejected.v1
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  → Trade applies workflow transition
 </code></pre></div>
 <h3 id="224-reservation-processing">22.4 Reservation Processing<a class="headerlink" href="#224-reservation-processing" title="Permanent link">&para;</a></h3>
 <p>Recipes expand a Specification into material demand. Material demand is aggregated (same material from multiple specifications merged), then locked in deterministic Material UUID order. Each stock's allowNegativeStock flag controls whether reservation exceeds on-hand quantity. Reservation lines capture immutable material and quantity snapshots.</p>
@@ -5060,7 +5185,7 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 <h3 id="227-store-integration-changes">22.7 Store Integration Changes<a class="headerlink" href="#227-store-integration-changes" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>TradeOrderCreatedHandler</code>: when INVENTORY_ENABLED, creates reservationId and writes awaiting_inventory state + reservation request outbox</li>
-<li>New handlers: <code>InventoryReservationConfirmedHandler</code>, <code>InventoryReservationRejectedHandler</code>, <code>InventoryReservationReleasedHandler</code></li>
+<li>New handlers: <code>ReservationConfirmedHandler</code>, <code>ReservationRejectedHandler</code>, <code>ReservationReleasedHandler</code></li>
 <li><code>TradeOrderCancelledHandler</code>: requests inventory release for cancelled orders with reservation</li>
 <li><code>StoreTradeOrderCancellation</code> tombstone entity: handles out-of-order cancellation events</li>
 <li>Trade events use OrderItem.uuid as stable lineId (not specification UUID)</li>
@@ -5208,6 +5333,10 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../javascripts/mermaid-init.js"></script>
       
     
   </body>

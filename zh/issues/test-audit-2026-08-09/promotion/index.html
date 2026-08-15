@@ -558,6 +558,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -822,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/identity/" class="md-nav__link">
         
   
@@ -1063,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1152,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1180,7 +1236,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1920,7 +1976,7 @@
 </ol>
 <h2 id="_3">验证步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ol>
-<li>确认模块套件大小并且在进行任何更改之前它是绿色的：
+<li>确认模块套件大小并且在任何更改之前它是绿色的：
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Promotion</code>（预计 360 次测试）。</li>
 <li>仅对于 <strong>高置信度</strong> 候选者（8 个测试：6 个 ParserCoverageTest 死分支测试，<code>ParserCoverageTest::testLexerRoundTripItemsNumericRate</code>、<code>PromotionServiceTest::testApplyWithNullTemplateDoesNothing</code>），删除它们，然后重新运行 <code>tests/Promotion</code> 以及完整套件 — 必须保持绿色，零失败/跳过更改。</li>
 <li>针对 <code>docs/issues/coverage-2026-08-09/promotion-dsl.md</code> Bug 7（EOL-skip 分支记录为词法分析器输出已死）和 Bug 4/5/6（其他 ParserCoverageTest 案例）交叉检查每个 ParserCoverageTest 删除，以确认保留的错误路径测试仍然固定可到达的语法错误。</li>
@@ -1988,6 +2044,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

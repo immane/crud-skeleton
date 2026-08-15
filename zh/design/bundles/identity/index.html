@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/bundles/identity/">
       
       
-        <link rel="prev" href="../wallet/">
+        <link rel="prev" href="../exchange/">
       
       
         <link rel="next" href="../wechat/">
@@ -562,6 +562,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -823,6 +851,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1057,10 +1113,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_15" class="md-nav__link">
+  <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        后续步骤
+        Next steps
       
     </span>
   </a>
@@ -1296,7 +1352,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1385,7 +1441,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1413,7 +1469,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1882,10 +1938,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_15" class="md-nav__link">
+  <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        后续步骤
+        Next steps
       
     </span>
   </a>
@@ -2301,76 +2357,76 @@
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>类型</th>
-<th>覆盖范围</th>
+<th>File</th>
+<th>Type</th>
+<th>Coverage</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>UserTest</code></td>
-<td>单元（9 次测试）</td>
-<td>用户实体：接口、电子邮件/用户名规范化、电话、角色、密码、擦除、id、toString</td>
+<td>Unit (9 tests)</td>
+<td>User entity: interfaces, email/username normalization, phone, roles, password, erase, id, toString</td>
 </tr>
 <tr>
 <td><code>ProfileTest</code></td>
-<td>单元（21 次测试）</td>
-<td>配置文件实体：构造函数默认值、级别、UUID、用户/级别设置器、joinedAt、PrePersist、touch、toString / toStringPrefersNickname、昵称/头像/元数据访问器、默认 null</td>
+<td>Unit (21 tests)</td>
+<td>Profile entity: constructor defaults, levels, UUID, user/level setters, joinedAt, PrePersist, touch, toString / toStringPrefersNickname, nickname/avatar/metadata accessors, default nulls</td>
 </tr>
 <tr>
 <td><code>UserProfileListenerTest</code></td>
-<td>单元（4 次测试）</td>
-<td>在用户持续时自动创建配置文件，存在时跳过，默认 LEVEL_BRONZE，忽略非用户实体</td>
+<td>Unit (4 tests)</td>
+<td>Auto-creates Profile on User persist, skips when exists, default LEVEL_BRONZE, ignores non-User entities</td>
 </tr>
 <tr>
 <td><code>ProfileRepositoryTest</code></td>
-<td>集成（9 项测试）</td>
-<td>findById、findByUser、findByUserId、findByLevel、findByLevelOrAbove、昵称存储、边缘情况</td>
+<td>Integration (9 tests)</td>
+<td>findById, findByUser, findByUserId, findByLevel, findByLevelOrAbove, nickname storage, edge cases</td>
 </tr>
 <tr>
 <td><code>ProfileServiceTest</code></td>
-<td>单元（11 次测试）</td>
-<td>new()、get() by id/criteria、update() persist/flush/fields + clear、remove()、joinAsMember 创建/幂等/默认</td>
+<td>Unit (11 tests)</td>
+<td>new(), get() by id/criteria, update() persist/flush/fields + clear, remove(), joinAsMember create/idempotent/default</td>
 </tr>
 <tr>
-<td><code>ProfileControllerTest</code>（管理）</td>
-<td>单元（5 次测试）</td>
-<td>创建/列表/详细信息/更新/删除的未经身份验证的访问拒绝</td>
+<td><code>ProfileControllerTest</code> (Manage)</td>
+<td>Unit (5 tests)</td>
+<td>Unauthenticated access rejection for create/list/detail/update/delete</td>
 </tr>
 <tr>
-<td><code>ProfileControllerTest</code>（应用程序）</td>
-<td>单元（10 次测试）</td>
-<td>获取未经身份验证/无配置文件/现有的； PUT 未经身份验证/创建/现有/级别拒绝/昵称/未知字段过滤/defaultCreateValues</td>
+<td><code>ProfileControllerTest</code> (App)</td>
+<td>Unit (10 tests)</td>
+<td>GET unauthenticated/no profile/existing; PUT unauthenticated/create/existing/level rejected/nickname/unknown fields filtered/defaultCreateValues</td>
 </tr>
 <tr>
 <td><code>SingleCreateAndUpdateApiViewMixinTest</code></td>
-<td>单元（10 次测试）</td>
-<td>传递（无道具）、acceptedCreateProperties 过滤器、acceptedUpdateProperties 过滤器、requiredCreateProperties 抛出/传递、requiredUpdateProperties 抛出/传递、组合 required+accepted、空接受无操作</td>
+<td>Unit (10 tests)</td>
+<td>Pass-through (no props), acceptedCreateProperties filter, acceptedUpdateProperties filter, requiredCreateProperties throw/pass, requiredUpdateProperties throw/pass, combined required+accepted, empty accepted no-op</td>
 </tr>
 <tr>
 <td><code>UserServiceTest</code></td>
-<td>单元（28 次测试）</td>
-<td>注册、更改密码、adminChangePassword、updateProfile、更新密码哈希</td>
+<td>Unit (28 tests)</td>
+<td>register, changePassword, adminChangePassword, updateProfile, update password hashing</td>
 </tr>
 <tr>
 <td><code>UserControllerTest</code></td>
-<td>单元（3 次测试）</td>
-<td>拒绝所有未经身份验证的访问操作</td>
+<td>Unit (3 tests)</td>
+<td>Unauthenticated access rejection for all actions</td>
 </tr>
 <tr>
 <td><code>UserApiIntegrationTest</code></td>
-<td>集成（45 项测试）</td>
-<td>注册流程、登录、个人资料、更改密码、更新个人资料、管理 CRUD、钱包存款、转账、余额、对账</td>
+<td>Integration (45 tests)</td>
+<td>Register flow, login, profile, change-password, update-profile, manage CRUD, wallet deposit, transfer, balance, reconcile</td>
 </tr>
 <tr>
 <td><code>AuthControllerTest</code></td>
-<td>单位（现有）</td>
-<td>登录、注销、刷新、OTP 验证</td>
+<td>Unit (existing)</td>
+<td>Login, logout, refresh, OTP verification</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_15">后续步骤<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h2>
-<p>我将生成实现该模块的代码补丁（文件、迁移、自述文件）并将其发布以供审核。在您批准后，我将通过测试和迁移逐步将更改提交到存储库。</p>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>I will generate the code patch implementing the module (files, migrations, README) and post it for review. After you approve, I will commit the changes to the repository in small steps with tests and migrations.</p>
 
 
 
@@ -2430,6 +2486,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

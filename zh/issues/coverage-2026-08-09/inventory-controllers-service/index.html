@@ -558,6 +558,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -822,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/identity/" class="md-nav__link">
         
   
@@ -1063,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1152,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1180,7 +1236,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1681,7 +1737,7 @@
 </tr>
 </tbody>
 </table>
-<p>控制器单元测试遵循现有的 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 模式：模拟协作者、<code>#[AllowMockObjectsWithoutExpectations]</code> 和 <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> 注入。数据库测试重用<code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>。任何地方都没有使用 <code>ReflectionProperty::setAccessible()</code>。</p>
+<p>控制器单元测试遵循现有的 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 模式：模拟协作者、<code>#[AllowMockObjectsWithoutExpectations]</code> 和 <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> 注入。 DB 测试重用 <code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>。任何地方都没有使用 <code>ReflectionProperty::setAccessible()</code>。</p>
 <p>对于 <code>RecipeController</code> 上的三个单行创建挂钩（第 35/44/49 行的 <code>defaultCreateValues</code>、<code>processCreateContent</code>、<code>afterCreated</code>），测试通过 <code>ReflectionMethod::invoke()</code> 调用它们（没有 <code>setAccessible()</code>，它在 PHP 8.5 中已弃用）。这些钩子只能通过 <code>UpdateApiViewMixin</code> 的创建模式 (<code>@mode=mixed</code>) 路径访问，该路径不是由该控制器自己的 <code>createAction</code> 连接的；直接调用是在不修改 <code>src/</code> 的情况下执行它们的唯一方法。</p>
 <h2 id="_3">覆盖结果<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>来自 <code>var/uncovered-map.txt</code> 的基线（2026-08-09 生成）。通过运行带有 <code>XDEBUG_MODE=coverage</code> 的组合 Inventory 套件并从 Clover 报告中区分 <code>count="0"</code> 语句行来验证后值：</p>
@@ -1862,6 +1918,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>

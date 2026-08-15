@@ -558,6 +558,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -822,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/identity/" class="md-nav__link">
         
   
@@ -1063,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1152,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1180,7 +1236,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1743,7 +1799,7 @@
 </tr>
 <tr>
 <td><code>Repository/ReservationLineRepositoryTest::testFindAllAndFindByMaterialReturnPersistedLines</code>、<code>::testFindByIdReturnsLineAndUnknownIdReturnsNull</code>、<code>::testRemovePersistedLine</code></td>
-<td>B2 DUPLICATE — <code>RecipeLineRepositoryTest</code> 的几乎相同的镜像（任务标记对），相同的继承学说覆盖范围；加B1</td>
+<td>B2 DUPLICATE — <code>RecipeLineRepositoryTest</code> 几乎相同的镜像（任务标记对），相同的继承学说覆盖范围；加B1</td>
 <td>中</td>
 <td>通过 <code>InventoryServiceTest</code>/<code>InventoryServiceCoverageTest</code>/<code>InventoryReservationRequestedHandlerIntegrationTest</code> 流断言的 ReservationLine 映射</td>
 </tr>
@@ -1757,7 +1813,7 @@
 <td><code>Integration/InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code></td>
 <td>B2 DUPLICATE — 相同的持久结果（<code>status='rejected'</code>、<code>rejectionCode='MATERIAL_INACTIVE'</code>）</td>
 <td>中</td>
-<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code> （通过处理程序进行相同的两个断言）— 保留一层（参见注释）</td>
+<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>（通过处理程序进行相同的两个断言）- 保留一层（参见注释）</td>
 </tr>
 <tr>
 <td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>、<code>::testMissingSpecificationRejectsReservation</code></td>
@@ -1767,7 +1823,7 @@
 </tr>
 <tr>
 <td><code>MessageHandler/InventoryReservationReleaseRequestedHandlerIntegrationTest::testReleaseForUnknownReservationThrows</code></td>
-<td>B2 DUPLICATE — 未知预订释放失败</td>
+<td>B2 DUPLICATE — 未知的预订释放失败</td>
 <td>中</td>
 <td><code>Integration/InventoryServiceTest::testUnknownReservationAndStockViewsFailExplicitly</code>（释放未知id会抛出<code>InvalidArgumentException</code>）；文件中的其他两个测试已经涵盖了用于发布的处理程序接线</td>
 </tr>
@@ -1781,7 +1837,7 @@
 <td><code>Message/InventoryMessageTest::testMessagesExposeTheirEnvelope</code></td>
 <td>B1 覆盖率追踪 — 一项测试断言三个消息类存储并返回构造函数 arg（同义反复）</td>
 <td>中</td>
-<td>消息类已经用 <code>Command/PublishOutboxCommandTest</code> 中的真实信封和处理程序单元/集成测试构建了</td>
+<td>消息类已使用 <code>Command/PublishOutboxCommandTest</code> 中的真实信封和处理程序单元/集成测试构建而成</td>
 </tr>
 </tbody>
 </table>
@@ -1905,6 +1961,10 @@
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
       
     
   </body>
