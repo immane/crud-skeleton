@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1119,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1208,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1578,10 +1578,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -1849,7 +1849,7 @@
 </tbody>
 </table>
 <h2 id="_2">保留 — 项目符号列表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p><strong>实用程序</strong>
+<p><strong>实用工具</strong>
 - <code>ArrayCommonExtendedTest</code> — 真正的 ExpressionLanguage <code>filter/map/reduce</code> 行为；这些助手被验证的唯一地方。
 - <code>ArrayCommonTest</code> — 小但包含 <code>testMergeMatchesCurrentLegacyBehavior</code>，一个真正的回归保护，用于令人惊讶的 <code>array_merge($arrays)</code> 包装。
 - <code>FixJSONTest</code> — <code>getJSONType</code>/<code>fixJSON</code> 的基本覆盖范围，均用于 <code>RestController</code> 和 <code>CreateApiViewMixin</code>。
@@ -2120,39 +2120,39 @@
 <h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>合并候选（将 <code>Extended</code>/<code>Coverage</code> 文件合并回其库中，仅保留上面列出的非重复案例）：</p>
 <ol>
-<li><code>FixJSONTest</code> + <code>FixJSONExtendedTest</code> → 一个<code>FixJSONTest</code>。</li>
-<li><code>ArrayCommonTest</code> + <code>ArrayCommonExtendedTest</code> → 一个<code>ArrayCommonTest</code>。</li>
-<li><code>MathTest</code> + <code>MathExtendedTest</code> + <code>MathCoverageTest</code> → 一个 <code>MathTest</code> （保留三个跳过的 bug 文档）。</li>
-<li><code>StringCaseTest</code> + <code>StringCaseExtendedTest</code> → 一个<code>StringCaseTest</code>。</li>
-<li><code>UUIDTest</code> + <code>UUIDExtendedTest</code> → 一个<code>UUIDExtendedTest</code>（如果需要，保留<code>testV4ProducesValidUuid</code>）。</li>
-<li><code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> + <code>RestControllerCoverageTest</code> + <code>RestControllerCoverage2Test</code> → 一个 <code>RestControllerTest</code> （5 个文件的分割纯粹是战役残留）。</li>
-<li><code>EntityControllerTest</code> + <code>EntityControllerExtendedTest</code> → 一个<code>EntityControllerTest</code>。</li>
-<li><code>RouterControllerTest</code> + <code>RouterControllerExtendedTest</code> → 1 个<code>RouterControllerTest</code>（仅保留空/非空信封盒）。</li>
-<li><code>MessageHttpExceptionTest</code> + <code>MessageHttpExceptionExtendedTest</code> → 一个文件（扩展）。</li>
-<li><code>ControllerListenerTest</code> + <code>ControllerListenerExtendedTest</code> → 一个文件（扩展）。</li>
-<li><code>ExceptionInterceptorTest</code> + <code>ExceptionInterceptorExtendedTest</code> → 一个文件（扩展）。</li>
-<li><code>InflectExtendedTest</code> + <code>InflectCoverageTest</code> → 删除库后的一个文件。</li>
-<li><code>OpenApiEnricherListenerCoverageTest</code> — 将 <code>testJsonContentWithoutPathsReturnsEarly</code> + <code>testJsonArrayContentWithoutPathsReturnsEarly</code> 合二为一。</li>
+<li><code>FixJSONTest</code> + <code>FixJSONExtendedTest</code> → one <code>FixJSONTest</code>.</li>
+<li><code>ArrayCommonTest</code> + <code>ArrayCommonExtendedTest</code> → one <code>ArrayCommonTest</code>.</li>
+<li><code>MathTest</code> + <code>MathExtendedTest</code> + <code>MathCoverageTest</code> → one <code>MathTest</code> (keep the three skipped bug-docs).</li>
+<li><code>StringCaseTest</code> + <code>StringCaseExtendedTest</code> → one <code>StringCaseTest</code>.</li>
+<li><code>UUIDTest</code> + <code>UUIDExtendedTest</code> → one <code>UUIDExtendedTest</code> (keep <code>testV4ProducesValidUuid</code> if desired).</li>
+<li><code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> + <code>RestControllerCoverageTest</code> + <code>RestControllerCoverage2Test</code> → one <code>RestControllerTest</code> (the 5-file split is pure campaign residue).</li>
+<li><code>EntityControllerTest</code> + <code>EntityControllerExtendedTest</code> → one <code>EntityControllerTest</code>.</li>
+<li><code>RouterControllerTest</code> + <code>RouterControllerExtendedTest</code> → one <code>RouterControllerTest</code> (keep only the empty/non-empty envelope cases).</li>
+<li><code>MessageHttpExceptionTest</code> + <code>MessageHttpExceptionExtendedTest</code> → one file (Extended).</li>
+<li><code>ControllerListenerTest</code> + <code>ControllerListenerExtendedTest</code> → one file (Extended).</li>
+<li><code>ExceptionInterceptorTest</code> + <code>ExceptionInterceptorExtendedTest</code> → one file (Extended).</li>
+<li><code>InflectExtendedTest</code> + <code>InflectCoverageTest</code> → one file after the base is deleted.</li>
+<li><code>OpenApiEnricherListenerCoverageTest</code> — collapse <code>testJsonContentWithoutPathsReturnsEarly</code> + <code>testJsonArrayContentWithoutPathsReturnsEarly</code> into one.</li>
 </ol>
-<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>每次删除后运行（每个 TEST_STRATEGY 的 PHP 8.4+ 运行时）：</p>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Run after every deletion (PHP 8.4+ runtime per TEST_STRATEGY):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Core/Utils<span class="w"> </span>tests/Core/EventListener<span class="w"> </span>tests/Core/Controller<span class="w"> </span>tests/Core/Serializer<span class="w"> </span>tests/Core/Exception<span class="w"> </span>tests/Core/DependencyInjection
 </code></pre></div>
-<p>然后是全门：</p>
+<p>Then the full gate:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>composer<span class="w"> </span>phpstan
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>composer<span class="w"> </span>rector:types:check
 </code></pre></div>
-<p>覆盖范围警告（批量删除之前很重要）：</p>
+<p>Coverage caveats (important before batch-deleting):</p>
 <ul>
-<li><strong>安全删除</strong>（没有覆盖率回归，因为重复项会覆盖行）：所有 <code>2 DUPLICATE</code> 行（UUID v4c、Inflect、FixJSON、RestController 204/post/reduce/expr、EntityController斜杠/assoc、MessageHttpException、LocaleListener Missing-header、ControllerListener、ExceptionInterceptor）。</li>
-<li><strong>覆盖范围敏感的删除</strong> — 删除这些会降低仅这些测试所触及的线路的覆盖范围，并且 90% 的线路门可能会触发：</li>
-<li><code>SerializerContextFactoryTest</code> — <code>SerializerContextFactory</code>仅被<code>services.yaml</code> +此测试引用；删除它会发现该类。</li>
-<li><code>FilterDateTimeTest</code> — <code>FilterDateTime::get()</code> 仅在此处执行。</li>
-<li>Dead utils（<code>Math</code>、<code>StringCase</code>、<code>Location</code>、<code>RsaClient</code>、<code>Utils\ArrayCollection</code>、<code>Serializer\Normalizer\CircularReferenceHandler</code>、<code>ObjectCallback</code>）除了测试之外从任何地方的 <code>src/</code> 引用。仅在 <code>src/</code> 清理的同时进行修剪（添加 <code>@codeCoverageIgnore</code> 或删除死类），或者在维护者签字后接受覆盖范围下降。</li>
-<li>根据 <code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code> / <code>testSetNormalizerForwardsToNormalizerAwareDecorated</code> 验证两个 <code>FlatNormalizerExtendedTest</code> <code>assertTrue(true)</code> 删除（它们断言实际的转发合同并保持 <code>setSerializer</code>/<code>setNormalizer</code> 被覆盖）。</li>
-<li>不要与其他数据库引导集成测试并行运行<code>RestControllerPaginationIntegrationTest</code>（<code>var/test.db</code>模式拆卸竞赛）。</li>
-<li>断言已记录的 <code>src/</code> 错误（位置 L-2、Math M-1/M-2、OpenApi BUG-7）的跳过测试必须保留 — 它们是有意保留的。</li>
+<li><strong>Safe deletes</strong> (no coverage regression because the duplicate keeps the lines covered): all <code>2 DUPLICATE</code> rows (UUID v4c, Inflect, FixJSON, RestController 204/post/reduce/expr, EntityController slash/assoc, MessageHttpException, LocaleListener missing-header, ControllerListener, ExceptionInterceptor).</li>
+<li><strong>Coverage-sensitive deletes</strong> — deleting these drops coverage of lines that only these tests touch, and the 90% line gate may trip:</li>
+<li><code>SerializerContextFactoryTest</code> — <code>SerializerContextFactory</code> is only referenced by <code>services.yaml</code> + this test; deleting it uncovers the class.</li>
+<li><code>FilterDateTimeTest</code> — <code>FilterDateTime::get()</code> is exercised only here.</li>
+<li>Dead utils (<code>Math</code>, <code>StringCase</code>, <code>Location</code>, <code>RsaClient</code>, <code>Utils\ArrayCollection</code>, <code>Serializer\Normalizer\CircularReferenceHandler</code>, <code>ObjectCallback</code>) are referenced from <code>src/</code> nowhere except tests. Prune only alongside a <code>src/</code> cleanup (add <code>@codeCoverageIgnore</code> or remove the dead class) or accept the coverage drop with maintainer sign-off.</li>
+<li>Verify the two <code>FlatNormalizerExtendedTest</code> <code>assertTrue(true)</code> deletions against <code>FlatNormalizerCoverageTest::testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated</code> / <code>testSetNormalizerForwardsToNormalizerAwareDecorated</code> (they assert the actual forwarding contract and keep <code>setSerializer</code>/<code>setNormalizer</code> covered).</li>
+<li>Do not run <code>RestControllerPaginationIntegrationTest</code> in parallel with other DB-bootstrapping integration tests (<code>var/test.db</code> schema teardown race).</li>
+<li>Skipped tests asserting documented <code>src/</code> bugs (Location L-2, Math M-1/M-2, OpenApi BUG-7) must remain — they are intentional KEEP.</li>
 </ul>
 
 

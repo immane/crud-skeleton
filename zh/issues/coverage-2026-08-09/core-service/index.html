@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1119,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1208,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1798,7 +1798,7 @@
   所以 <code>catch (\Exception $e) { return false; }</code> / <code>return 0;</code> 块永远不会触发。仅<code>\Error</code>（例如未定义
   表达式内实体上的方法）转义 - 并且这些不会被 <code>catch (\Exception)</code> 捕获。</li>
 <li><strong>影响：</strong> 防守接球给人虚假的信心；在内存中来自实体 getter 的 <code>\Error</code>
-  过滤/排序作为未处理的 500 传播而不是被抑制。死代码。</li>
+  过滤/排序作为未处理的 500 传播，而不是被抑制。死代码。</li>
 <li><strong>复制：</strong> 注入一个遗留的求值器，该求值器会抛出<code>evaluateBool()</code>； <code>catch</code> 永远不会到达
   因为 <code>evaluate()</code> 已经吞掉了异常。 （覆盖率测试通过注入
   <code>evaluateBool()</code> 直接抛出的子类。）</li>
@@ -1849,7 +1849,7 @@
 <li><code>RestControllerPaginationIntegrationTest</code> 启动 Symfony 内核，并通过 <code>DatabaseBootstrapTrait</code>，
   <strong>删除并重新创建 <code>var/test.db</code> 处的共享 sqlite 架构</strong>。不要与其他并行运行
   引导相同数据库文件的集成测试；单独或顺序运行时是安全的。</li>
-<li>上述覆盖率的测量依据：现有 <code>tests/Core/Service</code> + <code>tests/Core/Controller</code> +
+<li>上述覆盖率数据是根据以下内容测量的：现有 <code>tests/Core/Service</code> + <code>tests/Core/Controller</code> +
   <code>tests/Integration/CoreServiceIntegrationTest.php</code> + <code>tests/Integration/BaseServiceIntegrationTest.php</code>
   加上新的测试文件 <code>XDEBUG_MODE=coverage</code>。</li>
 </ul>

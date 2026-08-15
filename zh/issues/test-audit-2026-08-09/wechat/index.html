@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1119,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1208,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1703,7 +1703,7 @@
 <li><strong><code>Controller/Manage/WechatUserControllerTest.php</code></strong> — 断言管理控制器<strong>不</strong>添加所有者范围（继承空<code>commonFilter</code>）；断言管理与应用程序边界的唯一测试。</li>
 <li><strong><code>Entity/WechatUserTest.php</code></strong> — <code>testConstructorSetsRequiredFields</code>（构造函数 + <code>__toString</code> 合约）、<code>testOpenidCanBeUpdated</code>（setter <code>touch()</code> 副作用）、<code>testMetadata</code>（字段组合）。</li>
 <li><strong><code>Service/WechatAuthServiceTest.php</code></strong> — 两个提供商和两个 <code>bindPhone</code> 结果的现有/新用户路径；完全覆盖 <code>WechatAuthService</code>，并且在活动前已经 100%（这里没有覆盖范围流失）。</li>
-<li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>、<code>getPhoneNumber</code>、<code>getOAuthUser</code>成功/错误/空配置文件分支、<code>getOAuthRedirectUrl</code>（appid +范围）、小型应用程序/官方应用程序的延迟缓存。</li>
+<li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>、<code>getPhoneNumber</code>、<code>getOAuthUser</code>成功/错误/空配置文件分支、<code>getOAuthRedirectUrl</code>（appid +范围）、小型应用程序/官方应用程序的惰性缓存。</li>
 <li><strong><code>Service/WechatServiceCoverageTest.php</code></strong> — 四个 <code>getPayApp()</code> 配置分支测试（平台证书/pub-key/两者/两者都不是；<code>WechatService.php:84-89</code>）是这些配置分支的<strong>唯一</strong>覆盖范围并断言真正的 EasyWeChat 配置密钥。</li>
 <li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — 本机/jsapi 成功、描述/<code>'Payment'</code> 后备、退款状态计算（成功全部/部分与待定）、所有三个 <code>notify()</code> 错误/成功路径以及 <code>getNotifySuccessResponse</code> 后备正文。</li>
 <li><strong><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></strong> — <code>testPayNativeClientWithoutPostJsonSupportThrows</code> 和 <code>testPayNativeClientReturningInvalidResponseThrows</code> 是 <code>postJson()</code> 防御分支 (<code>WechatPayGateway.php:199,204</code>) 的唯一覆盖范围。</li>

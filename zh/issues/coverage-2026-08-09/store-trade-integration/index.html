@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1119,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1208,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1907,7 +1907,7 @@
 <h2 id="_3">观察结果（不是错误）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong><code>InventoryOutboxMessage</code> API 不对称性：</strong> 与 <code>StoreOutboxMessage</code> / <code>TradeOutboxMessage</code> 不同，库存发件箱实体仅公开 <code>getId()</code>/<code>getEventId()</code>/<code>isPublished()</code>/<code>markPublished()</code>/<code>recordAttempt()</code> — 不公开 <code>getTopic()</code>/<code>getPayload()</code>。测试必须使用返回数组的 <code>findUnpublishedForPublishing()</code>。化妆品;今天 <code>src/</code> 中没有任何内容读取这些吸气剂。</li>
-<li>真正的存储/贸易发布命令<strong>仅</strong>在总线同步时才驱动处理程序完成。在生产中，消息通过 <code>config/packages/messenger.yaml</code> 路由到 <code>async</code>（Doctrine）传输，因此命令将它们标记为已发布，同时单独的 <code>worker</code> 使用它们 - E2E 同步总线工具是测试时的等效项，并执行完全相同的命令 + 处理程序代码。</li>
+<li>真正的存储/贸易发布命令<strong>仅</strong>在总线同步时才驱动处理程序完成。在生产中，消息通过 <code>config/packages/messenger.yaml</code> 路由到 <code>async</code>（Doctrine）传输，因此命令将它们标记为已发布，同时单独的 <code>worker</code> 使用它们 — E2E 同步总线线束是测试时的等效项，并执行完全相同的命令 + 处理程序代码。</li>
 </ul>
 <h2 id="_4">最终测试运行<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \

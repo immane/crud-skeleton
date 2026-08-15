@@ -1296,10 +1296,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12_1" class="md-nav__link">
+  <a href="#12-phased-rollout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. 分阶段推出
+        12. Phased Rollout
       
     </span>
   </a>
@@ -1307,10 +1307,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13" class="md-nav__link">
+  <a href="#13-open-decisions-non-goals" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. 开放决策和非目标
+        13. Open Decisions &amp; Non-Goals
       
     </span>
   </a>
@@ -1368,7 +1368,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1574,7 +1574,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1663,7 +1663,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1803,7 +1803,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2371,10 +2371,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12_1" class="md-nav__link">
+  <a href="#12-phased-rollout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. 分阶段推出
+        12. Phased Rollout
       
     </span>
   </a>
@@ -2382,10 +2382,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13" class="md-nav__link">
+  <a href="#13-open-decisions-non-goals" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. 开放决策和非目标
+        13. Open Decisions &amp; Non-Goals
       
     </span>
   </a>
@@ -2416,7 +2416,7 @@
 <blockquote>
 <p>Exchange 捆绑包 (<code>src/ExchangeBundle/</code>) 是一个<strong>抵押支持的积分/货币经济</strong>。
 它提供汇率、转换引擎、流动性池、抵押品质押、
-积分铸造/发行、单位之间的用户交换（转换）以及兑换 — 所有
+积分铸造/发行、单位之间的用户交换（转换）以及兑换 - 所有
 针对做市商监督的池。 <strong>状态：仅设计 - 未实施。</strong></p>
 </blockquote>
 <hr />
@@ -2862,7 +2862,7 @@
 </ul>
 <hr />
 <h2 id="7">7. 预订流程和零和不变量<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<p>每次转换都被记录为池中配对、相等和相反的条目→ <strong>在铸造之外不会创建或销毁货币</strong>；每种货币的总余额得以保留。</p>
+<p>每次转换都被记录为池中配对、相等和相反的条目→<strong>在铸造之外不会创建或销毁货币</strong>；每种货币的总余额得以保留。</p>
 <h3 id="71">7.1 承诺<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>wrapInTransaction:
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Ledger.transfer(pledgor → pool[CNY], 1_0000, ref, &#39;pledge&#39;)   # collateral into pool
@@ -2936,53 +2936,53 @@
 <hr />
 <h2 id="11_1">11. 测试<a class="headerlink" href="#11_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>单位（<code>CurrencyConverter</code>，假利率回购）</strong>：相同单位短路，直接对，反向对，通过基础交叉，半上边界（包括<code>.5</code>，负数），未知单位/无有效利率→例外。</li>
-<li><strong>单位（服务，假<code>LedgerInterface</code>）</strong>：质押上限数学，铸币厂偿付能力拒绝，交易所复式记账余额效应，赎回支付限额，通过<code>referenceId</code>实现幂等性。</li>
-<li><strong>集成（真实存储库）</strong>：有效日期查找边界 (<code>valid_from &lt;= at &lt; valid_to</code>)、开放式有效性、多个最新版本、<code>setRate</code> 重叠拒绝。</li>
+<li><strong>Unit (<code>CurrencyConverter</code>, fake rate repo)</strong>: same-unit short-circuit, direct pair, inverse pair, cross via base, half-up boundaries (incl. <code>.5</code>, negatives), unknown unit / no effective rate → exception.</li>
+<li><strong>Unit (services, fake <code>LedgerInterface</code>)</strong>: pledge ceiling math, mint solvency rejection, exchange double-entry balance effects, redemption payout limits, idempotency via <code>referenceId</code>.</li>
+<li><strong>Integration (real repo)</strong>: effective-dated lookup boundaries (<code>valid_from &lt;= at &lt; valid_to</code>), open-ended validity, latest-of-multiple versions, <code>setRate</code> overlap rejection.</li>
 </ul>
 <hr />
-<h2 id="12_1">12. 分阶段推出<a class="headerlink" href="#12_1" title="Permanent link">&para;</a></h2>
+<h2 id="12-phased-rollout">12. Phased Rollout<a class="headerlink" href="#12-phased-rollout" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>相</th>
-<th>范围</th>
-<th>取决于</th>
+<th>Phase</th>
+<th>Scope</th>
+<th>Depends on</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>P0</strong></td>
-<td>Bundle骨架+Rate域+<code>CurrencyConverter</code>（纯只读）</td>
+<td>Bundle skeleton + Rate domain + <code>CurrencyConverter</code> (pure read-only)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><strong>P1</strong></td>
-<td><code>LedgerInterface</code> +矿池+质押+铸币（发行+偿付能力）</td>
+<td><code>LedgerInterface</code> + Pool + Pledge + Mint (issuance + solvency)</td>
 <td>P0</td>
 </tr>
 <tr>
 <td><strong>P2</strong></td>
-<td>兑换预订+兑换（零和复式）</td>
+<td>Exchange booking + Redemption (zero-sum double-entry)</td>
 <td>P1</td>
 </tr>
 <tr>
 <td><strong>P3</strong></td>
-<td>Maker 政策 + 管理/应用程序 API + 对账/审计报告</td>
+<td>Maker policy + Manage/App API + reconciliation/audit reporting</td>
 <td>P2</td>
 </tr>
 </tbody>
 </table>
-<p>每个阶段都是可独立测试和审查的。预订<code>App\Wallet</code>（主机<code>LedgerInterface</code>实现）登陆P1。</p>
+<p>Each phase is independently testable and reviewable. Booking into <code>App\Wallet</code> (the host <code>LedgerInterface</code> implementation) lands with P1.</p>
 <hr />
-<h2 id="13">13. 开放决策和非目标<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
+<h2 id="13-open-decisions-non-goals">13. Open Decisions &amp; Non-Goals<a class="headerlink" href="#13-open-decisions-non-goals" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>捆绑包装</strong>：首先是in-repo <code>App\ExchangeBundle</code>；稍后可提取。</li>
-<li><strong>将<code>POINT</code>赎回人民币</strong>：必需 → 强制要求提供抵押品。如果积分变成单向的（赚取/花费，从未兑换），则承诺层就会减少为审计支持。</li>
-<li><strong>固定锚定与浮动利率</strong>：<code>1 CNY = 100,000,000 POINT</code>作为硬编码系数是<em>固定挂钩</em>（质押上限，无利率查找）；浮动利率使用利率表。两者都是可表达的——预订土地时决定优先顺序。</li>
-<li><strong>日元/0-十进制货币</strong>：不支持（需要每种货币的指数图）。</li>
-<li><strong>外部馈送/自动同步</strong>：通过 <code>source</code> 保留；没有实施。</li>
-<li><strong>在此设计中没有与<code>PaymentDeductionService</code>/贸易定价</strong>集成； <code>PaymentDeductionService</code> 今天仍然强制使用相同的货币。</li>
+<li><strong>Bundle packaging</strong>: in-repo <code>App\ExchangeBundle</code> first; extractable later.</li>
+<li><strong>Redemption of <code>POINT</code> back to CNY</strong>: required → makes collateral mandatory. If points become one-way (earn/spend, never redeemed), the pledge layer reduces to an audit backstop.</li>
+<li><strong>Fixed anchor vs floating rate</strong>: <code>1 CNY = 100,000,000 POINT</code> as a hard-coded coefficient is a <em>fixed peg</em> (pledge ceiling, no rate lookup); floating rates use the rate table. Both are expressible — decide priority when booking lands.</li>
+<li><strong>JPY / 0-decimal currencies</strong>: not supported (requires per-currency exponent map).</li>
+<li><strong>External feed / auto-sync</strong>: reserved via <code>source</code>; not implemented.</li>
+<li><strong>No integration with <code>PaymentDeductionService</code> / Trade pricing</strong> in this design; <code>PaymentDeductionService</code> still enforces same-currency today.</li>
 </ul>
 
 

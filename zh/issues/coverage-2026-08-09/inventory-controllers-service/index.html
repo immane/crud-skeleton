@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1119,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1208,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1645,10 +1645,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注释
+        Notes
       
     </span>
   </a>
@@ -1737,7 +1737,7 @@
 </tr>
 </tbody>
 </table>
-<p>控制器单元测试遵循现有的 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 模式：模拟协作者、<code>#[AllowMockObjectsWithoutExpectations]</code> 和 <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> 注入。 DB 测试重用 <code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>。任何地方都没有使用 <code>ReflectionProperty::setAccessible()</code>。</p>
+<p>控制器单元测试遵循现有的 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 模式：模拟协作者、<code>#[AllowMockObjectsWithoutExpectations]</code> 和 <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> 注入。数据库测试重用<code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>。任何地方都没有使用 <code>ReflectionProperty::setAccessible()</code>。</p>
 <p>对于 <code>RecipeController</code> 上的三个单行创建挂钩（第 35/44/49 行的 <code>defaultCreateValues</code>、<code>processCreateContent</code>、<code>afterCreated</code>），测试通过 <code>ReflectionMethod::invoke()</code> 调用它们（没有 <code>setAccessible()</code>，它在 PHP 8.5 中已弃用）。这些钩子只能通过 <code>UpdateApiViewMixin</code> 的创建模式 (<code>@mode=mixed</code>) 路径访问，该路径不是由该控制器自己的 <code>createAction</code> 连接的；直接调用是在不修改 <code>src/</code> 的情况下执行它们的唯一方法。</p>
 <h2 id="_3">覆盖结果<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>来自 <code>var/uncovered-map.txt</code> 的基线（2026-08-09 生成）。通过运行带有 <code>XDEBUG_MODE=coverage</code> 的组合 Inventory 套件并从 Clover 报告中区分 <code>count="0"</code> 语句行来验证后值：</p>
@@ -1853,11 +1853,11 @@
 <li><strong>建议的修复：</strong> 在调用 <code>$reservation-&gt;release()</code> 之前预先验证所有行（材料 + 库存查找），或将失败包装在 <code>$this-&gt;entityManager-&gt;refresh($reservation)</code> / 重新获取中，以便实体无法保留半应用状态。</li>
 </ul>
 <h2 id="_6">跳过测试<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>没有任何。每个新测试都会通过当前的 <code>src/</code>（43 个测试，142 个断言，绿色）。由于 <code>src/</code> 错误，不必跳过正确行为测试 - InventoryService/控制器代码的行为与所有覆盖路径的记录相同。上述错误是通过检查/分析发现的，对于错误 1 ​​和错误 2，通过经验验证，但它们都不会导致需要记录为跳过的正确行为测试失败。</p>
-<h2 id="_7">注释<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>None. Every new test passes against the current <code>src/</code> (43 tests, 142 assertions, green). No correct-behavior test had to be skipped due to a <code>src/</code> bug — the InventoryService/controller code behaves as documented for all covered paths. The bugs above are found by inspection/analysis and, for Bug 1 and Bug 2, verified empirically, but none of them cause a failure of a correct-behavior test that needed to be recorded as skipped.</p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
-<li>当删除/重新创建 <code>var/test.db</code> 的集成类连续运行时，观察到瞬态 SQLite <code>database is locked</code> 错误；根据项目惯例，等待 10-15 秒并重新运行即可解决这些问题（所有运行均以绿色结束）。</li>
-<li>当所有 Inventory 测试一起运行时，完整的 <code>tests/Inventory</code> 目录显示 <code>InventoryReservationRequestedHandlerIntegrationTest</code> 中预先存在的不稳定情况（与这些更改无关）；新文件单独和一起都是绿色的。</li>
+<li>Transient SQLite <code>database is locked</code> errors were observed when integration classes that drop/recreate <code>var/test.db</code> run back-to-back; per the project convention, waiting 10–15 s and re-running resolved them (all runs ended green).</li>
+<li>The full <code>tests/Inventory</code> directory shows pre-existing flakiness in <code>InventoryReservationRequestedHandlerIntegrationTest</code> when all Inventory tests run together (unrelated to these changes); the new files are green both individually and together.</li>
 </ul>
 
 

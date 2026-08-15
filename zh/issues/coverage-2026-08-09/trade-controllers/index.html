@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1119,7 +1119,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1208,7 +1208,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1836,7 +1836,7 @@
 <ul>
 <li><strong>管理 <code>refundAction</code> 发票分支 (259-260)</strong> — 它在 <code>refundPayment()</code> 之后返回，而不在控制器中应用 <code>refund</code> 工作流转换。这不是一个错误：<code>InvoiceService::refund()</code> 调度 <code>InvoiceRefundedEvent</code>，<code>Trade\EventListener\OrderInvoiceListener::onInvoiceRefunded()</code> 应用 <code>refund</code> 转换并设置 <code>refundedAt</code>。由现有集成测试<code>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</code>确认（订单以<code>STATUS_REFUNDED</code>结尾）。</li>
 <li><strong>应用 <code>createAction</code> store-context 202 路径</strong> — 订单状态不会保留为普通草稿：<code>OrderService::createOrder()</code> 应用 <code>store_submit</code> 转换并在同一事务 (<code>src/Trade/Service/OrderService.php:111-140</code>) 中记录 <code>trade.order.created.v1</code> 发件箱消息。</li>
-<li><strong><code>paymentAction</code> 上的无效支付方法</strong> — 控制器转发任何字符串，但验证发生在服务端：<code>InvoiceService::pay()</code> 通过网关注册表解析方法并抛出未知方法（捕获 → 400）。应用程序单元测试涵盖断言 <code>mock</code>/<code>wallet</code>/<code>wechat</code> 被转发。</li>
+<li><strong><code>paymentAction</code> 上的无效支付方法</strong> — 控制器转发任何字符串，但验证发生在服务端：<code>InvoiceService::pay()</code> 通过网关注册表解析方法并抛出未知方法（捕获 → 400）。由应用程序单元测试覆盖，断言 <code>mock</code>/<code>wallet</code>/<code>wechat</code> 已转发。</li>
 <li><strong><code>doTransitionAction</code> “can() 失败”路径返回 HTTP 200</strong> — 这是由现有集成测试断言的（<code>testOrderCannotCancelAfterPaid</code> 期望 200 + 非零代码），因此这是有意为之。</li>
 <li><strong><code>wrapInTransaction</code> 在 <code>OrderServiceInterface</code> 上的可用性</strong> — 它是一个仅 <code>@method</code> 的声明，因此 <code>createMock()</code> 无法在 PHPUnit 12 下生成它；由于这个原因引入了虚假服务（这是测试基础设施说明，而不是产品错误）。</li>
 </ul>
