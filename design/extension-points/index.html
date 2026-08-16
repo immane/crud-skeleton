@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="zh" class="no-js">
+<html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/issues/coverage-2026-08-09/store-handlers/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/extension-points/">
       
       
       
@@ -22,19 +22,19 @@
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Store MessageHandlers — 覆盖率约 100% 并报告错误 - CRUD Skeleton</title>
+        <title>Extension Points Catalog - CRUD Skeleton</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,7 +53,7 @@
       
     
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,8 +78,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#store-messagehandlers-100" class="md-skip">
-          跳转至
+        <a href="#extension-points-catalog" class="md-skip">
+          Skip to content
         </a>
       
     </div>
@@ -93,8 +93,8 @@
   
 
 <header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Store MessageHandlers — 覆盖率约 100% 并报告错误
+              Extension Points Catalog
             
           </span>
         </div>
@@ -154,7 +154,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="选择当前语言">
+    <button class="md-header__button md-icon" aria-label="Select language">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -188,16 +188,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="查找">
+      <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -210,7 +210,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            正在初始化搜索引擎
+            Initializing search
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -222,7 +222,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -256,9 +256,9 @@
 
 
 
-<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -268,7 +268,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -288,14 +288,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    首页
+    Home
   
 
     
@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    设计契约
+    Design Contracts
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    设计契约
+    Design Contracts
   
 
           </label>
@@ -369,14 +369,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/system-architecture/" class="md-nav__link">
+      <a href="../system-architecture/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    系统架构
+    System Architecture
   
 
     
@@ -397,14 +397,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/api-design/" class="md-nav__link">
+      <a href="../api-design/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    API 设计
+    API Design
   
 
     
@@ -425,14 +425,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/data-model/" class="md-nav__link">
+      <a href="../data-model/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    数据模型
+    Data Model
   
 
     
@@ -453,14 +453,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/module-design/" class="md-nav__link">
+      <a href="../module-design/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    模块设计
+    Module Design
   
 
     
@@ -481,14 +481,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/controller-design/" class="md-nav__link">
+      <a href="../controller-design/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    控制器设计
+    Controller Design
   
 
     
@@ -509,14 +509,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/api-documentation/" class="md-nav__link">
+      <a href="../api-documentation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    API 文档
+    API Documentation
   
 
     
@@ -537,14 +537,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/system-contracts/" class="md-nav__link">
+      <a href="../system-contracts/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    系统契约
+    System Contracts
   
 
     
@@ -565,14 +565,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/naming-convention/" class="md-nav__link">
+      <a href="../naming-convention/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -625,7 +625,7 @@
   <span class="md-ellipsis">
     
   
-    模块设计
+    Bundles
   
 
     
@@ -641,7 +641,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    模块设计
+    Bundles
   
 
           </label>
@@ -654,14 +654,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/core/" class="md-nav__link">
+      <a href="../bundles/core/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Core 框架
+    Core Framework
   
 
     
@@ -682,7 +682,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/common/" class="md-nav__link">
+      <a href="../bundles/common/" class="md-nav__link">
         
   
   
@@ -710,14 +710,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/trade/" class="md-nav__link">
+      <a href="../bundles/trade/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Trade (电商)
+    Trade (E-Commerce)
   
 
     
@@ -738,14 +738,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/store/" class="md-nav__link">
+      <a href="../bundles/store/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -766,7 +766,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/inventory/" class="md-nav__link">
+      <a href="../bundles/inventory/" class="md-nav__link">
         
   
   
@@ -794,14 +794,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/payment/" class="md-nav__link">
+      <a href="../bundles/payment/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Payment (支付)
+    Payment
   
 
     
@@ -822,14 +822,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/wallet/" class="md-nav__link">
+      <a href="../bundles/wallet/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Wallet (钱包)
+    Wallet
   
 
     
@@ -850,14 +850,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/exchange/" class="md-nav__link">
+      <a href="../bundles/exchange/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -878,14 +878,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/identity/" class="md-nav__link">
+      <a href="../bundles/identity/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Identity (鉴权)
+    Identity (Auth)
   
 
     
@@ -906,14 +906,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/bundles/wechat/" class="md-nav__link">
+      <a href="../bundles/wechat/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -966,7 +966,7 @@
   <span class="md-ellipsis">
     
   
-    调研
+    Research
   
 
     
@@ -982,7 +982,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    调研
+    Research
   
 
           </label>
@@ -995,14 +995,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    EasyWeChat 6.x 用法
+    EasyWeChat 6.x Usage
   
 
     
@@ -1023,14 +1023,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    汇付支付 API
+    Huifu Payment API
   
 
     
@@ -1112,14 +1112,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture-review-2026-06-26/" class="md-nav__link">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1201,14 +1201,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -1229,14 +1229,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1257,14 +1257,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -1285,7 +1285,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
         
   
   
@@ -1313,14 +1313,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -1341,14 +1341,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1369,14 +1369,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -1397,14 +1397,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -1425,14 +1425,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+      <a href="../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1460,14 +1460,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai/context/" class="md-nav__link">
+      <a href="../../ai/context/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    AI 快照
+    AI Context
   
 
     
@@ -1487,14 +1487,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    API 参考
+    API Reference
   
 
     
@@ -1520,7 +1520,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="目录">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -1529,15 +1529,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      目录
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#1-placement-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        之前→之后的覆盖范围
+        1. Placement Rule
       
     </span>
   </a>
@@ -1545,10 +1545,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-43-43-0" class="md-nav__link">
+  <a href="#2-auto-tagging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        添加测试文件（6 个文件，43 个测试：43 个通过 + 0 个跳过）
+        2. Auto-Tagging
       
     </span>
   </a>
@@ -1556,66 +1556,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#-" class="md-nav__link">
+  <a href="#3-catalog" class="md-nav__link">
     <span class="md-ellipsis">
       
-        发现错误（仅报告 - 未更改来源）
+        3. Catalog
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="发现错误（仅报告 - 未更改来源）">
+    <nav class="md-nav" aria-label="3. Catalog">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-" class="md-nav__link">
+  <a href="#31-registry-pattern" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 1（中）- 商店发布库存预订请求 库存永远无法接受
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bug-2-medium-tradeordercreated" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Bug 2 (MEDIUM) — 确定性无效的 trade.order.created 有效负载变成有害消息
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bug-3-" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Bug 3（低/中）- 存储端重复数据删除没有有效负载哈希完整性检查
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bug-4-confirmedatrejectedatreleasedat" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Bug 4（低）- confirmedAt/rejectedAt/releasedAt 是必需的，但从未使用过
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bug-5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Bug 5（低）——发布确认被盲目消耗
+        3.1 Registry Pattern
       
     </span>
   </a>
@@ -1628,10 +1584,82 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#4-provider-contracts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注释
+        4. Provider Contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Provider Contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-voucher-backed-providers-deposit-withdraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Voucher-Backed Providers (Deposit / Withdraw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-payment-gateways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Payment Gateways
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-payment-adjustment-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Payment Adjustment Providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cross-module-guards-service-decoration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Cross-Module Guards (Service Decoration)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-adding-a-new-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Adding a New Provider
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-related-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Related Docs
       
     </span>
   </a>
@@ -1658,210 +1686,215 @@
   
 
 
-<h1 id="store-messagehandlers-100">Store MessageHandlers — 覆盖率约 100% 并报告错误<a class="headerlink" href="#store-messagehandlers-100" title="Permanent link">&para;</a></h1>
-<p>日期：2026-08-09
-范围：<code>src/Store/MessageHandler/*</code>（5 个处理程序）
-跑步者：<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code>
-规则：<strong><code>src/</code> 下没有任何更改</strong> — 仅在 <code>tests/</code> 下添加的测试以及此报告。</p>
-<h2 id="_1">之前→之后的覆盖范围<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>已针对 Xdebug 覆盖率 (<code>XDEBUG_MODE=coverage ... --coverage-clover</code>) 进行验证
-新的 <code>tests/Store/MessageHandler/*</code> 套件与现有套件相结合
-<code>tests/Store/Integration/TradeOrderCreatedHandlerTest.php</code> 和
-<code>tests/Store/Integration/InventoryReservationOutcomeHandlerTest.php</code>（54 次测试，132 次
-断言，全绿色，无弃用/通知/警告）。</p>
+<h1 id="extension-points-catalog">Extension Points Catalog<a class="headerlink" href="#extension-points-catalog" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Central directory of every pluggable extension point in the system: the
+auto-tag, the contract interface, the owning module, the registry that
+collects implementations, where concrete providers live, and who consumes
+them. Use this document to discover or add a provider without grepping.</p>
+</blockquote>
+<hr />
+<h2 id="1-placement-rule">1. Placement Rule<a class="headerlink" href="#1-placement-rule" title="Permanent link">&para;</a></h2>
+<p>Two rules decide where an extension point and its implementations live:</p>
+<ol>
+<li><strong>The contract (interface + registry) lives in the module that owns/consumes the behavior.</strong>
+   Payment defines <code>PaymentGatewayInterface</code> because it orchestrates gateways.
+   Wallet defines <code>DepositProviderInterface</code> because it gates every credit.
+   Trade defines <code>PriceCalculatorInterface</code> because it runs the price pipeline.</li>
+<li><strong>The implementation lives in the module that owns the side-effect.</strong>
+   <code>WalletGateway</code> lives in Wallet because it moves wallet balances; <code>WechatPayGateway</code>
+   lives in Wechat because it drives EasyWeChat; <code>ManualDepositProvider</code> lives in
+   Wallet because it authorizes a wallet credit. An implementation may live in a
+   different module than the interface, as long as the dependency direction is
+   allowed (implementing module imports the interface's module).</li>
+</ol>
+<p>The rule that keeps Payment a generic facade is contractual:</p>
+<blockquote>
+<p><strong>Payment MUST NOT depend on Wallet</strong> (services or entities). Wallet, Wechat,
+and other modules MAY implement Payment-defined interfaces. Any provider backing
+wallet credits therefore implements Wallet's <code>wallet.deposit_provider</code> extension
+point, not a Payment one — even when the funding source is a Payment invoice.</p>
+</blockquote>
+<h2 id="2-auto-tagging">2. Auto-Tagging<a class="headerlink" href="#2-auto-tagging" title="Permanent link">&para;</a></h2>
+<p>Every extension point is registered centrally in <code>config/services.yaml</code> under
+<code>_instanceof</code>. Any class implementing the interface — in any module namespace —
+receives the tag automatically. No per-provider wiring is needed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">App\Payment\Service\PaymentGatewayInterface</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="nt">App\Payment\Service\Adjustment\PaymentAdjustmentProviderInterface</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.adjustment_provider&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="nt">App\Wallet\Service\Deposit\DepositProviderInterface</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;wallet.deposit_provider&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="nt">App\Wallet\Service\Withdraw\WithdrawProviderInterface</span><span class="p">:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;wallet.withdraw_provider&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>Tags are consumed with <code>#[AutowireIterator('tag.name')]</code>.</p>
+<h2 id="3-catalog">3. Catalog<a class="headerlink" href="#3-catalog" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>之前</th>
-<th>之后</th>
+<th>Tag</th>
+<th>Interface (owner)</th>
+<th>Registry</th>
+<th>Consumers</th>
+<th>Implementations (module)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>TradeOrderCancelledHandler.php</code></td>
-<td>64.71% (33/51)</td>
-<td><strong>100%</strong> (51/51)</td>
+<td><code>payment.gateway</code></td>
+<td><code>App\Payment\Service\PaymentGatewayInterface</code> (Payment)</td>
+<td><code>PaymentGatewayRegistry</code></td>
+<td><code>InvoiceService</code></td>
+<td><code>MockGateway</code> (Payment), <code>WalletGateway</code> (Wallet), <code>WechatPayGateway</code> (Wechat)</td>
 </tr>
 <tr>
-<td><code>InventoryReservationConfirmedHandler.php</code></td>
-<td>87.10% (27/31)</td>
-<td><strong>100%</strong> (31/31)</td>
+<td><code>payment.adjustment_provider</code></td>
+<td><code>App\Payment\Service\Adjustment\PaymentAdjustmentProviderInterface</code> (Payment)</td>
+<td><code>PaymentAdjustmentRegistry</code></td>
+<td><code>InvoiceService</code></td>
+<td><code>WalletBalanceAdjustmentProvider</code> (Wallet)</td>
 </tr>
 <tr>
-<td><code>InventoryReservationRejectedHandler.php</code></td>
-<td>83.87% (26/31)</td>
-<td><strong>100%</strong> (31/31)</td>
+<td><code>wallet.deposit_provider</code></td>
+<td><code>App\Wallet\Service\Deposit\DepositProviderInterface</code> (Wallet)</td>
+<td><code>DepositProviderRegistry</code></td>
+<td><code>DepositService</code></td>
+<td><code>ManualDepositProvider</code> (Wallet), <code>InvoiceDepositProvider</code> (Wallet)</td>
 </tr>
 <tr>
-<td><code>InventoryReservationReleasedHandler.php</code></td>
-<td>90.91% (20/22)</td>
-<td><strong>100%</strong> (22/22)</td>
+<td><code>wallet.withdraw_provider</code></td>
+<td><code>App\Wallet\Service\Withdraw\WithdrawProviderInterface</code> (Wallet)</td>
+<td><code>WithdrawProviderRegistry</code></td>
+<td><code>WithdrawService</code></td>
+<td><code>ManualWithdrawProvider</code> (Wallet)</td>
 </tr>
 <tr>
-<td><code>TradeOrderCreatedHandler.php</code></td>
-<td>90.91% (70/77)</td>
-<td><strong>100%</strong> (77/77)</td>
+<td><code>media.storage</code></td>
+<td><code>App\Storage\Service\MediaStorageInterface</code> (Storage)</td>
+<td><code>MediaStorageRegistry</code></td>
+<td><code>MediaService</code></td>
+<td><code>LocalStorage</code>, <code>QiniuStorage</code> (Storage)</td>
+</tr>
+<tr>
+<td><code>trade.price_calculator</code></td>
+<td><code>App\Trade\Service\Pricing\PriceCalculatorInterface</code> (Trade)</td>
+<td>collected inline in <code>OrderService</code></td>
+<td><code>OrderService::calculatePrices()</code></td>
+<td><code>BasePriceCalculator</code>, <code>QuantityCalculator</code>, <code>TotalAggregator</code> (Trade); <code>PromotionCalculator</code> (Promotion)</td>
+</tr>
+<tr>
+<td><code>promotion.strategy</code></td>
+<td><code>App\Promotion\Strategy\PromotionStrategyInterface</code> (Promotion)</td>
+<td>collected inline in <code>PromotionService</code></td>
+<td><code>PromotionCalculator</code></td>
+<td>7 strategies (Promotion)</td>
 </tr>
 </tbody>
 </table>
-<p>现在将执行 <code>var/uncovered-map.txt</code> 中列出的这些处理程序的每一行
-（41,49,54,67,68,70,79–91；35,39,48,63；35,39,43,48,63；32,40；47,52,65,80,107,127,137）。</p>
-<h2 id="6-43-43-0">添加测试文件（6 个文件，43 个测试：43 个通过 + 0 个跳过）<a class="headerlink" href="#6-43-43-0" title="Permanent link">&para;</a></h2>
-<p>全部位于<code>tests/Store/MessageHandler/</code>、命名空间<code>App\Tests\Store\MessageHandler</code>中，
-<code>declare(strict_types=1);</code>。 DB 支持的类使用 <code>DatabaseBootstrapTrait</code> +
-<code>IntegrationWebTestCase</code>；仅并发分支使用模拟单元测试（事务中
-无法按顺序到达重新重复数据删除行，只能通过两个并发检查）。</p>
+<h3 id="31-registry-pattern">3.1 Registry Pattern<a class="headerlink" href="#31-registry-pattern" title="Permanent link">&para;</a></h3>
+<p>Registries index providers by <code>::getName()</code> and expose typed access:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">final class DepositProviderRegistry</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    /** @param iterable&lt;DepositProviderInterface&gt; $providers */</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    public function __construct(#[AutowireIterator(&#39;wallet.deposit_provider&#39;)] iterable $providers) {}</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">    public function has(string $name): bool;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="x">    public function get(string $name): DepositProviderInterface;   // throws when unknown</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="x">    public function forVoucherType(string $voucherType): ?DepositProviderInterface; // whitelist routing</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="x">}</span>
+</code></pre></div>
+<p>A provider that supports multiple concrete names uses <code>supports()</code> to route; a
+provider that is itself one name returns its <code>getName()</code> from <code>supports()</code>.</p>
+<h2 id="4-provider-contracts">4. Provider Contracts<a class="headerlink" href="#4-provider-contracts" title="Permanent link">&para;</a></h2>
+<h3 id="41-voucher-backed-providers-deposit-withdraw">4.1 Voucher-Backed Providers (Deposit / Withdraw)<a class="headerlink" href="#41-voucher-backed-providers-deposit-withdraw" title="Permanent link">&para;</a></h3>
+<p><code>DepositProviderInterface</code> and <code>WithdrawProviderInterface</code> share the same shape:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getName()</code></td>
+<td>Stable provider/voucher-type name</td>
+</tr>
+<tr>
+<td><code>supports(string $type)</code></td>
+<td>Whether this provider handles the requested voucher type</td>
+</tr>
+<tr>
+<td><code>assertPermitted(array $options)</code></td>
+<td>Own the permission rule; throw <code>AccessDeniedException</code> when the caller is not allowed. No active security context (CLI/queue/system) is a trusted caller and MUST pass</td>
+</tr>
+<tr>
+<td><code>authorize(Voucher, array $options)</code></td>
+<td>Verify the source backing the voucher is ready (e.g. an invoice is paid and matches). Called inside the deposit/withdraw transaction</td>
+</tr>
+<tr>
+<td><code>reverse(Voucher, string $reason, array $options)</code></td>
+<td>Source-side handling when an applied voucher is reversed. Runs after the wallet movement transaction</td>
+</tr>
+</tbody>
+</table>
+<p>The built-in <code>manual</code> providers are admin-only when a security context is active
+and use <code>authorize()</code>/<code>reverse()</code> as no-ops. Domain-backed providers (e.g.
+<code>InvoiceDepositProvider</code>) encode their source checks in <code>authorize()</code>.</p>
+<h3 id="42-payment-gateways">4.2 Payment Gateways<a class="headerlink" href="#42-payment-gateways" title="Permanent link">&para;</a></h3>
+<p><code>PaymentGatewayInterface</code> receives <strong>explicit</strong> <code>$amount</code> arguments and MUST NOT
+derive the payable amount from the invoice or inspect adjustment options. See
+<code>docs/design/bundles/payment.md</code> §6.</p>
+<h3 id="43-payment-adjustment-providers">4.3 Payment Adjustment Providers<a class="headerlink" href="#43-payment-adjustment-providers" title="Permanent link">&para;</a></h3>
+<p><code>PaymentAdjustmentProviderInterface</code> reduces the amount a gateway must process
+(e.g. wallet-balance deduction). Implementations live in the owning module and
+return only generic <code>PaymentAdjustmentResult</code> data. See <code>payment.md</code> §5.3.</p>
+<h2 id="5-cross-module-guards-service-decoration">5. Cross-Module Guards (Service Decoration)<a class="headerlink" href="#5-cross-module-guards-service-decoration" title="Permanent link">&para;</a></h2>
+<p>Not every cross-module rule needs a registry. A rule that intercepts an existing
+service entry point can be layered as a <strong>service decorator</strong>:</p>
 <ul>
-<li><code>TradeOrderCancelledHandlerTest.php</code>（10 次测试）— 最大的胜利。无效信封
-  （错误的类型/版本/非字符串 eventId/非数组负载/缺失字段 → 第 41 行），
-  重复的 eventId 被忽略 (49)，未知订单的逻辑删除幂等性 (70)，冲突
-  墓碑商店 → <code>LogicException</code> (67–68)，取消 <code>pending_validation</code> 订单，没有
-  预订 (79–82)，取消 <code>awaiting_inventory</code> 订单发布
-  <code>inventory.reservation.release.requested.v1</code> 具有完整的相关负载 (79–91)。</li>
-<li><code>TradeOrderCancelledHandlerConcurrencyTest.php</code> (1 次测试) — 内的第二个 <code>findOneBy</code>
-  交易返回消费事件→提前返回（54）。</li>
-<li><code>InventoryReservationOutcomeCoverageTest.php</code>（19 次测试）— 已确认：无效信封 (35)，
-  缺少 <code>confirmedAt</code> (39)，因未知订单/商店不匹配/tradeOrderUuid 而被忽略
-  不匹配/reservationId 不匹配/非<code>awaiting_inventory</code> 状态 (63)。拒绝：无效
-  信封 (35)、缺少/类型不匹配的必填字段 (39)、忽略重复事件 (43)、
-  忽略未知订单/商店不匹配/终端状态 (63)。已发布：无效
-  信封 / 缺少 <code>releasedAt</code> / 缺少 <code>reservationId</code> (32)，非 UUID 预订 ID
-  消耗了。</li>
-<li><code>InventoryReservationOutcomeConcurrencyTest.php</code>（3 个测试）— 事务内尽早重新重复数据删除
-  返回已确认 (48)、已拒绝 (48)、已释放 (40)。</li>
-<li><code>TradeOrderCreatedHandlerCoverageTest.php</code>（9个测试）——缺少商店快照/快照
-  没有 <code>uuid</code> (47)，冲突取消墓碑 → <code>LogicException</code> (65)，重复
-  使用 <strong>不同</strong> eventId 创建的事件保持现有订单不变 (80)，
-  不可用的商店 + 缺少 <code>orderUuid</code> → <code>InvalidArgumentException</code> (107)，并且带有
-  支持库存的处理程序：空项目 (127)、零数量项目 (137)、项目缺失
-  <code>catalogReference</code> (137)，非整数数量 (137)。</li>
-<li><code>TradeOrderCreatedHandlerConcurrencyTest.php</code>（1 次测试）— 事务内提前重新重复数据删除
-  返回（52）。</li>
+<li><code>App\Wallet\Service\Payment\InvoiceDepositRefundGuard</code> decorates
+  <code>App\Payment\Service\InvoiceService</code> and blocks <code>refund()</code> while an APPLIED
+  <code>invoice</code> deposit voucher exists. The derived "deposited" state (paid invoice</li>
+<li>applied voucher) unlocks automatically when the voucher is reversed.</li>
+<li>Wiring in <code>config/services.yaml</code>:
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">App\Wallet\Service\Payment\InvoiceDepositRefundGuard</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">decorates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">App\Payment\Service\InvoiceService</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;@.inner&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">App\Payment\Service\InvoiceServiceInterface</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;@App\Wallet\Service\Payment\InvoiceDepositRefundGuard&#39;</span>
+</code></pre></div></li>
+<li>The explicit interface alias is required once decoration creates two candidates
+  for the interface.</li>
 </ul>
-<p>注意：最终的<code>StoreTradeOrderCancellationRepository</code>不能被PHPUnit加倍，所以
-并发单元测试通过模拟的 <code>ManagerRegistry</code> 构造一个真实的实例（其查询
-方法在早期返回路径上永远不会到达）。单元测试携带
-<code>#[AllowMockObjectsWithoutExpectations]</code> （现有套件仅用于模拟测试的约定）
-因此 <code>failOnNotice="true"</code> 下不会发出任何 PHPUnit 通知。</p>
-<h2 id="-">发现错误（仅报告 - 未更改来源）<a class="headerlink" href="#-" title="Permanent link">&para;</a></h2>
-<p>没有正确行为测试失败，因此不需要将任何内容标记为跳过；下面的调查结果
-通过端到端地读取每个处理程序及其对应的处理程序，是否会出现鲁棒性/正确性差距
-生产者（贸易）和消费者（库存）。</p>
-<h3 id="bug-1-">Bug 1（中）- 商店发布库存预订请求 库存永远无法接受<a class="headerlink" href="#bug-1-" title="Permanent link">&para;</a></h3>
+<p>Decoration applies to every consumer of the interface (controllers, Trade), so no
+call-site changes are needed.</p>
+<h2 id="6-adding-a-new-provider">6. Adding a New Provider<a class="headerlink" href="#6-adding-a-new-provider" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Decide the owner of the side-effect → that module hosts the implementation.
+   Keep the contract in its owning module unless the behavior being added is the
+   contract itself.</li>
+<li>Implement the interface (contract from §3). Rely on the global <code>_instanceof</code>
+   tag — do <strong>not</strong> register the service manually.</li>
+<li>If a registry needs no change (it collects by tag), stop there. If the new
+   provider owns a new permission rule or source check, put it in
+   <code>assertPermitted()</code>/<code>authorize()</code> per the contract.</li>
+<li>Add translation keys for every user-facing message the provider can throw.</li>
+<li>Add unit tests for the provider (success + every rejection path) and an
+   integration test that drives the real registry, plus a lifecycle test for
+   any domain-derived guard.</li>
+<li>Verify PHPStan Level 8 and the 90% coverage gate.</li>
+</ol>
+<h2 id="7-related-docs">7. Related Docs<a class="headerlink" href="#7-related-docs" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:132-137</code>
-  (<code>inventoryItems()</code>) — 仅需要 <code>is_string($item['catalogReference'] ?? null)</code>。</li>
-<li><strong>描述：</strong> 贸易序列化 <code>catalogReference</code> 为
-  <code>$item-&gt;getSpecification()?-&gt;getUuid() ?? ''</code> (<code>src/Trade/Service/OrderService.php:128</code>)，所以
-  无规范的订单项目会生成 <code>catalogReference = ''</code>。 Store 处理程序接受
-  （空字符串是字符串），构建 <code>inventory.reservation.requested.v1</code> 发件箱
-  负载，但库存消费者（<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:119-120</code>）
-  要求 <code>catalogReference</code> 匹配 UUID 并抛出 <code>InvalidArgumentException</code>。</li>
-<li><strong>影响：</strong> 预订请求是有害消息（重试 3 次，然后 <code>failed</code>
-  运输），并且商店订单永久卡在<code>awaiting_inventory</code>中 -
-  确认永远无法到达。具有任何无规格行的交易订单永远不会
-  <code>INVENTORY_ENABLED=1</code> 时由 Store 投影接受。</li>
-<li><strong>复制：</strong> 创建一个项目没有规格的贸易订单（规格已删除
-  / 空）；观察 <code>trade.order.created</code> → 存储订单 <code>awaiting_inventory</code>，发件箱请求
-  <code>items[0].catalogReference = ''</code>；库存 <code>InventoryReservationRequestedHandler</code> 抛出
-  每次交付时<code>Invalid inventory reservation request item.</code>。</li>
-<li><strong>建议的修复：</strong> 根据 UUID 格式验证 <code>catalogReference</code> （和 <code>lineId</code>）（和
-  非空）在 <code>inventoryItems()</code> 中，在 Store 边界处确定性失败；和/或使
-  Trade 为无规范的项目发出稳定的 UUID 参考，而不是 <code>''</code>。</li>
-</ul>
-<h3 id="bug-2-medium-tradeordercreated">Bug 2 (MEDIUM) — 确定性无效的 <code>trade.order.created</code> 有效负载变成有害消息<a class="headerlink" href="#bug-2-medium-tradeordercreated" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:37-38</code>（浅
-  信封验证），<code>:56-61</code>（<code>StoreConsumedEvent</code>在交易中持续存在），
-  <code>:106-107</code>（<code>recordRejected()</code> orderUuid 抛出）、<code>:126-137</code>（<code>inventoryItems()</code> 抛出）、
-  加上 <code>src/Store/Service/StoreOrderService.php:84-86,110-111</code> （快照上的 <code>LogicException</code>
-  冲突）。</li>
-<li><strong>描述：</strong> 只有 <code>is_string($eventId) &amp;&amp; is_array($payload)</code> 被预先验证。任意
-  更深层次的失败（<code>recordRejected()</code> 中缺少 <code>orderUuid</code>、空/无效项、冲突
-  snapshot) 抛出 <strong>inside</strong> <code>wrapInTransaction</code>，这会回滚已经持久化的
-  <code>StoreConsumedEvent</code>。因此，该事件永远不会被标记为已消耗，并且会重试 (3×)
-  在<code>failed</code>交通工具着陆之前成功的机会。对比取消处理程序，
-  验证完整的信封（type/version/eventId/payload/orderUuid/storeUuid/cancelledAt/
-  时间戳）在任何持久性之前。</li>
-<li><strong>影响：</strong> 单个格式错误但结构有效的 <code>trade.order.created</code> 事件会阻止
-  该贸易订单的订单接受，需要手动<code>failed</code>-传输干预，并且
-  每次重试时重新运行整个事务（重新创建并回滚商店订单）。</li>
-<li><strong>复制：</strong> 使用包含有效 <code>store.uuid</code> 的有效负载调度 <code>trade.order.created</code>
-  但每次重新投递时都没有 <code>orderUuid</code> 且不存在商店 → <code>InvalidArgumentException: Trade order event does
-  not include an order UUID.</code>； <code>store_consumed_event</code> 从不包含
-  事件 ID。</li>
-<li><strong>建议的修复：</strong>移动确定性结构验证（orderUuid存在，项目格式良好
-  当启用库存时，在交易之前存储快照形状），或消耗并记录
-  终端 <code>StoreConsumedEvent</code> 用于无效信封而不是抛出。</li>
-</ul>
-<h3 id="bug-3-">Bug 3（低/中）- 存储端重复数据删除没有有效负载哈希完整性检查<a class="headerlink" href="#bug-3-" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/TradeOrderCancelledHandler.php:48,53</code>，
-  <code>TradeOrderCreatedHandler.php:40,51</code>、<code>InventoryReservationConfirmedHandler.php:42,47</code>、
-  <code>InventoryReservationRejectedHandler.php:42,47</code>、<code>InventoryReservationReleasedHandler.php:34,39</code>。</li>
-<li><strong>描述：</strong> 所有五个处理程序仅通过 <code>eventId</code> 进行重复数据删除 (<code>findOneBy(['eventId' =&gt; ...])</code>)
-  并默默返回。库存处理程序 (<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:181-192</code>,
-  <code>InventoryReservationReleaseRequestedHandler.php:122-133</code>) 另外比较有效负载
-  当 eventId 与不同的事件重用时，散列并引发 <code>InventoryMessageIntegrityException</code>
-  有效负载。</li>
-<li><strong>影响：</strong> 如果生产者重用带有修改后的有效负载的 eventId（重新交付或
-  被篡改/损坏的消息），存储会默默地忽略新的有效负载而不是标记
-  违反诚信行为；对于同一故障，双方的行为有所不同。</li>
-<li><strong>重现：</strong> 传递 <code>inventory.reservation.confirmed</code> 和 eventId <code>E</code>，然后传递它
-  再次使用 eventId <code>E</code> 和不同的 <code>storeOrderUuid</code>。商店：默默消费（订单从未
-  接受）。库存（在其自己的处理程序上的情况相同）：<code>InventoryMessageIntegrityException</code>。</li>
-<li><strong>建议的修复：</strong> 存储 <code>hash('sha256', json_encode($envelope))</code> （已经为
-  <code>StoreConsumedEvent</code>) 和 <code>hash_equals()</code> 进行重复数据删除，抛出完整性异常
-  不匹配，反映库存方面。</li>
-</ul>
-<h3 id="bug-4-confirmedatrejectedatreleasedat">Bug 4（低）- <code>confirmedAt</code>/<code>rejectedAt</code>/<code>releasedAt</code> 是必需的，但从未使用过<a class="headerlink" href="#bug-4-confirmedatrejectedatreleasedat" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>文件/行：</strong> <code>InventoryReservationConfirmedHandler.php:37-40</code>，
-  <code>InventoryReservationRejectedHandler.php:37-40</code>、<code>InventoryReservationReleasedHandler.php:30-31</code>；
-  <code>src/Store/Entity/StoreOrder.php:129-130</code>。</li>
-<li><strong>描述：</strong> 三个结果处理程序需要存在 ISO-8601 时间戳字段
-  （非字符串有效负载抛出）但从不解析它、验证其格式或保留它。
-  <code>StoreOrder::accept()/reject()</code> 标记 <code>acceptedAt</code>/<code>rejectedAt</code> 以及处理时间
-  (<code>new \DateTimeImmutable()</code>)，而不是事件时间戳。确认
-  <code>confirmedAt: 'not-a-date'</code> 被接受并且订单无论如何都被接受。</li>
-<li><strong>影响：</strong> 商店订单上的审核时间戳反映了商店处理结果的时间，
-  不在库存确认/拒绝时（延迟消息可能会休息几个小时），并且事件的
-  时间戳被丢弃。无效的时间戳会被静默接受。</li>
-<li><strong>复制：</strong> <code>InventoryReservationConfirmedHandler</code> 接受
-  <code>['reservationId' =&gt; ..., ..., 'confirmedAt' =&gt; 'garbage']</code> 并标记订单已接受；的
-  生成的 <code>store.order.accepted.v1</code> 有效负载携带 <code>acceptedAt = &lt;now&gt;</code> 而不是
-  确认时间。</li>
-<li><strong>建议的修复：</strong> 验证时间戳格式和/或显示它 - 例如<code>StoreOrder::accept()</code>
-  获得可选的 <code>$acceptedAt</code>，处理程序传递解析的事件时间戳和接受的/
-  被拒绝的发件箱有效负载使用它。</li>
-</ul>
-<h3 id="bug-5">Bug 5（低）——发布确认被盲目消耗<a class="headerlink" href="#bug-5" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/InventoryReservationReleasedHandler.php:34-47</code>。</li>
-<li><strong>说明：</strong>释放的handler只持久化一个<code>StoreConsumedEvent</code>；它从不抬头
-  商店订单，从不验证 <code>reservationId</code> 是否匹配（与已确认/拒绝的订单不同）
-  处理程序的相关性检查），并且从不向 Trade 发布任何确认（
-  商店订单已被 <code>TradeOrderCancelledHandler</code> 标记为取消）。</li>
-<li><strong>影响：</strong> 未知或从未取消的预订的释放事件会被默默标记
-  已消耗，并且取消流程不会从 Store 端产生终端发件箱消息，
-  因此，Trade 没有商店方确认库存释放已完成。</li>
-<li><strong>复制：</strong> 交付带有随机<code>reservationId</code>的<code>inventory.reservation.released</code>；的
-  事件被消耗（<code>store_consumed_event</code>行），没有商店订单验证，也没有发件箱
-  消息。</li>
-<li><strong>建议的修复：</strong> 将 <code>reservationId</code> 与商店订单相关联（作为已确认/
-  被拒绝的处理程序执行），并决定 Store 是否应该发出 <code>store.order.cancelled.v1</code>
-  （或类似的）发布完成后的确认。</li>
-</ul>
-<h2 id="_2">注释<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<ul>
-<li>预先存在的<code>tests/Store/Integration/TradeOrderCreatedHandlerTest.php</code>和
-  <code>tests/Store/Integration/InventoryReservationOutcomeHandlerTest.php</code>已经涵盖了
-  幸福的道路和几条分支；新的测试故意只添加缺失的分支
-  （无重复）。</li>
-<li>仅报告错误 - <strong>未修改源文件</strong>。</li>
-<li>任务预期的两个跳过测试场景没有出现：没有正确行为
-  测试失败，因此该套件是完全绿色的（54 个测试，132 个断言），跳过 0 次。</li>
+<li><code>docs/design/module-design.md</code> — module skeleton + dependency rules</li>
+<li><code>docs/design/bundles/payment.md</code> — gateway/adjustment framework</li>
+<li><code>docs/design/bundles/wallet.md</code> — voucher-backed deposit/withdraw</li>
+<li><code>config/services.yaml</code> — the single source of truth for auto-tags</li>
 </ul>
 
 
@@ -1886,7 +1919,7 @@
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  回到页面顶部
+  Back to top
 </button>
         
       </main>
@@ -1918,14 +1951,14 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
       
-        <script src="../../../javascripts/mermaid-init.js"></script>
+        <script src="../../javascripts/mermaid-init.js"></script>
       
     
   </body>

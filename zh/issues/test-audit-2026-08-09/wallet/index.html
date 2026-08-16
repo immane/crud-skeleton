@@ -27,7 +27,7 @@
     
     
       
-        <title>Wallet module test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>钱包模块测试审核(2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#wallet-module-test-audit-2026-08-09" class="md-skip">
+        <a href="#2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Wallet module test audit (2026-08-09)
+              钱包模块测试审核(2026-08-09)
             
           </span>
         </div>
@@ -913,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -1236,7 +1236,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -1534,43 +1534,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary-table" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary — table
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        KEEP
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#delete-candidates-table" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DELETE CANDIDATES — table
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议
+        摘要 — 表
       
     </span>
   </a>
@@ -1581,7 +1548,40 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        保留
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除候选人 — 表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merge-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERGE SUGGESTIONS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification steps
       
     </span>
   </a>
@@ -1608,116 +1608,116 @@
   
 
 
-<h1 id="wallet-module-test-audit-2026-08-09">Wallet module test audit (2026-08-09)<a class="headerlink" href="#wallet-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Read-only audit of <code>tests/Wallet/</code> (183 PHPUnit tests, 524 assertions, 3 skipped) to identify
-unnecessary/redundant tests that are candidates for later deletion. No <code>src/</code> or <code>tests/</code> file was
-modified. Verdicts follow the project strategy (<code>docs/testing/crud-skeleton-production/TEST_STRATEGY.md</code>
-— one behaviour per primary layer; no controller tests purely for line coverage) and the coverage-campaign
-context (<code>docs/issues/coverage-2026-08-09/README.md</code>, <code>wallet-manage.md</code>).</p>
-<p>Suite state verified: <code>php ./vendor/bin/phpunit tests/Wallet</code> → <code>OK, but there were issues! Tests: 183,
-Assertions: 524, Skipped: 3, Notices: 16</code> (the 16 notices are pre-existing).</p>
-<h2 id="summary-table">Summary — table<a class="headerlink" href="#summary-table" title="Permanent link">&para;</a></h2>
+<h1 id="2026-08-09">钱包模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
+<p>对 <code>tests/Wallet/</code> 进行只读审核（183 个 PHPUnit 测试、524 个断言、3 个跳过）以识别
+不必要/多余的测试是稍后删除的候选者。没有 <code>src/</code> 或 <code>tests/</code> 文件
+已修改。判决遵循项目策略（<code>docs/testing/crud-skeleton-production/TEST_STRATEGY.md</code>
+— 每个主层一个行为；没有纯粹针对线路覆盖的控制器测试）和覆盖范围活动
+上下文（<code>docs/issues/coverage-2026-08-09/README.md</code>、<code>wallet-manage.md</code>）。</p>
+<p>套件状态已验证：<code>php ./vendor/bin/phpunit tests/Wallet</code> → <code>OK, but there were issues! Tests: 183,
+Assertions: 524, Skipped: 3, Notices: 16</code>（16 个通知是预先存在的）。</p>
+<h2 id="_1">摘要 — 表<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Wallet/Entity/WalletTest.php</code></td>
 <td>13</td>
-<td>MIXED — keep constructor defaults, status markers, <code>__toString</code>, money-as-cents conversion; delete trivial accessor round-trips and the duplicate zero-boundary test</td>
+<td>MIXED — 保留构造函数默认值、状态标记、<code>__toString</code>、金钱与美分的转换；删除琐碎的访问器往返和重复的零边界测试</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Entity/WalletTransactionTest.php</code></td>
 <td>17</td>
-<td>MIXED — keep type/status validation, <code>markCompleted</code>/<code>markFailed</code>, one-cent boundary; delete trivial accessors, the tautological UUID test, and the duplicate large-boundary test</td>
+<td>17 MIXED — 保持类型/状态验证，<code>markCompleted</code>/<code>markFailed</code>，一分边界；删除琐碎的访问器、同义反复的 UUID 测试和重复的大边界测试</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Entity/WalletPaymentDeductionTest.php</code></td>
 <td>2</td>
-<td>KEEP — state-machine markers (<code>markApplied/Released/Refunded/Failed</code>) and the invoice-payer constructor guard</td>
+<td>KEEP — 状态机标记 (<code>markApplied/Released/Refunded/Failed</code>) 和发票付款人构造函数守卫</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/WalletServiceTest.php</code></td>
 <td>11</td>
-<td>MIXED — keep <code>reconcile()</code> branch logic (idempotency, <code>skipped_negative</code>); consolidate <code>verifyBalance</code> trio and the defensive-guard pairs</td>
+<td>11 MIXED — 保留 <code>reconcile()</code> 分支逻辑（幂等性，<code>skipped_negative</code>）；巩固<code>verifyBalance</code>三人组和防守-后卫组合</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/WalletServiceCoverageTest.php</code></td>
 <td>2</td>
-<td>DELETE — coverage-chasing of one defensive guard; the two tests duplicate each other</td>
+<td>删除 — 一名防守后卫的追击；这两个测试相互重复</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/TransferServiceTest.php</code></td>
 <td>20</td>
-<td>MIXED — keep all deposit tests (no integration deposit coverage), rollback, EM-closed recovery, lock-ordering; delete transfer guard/happy-path duplicates covered by the Integration suite</td>
+<td>混合 — 保留所有存款测试（无集成存款覆盖）、回滚、EM 封闭恢复、锁定排序；删除集成套件涵盖的转会守卫/快乐路径重复项</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/Payment/WalletGatewayTest.php</code></td>
 <td>10</td>
-<td>MIXED — keep payer/wallet-required and partial-refund tests; delete notify/systemWalletId/full-refund duplicates covered by <code>WalletGatewayIntegrationTest</code></td>
+<td>10混合——保留付款人/钱包要求和部分退款测试；删除 <code>WalletGatewayIntegrationTest</code> 涵盖的 notification/systemWalletId/full-refund 重复项</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/Payment/WalletBalanceAdjustmentProviderTest.php</code></td>
 <td>6</td>
-<td>KEEP — adapter contract (supports/apply/applied/release/refund) with distinct error branches</td>
+<td>KEEP — 具有不同错误分支的适配器合约（支持/应用/应用/发布/退款）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Integration/TransferServiceTest.php</code></td>
 <td>16</td>
-<td>KEEP — primary layer for transfer money movement (persisted-state assertions)</td>
+<td>16 KEEP — 转账资金移动的主要层（持久状态断言）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Integration/WalletApiRegressionTest.php</code></td>
-<td>17 (+9 data sets)</td>
-<td>KEEP — primary HTTP layer (routing, auth, payload, owner scoping, idempotency, fuzz)</td>
+<td>17（+9 个数据集）</td>
+<td>KEEP — 主要 HTTP 层（路由、身份验证、有效负载、所有者范围、幂等性、模糊）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Integration/WalletGatewayIntegrationTest.php</code></td>
 <td>4</td>
-<td>KEEP — primary gateway integration (pay+refund moves funds)</td>
+<td>KEEP — 主要网关集成（支付+退款转移资金）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Integration/WalletPaymentDeductionServiceIntegrationTest.php</code></td>
 <td>12</td>
-<td>KEEP — deduction lifecycle, idempotency, validation branches, failed-transfer marking</td>
+<td>12 KEEP — 推导生命周期、幂等性、验证分支、失败传输标记</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Integration/WalletRepositoryTest.php</code></td>
 <td>9</td>
-<td>KEEP — pessimistic lock + findBy* contract</td>
+<td>KEEP — 悲观锁 + findBy* 合约</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Integration/WalletTransactionRepositoryTest.php</code></td>
 <td>13</td>
-<td>KEEP — repository query contract (minor <code>findPendingEmpty</code>/<code>findByWalletEmpty</code> overlaps noted below)</td>
+<td>KEEP — 存储库查询合约（下面指出了较小的 <code>findPendingEmpty</code>/<code>findByWalletEmpty</code> 重叠）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Controller/Manage/TransferControllerTest.php</code></td>
-<td>22 (3 skipped)</td>
-<td>MIXED — most create/deposit branch tests duplicate the HTTP layer; keep the 3 skipped bug-documentation tests</td>
+<td>22（跳过 3）</td>
+<td>混合 — 大多数创建/存款分支测试重复 HTTP 层；保留 3 个跳过的错误文档测试</td>
 </tr>
 </tbody>
 </table>
-<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
-<p>Critical invariants these tests protect — do not delete:</p>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>这些测试保护的关键不变量 - 不要删除：</p>
 <ul>
-<li><strong>Integer cents / money conversion</strong>: <code>WalletTest::testBalanceAsFloatWithCents</code>, <code>WalletTransactionTest::testAmountBoundaryOneCent</code> (and the large-boundary variant if kept), <code>WalletPaymentDeductionTest</code> amount/currency assertions.</li>
-<li><strong>Idempotency</strong>: <code>Service/TransferServiceTest::testDepositIdempotent</code>, <code>Integration/TransferServiceTest::testIdempotencyByReferenceId</code>, <code>::testSameReferenceIdDifferentParamsReturnsExisting</code>, <code>WalletApiRegressionTest::testTransferApiIdempotency</code>, <code>WalletPaymentDeductionServiceIntegrationTest::testApplyReleaseAndRefundAreIdempotent</code>, <code>::testReleasedDeductionPreventsReapply</code>.</li>
-<li><strong>Optimistic/pessimistic locking &amp; concurrency</strong>: <code>WalletRepositoryTest::testFindByIdForUpdatePessimisticLock</code>, <code>Service/TransferServiceTest::testTransferDeadlockSafeOrder</code> (white-box but protects the no-deadlock invariant), <code>Integration/TransferServiceTest::testConcurrentTransfersDoNotDoubleSpend</code>.</li>
-<li><strong>Transactional rollback / no partial state</strong>: <code>Service/TransferServiceTest::testDepositRollbackOnError</code>, <code>::testDepositEmClosedRecovery</code>, <code>::testTransferEmClosedRecovery</code>, <code>Integration/TransferServiceTest::testBalanceUnchangedAfterFailedTransfer</code>, <code>WalletPaymentDeductionServiceIntegrationTest::testApplyMarksDeductionFailedWhenTransferFails</code>.</li>
-<li><strong>Reconciliation</strong>: <code>WalletServiceTest::testReconcileExcessBalanceByDeposit</code>, <code>::testReconcileNegativeDiffSkipped</code>, <code>::testReconcileIdempotent</code>, <code>::testReconcileMultipleWallets</code>; HTTP <code>UserApiIntegrationTest::testBalanceVerification</code> / <code>::testReconcileAfterDepositProducesZero</code>.</li>
-<li><strong>Skipped tests documenting known bugs (KEEP per campaign rules)</strong>: <code>TransferControllerTest::testCreateActionZeroAmountShouldReportAmountNotPositive</code>, <code>::testDepositActionZeroAmountShouldReportAmountNotPositive</code> (BUG-3 <code>empty()</code>), <code>::testCreateActionIdempotentReplayEchoesStoredAmount</code> (BUG-4). <code>WalletApiRegressionTest::blindTransferProvider</code> <code>'float amount' =&gt; 201</code> also documents BUG-1 truncation.</li>
-<li><strong>Validation guards</strong>: <code>WalletTransactionTest::testConstructorInvalidTypeThrowsException</code>/<code>testSetInvalidStatus</code>/<code>testAllValidTypes</code>/<code>testAllValidStatuses</code>, <code>WalletPaymentDeductionTest::testRequiresInvoicePayer</code>, all <code>WalletPaymentDeductionServiceIntegrationTest</code> validation tests.</li>
-<li><strong>Owner/HTTP scoping</strong>: <code>WalletApiRegressionTest::testAppWalletsAndTransactionsAreScopedToCurrentUser</code>, <code>::testTransferRequiresAuth</code>.</li>
-<li><strong>Full gateway/HTTP money flow</strong>: <code>WalletGatewayIntegrationTest::testWalletPaymentAndRefund</code> (asserts payer and system wallet balances after pay and refund), <code>UserApiIntegrationTest::testDepositFundsToWallet</code>, <code>::testTransferBetweenWallets</code>.</li>
-<li><strong>Unique unit branches without a higher-layer duplicate</strong>: <code>WalletGatewayTest::testPayRequiresPayer</code>/<code>::testRefundRequiresPayer</code>/<code>::testPayRequiresWalletForPayer</code>/<code>::testRefundRequiresWalletForPayer</code>/<code>::testRefundReturnsPartialRefundedStatus</code>; <code>Service/TransferServiceTest::testTransferSourceNotFound</code> (Integration only covers target-not-found); all deposit tests in <code>Service/TransferServiceTest</code>.</li>
+<li><strong>整数美分/货币转换</strong>：<code>WalletTest::testBalanceAsFloatWithCents</code>、<code>WalletTransactionTest::testAmountBoundaryOneCent</code>（以及大边界变体（如果保留））、<code>WalletPaymentDeductionTest</code> 金额/货币断言。</li>
+<li><strong>幂等性</strong>：<code>Service/TransferServiceTest::testDepositIdempotent</code>、<code>Integration/TransferServiceTest::testIdempotencyByReferenceId</code>、<code>::testSameReferenceIdDifferentParamsReturnsExisting</code>、<code>WalletApiRegressionTest::testTransferApiIdempotency</code>、<code>WalletPaymentDeductionServiceIntegrationTest::testApplyReleaseAndRefundAreIdempotent</code>、<code>::testReleasedDeductionPreventsReapply</code>。</li>
+<li><strong>乐观/悲观锁定和并发</strong>：<code>WalletRepositoryTest::testFindByIdForUpdatePessimisticLock</code>、<code>Service/TransferServiceTest::testTransferDeadlockSafeOrder</code>（白盒，但保护无死锁不变式）、<code>Integration/TransferServiceTest::testConcurrentTransfersDoNotDoubleSpend</code>。</li>
+<li><strong>事务回滚/无部分状态</strong>：<code>Service/TransferServiceTest::testDepositRollbackOnError</code>、<code>::testDepositEmClosedRecovery</code>、<code>::testTransferEmClosedRecovery</code>、<code>Integration/TransferServiceTest::testBalanceUnchangedAfterFailedTransfer</code>、<code>WalletPaymentDeductionServiceIntegrationTest::testApplyMarksDeductionFailedWhenTransferFails</code>。</li>
+<li><strong>调节</strong>：<code>WalletServiceTest::testReconcileExcessBalanceByDeposit</code>、<code>::testReconcileNegativeDiffSkipped</code>、<code>::testReconcileIdempotent</code>、<code>::testReconcileMultipleWallets</code>； HTTP <code>UserApiIntegrationTest::testBalanceVerification</code> / <code>::testReconcileAfterDepositProducesZero</code>。</li>
+<li><strong>跳过记录已知错误的测试（根据活动规则保留）</strong>：<code>TransferControllerTest::testCreateActionZeroAmountShouldReportAmountNotPositive</code>、<code>::testDepositActionZeroAmountShouldReportAmountNotPositive</code> (BUG-3 <code>empty()</code>)、<code>::testCreateActionIdempotentReplayEchoesStoredAmount</code> (BUG-4)。 <code>WalletApiRegressionTest::blindTransferProvider</code> <code>'float amount' =&gt; 201</code> 还记录了 BUG-1 截断。</li>
+<li><strong>验证守卫</strong>：<code>WalletTransactionTest::testConstructorInvalidTypeThrowsException</code>/<code>testSetInvalidStatus</code>/<code>testAllValidTypes</code>/<code>testAllValidStatuses</code>、<code>WalletPaymentDeductionTest::testRequiresInvoicePayer</code>、所有<code>WalletPaymentDeductionServiceIntegrationTest</code>验证测试。</li>
+<li><strong>所有者/HTTP 范围</strong>：<code>WalletApiRegressionTest::testAppWalletsAndTransactionsAreScopedToCurrentUser</code>、<code>::testTransferRequiresAuth</code>。</li>
+<li><strong>完整网关/HTTP 资金流</strong>：<code>WalletGatewayIntegrationTest::testWalletPaymentAndRefund</code>（付款和退款后断言付款人和系统钱包余额）、<code>UserApiIntegrationTest::testDepositFundsToWallet</code>、<code>::testTransferBetweenWallets</code>。</li>
+<li><strong>没有高层重复的独特单元分支</strong>：<code>WalletGatewayTest::testPayRequiresPayer</code>/<code>::testRefundRequiresPayer</code>/<code>::testPayRequiresWalletForPayer</code>/<code>::testRefundRequiresWalletForPayer</code>/<code>::testRefundReturnsPartialRefundedStatus</code>； <code>Service/TransferServiceTest::testTransferSourceNotFound</code>（集成仅涵盖目标未找到）； <code>Service/TransferServiceTest</code> 中的所有存款测试。</li>
 </ul>
-<h2 id="delete-candidates-table">DELETE CANDIDATES — table<a class="headerlink" href="#delete-candidates-table" title="Permanent link">&para;</a></h2>
+<h2 id="_3">删除候选人 — 表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2018,39 +2018,39 @@ Assertions: 524, Skipped: 3, Notices: 16</code> (the 16 notices are pre-existing
 </tr>
 </tbody>
 </table>
-<p>关于控制器行的注释：HTTP 测试断言状态代码（以及部分响应主体）；单位
-控制器测试还断言响应包络。仅当 HTTP 层允许时，删除它们才是安全的
-是 API 合约的主要所有者（根据 TEST_STRATEGY）。请参阅合并建议 7。</p>
-<p>较低优先级（留待稍后处理，不建议立即删除）：
-<code>WalletTransactionRepositoryTest::testFindPendingEmpty</code>（与<code>testFindPendingExcludesCompleted</code>重叠），
-<code>WalletRepositoryTest::testFindByUserEmpty</code> / <code>testFindByUserAndCurrencyNotFound</code>（简单的空结果），
-<code>WalletApiRegressionTest::testTransferApiMissingFields</code> （与 <code>blindTransferProvider</code> 缺失字段的情况重叠）。</p>
-<h2 id="_1">合并建议<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Note on the controller rows: the HTTP tests assert status codes (and partly response bodies); the unit
+controller tests additionally assert the response envelope. Deleting them is safe only if the HTTP layer
+is the primary owner of the API contract (per TEST_STRATEGY). See merge suggestion 7.</p>
+<p>Lower-priority (leave for a later pass, not recommended for immediate deletion):
+<code>WalletTransactionRepositoryTest::testFindPendingEmpty</code> (overlaps <code>testFindPendingExcludesCompleted</code>),
+<code>WalletRepositoryTest::testFindByUserEmpty</code> / <code>testFindByUserAndCurrencyNotFound</code> (trivial empty results),
+<code>WalletApiRegressionTest::testTransferApiMissingFields</code> (overlaps <code>blindTransferProvider</code> missing-field cases).</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong><code>WalletServiceCoverageTest</code></strong> — 折叠为单个测试（或删除整个文件；它仅存在于 <code>WalletService.php</code> 的第 148 行）。</li>
-<li><strong><code>WalletServiceTest::testVerifyBalanceMatches</code> / <code>testVerifyBalanceMismatch</code> / <code>testVerifyBalanceZero</code></strong> — 表驱动到一个测试（匹配/不匹配/零行）。</li>
-<li><strong><code>WalletServiceTest::testReconcileEmptyWallets</code> + <code>testReconcileBalancedWallet</code></strong> 和 <strong><code>testReconcileSkipsNonWalletEntities</code> + <code>testReconcileSkipsWalletWithoutId</code></strong> — 将每一对合并到一个表驱动测试中。</li>
-<li><strong><code>WalletTest::testPrePersistWhenCreatedFromReflection</code> + <code>testPrePersistKeepsExistingCreatedAt</code></strong> 和 <strong><code>WalletTransactionTest::testPrePersist</code> + <code>testPrePersistKeepsExisting</code></strong> — 各自合并为一个参数化生命周期测试。</li>
-<li><strong><code>WalletTest::testConstructorCurrencyUppercase</code> + <code>testSetCurrency</code></strong> — 合并（单个大写矩阵）。</li>
-<li><strong><code>Entity</code> 边界测试</strong> — 每个实体保留一美分/浮动边界测试（一美分边界）并删除大值变体；两者都使用相同的 <code>amount/100</code> 行。</li>
-<li><strong><code>TransferControllerTest</code></strong> — 如果 HTTP 套件保留为主要所有者，则将响应信封断言（<code>code</code>/<code>message</code>/<code>data</code> 形状）折叠为 <code>WalletApiRegressionTest</code>/<code>UserApiIntegrationTest</code> 并删除相应的单元测试；仅保留 3 个跳过的错误文档测试。</li>
+<li><strong><code>WalletServiceCoverageTest</code></strong> — collapse to a single test (or delete the whole file; it exists only for line 148 of <code>WalletService.php</code>).</li>
+<li><strong><code>WalletServiceTest::testVerifyBalanceMatches</code> / <code>testVerifyBalanceMismatch</code> / <code>testVerifyBalanceZero</code></strong> — table-drive into one test (matches/mismatch/zero rows).</li>
+<li><strong><code>WalletServiceTest::testReconcileEmptyWallets</code> + <code>testReconcileBalancedWallet</code></strong> and <strong><code>testReconcileSkipsNonWalletEntities</code> + <code>testReconcileSkipsWalletWithoutId</code></strong> — merge each pair into one table-driven test.</li>
+<li><strong><code>WalletTest::testPrePersistWhenCreatedFromReflection</code> + <code>testPrePersistKeepsExistingCreatedAt</code></strong> and <strong><code>WalletTransactionTest::testPrePersist</code> + <code>testPrePersistKeepsExisting</code></strong> — merge into one parameterized lifecycle test each.</li>
+<li><strong><code>WalletTest::testConstructorCurrencyUppercase</code> + <code>testSetCurrency</code></strong> — merge (single uppercasing case matrix).</li>
+<li><strong><code>Entity</code> boundary tests</strong> — keep one cents/float boundary test per entity (one-cent boundary) and drop the large-value variants; both exercise the same <code>amount/100</code> line.</li>
+<li><strong><code>TransferControllerTest</code></strong> — if the HTTP suite is kept as primary owner, fold the response-envelope assertions (<code>code</code>/<code>message</code>/<code>data</code> shape) into <code>WalletApiRegressionTest</code>/<code>UserApiIntegrationTest</code> and delete the corresponding unit tests; retain only the 3 skipped bug-documentation tests.</li>
 </ol>
-<h2 id="_2">验证步骤<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
 <ol>
-<li>在删除任何内容之前确认当前基线：
+<li>Confirm the current baseline before deleting anything:
    <code>cd /Volumes/Nayuki/Development/PHP/crud-skeleton &amp;&amp; /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Wallet</code>
-   预期：<code>Tests: 183, Assertions: 524, Skipped: 3</code>（16 个预先存在的 PHPUnit 通知不相关）。</li>
-<li>执行任何删除操作后，重新运行相同的命令并确认计数下降的数量恰好等于删除的数量
-   不可跳过的测试，并且 <code>Skipped: 3</code> 保持不变（必须保留 3 个错误文档跳过）。</li>
-<li>由于重复是跨层的，因此也运行全套以确保更高层的所有者仍然
-   通过并且在 90% 门以下没有 <code>src/Wallet</code> 线被覆盖：
+   Expected: <code>Tests: 183, Assertions: 524, Skipped: 3</code> (16 pre-existing PHPUnit notices are unrelated).</li>
+<li>After any deletion, re-run the same command and confirm the count drops exactly by the number of removed
+   non-skipped tests and that <code>Skipped: 3</code> is unchanged (the 3 bug-documentation skips must remain).</li>
+<li>Because the duplicates are cross-layer, also run the full suite to ensure the higher-layer owners still
+   pass and that no <code>src/Wallet</code> line becomes uncovered below the 90% gate:
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code></li>
-<li>对于覆盖范围追踪实体（访问器、<code>prePersist</code>、<code>WalletServiceCoverageTest</code>），验证删除
-   不会将 <code>src/Wallet</code> 线路覆盖范围降至门以下：
-   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-html var/coverage</code>。
-   该活动在整个项目范围内达到了 99.46%，具有很大的空间，因此标记的琐碎测试应该是安全的
-   下降；任何意外的下降都应该在做出承诺之前进行审查。
-5、本次审核未发生<code>src/</code>或<code>tests/</code>项下的变更；删除是一项单独的后续任务。</li>
+<li>For the coverage-chasing entities (accessors, <code>prePersist</code>, <code>WalletServiceCoverageTest</code>), verify removal
+   does not drop <code>src/Wallet</code> line coverage below the gate:
+   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-html var/coverage</code>.
+   The campaign reached 99.46% project-wide with large headroom, so the flagged trivial tests should be safe
+   to drop; any surprising dip should be reviewed before committing.</li>
+<li>No changes under <code>src/</code> or <code>tests/</code> were made by this audit; deletion is a separate follow-up task.</li>
 </ol>
 
 
