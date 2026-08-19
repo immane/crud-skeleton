@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2170,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2741,7 +2741,7 @@
 <ul>
 <li><strong>文件/行：</strong> <code>src/Store/Repository/StoreOutboxMessageRepository.php:47-61</code></li>
 <li><strong>描述：</strong> DQL <code>WHERE</code> 仅匹配 <code>id</code> 和 <code>publishedAt IS NULL</code>。它<strong>不需要</strong>需要 <code>availableAt &lt;= :now</code>，因此它不会验证调用者是否仍然拥有 <code>claim()</code> 设置的声明窗口。</li>
-<li><strong>影响：</strong>在多工作人员部署中，工作人员 A 声明消息 M (<code>availableAt = now+1m</code>)，其调度速度很慢（&gt;1 分钟）并随后抛出；同时，工人 B 重新声明了 M。A 的晚期 <code>defer(M)</code> 仍然匹配（M 未发布），因此它递增 <code>attempts</code> 并覆盖 <code>availableAt</code>，破坏 B 的声明状态。重试元数据被损坏，并且消息可能会相对于其真实所有者无序地延迟/重试。</li>
+<li><strong>影响：</strong>在多工作人员部署中，工作人员 A 声明消息 M (<code>availableAt = now+1m</code>)，其调度很慢（&gt;1 分钟）并且稍后抛出；同时，工人 B 重新声明了 M。A 的晚期 <code>defer(M)</code> 仍然匹配（M 未发布），因此它递增 <code>attempts</code> 并覆盖 <code>availableAt</code>，破坏 B 的声明状态。重试元数据被损坏，并且消息可能会相对于其真实所有者无序地延迟/重试。</li>
 <li><strong>复制：</strong> 索赔 M；睡眠 61 秒；工人 B 主张 M（返回 true）；工人 A 的 <code>dispatch</code> 抛出； A 调用 <code>defer(M)</code> — 成功并覆盖 B 的 <code>availableAt</code>。</li>
 <li><strong>建议的修复：</strong> 将 <code>andWhere('message.availableAt &lt;= :now')</code> 添加到 <code>defer()</code> （镜像 <code>claim()</code>），或者要求调用者传递声明的 <code>until</code> 并对其进行匹配。</li>
 </ul>

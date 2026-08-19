@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2170,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2571,7 +2571,7 @@
 
 
 <h1 id="2026-08-09">存储模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
-<p><code>tests/Storage/</code>（<code>Service/</code>、<code>Command/</code>）的只读审核。没有 <code>src/</code> 或
+<p><code>tests/Storage/</code>（<code>Service/</code>、<code>Command/</code>）的只读审计。没有 <code>src/</code> 或
 <code>tests/</code> 文件已修改。跳过记录已知 <code>src/</code> 错误的测试是
 保留（QiniuStorageTest::testDeleteOfPathOutsideConfiguredDomainIsIgnored）。</p>
 <p>参考：<code>docs/issues/coverage-2026-08-09/storage.md</code>（错误#1、#2），
@@ -2653,11 +2653,11 @@
 </tr>
 <tr>
 <td><code>StorageServiceTest::testQiniuStoresAndDeletesWithSdkStubs</code></td>
-<td>Happy-path <code>store()</code> URL 构造、<code>delete()</code> 成功以及裸域 <code>$key === ''</code> 防护 (<code>QiniuStorage.php:47-49</code>) — 最后一个没有涉及其他任何地方。</td>
+<td>Happy-path <code>store()</code> URL 构造、<code>delete()</code> 成功以及裸域 <code>$key === ''</code> 防护 (<code>QiniuStorage.php:47-49</code>) — 最后一个没有涉及到其他地方。</td>
 </tr>
 <tr>
 <td><code>StorageServiceTest::testQiniuStoreAndDeleteErrorsAreReported</code></td>
-<td>独家报道上传/删除错误传播 (<code>QiniuStorage.php:32-34,58-60</code>)。</td>
+<td>唯一报道上传/删除错误传播 (<code>QiniuStorage.php:32-34,58-60</code>)。</td>
 </tr>
 <tr>
 <td><code>QiniuStorageTest::testStoreFallsBackToNameWhenSdkResultHasNoKey</code></td>
@@ -2721,7 +2721,7 @@
 <tr>
 <td><code>QiniuStorageTest::testStoreUsesKeyReturnedBySdk</code></td>
 <td>2 DUPLICATE — <code>$result['key']</code> true-branch + URL 构造 (<code>QiniuStorage.php:36,38</code>);不同的 <code>uploaded-key.png</code> 值仅证明回退测试已经区分的内容，并且分支本身被主进程快乐路径覆盖</td>
-<td>MEDIUM（同一分支，断言值稍强）</td>
+<td>MEDIUM（同一分支，断言值略强）</td>
 <td><code>StorageServiceTest::testQiniuStoresAndDeletesWithSdkStubs</code></td>
 </tr>
 <tr>
@@ -2748,7 +2748,7 @@
 <tbody>
 <tr>
 <td>将 <code>InitQiniuSettingsCommandValuesTest</code> （1 个测试）折叠到 <code>InitQiniuSettingsCommandTest</code> 作为表驱动案例</td>
-<td>相同的命令，相同的装置（<code>EntityManagerInterface</code>/<code>SettingRepository</code> 模拟，<code>CommandTester</code>），相同的 4 设置创建形状。 <code>TEST_STRATEGY.md</code> 明确更喜欢表驱动测试“具有许多等效输入的规则”。删除单测试文件时保留空值分支。</td>
+<td>相同的命令，相同的灯具（<code>EntityManagerInterface</code>/<code>SettingRepository</code> 模拟，<code>CommandTester</code>），相同的 4 设置创建形状。 <code>TEST_STRATEGY.md</code> 明确更喜欢表驱动测试“具有许多等效输入的规则”。删除单测试文件时保留空值分支。</td>
 </tr>
 <tr>
 <td>（可选，较低值）删除 <code>QiniuStorageTest::testStoreUsesKeyReturnedBySdk</code> 后，将 <code>testStoreFallsBackToNameWhenSdkResultHasNoKey</code> 保留为单个 SDK-result-shape 测试</td>

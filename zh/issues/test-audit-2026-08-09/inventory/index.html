@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2170,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2636,7 +2636,7 @@
 <tr>
 <td><code>tests/Inventory/Message/InventoryMessageTest.php</code></td>
 <td>1</td>
-<td>1 删除候选(B1)</td>
+<td>1 删除候选（B1）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandlerIntegrationTest.php</code></td>
@@ -2761,7 +2761,7 @@
 </tr>
 <tr>
 <td><code>Repository/ReservationLineRepositoryTest::testFindAllAndFindByMaterialReturnPersistedLines</code>、<code>::testFindByIdReturnsLineAndUnknownIdReturnsNull</code>、<code>::testRemovePersistedLine</code></td>
-<td>B2 DUPLICATE — <code>RecipeLineRepositoryTest</code> 几乎相同的镜像（任务标记对），相同的继承学说覆盖范围；加B1</td>
+<td>B2 DUPLICATE — <code>RecipeLineRepositoryTest</code> 的几乎相同的镜像（任务标记对），相同的继承学说覆盖范围；加B1</td>
 <td>中</td>
 <td>通过 <code>InventoryServiceTest</code>/<code>InventoryServiceCoverageTest</code>/<code>InventoryReservationRequestedHandlerIntegrationTest</code> 流断言的 ReservationLine 映射</td>
 </tr>
@@ -2775,7 +2775,7 @@
 <td><code>Integration/InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code></td>
 <td>B2 DUPLICATE — 相同的持久结果（<code>status='rejected'</code>、<code>rejectionCode='MATERIAL_INACTIVE'</code>）</td>
 <td>中</td>
-<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code> （通过处理程序进行相同的两个断言）— 保留一层（参见注释）</td>
+<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>（通过处理程序进行相同的两个断言）- 保留一层（参见注释）</td>
 </tr>
 <tr>
 <td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>、<code>::testMissingSpecificationRejectsReservation</code></td>
@@ -2846,23 +2846,23 @@
 <h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>如果 DELETE CANDIDATES 被删除（或根据建议合并）：</p>
 <ol>
-<li>Re-run the Inventory suite and confirm the count drops from 109 by the number of deleted tests and that
-   the suite stays green:
+<li>重新运行 Inventory 套件并确认计数从 109 下降到已删除测试的数量，并且
+   套房保持绿色：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Inventory
 </code></pre></div>
-   (Run integration files individually or in small groups if transient SQLite <code>database is locked</code> /
-   <code>no such table</code> flakes appear — documented in the coverage reports.)</li>
-<li>Confirm the deleted behavior still passes through the surviving covering test listed in the
-   "Covered by" column (run that test file specifically).</li>
-<li>For the repository/controller deletions, confirm no new uncovered lines are introduced in
-   <code>src/Inventory/</code> beyond the known trivial constructor/pass-through lines that the audit deems
-   infrastructure rather than behavior:
+   （如果是瞬态 SQLite <code>database is locked</code> /，则单独运行集成文件或以小组形式运行
+   <code>no such table</code> 出现薄片 - 记录在覆盖率报告中。）</li>
+<li>确认删除的行为仍然通过了表中列出的幸存覆盖测试
+   “覆盖范围”列（专门运行该测试文件）。</li>
+<li>对于存储库/控制器删除，确认没有引入新的未覆盖行
+   <code>src/Inventory/</code> 超出审计认为的已知的简单构造函数/传递行
+   基础设施而不是行为：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-html<span class="w"> </span>var/coverage<span class="w"> </span>tests/Inventory
 </code></pre></div></li>
-<li>Confirm <code>composer phpstan</code> and <code>composer rector:types:check</code> still pass (test deletions should not
-   affect them).</li>
-<li>Do not delete any reservation/stock/ledger behavior or handler idempotency test; those are KEEP per
-   <code>BUSINESS_INVARIANTS.md</code>.</li>
+<li>确认<code>composer phpstan</code>和<code>composer rector:types:check</code>仍然通过（测试删除不应
+   影响他们）。
+5、不要删除任何预留/库存/账本行为或handler幂等性测试；这些是保留的
+   <code>BUSINESS_INVARIANTS.md</code>。</li>
 </ol>
 
 

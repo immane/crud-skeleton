@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -857,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -941,7 +941,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2310,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2399,7 +2399,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2567,7 +2567,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2927,7 +2927,7 @@
 规范版本为<a href="../../design/system-architecture/">docs/design/system-architecture.md</a>；
 该文档就是合同——该页面是面向开发人员的概述。</p>
 <h2 id="_2">模块化整体架构（不是单一存储库）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>该应用程序是<strong>作为一个单元部署的一个 Symfony 应用程序</strong>，其中包含
+<p>该应用程序是 <strong>作为一个单元部署的一个 Symfony 应用程序</strong>，其中包含
 几个独立的业务模块。它故意“不是”多服务
 monorepo：模块共享一个内核、一个 Doctrine EntityManager、一个缓存和
 一辆 Messenger 总线，但它们的行为必须像独立服务一样。</p>
@@ -2940,13 +2940,13 @@ monorepo：模块共享一个内核、一个 Doctrine EntityManager、一个缓�
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌────────────────────────────────────────────────────────────┐
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                     Single application                     │
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   Kernel · config/ · public/ ·  migrations/ ·  tests/      │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  ┌────────┐ ┌─────────┐ ┌────────┐ ┌────────┐ ┌─────────┐   │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  │  Core  │ │ Common  │ │Identity│ │ Trade  │ │  ...    │   │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  ├────────┤ ├─────────┤ ├────────┤ ├────────┤ ├─────────┤   │
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  │ Store  │ │Inventory│ │Payment │ │ Wallet │ │Promotion│   │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  ├────────┤ ├─────────┤ ├────────┤ ├────────┤ ├─────────┤   │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  │Settle  │ │Storage  │ │Wechat  │ │  ...   │ │         │   │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│  └────────┘ └─────────┘ └────────┘ └────────┘ └─────────┘   │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  ┌────────┐ ┌─────────┐ ┌────────┐ ┌────────┐ ┌─────────┐  │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  │  Core  │ │ Common  │ │Identity│ │ Trade  │ │  ...    │  │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  ├────────┤ ├─────────┤ ├────────┤ ├────────┤ ├─────────┤  │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  │ Store  │ │Inventory│ │Payment │ │ Wallet │ │Promotion│  │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  ├────────┤ ├─────────┤ ├────────┤ ├────────┤ ├─────────┤  │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  │Settle  │ │Storage  │ │Wechat  │ │  ...   │ │         │  │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│  └────────┘ └─────────┘ └────────┘ └────────┘ └─────────┘  │
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>└────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h3 id="src"><code>src/</code>下的模块<a class="headerlink" href="#src" title="Permanent link">&para;</a></h3>
@@ -3203,7 +3203,7 @@ JSON 信封、分页和 <code>@display</code>/<code>@expands</code> 响应整形
 <h3 id="_10">发件箱/收件箱模式<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>跨模块写入永远不会同步调用目标模块：</p>
 <ul>
-<li><strong>发件箱</strong> — 每个发布模块都在发件箱中保留自己的 <code>*OutboxMessage</code> 实体
+<li><strong>发件箱</strong> — 每个发布模块都将其自己的 <code>*OutboxMessage</code> 实体保存在
   与变更相同的交易。 <code>scheduler</code> 服务轮询
   <code>app:{module}:outbox:publish</code> 命令（贸易、商店、库存、结算）
   将消息刷新到 Messenger。</li>

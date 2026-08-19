@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2170,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2691,7 +2691,7 @@
 <h3 id="bug-3">Bug 3（中）——自动生成的微信用户身份可能会发生冲突<a class="headerlink" href="#bug-3" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Wechat/Service/WechatAuthService.php</code> — <code>findOrCreateUser()</code> 第 116-119 行。</li>
-<li><strong>描述：</strong>使用从 openid 的 <strong>最后 8 个字符</strong>派生的 <code>username</code>/<code>email</code> 创建新用户：<code>wx_&lt;suffix&gt;</code> / <code>wx_&lt;suffix&gt;@wechat.local</code>（均由 <code>User::setUsername</code>/<code>setEmail</code> 小写）。共享相同 8 字符尾部的不同 openid 会生成相同的用户名/电子邮件。 <code>User</code> 实体对两者（<code>uniq_users_username</code>、<code>uniq_users_email</code>）都有唯一的约束。</li>
+<li><strong>描述：</strong>使用从 openid 的 <strong>最后 8 个字符</strong>派生的 <code>username</code>/<code>email</code> 创建新用户：<code>wx_&lt;suffix&gt;</code> / <code>wx_&lt;suffix&gt;@wechat.local</code>（均由 <code>User::setUsername</code>/<code>setEmail</code> 小写）。共享相同 8 字符尾部的不同 openids 会生成相同的用户名/电子邮件。 <code>User</code> 实体对两者（<code>uniq_users_username</code>、<code>uniq_users_email</code>）都有唯一的约束。</li>
 <li><strong>影响：</strong>大规模（8 个字符的生日悖论，约 6 万用户），使用冲突后缀的第二个新用户登录在 <code>flush()</code> → HTTP 500 期间抛出 <code>UniqueConstraintViolationException</code>，用户无法登录。 <code>WechatUser</code>/<code>User</code> 记录也在强制执行约束之前创建，因此留下了部分写入。</li>
 <li><strong>复制：</strong> 单元级 - 对 <code>findOrCreateUser()</code> 的两次调用，其 openid 仅在最后 8 个字符之外有所不同（例如 <code>aaa...o12345678</code> 与 <code>bbb...o12345678</code>）均派生 <code>wx_o12345678</code>。需要真正的数据库与表面齐平；未添加作为保持套件绿色的测试。</li>
 <li><strong>建议的修复：</strong> 使用完整的 openid （或其哈希值）作为后缀，例如<code>mb_substr($openid, 0, 40)</code> + 清理，或 <code>substr(hash('sha256', $openid), 0, 12)</code>，和/或捕获 <code>UniqueConstraintViolationException</code> 并回退到现有用户。</li>

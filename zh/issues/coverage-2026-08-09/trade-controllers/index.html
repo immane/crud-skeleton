@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2170,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2586,10 +2586,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-dotransitionaction-update" class="md-nav__link">
+  <a href="#bug-2-manage-dotransitionaction-forwards-arbitrary-request-fields-to-update-allowing-order-data-tampering-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 2 — 管理 doTransitionAction 将任意请求字段转发到 update()，允许订单数据篡改（中）
+        Bug 2 — Manage doTransitionAction forwards arbitrary request fields to update(), allowing order-data tampering (MEDIUM)
       
     </span>
   </a>
@@ -2597,10 +2597,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-api" class="md-nav__link">
+  <a href="#bug-3-raw-exception-messages-returned-to-api-clients-low-consistent-with-codebase" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 3 — 返回到 API 客户端的原始异常消息（低/与代码库一致）
+        Bug 3 — Raw exception messages returned to API clients (LOW / consistent with codebase)
       
     </span>
   </a>
@@ -2613,29 +2613,29 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#skipped-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipped items
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-non-bugs-investigated-and-cleared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified NON-bugs (investigated and cleared)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        跳过的项目
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        已验证的非错误（已调查并清除）
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         最终测试运行
@@ -2757,12 +2757,12 @@
 <h2 id="_7">发现错误<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <h3 id="bug-1-submitactionconfirmaction-http-500">Bug 1 - 应用程序 <code>submitAction</code>/<code>confirmAction</code> 让工作流/数据库故障以 HTTP 500（高）的形式出现<a class="headerlink" href="#bug-1-submitactionconfirmaction-http-500" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition()</code>)，由 <code>submitAction</code> (123-132) 和 <code>confirmAction</code> (134-143) 使用。</li>
-<li><strong>描述：</strong> 与 <code>cancelAction</code> (194-202) 和 <code>paymentAction</code> (226-230) 不同，它们将 <code>wrapInTransaction(...)</code>/<code>workflow-&gt;apply(...)</code> 包裹在 <code>try/catch</code> 中并返回 400 警告，<code>applyUserOrderTransition()</code> 在 <code>wrapInTransaction()</code> 内执行转换，<strong>没有 <code>try/catch</code></strong>。任何异常（工作流 <code>NotEnabledTransitionException</code>、数据库故障、侦听器错误）都会从操作中传播出去。</li>
-<li><strong>影响：</strong> 失败的提交/确认返回未处理的异常→ HTTP 500（Symfony 异常处理），而不是同一控制器上的所有其他突变返回一致的 <code>400 {"code":400,"message":...}</code> JSON。 API 客户端看到不一致的合同；在开发中，原始异常可能会暴露。</li>
-<li><strong>复制：</strong>（通过探测测试验证）- 所有者匹配，<code>workflow-&gt;can($order,'submit') === true</code>，然后 <code>workflow-&gt;apply($order,'submit')</code> 抛出。结果：<code>submitAction()</code> <strong>抛出</strong> <code>RuntimeException('submit boom')</code>;同一文件中的 <code>cancelAction()</code>/<code>paymentAction()</code> 对于等效失败返回 400 警告。</li>
-<li><strong>正确行为测试：</strong> <code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> 断言 400 响应；它针对当前代码<strong>失败</strong>，因此<strong>被跳过</strong>（请参阅跳过的项目）。</li>
-<li><strong>建议的修复：</strong>
+<li><strong>File/line:</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition()</code>), used by <code>submitAction</code> (123-132) and <code>confirmAction</code> (134-143).</li>
+<li><strong>Description:</strong> Unlike <code>cancelAction</code> (194-202) and <code>paymentAction</code> (226-230), which wrap <code>wrapInTransaction(...)</code>/<code>workflow-&gt;apply(...)</code> in <code>try/catch</code> and return a 400 warning, <code>applyUserOrderTransition()</code> performs the transition inside <code>wrapInTransaction()</code> with <strong>no <code>try/catch</code></strong>. Any exception (workflow <code>NotEnabledTransitionException</code>, DB failure, listener error) propagates out of the action.</li>
+<li><strong>Impact:</strong> A failed submit/confirm returns an unhandled exception → HTTP 500 (Symfony exception handling) instead of the consistent <code>400 {"code":400,"message":...}</code> JSON every other mutation on the same controller returns. API clients see an inconsistent contract; in dev the raw exception may be exposed.</li>
+<li><strong>Reproduction:</strong> (verified with a probe test) — owner matched, <code>workflow-&gt;can($order,'submit') === true</code>, then <code>workflow-&gt;apply($order,'submit')</code> throws. Result: <code>submitAction()</code> <strong>throws</strong> <code>RuntimeException('submit boom')</code>; <code>cancelAction()</code>/<code>paymentAction()</code> in the same file return a 400 warning for the equivalent failure.</li>
+<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> asserts a 400 response; it <strong>fails</strong> against the current code and is therefore <strong>skipped</strong> (see Skipped items).</li>
+<li><strong>Proposed fix:</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">try {</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    $this-&gt;service-&gt;wrapInTransaction(function () use ($order, $transition) {</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">        $this-&gt;workflow-&gt;apply($order, $transition);</span>
@@ -2773,28 +2773,28 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="x">return $this-&gt;success($order, $successMessage);</span>
 </code></pre></div></li>
 </ul>
-<h3 id="bug-2-dotransitionaction-update">Bug 2 — 管理 <code>doTransitionAction</code> 将任意请求字段转发到 <code>update()</code>，允许订单数据篡改（中）<a class="headerlink" href="#bug-2-dotransitionaction-update" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-manage-dotransitionaction-forwards-arbitrary-request-fields-to-update-allowing-order-data-tampering-medium">Bug 2 — Manage <code>doTransitionAction</code> forwards arbitrary request fields to <code>update()</code>, allowing order-data tampering (MEDIUM)<a class="headerlink" href="#bug-2-manage-dotransitionaction-forwards-arbitrary-request-fields-to-update-allowing-order-data-tampering-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Trade/Controller/Manage/OrderController.php:322-332</code> （特别是 <code>:329</code> <code>$this-&gt;service-&gt;update($entity, $content);</code>）。</li>
-<li><strong>描述：</strong> <code>/do/{transition}</code>端点将<strong>整个解码后的请求正文</strong>传递给<code>OrderService::update()</code>。 <code>BaseServiceMutationTrait::update()</code> (<code>src/Core/Service/Concern/BaseServiceMutationTrait.php:38+</code>) 通过序列化程序 (<code>object_to_populate</code>) 应用实体的<strong>任何可设置属性</strong>，而不仅仅是白名单。相比之下，<code>updateAction()</code> (105-112) 明确限制对 <code>notes</code> 和 <code>metadata</code> 的突变。</li>
-<li><strong>影响：</strong> <code>ROLE_ADMIN</code> 调用者可以改变受保护的订单数据 - 例如<code>totalAmount</code>、<code>currency</code>、<code>paidAt</code>、<code>trackingNumber</code> — 只需将其包含在转换主体中即可：<code>POST /manage/orders/{id}/do/complete {..., "totalAmount": 1}</code> 永久重写订单总数（后面的 <code>workflow-&gt;apply()</code> 仅重写 <code>status</code>）。这绕过了普通更新端点强制执行的字段白名单，并允许转换调用更改定价数据。</li>
-<li><strong>复制：</strong> <code>Order</code> 暴露 <code>totalAmount</code> + <code>setTotalAmount()</code>；在<code>update()</code>中的反射循环之后，剩余的键被反序列化到实体上，因此<code>totalAmount</code>被设置。控制器的 <code>can()</code> 防护在更新之前运行，并且仅检查转换，而不检查有效负载字段。</li>
-<li><strong>正确行为测试：</strong> <code>App\Tests\Trade\Controller\Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> 断言更新负载不包括 <code>totalAmount</code>；它针对当前代码<strong>失败</strong>，因此被<strong>跳过</strong>。</li>
-<li><strong>建议的修复：</strong> 在调用 <code>update()</code>、镜像 <code>updateAction()</code> 之前，将 <code>doTransitionAction</code> 接受的字段（例如 <code>notes</code>、<code>reason</code>、<code>trackingNumber</code>、<code>shippingAddress</code>）列入白名单。此外，首先运行 <code>workflow-&gt;apply()</code>，然后仅保留安全字段，因此状态/总计永远不会通过转换主体被篡改。</li>
+<li><strong>File/line:</strong> <code>src/Trade/Controller/Manage/OrderController.php:322-332</code> (specifically <code>:329</code> <code>$this-&gt;service-&gt;update($entity, $content);</code>).</li>
+<li><strong>Description:</strong> The <code>/do/{transition}</code> endpoint passes the <strong>entire decoded request body</strong> to <code>OrderService::update()</code>. <code>BaseServiceMutationTrait::update()</code> (<code>src/Core/Service/Concern/BaseServiceMutationTrait.php:38+</code>) applies <strong>any settable property</strong> of the entity via the serializer (<code>object_to_populate</code>), not just a whitelist. By contrast, <code>updateAction()</code> (105-112) explicitly restricts mutations to <code>notes</code> and <code>metadata</code>.</li>
+<li><strong>Impact:</strong> A <code>ROLE_ADMIN</code> caller can mutate protected order data — e.g. <code>totalAmount</code>, <code>currency</code>, <code>paidAt</code>, <code>trackingNumber</code> — simply by including it in the transition body: <code>POST /manage/orders/{id}/do/complete {..., "totalAmount": 1}</code> permanently rewrites the order total (the later <code>workflow-&gt;apply()</code> only rewrites <code>status</code>). This bypasses the field whitelist enforced by the ordinary update endpoint and lets a transition call change pricing data.</li>
+<li><strong>Reproduction:</strong> <code>Order</code> exposes <code>totalAmount</code> + <code>setTotalAmount()</code>; after the reflection loop in <code>update()</code>, the remaining keys are deserialized onto the entity, so <code>totalAmount</code> is set. The controller's <code>can()</code> guard runs before the update and only checks the transition, not the payload fields.</li>
+<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Trade\Controller\Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> asserts the update payload excludes <code>totalAmount</code>; it <strong>fails</strong> against the current code and is therefore <strong>skipped</strong>.</li>
+<li><strong>Proposed fix:</strong> whitelist the fields accepted by <code>doTransitionAction</code> (e.g. <code>notes</code>, <code>reason</code>, <code>trackingNumber</code>, <code>shippingAddress</code>) before calling <code>update()</code>, mirroring <code>updateAction()</code>. Additionally, run <code>workflow-&gt;apply()</code> first and then persist only the safe fields, so status/total can never be tampered with through the transition body.</li>
 </ul>
-<h3 id="bug-3-api">Bug 3 — 返回到 API 客户端的原始异常消息（低/与代码库一致）<a class="headerlink" href="#bug-3-api" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-raw-exception-messages-returned-to-api-clients-low-consistent-with-codebase">Bug 3 — Raw exception messages returned to API clients (LOW / consistent with codebase)<a class="headerlink" href="#bug-3-raw-exception-messages-returned-to-api-clients-low-consistent-with-codebase" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> 两个控制器中的每个 <code>catch (\Throwable $e)</code> 块都会逐字返回 <code>$e-&gt;getMessage()</code>：App <code>createAction:81</code>、<code>quoteAction:102</code>、<code>cancelAction:201</code>、<code>paymentAction:229</code>；管理<code>createAction:67</code>、<code>quoteAction:88</code>、<code>payAction:180</code>、<code>paymentAction:205</code>、<code>fulfillAction:231</code>、<code>refundAction:274</code>、<code>doTransitionAction:335</code>。</li>
-<li><strong>描述：</strong> 内部异常消息（数据库约束、钱包/网关内部、序列化器错误）在 <code>message</code> 字段中向 API 客户端公开。</li>
-<li><strong>影响：</strong> 信息泄露/令人困惑的客户端错误。请注意，这是代码库范围内的约定（<code>src/Core/View/*</code> 中存在相同的模式），因此此处仅将其记录为注释，而不将其视为回归。</li>
-<li><strong>建议的修复：</strong> 记录真正的异常并返回稳定的、用户安全的消息（例如 <code>ApiViewMessages::UNKNOWN_ERROR</code> / 现有的 <code>RestController::UNKNOWN_ERROR</code>）。</li>
+<li><strong>File/line:</strong> every <code>catch (\Throwable $e)</code> block in both controllers returns <code>$e-&gt;getMessage()</code> verbatim: App <code>createAction:81</code>, <code>quoteAction:102</code>, <code>cancelAction:201</code>, <code>paymentAction:229</code>; Manage <code>createAction:67</code>, <code>quoteAction:88</code>, <code>payAction:180</code>, <code>paymentAction:205</code>, <code>fulfillAction:231</code>, <code>refundAction:274</code>, <code>doTransitionAction:335</code>.</li>
+<li><strong>Description:</strong> Internal exception messages (DB constraints, wallet/gateway internals, serializer errors) are exposed to API clients in the <code>message</code> field.</li>
+<li><strong>Impact:</strong> Information disclosure / confusing client errors. Note this is a codebase-wide convention (the same pattern exists in <code>src/Core/View/*</code>), so it is recorded here only as a note, not treated as a regression.</li>
+<li><strong>Proposed fix:</strong> log the real exception and return a stable, user-safe message (e.g. <code>ApiViewMessages::UNKNOWN_ERROR</code> / the existing <code>RestController::UNKNOWN_ERROR</code>).</li>
 </ul>
-<h2 id="_8">跳过的项目<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="skipped-items">Skipped items<a class="headerlink" href="#skipped-items" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> — <strong>跳过</strong>，因为它断言正确的行为（提交/确认失败必须返回 400 JSON 警告，如取消/付款），并且根据当前代码（错误 1）将 <strong>失败</strong>。</li>
-<li><code>App\Tests\Trade\Controller\Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> — <strong>跳过</strong>，因为它断言正确的行为（转换体不得改变任意顺序字段），并且根据当前代码（错误 2）将<strong>失败</strong>。</li>
+<li><code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> — <strong>skipped</strong> because it asserts the correct behaviour (submit/confirm failures must return a 400 JSON warning like cancel/payment) and would <strong>fail</strong> against the current code (Bug 1).</li>
+<li><code>App\Tests\Trade\Controller\Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> — <strong>skipped</strong> because it asserts the correct behaviour (transition bodies must not mutate arbitrary order fields) and would <strong>fail</strong> against the current code (Bug 2).</li>
 </ul>
-<h2 id="_9">已验证的非错误（已调查并清除）<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="verified-non-bugs-investigated-and-cleared">Verified NON-bugs (investigated and cleared)<a class="headerlink" href="#verified-non-bugs-investigated-and-cleared" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>管理 <code>refundAction</code> 发票分支 (259-260)</strong> — 它在 <code>refundPayment()</code> 之后返回，而不在控制器中应用 <code>refund</code> 工作流转换。这不是一个错误：<code>InvoiceService::refund()</code> 调度 <code>InvoiceRefundedEvent</code>，<code>Trade\EventListener\OrderInvoiceListener::onInvoiceRefunded()</code> 应用 <code>refund</code> 转换并设置 <code>refundedAt</code>。由现有集成测试<code>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</code>确认（订单以<code>STATUS_REFUNDED</code>结尾）。</li>
 <li><strong>应用 <code>createAction</code> store-context 202 路径</strong> — 订单状态不会保留为普通草稿：<code>OrderService::createOrder()</code> 应用 <code>store_submit</code> 转换并在同一事务 (<code>src/Trade/Service/OrderService.php:111-140</code>) 中记录 <code>trade.order.created.v1</code> 发件箱消息。</li>
@@ -2802,7 +2802,7 @@
 <li><strong><code>doTransitionAction</code> “can() 失败”路径返回 HTTP 200</strong> — 这是由现有集成测试断言的（<code>testOrderCannotCancelAfterPaid</code> 期望 200 + 非零代码），因此这是有意为之。</li>
 <li><strong><code>wrapInTransaction</code> 在 <code>OrderServiceInterface</code> 上的可用性</strong> — 它是一个仅 <code>@method</code> 的声明，因此 <code>createMock()</code> 无法在 PHPUnit 12 下生成它；由于这个原因引入了虚假服务（这是测试基础设施说明，而不是产品错误）。</li>
 </ul>
-<h2 id="_10">最终测试运行<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_8">最终测试运行<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    tests/Trade/Controller/App/OrderControllerTest.php \
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    tests/Trade/Controller/Manage/OrderControllerTest.php --no-coverage

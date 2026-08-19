@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2170,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2541,10 +2541,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2" class="md-nav__link">
+  <a href="#bug-2-" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #2 — 成功发布不会清除以前的失败元数据
+        Bug #2 - 成功发布不会清除以前的失败元数据
       
     </span>
   </a>
@@ -2552,10 +2552,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-envelope-aggregatetype" class="md-nav__link">
+  <a href="#bug-3-latent-envelope-aggregatetype-is-hardcoded-instead-of-read-from-the-entity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #3（潜在）- Envelope aggregateType 是硬编码的，而不是从实体中读取
+        Bug #3 (latent) — Envelope aggregateType is hardcoded instead of read from the entity
       
     </span>
   </a>
@@ -2568,10 +2568,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#observations-not-bugs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        观察结果（不是错误）
+        Observations (not bugs)
       
     </span>
   </a>
@@ -2579,10 +2579,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#skipped-tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        跳过测试
+        Skipped tests
       
     </span>
   </a>
@@ -2701,35 +2701,35 @@
 <li><strong>文件/行：</strong> <code>src/Trade/Command/PublishOutboxCommand.php:36-39</code>（不支持的主题）和<code>:58-60</code>（调度失败）； <code>src/Trade/Repository/TradeOutboxMessageRepository.php:47-61</code> (<code>defer()</code>)。</li>
 <li><strong>描述：</strong> <code>defer()</code>仅守卫<code>publishedAt IS NULL</code>。它总是递增 <code>attempts</code> 并重新安排 <code>availableAt = +5 minutes</code>。没有尝试上限，也没有死信/隔离状态，因此不受支持的主题或永久失败的消息将每隔 5 分钟重新声明并重新推迟一次。</li>
 <li><strong>影响：</strong> <code>attempts</code> 在行上无限增长，消息永远不会离开未发布的集合，并且每次运行都会执行浪费的声明+调度尝试。单个配置错误/拼写错误的主题会永久污染发件箱表和发布循环。</li>
-<li><strong>复制（已验证）：</strong>插入带有 <code>topic = 'trade.custom.topic.v1'</code> 的行；重复运行 <code>app:trade:outbox:publish</code> — 每次运行都会递增 <code>attempts</code> (<code>0 → 1 → 2 → …</code>)、设置 <code>last_error</code>，并且该行永远不会发布或删除。对于任何调度总是抛出异常的主题来说都是如此。</li>
+<li><strong>复制（已验证）：</strong>插入带有 <code>topic = 'trade.custom.topic.v1'</code> 的行；重复运行 <code>app:trade:outbox:publish</code> — 每次运行都会递增 <code>attempts</code> (<code>0 → 1 → 2 → …</code>)，设置 <code>last_error</code>，并且该行永远不会发布或删除。对于任何调度总是抛出异常的主题来说都是如此。</li>
 <li><strong>建议的修复：</strong> 限制尝试（例如，在 <code>attempts &lt; N</code> 时仅使用 <code>defer()</code>，然后将该行移至死信/隔离状态或将其删除），和/或添加 <code>status</code>/<code>dead_lettered</code> 列，以便 <code>findUnpublished()</code> 跳过有害消息。</li>
 </ul>
-<h3 id="bug-2">Bug #2 — 成功发布不会清除以前的失败元数据<a class="headerlink" href="#bug-2" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-">Bug #2 - 成功发布不会清除以前的失败元数据<a class="headerlink" href="#bug-2-" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Trade/Command/PublishOutboxCommand.php:56-57</code> (<code>markPublished()</code> + <code>flush()</code>); <code>src/Trade/Repository/TradeOutboxMessageRepository.php:47-61</code> (<code>defer()</code>); <code>src/Trade/Entity/TradeOutboxMessage.php:73</code> (<code>markPublished()</code>)。</li>
-<li><strong>说明：</strong> <code>claim()</code>/<code>defer()</code> 是绕过工作单元的 DQL 批量更新； <code>markPublished()</code> 仅在内存中设置<code>publishedAt</code>。如果消息失败一次（defer → <code>attempts=1</code>、<code>lastError</code> 设置），并且稍后在重试时成功发布，则该行将使用 <code>published_at</code> 设置写入，但 <strong><code>attempts</code> 和 <code>last_error</code> 仍保留之前的失败</strong> — 不会重置它们。</li>
-<li><strong>影响：</strong>成功交付的事件带有陈旧的、误导性的失败计数器/错误； <code>attempts</code>/<code>last_error</code>（监控、仪表板、协调）的任何使用者都会报告已交付事件的错误失败。</li>
-<li><strong>复制（经过验证的推理，由跳过的测试覆盖）：</strong> 创建一条消息，<code>defer()</code> 它（attempts=1，lastError='realbus down'），然后使用工作总线运行命令 - 已发布的行仍然具有 <code>attempts=1</code> 和 <code>last_error='real bus down'</code>。</li>
-<li><strong>建议的修复：</strong>成功发布时，清除失败状态，例如设置 <code>published_at = now</code>、<code>attempts = 0</code>、<code>last_error = NULL</code> 的存储库 <code>markPublished()</code> （或让实体 <code>markPublished()</code> 重置它们并保持当前基于刷新的流程）。</li>
+<li><strong>File/line:</strong> <code>src/Trade/Command/PublishOutboxCommand.php:56-57</code> (<code>markPublished()</code> + <code>flush()</code>); <code>src/Trade/Repository/TradeOutboxMessageRepository.php:47-61</code> (<code>defer()</code>); <code>src/Trade/Entity/TradeOutboxMessage.php:73</code> (<code>markPublished()</code>).</li>
+<li><strong>Description:</strong> <code>claim()</code>/<code>defer()</code> are DQL bulk updates that bypass the unit of work; <code>markPublished()</code> only sets <code>publishedAt</code> in memory. If a message fails once (defer → <code>attempts=1</code>, <code>lastError</code> set) and is later published successfully on a retry, the row is written with <code>published_at</code> set but <strong><code>attempts</code> and <code>last_error</code> remain from the earlier failure</strong> — nothing ever resets them.</li>
+<li><strong>Impact:</strong> successfully delivered events carry stale, misleading failure counters/errors; any consumer of <code>attempts</code>/<code>last_error</code> (monitoring, dashboards, reconciliation) reports false failures for delivered events.</li>
+<li><strong>Reproduction (verified reasoning, covered by skipped test):</strong> create a message, <code>defer()</code> it (attempts=1, lastError='real bus down'), then run the command with a working bus — the published row still has <code>attempts=1</code> and <code>last_error='real bus down'</code>.</li>
+<li><strong>Proposed fix:</strong> on successful publish, clear the failure state, e.g. a repository <code>markPublished()</code> that sets <code>published_at = now</code>, <code>attempts = 0</code>, <code>last_error = NULL</code> (or have the entity <code>markPublished()</code> reset them and keep the current flush-based flow).</li>
 </ul>
-<h3 id="bug-3-envelope-aggregatetype">Bug #3（潜在）- Envelope <code>aggregateType</code> 是硬编码的，而不是从实体中读取<a class="headerlink" href="#bug-3-envelope-aggregatetype" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-latent-envelope-aggregatetype-is-hardcoded-instead-of-read-from-the-entity">Bug #3 (latent) — Envelope <code>aggregateType</code> is hardcoded instead of read from the entity<a class="headerlink" href="#bug-3-latent-envelope-aggregatetype-is-hardcoded-instead-of-read-from-the-entity" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Trade/Command/PublishOutboxCommand.php:45</code>; <code>src/Trade/Entity/TradeOutboxMessage.php</code>（存储<code>aggregate_type</code>，但公开<strong>没有<code>getAggregateType()</code></strong> getter）。</li>
-<li><strong>描述：</strong> 该命令按字面意义发出 <code>'aggregateType' =&gt; 'trade_order'</code> 而不是 <code>$message-&gt;getAggregateType()</code>。该实体已存储该值（构造函数 arg <code>$aggregateType</code>）。</li>
-<li><strong>影响：</strong> 当前没有运行时影响 — 每个交易发件箱行均记录有 <code>aggregate_type = 'trade_order'</code>（<code>OrderService::createOrder</code> 和 <code>OrderWorkflowListener</code>）。这是一个潜在的一致性差距：当任何生产者记录不同的聚合类型时，发布的信封仍然会声明 <code>trade_order</code>，从而破坏下游信封语义。</li>
-<li><strong>复制：</strong>用<code>'trade_order'</code>以外的任何<code>aggregateType</code>记录一行；观察已发送的 <code>TradeOrderCreatedMessage</code>/<code>TradeOrderCancelledMessage</code> 信封，其中仍载有 <code>'aggregateType' =&gt; 'trade_order'</code>。</li>
-<li><strong>建议的修复：</strong> 将 <code>getAggregateType(): string</code> 添加到 <code>TradeOutboxMessage</code> 并在 <code>PublishOutboxCommand.php:45</code> 中使用它（镜像已经公开 <code>getAggregateType()</code> 等的更丰富的 <code>StoreOutboxMessage</code> API）。</li>
+<li><strong>File/line:</strong> <code>src/Trade/Command/PublishOutboxCommand.php:45</code>; <code>src/Trade/Entity/TradeOutboxMessage.php</code> (stores <code>aggregate_type</code>, but exposes <strong>no <code>getAggregateType()</code></strong> getter).</li>
+<li><strong>Description:</strong> The command emits <code>'aggregateType' =&gt; 'trade_order'</code> literally rather than <code>$message-&gt;getAggregateType()</code>. The entity already stores the value (constructor arg <code>$aggregateType</code>).</li>
+<li><strong>Impact:</strong> No current runtime impact — every Trade outbox row is recorded with <code>aggregate_type = 'trade_order'</code> (<code>OrderService::createOrder</code> and <code>OrderWorkflowListener</code>). It is a latent consistency gap: the moment any producer records a different aggregate type, the published envelope will still claim <code>trade_order</code>, corrupting downstream envelope semantics.</li>
+<li><strong>Reproduction:</strong> record a row with any <code>aggregateType</code> other than <code>'trade_order'</code>; observe the dispatched <code>TradeOrderCreatedMessage</code>/<code>TradeOrderCancelledMessage</code> envelope still carrying <code>'aggregateType' =&gt; 'trade_order'</code>.</li>
+<li><strong>Proposed fix:</strong> add <code>getAggregateType(): string</code> to <code>TradeOutboxMessage</code> and use it at <code>PublishOutboxCommand.php:45</code> (mirroring the richer <code>StoreOutboxMessage</code> API which already exposes <code>getAggregateType()</code> etc.).</li>
 </ul>
-<h2 id="_4">观察结果（不是错误）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="observations-not-bugs">Observations (not bugs)<a class="headerlink" href="#observations-not-bugs" title="Permanent link">&para;</a></h2>
 <ul>
-<li>成功发布后，该行上的 <code>available_at</code> 保留在 <code>claimTime + 1 minute</code> （永远不会重置为 <code>published_at</code>）。无害 — <code>findUnpublished()</code> 首先过滤 <code>published_at IS NULL</code> — 但如果有人在已发布的行上读取 <code>available_at</code>，则会产生轻微误导。</li>
-<li><code>claim()</code> 然后 <code>dispatch()</code> 故意是非原子的（两个查询）。他们之间发生崩溃，1 分钟后重试消息；并发工作线程无法双重发布，因为 <code>claim()</code> 还需要 <code>available_at &lt;= now</code>，这是第一个声明所提出的。由 <code>testClaimReturnsTrueThenPreventsDoubleClaim</code> 验证。</li>
-<li><code>TradeOutboxMessage</code> 缺少其 Store 孪生拥有的几个 getter（<code>getAggregateType</code>、<code>getAvailableAt</code>、<code>getAttempts</code>、<code>getLastError</code>、<code>isPublished</code>）——仅 API 不对称；今天，<code>src/Trade</code> 中没有任何内容可以调用它们。</li>
+<li>After a successful publish, <code>available_at</code> on the row is left at <code>claimTime + 1 minute</code> (never reset to <code>published_at</code>). Harmless — <code>findUnpublished()</code> filters <code>published_at IS NULL</code> first — but slightly misleading if anyone reads <code>available_at</code> on published rows.</li>
+<li><code>claim()</code> then <code>dispatch()</code> are deliberately non-atomic (two queries). A crash between them retries the message after 1 minute; a concurrent worker cannot double-publish because <code>claim()</code> also requires <code>available_at &lt;= now</code>, which the first claim advances. Verified by <code>testClaimReturnsTrueThenPreventsDoubleClaim</code>.</li>
+<li><code>TradeOutboxMessage</code> is missing several getters that its Store twin has (<code>getAggregateType</code>, <code>getAvailableAt</code>, <code>getAttempts</code>, <code>getLastError</code>, <code>isPublished</code>) — API asymmetry only; nothing in <code>src/Trade</code> calls them today.</li>
 </ul>
-<h2 id="_5">跳过测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>TradeOutboxMessageRepositoryTest::testUnsupportedTopicIsEventuallyQuarantined</code> — 断言不受支持的主题停止重试/是死信的正确行为测试。当前实现失败（错误#1：无限制重试），因此 <code>markTestSkipped</code> 保持套件绿色并记录预期的行为/修复。</li>
-<li><code>TradeOutboxMessageRepositoryTest::testSuccessfulPublishClearsPreviousFailureMetadata</code> — 断言先前失败后发布的行具有 <code>attempts = 0</code> 和 <code>last_error = null</code> 的正确行为测试。当前实现失败（Bug #2），因此 <code>markTestSkipped</code> 保持套件绿色并记录预期的行为/修复。</li>
+<li><code>TradeOutboxMessageRepositoryTest::testUnsupportedTopicIsEventuallyQuarantined</code> — correct-behavior test asserting an unsupported topic stops being retried / is dead-lettered. Fails against the current implementation (Bug #1: unbounded retry), so <code>markTestSkipped</code> to keep the suite green and document the expected behaviour/fix.</li>
+<li><code>TradeOutboxMessageRepositoryTest::testSuccessfulPublishClearsPreviousFailureMetadata</code> — correct-behavior test asserting a row published after a prior failure has <code>attempts = 0</code> and <code>last_error = null</code>. Fails against the current implementation (Bug #2), so <code>markTestSkipped</code> to keep the suite green and document the expected behaviour/fix.</li>
 </ul>
 
 
