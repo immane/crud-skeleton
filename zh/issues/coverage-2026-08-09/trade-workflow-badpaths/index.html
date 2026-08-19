@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2552,10 +2552,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#finding-2-orderservicepayrefundfulfill-do-not-apply-the-workflow-transition-low-design-split" class="md-nav__link">
+  <a href="#2-orderservicepayrefundfulfill" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Finding 2 — OrderService::pay/refund/fulfill do not apply the workflow transition (LOW / design split)
+        发现 2 — OrderService::pay/refund/fulfill 不应用工作流程转换（低/设计拆分）
       
     </span>
   </a>
@@ -2563,10 +2563,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#finding-3-dotransitionaction-forwards-arbitrary-request-body-fields-to-update-enabling-order-data-tampering-medium-previously-documented" class="md-nav__link">
+  <a href="#3-dotransitionaction-update" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Finding 3 — doTransitionAction forwards arbitrary request-body fields to update(), enabling order-data tampering (MEDIUM — previously documented)
+        发现 3 — doTransitionAction 将任意请求主体字段转发到 update()，从而实现订单数据篡改（中 — 先前记录）
       
     </span>
   </a>
@@ -2574,10 +2574,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#finding-4-app-submitconfirm-propagate-workflowdb-failures-as-http-500-medium-previously-documented" class="md-nav__link">
+  <a href="#4-submitconfirm-http-500" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Finding 4 — App submit/confirm propagate workflow/DB failures as HTTP 500 (MEDIUM — previously documented)
+        发现 4 — 应用程序 submit/confirm 将工作流/数据库故障传播为 HTTP 500（中 — 先前记录）
       
     </span>
   </a>
@@ -2585,10 +2585,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#finding-5-status-reset-endpoint-is-dead-code-and-would-not-work-on-orders-low" class="md-nav__link">
+  <a href="#5-status-reset" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Finding 5 — status-reset endpoint is dead code and would not work on orders (LOW)
+        发现 5 — status-reset 端点是死代码，无法处理订单（低）
       
     </span>
   </a>
@@ -2796,34 +2796,34 @@
 <h2 id="_5">发现错误<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <h3 id="1-dotransition-">发现 1 — 订单工作流程没有保护规则； <code>/do/{transition}</code> 让管理员无需付费即可运行整个付费生命周期（中-高）<a class="headerlink" href="#1-dotransition-" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>config/packages/workflow.yaml</code> (order section) — no <code>guard:</code> on any transition; <code>src/Trade/Controller/Manage/OrderController.php:308-339</code> (<code>doTransitionAction</code>).</li>
-<li><strong>Description:</strong> The workflow defines arcs only. The installed Symfony Workflow <code>Transition</code> value object no longer has a guard API (<code>vendor/symfony/workflow/Transition.php</code>), so guard expressions are impossible. The only enforcement is <code>OrderService</code> status checks (<code>pay</code> requires <code>confirmed</code>, <code>refund</code> requires <code>completed</code>, <code>fulfill</code> requires <code>paid</code>) plus controller <code>can()</code> calls. The generic <code>POST /manage/orders/{id}/do/{transition}</code> endpoint calls <code>can()</code> only — so a <code>ROLE_ADMIN</code> can move any order <code>draft→paid</code> (<code>do/submit</code>, <code>do/confirm</code>, <code>do/pay</code>), <code>→fulfilled</code>, <code>→completed</code>, <code>→refunded</code> with no wallet, no invoice, and no money movement.</li>
-<li><strong>Impact:</strong> An order can be marked paid/fulfilled/completed/refunded without any actual payment; financial-state integrity depends entirely on every caller remembering to use the wallet endpoints rather than <code>/do</code>. This is the demo script's own happy path (<code>scripts/tests/demo-trade-workflow.php</code> step 1 uses <code>do/pay</code>), so it is intended for demos — but it is a real data-integrity hole for production.</li>
-<li><strong>Reproduction:</strong> <code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code> (passes by design) and <code>OrderWorkflowStateMachineTest::testWorkflowLayerAllowsPayWithoutAmountWalletOrUser</code> (passes — proves no guard).</li>
-<li><strong>Proposed fix:</strong> do not expose money transitions (<code>pay</code>/<code>refund</code>) through <code>/do/{transition}</code> — restrict <code>/do</code> to non-monetary transitions (<code>submit</code>, <code>store_*</code>, <code>confirm</code>, <code>fulfill</code>, <code>complete</code>) or require a payment reference for <code>pay</code>/<code>refund</code>. Alternatively re-add guard expressions as workflow event-listeners/blockers (guards as an API no longer exist in this Symfony version).</li>
+<li><strong>文件/行：</strong> <code>config/packages/workflow.yaml</code>（订单部分）-任何转换上都没有<code>guard:</code>； <code>src/Trade/Controller/Manage/OrderController.php:308-339</code> (<code>doTransitionAction</code>)。</li>
+<li><strong>描述：</strong> 工作流程仅定义圆弧。安装的 Symfony Workflow <code>Transition</code> 值对象不再具有防护 API (<code>vendor/symfony/workflow/Transition.php</code>)，因此防护表达式是不可能的。唯一的强制执行是 <code>OrderService</code> 状态检查（<code>pay</code> 需要 <code>confirmed</code>、<code>refund</code> 需要 <code>completed</code>、<code>fulfill</code> 需要 <code>paid</code>）以及控制器 <code>can()</code> 调用。通用<code>POST /manage/orders/{id}/do/{transition}</code>端点仅调用<code>can()</code> - 因此<code>ROLE_ADMIN</code>可以移动任何订单<code>draft→paid</code>（<code>do/submit</code>，<code>do/confirm</code>，<code>do/pay</code>），<code>→fulfilled</code>，<code>→completed</code>，<code>→refunded</code>，没有钱包，没有发票，也没有资金移动。</li>
+<li><strong>影响：</strong> 订单可以标记为已付款/履行/已完成/退款，而无需任何实际付款；财务状态完整性完全取决于每个调用者记得使用钱包端点，而不是 <code>/do</code>。这是演示脚本自己的快乐路径（<code>scripts/tests/demo-trade-workflow.php</code> 步骤 1 使用 <code>do/pay</code>），因此它旨在用于演示 - 但对于生产而言，它是一个真正的数据完整性漏洞。</li>
+<li><strong>复制：</strong> <code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code>（按设计通过）和<code>OrderWorkflowStateMachineTest::testWorkflowLayerAllowsPayWithoutAmountWalletOrUser</code>（通过-证明没有守卫）。</li>
+<li><strong>建议的修复：</strong> 不要通过 <code>/do/{transition}</code> 公开货币转换 (<code>pay</code>/<code>refund</code>) - 将 <code>/do</code> 限制为非货币转换（<code>submit</code>、<code>store_*</code>、<code>confirm</code>、<code>fulfill</code>、<code>complete</code>）或要求 <code>pay</code>/<code>refund</code> 提供付款参考。或者重新添加守卫表达式作为工作流事件侦听器/阻止程序（守卫作为 API 在此 Symfony 版本中不再存在）。</li>
 </ul>
-<h3 id="finding-2-orderservicepayrefundfulfill-do-not-apply-the-workflow-transition-low-design-split">Finding 2 — OrderService::pay/refund/fulfill do not apply the workflow transition (LOW / design split)<a class="headerlink" href="#finding-2-orderservicepayrefundfulfill-do-not-apply-the-workflow-transition-low-design-split" title="Permanent link">&para;</a></h3>
+<h3 id="2-orderservicepayrefundfulfill">发现 2 — OrderService::pay/refund/fulfill 不应用工作流程转换（低/设计拆分）<a class="headerlink" href="#2-orderservicepayrefundfulfill" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Trade/Service/OrderService.php:146-265</code> (<code>pay</code>, <code>refund</code>, <code>fulfill</code>).</li>
-<li><strong>Description:</strong> These methods validate the current status, perform the wallet transfer / set business fields (<code>paidAt</code>, <code>refundedAt</code>, <code>fulfilledAt</code>, <code>trackingNumber</code>, <code>paymentMethod</code>, <code>refundReason</code>), but <strong>never</strong> call <code>$this-&gt;workflow-&gt;apply(...)</code>. The status change happens only in the controllers (<code>Manage/OrderController::payAction/fulfillAction/refundAction</code> call <code>workflow-&gt;apply()</code> inside <code>wrapInTransaction</code>). <code>OrderWorkflowListener</code> deliberately preserves a pre-set <code>paidAt</code>/<code>fulfilledAt</code>/<code>refundedAt</code> (only sets when null), which confirms the split design.</li>
-<li><strong>Impact:</strong> Any caller that uses <code>OrderService::pay()</code> directly (a future command/worker/saga) will set <code>paidAt</code> while the order stays <code>confirmed</code> — an inconsistent state. The status checks in the methods are the only guard, and they don't protect against a direct caller skipping the transition.</li>
-<li><strong>Reproduction:</strong> unit-level — <code>OrderService::pay()</code> on a confirmed order sets <code>paidAt</code> and leaves <code>status === 'confirmed'</code> (covered by existing <code>OrderServiceTest</code>).</li>
-<li><strong>Proposed fix:</strong> either have <code>OrderService::pay/refund/fulfill</code> apply the matching workflow transition themselves, or document loudly that callers must pair each service call with the workflow transition.</li>
+<li><strong>文件/行：</strong> <code>src/Trade/Service/OrderService.php:146-265</code>（<code>pay</code>、<code>refund</code>、<code>fulfill</code>）。</li>
+<li><strong>描述：</strong>这些方法验证当前状态，执行钱包转账/设置业务字段（<code>paidAt</code>、<code>refundedAt</code>、<code>fulfilledAt</code>、<code>trackingNumber</code>、<code>paymentMethod</code>、<code>refundReason</code>），但<strong>从不</strong>调用<code>$this-&gt;workflow-&gt;apply(...)</code>。状态更改仅发生在控制器中（<code>Manage/OrderController::payAction/fulfillAction/refundAction</code> 在 <code>wrapInTransaction</code> 内调用 <code>workflow-&gt;apply()</code>）。 <code>OrderWorkflowListener</code>特意保留了预设的<code>paidAt</code>/<code>fulfilledAt</code>/<code>refundedAt</code>（仅在为空时设置），这确认了拆分设计。</li>
+<li><strong>影响：</strong> 任何直接使用 <code>OrderService::pay()</code> 的调用者（未来的命令/worker/saga）都将设置 <code>paidAt</code>，而订单保持 <code>confirmed</code> — 不一致的状态。方法中的状态检查是唯一的保护措施，它们不能防止直接调用者跳过转换。</li>
+<li><strong>复制：</strong> 单位级 — 已确认订单上的 <code>OrderService::pay()</code> 设置 <code>paidAt</code> 并留下 <code>status === 'confirmed'</code>（由现有 <code>OrderServiceTest</code> 覆盖）。</li>
+<li><strong>建议的修复：</strong>要么让 <code>OrderService::pay/refund/fulfill</code> 自己应用匹配的工作流转换，要么大声记录调用者必须将每个服务调用与工作流转换配对。</li>
 </ul>
-<h3 id="finding-3-dotransitionaction-forwards-arbitrary-request-body-fields-to-update-enabling-order-data-tampering-medium-previously-documented">Finding 3 — <code>doTransitionAction</code> forwards arbitrary request-body fields to <code>update()</code>, enabling order-data tampering (MEDIUM — previously documented)<a class="headerlink" href="#finding-3-dotransitionaction-forwards-arbitrary-request-body-fields-to-update-enabling-order-data-tampering-medium-previously-documented" title="Permanent link">&para;</a></h3>
+<h3 id="3-dotransitionaction-update">发现 3 — <code>doTransitionAction</code> 将任意请求主体字段转发到 <code>update()</code>，从而实现订单数据篡改（中 — 先前记录）<a class="headerlink" href="#3-dotransitionaction-update" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Trade/Controller/Manage/OrderController.php:329</code>.</li>
-<li><strong>Description:</strong> <code>/do/{transition}</code> passes the whole decoded body to <code>OrderService::update()</code>, which applies any settable property via the serializer (no whitelist, unlike <code>updateAction()</code> which restricts to <code>notes</code>/<code>metadata</code>).</li>
-<li><strong>Impact:</strong> <code>POST /manage/orders/{id}/do/submit {"totalAmount": 1}</code> rewrites the order total; the same holds for <code>currency</code>, <code>paidAt</code>, etc. Bypasses the ordinary update whitelist.</li>
-<li><strong>Reproduction:</strong> <code>OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code> — <strong>skipped</strong> because it asserts the correct behaviour (tampered <code>totalAmount</code> must NOT persist) and currently fails. Full detail in <code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> (Bug 2).</li>
+<li><strong>文件/行：</strong> <code>src/Trade/Controller/Manage/OrderController.php:329</code>。</li>
+<li><strong>描述：</strong> <code>/do/{transition}</code> 将整个解码后的正文传递给 <code>OrderService::update()</code>，它通过序列化程序应用任何可设置的属性（没有白名单，不像 <code>updateAction()</code> 限制为 <code>notes</code>/<code>metadata</code>）。</li>
+<li><strong>影响：</strong> <code>POST /manage/orders/{id}/do/submit {"totalAmount": 1}</code>重写订单总数；对于 <code>currency</code>、<code>paidAt</code> 等也是如此。绕过普通更新白名单。</li>
+<li><strong>复制：</strong> <code>OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code> — <strong>跳过</strong>，因为它断言正确的行为（篡改的 <code>totalAmount</code> 不得持续）并且当前失败。 <code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> 中的完整详细信息（Bug 2）。</li>
 </ul>
-<h3 id="finding-4-app-submitconfirm-propagate-workflowdb-failures-as-http-500-medium-previously-documented">Finding 4 — App <code>submit</code>/<code>confirm</code> propagate workflow/DB failures as HTTP 500 (MEDIUM — previously documented)<a class="headerlink" href="#finding-4-app-submitconfirm-propagate-workflowdb-failures-as-http-500-medium-previously-documented" title="Permanent link">&para;</a></h3>
+<h3 id="4-submitconfirm-http-500">发现 4 — 应用程序 <code>submit</code>/<code>confirm</code> 将工作流/数据库故障传播为 HTTP 500（中 — 先前记录）<a class="headerlink" href="#4-submitconfirm-http-500" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition</code>), used by <code>submitAction</code>/<code>confirmAction</code>.</li>
-<li><strong>Description:</strong> Unlike <code>cancelAction</code>/<code>paymentAction</code> (which <code>try/catch</code> and return 400), <code>applyUserOrderTransition()</code> performs <code>workflow-&gt;apply()</code> inside <code>wrapInTransaction</code> with no <code>catch</code>; a failure escapes as an unhandled 500 instead of the API's <code>400 {code,message}</code> contract.</li>
-<li><strong>Reproduction:</strong> covered conceptually by <code>OrderWorkflowApiTest::testAppSubmitOnAlreadySubmittedOrderIsRejected</code> (guard path returns 400 cleanly) — the 500 path needs a mid-transaction throw and is pinned in <code>tests/Trade/Controller/App/OrderControllerTest.php</code> (skipped correct-behaviour test). Full detail in <code>trade-controllers.md</code> (Bug 1).</li>
+<li><strong>文件/行：</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition</code>)，由 <code>submitAction</code>/<code>confirmAction</code> 使用。</li>
+<li><strong>描述：</strong> 与<code>cancelAction</code>/<code>paymentAction</code>（<code>try/catch</code>并返回400）不同，<code>applyUserOrderTransition()</code>在<code>wrapInTransaction</code>内执行<code>workflow-&gt;apply()</code>，没有<code>catch</code>；失败会作为未处理的 500 转义，而不是 API 的 <code>400 {code,message}</code> 合约。</li>
+<li><strong>复制：</strong> 在概念上由 <code>OrderWorkflowApiTest::testAppSubmitOnAlreadySubmittedOrderIsRejected</code> 覆盖（保护路径干净地返回 400） - 500 路径需要中间事务抛出并固定在 <code>tests/Trade/Controller/App/OrderControllerTest.php</code> 中（跳过正确行为测试）。 <code>trade-controllers.md</code> 中的完整详细信息（Bug 1）。</li>
 </ul>
-<h3 id="finding-5-status-reset-endpoint-is-dead-code-and-would-not-work-on-orders-low">Finding 5 — <code>status-reset</code> endpoint is dead code and would not work on orders (LOW)<a class="headerlink" href="#finding-5-status-reset-endpoint-is-dead-code-and-would-not-work-on-orders-low" title="Permanent link">&para;</a></h3>
+<h3 id="5-status-reset">发现 5 — <code>status-reset</code> 端点是死代码，无法处理订单（低）<a class="headerlink" href="#5-status-reset" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Core/View/WorkflowApiViewMixin.php:104-109</code> (<code>resetMarkingAction</code>)。</li>
 <li><strong>描述：</strong> 没有控制器使用 <code>WorkflowApiViewMixin</code> （由 grep 验证 - 只有 mixin 文件本身及其单元测试引用它），因此 <code>PUT /manage/orders/{id}/status-reset</code> 不是订单控制器上的路由并返回 <strong>404</strong> (<code>OrderWorkflowApiTest::testStatusResetRouteIsNotRegisteredOnOrderControllers</code>)。即使已连接，<code>resetMarkingAction()</code> 也会调用 <code>$entity-&gt;setStatus([])</code> — 一个数组进入 <code>Order::setStatus(string)</code> → <code>TypeError</code> — 并且路由占位符 <code>{id}</code> 与 <code>$entity</code> 参数名称不匹配。 （占位符不匹配已在 <code>docs/issues/coverage-2026-08-09/core-view.md</code> 中标记。）</li>

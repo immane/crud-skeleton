@@ -27,7 +27,7 @@
     
     
       
-        <title>Inventory module test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>库存模块测试审核(2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#inventory-module-test-audit-2026-08-09" class="md-skip">
+        <a href="#2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Inventory module test audit (2026-08-09)
+              库存模块测试审核(2026-08-09)
             
           </span>
         </div>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2496,10 +2496,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Summary
+        总结
       
     </span>
   </a>
@@ -2507,10 +2507,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#keep" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        KEEP
+        保留
       
     </span>
   </a>
@@ -2518,10 +2518,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delete-candidates" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DELETE CANDIDATES
+        删除候选者
       
     </span>
   </a>
@@ -2529,10 +2529,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -2540,10 +2540,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -2570,299 +2570,299 @@
   
 
 
-<h1 id="inventory-module-test-audit-2026-08-09">Inventory module test audit (2026-08-09)<a class="headerlink" href="#inventory-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Scope: <code>tests/Inventory/</code> (19 files, 109 tests). Read-only audit; no <code>src/</code> or <code>tests/</code> file was modified.
-Pre-campaign files (2026-07-26, <code>e9a3594</code>) vs coverage-campaign files (2026-08-09, <code>4c62b5f</code>) were
-distinguished via <code>git log --diff-filter=A</code>. Context: <code>TEST_STRATEGY.md</code>, <code>TEST_MATRIX.md</code>,
-<code>BUSINESS_INVARIANTS.md</code>, <code>docs/issues/coverage-2026-08-09/README.md</code> and the two Inventory module
-reports (<code>inventory-repos-handlers.md</code>, <code>inventory-controllers-service.md</code>).</p>
-<p>No skipped tests exist in this module (all 38 suite-wide skips live elsewhere), so the
-"skipped tests documenting bugs = KEEP" rule does not apply here.</p>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<h1 id="2026-08-09">库存模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
+<p>范围：<code>tests/Inventory/</code>（19 个文件，109 个测试）。只读审核；没有修改 <code>src/</code> 或 <code>tests/</code> 文件。
+活动前文件（2026-07-26，<code>e9a3594</code>）与覆盖活动文件（2026-08-09，<code>4c62b5f</code>）
+通过<code>git log --diff-filter=A</code>来区分。上下文：<code>TEST_STRATEGY.md</code>、<code>TEST_MATRIX.md</code>、
+<code>BUSINESS_INVARIANTS.md</code>、<code>docs/issues/coverage-2026-08-09/README.md</code>以及两个Inventory模块
+报告（<code>inventory-repos-handlers.md</code>、<code>inventory-controllers-service.md</code>）。</p>
+<p>此模块中不存在跳过的测试（所有 38 个套件范围的测试都在其他地方跳过），因此
+“跳过记录错误的测试 = 保留”规则在此不适用。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Inventory/Command/PublishOutboxCommandTest.php</code></td>
 <td>6</td>
-<td>KEEP — merge 3 per-topic tests (C)</td>
+<td>KEEP — 合并 3 个每个主题的测试 (C)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Controller/Manage/RecipeControllerTest.php</code></td>
 <td>7</td>
-<td>KEEP — 1 delete candidate (B1)</td>
+<td>KEEP — 1 删除候选 (B1)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Controller/Manage/StockControllerTest.php</code></td>
 <td>8</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Entity/InventoryDomainEntityTest.php</code></td>
 <td>4</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Entity/InventoryEntityCoverageTest.php</code></td>
 <td>3</td>
-<td>DELETE file — merge 2 survivors (C)</td>
+<td>删除文件 — 合并 2 个幸存者 (C)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Entity/MaterialTest.php</code></td>
 <td>1</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Integration/InventoryMessagingAndApiTest.php</code></td>
 <td>11</td>
-<td>KEEP (critical messaging/idempotency)</td>
+<td>11 KEEP（关键消息传递/幂等性）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Integration/InventoryServiceCoverageTest.php</code></td>
 <td>13</td>
-<td>KEEP — fold into <code>InventoryServiceTest</code> (C)</td>
+<td>保留 — 折叠成 <code>InventoryServiceTest</code> (C)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Integration/InventoryServiceTest.php</code></td>
 <td>9</td>
-<td>KEEP (core stock/ledger/reservation)</td>
+<td>KEEP（核心库存/分类帐/预订）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Message/InventoryMessageTest.php</code></td>
 <td>1</td>
-<td>1 delete candidate (B1)</td>
+<td>1 删除候选（B1）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandlerIntegrationTest.php</code></td>
 <td>3</td>
-<td>KEEP — 1 delete candidate (B2)</td>
+<td>KEEP — 1 删除候选 (B2)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandlerTest.php</code></td>
 <td>8</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationRequestedHandlerIntegrationTest.php</code></td>
 <td>3</td>
-<td>KEEP — 2 delete candidates (B2)</td>
+<td>保留 — 2 删除候选 (B2)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationRequestedHandlerTest.php</code></td>
 <td>12</td>
-<td>KEEP — merge timestamp tests (C)</td>
+<td>12 KEEP — 合并时间戳测试 (C)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Repository/RecipeLineRepositoryTest.php</code></td>
 <td>5</td>
-<td>DELETE file — trivial repo (B1/B2)</td>
+<td>删除文件 — 简单的存储库 (B1/B2)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Repository/ReservationLineRepositoryTest.php</code></td>
 <td>5</td>
-<td>DELETE file — mirror of above (B2)</td>
+<td>删除文件 — 上面 (B2) 的镜像</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Service/QuantityCoverageTest.php</code></td>
 <td>4</td>
-<td>MERGE into <code>QuantityTest</code> (C)</td>
+<td>合并到 <code>QuantityTest</code> (C)</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Service/QuantityTest.php</code></td>
 <td>4</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Service/SpecificationRecipeServiceTest.php</code></td>
 <td>2</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 </tbody>
 </table>
-<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
-<p>Critical behavior that must not be deleted (per <code>TEST_MATRIX.md</code> Inventory row and
-<code>BUSINESS_INVARIANTS.md</code> "Inventory" invariant: ledger-backed non-negative reserved quantities,
-idempotent release):</p>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>不得删除的关键行为（根据 <code>TEST_MATRIX.md</code> 库存行和
+<code>BUSINESS_INVARIANTS.md</code> “库存”不变量：账本支持的非负保留数量，
+幂等发布）：</p>
 <ul>
-<li><code>InventoryServiceTest</code> (all 9): virtual-zero stock, recipe-demand aggregation, expired/unstockable
-  rejection, reservation conflict, out-of-stock, unknown-reservation/stock failures, store-scoped
-  policies + adjustment idempotency, store-UUID boundary, expired-reservation release command.</li>
-<li><code>InventoryMessagingAndApiTest</code> (all 11): management API auth/validation, requested/released
-  message idempotency, outbox publisher success/unsupported/transport-failure/mapping, malformed
-  envelope rejection, release correlation integrity, inbox event-id-payload integrity.</li>
-<li><code>InventoryReservationRequestedHandlerTest</code> and <code>InventoryReservationReleaseRequestedHandlerTest</code>
-  (all validation + idempotent-skip tests): the envelope contract and at-least-once idempotency are
-  the module's core messaging guarantees.</li>
+<li><code>InventoryServiceTest</code>（全部 9 个）：虚拟零库存、配方需求聚合、过期/缺货
+  拒绝、预订冲突、缺货、未知预订/库存失败、商店范围
+  策略+调整幂等性、store-UUID 边界、expired-reservation 释放命令。</li>
+<li><code>InventoryMessagingAndApiTest</code>（全部 11 个）：管理 API 身份验证/验证、请求/发布
+  消息幂等性、发件箱发布者成功/不支持/传输失败/映射、格式错误
+  信封拒绝、释放关联完整性、收件箱事件 ID 有效负载完整性。</li>
+<li><code>InventoryReservationRequestedHandlerTest</code>和<code>InventoryReservationReleaseRequestedHandlerTest</code>
+  （所有验证+幂等跳过测试）：信封合约和至少一次幂等性是
+  该模块的核心消息传递保证。</li>
 <li><code>InventoryReservationReleaseRequestedHandlerIntegrationTest::testReleaseMessageIsIdempotentForSameEventId</code>
-  and <code>testReleaseForAlreadyReleasedReservationIsSilentlyIgnored</code> (double delivery / double release
-  no-op — the documented "release is idempotent" invariant).</li>
+  和<code>testReleaseForAlreadyReleasedReservationIsSilentlyIgnored</code>（双重交付/双重释放
+  no-op — 记录的“发布是幂等的”不变量）。</li>
 <li><code>InventoryReservationRequestedHandlerIntegrationTest::testServiceExceptionPropagatesAndConsumedEventIsRolledBack</code>
-  (consumed-event rollback on service failure — regression for <code>inventory-repos-handlers</code> Bug #3 EM-close finding).</li>
-<li><code>InventoryServiceCoverageTest</code> failure/idempotency paths that are NOT duplicated elsewhere:
-  <code>testAdjustStockRejectsZeroQuantityOrEmptyReason</code>, <code>testAdjustStockWithLedgerButMissingStockBalanceFails</code>,
-  <code>testAdjustStockAppliesNegativePolicyToExistingStock</code>, <code>testAdjustStockBelowConfirmedReservationsIsRejected</code>,
-  <code>testSetStockAllowNegativeRejectsMissingMaterialInBothBranches</code>, <code>testSetStockAllowNegativeUpdatesExistingStock</code>,
-  <code>testReserveRejectsStoreOrderAlreadyReserved</code>, <code>testReleaseRejectsReservationWithMissingMaterial</code>,
-  <code>testReleaseRejectsReservationWithMissingStock</code> (documents <code>inventory-controllers-service</code> Bug #4),
-  <code>testReserveRejectsEmptyItemList</code>, <code>testReserveRejectsDuplicateLineIds</code>.</li>
-<li><code>StockControllerTest</code> (all 8) and <code>RecipeControllerTest</code> (6 of 7): real HTTP-status/payload-validation
-  contracts with exact error messages; the HTTP layer in <code>InventoryMessagingAndApiTest</code> only asserts status
-  codes, so the unit assertions are not redundant.</li>
-<li><code>SpecificationRecipeServiceTest</code> (both): duplicate-specification and missing/inactive-material guards
-  against the real DB.</li>
-<li><code>InventoryDomainEntityTest</code>, <code>MaterialTest</code>, <code>QuantityTest</code>: original entity/quantity unit behavior.</li>
+  （服务失败时消费事件回滚 - <code>inventory-repos-handlers</code> Bug #3 EM-close 发现的回归）。</li>
+<li><code>InventoryServiceCoverageTest</code> 不在其他地方重复的失败/幂等路径：
+  <code>testAdjustStockRejectsZeroQuantityOrEmptyReason</code>、<code>testAdjustStockWithLedgerButMissingStockBalanceFails</code>、
+  <code>testAdjustStockAppliesNegativePolicyToExistingStock</code>、<code>testAdjustStockBelowConfirmedReservationsIsRejected</code>、
+  <code>testSetStockAllowNegativeRejectsMissingMaterialInBothBranches</code>，<code>testSetStockAllowNegativeUpdatesExistingStock</code>，
+  <code>testReserveRejectsStoreOrderAlreadyReserved</code>、<code>testReleaseRejectsReservationWithMissingMaterial</code>、
+  <code>testReleaseRejectsReservationWithMissingStock</code> （文档 <code>inventory-controllers-service</code> Bug #4），
+  <code>testReserveRejectsEmptyItemList</code>、<code>testReserveRejectsDuplicateLineIds</code>。</li>
+<li><code>StockControllerTest</code>（全部 8 个）和 <code>RecipeControllerTest</code>（7 个中的 6 个）：真实 HTTP 状态/有效负载验证
+  具有准确错误消息的合同； <code>InventoryMessagingAndApiTest</code> 中的 HTTP 层仅断言状态
+  代码，因此单元断言不是多余的。</li>
+<li><code>SpecificationRecipeServiceTest</code>（两者）：重复规格和缺失/非活动材料防护
+  与真实的数据库相对应。</li>
+<li><code>InventoryDomainEntityTest</code>、<code>MaterialTest</code>、<code>QuantityTest</code>：原始实体/数量单位行为。</li>
 </ul>
-<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File::method</th>
-<th>Reason</th>
-<th>Confidence</th>
-<th>Covered by</th>
+<th>文件::方法</th>
+<th>原因</th>
+<th>信心</th>
+<th>涵盖范围</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Entity/InventoryEntityCoverageTest::testReservationExposesNullDatabaseIdBeforePersist</code></td>
-<td>B1 COVERAGE-CHASING — pure getter passthrough + <code>getId()===null</code> on an object never persisted; tautological</td>
-<td>HIGH</td>
-<td><code>Entity/InventoryDomainEntityTest::testReservationAndRecipeStateTransitions</code> already asserts <code>getUuid()/getStoreUuid()/getTradeOrderUuid()/getStoreOrderUuid()/getRequestHash()/getLines()</code> with identical values</td>
+<td>B1 COVERAGE-CHASING — 对象上的纯 getter 直通 + <code>getId()===null</code> 从未持久化；同义反复</td>
+<td>高</td>
+<td><code>Entity/InventoryDomainEntityTest::testReservationAndRecipeStateTransitions</code> 已断言 <code>getUuid()/getStoreUuid()/getTradeOrderUuid()/getStoreOrderUuid()/getRequestHash()/getLines()</code> 具有相同的值</td>
 </tr>
 <tr>
 <td><code>Controller/Manage/RecipeControllerTest::testCreateHooksUsedByCreateModeReturnPassThroughValues</code></td>
-<td>B1 COVERAGE-CHASING — reflection-invokes three trivial pass-through hooks (<code>defaultCreateValues</code>, <code>processCreateContent</code>, <code>afterCreated</code>) that are unreachable in this controller's own flow; created solely to cover lines 35/44/49</td>
-<td>HIGH</td>
-<td>none (behavior is a no-op passthrough; <code>inventory-controllers-service.md</code> admits reflection is the only way to exercise it)</td>
+<td>B1 COVERAGE-CHASING — 反射调用三个简单的直通钩子（<code>defaultCreateValues</code>、<code>processCreateContent</code>、<code>afterCreated</code>），这些钩子在此控制器自己的流中是无法访问的；专为涵盖第 35/44/49 行而创建</td>
+<td>高</td>
+<td>无（行为是无操作直通；<code>inventory-controllers-service.md</code> 承认反射是执行它的唯一方法）</td>
 </tr>
 <tr>
 <td><code>Repository/RecipeLineRepositoryTest::testRepositoryIsInstantiatedByTheContainer</code></td>
-<td>B1 COVERAGE-CHASING — asserts container instantiation + <code>getClassName()</code> of a <code>ServiceEntityRepository</code> subclass whose only code is <code>parent::__construct()</code> (line 16)</td>
-<td>HIGH</td>
-<td>the <code>find*</code> assertions in the rest of the file / integration tests already instantiate it; the constructor line is infrastructure, not behavior</td>
+<td>B1 COVERAGE-CHASING — 断言容器实例化 + <code>ServiceEntityRepository</code> 子类的 <code>getClassName()</code>，其唯一代码是 <code>parent::__construct()</code>（第 16 行）</td>
+<td>高</td>
+<td>文件其余部分/集成测试中的 <code>find*</code> 断言已经实例化它；构造函数线是基础设施，而不是行为</td>
 </tr>
 <tr>
 <td><code>Repository/ReservationLineRepositoryTest::testRepositoryIsInstantiatedByTheContainer</code></td>
-<td>B1 COVERAGE-CHASING — identical situation for the mirror repository</td>
-<td>HIGH</td>
-<td>same as above</td>
+<td>B1 覆盖率追踪 — 镜像存储库的情况相同</td>
+<td>高</td>
+<td>同上</td>
 </tr>
 <tr>
-<td><code>Repository/RecipeLineRepositoryTest::testFindAllReturnsPersistedLines</code>, <code>::testFindByIdReturnsLineAndUnknownIdReturnsNull</code>, <code>::testRemovePersistedLine</code></td>
-<td>B1 COVERAGE-CHASING — stock inherited Doctrine CRUD (<code>findAll</code>/<code>find</code>/<code>remove</code>) on a repository with no custom query methods; nothing project-specific is asserted</td>
-<td>MEDIUM</td>
-<td>RecipeLine mapping (quantity/sort/recipe) is already exercised by <code>InventoryServiceTest::testRecipeReservationAggregatesMaterialDemandAndReleaseIsIdempotent</code>, <code>InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code>, <code>SpecificationRecipeServiceTest</code>, and the handler integration tests</td>
+<td><code>Repository/RecipeLineRepositoryTest::testFindAllReturnsPersistedLines</code>、<code>::testFindByIdReturnsLineAndUnknownIdReturnsNull</code>、<code>::testRemovePersistedLine</code></td>
+<td>B1 COVERAGE-CHASING — 在存储库上继承了 Doctrine CRUD (<code>findAll</code>/<code>find</code>/<code>remove</code>)，没有自定义查询方法；没有任何特定于项目的断言</td>
+<td>中</td>
+<td>RecipeLine 映射（数量/排序/配方）已由 <code>InventoryServiceTest::testRecipeReservationAggregatesMaterialDemandAndReleaseIsIdempotent</code>、<code>InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code>、<code>SpecificationRecipeServiceTest</code> 和处理程序集成测试执行</td>
 </tr>
 <tr>
-<td><code>Repository/ReservationLineRepositoryTest::testFindAllAndFindByMaterialReturnPersistedLines</code>, <code>::testFindByIdReturnsLineAndUnknownIdReturnsNull</code>, <code>::testRemovePersistedLine</code></td>
-<td>B2 DUPLICATE — near-identical mirror of <code>RecipeLineRepositoryTest</code> (task-flagged pair), same inherited-Doctrine coverage; plus B1</td>
-<td>MEDIUM</td>
-<td>ReservationLine mapping asserted via <code>InventoryServiceTest</code>/<code>InventoryServiceCoverageTest</code>/<code>InventoryReservationRequestedHandlerIntegrationTest</code> flows</td>
+<td><code>Repository/ReservationLineRepositoryTest::testFindAllAndFindByMaterialReturnPersistedLines</code>、<code>::testFindByIdReturnsLineAndUnknownIdReturnsNull</code>、<code>::testRemovePersistedLine</code></td>
+<td>B2 DUPLICATE — <code>RecipeLineRepositoryTest</code> 的几乎相同的镜像（任务标记对），相同的继承学说覆盖范围；加B1</td>
+<td>中</td>
+<td>通过 <code>InventoryServiceTest</code>/<code>InventoryServiceCoverageTest</code>/<code>InventoryReservationRequestedHandlerIntegrationTest</code> 流断言的 ReservationLine 映射</td>
 </tr>
 <tr>
 <td><code>Integration/InventoryServiceCoverageTest::testAdjustStockIsIdempotentForRepeatedReference</code></td>
-<td>B2 DUPLICATE — same reference-id idempotency through <code>adjustStock</code></td>
-<td>MEDIUM</td>
-<td><code>InventoryServiceTest::testStockPoliciesAndAdjustmentIdempotencyAreScopedToStore</code> (adjust with <code>'same-reference'</code> returns unchanged balance)</td>
+<td>B2 DUPLICATE — 通过 <code>adjustStock</code> 具有相同的引用 ID 幂等性</td>
+<td>中</td>
+<td><code>InventoryServiceTest::testStockPoliciesAndAdjustmentIdempotencyAreScopedToStore</code>（使用<code>'same-reference'</code>调整返回未更改的余额）</td>
 </tr>
 <tr>
 <td><code>Integration/InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code></td>
-<td>B2 DUPLICATE — identical persisted outcome (<code>status='rejected'</code>, <code>rejectionCode='MATERIAL_INACTIVE'</code>)</td>
-<td>MEDIUM</td>
-<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code> (same two asserts through the handler) — keep ONE layer (see note)</td>
+<td>B2 DUPLICATE — 相同的持久结果（<code>status='rejected'</code>、<code>rejectionCode='MATERIAL_INACTIVE'</code>）</td>
+<td>中</td>
+<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>（通过处理程序进行相同的两个断言）- 保留一层（参见注释）</td>
 </tr>
 <tr>
-<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>, <code>::testMissingSpecificationRejectsReservation</code></td>
-<td>B2 DUPLICATE — handler-layer re-test of service outcomes</td>
-<td>MEDIUM</td>
-<td><code>Integration/InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code> (MATERIAL_INACTIVE) and <code>Integration/InventoryServiceTest::testReservationRejectsExpiredAndUnstockableRequests</code> (SPECIFICATION_NOT_STOCKABLE) assert the identical <code>getStatus()</code>/<code>getRejectionCode()</code></td>
+<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>、<code>::testMissingSpecificationRejectsReservation</code></td>
+<td>B2 DUPLICATE — 服务结果的处理程序层重新测试</td>
+<td>中</td>
+<td><code>Integration/InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code> (MATERIAL_INACTIVE) 和 <code>Integration/InventoryServiceTest::testReservationRejectsExpiredAndUnstockableRequests</code> (SPECIFICATION_NOT_STOCKABLE) 断言相同的 <code>getStatus()</code>/<code>getRejectionCode()</code></td>
 </tr>
 <tr>
 <td><code>MessageHandler/InventoryReservationReleaseRequestedHandlerIntegrationTest::testReleaseForUnknownReservationThrows</code></td>
-<td>B2 DUPLICATE — unknown-reservation release failure</td>
-<td>MEDIUM</td>
-<td><code>Integration/InventoryServiceTest::testUnknownReservationAndStockViewsFailExplicitly</code> (release of unknown id throws <code>InvalidArgumentException</code>); handler wiring for release already covered by the other two tests in the file</td>
+<td>B2 DUPLICATE — 未知预订释放失败</td>
+<td>中</td>
+<td><code>Integration/InventoryServiceTest::testUnknownReservationAndStockViewsFailExplicitly</code>（释放未知id会抛出<code>InvalidArgumentException</code>）；文件中的其他两个测试已经涵盖了用于发布的处理程序接线</td>
 </tr>
 <tr>
 <td><code>Service/QuantityCoverageTest::testRejectsLeadingZeroVariantsThroughNormalize</code></td>
-<td>B1 COVERAGE-CHASING — 2 of 3 asserts are identity assertions (<code>'-0.500000'→'-0.500000'</code>, <code>'0.000000'→'0.000000'</code>); only the <code>'+00000012.34'</code> leading-zero case adds value</td>
-<td>MEDIUM</td>
-<td><code>Service/QuantityTest::testNormalizesAndAddsSignedQuantities</code> already asserts <code>normalize('00012.34')==='12.340000'</code> (same padding/trim branch)</td>
+<td>B1 覆盖范围追踪 — 3 个断言中有 2 个是身份断言（<code>'-0.500000'→'-0.500000'</code>、<code>'0.000000'→'0.000000'</code>）；只有 <code>'+00000012.34'</code> 前导零的情况会增加价值</td>
+<td>中</td>
+<td><code>Service/QuantityTest::testNormalizesAndAddsSignedQuantities</code> 已断言 <code>normalize('00012.34')==='12.340000'</code> （相同的填充/修剪分支）</td>
 </tr>
 <tr>
 <td><code>Message/InventoryMessageTest::testMessagesExposeTheirEnvelope</code></td>
-<td>B1 COVERAGE-CHASING — one test asserting three message classes store-and-return the constructor arg (tautological)</td>
-<td>MEDIUM</td>
-<td>message classes are already constructed with real envelopes in <code>Command/PublishOutboxCommandTest</code> and the handler unit/integration tests</td>
+<td>B1 覆盖率追踪 — 一项测试断言三个消息类存储并返回构造函数 arg（同义反复）</td>
+<td>中</td>
+<td>消息类已使用 <code>Command/PublishOutboxCommandTest</code> 中的真实信封和处理程序单元/集成测试构建而成</td>
 </tr>
 </tbody>
 </table>
-<p>Note on the two MATERIAL_INACTIVE tests (<code>InventoryServiceCoverageTest</code> vs request-handler integration):
-they assert byte-identical outcomes, so only one layer is needed. Prefer keeping the <strong>service-level</strong> test
-(<code>testReserveRejectsInactiveRecipeMaterial</code>, more direct) and deleting the handler-layer duplicates, since
-<code>InventoryMessagingAndApiTest::testRequestedAndReleasedMessagesAreIdempotent</code> already proves the handler
-delivers request → reservation persistence.</p>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<p>请注意两个 MATERIAL_INACTIVE 测试（<code>InventoryServiceCoverageTest</code> 与请求处理程序集成）：
+它们断言字节相同的结果，因此只需要一层。更喜欢保留<strong>服务级别</strong>测试
+（<code>testReserveRejectsInactiveRecipeMaterial</code>，更直接）并删除处理程序层重复项，因为
+<code>InventoryMessagingAndApiTest::testRequestedAndReleasedMessagesAreIdempotent</code>已经证明了处理程序
+发送请求 → 保留保留。</p>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Merge</th>
-<th>Rationale</th>
+<th>合并</th>
+<th>理由</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>Entity/InventoryEntityCoverageTest</code> → into <code>Entity/InventoryDomainEntityTest</code> + <code>Entity/MaterialTest</code></td>
-<td>Delete the file; <code>testStockRejectsDisablingNegativePolicyWhileBalanceNegative</code> (entity-level negative-policy guard) belongs in <code>InventoryDomainEntityTest</code> next to its stock-lifecycle test; <code>testMaterialSettersRejectBlankRequiredFields</code> (blank code/name/unit validation) belongs in <code>MaterialTest</code>.</td>
+<td><code>Entity/InventoryEntityCoverageTest</code> → 进入 <code>Entity/InventoryDomainEntityTest</code> + <code>Entity/MaterialTest</code></td>
+<td>删除文件； <code>testStockRejectsDisablingNegativePolicyWhileBalanceNegative</code>（实体级负面政策防护）属于<code>InventoryDomainEntityTest</code>，紧邻其库存生命周期测试； <code>testMaterialSettersRejectBlankRequiredFields</code>（空白代码/名称/单位验证）属于<code>MaterialTest</code>。</td>
 </tr>
 <tr>
-<td><code>Service/QuantityCoverageTest</code> → into <code>Service/QuantityTest</code></td>
-<td>Same target class; keep <code>testRejectsMalformedQuantityStrings</code>, <code>testRejectsNonPositiveQuantityWhenPositiveRequired</code>, <code>testSmallMultiplicationsKeepExactScale</code> inside <code>QuantityTest</code> (table-driven, per <code>TEST_STRATEGY.md</code> maintenance rule) and drop the standalone coverage file.</td>
+<td><code>Service/QuantityCoverageTest</code> → 进入<code>Service/QuantityTest</code></td>
+<td>目标类别相同；将 <code>testRejectsMalformedQuantityStrings</code>、<code>testRejectsNonPositiveQuantityWhenPositiveRequired</code>、<code>testSmallMultiplicationsKeepExactScale</code> 保留在 <code>QuantityTest</code> 内（表驱动，根据 <code>TEST_STRATEGY.md</code> 维护规则）并删除独立覆盖文件。</td>
 </tr>
 <tr>
-<td><code>Integration/InventoryServiceCoverageTest</code> → fold into <code>Integration/InventoryServiceTest</code></td>
-<td>Twin files for the same service (task-flagged pair). Consolidate to a single owning integration test; keep every non-duplicated failure/idempotency test.</td>
+<td><code>Integration/InventoryServiceCoverageTest</code> → 折叠成 <code>Integration/InventoryServiceTest</code></td>
+<td>同一服务的孪生文件（任务标记对）。整合为单一拥有的集成测试；保留每个非重复的失败/幂等性测试。</td>
 </tr>
 <tr>
-<td><code>Repository/RecipeLineRepositoryTest</code> + <code>Repository/ReservationLineRepositoryTest</code> → one merged <code>LineRepositoryTest</code> (or delete both)</td>
-<td>Both repositories contain zero custom query logic (only a constructor). If kept, merge into a single file and keep only the mapping-relevant assertions (<code>findOneByMaterial</code>/<code>findByRecipe</code> for RecipeLine; <code>findByReservation</code> for ReservationLine); drop findAll/find/remove noise.</td>
+<td><code>Repository/RecipeLineRepositoryTest</code> + <code>Repository/ReservationLineRepositoryTest</code> → 合并一个<code>LineRepositoryTest</code>（或删除两者）</td>
+<td>两个存储库都包含零自定义查询逻辑（仅一个构造函数）。如果保留，则合并到单个文件中，并仅保留与映射相关的断言（对于 RecipeLine 为 <code>findOneByMaterial</code>/<code>findByRecipe</code>；对于 ReservationLine 为 <code>findByReservation</code>）；删除 findAll/查找/删除噪音。</td>
 </tr>
 <tr>
-<td><code>Command/PublishOutboxCommandTest</code> → merge <code>testPublishesConfirmedMessageAndMarksPublished</code>, <code>testPublishesRejectedMessageAndMarksPublished</code>, <code>testPublishesReleasedMessageAndMarksPublished</code> into one table-driven test</td>
-<td>Three near-identical per-topic tests for the <code>match()</code> mapping; the published-vs-deferred outcome is already asserted at integration level by <code>InventoryMessagingAndApiTest::testOutboxPublisherMarksKnownTopicPublished</code> / <code>::testOutboxPublisherMapsEveryInventoryOutcome</code>.</td>
+<td><code>Command/PublishOutboxCommandTest</code> → 将 <code>testPublishesConfirmedMessageAndMarksPublished</code>、<code>testPublishesRejectedMessageAndMarksPublished</code>、<code>testPublishesReleasedMessageAndMarksPublished</code> 合并到一个表驱动测试</td>
+<td>针对 <code>match()</code> 映射的三个几乎相同的每个主题测试；已发布与延迟的结果已由 <code>InventoryMessagingAndApiTest::testOutboxPublisherMarksKnownTopicPublished</code> / <code>::testOutboxPublisherMapsEveryInventoryOutcome</code> 在集成级别断言。</td>
 </tr>
 <tr>
-<td><code>MessageHandler/InventoryReservationRequestedHandlerTest</code> → merge <code>testRejectsTimestampThatDoesNotMatchIso8601</code>, <code>testRejectsImpossibleCalendarDate</code>, <code>testRejectsShortFractionalTimestampWithImpossibleDate</code>, <code>testRejectsExpiryBeforeOrEqualToRequestTime</code> into one table-driven timestamp test</td>
-<td>Same guard (<code>parseDate</code> + expiry order) with four near-identical setups; <code>TEST_STRATEGY.md</code> prefers table-driven tests for a rule with many equivalent inputs.</td>
+<td><code>MessageHandler/InventoryReservationRequestedHandlerTest</code> → 将 <code>testRejectsTimestampThatDoesNotMatchIso8601</code>、<code>testRejectsImpossibleCalendarDate</code>、<code>testRejectsShortFractionalTimestampWithImpossibleDate</code>、<code>testRejectsExpiryBeforeOrEqualToRequestTime</code> 合并到一个表驱动的时间戳测试中</td>
+<td>相同的保护（<code>parseDate</code> + 到期指令）具有四个几乎相同的设置； <code>TEST_STRATEGY.md</code> 更喜欢对具有许多等效输入的规则进行表驱动测试。</td>
 </tr>
 </tbody>
 </table>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>If the DELETE CANDIDATES are removed (or merged per the suggestions):</p>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>如果 DELETE CANDIDATES 被删除（或根据建议合并）：</p>
 <ol>
-<li>Re-run the Inventory suite and confirm the count drops from 109 by the number of deleted tests and that
-   the suite stays green:
+<li>重新运行 Inventory 套件并确认计数从 109 下降到已删除测试的数量，并且
+   套房保持绿色：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Inventory
 </code></pre></div>
-   (Run integration files individually or in small groups if transient SQLite <code>database is locked</code> /
-   <code>no such table</code> flakes appear — documented in the coverage reports.)</li>
-<li>Confirm the deleted behavior still passes through the surviving covering test listed in the
-   "Covered by" column (run that test file specifically).</li>
-<li>For the repository/controller deletions, confirm no new uncovered lines are introduced in
-   <code>src/Inventory/</code> beyond the known trivial constructor/pass-through lines that the audit deems
-   infrastructure rather than behavior:
+   （如果是瞬态 SQLite <code>database is locked</code> /，则单独运行集成文件或以小组形式运行
+   <code>no such table</code> 出现薄片 - 记录在覆盖率报告中。）</li>
+<li>确认删除的行为仍然通过了表中列出的幸存覆盖测试
+   “覆盖范围”列（专门运行该测试文件）。</li>
+<li>对于存储库/控制器删除，确认没有引入新的未覆盖行
+   <code>src/Inventory/</code> 超出审计认为的已知的简单构造函数/传递行
+   基础设施而不是行为：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-html<span class="w"> </span>var/coverage<span class="w"> </span>tests/Inventory
 </code></pre></div></li>
-<li>Confirm <code>composer phpstan</code> and <code>composer rector:types:check</code> still pass (test deletions should not
-   affect them).</li>
-<li>Do not delete any reservation/stock/ledger behavior or handler idempotency test; those are KEEP per
-   <code>BUSINESS_INVARIANTS.md</code>.</li>
+<li>确认<code>composer phpstan</code>和<code>composer rector:types:check</code>仍然通过（测试删除不应
+   影响他们）。
+5、不要删除任何预留/库存/账本行为或handler幂等性测试；这些是保留的
+   <code>BUSINESS_INVARIANTS.md</code>。</li>
 </ol>
 
 

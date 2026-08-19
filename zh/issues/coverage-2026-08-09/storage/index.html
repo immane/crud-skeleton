@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2721,8 +2721,8 @@
 </ul>
 <h2 id="_5">跳过测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>QiniuStorageTest::testDeleteOfPathOutsideConfiguredDomainIsIgnored</code> — correct-behavior test asserting that <code>delete()</code> of a foreign URL makes <strong>no</strong> API call. It fails against the current implementation (Bug #1), so it is <code>markTestSkipped</code> to keep the suite green and documents the expected behaviour/fix.</li>
-<li><code>QiniuStorageTest</code> missing-SDK tests are skipped automatically when the Qiniu SDK/stub classes are already defined in the process (e.g. when run after <code>StorageServiceTest</code> in the same PHPUnit process); with the current suite ordering they run normally.</li>
+<li><code>QiniuStorageTest::testDeleteOfPathOutsideConfiguredDomainIsIgnored</code> — 正确行为测试，断言外部 URL 的 <code>delete()</code> 不会进行 API 调用。它无法满足当前的实现（Bug #1），因此 <code>markTestSkipped</code> 需要保持套件绿色并记录预期的行为/修复。</li>
+<li>当七牛 SDK/存根类已在进程中定义时（例如，在同一 PHPUnit 进程中的 <code>StorageServiceTest</code> 之后运行时），会自动跳过 <code>QiniuStorageTest</code> 缺失 SDK 测试；按照当前的套件顺序，它们可以正常运行。</li>
 </ul>
 
 

@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -1085,7 +1085,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1517,10 +1517,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34" class="md-nav__link">
+  <a href="#34-specificationrecipe-and-recipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 规格菜谱和菜谱行
+        3.4 SpecificationRecipe And RecipeLine
       
     </span>
   </a>
@@ -1528,10 +1528,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35" class="md-nav__link">
+  <a href="#35-finished-good-fallback" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 成品良好后备
+        3.5 Finished-Good Fallback
       
     </span>
   </a>
@@ -1539,10 +1539,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#36" class="md-nav__link">
+  <a href="#36-reservation-and-reservationline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.6 预订和预订热线
+        3.6 Reservation And ReservationLine
       
     </span>
   </a>
@@ -1550,10 +1550,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#37" class="md-nav__link">
+  <a href="#37-ledgerentry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.7 账本条目
+        3.7 LedgerEntry
       
     </span>
   </a>
@@ -2642,7 +2642,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2787,7 +2787,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2927,7 +2927,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -3235,10 +3235,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34" class="md-nav__link">
+  <a href="#34-specificationrecipe-and-recipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 规格菜谱和菜谱行
+        3.4 SpecificationRecipe And RecipeLine
       
     </span>
   </a>
@@ -3246,10 +3246,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35" class="md-nav__link">
+  <a href="#35-finished-good-fallback" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 成品良好后备
+        3.5 Finished-Good Fallback
       
     </span>
   </a>
@@ -3257,10 +3257,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#36" class="md-nav__link">
+  <a href="#36-reservation-and-reservationline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.6 预订和预订热线
+        3.6 Reservation And ReservationLine
       
     </span>
   </a>
@@ -3268,10 +3268,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#37" class="md-nav__link">
+  <a href="#37-ledgerentry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.7 账本条目
+        3.7 LedgerEntry
       
     </span>
   </a>
@@ -3972,202 +3972,204 @@
 <table>
 <thead>
 <tr>
-<th>领域</th>
-<th>类型</th>
-<th>规则</th>
+<th>Field</th>
+<th>Type</th>
+<th>Rules</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>id</code></td>
-<td>整数</td>
-<td>内部PK</td>
+<td>int</td>
+<td>Internal PK</td>
 </tr>
 <tr>
 <td><code>material</code></td>
-<td>多对一材质</td>
-<td>所需的本地关系</td>
+<td>ManyToOne Material</td>
+<td>Required local relation</td>
 </tr>
 <tr>
 <td><code>storeUuid</code></td>
-<td>字符串(36)</td>
-<td>所需标量存储参考</td>
+<td>string(36)</td>
+<td>Required scalar Store reference</td>
 </tr>
 <tr>
 <td><code>onHandQuantity</code></td>
-<td>小数(20,6)</td>
-<td>实物盘点数量；只有在允许的情况下消费后才可能变为负数</td>
+<td>decimal(20,6)</td>
+<td>Physical counted quantity; may become negative only after consumption when allowed</td>
 </tr>
 <tr>
 <td><code>reservedQuantity</code></td>
-<td>小数(20,6)</td>
-<td>活跃预订总数；绝不消极</td>
+<td>decimal(20,6)</td>
+<td>Active reservation total; never negative</td>
 </tr>
 <tr>
 <td><code>allowNegativeStock</code></td>
-<td>布尔</td>
-<td>默认为 <code>false</code></td>
+<td>boolean</td>
+<td>Defaults to <code>false</code></td>
 </tr>
 <tr>
 <td><code>version</code></td>
-<td>整数</td>
-<td>Doctrine 乐观锁版本</td>
+<td>integer</td>
+<td>Doctrine optimistic-lock version</td>
 </tr>
 <tr>
-<td><code>createdAt</code>、<code>updatedAt</code></td>
-<td>日期时间不可变</td>
-<td>审计时间戳</td>
+<td><code>createdAt</code>, <code>updatedAt</code></td>
+<td>datetime immutable</td>
+<td>Audit timestamps</td>
 </tr>
 </tbody>
 </table>
-<p>约束条件和指标：</p>
+<p>Constraints and indexes:</p>
 <ul>
-<li>独特的<code>(store_uuid, material_id)</code>。</li>
-<li>用于预留锁定和余额读取的索引<code>(store_uuid, material_id)</code>。</li>
-<li>管理报告索引<code>(store_uuid, updated_at)</code>。</li>
-<li><code>reservedQuantity &gt;= 0</code> 在域代码中强制执行，并且在可移植的情况下进行数据库检查。</li>
+<li>Unique <code>(store_uuid, material_id)</code>.</li>
+<li>Index <code>(store_uuid, material_id)</code> for reservation locking and balance reads.</li>
+<li>Index <code>(store_uuid, updated_at)</code> for management reporting.</li>
+<li><code>reservedQuantity &gt;= 0</code> is enforced in domain code and, where portable, a DB check.</li>
 </ul>
-<p>故意没有公共 <code>setOnHandQuantity()</code> 或 <code>setReservedQuantity()</code>。
-<code>InventoryService</code> 仅通过相应的分类帐条目更改数量。</p>
-<h3 id="34">3.4 规格菜谱和菜谱行<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
-<p><code>SpecificationRecipe</code> 拥有一项贸易规范的当前物料清单。
-它不存储贸易实体关系。</p>
+<p>There is deliberately no public <code>setOnHandQuantity()</code> or <code>setReservedQuantity()</code>.
+<code>InventoryService</code> changes quantities only with a corresponding ledger entry.</p>
+<h3 id="34-specificationrecipe-and-recipeline">3.4 SpecificationRecipe And RecipeLine<a class="headerlink" href="#34-specificationrecipe-and-recipeline" title="Permanent link">&para;</a></h3>
+<p><code>SpecificationRecipe</code> owns the current bill of materials for one Trade Specification.
+It stores no Trade entity relation.</p>
 <table>
 <thead>
 <tr>
-<th>领域</th>
-<th>类型</th>
-<th>规则</th>
+<th>Field</th>
+<th>Type</th>
+<th>Rules</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>uuid</code></td>
-<td>字符串(36)</td>
-<td>外部配方标识</td>
+<td>string(36)</td>
+<td>External recipe identity</td>
 </tr>
 <tr>
 <td><code>specificationUuid</code></td>
-<td>字符串(36)</td>
-<td>独特的当前贸易规范参考</td>
+<td>string(36)</td>
+<td>Unique current Trade Specification reference</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td>字符串（20）</td>
-<td><code>active</code> 或 <code>inactive</code></td>
+<td>string(20)</td>
+<td><code>active</code> or <code>inactive</code></td>
 </tr>
 <tr>
 <td><code>lines</code></td>
-<td>一对多食谱线</td>
-<td>至少一条有效线路</td>
+<td>OneToMany RecipeLine</td>
+<td>At least one active line</td>
 </tr>
 <tr>
-<td><code>createdAt</code>、<code>updatedAt</code></td>
-<td>日期时间不可变</td>
-<td>审计时间戳</td>
+<td><code>createdAt</code>, <code>updatedAt</code></td>
+<td>datetime immutable</td>
+<td>Audit timestamps</td>
 </tr>
 </tbody>
 </table>
-<p>每个<code>RecipeLine</code>都有<code>material</code>、<code>quantityPerUnit decimal(20,6)</code>和<code>sort</code>。其
-唯一约束为<code>(recipe_id, material_id)</code>，因此重复的物料需求为
-在编写的食谱中是不可能的。预订服务仍然通过以下方式汇总需求：
-材料，因为请求可能包含重复的规范行。</p>
-<p>第一阶段每个规范仅允许一种配方。更新现有食谱
-在影响未来预订之前替换当前线路。现有
-<code>ReservationLine</code>行保存已解析的材料和数量快照，并且是
-从未根据更改的配方重新计算。</p>
-<h3 id="35">3.5 成品良好后备<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
-<p>每个库存控制规范均由以下规则之一解析：</p>
-<p>1.<code>specificationUuid</code>存在一个有效配方：将每个配方材料保留在
-   <code>orderQuantity * quantityPerUnit</code>。
-2. 不存在有效配方：保留<code>code</code>等于的有效<code>finished</code>物料
-   规范 UUID (<code>catalogReference</code>)。
-3. 两者都不存在：用 <code>SPECIFICATION_NOT_STOCKABLE</code> 拒绝。</p>
-<p>直接成品约定避免了第一阶段的第二个映射表，同时
-保持显式和跨模块安全。材料代码验证必须接受 UUID。
-如果稍后需要人类可读的 SKU 代码，请添加库存拥有的
-<code>SpecificationMaterialMapping</code> 通过单独版本化的迁移和事件
-合同；不要将交易表视为后备。</p>
-<h3 id="36">3.6 预订和预订热线<a class="headerlink" href="#36" title="Permanent link">&para;</a></h3>
-<p><code>Reservation</code> 是幂等预留聚合。 <code>reservationId</code> 是
-在发布请求之前由 Store 生成。</p>
+<p>Each <code>RecipeLine</code> has <code>material</code>, <code>quantityPerUnit decimal(20,6)</code>, and <code>sort</code>. Its
+unique constraint is <code>(recipe_id, material_id)</code>, so duplicate material demand is
+impossible in an authored recipe. The reservation service still aggregates demand by
+material because a request can contain repeated Specification lines.</p>
+<p>Only one recipe is allowed per Specification in phase one. Updating an existing recipe
+replaces its current lines before it can affect a future reservation. Existing
+<code>ReservationLine</code> rows preserve the resolved material and quantity snapshot and are
+never recalculated from a changed recipe.</p>
+<h3 id="35-finished-good-fallback">3.5 Finished-Good Fallback<a class="headerlink" href="#35-finished-good-fallback" title="Permanent link">&para;</a></h3>
+<p>Every inventory-controlled Specification resolves by exactly one of these rules:</p>
+<ol>
+<li>An active recipe exists for <code>specificationUuid</code>: reserve every recipe material at
+   <code>orderQuantity * quantityPerUnit</code>.</li>
+<li>No active recipe exists: reserve the active <code>finished</code> Material whose <code>code</code> equals
+   the Specification UUID (<code>catalogReference</code>).</li>
+<li>Neither exists: reject with <code>SPECIFICATION_NOT_STOCKABLE</code>.</li>
+</ol>
+<p>The direct-finished-good convention avoids a second mapping table in phase one while
+remaining explicit and cross-module safe. Material code validation MUST accept UUIDs.
+If a human-readable SKU code is later needed, add an Inventory-owned
+<code>SpecificationMaterialMapping</code> through a separately versioned migration and event
+contract; do not read Trade tables as a fallback.</p>
+<h3 id="36-reservation-and-reservationline">3.6 Reservation And ReservationLine<a class="headerlink" href="#36-reservation-and-reservationline" title="Permanent link">&para;</a></h3>
+<p><code>Reservation</code> is the idempotent reservation aggregate. <code>reservationId</code> is
+generated by Store before the request is published.</p>
 <table>
 <thead>
 <tr>
-<th>领域</th>
-<th>类型</th>
-<th>规则</th>
+<th>Field</th>
+<th>Type</th>
+<th>Rules</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>id</code> / <code>uuid</code></td>
-<td>整数/字符串(36)</td>
-<td>内部和外部身份</td>
+<td>int / string(36)</td>
+<td>Internal and external identities</td>
 </tr>
 <tr>
 <td><code>reservationId</code></td>
-<td>字符串(36)</td>
-<td>唯一存储幂等性和关联键</td>
+<td>string(36)</td>
+<td>Unique Store idempotency and correlation key</td>
 </tr>
 <tr>
 <td><code>storeUuid</code></td>
-<td>字符串(36)</td>
-<td>所需的标量参考</td>
+<td>string(36)</td>
+<td>Required scalar reference</td>
 </tr>
 <tr>
 <td><code>tradeOrderUuid</code></td>
-<td>字符串(36)</td>
-<td>所需的标量参考</td>
+<td>string(36)</td>
+<td>Required scalar reference</td>
 </tr>
 <tr>
 <td><code>storeOrderUuid</code></td>
-<td>字符串(36)</td>
-<td>所需的标量参考</td>
+<td>string(36)</td>
+<td>Required scalar reference</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td>字符串（30）</td>
-<td>请参阅下面的状态机</td>
+<td>string(30)</td>
+<td>See state machine below</td>
 </tr>
 <tr>
 <td><code>requestHash</code></td>
-<td>字符串（64）</td>
-<td>规范化请求负载的 SHA-256</td>
+<td>string(64)</td>
+<td>SHA-256 of normalized request payload</td>
 </tr>
 <tr>
 <td><code>expiresAt</code></td>
-<td>日期时间不可变可为空</td>
-<td>预订截止日期快照</td>
+<td>datetime immutable nullable</td>
+<td>Reservation deadline snapshot</td>
 </tr>
 <tr>
-<td><code>releasedAt</code>、<code>consumedAt</code></td>
-<td>日期时间不可变可为空</td>
-<td>终端操作时间戳</td>
+<td><code>releasedAt</code>, <code>consumedAt</code></td>
+<td>datetime immutable nullable</td>
+<td>Terminal-operation timestamps</td>
 </tr>
 <tr>
-<td><code>createdAt</code>、<code>updatedAt</code></td>
-<td>日期时间不可变</td>
-<td>审计时间戳</td>
+<td><code>createdAt</code>, <code>updatedAt</code></td>
+<td>datetime immutable</td>
+<td>Audit timestamps</td>
 </tr>
 </tbody>
 </table>
-<p><code>ReservationLine</code> 存储 <code>materialUuid</code>、<code>materialCodeSnapshot</code>、<code>unitSnapshot</code>、
-<code>requestedQuantity</code>、<code>reservedQuantity</code> 和源规范 UUID。它必须
-保留足够的数据以在材料或食谱重命名后审核预订，
-停用或更改。</p>
-<p>预订状态：</p>
+<p><code>ReservationLine</code> stores <code>materialUuid</code>, <code>materialCodeSnapshot</code>, <code>unitSnapshot</code>,
+<code>requestedQuantity</code>, <code>reservedQuantity</code>, and the source Specification UUIDs. It must
+retain enough data to audit a reservation after materials or recipes are renamed,
+deactivated, or altered.</p>
+<p>Reservation statuses:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>requested -&gt; confirmed -&gt; released
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>                     \-&gt; consumed
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>requested -&gt; rejected
 </code></pre></div>
-<p><code>requested</code>仅在处理本地事务时存在。已承诺的预订
-是 <code>confirmed</code> 或 <code>rejected</code>。 <code>released</code>、<code>consumed</code> 和 <code>rejected</code> 是终端。
-如果重复的释放和消费请求与现有状态一致，则它们是无操作的；
-冲突的请求是操作错误，不得重写历史记录。</p>
-<h3 id="37">3.7 账本条目<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
-<p>分类帐只能追加。它是库存突变的审计来源； <code>Stock</code>
-是当前余额预测。</p>
+<p><code>requested</code> exists only while processing the local transaction. A committed reservation
+is either <code>confirmed</code> or <code>rejected</code>. <code>released</code>, <code>consumed</code>, and <code>rejected</code> are terminal.
+Duplicate release and consume requests are no-ops if they agree with the existing state;
+conflicting requests are operational errors and must not rewrite history.</p>
+<h3 id="37-ledgerentry">3.7 LedgerEntry<a class="headerlink" href="#37-ledgerentry" title="Permanent link">&para;</a></h3>
+<p>The ledger is append-only. It is the audit source for stock mutations; <code>Stock</code>
+is the current balance projection.</p>
 <table>
 <thead>
 <tr>

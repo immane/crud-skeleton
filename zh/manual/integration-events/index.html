@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -919,10 +919,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#64-settlement-allocation-posting" class="md-nav__link">
+  <a href="#64" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.4 Settlement allocation posting
+        6.4 结算分配过帐
       
     </span>
   </a>
@@ -935,10 +935,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-operational-notes" class="md-nav__link">
+  <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Operational notes
+        7. 操作注意事项
       
     </span>
   </a>
@@ -1337,7 +1337,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -2337,7 +2337,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2482,7 +2482,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2622,7 +2622,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2930,10 +2930,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#64-settlement-allocation-posting" class="md-nav__link">
+  <a href="#64" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.4 Settlement allocation posting
+        6.4 结算分配过帐
       
     </span>
   </a>
@@ -2946,10 +2946,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-operational-notes" class="md-nav__link">
+  <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Operational notes
+        7. 操作注意事项
       
     </span>
   </a>
@@ -3521,9 +3521,9 @@
 <code>InventoryService::releaseExpiredReservations()</code> 查找过去的 <code>confirmed</code> 预订
 <code>expires_at</code> 并以原因 <code>reservation expired</code> 释放它们，从而重新进入
 上面的标准 <code>inventory.reservation.released.v1</code> 发件箱流程。</p>
-<h3 id="64-settlement-allocation-posting">6.4 Settlement allocation posting<a class="headerlink" href="#64-settlement-allocation-posting" title="Permanent link">&para;</a></h3>
-<p>Settlement is an <strong>inbox-first</strong> module: funding confirmations arrive from outside as
-explicit-field messages.</p>
+<h3 id="64">6.4 结算分配过帐<a class="headerlink" href="#64" title="Permanent link">&para;</a></h3>
+<p>结算是一个<strong>收件箱优先</strong>模块：资金确认从外部到达
+显式字段消息。</p>
 <pre class="mermaid"><code>sequenceDiagram
     autonumber
     participant P as External producer
@@ -3551,22 +3551,22 @@ explicit-field messages.</p>
     end
     A-&gt;&gt;A: reconcilePlanState()
     Note over SO: app:settlement:allocations:requeue-due&lt;br/&gt;re-queues retryable_failure rows</code></pre>
-<p>Statuses used by the settlement retry loop: allocation <code>planned → posting_requested →
-posted</code> (terminal <code>cancelled</code>/<code>failed</code>/<code>reversed</code>/<code>reversal_pending</code>), with
-<code>retryable_failure</code> feeding <code>requeue-due</code>. In test fixtures the voucher boundary is the
-<code>InMemorySettlementVoucherPort</code>.</p>
-<h2 id="7-operational-notes">7. Operational notes<a class="headerlink" href="#7-operational-notes" title="Permanent link">&para;</a></h2>
+<p>结算重试循环使用的状态：分配<code>planned → posting_requested →
+posted</code>（终端<code>cancelled</code>/<code>failed</code>/<code>reversed</code>/<code>reversal_pending</code>），
+<code>retryable_failure</code>喂养<code>requeue-due</code>。在测试装置中，凭证边界是
+<code>InMemorySettlementVoucherPort</code>。</p>
+<h2 id="7">7. 操作注意事项<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Dead letters</strong> accumulate on the <code>failed</code> transport (<code>messenger_messages</code> with
-  <code>queue_name = 'failed'</code>); the outbox row is left unpublished so it can be manually
-  re-queued or repaired.</li>
-<li><strong>Stuck rows</strong> show up as <code>published_at IS NULL</code> with a non-null <code>last_error</code>; they are
-  re-attempted automatically after their <code>available_at</code> passes.</li>
-<li><strong>Race safety</strong> relies on the claim UPDATE being conditional (<code>published_at IS NULL AND
-  available_at &lt;= now</code>), plus the index <code>(published_at, available_at)</code> on each outbox
-  table (Inventory appends <code>id</code>).</li>
-<li>The <code>INVENTORY_ENABLED</code> environment toggle decides whether Store skips inventory
-  altogether and accepts orders immediately, or waits for an <code>inventory.reservation.confirmed.v1</code>.</li>
+<li><strong>死信</strong>在<code>failed</code>传输上累积（<code>messenger_messages</code>与
+  <code>queue_name = 'failed'</code>);发件箱行未发布，因此可以手动
+  重新排队或修复。</li>
+<li><strong>卡住的行</strong>显示为带有非空 <code>last_error</code> 的 <code>published_at IS NULL</code>；他们是
+  在 <code>available_at</code> 通过后自动重新尝试。</li>
+<li><strong>比赛安全</strong>依赖于有条件的索赔更新（<code>published_at IS NULL AND
+  available_at &lt;= now</code>），加上每个发件箱上的索引<code>(published_at, available_at)</code>
+  表（库存附加<code>id</code>）。</li>
+<li><code>INVENTORY_ENABLED</code>环境切换决定商店是否跳过库存
+  完全并立即接受订单，或等待 <code>inventory.reservation.confirmed.v1</code>。</li>
 </ul>
 
 
