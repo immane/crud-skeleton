@@ -31,7 +31,7 @@
     
     
       
-        <title>系统演练和测试接缝 - CRUD Skeleton</title>
+        <title>System Walkthrough And Test Seams - CRUD Skeleton</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#system-walkthrough-and-test-seams" class="md-skip">
           跳转至
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              系统演练和测试接缝
+              System Walkthrough And Test Seams
             
           </span>
         </div>
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2085,7 +2085,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2239,7 +2239,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2352,7 +2352,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2521,9 +2521,9 @@
   
 
 
-<h1 id="_1">系统演练和测试接缝<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>使用此地图来决定在哪里测试更改最好。完整的架构
-端点库存保留在 <code>docs/ai/context.md</code> 和 <code>docs/design/</code> 中。</p>
+<h1 id="system-walkthrough-and-test-seams">System Walkthrough And Test Seams<a class="headerlink" href="#system-walkthrough-and-test-seams" title="Permanent link">&para;</a></h1>
+<p>Use this map to decide where a change is best tested. The complete architecture
+and endpoint inventory remain in <code>docs/ai/context.md</code> and <code>docs/design/</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>HTTP request
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  -&gt; JwtAuthenticator / LocaleListener / controller authorization
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  -&gt; Controller validation and commonFilter scope
@@ -2537,58 +2537,58 @@
 <table>
 <thead>
 <tr>
-<th>缝</th>
-<th>主要断言</th>
-<th>典型测试层</th>
+<th>Seam</th>
+<th>Primary assertion</th>
+<th>Typical test layer</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>向控制器请求</td>
-<td>路由、状态、有效负载、身份验证、所有者/商店/管理范围、区域设置</td>
+<td>Request to controller</td>
+<td>route, status, payload, authentication, owner/store/admin scope, locale</td>
 <td>HTTP/API</td>
 </tr>
 <tr>
-<td>控制器到服务</td>
-<td>接受字段、验证、通用过滤器无法绕过</td>
+<td>Controller to service</td>
+<td>accepted fields, validation, common filter cannot be bypassed</td>
 <td>HTTP/API</td>
 </tr>
 <tr>
-<td>数据库服务</td>
-<td>事务原子提交或完全回滚</td>
-<td>整合</td>
+<td>Service to database</td>
+<td>transaction commits atomically or rolls back completely</td>
+<td>integration</td>
 </tr>
 <tr>
-<td>域状态转换</td>
-<td>有效/无效状态和生成的时间戳/审核字段</td>
-<td>单元加集成</td>
+<td>Domain state transition</td>
+<td>valid/invalid states and resulting timestamps/audit fields</td>
+<td>unit plus integration</td>
 </tr>
 <tr>
-<td>支付/钱包边界</td>
-<td>显式金额、整数美分、重复参考安全</td>
-<td>整合</td>
+<td>Payment/wallet boundary</td>
+<td>explicit amounts, integer cents, duplicate reference safety</td>
+<td>integration</td>
 </tr>
 <tr>
-<td>数据库到发件箱</td>
-<td>源突变和版本化事件一起提交</td>
-<td>整合</td>
+<td>Database to outbox</td>
+<td>source mutation and versioned event commit together</td>
+<td>integration</td>
 </tr>
 <tr>
-<td>发件箱给消费者</td>
-<td>声明/重试行为和一次性有效副作用</td>
-<td>集成/处理程序</td>
+<td>Outbox to consumer</td>
+<td>claim/retry behaviour and exactly-once effective side effect</td>
+<td>integration/handler</td>
 </tr>
 <tr>
-<td>跨模块最终状态</td>
-<td>排序、取消、补偿和幂等性</td>
-<td>跨模块集成</td>
+<td>Cross-module final state</td>
+<td>ordering, cancellation, compensation, and idempotency</td>
+<td>cross-module integration</td>
 </tr>
 </tbody>
 </table>
-<p>如果更改的要求跨越接缝，请在两侧保留测试或添加测试
-观察最终状态的单一集成测试。单独的单元测试是不够的
-足以进行 HTTP 授权、事务或异步交付
-合同。</p>
+<p>If the changed requirement crosses a seam, retain a test on both sides or add a
+single integration test that observes the final state. A unit test alone is not
+sufficient for an HTTP authorization, transaction, or asynchronous delivery
+contract.</p>
 
 
 

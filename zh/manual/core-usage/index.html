@@ -756,22 +756,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-api-nelmioapidoc" class="md-nav__link">
+  <a href="#8-api-documentation-nelmioapidoc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. API 文档 (NelmioApiDoc)
+        8. API Documentation (NelmioApiDoc)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. API 文档 (NelmioApiDoc)">
+    <nav class="md-nav" aria-label="8. API Documentation (NelmioApiDoc)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#configuring-the-spec" class="md-nav__link">
     <span class="md-ellipsis">
       
-        配置规范
+        Configuring the spec
       
     </span>
   </a>
@@ -779,10 +779,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#documenting-with-attributes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        使用属性记录
+        Documenting with attributes
       
     </span>
   </a>
@@ -790,10 +790,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#automatic-enrichment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        自动浓缩
+        Automatic enrichment
       
     </span>
   </a>
@@ -806,10 +806,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-crud" class="md-nav__link">
+  <a href="#9-putting-it-together-minimal-new-crud-module" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. 组合在一起：最小的新 CRUD 模块
+        9. Putting It Together: Minimal New CRUD Module
       
     </span>
   </a>
@@ -839,7 +839,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -867,7 +867,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2376,7 +2376,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2521,7 +2521,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2633,7 +2633,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2974,22 +2974,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-api-nelmioapidoc" class="md-nav__link">
+  <a href="#8-api-documentation-nelmioapidoc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. API 文档 (NelmioApiDoc)
+        8. API Documentation (NelmioApiDoc)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. API 文档 (NelmioApiDoc)">
+    <nav class="md-nav" aria-label="8. API Documentation (NelmioApiDoc)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#configuring-the-spec" class="md-nav__link">
     <span class="md-ellipsis">
       
-        配置规范
+        Configuring the spec
       
     </span>
   </a>
@@ -2997,10 +2997,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#documenting-with-attributes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        使用属性记录
+        Documenting with attributes
       
     </span>
   </a>
@@ -3008,10 +3008,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#automatic-enrichment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        自动浓缩
+        Automatic enrichment
       
     </span>
   </a>
@@ -3024,10 +3024,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-crud" class="md-nav__link">
+  <a href="#9-putting-it-together-minimal-new-crud-module" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. 组合在一起：最小的新 CRUD 模块
+        9. Putting It Together: Minimal New CRUD Module
       
     </span>
   </a>
@@ -3359,16 +3359,16 @@ JSON 由 <code>ExceptionInterceptor</code> 提供。</p>
 全有或全无的语义；它在提交之前刷新并回滚任何
 <code>Throwable</code> （并恢复关闭的 EntityManager）。用它来制作几个
 写原子。</p>
-<p>示例 - 通过钱包转账自动应用工作流程转换
-（来自 <code>src/Trade/Controller/Manage/OrderController::payAction</code> 的评论）：</p>
+<p>Example — apply a workflow transition atomically with a wallet transfer
+(comment from <code>src/Trade/Controller/Manage/OrderController::payAction</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="x">$this-&gt;service-&gt;wrapInTransaction(function () use ($order, $systemWalletId, $paymentMethod) {</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">    $this-&gt;service-&gt;pay($order, $systemWalletId, $paymentMethod);</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="x">    $this-&gt;workflow-&gt;apply($order, 'pay');</span>
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="x">    $this-&gt;service-&gt;update($order, []);</span>
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="x">});</span>
 </code></pre></div>
-<p>回调接收 <code>EntityManager</code> 作为其第一个参数，因此您可以使用
-直接：</p>
+<p>The callback receives the <code>EntityManager</code> as its first argument, so you can use
+it directly:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">$this-&gt;service-&gt;wrapInTransaction(function ($em) use ($entity, $content, $transition) {</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="x">    if ($content) {</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">        $this-&gt;service-&gt;update($entity, $content);</span>
@@ -3376,21 +3376,21 @@ JSON 由 <code>ExceptionInterceptor</code> 提供。</p>
 <a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="x">    $this-&gt;workflow-&gt;apply($entity, $transition);</span>
 <a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="x">});</span>
 </code></pre></div>
-<p>嵌套事务是通过数据库的保存点机制处理的，因此内部事务
-钱包转账本身可以调用<code>wrapInTransaction</code>。</p>
+<p>Nested transactions are handled via the DB's savepoint mechanism, so the inner
+wallet transfer can itself call <code>wrapInTransaction</code>.</p>
 <hr />
-<h2 id="8-api-nelmioapidoc">8. API 文档 (NelmioApiDoc)<a class="headerlink" href="#8-api-nelmioapidoc" title="Permanent link">&para;</a></h2>
-<p>NelmioApiDoc 在 <code>/api/doc</code> 处为 Swagger 提供服务（JSON 在 <code>/api/doc.json</code> 处）。</p>
-<h3 id="_8">配置规范<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p><code>config/packages/nelmio_api_doc.yaml</code> 定义 OpenAPI 3.1 信息、标题、
-版本、安全方案 (<code>bearerAuth</code> JWT)、可重用组件（信封
-<code>SuccessResponse</code>/<code>ErrorResponse</code>/<code>Paginator</code>，每个资源请求/响应
-模式和示例），并且 <code>default</code> 区域仅限于 <code>/api</code>、<code>/system</code>、
-<code>/health</code>、<code>/metrics</code>。</p>
-<h3 id="_9">使用属性记录<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<p>视图 mixin 提供 <code>#[OA\*]</code> 属性（参数、标签、响应），因此 mixin
-路线会自动记录。对于自定义控制器添加 <code>#[OA\...]</code>
-属性，如 <code>HealthController</code> 中：</p>
+<h2 id="8-api-documentation-nelmioapidoc">8. API Documentation (NelmioApiDoc)<a class="headerlink" href="#8-api-documentation-nelmioapidoc" title="Permanent link">&para;</a></h2>
+<p>NelmioApiDoc serves Swagger at <code>/api/doc</code> (JSON at <code>/api/doc.json</code>).</p>
+<h3 id="configuring-the-spec">Configuring the spec<a class="headerlink" href="#configuring-the-spec" title="Permanent link">&para;</a></h3>
+<p><code>config/packages/nelmio_api_doc.yaml</code> defines the OpenAPI 3.1 info, title,
+version, security scheme (<code>bearerAuth</code> JWT), reusable components (envelopes
+<code>SuccessResponse</code>/<code>ErrorResponse</code>/<code>Paginator</code>, per-resource request/response
+schemas and examples), and the <code>default</code> area limited to <code>/api</code>, <code>/system</code>,
+<code>/health</code>, <code>/metrics</code>.</p>
+<h3 id="documenting-with-attributes">Documenting with attributes<a class="headerlink" href="#documenting-with-attributes" title="Permanent link">&para;</a></h3>
+<p>The view mixins ship <code>#[OA\*]</code> attributes (parameters, tags, responses), so mixin
+routes are documented automatically. For custom controllers add <code>#[OA\...]</code>
+attributes, as in <code>HealthController</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">#[OA\Get(</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">    path: '/health/ready',</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="x">    summary: 'Readiness probe (database + optional Redis)',</span>
@@ -3401,36 +3401,36 @@ JSON 由 <code>ExceptionInterceptor</code> 提供。</p>
 <a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="x">    tags: ['System'],</span>
 <a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="x">)]</span>
 </code></pre></div>
-<h3 id="_10">自动浓缩<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
-<p><code>OpenApiEnricherListener</code> 对 <code>/api/doc.json</code>/<code>/api/doc</code> 进行后处理
-回应：</p>
+<h3 id="automatic-enrichment">Automatic enrichment<a class="headerlink" href="#automatic-enrichment" title="Permanent link">&para;</a></h3>
+<p><code>OpenApiEnricherListener</code> post-processes the <code>/api/doc.json</code>/<code>/api/doc</code>
+response to:</p>
 <ul>
-<li>注入规范模块标签（<code>Auth</code>、<code>Products</code>、<code>Orders</code>、<code>Categories</code>、...）
-  带有描述；</li>
-<li>从其 <code>META</code> 映射中设置每个端点 <code>summary</code>/<code>description</code>；</li>
-<li>记录<code>/api/v1/{app,manage}/media/upload</code>的分段上传请求主体；</li>
-<li>删除通用 mixin 标签（<code>List</code>、<code>Detail</code>、<code>Create</code>、<code>Update</code>、<code>Delete</code>、
-  <code>Workflow</code>）。</li>
+<li>inject canonical module tags (<code>Auth</code>, <code>Products</code>, <code>Orders</code>, <code>Categories</code>, ...)
+  with descriptions;</li>
+<li>set per-endpoint <code>summary</code>/<code>description</code> from its <code>META</code> map;</li>
+<li>document multipart upload request bodies for <code>/api/v1/{app,manage}/media/upload</code>;</li>
+<li>remove the generic mixin tags (<code>List</code>, <code>Detail</code>, <code>Create</code>, <code>Update</code>, <code>Delete</code>,
+  <code>Workflow</code>).</li>
 </ul>
-<p>因此，添加模块后，您通常无需额外工作即可获得可用的文档；添加
-仅当您需要更丰富的文本时，才显式 <code>OA</code> 属性和/或 <code>META</code> 条目。</p>
+<p>So after adding a module you usually get usable docs with no extra work; add
+explicit <code>OA</code> attributes and/or a <code>META</code> entry only when you need richer text.</p>
 <hr />
-<h2 id="9-crud">9. 组合在一起：最小的新 CRUD 模块<a class="headerlink" href="#9-crud" title="Permanent link">&para;</a></h2>
+<h2 id="9-putting-it-together-minimal-new-crud-module">9. Putting It Together: Minimal New CRUD Module<a class="headerlink" href="#9-putting-it-together-minimal-new-crud-module" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>实体</strong> — <code>src/{Module}/Entity/{Thing}.php</code>（学说属性）。</li>
-<li><strong>存储库</strong> — <code>src/{Module}/Repository/{Thing}Repository.php</code> 扩展
-   <code>ServiceEntityRepository</code>。</li>
-<li><strong>服务接口+服务</strong> — <code>{Thing}ServiceInterface extends
-   BaseServiceInterface</code>； <code>ThingService extends BaseService implements
-   ThingServiceInterface</code>，与<code>parent::__construct($container, Thing::class)</code>。</li>
-<li><strong>控制器</strong> - 应用程序（只读公共）和管理（管理 CRUD）扩展
-   <code>RestController</code> 并组合视图 mixins。</li>
-<li><strong>路线</strong> — 在<code>config/routes.yaml</code>中注册。</li>
-<li><strong>迁移</strong> — <code>bin/console make:migration</code> / 审核并应用。</li>
+<li><strong>Entity</strong> — <code>src/{Module}/Entity/{Thing}.php</code> (Doctrine attributes).</li>
+<li><strong>Repository</strong> — <code>src/{Module}/Repository/{Thing}Repository.php</code> extending
+   <code>ServiceEntityRepository</code>.</li>
+<li><strong>Service interface + service</strong> — <code>{Thing}ServiceInterface extends
+   BaseServiceInterface</code>; <code>ThingService extends BaseService implements
+   ThingServiceInterface</code>, with <code>parent::__construct($container, Thing::class)</code>.</li>
+<li><strong>Controllers</strong> — App (read-only public) and Manage (admin CRUD) extending
+   <code>RestController</code> and composing the view mixins.</li>
+<li><strong>Routes</strong> — register in <code>config/routes.yaml</code>.</li>
+<li><strong>Migration</strong> — <code>bin/console make:migration</code> / review &amp; apply.</li>
 </ol>
-<p>自动装配处理一切：<code>App\:</code>是自动注册的，<code>RestController</code>
-deps 通过 <code>_instanceof</code> 连接，并注入 <code>$service</code> 属性
-通过构造函数。</p>
+<p>Autowiring handles everything: <code>App\:</code> is auto-registered, <code>RestController</code>
+deps are wired via <code>_instanceof</code>, and the <code>$service</code> property is injected
+through the constructor.</p>
 
 
 

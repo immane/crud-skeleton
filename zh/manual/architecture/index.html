@@ -773,7 +773,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -801,7 +801,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2310,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2455,7 +2455,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2567,7 +2567,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2927,7 +2927,7 @@
 规范版本为<a href="../../design/system-architecture/">docs/design/system-architecture.md</a>；
 该文档就是合同——该页面是面向开发人员的概述。</p>
 <h2 id="_2">模块化整体架构（不是单一存储库）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>该应用程序是<strong>作为一个单元部署的一个 Symfony 应用程序</strong>，其中包含
+<p>该应用程序是 <strong>作为一个单元部署的一个 Symfony 应用程序</strong>，其中包含
 几个独立的业务模块。它故意“不是”多服务
 monorepo：模块共享一个内核、一个 Doctrine EntityManager、一个缓存和
 一辆 Messenger 总线，但它们的行为必须像独立服务一样。</p>
@@ -3203,7 +3203,7 @@ JSON 信封、分页和 <code>@display</code>/<code>@expands</code> 响应整形
 <h3 id="_10">发件箱/收件箱模式<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>跨模块写入永远不会同步调用目标模块：</p>
 <ul>
-<li><strong>发件箱</strong> — 每个发布模块都在发件箱中保留自己的 <code>*OutboxMessage</code> 实体
+<li><strong>发件箱</strong> — 每个发布模块都将其自己的 <code>*OutboxMessage</code> 实体保存在
   与变更相同的交易。 <code>scheduler</code> 服务轮询
   <code>app:{module}:outbox:publish</code> 命令（贸易、商店、库存、结算）
   将消息刷新到 Messenger。</li>

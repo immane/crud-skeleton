@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2735,7 +2735,7 @@
 <p>关于子流程/流包装机的注释（任务问题）：</p>
 <ul>
 <li>对于其余存根测试，<code>QiniuStorageTest</code> 中的 <code>#[RunInSeparateProcess]</code> 隔离是<strong>合理的，而不是过度杀伤</strong>。 <code>StorageServiceTest::testQiniuRequiresSdkWhenConfigured</code> 依赖于主进程中未定义的真实七牛类（其供应商文件跳过是一个代理；泄露的 <code>eval()</code> 存根将悄悄地击败 <code>assertSdkInstalled()</code>）。删除上面的三个重复的 <code>QiniuStorageTest</code> 非存根测试并不会删除该依赖性 - 剩余的两个存根测试（回退 + 跳过的错误文档）仍然需要单独的进程。如果缺少 SDK 断言本身被移至单独的进程并合并存根（这超出了此处的范围），则隔离情况只会进一步简化。</li>
-<li><code>LocalStorageCoverageTest::testStoreThrowsWhenDirectoryIsStillMissingAfterMkdir</code> 中的<strong>流包装器太过分了</strong>：它的存在纯粹是为了到达一个没有明显可观察输出的防御分支。</li>
+<li><code>LocalStorageCoverageTest::testStoreThrowsWhenDirectoryIsStillMissingAfterMkdir</code> 中的 <strong>流包装器太过分了</strong>：它的存在纯粹是为了到达一个没有明显可观察输出的防御分支。</li>
 </ul>
 <h2 id="_3">合并建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>

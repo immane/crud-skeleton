@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2722,7 +2722,7 @@
 <td>19 KEEP（MediaTest 的 1 个测试副本）</td>
 </tr>
 <tr>
-<td>测试/Common/Integration/PictureControllerTest.php</td>
+<td>测试/通用/集成/PictureControllerTest.php</td>
 <td>6</td>
 <td>保持</td>
 </tr>
@@ -2748,7 +2748,7 @@
 - <code>PictureControllerTest</code>（完整的 HTTP CRUD、验证、所有者范围隔离、图片存储库
   自定义方法）。没有其他文件触及 <code>/api/v1/{app,manage}/pictures</code>。
 - <code>MediaUploadIntegrationTest</code>核心上传历程：管理上传存储+删除文件，
-  没有尺寸的 PDF 上传、仅限所有者的应用程序删除、公共只读范围、丢失文件 /
+  没有尺寸的 PDF 上传、仅限所有者的应用程序删除、公共只读范围、丢失文件/
   未知存储/未知类别 400、<code>MediaService</code> 验证分支和存储
   故障处理。这些都是独一无二的。
 - <code>CommonRepoFullTest</code> 自定义存储库方法（<code>findBySlug</code>、<code>findRootCategories</code>、
@@ -2835,9 +2835,9 @@
 </tr>
 <tr>
 <td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus</td>
+<td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus</td>
 <td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus 1</td>
 <td>中</td>
-<td>（空用户分支在身份验证后无法访问；请参阅注释）</td>
 </tr>
 <tr>
 <td>MediaControllerUploadTest::testManageUploadReturns500ForUnexpectedError</td>
@@ -2966,7 +2966,7 @@
 <li><strong>CommonRepoFullTest::testContentFindLatest</strong>*。 <code>findLatest()</code> 已下单+限额
   由 <code>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit</code> 断言；
   新测试添加了限制计数断言，无需排序和 <code>findLatest(1) → count 1</code>。
-  将默认限制变量折叠到预先存在的测试中，而不是重复。</li>
+  将默认限制变体折叠到预先存在的测试中，而不是重复。</li>
 <li><strong>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus.</strong> 应用程序评论创建
   受身份验证保护 (<code>AppApiRegressionTest::testAppCommentCreateUnauthenticated</code>)，因此
   <code>defaultCreateValues()</code> 的空用户分支在生产环境中无法访问；测试模拟

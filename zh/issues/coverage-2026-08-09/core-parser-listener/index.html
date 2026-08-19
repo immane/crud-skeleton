@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2741,7 +2741,7 @@
 <ul>
 <li><code>ExpressionDqlParser</code> 针对模拟的 <code>Symfony\Component\ExpressionLanguage\ExpressionLanguage</code> 进行单元测试，以执行真实解析器无法生成的 <code>parse()</code> / <code>getNodes()</code> 异常包装（第 146–147 行、154–155 行）。</li>
 <li><code>validateFragments()</code> 的 Unreachable-by-public-API 分支通过 <code>ReflectionProperty::setValue()</code> 写入私有状态来执行（自 PHP 8.1 起允许，不再有 <code>setAccessible()</code>），例如精心制作的 <code>where</code> 字符串，具有未知别名（第 501 行）和空连接路径（第 529 行）。</li>
-<li>运算符覆盖范围：<code>in</code>（不支持的二进制操作 → 277）、一元 <code>-</code>（<code>entity.getId() == -5</code> → 307）、<code>[1, 2]</code> 数组文字（通用遍历分支 351-352）。</li>
+<li>运算符覆盖范围：<code>in</code>（不支持的二进制操作 → 277）、一元 <code>-</code>（<code>entity.getId() == -5</code> → 307）、<code>[1, 2]</code> 数组文字（通用遍历分支 351–352）。</li>
 <li><code>FlatNormalizer</code>：带有<code>__toString()</code>的Doctrine-ORM对象（使用<code>Doctrine\ORM\Mapping\ClassMetadata</code>，第50行）；装饰标准化器故障路径 (58/61–64)；关系 <code>__metadata()</code> 与 <code>__metadata</code> 属性 (97/99)； JSON字符串属性解码（127）； <code>denormalize()</code> 逻辑异常防护 (147); <code>setSerializer()</code>/<code>setNormalizer()</code> 转发存根实现 <code>NormalizerAwareInterface</code>/<code>SerializerInterface</code>+<code>NormalizerInterface</code> (169–170, 180)。</li>
 <li><code>OpenApiEnricherListener</code> 和 <code>LocaleListener</code> 使用真实的 <code>Request</code>/<code>Response</code>/<code>*Event</code> 对象进行练习。</li>
 </ul>
@@ -2786,7 +2786,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === 'en'  (expected 'zh')</span>
 </code></pre></div></li>
-<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空格/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
+<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空白/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
 </ul>
 <h3 id="34-expressiondqlparser">3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低<a class="headerlink" href="#34-expressiondqlparser" title="Permanent link">&para;</a></h3>
 <p>无法提高到 100% 的四条线是任何公众意见都无法达到的。每个都是一个防御分支，其守卫永远不会失败：</p>
@@ -2845,10 +2845,10 @@
 </ul>
 <h2 id="5">5. 建议的后续行动<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Fix §3.1 (JSON string corruption) and §3.2 (relation field loss) in <code>FlatNormalizer</code> — both change API response payloads.</li>
-<li>Harden §3.3 (<code>Accept-Language</code> parsing) with a proper tokenizer.</li>
-<li>Clean up the §3.4 dead branches or add a <code>@codeCoverageIgnore</code>/comment so coverage audits stop flagging them.</li>
-<li>Make <code>ExpressionQueryBuilderAssembler</code> join failures visible (§3.5).</li>
+<li>修复 <code>FlatNormalizer</code> 中的 §3.1（JSON 字符串损坏）和 §3.2（关系字段丢失）——两者都会更改 API 响应负载。</li>
+<li>使用适当的分词器强化 §3.3（<code>Accept-Language</code> 解析）。</li>
+<li>清理 §3.4 死分支或添加 <code>@codeCoverageIgnore</code>/ 注释，以便覆盖率审计停止标记它们。</li>
+<li>使 <code>ExpressionQueryBuilderAssembler</code> 连接失败可见（第 3.5 节）。</li>
 </ol>
 
 

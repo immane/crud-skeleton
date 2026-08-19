@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2760,7 +2760,7 @@
 <li><strong>文件/行：</strong> <code>src/Trade/Controller/App/OrderController.php:158-166</code> (<code>applyUserOrderTransition()</code>)，由 <code>submitAction</code> (123-132) 和 <code>confirmAction</code> (134-143) 使用。</li>
 <li><strong>描述：</strong> 与 <code>cancelAction</code> (194-202) 和 <code>paymentAction</code> (226-230) 不同，它们将 <code>wrapInTransaction(...)</code>/<code>workflow-&gt;apply(...)</code> 包裹在 <code>try/catch</code> 中并返回 400 警告，<code>applyUserOrderTransition()</code> 在 <code>wrapInTransaction()</code> 内执行转换，<strong>没有 <code>try/catch</code></strong>。任何异常（工作流 <code>NotEnabledTransitionException</code>、数据库故障、侦听器错误）都会从操作中传播出去。</li>
 <li><strong>影响：</strong> 失败的提交/确认返回未处理的异常→ HTTP 500（Symfony 异常处理），而不是同一控制器上的所有其他突变返回一致的 <code>400 {"code":400,"message":...}</code> JSON。 API 客户端看到不一致的合同；在开发中，原始异常可能会暴露。</li>
-<li><strong>复制：</strong>（通过探测测试验证）- 所有者匹配，<code>workflow-&gt;can($order,'submit') === true</code>，然后 <code>workflow-&gt;apply($order,'submit')</code> 抛出。结果：<code>submitAction()</code> <strong>抛出</strong> <code>RuntimeException('submit boom')</code>;同一文件中的 <code>cancelAction()</code>/<code>paymentAction()</code> 对于等效失败返回 400 警告。</li>
+<li><strong>复制：</strong>（通过探测测试验证）- 所有者匹配，<code>workflow-&gt;can($order,'submit') === true</code>，然后 <code>workflow-&gt;apply($order,'submit')</code> 抛出。结果：<code>submitAction()</code> <strong>抛出</strong> <code>RuntimeException('submit boom')</code>;同一文件中的 <code>cancelAction()</code>/<code>paymentAction()</code> 对于同等失败返回 400 警告。</li>
 <li><strong>正确行为测试：</strong> <code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> 断言 400 响应；它针对当前代码<strong>失败</strong>，因此<strong>被跳过</strong>（请参阅跳过的项目）。</li>
 <li><strong>建议的修复：</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">try {</span>
