@@ -1264,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -1376,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -1678,10 +1678,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -2182,35 +2182,35 @@
    删除约 90 条重复行。）</p>
 </li>
 <li>
-<p><strong><code>TradePaymentIntegrationTest::testAppUserCanSubmitConfirmAndPayOwnOrder</code></strong> re-asserts the
-   app submit/confirm steps already covered by <code>OrderWorkflowApiTest::testAppUserSubmitConfirmAndCancelOwnOrder</code>;
-   keep only the invoice-based pay step (autoPaid mock) as the unique delta, or fold it into the
-   surviving app-flow test.</p>
+<p><strong><code>TradePaymentIntegrationTest::testAppUserCanSubmitConfirmAndPayOwnOrder</code></strong> 重新断言
+   <code>OrderWorkflowApiTest::testAppUserSubmitConfirmAndCancelOwnOrder</code> 已涵盖应用程序提交/确认步骤；
+   仅保留基于发票的付款步骤（自动付款模拟）作为唯一增量，或将其折叠到
+   通过应用程序流程测试。</p>
 </li>
 </ol>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>Follow the strategy's mandatory commands and the 2026-08-09 report conventions:</p>
+<h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>遵循该策略的强制性命令和 2026-08-09 报告惯例：</p>
 <ol>
-<li>Baseline: run the two biggest files and capture timings before edits:
+<li>基线：运行两个最大的文件并在编辑前捕获计时：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/TradeApiIntegrationTest.php<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>--no-coverage
 </code></pre></div></li>
-<li>Apply deletions, then re-run the survivors in isolation first:
+<li>应用删除，然后首先隔离地重新运行幸存者：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>tests/Trade/Integration/TradeRepoFullTest.php<span class="w"> </span>--no-coverage
 </code></pre></div></li>
-<li>Prove no <code>src/Trade</code> coverage regression: capture clover before/after on the affected areas
-   and diff the <code>count="0"</code> statements (the campaign's own technique):
+<li>证明没有<code>src/Trade</code>覆盖回归：在受影响区域之前/之后捕获三叶草
+   并区分 <code>count="0"</code> 语句（该活动自己的技术）：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml
 </code></pre></div>
-   Expected result: <code>OrderWorkflowApiTest</code> keeps the state-machine lines covered; <code>TradeRepoFullTest</code>
-   keeps the repository lines covered; the deleted <code>TradeRepositoryIntegrationTest</code> adds no unique lines.</li>
-<li>Full suite on CI PostgreSQL must stay green (2686 → fewer tests, same line coverage ≥ 90%):
-   <code>composer phpstan</code>, <code>composer rector:types:check</code>, full <code>phpunit</code> run.</li>
-<li>Confirm exactly ONE skipped doTransition-tamper regression remains (the integration twin in
-   <code>OrderWorkflowApiTest</code>), and update <code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> /
-   <code>trade-workflow-badpaths.md</code> if the referenced unit test is removed.</li>
-<li>Confirm the skipped Bug-1 test (<code>App/OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code>)
-   and all other bug-documenting skips are untouched.</li>
+   预期结果：<code>OrderWorkflowApiTest</code> 保持状态机线被覆盖； <code>TradeRepoFullTest</code>
+   保持存储库线被覆盖；删除的 <code>TradeRepositoryIntegrationTest</code> 不添加任何唯一行。</li>
+<li>CI PostgreSQL 上的全套套件必须保持绿色（2686 → 更少的测试，同一行覆盖率≥ 90%）：
+   <code>composer phpstan</code>、<code>composer rector:types:check</code>、完整<code>phpunit</code>运行。</li>
+<li>准确确认 1 个跳过的 doTransition-tamper 回归仍然存在（集成双胞胎
+   <code>OrderWorkflowApiTest</code>)，并更新<code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> /
+   <code>trade-workflow-badpaths.md</code> 如果引用的单元测试被删除。</li>
+<li>确认跳过的Bug-1测试(<code>App/OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code>)
+   所有其他错误记录跳过都保持不变。</li>
 </ol>
 
 
