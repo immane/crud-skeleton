@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1745,7 +1745,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1885,7 +1885,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2035,7 +2035,7 @@
   <a href="#bug-2-localstoragedelete-e_warning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #2（次要） - LocalStorage::delete() 在取消链接失败时发出未抑制的 E_WARNING
+        Bug #2（次要）- LocalStorage::delete() 在取消链接失败时发出未抑制的 E_WARNING
       
     </span>
   </a>
@@ -2195,7 +2195,7 @@
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="x">}</span>
 </code></pre></div></li>
 </ul>
-<h3 id="bug-2-localstoragedelete-e_warning">Bug #2（次要） - <code>LocalStorage::delete()</code> 在取消链接失败时发出未抑制的 E_WARNING<a class="headerlink" href="#bug-2-localstoragedelete-e_warning" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-localstoragedelete-e_warning">Bug #2（次要）- <code>LocalStorage::delete()</code> 在取消链接失败时发出未抑制的 E_WARNING<a class="headerlink" href="#bug-2-localstoragedelete-e_warning" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Storage/Service/LocalStorage.php:64</code> (<code>if (is_file($realPath) &amp;&amp; !unlink($realPath))</code>)。</li>
 <li><strong>描述：</strong> <code>unlink()</code> 在没有 <code>@</code> 或错误处理程序的情况下调用。当删除失败（例如，权限被拒绝）时，PHP 在第 65 行抛出预期的 <code>RuntimeException</code> 之前发出 <code>unlink(...): Permission denied</code>。</li>
@@ -2206,7 +2206,7 @@
 <h2 id="_4">观察结果（不是错误）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li>通过精心设计的 <code>$name</code> （例如 <code>../escape.txt</code>）进行的 <code>LocalStorage::store()</code> 路径遍历尝试被 Symfony 的 <code>File::getName()</code> 基本名称剥离所抵消 - 文件存储在目标目录中。经经验验证；不是一个错误。</li>
-<li><code>LocalStorage.php:39-41</code>仅用于防御：它只能通过<code>mkdir()</code>/<code>is_dir()</code>竞赛到达，这就是它在生产路径中被发现的原因。</li>
+<li><code>LocalStorage.php:39-41</code> 仅用于防御：它只能通过 <code>mkdir()</code>/<code>is_dir()</code> 竞赛到达，这就是它在生产路径中被发现的原因。</li>
 <li><code>MediaStorageRegistry</code>通过<code>getName()</code>键驱动；无提示名称冲突（两个驱动程序返回相同的名称）会无提示地覆盖前一个驱动程序。严重程度较低，可以说是设计使然。</li>
 <li><code>QiniuStorage::delete()</code> 还使用 <code>str_replace(..., $path)</code> ，它从字符串中的任何位置剥离域（不仅仅是前缀）；修复 Bug #1 将其替换为前缀检查并消除该问题。</li>
 </ul>

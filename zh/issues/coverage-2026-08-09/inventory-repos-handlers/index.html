@@ -27,7 +27,7 @@
     
     
       
-        <title>Inventory module — Repositories & MessageHandlers coverage to ~100% & bug hunt (2026-08-09) - CRUD Skeleton</title>
+        <title>库存模块 — 存储库和消息处理程序覆盖率达到约 100% 并寻找 bug (2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#inventory-module-repositories-messagehandlers-coverage-to-100-bug-hunt-2026-08-09" class="md-skip">
+        <a href="#100-bug-2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Inventory module — Repositories &amp; MessageHandlers coverage to ~100% &amp; bug hunt (2026-08-09)
+              库存模块 — 存储库和消息处理程序覆盖率达到约 100% 并寻找 bug (2026-08-09)
             
           </span>
         </div>
@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1745,7 +1745,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1885,7 +1885,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -1987,10 +1987,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#test-files-added" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test files added
+        添加测试文件
       
     </span>
   </a>
@@ -1998,10 +1998,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage-results" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Coverage results
+        覆盖结果
       
     </span>
   </a>
@@ -2009,22 +2009,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bugs-found" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bugs found
+        发现错误
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Bugs found">
+    <nav class="md-nav" aria-label="发现错误">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-release-handler-accepts-impossible-calendar-dates-its-new-datetimeimmutable-check-is-a-no-op" class="md-nav__link">
+  <a href="#bug-1-new-datetimeimmutable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #1 — Release handler accepts impossible calendar dates; its new \DateTimeImmutable() check is a no-op
+        Bug #1 — 发布处理程序接受不可能的日历日期；它的 new \DateTimeImmutable() 检查是一个空操作
       
     </span>
   </a>
@@ -2070,7 +2070,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         注释
@@ -2100,94 +2100,94 @@
   
 
 
-<h1 id="inventory-module-repositories-messagehandlers-coverage-to-100-bug-hunt-2026-08-09">Inventory module — Repositories &amp; MessageHandlers coverage to ~100% &amp; bug hunt (2026-08-09)<a class="headerlink" href="#inventory-module-repositories-messagehandlers-coverage-to-100-bug-hunt-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Scope: <code>src/Inventory/Repository/RecipeLineRepository.php</code>, <code>src/Inventory/Repository/ReservationLineRepository.php</code>, <code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php</code>, <code>src/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php</code>.
-Goal: raise line coverage to ~100% and document bugs. <strong>No code under <code>src/</code> was modified.</strong></p>
-<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
+<h1 id="100-bug-2026-08-09">库存模块 — 存储库和消息处理程序覆盖率达到约 100% 并寻找 bug (2026-08-09)<a class="headerlink" href="#100-bug-2026-08-09" title="Permanent link">&para;</a></h1>
+<p>范围：<code>src/Inventory/Repository/RecipeLineRepository.php</code>、<code>src/Inventory/Repository/ReservationLineRepository.php</code>、<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php</code>、<code>src/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php</code>。
+目标：将线路覆盖率提高到 100% 并记录错误。 <strong>没有修改<code>src/</code>下的代码。</strong></p>
+<h2 id="_1">添加测试文件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Purpose</th>
+<th>文件</th>
+<th>测试</th>
+<th>目的</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Inventory/Repository/RecipeLineRepositoryTest.php</code></td>
-<td>5 (new)</td>
-<td>Container instantiation of the trivial <code>ServiceEntityRepository</code> subclass (covers the constructor line), <code>findAll</code>, <code>findOneBy</code> material / <code>findBy</code> recipe, <code>find(id)</code> + unknown-id null, <code>remove</code>+flush.</td>
+<td>5（新）</td>
+<td>简单的 <code>ServiceEntityRepository</code> 子类的容器实例化（涵盖构造函数行）、<code>findAll</code>、<code>findOneBy</code> 材料/<code>findBy</code> 配方、<code>find(id)</code> + 未知 id null、<code>remove</code>+flush。</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Repository/ReservationLineRepositoryTest.php</code></td>
-<td>5 (new)</td>
-<td>Container instantiation (covers the constructor line), <code>findAll</code>, <code>findBy</code> materialUuid, <code>findBy</code> reservation, <code>find(id)</code> via reflection (entity exposes no id getter) + unknown-id null, <code>remove</code>+flush.</td>
+<td>5（新）</td>
+<td>容器实例化（涵盖构造函数行）、<code>findAll</code>、<code>findBy</code>materialUuid、<code>findBy</code> 保留、<code>find(id)</code> 通过反射（实体不公开 id getter）+ 未知 id null、<code>remove</code>+flush。</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationRequestedHandlerTest.php</code></td>
-<td>12 (new, unit)</td>
-<td>Envelope validation: wrong type/version, malformed envelope, missing payload fields, empty items, non-ISO timestamp, impossible calendar date (<code>2026-02-30</code>), fractional-second timestamp + expiry check, expiry ≤ request time, malformed item (non-UUID catalog ref, zero quantity, duplicate lineId); mock-based skip-inside-transaction (line 36).</td>
+<td>12（新，单位）</td>
+<td>信封验证：类型/版本错误、信封格式错误、缺少有效负载字段、空项目、非 ISO 时间戳、不可能的日历日期 (<code>2026-02-30</code>)、小数秒时间戳 + 过期检查、过期 ≤ 请求时间、格式错误的项目（非 UUID 目录引用、零数量、重复的 lineId）；基于模拟的skip-inside-transaction（第36行）。</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandlerTest.php</code></td>
-<td>8 (new, unit)</td>
-<td>Envelope validation: wrong type/version, malformed envelope, invalid correlation, empty reason, missing <code>requestedAt</code>, non-ISO timestamp; mock-based event-ID reuse conflict (lines 128-129) and skip-inside-transaction (line 37).</td>
+<td>8（新，单位）</td>
+<td>信封验证：类型/版本错误、信封格式错误、关联无效、原因为空、缺少 <code>requestedAt</code>、非 ISO 时间戳；基于模拟的事件 ID 重用冲突（第 128-129 行）和skip-inside-transaction（第 37 行）。</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationRequestedHandlerIntegrationTest.php</code></td>
-<td>3 (new)</td>
-<td>Recipe-resolution failure through the handler (<code>MATERIAL_INACTIVE</code> rejection), missing specification (<code>SPECIFICATION_NOT_STOCKABLE</code> rejection), and service exception propagation with consumed-event rollback (<code>InventoryReservationConflictException</code>).</td>
+<td>3（新）</td>
+<td>通过处理程序解决方案失败（<code>MATERIAL_INACTIVE</code> 拒绝）、缺少规范（<code>SPECIFICATION_NOT_STOCKABLE</code> 拒绝）以及使用消费事件回滚的服务异常传播 (<code>InventoryReservationConflictException</code>)。</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandlerIntegrationTest.php</code></td>
-<td>3 (new)</td>
-<td>Release for unknown reservation throws (line 41), same-event-id idempotency (lines 32, 132, single consumed row), and already-released reservation is a silent no-op for a second (different event-id) release.</td>
+<td>3（新）</td>
+<td>未知预留的释放抛出（第 41 行）、相同事件 ID 幂等性（第 32、132 行，单个消费行），并且已释放的预留对于第二个（不同事件 ID）释放来说是静默无操作。</td>
 </tr>
 </tbody>
 </table>
-<p>Existing <code>tests/Inventory/*</code> were <strong>not</strong> modified. Total added: 36 tests, all passing, <strong>0 skipped</strong>.</p>
-<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
-<p>Measured with PHP 8.5 + Xdebug (<code>XDEBUG_MODE=coverage</code>, <code>--coverage-clover</code>) over the whole <code>tests/Inventory</code> tree (109 tests, 351 assertions, all green). Line coverage per target file:</p>
+<p><strong>未</strong>修改现有的 <code>tests/Inventory/*</code>。添加总数：36 项测试，全部通过，<strong>0 跳过</strong>。</p>
+<h2 id="_2">覆盖结果<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>使用 PHP 8.5 + Xdebug (<code>XDEBUG_MODE=coverage</code>、<code>--coverage-clover</code>) 在整个 <code>tests/Inventory</code> 树上进行测量（109 个测试、351 个断言，均为绿色）。每个目标文件的行覆盖率：</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Before</th>
-<th>After</th>
+<th>文件</th>
+<th>之前</th>
+<th>之后</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Inventory/Repository/RecipeLineRepository.php</code></td>
-<td><strong>0%</strong> (0/1) — line 16</td>
+<td><strong>0%</strong> (0/1) — 第 16 行</td>
 <td><strong>100%</strong> (1/1)</td>
 </tr>
 <tr>
 <td><code>Inventory/Repository/ReservationLineRepository.php</code></td>
-<td><strong>0%</strong> (0/1) — line 16</td>
+<td><strong>0%</strong> (0/1) — 第 16 行</td>
 <td><strong>100%</strong> (1/1)</td>
 </tr>
 <tr>
 <td><code>Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php</code></td>
-<td>83.33% — lines <strong>32, 37, 41, 76, 94, 98, 101, 102, 128, 129, 132</strong></td>
-<td><strong>100%</strong> (66/66 stmts)</td>
+<td>83.33% — 第 <strong>32、37、41、76、94、98、101、102、128、129、132</strong> 行<strong>100%</strong>（66/66 条）</td>
+<td></td>
 </tr>
 <tr>
 <td><code>Inventory/MessageHandler/InventoryReservationRequestedHandler.php</code></td>
-<td>92.86% — lines <strong>36, 104, 105, 108, 125, 156, 163, 175</strong></td>
-<td><strong>99.11%</strong> (111/112 stmts) — sole remaining uncovered statement is <strong>line 163</strong>, which is provably unreachable (see Bug #2)</td>
+<td>92.86% — 第 <strong>36、104、105、108、125、156、163、175</strong> 行<strong>99.11%</strong> (111/112 stmts) — 唯一剩余的未覆盖语句是 <strong>第 163 行</strong>，它被证明是无法访问的（参见 Bug #2）</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<p>Newly covered behaviour, by line:</p>
+<p>新涵盖的行为，按行：</p>
 <ul>
-<li><strong>Release handler</strong>: line 32 outer idempotent early-return (same message delivered twice); line 37 inner skip-inside-transaction (defence in depth, exercised with a queueing repository mock); line 41 <code>Reservation was not found.</code>; line 76 malformed-envelope throw; line 94 invalid release payload (blank reason / missing <code>requestedAt</code>); lines 98/101/102 non-ISO <code>requestedAt</code> throw + re-wrap; lines 128-129 <code>InventoryMessageIntegrityException</code> on event-ID reuse with a different payload; line 132 <code>isAlreadyConsumed()</code> returning true for a matching hash.</li>
-<li><strong>Requested handler</strong>: line 36 skip-inside-transaction (queueing repository mock); lines 104-105 timestamp parse error re-wrap; line 108 <code>expiry must be after request time</code>; line 125 malformed item (non-UUID catalog reference, zero quantity, duplicate lineId); line 156 non-ISO timestamp; lines 161-168 fractional-second <code>parseDate</code> branch (padding + <code>\.u</code> format); line 175 impossible-calendar-date rejection via <code>DateTimeImmutable::getLastErrors()</code>.</li>
-<li><strong>Repositories</strong>: constructor <code>parent::__construct()</code> instantiated through the container and exercised with real <code>find</code>/<code>findBy</code>/<code>findAll</code>/<code>remove</code> against the SQLite test DB.</li>
+<li><strong>释放处理程序</strong>：第32行外部幂等提前返回（相同的消息传递两次）；第37行内部skip-inside-transaction（深度防御，使用排队存储库模拟进行）；第 41 行 <code>Reservation was not found.</code>;第 76 行 畸形信封投掷；第 94 行无效的释放有效负载（空白原因/缺少 <code>requestedAt</code>）；第 98/101/102 行非 ISO <code>requestedAt</code> 抛出 + 重新换行；第 128-129 行 <code>InventoryMessageIntegrityException</code> 关于事件 ID 与不同负载的重用；第 132 行 <code>isAlreadyConsumed()</code> 对于匹配的哈希值返回 true。</li>
+<li><strong>请求的处理程序</strong>：第36行skip-inside-transaction（排队存储库模拟）；第 104-105 行时间戳解析错误重新包装；第 108 行 <code>expiry must be after request time</code>;第 125 行商品格式错误（非 UUID 目录参考、零数量、重复的 lineId）；第 156 行非 ISO 时间戳；第 161-168 行小数秒 <code>parseDate</code> 分支（填充 + <code>\.u</code> 格式）；第 175 行不可能的日历日期通过 <code>DateTimeImmutable::getLastErrors()</code> 拒绝。</li>
+<li><strong>存储库</strong>：构造函数 <code>parent::__construct()</code> 通过容器实例化，并针对 SQLite 测试数据库使用真实的 <code>find</code>/<code>findBy</code>/<code>findAll</code>/<code>remove</code> 进行练习。</li>
 </ul>
-<p>Lines 31 and 188 of the requested handler and line 48 of the release handler are covered by the pre-existing <code>tests/Inventory/Integration/InventoryMessagingAndApiTest.php</code> (<code>testRequestedAndReleasedMessagesAreIdempotent</code>, <code>testInboxRejectsEventIdReusedWithDifferentPayload</code>, <code>testReleaseMessageRejectsMismatchedReservationCorrelations</code>); they are <strong>not</strong> duplicated in the new files.</p>
-<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
-<h3 id="bug-1-release-handler-accepts-impossible-calendar-dates-its-new-datetimeimmutable-check-is-a-no-op">Bug #1 — Release handler accepts impossible calendar dates; its <code>new \DateTimeImmutable()</code> check is a no-op<a class="headerlink" href="#bug-1-release-handler-accepts-impossible-calendar-dates-its-new-datetimeimmutable-check-is-a-no-op" title="Permanent link">&para;</a></h3>
+<p>请求处理程序的第 31 行和第 188 行以及释放处理程序的第 48 行由预先存在的 <code>tests/Inventory/Integration/InventoryMessagingAndApiTest.php</code>（<code>testRequestedAndReleasedMessagesAreIdempotent</code>、<code>testInboxRejectsEventIdReusedWithDifferentPayload</code>、<code>testReleaseMessageRejectsMismatchedReservationCorrelations</code>）覆盖；它们在新文件中<strong>不</strong>重复。</p>
+<h2 id="_3">发现错误<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-new-datetimeimmutable">Bug #1 — 发布处理程序接受不可能的日历日期；它的 <code>new \DateTimeImmutable()</code> 检查是一个空操作<a class="headerlink" href="#bug-1-new-datetimeimmutable" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Inventory/MessageHandler/InventoryReservationReleaseRequestedHandler.php:97-100</code>。</li>
 <li><strong>描述：</strong> <code>requestedAt</code> 仅由第 97-98 行的正则表达式验证，然后由第 100 行的 <code>new \DateTimeImmutable($requestedAt)</code> 验证。PHP 的 <code>DateTimeImmutable</code> 构造函数默默地 * 规范化 * 超出范围的日期而不是抛出 — <code>2026-02-30T00:00:00+00:00</code> 毫无例外地变成 2026-03-02 — 因此第 100 行永远不会失败，并且不会添加任何超出正则表达式的内容。 101-102 处的 <code>catch</code> 只能由第 98 行的正则表达式 <code>throw</code> 触发。同时，预订请求处理程序的 <code>parseDate()</code> (<code>InventoryReservationRequestedHandler.php:153-179</code>) 通过 <code>DateTimeImmutable::getLastErrors()</code> 拒绝相同的不可能日期。两个处理程序对同一类型时间戳的验证不一致。</li>
@@ -2219,7 +2219,7 @@ Goal: raise line coverage to ~100% and document bugs. <strong>No code under <cod
 <li><strong>复制（集成探针）：</strong>带有 <code>quantity = '123456789012345'</code> 的请求消息通过 <code>validateEnvelope()</code>，然后处理程序失败并返回 <code>InvalidArgumentException: Quantity exceeds decimal(20, 6).</code>。</li>
 <li><strong>建议的修复：</strong> 绑定处理程序正则表达式中的数字，例如<code>/^[0-9]{1,14}(?:\.[0-9]{1,6})?$/</code>，或对 <code>validateEnvelope()</code> 内的每个项目调用 <code>Quantity::normalize()</code>，以便预先拒绝超出范围的数量。</li>
 </ul>
-<h2 id="_1">注释<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_4">注释<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>src/Inventory/Message/*</code> 类已被预先存在的 <code>tests/Inventory/Message/InventoryMessageTest.php</code> 加上发件箱发布测试覆盖；不需要新消息测试。</li>
 <li>无需跳过任何正确行为测试：所有 36 个新测试都通过了当前的 <code>src/</code>。 Bug #1、#3 和 #4 是通过一次性集成探针（随后删除）确认的，而不是通过提交的通过/失败测试来确认的。</li>

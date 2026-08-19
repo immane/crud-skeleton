@@ -749,7 +749,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -2034,7 +2034,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2174,7 +2174,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2534,19 +2534,19 @@
 
 
 <h1 id="_1">结算操作手册<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>本 Runbook 是配置、发布和操作
+<p>This runbook is the operational guide for configuring, publishing, and operating the
 结算捆绑。它补充了设计文件
-<a href="../../design/bundles/settlement/"><t17/></a> 与混凝土，
+<a href="../../design/bundles/settlement/"><t17/></a> with concrete,
 分步程序和工作示例。</p>
 <h2 id="1">1. 一分钟概念<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>资金</strong>是结算时确认的、可信的金额（例如订单付款）
-  必须分配。</li>
-<li><strong>计划</strong>是将一笔资金分为<strong>分配</strong>给受助者。</li>
-<li><strong>规则</strong>是<em>谁得到什么</em>的版本化、声明性定义。</li>
+  must allocate.</li>
+<li>A <strong>plan</strong> is one funding amount split into <strong>allocations</strong> for recipients.</li>
+<li>A <strong>rule</strong> is a versioned, declarative definition of <em>who gets what</em>.</li>
 <li>规则<strong>一旦发布就不可更改</strong>；计划存储所使用的确切版本和跟踪。</li>
-<li>货币<strong>精确</strong>（18 进制量子，<code>brick/math</code>）；没有漂浮物。</li>
-<li>分配通过<code>SettlementVoucherPort</code>边界发布到<strong>钱包</strong>，
+<li>Money is <strong>exact</strong> (18-decimal quantum, <code>brick/math</code>); no floats.</li>
+<li>Allocations are posted to <strong>Wallet</strong> through the <code>SettlementVoucherPort</code> boundary,
   通过结算发件箱异步进行。</li>
 </ul>
 <h2 id="2">2. 规则生命周期<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
@@ -2569,11 +2569,11 @@
 <td><code>POST /api/v1/manage/settlement-rule-versions</code></td>
 </tr>
 <tr>
-<td>更新草稿版本</td>
+<td>Update draft version</td>
 <td><code>PUT /api/v1/manage/settlement-rule-versions/{id}</code></td>
 </tr>
 <tr>
-<td>发布版本</td>
+<td>Publish version</td>
 <td><code>POST /api/v1/manage/settlement-rule-versions/{uuid}/publish</code></td>
 </tr>
 <tr>
@@ -2582,7 +2582,7 @@
 </tr>
 </tbody>
 </table>
-<p>发布的版本是不可变的。要更改规则，请使用新的规则创建<strong>新</strong>版本
+<p>发布的版本是不可变的。 To change a rule, create a <strong>new</strong> version with a new
 有效间隔并发布。现有计划保留其历史快照。</p>
 <h2 id="3">3. 规则定义结构<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
@@ -2724,7 +2724,7 @@
 </tr>
 </tbody>
 </table>
-<p>所有事实都必须由源适配器投射到冻结资金快照中。
+<p>All facts must be projected into the frozen funding snapshot by the source adapter.
 未知的事实在计划创建时被拒绝。</p>
 <h2 id="6">6. 公式原语<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <table>
@@ -2796,9 +2796,9 @@
 <h3 id="73">7.3 发布<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>POST /api/v1/manage/settlement-rule-versions/{versionUuid}/publish
 </code></pre></div>
-<p>该版本现在是不可变的并且从 <code>effectiveFrom</code> 开始处于活动状态。</p>
+<p>The version is now immutable and active from <code>effectiveFrom</code>.</p>
 <h2 id="8">8. 一步一步：每件特工奖励<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<p>目标：对于每一个规格为<code>32</code>且单价高于<code>3.00</code>的订单行，
+<p>Goal: for every order line whose specification is <code>32</code> and unit price is above <code>3.00</code>,
 支付订单代理<code>3.00 × quantity</code>。</p>
 <h3 id="81">8.1 创建规则草案<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>POST /api/v1/manage/settlement-rules
@@ -2908,7 +2908,7 @@
 <tbody>
 <tr>
 <td><code>GET /api/v1/manage/settlement-plans</code></td>
-<td>列出计划</td>
+<td>List plans</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-plans/{id}</code></td>
@@ -2916,7 +2916,7 @@
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-allocations</code></td>
-<td>分配清单</td>
+<td>List allocations</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-rules</code></td>
@@ -2936,7 +2936,7 @@
 </tr>
 </tbody>
 </table>
-<p>守恒不变量（必须在计划为 <code>posted</code> 之前保持）：</p>
+<p>Conservation invariants (must hold before a plan is <code>posted</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>fundingAmount = allocationAmountTotal + unallocatedAmount
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>fundingPostingAmount = sum(allocation.postingAmount) + unallocatedPostingAmount
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>unallocatedAmount = 0
@@ -2953,13 +2953,13 @@
 </thead>
 <tbody>
 <tr>
-<td>计划创建被拒绝</td>
-<td>未知事实、负金额或分配总额超过资金</td>
+<td>Plan creation rejected</td>
+<td>Unknown fact, negative amount, or allocation total exceeds funding</td>
 <td>查看资格/公式和快照事实</td>
 </tr>
 <tr>
 <td>规则不适用</td>
-<td><code>appliesTo</code> 不匹配、尚未生效或未发布</td>
+<td><code>appliesTo</code> mismatch, not yet effective, or not published</td>
 <td>检查源类型、<code>effectiveFrom</code>、发布状态</td>
 </tr>
 <tr>
@@ -2968,32 +2968,32 @@
 <td>运行 <code>app:settlement:outbox:publish</code></td>
 </tr>
 <tr>
-<td><code>retryable_failure</code></td>
-<td>中的分配暂时性钱包错误</td>
-<td>运行 <code>app:settlement:allocations:requeue-due</code></td>
+<td>Allocation in <code>retryable_failure</code></td>
+<td>暂时性钱包错误</td>
+<td>Run <code>app:settlement:allocations:requeue-due</code></td>
 </tr>
 <tr>
-<td>收件人被拒绝</td>
+<td>Recipient rejected</td>
 <td>不是 <code>wallet</code> 类型/id</td>
 <td>配置 <code>{"type":"wallet","id":"&lt;wallet-id&gt;"}</code></td>
 </tr>
 <tr>
 <td>保护失败</td>
 <td>四舍五入或规则余数未吸收</td>
-<td>确保存在后备收件人（默认平台）</td>
+<td>Ensure a fallback recipient exists (default platform)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="13">13. 上线前的检查清单<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
 <ul>
-<li>[ ] 规则版本通过配置模式进行解析和验证。</li>
+<li>[ ] Rule version parses and validates via the configuration schema.</li>
 <li>[ ] <code>appliesTo</code> 匹配资金来源类型。</li>
-<li>[ ] <code>effectiveFrom</code>已设置，并且<code>effectiveTo</code>不与已发布的版本重叠。</li>
+<li>[ ] <code>effectiveFrom</code> is set and <code>effectiveTo</code> does not overlap a published version.</li>
 <li>[ ] 收件人解析为真实的钱包 ID。</li>
-<li>[ ] 资格和公式引用的每个 <code>config</code>/fact 均由源适配器预测。</li>
-<li>[ ] 已安排发件箱中继和重新排队命令。</li>
-<li>[ ] 存在后备接收者，因此保留舍入余数。</li>
-<li>[ ] 审核端点返回预期的计划、分配和跟踪。</li>
+<li>[ ] Every <code>config</code>/fact referenced by eligibility and formula is projected by the source adapter.</li>
+<li>[ ] Outbox relay and requeue commands are scheduled.</li>
+<li>[ ] A fallback recipient exists so rounding remainder is conserved.</li>
+<li>[ ] Audit endpoints return the expected plans, allocations, and traces.</li>
 </ul>
 
 

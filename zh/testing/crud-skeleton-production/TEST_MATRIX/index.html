@@ -31,7 +31,7 @@
     
     
       
-        <title>Test Matrix - CRUD Skeleton</title>
+        <title>测试矩阵 - CRUD Skeleton</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#crud-skeleton-test-matrix" class="md-skip">
+        <a href="#crud" class="md-skip">
           跳转至
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Test Matrix
+              测试矩阵
             
           </span>
         </div>
@@ -749,7 +749,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1758,7 +1758,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1776,7 +1776,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1802,10 +1802,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#critical-paths" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Critical Paths
+        关键路径
       
     </span>
   </a>
@@ -1813,10 +1813,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#test-selection" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test Selection
+        测试选择
       
     </span>
   </a>
@@ -1958,7 +1958,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2060,10 +2060,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#critical-paths" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Critical Paths
+        关键路径
       
     </span>
   </a>
@@ -2071,10 +2071,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#test-selection" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test Selection
+        测试选择
       
     </span>
   </a>
@@ -2101,139 +2101,139 @@
   
 
 
-<h1 id="crud-skeleton-test-matrix">CRUD Skeleton Test Matrix<a class="headerlink" href="#crud-skeleton-test-matrix" title="Permanent link">&para;</a></h1>
-<p>This matrix is maintained when a module or business path changes. Test paths are
-representative ownership locations, not an exhaustive inventory of every test.</p>
+<h1 id="crud">CRUD 骨架测试矩阵<a class="headerlink" href="#crud" title="Permanent link">&para;</a></h1>
+<p>当模块或业务路径发生变化时，会维护该矩阵。测试路径是
+具有代表性的所有权地点，并非每次测试的详尽清单。</p>
 <table>
 <thead>
 <tr>
-<th>Area</th>
-<th>Primary risk</th>
-<th>Required validation</th>
-<th>Current owning tests / scripts</th>
+<th>面积</th>
+<th>主要风险</th>
+<th>所需验证</th>
+<th>当前拥有的测试/脚本</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Core API framework</td>
-<td>inconsistent response, exception, locale, pagination, or query semantics</td>
-<td>unit plus HTTP integration for public behaviour</td>
-<td><code>tests/Core/</code>, <code>tests/Integration/Core*</code></td>
+<td>核心API框架</td>
+<td>不一致的响应、异常、区域设置、分页或查询语义单元加 HTTP 集成以实现公共行为</td>
+<td><code>tests/Core/</code>、<code>tests/Integration/Core*</code></td>
+<td></td>
 </tr>
 <tr>
-<td>Identity</td>
-<td>token misuse, account takeover, cross-user access</td>
-<td>token lifecycle, auth failure, role and owner-boundary HTTP tests</td>
-<td><code>tests/Identity/</code>, <code>tests/Integration/TokenRevocationIntegrationTest.php</code></td>
+<td>身份</td>
+<td>令牌滥用、帐户接管、跨用户访问</td>
+<td>令牌生命周期、身份验证失败、角色和所有者边界 HTTP 测试<code>tests/Identity/</code>、<code>tests/Integration/TokenRevocationIntegrationTest.php</code></td>
+<td></td>
 </tr>
 <tr>
-<td>Common CMS and storage</td>
-<td>unauthorized media/content access, upload cleanup failure</td>
-<td>owner/public/admin scope, validation, storage-driver failure tests</td>
+<td>常见CMS和存储</td>
+<td>未经授权的媒体/内容访问，上传清理失败</td>
+<td>所有者/公共/管理范围、验证、存储驱动程序故障测试</td>
 <td><code>tests/Common/</code></td>
 </tr>
 <tr>
-<td>Trade and promotions</td>
-<td>wrong price, invalid order lifecycle, incorrect snapshot</td>
-<td>pricing table cases, quote/order integration, valid and invalid workflow transitions</td>
-<td><code>tests/Trade/</code>, <code>tests/Promotion/</code></td>
+<td>贸易和促销</td>
+<td>价格错误、订单生命周期无效、快照不正确</td>
+<td>定价表案例、报价/订单集成、有效和无效工作流程转换</td>
+<td><code>tests/Trade/</code>、<code>tests/Promotion/</code></td>
 </tr>
 <tr>
-<td>Wallet</td>
-<td>lost or duplicated money, balance drift</td>
-<td>atomic transfer/deposit, idempotency, optimistic-lock and reconciliation tests</td>
+<td>钱包</td>
+<td>钱丢失或重复，余额漂移</td>
+<td>原子传输/存款、幂等性、乐观锁和协调测试</td>
 <td><code>tests/Wallet/</code></td>
 </tr>
 <tr>
-<td>Payment</td>
-<td>incorrect gateway amount, duplicate callback, wrong order update</td>
-<td>gateway/adjustment contract, invoice state, webhook and Trade integration tests</td>
-<td><code>tests/Payment/</code>, <code>tests/Integration/PaymentTradeIntegrationTest.php</code></td>
+<td>付款</td>
+<td>网关金额错误、重复回调、订单更新错误</td>
+<td>网关/调整合约、发票状态、webhook 和贸易集成测试</td>
+<td><code>tests/Payment/</code>、<code>tests/Integration/PaymentTradeIntegrationTest.php</code></td>
 </tr>
 <tr>
-<td>Store</td>
-<td>store isolation, wrong staff authority, delayed acceptance/rejection</td>
-<td>scoped HTTP flow, outbox/inbox delivery, cancellation ordering tests</td>
-<td><code>tests/Store/</code>, <code>scripts/tests/store-smoke.sh</code></td>
+<td>商店</td>
+<td>商店隔离、员工权限错误、延迟接受/拒绝</td>
+<td>范围内的 HTTP 流、发件箱/收件箱交付、取消订购测试</td>
+<td><code>tests/Store/</code>、<code>scripts/tests/store-smoke.sh</code></td>
 </tr>
 <tr>
-<td>Inventory</td>
-<td>oversell, leaked reservation, wrong compensation</td>
-<td>stock/reservation integration, duplicate/out-of-order handler tests, concurrency checks before enablement</td>
-<td><code>tests/Inventory/</code>, <code>tests/Store/Integration/</code>, <code>scripts/tests/inventory-smoke.sh</code></td>
+<td>库存</td>
+<td>超售、预订泄露、赔偿错误</td>
+<td>库存/预订集成、重复/无序处理程序测试、启用前的并发检查</td>
+<td><code>tests/Inventory/</code>、<code>tests/Store/Integration/</code>、<code>scripts/tests/inventory-smoke.sh</code></td>
 </tr>
 <tr>
-<td>Messaging</td>
-<td>duplicated, lost, or out-of-order cross-module effects</td>
-<td>producer transaction, consumer idempotency, retry and ordering tests</td>
-<td><code>tests/*/MessageHandler/</code>, <code>tests/*/Command/</code></td>
+<td>消息</td>
+<td>重复、丢失或无序的跨模块效果</td>
+<td>生产者事务、消费者幂等性、重试和排序测试</td>
+<td><code>tests/*/MessageHandler/</code>、<code>tests/*/Command/</code></td>
 </tr>
 <tr>
-<td>Schema and portability</td>
-<td>mapping/query/migration fails outside local SQLite</td>
-<td>CI PostgreSQL schema setup; MySQL-compatible staging rehearsal for DB-specific changes</td>
-<td>CI <code>tests</code> job; release checklist</td>
+<td>架构和可移植性</td>
+<td>本地 SQLite 之外的映射/查询/迁移失败</td>
+<td>CI PostgreSQL 架构设置；针对特定于数据库的更改的 MySQL 兼容阶段演练</td>
+<td>CI <code>tests</code> 工作；发布清单</td>
 </tr>
 <tr>
-<td>Public API contract</td>
-<td>deployed app cannot complete a critical journey</td>
-<td>disposable-environment smoke tests</td>
-<td><code>scripts/tests/api-smoke.sh</code>, Store/Inventory smoke scripts</td>
+<td>公共API合约</td>
+<td>已部署的应用程序无法完成关键旅程</td>
+<td>一次性环境烟雾测试</td>
+<td><code>scripts/tests/api-smoke.sh</code>，商店/库存烟雾脚本</td>
 </tr>
 </tbody>
 </table>
-<h2 id="critical-paths">Critical Paths<a class="headerlink" href="#critical-paths" title="Permanent link">&para;</a></h2>
-<p>The following paths require both success and meaningful failure/denial coverage
-when changed:</p>
+<h2 id="_1">关键路径<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>以下路径既需要成功，也需要有意义的失败/拒绝报道
+改变时：</p>
 <ol>
-<li>Register/login, refresh rotation, logout/revocation, and access control.</li>
-<li>Owner, store-staff, public, and admin data boundaries.</li>
-<li>Product/specification quote, order creation, state transition, cancellation,
-   fulfillment, and refund.</li>
-<li>Invoice creation, adjustments, payment, callback, refund, and Trade result
-   propagation.</li>
-<li>Wallet deposit, transfer, deduction, reconciliation, and duplicate reference
-   handling.</li>
-<li>Trade, Store, and Inventory outbox/inbox delivery, duplicate delivery,
-   cancellation-before-create, and compensation.</li>
-<li>Media upload/delete and physical-storage failure cleanup.</li>
+<li>注册/登录、刷新轮换、注销/撤销、访问控制。</li>
+<li>店主、店员、公共和管理数据边界。
+3.产品/规格报价、订单创建、状态转换、取消、
+   履行并退款。</li>
+<li>发票创建、调整、付款、回调、退款、交易结果
+   传播。</li>
+<li>钱包充值、转账、扣款、对账、复查
+   处理。</li>
+<li>贸易、商店和库存发件箱/收件箱交付、重复交付、
+   创建前取消和补偿。</li>
+<li>媒体上传/删除和物理存储故障清理。</li>
 </ol>
-<h2 id="test-selection">Test Selection<a class="headerlink" href="#test-selection" title="Permanent link">&para;</a></h2>
+<h2 id="_2">测试选择<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Change characteristic</th>
-<th>Tests that must be added or updated</th>
+<th>改变特性</th>
+<th>必须添加或更新的测试</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>New API endpoint or payload field</td>
-<td>success, validation failure, authorization/scope, and response contract</td>
+<td>新的 API 端点或负载字段</td>
+<td>成功、验证失败、授权/范围和响应合同</td>
 </tr>
 <tr>
-<td>New workflow transition</td>
-<td>legal path, illegal path, idempotency/repeat behaviour, and side effects</td>
+<td>新的工作流程过渡</td>
+<td>合法路径、非法路径、幂等性/重复行为和副作用</td>
 </tr>
 <tr>
-<td>Money, price, tax, discount, or balance calculation</td>
-<td>boundary values, rounding/cent representation, negative/zero rejection, and integration result</td>
+<td>货币、价格、税收、折扣或余额计算</td>
+<td>边界值、舍入/分表示、负/零拒绝和积分结果</td>
 </tr>
 <tr>
-<td>Async event</td>
-<td>producer transaction, duplicate handling, ordering/cancellation race, and retry/failure</td>
+<td>异步事件</td>
+<td>生产者交易、重复处理、排序/取消竞争以及重试/失败</td>
 </tr>
 <tr>
-<td>Query/filter/expand feature</td>
-<td>parser/compiler result, authorization filter composition, and malformed-input failure</td>
+<td>查询/过滤/扩展功能</td>
+<td>解析器/编译器结果、授权过滤器组合和格式错误输入失败</td>
 </tr>
 <tr>
-<td>Migration</td>
-<td>existing-data upgrade, fresh schema, and staging target-database rehearsal</td>
+<td>移民</td>
+<td>现有数据升级、新模式和暂存目标数据库演练</td>
 </tr>
 </tbody>
 </table>
-<p>Coverage is never used to waive an item in this matrix.</p>
+<p>承保范围绝不会用于放弃此矩阵中的项目。</p>
 
 
 

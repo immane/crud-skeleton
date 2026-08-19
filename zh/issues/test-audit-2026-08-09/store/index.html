@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1745,7 +1745,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1885,7 +1885,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2069,10 +2069,10 @@
 A. 保持——核心行为价值。
 B. 删除候选，原因代码：1 覆盖范围追踪、2 重复、3 实施细节、4 冗余回归、5 接近空。
 C. 合并建议。</p>
-<p>设计上保守：高置信度 DELETE 候选者仅限于精确的
+<p>设计保守：高置信度 DELETE 候选者仅限于精确的
 重复/同义反复引用。存储集成流程（接受/拒绝/取消/
 墓碑，发件箱→收件箱幂等性）和每个并发测试都是KEEP。跳过
-记录已知商店错误的测试（<code>StoreOrderServiceTest::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code>、
+记录已知商店错误的测试（<code>StoreOrderServiceTest::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code>，
 根据自述文件 bug 28 的报道，请保留。</p>
 <h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
@@ -2223,7 +2223,7 @@ C. 合并建议。</p>
   存储接受/拒绝、创建逻辑删除前取消、发件箱→收件箱重复数据删除和存储边界
   来自 <code>BUSINESS_INVARIANTS.md</code> / 矩阵关键路径 #6 的授权不变量。不要删除。</li>
 <li><strong>并发测试。</strong> <code>TradeOrderCreatedHandlerConcurrencyTest</code>、<code>TradeOrderCancelledHandlerConcurrencyTest</code>、
-  <code>InventoryReservationOutcomeConcurrencyTest</code> 在 <code>wrapInTransaction</code> 中执行双重检查 <code>findOneBy</code>
+  <code>InventoryReservationOutcomeConcurrencyTest</code> 在<code>wrapInTransaction</code>中执行双重检查<code>findOneBy</code>
   （“支票和交易之间消耗的事件”竞赛）。根据审计摘要，并发测试是保留的。</li>
 <li><strong>跳过错误记录测试。</strong> <code>StoreOrderServiceTest::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code>
   （已跳过；文档 <code>matchesSnapshot</code> 顺序敏感 <code>===</code>，覆盖 README bug 28）。保持。</li>

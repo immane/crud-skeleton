@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#promotion-runbook" class="md-skip">
           跳转至
         </a>
       
@@ -749,7 +749,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1300,10 +1300,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32" class="md-nav__link">
+  <a href="#32-conditions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 条件
+        3.2 Conditions
       
     </span>
   </a>
@@ -1322,10 +1322,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34" class="md-nav__link">
+  <a href="#34-config-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 配置字段
+        3.4 Config Fields
       
     </span>
   </a>
@@ -2006,7 +2006,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2146,7 +2146,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2293,10 +2293,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32" class="md-nav__link">
+  <a href="#32-conditions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 条件
+        3.2 Conditions
       
     </span>
   </a>
@@ -2315,10 +2315,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34" class="md-nav__link">
+  <a href="#34-config-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 配置字段
+        3.4 Config Fields
       
     </span>
   </a>
@@ -2477,21 +2477,21 @@
   
 
 
-<h1 id="_1">促销操作手册<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="promotion-runbook">Promotion Runbook<a class="headerlink" href="#promotion-runbook" title="Permanent link">&para;</a></h1>
 <p>此操作手册是配置、验证和故障排除的操作指南
 促销捆绑包。它补充了设计文件
-<a href="../../design/bundles/promotion/"><t12/></a> 与混凝土，
-分步程序。</p>
+<a href="../../design/bundles/promotion/"><t12/></a> with concrete,
+step-by-step procedures.</p>
 <h2 id="1">1. 一分钟概念<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>PromotionTemplate</strong> 是可重复使用的 DSL 配方（“做什么”）。</li>
 <li><strong>促销</strong>是绑定到商店的模板的具体的、有时间限制的实例
   （“时间和地点”）。</li>
-<li><strong>DSL</strong> 是一种小型、封闭的语言，可在节省时间的情况下解析为 AST。这<strong>不是</strong>
+<li><strong>DSL</strong> 是一种小型、封闭的语言，可在节省时间的情况下解析为 AST。 It is <strong>not</strong>
   ExpressionLanguage 并且没有 <code>eval</code>。</li>
 <li>引擎将模板 <code>type</code> 解析为 <strong>策略</strong> 并应用每个 <code>do:</code> 操作
-  按顺序。</li>
-<li>促销活动是<strong>多商店</strong>：每个促销活动都带有 <code>storeCode</code>。</li>
+  in order.</li>
+<li>促销是<strong>多商店</strong>：每个促销都带有 <code>storeCode</code>。</li>
 </ul>
 <h2 id="2">2. 两级模型<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <table>
@@ -2532,7 +2532,7 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>fields:
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  &lt;name&gt;:&lt;type&gt;:&lt;label&gt;      # optional config field declarations
 </code></pre></div>
-<h3 id="32">3.2 条件<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<h3 id="32-conditions">3.2 Conditions<a class="headerlink" href="#32-conditions" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2542,7 +2542,7 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 </thead>
 <tbody>
 <tr>
-<td>购物车</td>
+<td>Cart</td>
 <td><code>cart.subtotal &gt;= 200.00</code>、<code>cart.items.count &gt;= 3</code></td>
 </tr>
 <tr>
@@ -2558,7 +2558,7 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 <td><code>cart.subtotal &gt;= config.threshold</code></td>
 </tr>
 <tr>
-<td>逻辑</td>
+<td>Logic</td>
 <td><code>and:</code> / <code>or:</code> 列表，<code>not:</code></td>
 </tr>
 </tbody>
@@ -2589,11 +2589,11 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 <td><code>add gift spec:config.gift_spec count:1</code></td>
 </tr>
 <tr>
-<td>第 N 项</td>
+<td>Nth item</td>
 <td><code>discount item 3 50%</code></td>
 </tr>
 <tr>
-<td>分层</td>
+<td>Tiered</td>
 <td>包含 <code>from:</code>/<code>less:</code> 行的 <code>tiered:</code> 块</td>
 </tr>
 <tr>
@@ -2601,12 +2601,12 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 <td><code>free shipping</code></td>
 </tr>
 <tr>
-<td>会员折扣</td>
+<td>Member discount</td>
 <td><code>member discount 95%</code></td>
 </tr>
 </tbody>
 </table>
-<h3 id="34">3.4 配置字段<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<h3 id="34-config-fields">3.4 Config Fields<a class="headerlink" href="#34-config-fields" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>fields:
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  threshold:number:消费门槛(元)
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  amount:number:优惠金额(元)
@@ -2734,7 +2734,7 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 <tr>
 <td>错误的商店看到促销</td>
 <td><code>storeCode</code> 不匹配</td>
-<td>在实例上设置正确的 <code>storeCode</code></td>
+<td>Set correct <code>storeCode</code> on instance</td>
 </tr>
 </tbody>
 </table>
@@ -2742,7 +2742,7 @@ DSL 位于一处，让运营商仅调整每个实例的 <code>config</code>。</
 <ul>
 <li>[ ] 模板DSL通过<code>/validate</code>解析。</li>
 <li>[ ] 促销<code>enabled=true</code>和时间窗口正确。</li>
-<li>[ ] <code>storeCode</code> 匹配目标商店。</li>
+<li>[ ] <code>storeCode</code> matches the target store.</li>
 <li>[ ] <code>config</code> 提供 DSL 引用的每个 <code>config.&lt;key&gt;</code>。</li>
 <li>[ ] <code>conflictMode</code> 和 <code>phase</code> 符合业务意图。</li>
 <li>[ ] 应用列表端点返回目标商店的促销信息。</li>

@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1745,7 +1745,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1885,7 +1885,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2245,7 +2245,7 @@
 <li><strong>说明：</strong> <code>$storeOrder-&gt;getOrderSnapshot() === $data['orderSnapshot']</code> 使用 PHP 严格的数组比较，需要相同的<strong>键顺序</strong>。规范化快照始终以一个固定顺序构建，但存储行的 <code>order_snapshot</code> JSON 可以合法地以不同的顺序携带键（从首先序列化 <code>channel</code> 的生产者或任何手动构建的顺序来回）。在这种情况下，<code>matchesSnapshot()</code> 返回 <code>false</code>，并且重新传递完全相同的交易订单事件会抛出 <code>LogicException('Trade order snapshot conflicts with the existing Store order.')</code>（第 85/111 行），而不是返回现有订单。</li>
 <li><strong>影响：</strong> 对于 JSON 键顺序不同的其他相同快照，核心“创建一次，然后返回现有投影”幂等性保证失败；重复 <code>trade.order.created.v1</code> 事件 500 次并永远重试。</li>
 <li><strong>复制：</strong> 持久化一个<code>StoreOrder</code>，其<code>order_snapshot</code>是<code>['channel' =&gt; 'mini_program', 'items' =&gt; [], 'delivery' =&gt; [], 'placedAt' =&gt; '…']</code>；使用由服务规范化的相同值（生成 <code>['items' =&gt; …, 'delivery' =&gt; …, 'placedAt' =&gt; …, 'channel' =&gt; …]</code>）调用 <code>createFromTradeOrderSnapshot()</code>。 <code>matchesSnapshot()</code> 返回 <code>false</code> → <code>LogicException</code>。 （通过下面跳过的测试确认。）</li>
-<li><strong>建议的修复：</strong> 不区分顺序地比较，例如使用 <code>==</code> 进行快照比较，或在 <code>===</code> 之前使用 <code>ksort()</code> 两个数组。</li>
+<li><strong>建议的修复：</strong> 比较顺序不敏感，例如使用 <code>==</code> 进行快照比较，或在 <code>===</code> 之前使用 <code>ksort()</code> 两个数组。</li>
 </ul>
 <h3 id="bug-2-acceptaction-reservationid-">Bug 2 — <code>acceptAction()</code> 接受空的 <code>reservationId</code> 并默默地清除预留（低-中，数据完整性）<a class="headerlink" href="#bug-2-acceptaction-reservationid-" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2276,7 +2276,7 @@
 <li><strong>文件/行：</strong> <code>src/Store/Service/StoreContextResolver.php:37</code></li>
 <li><strong>描述：</strong> <code>$request-&gt;headers-&gt;get('X-Store-Channel', 'api')</code> 逐字返回标头；显式存在但为空的标头会产生通道 <code>''</code> 而不是 <code>'api'</code>。</li>
 <li><strong>影响：</strong> 对于此类客户端，<code>StoreContext-&gt;channel</code> 变为 <code>''</code>，这可能会破坏下游的通道条件逻辑。</li>
-<li><strong>复制：</strong>发送<code>X-Store-Code: xuhui</code>和<code>X-Store-Channel:</code>（空）-<code>resolve()-&gt;channel === ''</code>。</li>
+<li><strong>复制：</strong>发送<code>X-Store-Code: xuhui</code>和<code>X-Store-Channel:</code>（空）- <code>resolve()-&gt;channel === ''</code>。</li>
 <li><strong>建议的修复：</strong> 使用 <code>$request-&gt;headers-&gt;get('X-Store-Channel') ?: 'api'</code>。</li>
 </ul>
 <h2 id="_5">跳过测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>

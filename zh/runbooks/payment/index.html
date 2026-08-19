@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#payment-runbook" class="md-skip">
           跳转至
         </a>
       
@@ -749,7 +749,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1249,10 +1249,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#3-gateways" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 网关
+        3. Gateways
       
     </span>
   </a>
@@ -1260,10 +1260,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
+  <a href="#4-payment-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 支付端点
+        4. Payment Endpoints
       
     </span>
   </a>
@@ -1884,7 +1884,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2024,7 +2024,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2148,10 +2148,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#3-gateways" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 网关
+        3. Gateways
       
     </span>
   </a>
@@ -2159,10 +2159,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
+  <a href="#4-payment-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 支付端点
+        4. Payment Endpoints
       
     </span>
   </a>
@@ -2233,10 +2233,10 @@
   
 
 
-<h1 id="_1">付款操作手册<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="payment-runbook">Payment Runbook<a class="headerlink" href="#payment-runbook" title="Permanent link">&para;</a></h1>
 <p>本操作手册是配置和操作支付的操作指南
 模块（发票、网关、webhooks、调整）。它补充了
-<a href="../../design/bundles/payment/"><t1/></a>。</p>
+<a href="../../design/bundles/payment/"><t1/></a>.</p>
 <h2 id="1">1. 一分钟概念<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>发票</strong>是付款单位，具有状态机
@@ -2261,7 +2261,7 @@
 </code></pre></div>
 <p>敏感提供商值（商户 ID、密钥、通知 URL）必须来自环境
 变量并且不得提交。</p>
-<h2 id="3">3. 网关<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h2 id="3-gateways">3. Gateways<a class="headerlink" href="#3-gateways" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2273,7 +2273,7 @@
 <tbody>
 <tr>
 <td><code>mock</code></td>
-<td>本地测试</td>
+<td>Local testing</td>
 <td><code>payment.gateways.mock.enabled</code></td>
 </tr>
 <tr>
@@ -2283,14 +2283,14 @@
 </tr>
 <tr>
 <td><code>wechat</code></td>
-<td>微信支付V3</td>
+<td>WeChat Pay V3</td>
 <td><code>payment.gateways.wechat.enabled</code> + 微信环境变量</td>
 </tr>
 </tbody>
 </table>
 <p>网关是通过 <code>payment.gateway</code> 标签自动发现的。要添加网关，请实施
-<code>PaymentGatewayInterface</code>并注册它；无需手动接线。</p>
-<h2 id="4">4. 支付端点<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<code>PaymentGatewayInterface</code> and register it;无需手动接线。</p>
+<h2 id="4-payment-endpoints">4. Payment Endpoints<a class="headerlink" href="#4-payment-endpoints" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2345,7 +2345,7 @@
 <h2 id="5-webhook">5. Webhook 设置<a class="headerlink" href="#5-webhook" title="Permanent link">&para;</a></h2>
 <ol>
 <li>配置提供商的通知 URL 指向
-   <code>https://&lt;host&gt;/api/payment/notify/{payment}</code>。</li>
+   <code>https://&lt;host&gt;/api/payment/notify/{payment}</code>.</li>
 <li>确保可以从提供者访问端点（webhook 上没有身份验证）。</li>
 <li>验证提供商对回调进行签名，并且网关验证签名。</li>
 </ol>
@@ -2364,7 +2364,7 @@
 </thead>
 <tbody>
 <tr>
-<td>找不到网关</td>
+<td>Gateway not found</td>
 <td>网关已禁用或未注册</td>
 <td>检查 <code>payment.gateways.*.enabled</code></td>
 </tr>

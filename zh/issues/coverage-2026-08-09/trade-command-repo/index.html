@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1745,7 +1745,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1885,7 +1885,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2032,10 +2032,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-" class="md-nav__link">
+  <a href="#bug-2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #2 - 成功发布不会清除以前的失败元数据
+        Bug #2 — 成功发布不会清除以前的失败元数据
       
     </span>
   </a>
@@ -2192,10 +2192,10 @@
 <li><strong>文件/行：</strong> <code>src/Trade/Command/PublishOutboxCommand.php:36-39</code>（不支持的主题）和<code>:58-60</code>（调度失败）； <code>src/Trade/Repository/TradeOutboxMessageRepository.php:47-61</code> (<code>defer()</code>)。</li>
 <li><strong>描述：</strong> <code>defer()</code>仅守卫<code>publishedAt IS NULL</code>。它总是递增 <code>attempts</code> 并重新安排 <code>availableAt = +5 minutes</code>。没有尝试上限，也没有死信/隔离状态，因此不受支持的主题或永久失败的消息将每隔 5 分钟重新声明并重新推迟一次。</li>
 <li><strong>影响：</strong> <code>attempts</code> 在行上无限增长，消息永远不会离开未发布的集合，并且每次运行都会执行浪费的声明+调度尝试。单个配置错误/拼写错误的主题会永久污染发件箱表和发布循环。</li>
-<li><strong>复制（已验证）：</strong>插入带有 <code>topic = 'trade.custom.topic.v1'</code> 的行；重复运行 <code>app:trade:outbox:publish</code> — 每次运行都会递增 <code>attempts</code> (<code>0 → 1 → 2 → …</code>)，设置 <code>last_error</code>，并且该行永远不会发布或删除。对于任何调度总是抛出异常的主题来说都是如此。</li>
+<li><strong>复制（已验证）：</strong>插入带有 <code>topic = 'trade.custom.topic.v1'</code> 的行；重复运行 <code>app:trade:outbox:publish</code> — 每次运行都会递增 <code>attempts</code> (<code>0 → 1 → 2 → …</code>)、设置 <code>last_error</code>，并且该行永远不会发布或删除。对于任何调度总是抛出异常的主题来说都是如此。</li>
 <li><strong>建议的修复：</strong> 限制尝试（例如，在 <code>attempts &lt; N</code> 时仅使用 <code>defer()</code>，然后将该行移至死信/隔离状态或将其删除），和/或添加 <code>status</code>/<code>dead_lettered</code> 列，以便 <code>findUnpublished()</code> 跳过有害消息。</li>
 </ul>
-<h3 id="bug-2-">Bug #2 - 成功发布不会清除以前的失败元数据<a class="headerlink" href="#bug-2-" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2">Bug #2 — 成功发布不会清除以前的失败元数据<a class="headerlink" href="#bug-2" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Trade/Command/PublishOutboxCommand.php:56-57</code> (<code>markPublished()</code> + <code>flush()</code>); <code>src/Trade/Repository/TradeOutboxMessageRepository.php:47-61</code> (<code>defer()</code>); <code>src/Trade/Entity/TradeOutboxMessage.php:73</code> (<code>markPublished()</code>)。</li>
 <li><strong>说明：</strong> <code>claim()</code>/<code>defer()</code> 是绕过工作单元的 DQL 批量更新； <code>markPublished()</code> 仅在内存中设置<code>publishedAt</code>。如果消息失败一次（defer → <code>attempts=1</code>、<code>lastError</code> 设置），并且稍后在重试时成功发布，则该行将使用 <code>published_at</code> 设置写入，但 <strong><code>attempts</code> 和 <code>last_error</code> 仍保留之前的失败</strong> — 不会重置它们。</li>
