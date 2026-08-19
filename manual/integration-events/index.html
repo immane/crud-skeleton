@@ -1,0 +1,3613 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/manual/integration-events/">
+      
+      
+        <link rel="prev" href="../development-contracts/">
+      
+      
+        <link rel="next" href="../database-and-migrations/">
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Integration Events - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#integration-events-outbox-inbox-pattern" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integration Events
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Manual
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development Manual
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Events
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-transport-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Transport configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-messages-and-envelopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Messages and envelopes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Messages and envelopes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-message-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Message classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-envelope-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Envelope structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-topic-catalogue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Topic catalogue
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-publishing-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Publishing flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-consuming-flow-and-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Consuming flow and idempotency
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Consuming flow and idempotency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-inbox-consumed-event-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Inbox (consumed-event) tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-idempotency-by-eventid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Idempotency by eventId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-correlation-causation-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Correlation / causation tracing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-reference-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Reference flows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Reference flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-trade-order-store-inventory-reservation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Trade order → Store → Inventory reservation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-order-cancellation-store-inventory-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Order cancellation → Store → Inventory release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-expired-reservations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Expired reservations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-settlement-allocation-posting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Settlement allocation posting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-operational-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Operational notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database & Migrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracting a Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Runbooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WeChat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-transport-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Transport configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-messages-and-envelopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Messages and envelopes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Messages and envelopes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-message-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Message classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-envelope-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Envelope structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-topic-catalogue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Topic catalogue
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-publishing-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Publishing flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-consuming-flow-and-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Consuming flow and idempotency
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Consuming flow and idempotency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-inbox-consumed-event-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Inbox (consumed-event) tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-idempotency-by-eventid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Idempotency by eventId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-correlation-causation-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Correlation / causation tracing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-reference-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Reference flows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Reference flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-trade-order-store-inventory-reservation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Trade order → Store → Inventory reservation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-order-cancellation-store-inventory-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Order cancellation → Store → Inventory release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-expired-reservations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Expired reservations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-settlement-allocation-posting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Settlement allocation posting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-operational-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Operational notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="integration-events-outbox-inbox-pattern">Integration Events (Outbox / Inbox Pattern)<a class="headerlink" href="#integration-events-outbox-inbox-pattern" title="Permanent link">&para;</a></h1>
+<p>Modules in this project (Trade, Store, Inventory, Settlement, Wallet, Payment) share one
+Kernel, one Doctrine EntityManager, and one Messenger bus, but they must <strong>not</strong> reach into
+each other's entities or repositories. Cross-module communication is event-driven and
+durable: a module <em>emits</em> facts it owns through <strong>outboxes</strong> and <em>consumes</em> facts from other
+modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
+<p>The pattern protects against two failure modes:</p>
+<ul>
+<li><strong>Lost events</strong> — an event is written in the <em>same DB transaction</em> as the business
+  change (transactional outbox), so it is never lost even if the process dies mid-flight.</li>
+<li><strong>Duplicate delivery</strong> — consumers record a consumed-event row in the <em>same transaction</em>
+  as the business effect, keyed by <code>eventId</code> (idempotent inbox).</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌────────────┐  outbox table   ┌──────────────┐  Messenger "async"  ┌────────────┐  inbox (consumed event) ┌───────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Business   │  (persisted in  │ publish cmd  │  (Doctrine transport)│ worker     │  (persisted in same     │ Consumer  │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│ operation  │──&gt; same txn) ──&gt;│ app:*:outbox │────────────────────&gt;│ (handlers) └─&gt; transform as txn with  │  (module) │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ (module A) │                 │ :publish     │                    │ module B   │  the business effect)    │           │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└────────────┘                 └──────────────┘                    └────────────┘                          └───────────┘
+</code></pre></div>
+<ul>
+<li><strong>Producer side (outbox):</strong> <code>*OutboxService::record(topic, aggregateType, aggregateId, payload)</code>
+  inserts a row into the module's <code>*_outbox_message</code> table. A publish command
+  (<code>app:&lt;module&gt;:outbox:publish</code>, one per module) polls the table, claims rows, builds
+  an envelope, and dispatches a Messenger message onto the <code>async</code> transport.</li>
+<li><strong>Consumer side (inbox):</strong> a <code>#[AsMessageHandler]</code> validates the envelope, checks the
+  module's <code>*_consumed_event</code> table for the <code>eventId</code>, and inside one DB transaction both
+  applies the effect and records the consumed-event row.</li>
+</ul>
+<hr />
+<h2 id="1-transport-configuration">1. Transport configuration<a class="headerlink" href="#1-transport-configuration" title="Permanent link">&para;</a></h2>
+<p><code>config/packages/messenger.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">framework</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">messenger</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nt">failure_transport</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">failed</span><span class="w">          </span><span class="c1"># dead-letter queue (doctrine://default?queue_name=failed)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nt">transports</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">            </span><span class="nt">async</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">                </span><span class="nt">dsn</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(MESSENGER_TRANSPORT_DSN)%'</span><span class="w">   </span><span class="c1"># default: doctrine://default?auto_setup=0</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">                </span><span class="nt">options</span><span class="p">:</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">                    </span><span class="nt">use_notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">                    </span><span class="nt">check_delayed_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60000</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">                </span><span class="nt">retry_strategy</span><span class="p">:</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">                    </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">                    </span><span class="nt">multiplier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">            </span><span class="nt">failed</span><span class="p">:</span><span class="w"> </span><span class="s">'doctrine://default?queue_name=failed'</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="nt">routing</span><span class="p">:</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCreatedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+</code></pre></div>
+<ul>
+<li>All integration messages route to the single <code>async</code> transport (a Doctrine table
+  <code>messenger_messages</code>), consumed by the <code>worker</code> Compose service:
+  <code>messenger:consume async --time-limit=3600 --memory-limit=256M</code>.</li>
+<li>Messenger applies its own in-transport retry (3 retries, exponential multiplier 2);
+  exhausted messages go to the <code>failed</code> transport.</li>
+<li>The outbox adds its own <strong>claim/defer layer on top</strong> (see
+  <a href="#3-publishing-flow">Publishing flow</a>) so the same envelope is never handed to
+  Messenger twice, even if two scheduler ticks race.</li>
+</ul>
+<h2 id="2-messages-and-envelopes">2. Messages and envelopes<a class="headerlink" href="#2-messages-and-envelopes" title="Permanent link">&para;</a></h2>
+<h3 id="21-message-classes">2.1 Message classes<a class="headerlink" href="#21-message-classes" title="Permanent link">&para;</a></h3>
+<p>Most module messages are thin <code>final readonly</code> carriers of a single <code>array $envelope</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">final readonly class TradeOrderCreatedMessage</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    /** @param array&lt;string, mixed&gt; $envelope */</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    public function __construct(public array $envelope) {}</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Produced by</th>
+<th>Consumed by</th>
+<th>Envelope-based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>App\Trade\Message\TradeOrderCreatedMessage</code></td>
+<td>Trade outbox</td>
+<td>Store</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Trade\Message\TradeOrderCancelledMessage</code></td>
+<td>Trade outbox</td>
+<td>Store</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>, <code>StoreOrderRejectedMessage</code></td>
+<td>Store outbox</td>
+<td>Trade</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationRequestedMessage</code></td>
+<td>Store outbox</td>
+<td>Inventory</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationReleaseRequestedMessage</code></td>
+<td>Store outbox</td>
+<td>Inventory</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationConfirmedMessage</code></td>
+<td>Inventory outbox</td>
+<td>Store</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationRejectedMessage</code></td>
+<td>Inventory outbox</td>
+<td>Store</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationReleasedMessage</code></td>
+<td>Inventory outbox</td>
+<td>Store</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Settlement\Message\SettlementAllocationPostingMessage</code></td>
+<td>Settlement outbox</td>
+<td>Settlement</td>
+<td>❌ explicit fields (<code>allocationUuid</code>, <code>planUuid</code>)</td>
+</tr>
+<tr>
+<td><code>App\Settlement\Message\SettlementFundingConfirmedMessage</code></td>
+<td>external producer (async)</td>
+<td>Settlement</td>
+<td>❌ explicit fields</td>
+</tr>
+</tbody>
+</table>
+<p>The Store message classes live in the <strong>Target</strong> module's namespace are imported into the
+producer command; e.g. <code>StoreOrderAcceptedMessage</code>/<code>StoreOrderRejectedMessage</code> are
+<code>App\Trade\Message\*</code> classes consumed by <code>App\Trade\MessageHandler\*</code>, while
+<code>ReservationRequestedMessage</code>/<code>ReservationReleaseRequestedMessage</code> are
+<code>App\Inventory\Message\*</code> consumed by <code>App\Inventory\MessageHandler\*</code>.</p>
+<h3 id="22-envelope-structure">2.2 Envelope structure<a class="headerlink" href="#22-envelope-structure" title="Permanent link">&para;</a></h3>
+<p>The publish commands assemble a versioned envelope from the outbox row. The Trade
+publisher shows the fullest shape:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$envelope = [</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">    'eventId'       =&gt; $message-&gt;getEventId(),                       // UUID v4, unique</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    'type'          =&gt; str_replace('.v1', '', $message-&gt;getTopic()), // 'trade.order.created'</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    'version'       =&gt; 1,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    'occurredAt'    =&gt; $message-&gt;getOccurredAt()-&gt;format(DATE_ATOM), // ISO-8601</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">    'aggregateType' =&gt; 'trade_order',</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">    'aggregateId'   =&gt; $message-&gt;getAggregateId(),                   // source aggregate uuid</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">    'correlationId' =&gt; $message-&gt;getAggregateId(),                   // trace scope</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">    'causationId'   =&gt; null,                                         // parent event (none at source)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="x">    'payload'       =&gt; $message-&gt;getPayload(),</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="x">];</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Envelope key</th>
+<th style="text-align: center;">Trade</th>
+<th style="text-align: center;">Store</th>
+<th style="text-align: center;">Inventory</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eventId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>UUID v4; idempotency key for the inbox</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>Topic without the <code>.v1</code> suffix</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>occurredAt</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>When the source fact happened (ISO-8601 ATOM)</td>
+</tr>
+<tr>
+<td><code>aggregateType</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>Source aggregate kind</td>
+</tr>
+<tr>
+<td><code>aggregateId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>Source aggregate uuid</td>
+</tr>
+<tr>
+<td><code>correlationId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>Trace scope (set to the order uuid by Trade)</td>
+</tr>
+<tr>
+<td><code>causationId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>Parent event id (null for source events)</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>Business data (array)</td>
+</tr>
+</tbody>
+</table>
+<p><code>aggregate_type</code>, <code>aggregate_id</code>, <code>payload</code>, <code>occurred_at</code>, <code>available_at</code>, <code>published_at</code>,
+<code>attempts</code>, and <code>last_error</code> are also persisted in the outbox table itself.</p>
+<p>The Settlement <code>AllocationPostingMessage</code> and <code>SettlementFundingConfirmedMessage</code> instead
+carry <strong>explicit scalar fields</strong> rather than an envelope (see
+<a href="#44-settlement-allocation-posting">Settlement flow</a>).</p>
+<h3 id="23-topic-catalogue">2.3 Topic catalogue<a class="headerlink" href="#23-topic-catalogue" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Topic (<code>.v1</code> suffix = version)</th>
+<th>Emitter outbox</th>
+<th>Consumer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trade.order.created.v1</code></td>
+<td><code>trade_outbox_message</code></td>
+<td>Store (<code>TradeOrderCreatedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>trade.order.cancelled.v1</code></td>
+<td><code>trade_outbox_message</code></td>
+<td>Store (<code>TradeOrderCancelledHandler</code>)</td>
+</tr>
+<tr>
+<td><code>store.order.accepted.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>Trade (<code>StoreOrderAcceptedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>store.order.rejected.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>Trade (<code>StoreOrderRejectedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.requested.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>Inventory (<code>ReservationRequestedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.release.requested.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>Inventory (<code>ReservationReleaseRequestedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.confirmed.v1</code></td>
+<td><code>inventory_outbox_message</code></td>
+<td>Store (<code>ReservationConfirmedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.rejected.v1</code></td>
+<td><code>inventory_outbox_message</code></td>
+<td>Store (<code>ReservationRejectedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.released.v1</code></td>
+<td><code>inventory_outbox_message</code></td>
+<td>Store (<code>ReservationReleasedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>settlement.allocation.post.requested.v1</code></td>
+<td><code>settlement_outbox_message</code></td>
+<td>Settlement (<code>SettlementAllocationPostingHandler</code>)</td>
+</tr>
+<tr>
+<td><code>settlement.funding.confirmed.v1</code></td>
+<td>— (async, external)</td>
+<td>Settlement (<code>SettlementFundingConfirmedHandler</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-publishing-flow">3. Publishing flow<a class="headerlink" href="#3-publishing-flow" title="Permanent link">&para;</a></h2>
+<p>Every module with an outbox has a <code>Command/PublishOutboxCommand.php</code> registered as
+<code>app:&lt;module&gt;:outbox:publish</code>. The scheduler in <code>compose.yaml</code> runs them every
+<code>OUTBOX_PUBLISH_INTERVAL</code> (default <code>5</code>s).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">scheduler</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">extends</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">command</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/sh</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-ec</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="no">while :; do</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="no">php bin/console app:trade:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="no">php bin/console app:store:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="no">php bin/console app:inventory:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="no">php bin/console app:inventory:reservations:release-expired --no-interaction</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="no">php bin/console app:settlement:allocations:requeue-due --no-interaction</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="no">php bin/console app:settlement:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="no">sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">      </span><span class="no">done</span>
+</code></pre></div>
+<p>The three standard steps (identical for Trade, Store, Inventory, Settlement):</p>
+<ol>
+<li><strong>Select</strong> unpublished rows older than their <code>available_at</code>
+   (<code>findUnpublished()</code> — <code>published_at IS NULL AND available_at &lt;= now ORDER BY id ASC LIMIT 100</code>).</li>
+<li><strong>Claim</strong> — <code>claim($id, now + 1 minute)</code> runs an atomic
+   <code>UPDATE … SET available_at = :until WHERE id = :id AND published_at IS NULL AND available_at &lt;= now</code>
+   and returns <code>true</code> only when one row was updated. This is the concurrency guard: a
+   second tick (or a restarted scheduler) will skip rows another worker has claimed.</li>
+<li><strong>Dispatch</strong> the matching bus message. On success <code>markPublished()</code> stamps
+   <code>published_at</code>. On any <code>\Throwable</code> (or an unsupported topic) <code>defer($id, $error, now + 5 min)</code>
+   increments <code>attempts</code>, stores <code>last_error</code>, and pushes <code>available_at</code> out so the row
+   can be retried by a later tick. Finally the EntityManager is flushed once.</li>
+</ol>
+<p>Trade's publisher also whitelists topics and treats anything else as an unsupported topic:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">if (!in_array($message-&gt;getTopic(), ['trade.order.created.v1', 'trade.order.cancelled.v1'], true)) {</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">    $this-&gt;repository-&gt;defer($id, 'Unsupported Trade outbox topic: ' . $message-&gt;getTopic(), new \DateTimeImmutable('+5 minutes'));</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    continue;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">}</span>
+</code></pre></div>
+<p>The Inventory publisher is the outlier: it selects an <strong>array projection</strong>
+(<code>findUnpublishedForPublishing()</code>) and marks published/records attempts through direct
+repository UPDATEs instead of through the Unit of Work, so it does not flush entity state.</p>
+<blockquote>
+<p><strong>Delivery guarantee vs ordering.</strong> Delivery is at-least-once and retried with a 1-minute
+claim lease and 5-minute backoff. Ordering is best-effort per outbox by <code>id</code>; consumers
+must be order-tolerant (they guard on workflow/state <code>can()</code>), which is exactly what the
+handlers do.</p>
+</blockquote>
+<h2 id="4-consuming-flow-and-idempotency">4. Consuming flow and idempotency<a class="headerlink" href="#4-consuming-flow-and-idempotency" title="Permanent link">&para;</a></h2>
+<h3 id="41-inbox-consumed-event-tables">4.1 Inbox (consumed-event) tables<a class="headerlink" href="#41-inbox-consumed-event-tables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>id</th>
+<th>event_id</th>
+<th>payload trace columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>store_consumed_event</code></td>
+<td>BIGINT</td>
+<td><code>VARCHAR(36)</code> UNIQUE</td>
+<td><code>aggregate_id</code>, <code>payload_hash(64)</code></td>
+</tr>
+<tr>
+<td><code>inventory_consumed_event</code></td>
+<td>BIGINT</td>
+<td><code>VARCHAR(36)</code> UNIQUE</td>
+<td><code>aggregate_id</code>, <code>payload_hash(64)</code></td>
+</tr>
+<tr>
+<td><code>settlement_consumed_event</code></td>
+<td>INT</td>
+<td><code>VARCHAR(64)</code> UNIQUE</td>
+<td><code>source_aggregate_type</code>, <code>source_aggregate_id</code>, <code>payload_hash(64)</code></td>
+</tr>
+</tbody>
+</table>
+<p>All three share <code>topic</code>, <code>processed_at</code>, and <code>payload_hash</code> (SHA-256 of the JSON-encoded
+envelope). Trade has <strong>no inbox table</strong>: its handlers are guarded by the workflow's
+<code>can(transition)</code> check plus the store-uuid snapshot match inside a transaction, so a
+duplicate <code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</code> is a no-op.</p>
+<h3 id="42-idempotency-by-eventid">4.2 Idempotency by <code>eventId</code><a class="headerlink" href="#42-idempotency-by-eventid" title="Permanent link">&para;</a></h3>
+<p>The canonical consumer shape — read-check, then re-check inside the transaction, and
+write the consumed row atomically with the effect:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">public function __invoke(TradeOrderCreatedMessage $message): void</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    $eventId = $message-&gt;envelope['eventId'] ?? null;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    $payload = $message-&gt;envelope['payload'] ?? null;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    // ...validate...</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="x">    if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="x">        return; // already processed</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="x">    }</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="x">    $this-&gt;entityManager-&gt;wrapInTransaction(function () use ($eventId, ...): void {</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="x">        if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="x">            return; // re-check under the transaction (closes the race window)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="x">        }</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="x">        $this-&gt;entityManager-&gt;persist(new StoreConsumedEvent(</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="x">            $eventId,</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="x">            'trade.order.created.v1',</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="x">            (string) ($payload['orderUuid'] ?? ''),</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="x">            hash('sha256', json_encode($message-&gt;envelope, JSON_THROW_ON_ERROR)),</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="x">        ));</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="x">        // ...apply the business effect...</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="x">    });</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="x">}</span>
+</code></pre></div>
+<p>Inventory tightens this further. Its <code>isAlreadyConsumed()</code> compares the stored
+<code>payload_hash</code> with the hash of the arriving envelope using <code>hash_equals</code>; a reused
+<code>eventId</code> with a <strong>different</strong> payload raises <code>InventoryMessageIntegrityException</code>
+("Event ID was reused with a different payload"). Settlement's <code>exists($eventId)</code> check is
+simpler: a reused id is silently skipped.</p>
+<h3 id="43-validation">4.3 Validation<a class="headerlink" href="#43-validation" title="Permanent link">&para;</a></h3>
+<p>Handlers validate their envelopes defensively before touching the database:</p>
+<ul>
+<li><code>type</code> / <code>version</code> exact match (e.g. <code>'inventory.reservation.released'</code> / <code>1</code>).</li>
+<li>Required keys exist with the right scalar types (<code>eventId</code> is a non-empty string in the
+  Store handlers; the Inventory handlers additionally require it to be a well-formed UUID).</li>
+<li>Inventory additionally validates: <code>aggregateId === payload['reservationId']</code>,
+  UUID format <code>^[0-9a-f]{8}-…-[1-8]…-[89ab]…$</code> for every id, ISO-8601 timestamps
+  (fractional seconds allowed), unique line ids, and quantity strings matching
+  <code>^[0-9]+(?:\.[0-9]{1,6})?$</code>.</li>
+<li>Correlation cross-checks (e.g. <code>ReservationReleaseRequestedHandler</code> verifies the
+  <code>storeUuid</code> / <code>tradeOrderUuid</code> / <code>storeOrderUuid</code> in the envelope match the stored
+  reservation, else it throws <code>InventoryMessageIntegrityException</code>).</li>
+<li>Business guards that make retries harmless: <code>ReservationConfirmedHandler</code> only
+  accepts a Store order that is still <code>awaiting_inventory</code> and whose
+  <code>reservationId == payload['reservationId']</code>; <code>SettlementService::postAllocation()</code>
+  returns early for already-<code>posted</code> / <code>cancelled</code> / <code>reversed</code> allocations.</li>
+</ul>
+<h2 id="5-correlation-causation-tracing">5. Correlation / causation tracing<a class="headerlink" href="#5-correlation-causation-tracing" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Trade</strong> assigns <code>correlationId = aggregateId</code> (the trade order uuid) and
+  <code>causationId = null</code> on every outbound envelope — the whole order saga (order created →
+  store acceptance → inventory reservation → cancellation) shares that correlation scope.</li>
+<li><strong>Settlement</strong> is the only module that persists the trace into its domain model:
+  <code>SettlementFundingConfirmedMessage</code> carries <code>correlationId</code>/<code>causationId</code>, and
+  <code>settlement_plan</code> stores <code>correlation_id</code> and <code>causation_id</code> columns. The
+  <code>SettlementFundingConfirmedHandler</code> copies them into the <code>SettlementFunding</code> contract.</li>
+<li><strong>Store / Inventory</strong> envelopes do not carry correlation/causation headers; lineage is
+  reconstructed from payload correlation keys — <code>orderUuid</code>, <code>storeUuid</code>,
+  <code>tradeOrderUuid</code>, <code>storeOrderUuid</code>, <code>reservationId</code> — and from the consumed-event
+  <code>aggregate_id</code> column.</li>
+</ul>
+<h2 id="6-reference-flows">6. Reference flows<a class="headerlink" href="#6-reference-flows" title="Permanent link">&para;</a></h2>
+<h3 id="61-trade-order-store-inventory-reservation">6.1 Trade order → Store → Inventory reservation<a class="headerlink" href="#61-trade-order-store-inventory-reservation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Trade OrderService::createOrder()
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  └─ (same txn) workflow store_submit
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  └─ (same txn) TRADE outbox += trade.order.created.v1
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        {orderUuid, store:{...}, customerUserUuid, currency, totalAmount(cents),
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>         items:[{lineId,catalogReference,quantity,unitPrice,lineAmount,snapshot}],
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>         delivery, placedAt}
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  └─ app:trade:outbox:publish → TradeOrderCreatedMessage → async
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        └─ Store TradeOrderCreatedHandler
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>              (txn) STORE inbox += {eventId, 'trade.order.created.v1', payload_hash}
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>              store inactive? → STORE outbox += store.order.rejected.v1 ('STORE_UNAVAILABLE')
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>              INVENTORY_ENABLED=0? → accept immediately
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>              else → STORE outbox += inventory.reservation.requested.v1
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>                     {reservationId (new UUID), storeUuid, tradeOrderUuid, storeOrderUuid,
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>                      items (quantity as 'N.000000'), expiresAt (+30 min), requestedAt}
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        └─ app:store:outbox:publish → ReservationRequestedMessage → async
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>              └─ Inventory ReservationRequestedHandler
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>                    (txn) INVENTORY inbox += inventory.reservation.requested.v1
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>                    InventoryService::reserve(): build Reservation(request_hash),
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>                      resolve recipes→materials, lock stocks FOR UPDATE,
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>                      on shortfall → reject('OUT_OF_STOCK'|'SPECIFICATION_NOT_STOCKABLE'|…)
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>                      → INVENTORY outbox += inventory.reservation.rejected.v1
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>                      else reserve stock + ledger, confirm()
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>                      → INVENTORY outbox += inventory.reservation.confirmed.v1
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>        └─ app:inventory:outbox:publish → ReservationConfirmed/Rejected → async
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>              └─ Store ReservationConfirmedHandler
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>                    (txn) STORE inbox += …confirmed; storeOrder accept(reservationId)
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>                 Store ReservationRejectedHandler
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>                    (txn) STORE inbox += …rejected; storeOrder reject(reasonCode, reason)
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>                    → STORE outbox += store.order.rejected.v1
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>        └─ app:store:outbox:publish → StoreOrderRejectedMessage → async
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>              └─ Trade StoreOrderRejectedHandler: workflow store_reject
+<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>              (StoreOrderAcceptedHandler symmetrically applies store_accept)
+</code></pre></div>
+<h3 id="62-order-cancellation-store-inventory-release">6.2 Order cancellation → Store → Inventory release<a class="headerlink" href="#62-order-cancellation-store-inventory-release" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>OrderWorkflowListener (workflow.order.transition 'cancel')
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  └─ (same txn) if order has _store metadata:
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        TRADE outbox += trade.order.cancelled.v1 {orderUuid, storeUuid, cancelledAt}
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  └─ app:trade:outbox:publish → TradeOrderCancelledMessage → async
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        └─ Store TradeOrderCancelledHandler
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>              (txn) STORE inbox += trade.order.cancelled.v1
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>              store order exists?  → cancel it; if reservation_id → STORE outbox +=
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>                  inventory.reservation.release.requested.v1 {reservationId, reason:'trade_order_cancelled', …}
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>              store order missing? → persist StoreTradeOrderCancellation (applied later
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                  when the order arrives; conflicting store_uuid throws LogicException)
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        └─ app:store:outbox:publish → ReservationReleaseRequestedMessage → async
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>              └─ Inventory ReservationReleaseRequestedHandler
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>                    (txn) INVENTORY inbox += inventory.reservation.release.requested.v1
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>                    correlation check vs reservation, then InventoryService::release()
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>                    → stock released + ledger, INVENTORY outbox += inventory.reservation.released.v1
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        └─ app:inventory:outbox:publish → ReservationReleasedMessage → async
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>              └─ Store ReservationReleasedHandler: inbox dedup only
+</code></pre></div>
+<h3 id="63-expired-reservations">6.3 Expired reservations<a class="headerlink" href="#63-expired-reservations" title="Permanent link">&para;</a></h3>
+<p><code>app:inventory:reservations:release-expired</code> →
+<code>InventoryService::releaseExpiredReservations()</code> finds <code>confirmed</code> reservations past
+<code>expires_at</code> and releases them with reason <code>reservation expired</code>, which re-enters the
+standard <code>inventory.reservation.released.v1</code> outbox flow above.</p>
+<h3 id="64-settlement-allocation-posting">6.4 Settlement allocation posting<a class="headerlink" href="#64-settlement-allocation-posting" title="Permanent link">&para;</a></h3>
+<p>Settlement is an <strong>inbox-first</strong> module: funding confirmations arrive from outside as
+explicit-field messages.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>external producer → SettlementFundingConfirmedMessage → async
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  └─ SettlementFundingConfirmedHandler
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        dedup exists(eventId)
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        (txn) SettlementService::createPlanFromFunding()
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            build SettlementPlan + SettlementAllocation rows (brick/math BigInteger totals)
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            SETTLEMENT outbox += settlement.allocation.post.requested.v1
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>                {allocationUuid, planUuid}  (one per allocation, same txn)
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            persist SettlementConsumedEvent(eventId, 'settlement.funding.confirmed.v1',
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>                source_aggregate_type=sourceType, source_aggregate_id=sourceId, payload_hash)
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  └─ app:settlement:outbox:publish → SettlementAllocationPostingMessage(allocationUuid, planUuid) → async
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        └─ SettlementAllocationPostingHandler → postAllocation($allocationUuid)
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>              mark posting_requested (flush first: durable idempotency claim)
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>              voucherPort-&gt;post() with posting_idempotency_key
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>                  ('settlement-credit:&lt;planUuid&gt;:&lt;allocationKey&gt;')
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>              success → markPosted(reference) | retryable → markRetryableFailure(next +60s)
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>                        | fatal → markFailed
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>              reconcilePlanState()
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>  └─ app:settlement:allocations:requeue-due
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>        findRetryableDue() (status=retryable_failure AND next_attempt_at &lt;= now)
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>        claimRetryDue() (status→planned, next_attempt_at→NULL)
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>        Record settlement.allocation.post.requested.v1 again → repeats the posting loop
+</code></pre></div>
+<p>Statuses used by the settlement retry loop: allocation <code>planned → posting_requested →
+posted</code> (terminal <code>cancelled</code>/<code>failed</code>/<code>reversed</code>/<code>reversal_pending</code>), with
+<code>retryable_failure</code> feeding <code>requeue-due</code>. In test fixtures the voucher boundary is the
+<code>InMemorySettlementVoucherPort</code>.</p>
+<h2 id="7-operational-notes">7. Operational notes<a class="headerlink" href="#7-operational-notes" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Dead letters</strong> accumulate on the <code>failed</code> transport (<code>messenger_messages</code> with
+  <code>queue_name = 'failed'</code>); the outbox row is left unpublished so it can be manually
+  re-queued or repaired.</li>
+<li><strong>Stuck rows</strong> show up as <code>published_at IS NULL</code> with a non-null <code>last_error</code>; they are
+  re-attempted automatically after their <code>available_at</code> passes.</li>
+<li><strong>Race safety</strong> relies on the claim UPDATE being conditional (<code>published_at IS NULL AND
+  available_at &lt;= now</code>), plus the index <code>(published_at, available_at)</code> on each outbox
+  table (Inventory appends <code>id</code>).</li>
+<li>The <code>INVENTORY_ENABLED</code> environment toggle decides whether Store skips inventory
+  altogether and accepts orders immediately, or waits for an <code>inventory.reservation.confirmed.v1</code>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../javascripts/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>

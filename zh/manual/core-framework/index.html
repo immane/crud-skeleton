@@ -1,0 +1,4636 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/manual/core-framework/">
+      
+      
+        <link rel="prev" href="../project-structure/">
+      
+      
+        <link rel="next" href="../core-usage/">
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core 框架 - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core 框架
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发手册
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    开发手册
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    手册索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 控制器层
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 控制器层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollerrestcontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/RestController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollerhealthcontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/HealthController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollermetricscontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/MetricsController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollersystementitycontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/System/EntityController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollersystemroutercontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/System/RouterController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollerdefaultcontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/DefaultController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.视图层
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.视图层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreviewapiviewphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/View/ApiView.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crud-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        标准 CRUD mixins
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="标准 CRUD mixins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#createapiviewmixin-key-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CreateApiViewMixin key points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updateapiviewmixin-key-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UpdateApiViewMixin key points
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoped-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scoped mixins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-resource-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Single resource" mixins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflowapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkflowApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformcontent-trait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TransformContent trait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiviewmessages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApiViewMessages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-service-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Service Layer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Service Layer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicebaseserviceinterfacephp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/BaseServiceInterface.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicebaseservicephp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/BaseService.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserviceservicelocatorinterfacephp-defaultservicelocatorphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/ServiceLocatorInterface.php &amp; DefaultServiceLocator.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserviceconcern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        服务问题 (src/Core/Service/Concern/)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="服务问题 (src/Core/Service/Concern/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseserviceinfrastructuretrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BaseServiceInfrastructureTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baseservicereadlisttrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BaseServiceReadListTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baseservicemutationtrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BaseServiceMutationTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 解析器和表达式引擎
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 解析器和表达式引擎">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreparserexpressiondqlparserphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Parser/ExpressionDqlParser.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreparserexpressionquerybuilderassemblerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Parser/ExpressionQueryBuilderAssembler.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserviceexpressionservicephpexpressionserviceinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/ExpressionService.php（+接口ExpressionServiceInterface）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicequerybuilderfactoryphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/QueryBuilderFactory.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicelegacyevaluatorphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/LegacyEvaluator.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 序列化器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 序列化器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializerserializercontextfactoryphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/SerializerContextFactory.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializercircularreferencehandlerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/CircularReferenceHandler.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializernormalizerflatnormalizerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/Normalizer/FlatNormalizer.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializernormalizercircularreferencehandlerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/Normalizer/CircularReferenceHandler.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializercallbacksobjectcallbackphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/Callbacks/ObjectCallback.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 内核事件监听器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 内核事件监听器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessloglistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AccessLogListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controllerlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ControllerListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceptioninterceptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExceptionInterceptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localelistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LocaleListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricslistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MetricsListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openapienricherlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenApiEnricherListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ratelimitlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RateLimitListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-srccoreutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 实用程序类 (src/Core/Utils)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-srccoreexception" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 异常 (src/Core/Exception/)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-srccoremetricsmetricsregistryphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 指标注册表 (src/Core/Metrics/MetricsRegistry.php)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    查询系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API合约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发合同
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    整合活动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库和迁移
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    提取服务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Runbooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WeChat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试策略
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统演练和测试接缝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    业务不变量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构测试映射
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    失效模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    发布验证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 控制器层
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 控制器层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollerrestcontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/RestController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollerhealthcontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/HealthController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollermetricscontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/MetricsController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollersystementitycontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/System/EntityController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollersystemroutercontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/System/RouterController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccorecontrollerdefaultcontrollerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Controller/DefaultController.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.视图层
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.视图层">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreviewapiviewphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/View/ApiView.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crud-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        标准 CRUD mixins
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="标准 CRUD mixins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#createapiviewmixin-key-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CreateApiViewMixin key points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updateapiviewmixin-key-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UpdateApiViewMixin key points
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoped-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scoped mixins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-resource-mixins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Single resource" mixins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflowapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WorkflowApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformcontent-trait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TransformContent trait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiviewmessages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApiViewMessages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-service-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Service Layer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Service Layer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicebaseserviceinterfacephp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/BaseServiceInterface.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicebaseservicephp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/BaseService.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserviceservicelocatorinterfacephp-defaultservicelocatorphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/ServiceLocatorInterface.php &amp; DefaultServiceLocator.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserviceconcern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        服务问题 (src/Core/Service/Concern/)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="服务问题 (src/Core/Service/Concern/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseserviceinfrastructuretrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BaseServiceInfrastructureTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baseservicereadlisttrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BaseServiceReadListTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baseservicemutationtrait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BaseServiceMutationTrait
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 解析器和表达式引擎
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 解析器和表达式引擎">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreparserexpressiondqlparserphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Parser/ExpressionDqlParser.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreparserexpressionquerybuilderassemblerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Parser/ExpressionQueryBuilderAssembler.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserviceexpressionservicephpexpressionserviceinterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/ExpressionService.php（+接口ExpressionServiceInterface）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicequerybuilderfactoryphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/QueryBuilderFactory.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreservicelegacyevaluatorphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Service/LegacyEvaluator.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 序列化器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 序列化器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializerserializercontextfactoryphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/SerializerContextFactory.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializercircularreferencehandlerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/CircularReferenceHandler.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializernormalizerflatnormalizerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/Normalizer/FlatNormalizer.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializernormalizercircularreferencehandlerphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/Normalizer/CircularReferenceHandler.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#srccoreserializercallbacksobjectcallbackphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Serializer/Callbacks/ObjectCallback.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 内核事件监听器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 内核事件监听器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessloglistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AccessLogListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controllerlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ControllerListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceptioninterceptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExceptionInterceptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localelistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LocaleListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricslistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MetricsListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openapienricherlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenApiEnricherListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ratelimitlistener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RateLimitListener
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-srccoreutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 实用程序类 (src/Core/Utils)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-srccoreexception" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 异常 (src/Core/Exception/)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-srccoremetricsmetricsregistryphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 指标注册表 (src/Core/Metrics/MetricsRegistry.php)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">核心框架——深入探讨<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p><code>src/Core</code> 包是粗骨架的核心。它提供了基础
+控制器契约、可重用的视图混合、基于特征的服务层、
+动态查询/表达式引擎、序列化器管道、内核事件侦听器、
+实用程序、异常和 Prometheus 风格的指标注册表。</p>
+<p>本文档描述了每个类、其角色及其关键方法。它是一个
+参考 — 有关实用食谱，请参阅 <a href="../core-usage/">core-usage.md</a> 并了解
+查询参数参见<a href="../query-system/">query-system.md</a>。</p>
+<hr />
+<h2 id="1">1. 控制器层<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h3 id="srccorecontrollerrestcontrollerphp"><code>src/Core/Controller/RestController.php</code><a class="headerlink" href="#srccorecontrollerrestcontrollerphp" title="Permanent link">&para;</a></h3>
+<p>基本控制器合约。每个 API 控制器都扩展 <code>RestController</code>
+（它扩展了<code>AbstractController</code>）。它集中响应塑造，
+分页、请求处理和依赖项访问。</p>
+<p>依赖项通过 <code>#[Required]</code> 设置器注入（<code>setRequestStack</code>、
+<code>setSerializer</code>、<code>setTranslator</code>、<code>setServiceContainer</code>) 所以子控制器
+只需要在自己的模块中声明其特定于模块的依赖关系
+构造函数。请参阅<code>config/services.yaml</code>中的<code>_instanceof</code>接线。</p>
+<p>主要成员：</p>
+<table>
+<thead>
+<tr>
+<th>会员</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UNKNOWN_ERROR</code></td>
+<td>默认警告消息<code>'Api error occurred'</code>。</td>
+</tr>
+<tr>
+<td><code>resolveService(string $id): object</code></td>
+<td>从容器中解析任意服务 ID，如果丢失则抛出异常。</td>
+</tr>
+<tr>
+<td><code>getService(): object</code></td>
+<td>返回控制器的 <code>$service</code> 属性（必须是一个对象）。</td>
+</tr>
+<tr>
+<td><code>getRequestStack()</code> / <code>getSerializer()</code> / <code>getTranslator()</code></td>
+<td>带防护装置的惰性访问器。</td>
+</tr>
+<tr>
+<td><code>pagination(mixed $collection): array</code></td>
+<td>应用 <code>page</code>/<code>limit</code> 查询参数并返回 <code>{items, paginator}</code>。处理 <code>QueryBuilder</code> （通过 Doctrine <code>Paginator</code>）、数组和 <code>ArrayCollection</code>。</td>
+</tr>
+<tr>
+<td><code>success(mixed $content, string $message, int $status): Response</code></td>
+<td>构建标准信封<code>{data, code: 0, message}</code>（加上可选的<code>paginator</code>）。当 <code>$status === 204</code> 时，将 <code>204</code> 作为空主体返回。运行分页和请求处理（<code>@expands</code>、<code>@display</code>）。</td>
+</tr>
+<tr>
+<td><code>warning(string $msg, int $code, mixed $raw, int $status): Response</code></td>
+<td>使用翻译后的消息构建错误信封 <code>{code, message, raw_data}</code>。</td>
+</tr>
+<tr>
+<td><code>requestProcess(mixed $collection)</code></td>
+<td>应用于<code>success()</code>内部。处理 <code>@expands</code>、<code>@display</code>（复杂/JSON 投影/<code>reduce</code>），拉取请求驱动的视图整形。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="srccorecontrollerhealthcontrollerphp"><code>src/Core/Controller/HealthController.php</code><a class="headerlink" href="#srccorecontrollerhealthcontrollerphp" title="Permanent link">&para;</a></h3>
+<p>容器/负载均衡器探针，<strong>公共（无 JWT）</strong> - 它们位于外部
+<code>/api</code> 防火墙，以便编排器可以在没有令牌的情况下轮询它们。</p>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>方法</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/health/live</code></td>
+<td>获取</td>
+<td>活跃度探测 — 当 PHP 处理请求时始终为 <code>200</code>。</td>
+</tr>
+<tr>
+<td><code>/health/ready</code></td>
+<td>获取</td>
+<td>准备就绪 — 运行 <code>SELECT 1</code> （数据库）以及可选的 Redis 探针；当硬依赖项关闭时，返回降级的 <code>503</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>Redis 探针 (<code>checkRedis()</code>) 是无依赖性的：它打开一个原始 TCP 套接字
+并发送 RESP <code>PING</code>。当<code>OTP_REDIS_DSN</code>为空时返回<code>disabled</code>，
+<code>ok</code> 位于 <code>+PONG</code> 上，否则错误字符串。详细信息绝不会泄露给
+匿名来电者；相反，它们会被记录。</p>
+<h3 id="srccorecontrollermetricscontrollerphp"><code>src/Core/Controller/MetricsController.php</code><a class="headerlink" href="#srccorecontrollermetricscontrollerphp" title="Permanent link">&para;</a></h3>
+<p>在 <code>/metrics</code>（公共）处提供 Prometheus <strong>文本说明格式</strong>。
+内存中的请求指标（计数器、持续时间直方图、飞行中的仪表）是
+每个 PHP-FPM 工作人员。 DB 支持的计量表 — 每个主题的发件箱待办事项
+（<code>trade_outbox_message</code>、<code>store_outbox_message</code>、<code>inventory_outbox_message</code>）
+和失败的信使消息 - 在每次抓取时实时计算，因此它们是
+对所有工人都是准确的。刮擦失败增加
+<code>metrics_scrape_errors_total</code>。</p>
+<h3 id="srccorecontrollersystementitycontrollerphp"><code>src/Core/Controller/System/EntityController.php</code><a class="headerlink" href="#srccorecontrollersystementitycontrollerphp" title="Permanent link">&para;</a></h3>
+<p>自省端点（扩展 <code>RestController</code>）位于 <code>/system/entities</code>。</p>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /system/entities</code></td>
+<td>列出每个 Doctrine 管理的实体的 FQCN。</td>
+</tr>
+<tr>
+<td><code>GET /system/entities/{entityName}</code></td>
+<td>返回字段映射（类型、columnName、可为空、长度等）、关联映射（类型、targetEntity），以及每个属性的人性化纯文本标签及其翻译。 <code>entityName</code> 使用斜杠而不是反斜杠（例如 <code>App/Common/Entity/Category</code>）。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="srccorecontrollersystemroutercontrollerphp"><code>src/Core/Controller/System/RouterController.php</code><a class="headerlink" href="#srccorecontrollersystemroutercontrollerphp" title="Permanent link">&para;</a></h3>
+<p>在 <code>GET /system/router</code> 处，返回在 Symfony 路由器中注册的每个路由
+由路线名称键入。</p>
+<h3 id="srccorecontrollerdefaultcontrollerphp"><code>src/Core/Controller/DefaultController.php</code><a class="headerlink" href="#srccorecontrollerdefaultcontrollerphp" title="Permanent link">&para;</a></h3>
+<p>顶级默认控制器（此处未详细介绍；请参阅该文件）。</p>
+<hr />
+<h2 id="2">2.视图层<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>视图层将配置好的控制器简单地转变为完整的 REST 端点
+通过撰写<strong>特征</strong>。每个 mixin 定义路由 (<code>#[Route]</code>)、OpenAPI
+属性 (<code>#[OA\*]</code>) 和操作方法。控制者通过 <code>use</code> 选择加入。</p>
+<h3 id="srccoreviewapiviewphp"><code>src/Core/View/ApiView.php</code><a class="headerlink" href="#srccoreviewapiviewphp" title="Permanent link">&para;</a></h3>
+<p>提供共享过滤助手的基本 <strong>trait</strong>。不是定义的 mixin
+路线本身；它提供了<code>commonFilter</code>扩展点和标准
+读取 mixins 使用的合并。</p>
+<table>
+<thead>
+<tr>
+<th>会员</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entityNotFoundMessage()</code></td>
+<td>默认<code>'Entity not found'</code>。</td>
+</tr>
+<tr>
+<td><code>commonFilter()</code></td>
+<td>扩展点：返回一个数组或<code>QueryBuilder</code>限制控制器上的所有查询（例如<code>['enabled' =&gt; true]</code>或<code>['user' =&gt; $this-&gt;getUser()]</code>）。</td>
+</tr>
+<tr>
+<td><code>mixIdToCommonFilter(int\|string $id)</code></td>
+<td>将 id 合并到公共过滤器中；当 id 是有效的 UUID 时，使用 <code>uuid</code> 作为键，否则使用 <code>id</code>。</td>
+</tr>
+<tr>
+<td><code>mixToCommonFilter(array $data)</code></td>
+<td>将 <code>$data</code> 合并到通用过滤器中。对于<code>QueryBuilder</code>，它附加<code>AND alias.key = :key</code>条件。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="crud-mixins">标准 CRUD mixins<a class="headerlink" href="#crud-mixins" title="Permanent link">&para;</a></h3>
+<p>这些是视图层的核心内容。每个用作：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">    CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Mixin</th>
+<th>Route(s)</th>
+<th>Methods</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ListApiViewMixin</code></td>
+<td><code>/</code> (name <code>list</code>)</td>
+<td>GET</td>
+<td>Calls <code>service-&gt;list($this-&gt;listFilter($this-&gt;commonFilter()), null, false)</code>, then <code>listProcessor</code> / <code>listResponses</code>.</td>
+</tr>
+<tr>
+<td><code>DetailApiViewMixin</code></td>
+<td><code>/{id}</code> (name <code>detail</code>)</td>
+<td>GET</td>
+<td><code>mixIdToCommonFilter</code>, then <code>detailFilter</code>, <code>detailProcessor</code>, <code>detailResponse</code>. 404 when missing.</td>
+</tr>
+<tr>
+<td><code>CreateApiViewMixin</code></td>
+<td><code>/</code> (name <code>create</code>)</td>
+<td>POST</td>
+<td>Accepts a single object or array (batch). Enforces <code>requiredCreateProperties</code> / <code>acceptedCreateProperties</code>, applies <code>defaultCreateValues</code>, <code>processCreateContent</code>, <code>processEntity</code>, <code>afterCreated</code>. Batch/transactional unless <code>@partial</code>.</td>
+</tr>
+<tr>
+<td><code>UpdateApiViewMixin</code></td>
+<td><code>/{id}</code> (PUT, <code>update</code>); <code>/batch-update</code> (POST)</td>
+<td>PUT/POST</td>
+<td>Single update by id plus batch/upsert mode via <code>@mode</code> and <code>@basis</code>. Enforces <code>requiredUpdateProperties</code> / <code>acceptedUpdateProperties</code>.</td>
+</tr>
+<tr>
+<td><code>DeleteApiViewMixin</code></td>
+<td><code>/{id}</code> (name <code>delete</code>)</td>
+<td>DELETE</td>
+<td><code>deletionFilter</code>, <code>service-&gt;get</code>, then <code>service-&gt;remove</code>; returns <code>204</code> on success, 404 when missing.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="createapiviewmixin-key-points"><code>CreateApiViewMixin</code> key points<a class="headerlink" href="#createapiviewmixin-key-points" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Determines input shape with <code>FixJSON::getJSONType()</code> (<code>object</code> → single,
+  <code>array</code> → batch).</li>
+<li>If <code>requiredCreateProperties</code> is defined, each listed property must exist in
+  the payload or a <code>ValidatorException</code> (<code>"{Property} is required"</code>) is thrown.</li>
+<li>If <code>acceptedCreateProperties</code> is defined, only those keys are forwarded.</li>
+<li><code>@partial</code> (boolean) disables the surrounding transaction; <code>@transform</code>
+  enables content transformation.</li>
+<li>Returns <code>201</code> with the created entity (or array of entities).</li>
+</ul>
+<h4 id="updateapiviewmixin-key-points"><code>UpdateApiViewMixin</code> key points<a class="headerlink" href="#updateapiviewmixin-key-points" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Single update: <code>PUT /{id}</code>, looks up via <code>mixIdToCommonFilter</code>.</li>
+<li>Batch update: <code>POST /batch-update</code>.</li>
+<li><code>@mode</code>: <code>update</code> or <code>mixed</code> (default <code>mixed</code> = upsert: create when no match).</li>
+<li><code>@basis</code>: comma-separated fields used to match existing entities.</li>
+<li><code>@partial</code>: when false, wraps the whole batch in one transaction.</li>
+<li>Enforces <code>requiredUpdateProperties</code> / <code>acceptedUpdateProperties</code> via
+  <code>propertyCannotBeEmpty</code>.</li>
+<li>In mixed mode it may call the create code path (<code>defaultCreateValues</code>,
+  <code>processCreateContent</code>, <code>afterCreated</code>).</li>
+</ul>
+<h3 id="scoped-mixins">Scoped mixins<a class="headerlink" href="#scoped-mixins" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Mixin</th>
+<th>Route</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ScopedListApiViewMixin</code></td>
+<td><code>/{scopeId}</code> (name <code>list</code>)</td>
+<td>Calls the abstract <code>scopedListFilter($scopeId)</code> then <code>service-&gt;list(...)</code>.</td>
+</tr>
+<tr>
+<td><code>ScopedDetailApiViewMixin</code></td>
+<td><code>/{scopeId}/{id}</code> (name <code>detail</code>)</td>
+<td>Calls abstract <code>scopedDetailFilter($scopeId, $id)</code> and returns 404 when nothing matches.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="single-resource-mixins">"Single resource" mixins<a class="headerlink" href="#single-resource-mixins" title="Permanent link">&para;</a></h3>
+<p>For resources that are singletons (e.g. a user's own single profile/settings
+record) rather than collections:</p>
+<table>
+<thead>
+<tr>
+<th>Mixin</th>
+<th>Route</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SingleDetailApiViewMixin</code></td>
+<td><code>/</code> (name <code>detail</code>)</td>
+<td>GET — returns whatever <code>commonFilter()</code> finds (may be null).</td>
+</tr>
+<tr>
+<td><code>SingleCreateAndUpdateApiViewMixin</code></td>
+<td><code>/</code> (name <code>update</code>)</td>
+<td>PUT — upserts the single record: if <code>commonFilter()</code> finds nothing it creates (filtering via <code>filterCreateProperties</code> + <code>defaultCreateValues</code>), otherwise updates (<code>filterUpdateProperties</code> + <code>defaultUpdateValues</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="workflowapiviewmixin"><code>WorkflowApiViewMixin</code><a class="headerlink" href="#workflowapiviewmixin" title="Permanent link">&para;</a></h3>
+<p>Adds Symfony Workflow helpers for a controller that declares a <code>$workflow</code>
+service (and typically a <code>$serviceClass</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Method</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/todo</code></td>
+<td>GET</td>
+<td>Lists entities with at least one enabled transition.</td>
+</tr>
+<tr>
+<td><code>/{id}/transitions</code></td>
+<td>GET</td>
+<td>Lists enabled transitions for an entity.</td>
+</tr>
+<tr>
+<td><code>/{id}/do/{transition}</code></td>
+<td>POST</td>
+<td>Applies a transition inside a transaction (optionally updating the entity first). Throws <code>TRANSITION_CANNOT_APPLY</code> when <code>can()</code> fails.</td>
+</tr>
+<tr>
+<td><code>/{id}/status-reset</code></td>
+<td>PUT</td>
+<td><code>ROLE_ADMIN</code> only — resets the workflow marking.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: Many modules (e.g. Trade <code>OrderController</code>) implement workflow actions
+inline rather than using this trait — prefer the trait when it fits, or follow
+the Trade controllers for more control.</p>
+</blockquote>
+<h3 id="transformcontent-trait"><code>TransformContent</code> trait<a class="headerlink" href="#transformcontent-trait" title="Permanent link">&para;</a></h3>
+<p>Enables <code>@transform</code> (or the <code>$transformer</code> argument) to rewrite submitted
+content through Symfony <code>ExpressionLanguage</code>. For each field in the transformer
+map it resolves the target entity's property metadata to detect Doctrine
+relations and, for a to-one relation, resolves the matching <code>*Service</code> so you
+can write things like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>category: "Service.get({'name': ':value'}).getId()"
+</code></pre></div>
+<p>It exposes <code>Service</code> (a gateway with <code>get</code>/<code>list</code> wrapping the resolved service
+and returning identity objects), <code>entity</code>, <code>Math</code>, and <code>ArrayCommon</code> to the
+expression. Throws <code>INVALID_CONTENT_FIELD</code> when a field is not a real property.</p>
+<h3 id="apiviewmessages"><code>ApiViewMessages</code><a class="headerlink" href="#apiviewmessages" title="Permanent link">&para;</a></h3>
+<p>Constant/helper set for shared user-facing messages:</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SUCCESS</code></td>
+<td><code>SUCCESS</code></td>
+</tr>
+<tr>
+<td><code>ENTITY_NOT_FOUND</code></td>
+<td><code>Entity is not found</code></td>
+</tr>
+<tr>
+<td><code>INVALID_JSON</code></td>
+<td><code>Invalid JSON</code></td>
+</tr>
+<tr>
+<td><code>INVALID_CONTENT_FIELD</code></td>
+<td><code>Invalid content field</code></td>
+</tr>
+<tr>
+<td><code>CREATE_FAILED</code></td>
+<td><code>Create failed</code></td>
+</tr>
+<tr>
+<td><code>BATCH_UPDATE_ERROR</code></td>
+<td><code>Batch update error</code></td>
+</tr>
+<tr>
+<td><code>CONTENT_TYPE_ERROR</code></td>
+<td><code>Content type error.</code></td>
+</tr>
+<tr>
+<td><code>TRANSITION_CANNOT_APPLY</code></td>
+<td><code>Current transition cannot be applied.</code></td>
+</tr>
+<tr>
+<td><code>propertyRequired($p)</code></td>
+<td><code>"{P} is required"</code></td>
+</tr>
+<tr>
+<td><code>propertyCannotBeEmpty($p)</code></td>
+<td><code>"{P} cannot be empty."</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-service-layer">3. Service Layer<a class="headerlink" href="#3-service-layer" title="Permanent link">&para;</a></h2>
+<h3 id="srccoreservicebaseserviceinterfacephp"><code>src/Core/Service/BaseServiceInterface.php</code><a class="headerlink" href="#srccoreservicebaseserviceinterfacephp" title="Permanent link">&para;</a></h3>
+<p>The contract implemented by <code>BaseService</code>. Generic over <code>TEntity</code>.</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>签名</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get</code></td>
+<td><code>($object, bool $directly = false)</code></td>
+<td>从 id、条件数组、<code>QueryBuilder</code> 或带有 <code>getId()</code> 的对象解析实体。</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td><code>($object = null, $order = null, bool $disableRequest = true)</code></td>
+<td>列出实体或返回配置的<code>QueryBuilder</code>。当<code>$disableRequest</code>为<code>false</code>时，查询当前请求的<code>@filter</code>/<code>@order</code>/<code>@select</code>/<code>@groupBy</code>/<code>@hints</code>/<code>@sort</code>。</td>
+</tr>
+<tr>
+<td><code>new</code></td>
+<td><code>()</code></td>
+<td>创建一个新的实体实例。</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><code>($object, ?array $data, bool $noFlush = false)</code></td>
+<td>将数据数组持久化到实体上；除非<code>$noFlush</code>，否则冲洗。</td>
+</tr>
+<tr>
+<td><code>remove</code></td>
+<td><code>($object): bool</code></td>
+<td>取出并冲洗。</td>
+</tr>
+<tr>
+<td><code>wrapInTransaction</code></td>
+<td><code>(callable $fn): mixed</code></td>
+<td>使用全有或全无语义在数据库事务内运行可调用对象。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="srccoreservicebaseservicephp"><code>src/Core/Service/BaseService.php</code><a class="headerlink" href="#srccoreservicebaseservicephp" title="Permanent link">&para;</a></h3>
+<p>组装三个关注点特征并连接共享状态的抽象基础
+通过构造函数：容器、实体类、定位器、实体管理器，
+存储库、记录器、当前用户（来自令牌存储）和可选
+<code>ExpressionServiceInterface</code> / <code>LegacyEvaluator</code>。</p>
+<h3 id="srccoreserviceservicelocatorinterfacephp-defaultservicelocatorphp"><code>src/Core/Service/ServiceLocatorInterface.php</code> &amp; <code>DefaultServiceLocator.php</code><a class="headerlink" href="#srccoreserviceservicelocatorinterfacephp-defaultservicelocatorphp" title="Permanent link">&para;</a></h3>
+<p>一个小接口，将 <code>BaseService</code> 与容器解耦，从而保持
+测试假货轻量。它公开 <code>getEntityManager</code>、<code>getLogger</code>、
+<code>getTokenStorage</code>、<code>getRequestStack</code>、<code>getSerializer</code>、<code>getValidator</code>（返回
+通过 PHPDoc 记录类型，因此假货保持无类型）。 <code>DefaultServiceLocator</code>
+通过从容器中提取这些服务来实现它，返回 <code>null</code> /
+<code>NullLogger</code> 缺席时保持优雅。自动连线为
+<code>App\Core\Service\ServiceLocatorInterface</code>。
+<code>DefaultServiceLocator</code> 被注册为该接口别名
+<code>config/services.yaml</code>。</p>
+<h3 id="srccoreserviceconcern">服务问题 (<code>src/Core/Service/Concern/</code>)<a class="headerlink" href="#srccoreserviceconcern" title="Permanent link">&para;</a></h3>
+<h4 id="baseserviceinfrastructuretrait"><code>BaseServiceInfrastructureTrait</code><a class="headerlink" href="#baseserviceinfrastructuretrait" title="Permanent link">&para;</a></h4>
+<p>共享基础设施访问器和助手：</p>
+<table>
+<thead>
+<tr>
+<th>会员</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>listResultToCollection($list): ArrayCollection</code>（静态）</td>
+<td>将 <code>QueryBuilder</code> 结果或数组标准化为 <code>ArrayCollection</code>。</td>
+</tr>
+<tr>
+<td><code>externalExpressionValues(): array</code></td>
+<td>暴露给表达式的值：<code>math</code>/<code>Math</code>、<code>datetime</code>/<code>Datetime</code>、<code>ArrayCommon</code>。</td>
+</tr>
+<tr>
+<td><code>getEntityManager()</code> / <code>getRepository()</code> / <code>getLogger()</code> / <code>getSerializer()</code> / <code>getValidator()</code> / <code>getRequestStack()</code></td>
+<td>惰性访问器，具有后备功能（例如，当没有注册时，手动滚动 <code>Serializer</code>）。</td>
+</tr>
+<tr>
+<td><code>getCurrentRequest()</code></td>
+<td>通过请求堆栈的当前请求。</td>
+</tr>
+<tr>
+<td><code>getQueryBuilderFactory()</code> / <code>getExpressionService()</code> / <code>getLegacyEvaluator()</code></td>
+<td>查询引擎协作者的懒惰创建者。</td>
+</tr>
+<tr>
+<td><code>wrapInTransaction(callable $fn): mixed</code></td>
+<td>开始事务，在提交之前刷新，回滚任何 <code>Throwable</code>，并重置已关闭的 EntityManager。回退到假/模拟 EM 的普通执行（无 <code>beginTransaction</code>）。</td>
+</tr>
+<tr>
+<td><code>resetEntityManager()</code></td>
+<td>连接失败后重新启动新的管理器/存储库。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="baseservicereadlisttrait"><code>BaseServiceReadListTrait</code><a class="headerlink" href="#baseservicereadlisttrait" title="Permanent link">&para;</a></h4>
+<p>实现<code>get()</code>和<code>list()</code>（参见<a href="../query-system/">query-system.md</a>
+完整的 <code>list()</code> 行为）。</p>
+<ul>
+<li><code>get()</code> 句柄：<code>null</code>（→ null）、<code>QueryBuilder</code>（单个结果）、一个对象
+  与 <code>getId()</code>、关联条件数组 (<code>findOneBy</code>)、有效的 UUID
+  字符串（如果存在，则与 <code>uuid</code> 字段匹配），或普通 id
+  （<code>rep-&gt;find</code>）。</li>
+<li><code>list()</code> 从实体类构建 <code>QueryBuilder</code>，应用
+  关联数组作为相等条件，并且 — 当 <code>$disableRequest</code> 为
+  <code>false</code> — 处理 <code>@dql</code>、<code>@filter</code>、<code>@select</code>、<code>@groupBy</code>、<code>@order</code>、
+  <code>@hints</code>、<code>@showDQL</code> 和内存中 <code>@sort</code>/<code>@filter</code> 后备。</li>
+<li>特权参数<code>@dql</code>、<code>@sort</code>、<code>@hints</code>仅限于
+  <code>ROLE_ADMIN</code>; <code>@showDQL</code> 仅限于 <code>dev</code> 环境。 <code>@select</code> 是
+  防止访问身份数据。</li>
+</ul>
+<h4 id="baseservicemutationtrait"><code>BaseServiceMutationTrait</code><a class="headerlink" href="#baseservicemutationtrait" title="Permanent link">&para;</a></h4>
+<p>实现<code>new()</code>、<code>update()</code>、<code>remove()</code>。</p>
+<ul>
+<li><code>new()</code> 实例化实体，如果需要则绕过所需的构造函数。</li>
+<li><code>update()</code> 将数据映射到实体：它将属性属性反映到
+  检测关系 — 一对一 (<code>ManyToOne</code>/<code>OneToOne</code>) 关系通过以下方式解决
+  id 并通过 setter 设置；一对多 (<code>ManyToMany</code>/<code>OneToMany</code>) 集合是
+  diffed 和添加/删除方法调用；类似日期的属性转换为
+  <code>new \DateTime(...)</code>。剩余的标量字段通过以下方式反序列化
+  使用 <code>object_to_populate</code> 的 Symfony 序列化器。它验证实体并
+  持续存在（除非<code>$noFlush</code>，否则刷新）。如果为 null，则抛出 <code>ValidatorException</code>
+  对象、缺少相关实体 (<code>NotFoundHttpException</code>) 以及
+  <code>"Duplication entries"</code> 位于 <code>UniqueConstraintViolationException</code> 上。</li>
+<li><code>remove()</code> 获取、删除和刷新，返回成功。</li>
+</ul>
+<hr />
+<h2 id="4">4. 解析器和表达式引擎<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>请参阅 <a href="../query-system/">query-system.md</a> 了解完整的面向用户的查询
+参考。在这里我们记录课程。</p>
+<h3 id="srccoreparserexpressiondqlparserphp"><code>src/Core/Parser/ExpressionDqlParser.php</code><a class="headerlink" href="#srccoreparserexpressiondqlparserphp" title="Permanent link">&para;</a></h3>
+<p>将 <code>@filter</code> 表达式编译为安全的 <code>QueryBuilder</code> 片段（连接、
+其中，参数）。它使用 Symfony <code>ExpressionLanguage</code> 进行解析，然后遍历
+AST (<code>recursiveCompile</code>) 支持严格、安全的节点集。</p>
+<p>支持的运算符映射到 DQL：</p>
+<table>
+<thead>
+<tr>
+<th>操作员</th>
+<th>DQL 片段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>==</code> / <code>!=</code></td>
+<td><code>=</code> / <code>!=</code></td>
+</tr>
+<tr>
+<td><code>&gt;</code> <code>&gt;=</code> <code>&lt;</code> <code>&lt;=</code></td>
+<td>相同</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code> / <code>||</code></td>
+<td><code>AND</code> / <code>OR</code></td>
+</tr>
+<tr>
+<td><code>+ - * /</code></td>
+<td>相同</td>
+</tr>
+<tr>
+<td><code>matches</code></td>
+<td><code>REGEXP(...) = TRUE</code> 代表 <code>/pattern/flags</code>，否则 <code>LIKE '%...%'</code></td>
+</tr>
+</tbody>
+</table>
+<p>著名成员：</p>
+<table>
+<thead>
+<tr>
+<th>会员</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setExpression</code> / <code>setDataClass</code> / <code>setValues</code></td>
+<td>配置解析器（构建器样式）。 <code>setValues</code> 保留 <code>entity</code> 签名密钥。</td>
+</tr>
+<tr>
+<td><code>compile(int $cacheTtl = 3600): self</code></td>
+<td>解析+编译；使用 PSR-16 缓存（如果可用）。语法/编译错误时抛出 <code>ValidatorException</code>。</td>
+</tr>
+<tr>
+<td><code>getWhere()</code> / <code>getJoins()</code> / <code>getParameters()</code></td>
+<td>编译的片段。</td>
+</tr>
+<tr>
+<td><code>getFragments(): array</code></td>
+<td>返回 <code>{joins, where, params}</code> — 与数据库无关；汇编器应用它们。</td>
+</tr>
+<tr>
+<td><code>getSource(?QueryBuilder $qb = null): string</code></td>
+<td>已编译表达式的完整 DQL 源。</td>
+</tr>
+<tr>
+<td><code>validateFragments(EntityManagerInterface $em): void</code></td>
+<td>根据 Doctrine 元数据重新解析每个连接路径和位置标记，对于未知的别名/属性抛出 <code>ValidatorException</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>像 <code>entity.getCategory().getName()</code> 这样的属性链会产生连接
+（<code>filter_entity_category</code> 等）和最后的 <code>filter_entity_category.name</code>
+参考。顶级裸属性编译为 <code>prop IS NOT NULL</code>。</p>
+<h3 id="srccoreparserexpressionquerybuilderassemblerphp"><code>src/Core/Parser/ExpressionQueryBuilderAssembler.php</code><a class="headerlink" href="#srccoreparserexpressionquerybuilderassemblerphp" title="Permanent link">&para;</a></h3>
+<p>将 <code>ExpressionDqlParser</code> 片段应用到 Doctrine <code>QueryBuilder</code> 上。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>buildQueryBuilder(parser, $options = []): QueryBuilder</code></td>
+<td>创建一个新的 <code>SELECT root FROM dataClass root</code> 并应用片段。</td>
+</tr>
+<tr>
+<td><code>applyToQueryBuilder($qb, parser, $options = []): QueryBuilder</code></td>
+<td>将片段应用到现有的 QueryBuilder（重新映射根别名、删除重复连接/别名、重命名冲突参数名称以及应用 <code>leftJoin</code> + <code>andWhere</code> + 参数）。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="srccoreserviceexpressionservicephpexpressionserviceinterface"><code>src/Core/Service/ExpressionService.php</code>（+接口<code>ExpressionServiceInterface</code>）<a class="headerlink" href="#srccoreserviceexpressionservicephpexpressionserviceinterface" title="Permanent link">&para;</a></h3>
+<p>将过滤器字符串转换为 <code>{qb, parameters}</code> 结果的中央包装器
+（由 <code>BaseServiceReadListTrait</code> 使用）。它通过一个缓存编译的 DQL + 参数
+PSR-16 缓存，否则通过解析器解析/验证/组装 +
+汇编器。 <code>parseAndAssemble()</code> 受到保护，因此单元测试可以覆盖它。</p>
+<h3 id="srccoreservicequerybuilderfactoryphp"><code>src/Core/Service/QueryBuilderFactory.php</code><a class="headerlink" href="#srccoreservicequerybuilderfactoryphp" title="Permanent link">&para;</a></h3>
+<p>用于创建 <code>QueryBuilder</code> 根的简单工厂：<code>create($dataClass,
+$rootAlias = 'entity')</code>（<code>createRootQueryBuilder</code> 的别名）返回
+<code>SELECT alias FROM dataClass alias</code>。将创作保留在一处，因此 <code>BaseService</code>
+可以委托并且测试可以模拟它。</p>
+<h3 id="srccoreservicelegacyevaluatorphp"><code>src/Core/Service/LegacyEvaluator.php</code><a class="headerlink" href="#srccoreservicelegacyevaluatorphp" title="Permanent link">&para;</a></h3>
+<p>使用 Symfony 为 <code>@filter</code> 和 <code>@sort</code> 提供内存中回退
+<code>ExpressionLanguage</code>。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>evaluate($expr, $context = [])</code></td>
+<td>根据全局+上下文进行评估；返回 <code>false</code> 并登录错误。</td>
+</tr>
+<tr>
+<td><code>evaluateBool($expr, $context = []): bool</code></td>
+<td>布尔转换方便（在内存中过滤/排序时使用，例如 <code>@sort</code> 比较 <code>x</code>/<code>y</code>）。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5">5. 序列化器<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<h3 id="srccoreserializerserializercontextfactoryphp"><code>src/Core/Serializer/SerializerContextFactory.php</code><a class="headerlink" href="#srccoreserializerserializercontextfactoryphp" title="Permanent link">&para;</a></h3>
+<p>构建规范的序列化器上下文。识别的选项：<code>groups</code>
+(array|string) 和 <code>max_depth</code> (int，<code>enable_max_depth</code> 默认为
+<code>true</code>）。</p>
+<h3 id="srccoreserializercircularreferencehandlerphp"><code>src/Core/Serializer/CircularReferenceHandler.php</code><a class="headerlink" href="#srccoreserializercircularreferencehandlerphp" title="Permanent link">&para;</a></h3>
+<p>静态、无依赖的循环引用处理程序：返回对象的 <code>id</code>
+当它有<code>getId()</code>时，否则<code>spl_object_hash</code>。参考自
+串行器配置。</p>
+<h3 id="srccoreserializernormalizerflatnormalizerphp"><code>src/Core/Serializer/Normalizer/FlatNormalizer.php</code><a class="headerlink" href="#srccoreserializernormalizerflatnormalizerphp" title="Permanent link">&para;</a></h3>
+<p>装饰默认的对象规范化器（注册为
+<code>app.serializer.method_normalizer</code>，装饰
+<code>serializer.normalizer.object</code>) 生成项目的“扁平”实体
+代表：</p>
+<ul>
+<li>避免规范化 Doctrine 内部对象（<code>Doctrine\ORM\*</code>、
+  <code>Doctrine\Persistence\*</code>) — 字符串化或返回类名。</li>
+<li>如果存在，则在顶层添加 <code>__toString</code>。</li>
+<li>将相关对象减少到<code>{id, __toString, __metadata}</code>。</li>
+<li>扩展相关对象的可遍历集合。</li>
+<li>JSON 将字符串值字段（不包括数字字符串）解码为对象。</li>
+<li>标准化失败时返回 <code>{id, __toString}</code> 或 <code>{__class}</code>。</li>
+</ul>
+<h3 id="srccoreserializernormalizercircularreferencehandlerphp"><code>src/Core/Serializer/Normalizer/CircularReferenceHandler.php</code><a class="headerlink" href="#srccoreserializernormalizercircularreferencehandlerphp" title="Permanent link">&para;</a></h3>
+<p>第二个更严格的循环处理程序：当对象
+有一个标量 id，否则抛出 <code>"Every entity should have getId method"</code>。</p>
+<h3 id="srccoreserializercallbacksobjectcallbackphp"><code>src/Core/Serializer/Callbacks/ObjectCallback.php</code><a class="headerlink" href="#srccoreserializercallbacksobjectcallbackphp" title="Permanent link">&para;</a></h3>
+<p>序列化器回调（<code>handle(object)</code>）：返回对象的<code>getId()</code>，否则
+<code>null</code>。作为特定属性的回调映射条目​​很有用。</p>
+<hr />
+<h2 id="6">6. 内核事件监听器<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>已在 <code>config/services.yaml</code> 中注册（以及一些在 Core 包中）
+<code>services.yaml</code>）。</p>
+<h3 id="accessloglistener"><code>AccessLogListener</code><a class="headerlink" href="#accessloglistener" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.response</code>（优先级<code>-5</code>）。日志<code>POST</code>/<code>PUT</code>/<code>DELETE</code>
+以表单形式向 <code>monolog.logger.access</code> 通道发出请求
+<code>{user} {METHOD} {uri} | {status} | REQ: ... | RES: ...</code>。正文被截断
+4096 个字符。身份验证路径（<code>/api/auth</code>、<code>/api/wechat</code>）的主体被隐藏。</p>
+<h3 id="controllerlistener"><code>ControllerListener</code><a class="headerlink" href="#controllerlistener" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.controller</code>。使用操作记录 <code>PUT</code>/<code>POST</code> 请求
+用户 ID 和 1 KB 截断的正文 (<code>"User [#$operator] Requests $method $uri: ..."</code>)。</p>
+<h3 id="exceptioninterceptor"><code>ExceptionInterceptor</code><a class="headerlink" href="#exceptioninterceptor" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.exception</code>。仅作用于 <code>/api/...</code> URL。记录
+异常，返回具有适当状态的 JSON <code>{code, message, class}</code>
+当退出开发时。 （如果环境等于 <code>dev.disabled</code> 它会重新抛出
+Symfony 显示调试页面。）</p>
+<h3 id="localelistener"><code>LocaleListener</code><a class="headerlink" href="#localelistener" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.request</code>（优先级<code>20</code>）。设置请求区域设置
+<code>_locale</code> 查询参数或 <code>Accept-Language</code> 标头。支持的区域设置：
+<code>en</code>、<code>zh</code>、<code>zh_Hant</code>、<code>ja</code>。映射详细形式 (<code>zh-CN</code> → <code>zh</code>、<code>zh-TW</code> →
+<code>zh_Hant</code>、<code>ja-JP</code>→<code>ja</code>等）。</p>
+<h3 id="metricslistener"><code>MetricsListener</code><a class="headerlink" href="#metricslistener" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.request</code>（优先级<code>10</code>）和<code>kernel.response</code>（优先级<code>10</code>）
+<code>-1</code>）。记录<code>http_requests_total</code>（按方法/路线/状态计数器），
+<code>http_request_duration_seconds</code>（直方图）和<code>http_requests_inflight</code>
+（仪表）。跳过子请求和 <code>/health</code>、<code>/metrics</code>、<code>/_profiler</code>、<code>/_wdt</code>、
+<code>/api/doc</code> 路径。</p>
+<h3 id="openapienricherlistener"><code>OpenApiEnricherListener</code><a class="headerlink" href="#openapienricherlistener" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.response</code>（优先级<code>-10</code>）。后处理
+<code>/api/doc.json</code> 和 <code>/api/doc</code> 响应以丰富 OpenAPI 规范：注入
+规范标签，来自 <code>META</code> 地图的每个端点摘要/描述，
+媒体上传端点的多部分上传请求主体，并剥离
+通用 mixin 标签（<code>List</code>、<code>Detail</code>、<code>Create</code>、<code>Update</code>、<code>Delete</code>、<code>Workflow</code>）。
+标签是从路由名称自动检测的（<code>manage-*</code>/<code>app-*</code>资源段，
+<code>system-*</code>、<code>wechat-*</code>、<code>sys-auth</code>）。</p>
+<h3 id="ratelimitlistener"><code>RateLimitListener</code><a class="headerlink" href="#ratelimitlistener" title="Permanent link">&para;</a></h3>
+<p>响应<code>kernel.controller</code>（优先级<code>10</code>）。应用由以下键控的速率限制
+客户端 IP 到公共端点：</p>
+<table>
+<thead>
+<tr>
+<th>限制器</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth_login</code></td>
+<td><code>^/api/auth/login$</code></td>
+</tr>
+<tr>
+<td><code>auth_register</code></td>
+<td><code>^/api/auth/register$</code></td>
+</tr>
+<tr>
+<td><code>otp_request</code></td>
+<td><code>^/api/auth/otp/request$</code></td>
+</tr>
+<tr>
+<td><code>otp_verify</code></td>
+<td><code>^/api/auth/otp/verify$</code></td>
+</tr>
+<tr>
+<td><code>wechat_login</code></td>
+<td><code>^/api/wechat/miniapp/login$</code>、<code>^/api/wechat/oauth/callback$</code></td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td><code>~^/api/v1/app/orders/.+/payment$~</code>、<code>~^/api/v1/(app\|manage)/invoices/.+/pay~</code></td>
+</tr>
+</tbody>
+</table>
+<p>超出时，它会用标准中的 <code>429</code> 响应替换控制器
+信封 <code>{data, code, message}</code> 加上 <code>Retry-After</code> 标头。限制器是
+通过服务定位器注入（<code>auth_login</code>、<code>auth_register</code>、<code>otp_request</code>、
+<code>otp_verify</code>、<code>wechat_login</code>、<code>payment</code>）。</p>
+<hr />
+<h2 id="7-srccoreutils">7. 实用程序类 (<code>src/Core/Utils</code>)<a class="headerlink" href="#7-srccoreutils" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>班级</th>
+<th>目的/关键方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UUID</code></td>
+<td>UUID 生成/验证：<code>v3</code>、<code>v4</code>、<code>v4c</code>（紧凑版 v4）、<code>v5</code>、<code>is_valid</code>。</td>
+</tr>
+<tr>
+<td><code>Math</code></td>
+<td>静态数学助手（<code>random</code>、<code>locationDistance</code>）以及完整 PHP 数学函数集（abs、trig、log、带有 <code>PHP_ROUND_HALF_*</code> 模式的舍入等）的包装器，暴露给表达式。</td>
+</tr>
+<tr>
+<td><code>StringCase</code></td>
+<td><code>dashesToCamelCase($string, $capitalizeFirstCharacter = false)</code>。</td>
+</tr>
+<tr>
+<td><code>ArrayCollection</code></td>
+<td><code>init($array)</code>、<code>fromJsonString($json)</code>、<code>map($array, $key)</code>（通过 <code>get{Key}</code> getter 映射）——全部返回 Doctrine <code>ArrayCollection</code>。</td>
+</tr>
+<tr>
+<td><code>ArrayCommon</code></td>
+<td>表达式友好的数组助手：<code>in_array</code>、<code>count</code>、<code>merge</code>、<code>push</code>、<code>key_exist</code>，以及基于表达式的<code>filter</code>、<code>map</code>、<code>reduce</code>。</td>
+</tr>
+<tr>
+<td><code>FilterDateTime</code></td>
+<td><code>get($time = 'now', ?DateTimeZone)</code> → <code>DateTime</code>。</td>
+</tr>
+<tr>
+<td><code>FixJSON</code></td>
+<td><code>fixJSON($json)</code> 将单引号 JSON 转换为有效 JSON； <code>getJSONType($json)</code> 返回 <code>'object'</code>、<code>'array'</code> 或 <code>false</code>。</td>
+</tr>
+<tr>
+<td><code>Inflect</code></td>
+<td><code>pluralize</code>、<code>singularize</code>、<code>pluralize_if</code> 带有复数/单数/不规则/不可数表（用于派生集合添加/删除方法名称）。</td>
+</tr>
+<tr>
+<td><code>Location</code></td>
+<td>通过 <code>Curl\Curl</code> 客户端的腾讯地图地理编码助手（<code>getLocation</code>、<code>getAddress</code>、<code>getDistance</code>）。</td>
+</tr>
+<tr>
+<td><code>RsaClient</code></td>
+<td>RSA 对原始密钥或密钥文件进行签名/验证和加密/解密（<code>rsaSign</code>、<code>rsaVerifySign</code>、<code>sign</code>、<code>verifySign</code>、<code>getSignContent</code>、<code>privateEncryptRsa</code>、<code>publicEncryptRsa</code>、<code>privateDecryptRsa</code>、<code>publicDecryptRsa</code>、密钥长度助手）。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-srccoreexception">8. 异常 (<code>src/Core/Exception/</code>)<a class="headerlink" href="#8-srccoreexception" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>班级</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MessageErrorHttpException</code></td>
+<td><code>HttpException</code> 带有状态 <code>403</code>，可选 <code>redirectUrl</code> 标头。用于业务“错误”控制流。</td>
+</tr>
+<tr>
+<td><code>MessageSuccessHttpException</code></td>
+<td><code>HttpException</code> 带有状态 <code>200</code>，可选 <code>redirectUrl</code> 标头。用于业务“成功”控制流消息有效负载。</td>
+</tr>
+</tbody>
+</table>
+<p>两者均由 <code>ExceptionInterceptor</code> 处理并在 JSON 中进行翻译
+<code>message</code> 字段。</p>
+<hr />
+<h2 id="9-srccoremetricsmetricsregistryphp">9. 指标注册表 (<code>src/Core/Metrics/MetricsRegistry.php</code>)<a class="headerlink" href="#9-srccoremetricsmetricsregistryphp" title="Permanent link">&para;</a></h2>
+<p>一个轻量级的、内存中的 Prometheus 风格的注册表（无外部客户端）。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>incCounter($name, $labels, $by = 1)</code></td>
+<td>增加一个计数器。</td>
+</tr>
+<tr>
+<td><code>setGauge($name, $labels, $value)</code> / <code>getGauge(...)</code></td>
+<td>设置/读取仪表。</td>
+</tr>
+<tr>
+<td><code>observe($name, $labels, $value, $buckets = null)</code></td>
+<td>记录直方图观察（默认存储桶 <code>HISTOGRAM_BUCKETS</code> 以秒为单位）。</td>
+</tr>
+<tr>
+<td><code>render(): string</code></td>
+<td>渲染 Prometheus 文本展示格式 (v0.0.4)。</td>
+</tr>
+</tbody>
+</table>
+<p><code>METADATA</code>中注册的指标名称：<code>app_info</code>、<code>http_requests_total</code>、
+<code>http_request_duration_seconds</code>、<code>http_requests_inflight</code>、
+<code>app_outbox_backlog</code>、<code>app_messenger_failed</code>、<code>metrics_scrape_errors_total</code>。
+计数器/直方图是针对每个工人的； DB 支持的仪表是在抓取时实时计算的。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../javascripts/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>

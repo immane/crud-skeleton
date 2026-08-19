@@ -31,7 +31,7 @@
     
     
       
-        <title>Settlement (Allocation + Finality) - CRUD Skeleton</title>
+        <title>结算（分配+最终确定） - CRUD Skeleton</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#settlement-bundle-design" class="md-skip">
           跳转至
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Settlement (Allocation + Finality)
+              结算（分配+最终确定）
             
           </span>
         </div>
@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    设计契约
+    开发手册
   
 
     
@@ -357,6 +357,515 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    开发手册
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    手册索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    查询系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API合约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发合同
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    整合活动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库和迁移
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    提取服务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -619,10 +1128,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -640,8 +1149,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -870,7 +1379,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -888,7 +1397,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -914,22 +1423,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-goal-and-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 目标和范围
+        1. Goal And Scope
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. 目标和范围">
+    <nav class="md-nav" aria-label="1. Goal And Scope">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11" class="md-nav__link">
+  <a href="#11-goal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 目标
+        1.1 Goal
       
     </span>
   </a>
@@ -937,10 +1446,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12" class="md-nav__link">
+  <a href="#12-in-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 范围
+        1.2 In Scope
       
     </span>
   </a>
@@ -948,10 +1457,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13" class="md-nav__link">
+  <a href="#13-explicit-non-goals" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 明确的非目标
+        1.3 Explicit Non-Goals
       
     </span>
   </a>
@@ -959,10 +1468,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#14" class="md-nav__link">
+  <a href="#14-important-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.4 重要术语
+        1.4 Important Terms
       
     </span>
   </a>
@@ -1512,7 +2021,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11_1" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
         11. 钱包代金券边界
@@ -1568,10 +2077,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#115" class="md-nav__link">
+  <a href="#115-wallet-is-final" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11.5 钱包最终确定
+        11.5 Wallet Is Final
       
     </span>
   </a>
@@ -1579,10 +2088,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#116" class="md-nav__link">
+  <a href="#116-reversal-semantics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11.6 反转语义
+        11.6 Reversal Semantics
       
     </span>
   </a>
@@ -1590,10 +2099,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#117" class="md-nav__link">
+  <a href="#117-wallet-changes-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11.7 需要更改钱包
+        11.7 Wallet Changes Required
       
     </span>
   </a>
@@ -1606,22 +2115,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12_1" class="md-nav__link">
+  <a href="#12-payment-refund-lock-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. 支付退款锁定集成
+        12. Payment Refund Lock Integration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="12. 支付退款锁定集成">
+    <nav class="md-nav" aria-label="12. Payment Refund Lock Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#121" class="md-nav__link">
+  <a href="#121-generic-payment-extension-point" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12.1 通用支付扩展点
+        12.1 Generic Payment Extension Point
       
     </span>
   </a>
@@ -1629,10 +2138,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#122" class="md-nav__link">
+  <a href="#122-refund-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12.2 退款规则
+        12.2 Refund Rule
       
     </span>
   </a>
@@ -1656,7 +2165,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13_1" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
         13. 可靠处理和幂等性
@@ -1762,10 +2271,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#143" class="md-nav__link">
+  <a href="#143-read-security" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14.3 读取安全性
+        14.3 Read Security
       
     </span>
   </a>
@@ -1778,22 +2287,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15" class="md-nav__link">
+  <a href="#15-observability-audit-and-reconciliation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. 可观察性、审计和对账
+        15. Observability, Audit, And Reconciliation
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="15. 可观察性、审计和对账">
+    <nav class="md-nav" aria-label="15. Observability, Audit, And Reconciliation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#151" class="md-nav__link">
+  <a href="#151-required-audit-evidence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.1 所需的审核证据
+        15.1 Required Audit Evidence
       
     </span>
   </a>
@@ -1801,10 +2310,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#152" class="md-nav__link">
+  <a href="#152-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.2 指标
+        15.2 Metrics
       
     </span>
   </a>
@@ -1812,10 +2321,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#153" class="md-nav__link">
+  <a href="#153-reconciliation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.3 和解
+        15.3 Reconciliation
       
     </span>
   </a>
@@ -1828,10 +2337,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#16" class="md-nav__link">
+  <a href="#16-database-migration-requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
-        16. 数据库迁移要求
+        16. Database Migration Requirements
       
     </span>
   </a>
@@ -1839,10 +2348,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#17" class="md-nav__link">
+  <a href="#17-implementation-phases" class="md-nav__link">
     <span class="md-ellipsis">
       
-        17. 实施阶段
+        17. Implementation Phases
       
     </span>
   </a>
@@ -1850,22 +2359,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#18-test-strategy-and-mandatory-invariants" class="md-nav__link">
+  <a href="#18" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18. Test Strategy And Mandatory Invariants
+        18. 测试策略和强制不变量
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="18. Test Strategy And Mandatory Invariants">
+    <nav class="md-nav" aria-label="18. 测试策略和强制不变量">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#181-unit-tests" class="md-nav__link">
+  <a href="#181" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.1 Unit Tests
+        18.1 单元测试
       
     </span>
   </a>
@@ -1873,10 +2382,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#182-integration-tests" class="md-nav__link">
+  <a href="#182" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.2 Integration Tests
+        18.2 集成测试
       
     </span>
   </a>
@@ -1884,10 +2393,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#183-architecture-tests" class="md-nav__link">
+  <a href="#183" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.3 Architecture Tests
+        18.3 架构测试
       
     </span>
   </a>
@@ -1895,10 +2404,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#184-end-to-end-scenarios" class="md-nav__link">
+  <a href="#184" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.4 End-To-End Scenarios
+        18.4 端到端场景
       
     </span>
   </a>
@@ -2011,7 +2520,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2054,10 +2563,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -2075,8 +2584,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2479,10 +2988,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -2500,8 +3009,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2596,10 +3105,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
             
   
   
@@ -2617,8 +3126,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2685,10 +3194,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
             
   
   
@@ -2706,8 +3215,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2731,7 +3240,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2955,7 +3464,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -3057,22 +3566,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-goal-and-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 目标和范围
+        1. Goal And Scope
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. 目标和范围">
+    <nav class="md-nav" aria-label="1. Goal And Scope">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11" class="md-nav__link">
+  <a href="#11-goal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 目标
+        1.1 Goal
       
     </span>
   </a>
@@ -3080,10 +3589,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12" class="md-nav__link">
+  <a href="#12-in-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 范围
+        1.2 In Scope
       
     </span>
   </a>
@@ -3091,10 +3600,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13" class="md-nav__link">
+  <a href="#13-explicit-non-goals" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 明确的非目标
+        1.3 Explicit Non-Goals
       
     </span>
   </a>
@@ -3102,10 +3611,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#14" class="md-nav__link">
+  <a href="#14-important-terms" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.4 重要术语
+        1.4 Important Terms
       
     </span>
   </a>
@@ -3655,7 +4164,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11_1" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
         11. 钱包代金券边界
@@ -3711,10 +4220,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#115" class="md-nav__link">
+  <a href="#115-wallet-is-final" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11.5 钱包最终确定
+        11.5 Wallet Is Final
       
     </span>
   </a>
@@ -3722,10 +4231,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#116" class="md-nav__link">
+  <a href="#116-reversal-semantics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11.6 反转语义
+        11.6 Reversal Semantics
       
     </span>
   </a>
@@ -3733,10 +4242,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#117" class="md-nav__link">
+  <a href="#117-wallet-changes-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11.7 需要更改钱包
+        11.7 Wallet Changes Required
       
     </span>
   </a>
@@ -3749,22 +4258,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12_1" class="md-nav__link">
+  <a href="#12-payment-refund-lock-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. 支付退款锁定集成
+        12. Payment Refund Lock Integration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="12. 支付退款锁定集成">
+    <nav class="md-nav" aria-label="12. Payment Refund Lock Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#121" class="md-nav__link">
+  <a href="#121-generic-payment-extension-point" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12.1 通用支付扩展点
+        12.1 Generic Payment Extension Point
       
     </span>
   </a>
@@ -3772,10 +4281,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#122" class="md-nav__link">
+  <a href="#122-refund-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12.2 退款规则
+        12.2 Refund Rule
       
     </span>
   </a>
@@ -3799,7 +4308,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13_1" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
         13. 可靠处理和幂等性
@@ -3905,10 +4414,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#143" class="md-nav__link">
+  <a href="#143-read-security" class="md-nav__link">
     <span class="md-ellipsis">
       
-        14.3 读取安全性
+        14.3 Read Security
       
     </span>
   </a>
@@ -3921,22 +4430,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15" class="md-nav__link">
+  <a href="#15-observability-audit-and-reconciliation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. 可观察性、审计和对账
+        15. Observability, Audit, And Reconciliation
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="15. 可观察性、审计和对账">
+    <nav class="md-nav" aria-label="15. Observability, Audit, And Reconciliation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#151" class="md-nav__link">
+  <a href="#151-required-audit-evidence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.1 所需的审核证据
+        15.1 Required Audit Evidence
       
     </span>
   </a>
@@ -3944,10 +4453,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#152" class="md-nav__link">
+  <a href="#152-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.2 指标
+        15.2 Metrics
       
     </span>
   </a>
@@ -3955,10 +4464,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#153" class="md-nav__link">
+  <a href="#153-reconciliation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15.3 和解
+        15.3 Reconciliation
       
     </span>
   </a>
@@ -3971,10 +4480,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#16" class="md-nav__link">
+  <a href="#16-database-migration-requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
-        16. 数据库迁移要求
+        16. Database Migration Requirements
       
     </span>
   </a>
@@ -3982,10 +4491,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#17" class="md-nav__link">
+  <a href="#17-implementation-phases" class="md-nav__link">
     <span class="md-ellipsis">
       
-        17. 实施阶段
+        17. Implementation Phases
       
     </span>
   </a>
@@ -3993,22 +4502,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#18-test-strategy-and-mandatory-invariants" class="md-nav__link">
+  <a href="#18" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18. Test Strategy And Mandatory Invariants
+        18. 测试策略和强制不变量
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="18. Test Strategy And Mandatory Invariants">
+    <nav class="md-nav" aria-label="18. 测试策略和强制不变量">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#181-unit-tests" class="md-nav__link">
+  <a href="#181" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.1 Unit Tests
+        18.1 单元测试
       
     </span>
   </a>
@@ -4016,10 +4525,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#182-integration-tests" class="md-nav__link">
+  <a href="#182" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.2 Integration Tests
+        18.2 集成测试
       
     </span>
   </a>
@@ -4027,10 +4536,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#183-architecture-tests" class="md-nav__link">
+  <a href="#183" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.3 Architecture Tests
+        18.3 架构测试
       
     </span>
   </a>
@@ -4038,10 +4547,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#184-end-to-end-scenarios" class="md-nav__link">
+  <a href="#184" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18.4 End-To-End Scenarios
+        18.4 端到端场景
       
     </span>
   </a>
@@ -4095,21 +4604,21 @@
   
 
 
-<h1 id="_1">结算捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="settlement-bundle-design">Settlement Bundle Design<a class="headerlink" href="#settlement-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>状态：仅设计，未实施。</strong></p>
-<p>结算是一个通用的分配和结算规划域。它
-接受已确认的资金事实，根据不可变的规则评估版本化规则
-源上下文，生成可审核的收件人分配，并请求预订
-通过主机提供的凭证端口。它有意独立于贸易
-订单、付款发票和电子钱包实体。</p>
+<p><strong>Status: design only, not implemented.</strong></p>
+<p>Settlement is a general-purpose allocation and settlement-planning domain. It
+accepts a confirmed funding fact, evaluates versioned rules against an immutable
+source context, produces auditable recipient allocations, and requests booking
+through a host-provided voucher port. It is intentionally independent of Trade
+orders, Payment invoices, and Wallet entities.</p>
 </blockquote>
 <hr />
-<h2 id="1">1. 目标和范围<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<h3 id="11">1.1 目标<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
-<p>和解决定<strong>谁有权获得确认的金额、原因以及金额</strong>。
-它在登记任何余额之前记录持久计划，执行每个分配
-幂等地，并保留撤销该预订所需的确切引用。</p>
+<h2 id="1-goal-and-scope">1. Goal And Scope<a class="headerlink" href="#1-goal-and-scope" title="Permanent link">&para;</a></h2>
+<h3 id="11-goal">1.1 Goal<a class="headerlink" href="#11-goal" title="Permanent link">&para;</a></h3>
+<p>Settlement determines <strong>who is entitled to a confirmed amount, why, and how much</strong>.
+It records a durable plan before any balance is booked, executes each allocation
+idempotently, and preserves the exact references needed to reverse that booking.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>trusted funding source
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  -&gt; SettlementFundingConfirmed
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  -&gt; immutable source context
@@ -4118,49 +4627,49 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  -&gt; voucher booking adapter
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  -&gt; recipient accounts
 </code></pre></div>
-<p>第一个主机集成将是已付款的付款发票。这只是一项资金
-制片人。结算核心不得需要发票、订单、订单项目、
-或任何存在的 Wallet 类。</p>
-<h3 id="12">1.2 范围<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<p>The first host integration will be a paid Payment invoice. This is only one funding
+producer. The Settlement core MUST NOT require an Invoice, an Order, an OrderItem,
+or any Wallet class to exist.</p>
+<h3 id="12-in-scope">1.2 In Scope<a class="headerlink" href="#12-in-scope" title="Permanent link">&para;</a></h3>
 <ul>
-<li>以稳定的标量引用为代表的通用、可信的资金来源。</li>
-<li>不可变的资金、背景、规则、接收者、计算和发布快照。</li>
-<li>一笔资金可以多次分配给不透明的接受者。</li>
-<li>可组合的资格规则和金额公式。</li>
-<li>通过受控插件可扩展的收件人解析。</li>
-<li>在固定的 18 位小数内部刻度上进行精确、任意精度的计算。</li>
-<li>确定性转换为目标帐户过帐规模，包括最大-
-  舍入灰尘的剩余分配。</li>
-<li><code>T+0</code>（默认）、延迟（<code>T+N</code>）和手动缺席/强制发布策略，所有
-  在资金离开结算边界之前在结算方安排。</li>
-<li>通过钱包实施的结算拥有的端口进行凭证支持的过账。一次
-  应用信用后，资金完全属于接收方，不再进行结算
-  与他们互动，除非冲销原始凭证。</li>
-<li>撤销原始过账凭证，绝不重新计算当前规则。</li>
-<li>SQL 发件箱、收件箱重复数据删除、业务幂等性、重试和审计跟踪。</li>
-<li>当任何预订的结算金额尚未撤销时，付款退款将被阻止。</li>
-<li>管理读取、模拟、批准、重试、发布授权和撤销命令。</li>
+<li>Generic, trusted funding sources represented by stable scalar references.</li>
+<li>Immutable funding, context, rule, recipient, calculation, and posting snapshots.</li>
+<li>Multiple allocations to opaque recipients for one funding amount.</li>
+<li>Composable eligibility rules and amount formulas.</li>
+<li>Extensible recipient resolution through controlled plugins.</li>
+<li>Exact, arbitrary-precision calculation at a fixed 18-decimal internal scale.</li>
+<li>Deterministic conversion to a target account posting scale, including largest-
+  remainder allocation of rounding dust.</li>
+<li><code>T+0</code> (default), delayed (<code>T+N</code>), and manual absent/mandatory posting policies, all
+  scheduled on the Settlement side before funds leave the Settlement boundary.</li>
+<li>Voucher-backed posting through a Settlement-owned port implemented by Wallet. Once a
+  credit is applied, the funds belong entirely to the recipient and Settlement no longer
+  interacts with them, except by reversing the original voucher.</li>
+<li>Reversal of the original posted vouchers, never a recomputation of current rules.</li>
+<li>SQL Outbox, Inbox deduplication, business idempotency, retry, and audit trails.</li>
+<li>Payment refund blocking while any booked settlement amount has not been reversed.</li>
+<li>Management read, simulation, approval, retry, posting-authorization, and reversal commands.</li>
 </ul>
-<h3 id="13">1.3 明确的非目标<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
-<p>初始捆绑包不得：</p>
+<h3 id="13-explicit-non-goals">1.3 Explicit Non-Goals<a class="headerlink" href="#13-explicit-non-goals" title="Permanent link">&para;</a></h3>
+<p>The initial bundle MUST NOT:</p>
 <ul>
-<li>直接依赖于<code>App\Trade\Entity\Order</code>、<code>OrderItem</code>、<code>App\Payment\Entity\Invoice</code>、
-  <code>App\Wallet\Entity\Wallet</code>，或者他们的存储库。</li>
-<li>存储跨捆绑 Doctrine 关联或外键。</li>
-<li>将任何任意对象、HTTP 请求或管理员输入视为证明
-  资金存在。</li>
-<li>执行数据库存储的 PHP、Symfony ExpressionLanguage、容器查找或
-  任意对象属性路径作为结算规则。</li>
-<li>使用 <code>float</code>、本机整数算术、隐式舍入或小数
-  数据库类型作为财务计算的真实来源。</li>
-<li>创建第二个钱包分类账、替代支付网关、税务引擎或
-  应收账款/应付账款子系统。</li>
-<li>通过创建一个账户，迫使余额不足的收款人为逆转提供资金
-  钱包余额为负。未来应收账款/应付账款功能拥有回收功能。</li>
-<li>第一阶段进行外汇兑换。一项计划只有一种单位/货币。</li>
-<li>从旧版 <code>night-keeper</code> 实现导入历史数据。</li>
+<li>Depend directly on <code>App\Trade\Entity\Order</code>, <code>OrderItem</code>, <code>App\Payment\Entity\Invoice</code>,
+  <code>App\Wallet\Entity\Wallet</code>, or their repositories.</li>
+<li>Store a cross-bundle Doctrine association or foreign key.</li>
+<li>Treat any arbitrary object, HTTP request, or administrator input as proof that
+  funds exist.</li>
+<li>Execute database-stored PHP, Symfony ExpressionLanguage, container lookups, or
+  arbitrary object-property paths as a settlement rule.</li>
+<li>Use <code>float</code>, native integer arithmetic for money, implicit rounding, or a decimal
+  database type as the source of truth for financial calculations.</li>
+<li>Create a second wallet ledger, a replacement payment gateway, a tax engine, or an
+  accounts-receivable/accounts-payable subsystem.</li>
+<li>Force a recipient with insufficient balance to fund a reversal by creating a
+  negative wallet balance. Future receivables/payables functionality owns recovery.</li>
+<li>Perform foreign exchange in phase one. A plan has exactly one unit/currency.</li>
+<li>Import historical data from the legacy <code>night-keeper</code> implementation.</li>
 </ul>
-<h3 id="14">1.4 重要术语<a class="headerlink" href="#14" title="Permanent link">&para;</a></h3>
+<h3 id="14-important-terms">1.4 Important Terms<a class="headerlink" href="#14-important-terms" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -5116,7 +5625,7 @@
 <li>第一阶段的利率值表示为整数基点；任意小数
   费率需要专门的审查原语。</li>
 <li>所有金额比较都使用 <code>BigInteger</code>/<code>BigRational</code>，而不是词汇字符串。</li>
-<li>钱包适配器验证最终发布整数是否符合钱包支持的要求
+<li>钱包适配器验证最终发布的整数是否符合钱包支持的要求
   数据库/PHP 范围。超出范围的分配将成为不可重试的手动审核
   失败；它永远不会被截断。</li>
 </ul>
@@ -5150,7 +5659,7 @@
 <tr>
 <td><code>SettlementAllocation</code></td>
 <td><code>settlement_allocation</code></td>
-<td>一项收件人权利和发布/撤销生命周期。</td>
+<td>一种收件人权利和发布/撤销生命周期。</td>
 </tr>
 <tr>
 <td><code>SettlementReversal</code></td>
@@ -5296,7 +5805,7 @@
 <ul>
 <li>独特的<code>(rule_uuid, version)</code>。</li>
 <li>对于同一逻辑规则版本通道，没有重叠的已发布有效间隔。</li>
-<li>已发布的<code>definition</code>，哈希值、优先级和有效范围是不可变的。</li>
+<li>已发布的<code>definition</code>，哈希、优先级和有效范围是不可变的。</li>
 <li>计划存储完整的定义快照，即使该表是不可变的；这个
   使提取和取证导出变得独立。</li>
 </ul>
@@ -5304,322 +5813,322 @@
 <table>
 <thead>
 <tr>
-<th>领域</th>
-<th>类型</th>
-<th>笔记</th>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>id</code></td>
-<td>整数</td>
-<td>本地主键。</td>
+<td>integer</td>
+<td>Local primary key.</td>
 </tr>
 <tr>
 <td><code>uuid</code></td>
-<td>字符串(36)，唯一</td>
-<td>公共计划身份。</td>
+<td>string(36), unique</td>
+<td>Public plan identity.</td>
 </tr>
 <tr>
 <td><code>funding_id</code></td>
-<td>字符串（64），唯一</td>
-<td>稳定的资金身份。</td>
+<td>string(64), unique</td>
+<td>Stable funding identity.</td>
 </tr>
 <tr>
-<td><code>source_type</code>、<code>source_id</code></td>
-<td>字符串（64）</td>
-<td>不透明的来源参考。</td>
+<td><code>source_type</code>, <code>source_id</code></td>
+<td>string(64)</td>
+<td>Opaque source reference.</td>
 </tr>
 <tr>
 <td><code>funding_kind</code></td>
-<td>字符串（50）</td>
-<td>资金通道，最初为<code>confirmed</code>；业务幂等性的一部分。</td>
+<td>string(50)</td>
+<td>Funding lane, initially <code>confirmed</code>; part of business idempotency.</td>
 </tr>
 <tr>
 <td><code>confirmation_reference</code></td>
-<td>字符串（128）</td>
-<td>资金证明参考。</td>
+<td>string(128)</td>
+<td>Funding proof reference.</td>
 </tr>
 <tr>
 <td><code>funding_fingerprint</code></td>
-<td>字符串（64）</td>
-<td>不可变的规范资金指纹。</td>
+<td>string(64)</td>
+<td>Immutable canonical funding fingerprint.</td>
 </tr>
 <tr>
 <td><code>currency</code></td>
-<td>字符串(32)</td>
-<td>一个计划单位。</td>
+<td>string(32)</td>
+<td>One plan unit.</td>
 </tr>
 <tr>
 <td><code>calculation_scale</code></td>
-<td>小整数</td>
-<td>第一阶段：18。</td>
+<td>smallint</td>
+<td>Phase one: 18.</td>
 </tr>
 <tr>
 <td><code>funding_amount_quantum</code></td>
-<td>字符串（128）</td>
-<td>正规范整数字符串。</td>
+<td>string(128)</td>
+<td>Positive canonical integer string.</td>
 </tr>
 <tr>
 <td><code>allocated_amount_quantum</code></td>
-<td>字符串（128）</td>
-<td>准确分配金额的总和。</td>
+<td>string(128)</td>
+<td>Sum of exact allocation amounts.</td>
 </tr>
 <tr>
 <td><code>unallocated_amount_quantum</code></td>
-<td>字符串（128）</td>
-<td>在最终成功之前必须达到零。</td>
+<td>string(128)</td>
+<td>Must reach zero before terminal success.</td>
 </tr>
 <tr>
 <td><code>posting_scale</code></td>
-<td>小整数</td>
-<td>计划分配的目标单位规模。</td>
+<td>smallint</td>
+<td>Target unit scale for plan allocations.</td>
 </tr>
 <tr>
 <td><code>funding_posting_amount</code></td>
-<td>字符串（128）</td>
-<td>最终目标单元整数字符串。</td>
+<td>string(128)</td>
+<td>Final target-unit integer string.</td>
 </tr>
 <tr>
 <td><code>allocated_posting_amount</code></td>
-<td>字符串（128）</td>
-<td>分配过帐金额的总和。</td>
+<td>string(128)</td>
+<td>Sum of allocation posting amounts.</td>
 </tr>
 <tr>
 <td><code>unallocated_posting_amount</code></td>
-<td>字符串（128）</td>
-<td>在最终成功之前必须达到零。</td>
+<td>string(128)</td>
+<td>Must reach zero before terminal success.</td>
 </tr>
 <tr>
-<td><code>subject_type</code>、<code>subject_id</code>、<code>subject_version</code></td>
-<td>字符串</td>
-<td>上下文主体身份。</td>
+<td><code>subject_type</code>, <code>subject_id</code>, <code>subject_version</code></td>
+<td>strings</td>
+<td>Context subject identity.</td>
 </tr>
 <tr>
 <td><code>context_snapshot</code></td>
 <td>json</td>
-<td>不可变的标准化事实/候选者。</td>
+<td>Immutable normalized facts/candidates.</td>
 </tr>
 <tr>
 <td><code>context_hash</code></td>
-<td>字符串（64）</td>
-<td>SHA-256 规范快照。</td>
+<td>string(64)</td>
+<td>SHA-256 canonical snapshot.</td>
 </tr>
 <tr>
 <td><code>funding_snapshot</code></td>
 <td>json</td>
-<td>清理不可变的生产者数据。</td>
+<td>Sanitized immutable producer data.</td>
 </tr>
 <tr>
 <td><code>rule_snapshot</code></td>
 <td>json</td>
-<td>所有选定的规则定义/版本。</td>
+<td>All selected rule definitions/versions.</td>
 </tr>
 <tr>
 <td><code>calculation_trace</code></td>
 <td>json</td>
-<td>匹配、公式、精确结果、四舍五入证据。</td>
+<td>Match, formula, exact result, rounding evidence.</td>
 </tr>
 <tr>
-<td><code>fallback_recipient_type</code>、<code>fallback_recipient_id</code></td>
-<td>字符串</td>
-<td>已解决的计划后备收件人。</td>
+<td><code>fallback_recipient_type</code>, <code>fallback_recipient_id</code></td>
+<td>strings</td>
+<td>Resolved plan fallback recipient.</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td>字符串(32)</td>
-<td>下面的状态机。</td>
+<td>string(32)</td>
+<td>State machine below.</td>
 </tr>
 <tr>
 <td><code>refund_locked_at</code></td>
-<td>日期时间不可变可为空</td>
-<td>第一个成功发布最终标记。</td>
+<td>datetime immutable nullable</td>
+<td>First successful posting finality marker.</td>
 </tr>
 <tr>
 <td><code>refund_unlocked_at</code></td>
-<td>日期时间不可变可为空</td>
-<td>仅在完全批准逆转后。</td>
+<td>datetime immutable nullable</td>
+<td>Only after complete approved reversal.</td>
 </tr>
 <tr>
-<td><code>correlation_id</code>、<code>causation_id</code></td>
-<td>字符串（64）可为空</td>
-<td>跨界追踪。</td>
+<td><code>correlation_id</code>, <code>causation_id</code></td>
+<td>string(64) nullable</td>
+<td>Cross-boundary tracing.</td>
 </tr>
 <tr>
-<td><code>created_at</code>、<code>updated_at</code>、<code>completed_at</code></td>
-<td>日期时间不可变</td>
-<td>审计。</td>
+<td><code>created_at</code>, <code>updated_at</code>, <code>completed_at</code></td>
+<td>datetime immutable</td>
+<td>Audit.</td>
 </tr>
 </tbody>
 </table>
-<p>业务限制：</p>
+<p>Business constraints:</p>
 <ul>
-<li><code>funding_amount_quantum &gt; 0</code>。</li>
-<li>货币和计算规模永远不会改变。</li>
-<li>快照和跟踪在规划后永远不会改变。</li>
-<li>两个精度域中的<code>allocated + unallocated = funding</code>。</li>
-<li>在成功的终端计划状态之前，<code>unallocated</code>为零。</li>
-<li>计划在尝试发布后绝不会更改收件人或分配金额；修正
-  使用逆转和新的融资/调整流程。</li>
+<li><code>funding_amount_quantum &gt; 0</code>.</li>
+<li>Currency and calculation scale never change.</li>
+<li>Snapshots and trace never change after planning.</li>
+<li><code>allocated + unallocated = funding</code> in both precision domains.</li>
+<li><code>unallocated</code> is zero before successful terminal plan states.</li>
+<li>A plan never changes recipient or allocation amount after a posting attempt; correction
+  uses reversal and a new funding/adjustment process.</li>
 </ul>
 <h3 id="95-settlementallocation">9.5 <code>SettlementAllocation</code><a class="headerlink" href="#95-settlementallocation" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>领域</th>
-<th>类型</th>
-<th>笔记</th>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>id</code></td>
-<td>整数</td>
-<td>本地主键。</td>
+<td>integer</td>
+<td>Local primary key.</td>
 </tr>
 <tr>
 <td><code>uuid</code></td>
-<td>字符串(36)，唯一</td>
-<td>稳定的分配身份和凭证源密钥。</td>
+<td>string(36), unique</td>
+<td>Stable allocation identity and voucher source key.</td>
 </tr>
 <tr>
 <td><code>plan_uuid</code></td>
-<td>字符串(36)</td>
-<td>定居-当地计划参考。</td>
+<td>string(36)</td>
+<td>Settlement-local plan reference.</td>
 </tr>
 <tr>
 <td><code>sequence</code></td>
-<td>整数</td>
-<td>确定性显示/订单号。</td>
+<td>integer</td>
+<td>Deterministic display/order number.</td>
 </tr>
 <tr>
 <td><code>allocation_key</code></td>
-<td>字符串（128）</td>
-<td>计划内稳定的业务关键。</td>
+<td>string(128)</td>
+<td>Stable business key inside plan.</td>
 </tr>
 <tr>
-<td><code>recipient_type</code>、<code>recipient_id</code></td>
-<td>字符串</td>
-<td>不透明解析的收件人。</td>
+<td><code>recipient_type</code>, <code>recipient_id</code></td>
+<td>strings</td>
+<td>Opaque resolved recipient.</td>
 </tr>
 <tr>
 <td><code>recipient_snapshot</code></td>
 <td>json</td>
-<td>解析器名称/版本/配置/候选证据。</td>
+<td>Resolver name/version/config/candidate evidence.</td>
 </tr>
 <tr>
-<td><code>rule_code</code>、<code>rule_version_uuid</code></td>
-<td>字符串可为空</td>
-<td>来源规则；回退是明确的。</td>
+<td><code>rule_code</code>, <code>rule_version_uuid</code></td>
+<td>strings nullable</td>
+<td>Source rule; fallback is explicit.</td>
 </tr>
 <tr>
 <td><code>reason_code</code></td>
-<td>字符串（100）</td>
-<td>业务说明。</td>
+<td>string(100)</td>
+<td>Business explanation.</td>
 </tr>
 <tr>
 <td><code>exact_amount_quantum</code></td>
-<td>字符串（128）</td>
-<td>规模 18 的精确分配量。</td>
+<td>string(128)</td>
+<td>Exact allocation amount at scale 18.</td>
 </tr>
 <tr>
 <td><code>posting_amount</code></td>
-<td>字符串（128）</td>
-<td>钱包的最终整数金额。</td>
+<td>string(128)</td>
+<td>Final integer amount for Wallet.</td>
 </tr>
 <tr>
 <td><code>posting_scale</code></td>
-<td>小整数</td>
-<td>目标发帖规模。</td>
+<td>smallint</td>
+<td>Target posting scale.</td>
 </tr>
 <tr>
 <td><code>rounding_delta_quantum</code></td>
-<td>字符串（128）</td>
-<td>精确减去已发布的转换，以比例 18 表示。</td>
+<td>string(128)</td>
+<td>Exact minus posted conversion represented at scale 18.</td>
 </tr>
 <tr>
 <td><code>rounding_rank</code></td>
-<td>整数可为空</td>
-<td>最大余数确定性排名。</td>
+<td>integer nullable</td>
+<td>Largest-remainder deterministic rank.</td>
 </tr>
 <tr>
 <td><code>release_policy</code></td>
-<td>字符串（20）</td>
-<td><code>immediate</code>、<code>delayed</code>、<code>manual</code>；何时可以运行发布命令。</td>
+<td>string(20)</td>
+<td><code>immediate</code>, <code>delayed</code>, <code>manual</code>; when the posting command may run.</td>
 </tr>
 <tr>
 <td><code>posting_available_at</code></td>
-<td>日期时间不可变可为空</td>
-<td><code>delayed</code> 必需；何时可以运行发布命令。</td>
+<td>datetime immutable nullable</td>
+<td>Required for <code>delayed</code>; when the posting command may run.</td>
 </tr>
 <tr>
 <td><code>posting_due_at</code></td>
-<td>日期时间不可变可为空</td>
-<td><code>manual</code>/<code>delayed</code> 发布命令的调度程序截止。</td>
+<td>datetime immutable nullable</td>
+<td>Scheduler cutoff for a <code>manual</code>/<code>delayed</code> posting command.</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td>字符串(32)</td>
-<td>分配状态机如下。</td>
+<td>string(32)</td>
+<td>Allocation state machine below.</td>
 </tr>
 <tr>
 <td><code>posting_reference</code></td>
-<td>字符串（128）可为空</td>
-<td>不透明钱包凭证收据参考。</td>
+<td>string(128) nullable</td>
+<td>Opaque Wallet voucher receipt reference.</td>
 </tr>
 <tr>
 <td><code>posting_idempotency_key</code></td>
-<td>字符串（128），唯一</td>
-<td>稳定的命令键。</td>
+<td>string(128), unique</td>
+<td>Stable command key.</td>
 </tr>
 <tr>
 <td><code>posted_at</code></td>
-<td>日期时间不可变可为空</td>
-<td>发布成功时间。从此时起，资金就属于接收者。</td>
+<td>datetime immutable nullable</td>
+<td>Posting success time. Funds are the recipient's from this moment.</td>
 </tr>
 <tr>
 <td><code>reversal_reference</code></td>
-<td>字符串（128）可为空</td>
-<td>不透明钱包冲销收据。</td>
+<td>string(128) nullable</td>
+<td>Opaque Wallet reversal receipt.</td>
 </tr>
 <tr>
 <td><code>reversal_idempotency_key</code></td>
-<td>字符串(128)，唯一可为空</td>
-<td>稳定的反转键。</td>
+<td>string(128), unique nullable</td>
+<td>Stable reversal key.</td>
 </tr>
 <tr>
 <td><code>reversed_at</code></td>
-<td>日期时间不可变可为空</td>
-<td>逆转成功时间。</td>
+<td>datetime immutable nullable</td>
+<td>Reversal success time.</td>
 </tr>
 <tr>
-<td><code>failure_code</code>、<code>failure_detail</code></td>
-<td>可为空字符串</td>
-<td>净化操作诊断。</td>
+<td><code>failure_code</code>, <code>failure_detail</code></td>
+<td>nullable strings</td>
+<td>Sanitized operational diagnosis.</td>
 </tr>
 <tr>
-<td><code>attempt_count</code>、<code>next_attempt_at</code></td>
-<td>整数/日期时间可为空</td>
-<td>重试状态。</td>
+<td><code>attempt_count</code>, <code>next_attempt_at</code></td>
+<td>integer/datetime nullable</td>
+<td>Retry state.</td>
 </tr>
 <tr>
-<td><code>created_at</code>、<code>updated_at</code></td>
-<td>日期时间不可变</td>
-<td>审计。</td>
+<td><code>created_at</code>, <code>updated_at</code></td>
+<td>datetime immutable</td>
+<td>Audit.</td>
 </tr>
 </tbody>
 </table>
-<p>限制条件：</p>
+<p>Constraints:</p>
 <ul>
-<li>独特的<code>(plan_uuid, allocation_key)</code>。</li>
-<li><code>posting_amount &gt; 0</code>；零分配永远不会持久。</li>
-<li>收件人类型/ID 和确切金额在计划后是不可变的。</li>
-<li>成功的<code>posting_reference</code>无法被替换。</li>
-<li>逆转参考原始分配，而不是新计算的交易对手。</li>
+<li>Unique <code>(plan_uuid, allocation_key)</code>.</li>
+<li><code>posting_amount &gt; 0</code>; a zero allocation is never persisted.</li>
+<li>Recipient type/id and exact amount are immutable after planning.</li>
+<li>A successful <code>posting_reference</code> cannot be replaced.</li>
+<li>Reversal references the original allocation, not a newly calculated counterparty.</li>
 </ul>
 <h3 id="96-settlementreversal">9.6 <code>SettlementReversal</code><a class="headerlink" href="#96-settlementreversal" title="Permanent link">&para;</a></h3>
-<p>撤销请求是一个可审核的聚合，而不是直接更改的按钮
-分配。</p>
+<p>A reversal request is an auditable aggregate rather than a button that directly changes
+allocations.</p>
 <table>
 <thead>
 <tr>
@@ -5751,7 +6260,7 @@
 当信用被交给接收者时，发布计划发生变化，而不是资金是否
 一旦信用被移交，最终结果就存在。</p>
 <hr />
-<h2 id="11_1">11. 钱包代金券边界<a class="headerlink" href="#11_1" title="Permanent link">&para;</a></h2>
+<h2 id="11">11. 钱包代金券边界<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p><strong>单向交接。</strong> 结算决定<em>何时</em>确认的分配成为
 接收者的资金并通过凭证边界过帐该分配。从
@@ -5822,99 +6331,99 @@
 <table>
 <thead>
 <tr>
-<th>发布政策</th>
-<th>结算行为</th>
-<th>收件人所有权</th>
+<th>Posting policy</th>
+<th>Settlement behavior</th>
+<th>Recipient ownership</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>immediate</code>（<code>T+0</code>，默认）</td>
-<td>计划创建后立即运行发布命令。</td>
-<td>在信用申请时。</td>
+<td><code>immediate</code> (<code>T+0</code>, default)</td>
+<td>Posting command runs as soon as the plan is created.</td>
+<td>At credit application.</td>
 </tr>
 <tr>
 <td><code>delayed</code> (<code>T+N</code>)</td>
-<td>发布命令安排在<code>posting_available_at</code>；调度程序在该时间/之后运行它。</td>
-<td>预定过帐后的信用申请。</td>
+<td>Posting command is scheduled for <code>posting_available_at</code>; the scheduler runs it at/after that time.</td>
+<td>At credit application after the scheduled posting.</td>
 </tr>
 <tr>
 <td><code>manual</code></td>
-<td>过帐命令将保留在结算中，直到授权操作员批准为止。</td>
-<td>批准后进行信贷申请。</td>
+<td>Posting command is held in Settlement until an authorized operator approves it.</td>
+<td>At credit application after approval.</td>
 </tr>
 </tbody>
 </table>
-<p>对于延迟策略，调度程序必须等到 <code>posting_available_at</code> 才能发布
-发布命令。 <code>posting_available_at</code> 在规划期间计算并冻结。的
-规则或资金政策必须说明其业务日历语义：下一个结算日
-与严格的持续时间相比。该实现应该使用注入的业务日历
-服务而不是默默地将 <code>T+1</code> 解释为 24 小时。</p>
-<p><code>manual</code> 发布需要授权操作员命令。 <code>manual</code> 分配等待
-<code>planned</code> 直到批准设置其 <code>posting_available_at</code> （过去）或发出过帐
-直接命令。</p>
-<p>因为过帐是所有权转移，所以安排延迟/手动分配是
-仍然受与 <code>T+0</code> 相同的发布幂等性、重试和反转规则的约束。那里
-没有 <code>held</code> 金额，没有 <code>release</code> 命令，并且在任何地方都没有单独的 <code>held</code> 余额。</p>
-<h3 id="115">11.5 钱包最终确定<a class="headerlink" href="#115" title="Permanent link">&para;</a></h3>
-<p>一旦<code>post()</code>返回分配的成功收据：</p>
+<p>For a delayed policy the scheduler must wait until <code>posting_available_at</code> before issuing
+the posting command. <code>posting_available_at</code> is calculated and frozen during planning. The
+rule or funding policy must state its business calendar semantics: next settlement-day
+versus strict duration. The implementation SHOULD use an injected business-calendar
+service rather than silently interpreting <code>T+1</code> as 24 hours.</p>
+<p><code>manual</code> posting requires an authorized operator command. A <code>manual</code> allocation waits in
+<code>planned</code> until approval sets its <code>posting_available_at</code> (past) or emits the posting
+command directly.</p>
+<p>Because posting is the ownership transfer, Scheduling a delayed/manual allocation is
+still governed by the same posting idempotency, retry, and reversal rules as <code>T+0</code>. There
+is no <code>held</code> amount, no <code>release</code> command, and no separate <code>held</code> balance anywhere.</p>
+<h3 id="115-wallet-is-final">11.5 Wallet Is Final<a class="headerlink" href="#115-wallet-is-final" title="Permanent link">&para;</a></h3>
+<p>Once <code>post()</code> has returned a successful receipt for an allocation:</p>
 <ul>
-<li>存入金额为收款人的无条件余额。</li>
-<li>结算不会跟踪该余额的可用性、支出或部分所有权。</li>
-<li>结算不执行补偿日记账分录、保留或冻结该款项。</li>
-<li>唯一的结算操作是冲销原始凭证，该凭证已被处理
-  与任何主机存款冲销一样：它会扣除收件人的可用余额。</li>
-<li>结算不需要<code>held</code>列、发布状态或发布调度程序。</li>
+<li>The credited amount is the recipient's unconditional balance.</li>
+<li>Settlement does not track availability, spend, or partial ownership of that balance.</li>
+<li>Settlement performs no compensating journal entries, holds, or freezes on that money.</li>
+<li>The only Settlement operation is reversing the exact original voucher, which is treated
+  like any host deposit reversal: it debits the recipient's available balance.</li>
+<li>Settlement does not need a <code>held</code> column, a release state, or a release scheduler.</li>
 </ul>
-<p>这保持了边界的干净：结算控制着结算的时间和正确性
-分配和钱包（已经拥有余额，出于其他目的持有，冻结
-标志和反转语义）拥有信用之后的一切。</p>
-<h3 id="116">11.6 反转语义<a class="headerlink" href="#116" title="Permanent link">&para;</a></h3>
-<p>冲销始终针对原始结算凭证：</p>
+<p>This keeps the boundary clean: Settlement controls the timing and correctness of
+distribution, and Wallet (which already owns balances, holds for other purposes, frozen
+flags, and reversal semantics) owns everything after the credit.</p>
+<h3 id="116-reversal-semantics">11.6 Reversal Semantics<a class="headerlink" href="#116-reversal-semantics" title="Permanent link">&para;</a></h3>
+<p>Reversal always targets the original settlement voucher:</p>
 <table>
 <thead>
 <tr>
-<th>原始状态</th>
-<th>钱包效应</th>
+<th>Original state</th>
+<th>Wallet effect</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>发布</td>
-<td>借记收款人的可用余额；写出原始信用凭证的冲销。</td>
+<td>Posted</td>
+<td>Debit the recipient's available balance; write the original credit voucher's reversal.</td>
 </tr>
 <tr>
-<td>未发布（立即/延迟/手动到期）</td>
-<td>取消分配；没有钱包通话。</td>
+<td>Not posted (immediate/delayed/manual due)</td>
+<td>Cancel allocation; no Wallet call.</td>
 </tr>
 </tbody>
 </table>
-<p>如果分配后可用余额不足，钱包
-返回分类的资金不足结果。结算记录<code>reversal_pending</code>，
-保持资金退款锁定，不进行补偿性调整。未来应收款
-模块可以解决债务，然后允许重试，但它不能重写此历史记录。
-结算不会产生负余额来强制逆转。</p>
-<h3 id="117">11.7 需要更改钱包<a class="headerlink" href="#117" title="Permanent link">&para;</a></h3>
-<p>现有的钱包存款/反向支持凭证来源。唯一需要的钱包端
-结算的扩展是 <code>settlement</code> 的凭证提供者/授权路径
-优惠券类型：</p>
+<p>If the available balance is insufficient after a posted allocation, Wallet
+returns a classified insufficient-funds result. Settlement records <code>reversal_pending</code>,
+keeps the funding refund lock, and makes no compensating adjustment. A future receivable
+module may settle the debt and then permit a retry, but it must not rewrite this history.
+Settlement does not create a negative balance to force the reversal through.</p>
+<h3 id="117-wallet-changes-required">11.7 Wallet Changes Required<a class="headerlink" href="#117-wallet-changes-required" title="Permanent link">&para;</a></h3>
+<p>Existing Wallet deposit/reverse supports voucher provenance. The only required Wallet-side
+extension for Settlement is a voucher provider/authorization path for the <code>settlement</code>
+voucher type:</p>
 <ul>
-<li>在钱包内添加结算拥有的凭证提供商/授权路径。</li>
-<li>复用Wallet现有的存款+凭证+交易原子性作为信用。</li>
-<li>重复使用 Wallet 现有的存款冲销进行冲销；没有 <code>held</code> 集成
-  结算所需。</li>
-<li>保留钱包的交易、凭证、锁、货币、幂等性和对账
-  不变量。</li>
-<li>不要通过通用自助服务 HTTP 端点公开这些操作。</li>
+<li>Add a Settlement-owned voucher provider/authorization path inside Wallet.</li>
+<li>Reuse Wallet's existing deposit + voucher + transaction atomicity for the credit.</li>
+<li>Reuse Wallet's existing deposit reversal for the reversal; no <code>held</code> integration is
+  required for Settlement.</li>
+<li>Preserve Wallet's transaction, voucher, lock, currency, idempotency, and reconciliation
+  invariants.</li>
+<li>Do not expose these operations through a generic self-service HTTP endpoint.</li>
 </ul>
-<p>结算功能交付不需要 <code>Wallet.held</code> 进行任何更改。钱包仍可使用
-<code>held</code> 用于与结算无关的完全独立的商业目的；结算必须
-不依赖它。</p>
+<p>No <code>Wallet.held</code> change is needed for Settlement feature delivery. Wallet may still use
+<code>held</code> for entirely separate business purposes unrelated to Settlement; Settlement must
+not depend on it.</p>
 <hr />
-<h2 id="12_1">12. 支付退款锁定集成<a class="headerlink" href="#12_1" title="Permanent link">&para;</a></h2>
-<h3 id="121">12.1 通用支付扩展点<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
-<p>付款应公开通用的、带标签的退款保护合同，而不是导入
-结算：</p>
+<h2 id="12-payment-refund-lock-integration">12. Payment Refund Lock Integration<a class="headerlink" href="#12-payment-refund-lock-integration" title="Permanent link">&para;</a></h2>
+<h3 id="121-generic-payment-extension-point">12.1 Generic Payment Extension Point<a class="headerlink" href="#121-generic-payment-extension-point" title="Permanent link">&para;</a></h3>
+<p>Payment should expose a generic, tagged refund-guard contract rather than import
+Settlement:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="x">interface PaymentRefundGuardInterface</span>
 <a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="x">{</span>
 <a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="x">    public function supports(string $sourceType): bool;</span>
@@ -5922,13 +6431,13 @@
 <a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="x">    public function assertRefundAllowed(string $sourceId, int $amount, string $currency): void;</span>
 <a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="x">}</span>
 </code></pre></div>
-<p>结算集成适配器为其拥有的源类型实现此接口。
-在将发票转换为退款工作之前，付款会调用所有适用的防护措施。
-适配器仅使用标量源标识来请求 <code>SettlementFinalityService</code>。</p>
-<p>这使得未来的资金消费者能够定义自己的最终性保护，而无需做出任何决定
-付款知道任何结算表或实体。</p>
-<h3 id="122">12.2 退款规则<a class="headerlink" href="#122" title="Permanent link">&para;</a></h3>
-<p>对于任何已成功发布分配的来源：</p>
+<p>The Settlement integration adapter implements this interface for source types it owns.
+Payment invokes all applicable guards before transitioning an invoice into refund work.
+The adapter asks <code>SettlementFinalityService</code> using scalar source identity only.</p>
+<p>This permits future funding consumers to define their own finality guard without making
+Payment know any settlement table or entity.</p>
+<h3 id="122-refund-rule">12.2 Refund Rule<a class="headerlink" href="#122-refund-rule" title="Permanent link">&para;</a></h3>
+<p>For a source with any successfully posted allocation:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>refund requested
 <a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>  -&gt; guard sees refund_locked_at and no refund_unlocked_at
 <a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>  -&gt; reject with a stable business error
@@ -5952,7 +6461,7 @@
 <p>解锁本身并不退款。只允许源码所有者正常退款
 过程开始。</p>
 <hr />
-<h2 id="13_1">13. 可靠处理和幂等性<a class="headerlink" href="#13_1" title="Permanent link">&para;</a></h2>
+<h2 id="13">13. 可靠处理和幂等性<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
 <h3 id="131">13.1 本地事务边界<a class="headerlink" href="#131" title="Permanent link">&para;</a></h3>
 <p>计划创建交易：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>Settlement transaction:
@@ -6088,91 +6597,91 @@
 <table>
 <thead>
 <tr>
-<th>端点概念</th>
-<th>命令</th>
-<th>所需授权</th>
+<th>Endpoint concept</th>
+<th>Command</th>
+<th>Required authorization</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>创建/更新规则草案</td>
-<td>规则草稿命令</td>
-<td>结算规则管理员。</td>
+<td>Create/update rule draft</td>
+<td>Rule draft command</td>
+<td>Settlement rule administrator.</td>
 </tr>
 <tr>
-<td>发布/撤销规则</td>
-<td>规则治理命令</td>
-<td>单独的审批者或特权财务角色。</td>
+<td>Publish/retire rule</td>
+<td>Rule governance command</td>
+<td>Separate approver or privileged finance role.</td>
 </tr>
 <tr>
-<td>模拟</td>
-<td>针对提供的可信/已清理的固定装置上下文进行纯计算</td>
-<td>规则管理员；没有持久性或优惠券调用。</td>
+<td>Simulate</td>
+<td>Pure calculation against supplied trusted/sanitized fixture context</td>
+<td>Rule administrator; no persistence or voucher call.</td>
 </tr>
 <tr>
-<td>阅读计划/分配</td>
-<td>查询</td>
-<td>范围内的财务/审计许可。</td>
+<td>Read plan/allocation</td>
+<td>Query</td>
+<td>Scoped finance/audit permission.</td>
 </tr>
 <tr>
-<td>重试分配</td>
-<td>重新排队现有分配发布命令</td>
-<td>运营角色。</td>
+<td>Retry allocation</td>
+<td>Requeue existing allocation posting command</td>
+<td>Operations role.</td>
 </tr>
 <tr>
-<td>批准手动发布</td>
-<td>授权<code>manual</code>分配的发布命令</td>
-<td>结算过帐权限。</td>
+<td>Approve manual posting</td>
+<td>Authorize a <code>manual</code> allocation's posting command</td>
+<td>Settlement posting authority.</td>
 </tr>
 <tr>
-<td>取消待发帖</td>
-<td>在运行之前撤回 <code>delayed</code>/<code>manual</code> 发布命令</td>
-<td>运营角色。</td>
+<td>Cancel pending posting</td>
+<td>Withdraw a <code>delayed</code>/<code>manual</code> posting command before it runs</td>
+<td>Operations role.</td>
 </tr>
 <tr>
-<td>请求撤销</td>
-<td>创建 <code>SettlementReversal</code></td>
-<td>财务逆转权。</td>
+<td>Request reversal</td>
+<td>Create <code>SettlementReversal</code></td>
+<td>Finance reversal authority.</td>
 </tr>
 <tr>
-<td>重试反转</td>
-<td>重新排队现有反转命令</td>
-<td>财务逆转权。</td>
+<td>Retry reversal</td>
+<td>Requeue existing reversal command</td>
+<td>Finance reversal authority.</td>
 </tr>
 <tr>
-<td>解锁源码退款</td>
-<td>明确的最终性解锁</td>
-<td>冲销证明后的财务当局。</td>
+<td>Unlock source refund</td>
+<td>Explicit finality unlock</td>
+<td>Finance authority after reversal proof.</td>
 </tr>
 </tbody>
 </table>
-<p>所有命令请求都需要客户端幂等性密钥，人们可以在其中重试操作。
-参与者身份、角色/授权原因、请求 ID、时间戳和已清理的信息
-请求元数据包含在审核记录中。</p>
-<h3 id="143">14.3 读取安全性<a class="headerlink" href="#143" title="Permanent link">&para;</a></h3>
-<p>分配接收者、资金和审计参考资料都是敏感的。读取 API 不得
-重用订单/商店连接进行授权。结算查询授权使用
-接收计划/源标量参考和参与者声明的专用策略。安
-集成适配器可以通过接口提供特定于源的范围检查；它
-不得将源实体泄漏到结算域中。</p>
+<p>All command requests require a client idempotency key where a human can retry an action.
+The actor identity, role/authorization reason, request ID, timestamp, and sanitized
+request metadata are included in the audit record.</p>
+<h3 id="143-read-security">14.3 Read Security<a class="headerlink" href="#143-read-security" title="Permanent link">&para;</a></h3>
+<p>Allocation recipients, funds, and audit references are sensitive. Read APIs must not
+reuse an Order/Store join for authorization. Settlement query authorization uses a
+dedicated policy that receives plan/source scalar references and actor claims. An
+integration adapter may supply source-specific scope checks through an interface; it
+must not leak a source entity into the Settlement domain.</p>
 <hr />
-<h2 id="15">15. 可观察性、审计和对账<a class="headerlink" href="#15" title="Permanent link">&para;</a></h2>
-<h3 id="151">15.1 所需的审核证据<a class="headerlink" href="#151" title="Permanent link">&para;</a></h3>
-<p>完成的分配必须回答所有这些问题，而无需加载另一个
-模块的可变数据：</p>
+<h2 id="15-observability-audit-and-reconciliation">15. Observability, Audit, And Reconciliation<a class="headerlink" href="#15-observability-audit-and-reconciliation" title="Permanent link">&para;</a></h2>
+<h3 id="151-required-audit-evidence">15.1 Required Audit Evidence<a class="headerlink" href="#151-required-audit-evidence" title="Permanent link">&para;</a></h3>
+<p>A completed allocation must answer all of these questions without loading another
+module's mutable data:</p>
 <ul>
-<li>分配了哪些确认的资金？</li>
-<li>使用了哪些来源/上下文事实，它们的哈希值是什么？</li>
-<li>应用了哪个规则版本和收件人解析器版本？</li>
-<li>计算出什么精确的理性/公式结果？</li>
-<li>它是如何转换为最终过账单位的？每个剩余单位去了哪里？</li>
-<li>哪个收件人参考收到了它？</li>
-<li>哪个凭证收据预订了它，何时以及使用什么幂等密钥？</li>
-<li>哪个发布策略安排了它，以及在什么时间<code>posting_available_at</code>？</li>
-<li>是否被冲销、由谁冲销、为何冲销以及使用哪张原始凭证冲销收据？</li>
+<li>What confirmed funding was allocated?</li>
+<li>Which source/context facts were used, and what is their hash?</li>
+<li>Which rule version and recipient resolver version applied?</li>
+<li>What exact rational/formula result was calculated?</li>
+<li>How was it converted to final posting units and where did each remainder unit go?</li>
+<li>Which recipient reference received it?</li>
+<li>Which voucher receipt booked it, when, and with what idempotency key?</li>
+<li>Which posting policy scheduled it, and at what <code>posting_available_at</code>?</li>
+<li>Was it reversed, by whom, why, and with which original-voucher reversal receipt?</li>
 </ul>
-<h3 id="152">15.2 指标<a class="headerlink" href="#152" title="Permanent link">&para;</a></h3>
-<p>实现应该使用现有的核心指标方法添加模块指标：</p>
+<h3 id="152-metrics">15.2 Metrics<a class="headerlink" href="#152-metrics" title="Permanent link">&para;</a></h3>
+<p>The implementation should add module metrics using the existing Core metrics approach:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>settlement_plans_total{status,currency}
 <a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>settlement_allocations_total{status,recipient_type,currency}
 <a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>settlement_outbox_backlog{topic}
@@ -6182,49 +6691,49 @@
 <a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>settlement_unallocated_amount_quantum{currency}
 <a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>settlement_refund_locks_total{source_type}
 </code></pre></div>
-<p>金额可以导出为仔细记录的十进制字符串或仅在以下情况下转换：
-指标后端支持任意精度。 Prometheus 浮体样本不得
-用作财务真相。</p>
-<h3 id="153">15.3 和解<a class="headerlink" href="#153" title="Permanent link">&para;</a></h3>
-<p>结算对账将其不可变的分配收据与钱包的进行比较
-边界券：</p>
+<p>Amounts may be exported as carefully documented decimal strings or converted only where
+the metrics backend supports arbitrary precision. A Prometheus float sample must not be
+used as financial truth.</p>
+<h3 id="153-reconciliation">15.3 Reconciliation<a class="headerlink" href="#153-reconciliation" title="Permanent link">&para;</a></h3>
+<p>Settlement reconciliation compares its immutable allocation receipts with Wallet's
+boundary vouchers:</p>
 <table>
 <thead>
 <tr>
-<th>结算领域</th>
-<th>钱包凭证领域</th>
+<th>Settlement field</th>
+<th>Wallet voucher field</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>分配UUID</td>
-<td><code>voucher_id</code> 对于类型 <code>settlement</code></td>
+<td>allocation UUID</td>
+<td><code>voucher_id</code> for type <code>settlement</code></td>
 </tr>
 <tr>
-<td>发布幂等性密钥</td>
+<td>posting idempotency key</td>
 <td><code>reference_id</code></td>
 </tr>
 <tr>
-<td>过账金额/币种</td>
-<td>优惠券金额/货币</td>
+<td>posting amount/currency</td>
+<td>voucher amount/currency</td>
 </tr>
 <tr>
-<td>发帖参考</td>
-<td>钱包凭证外部身份</td>
+<td>posting reference</td>
+<td>Wallet voucher external identity</td>
 </tr>
 <tr>
-<td>反转参考</td>
-<td>原始凭证冲销身份</td>
+<td>reversal reference</td>
+<td>original voucher reversal identity</td>
 </tr>
 </tbody>
 </table>
-<p>任何不匹配都是诚信事件。和解报告了这一情况，但没有默默地报告
-通过调整计划或钱包余额来修复资金。</p>
+<p>Any mismatch is an integrity incident. Reconciliation reports it but does not silently
+repair money by adjusting plans or Wallet balances.</p>
 <hr />
-<h2 id="16">16. 数据库迁移要求<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
-<p>迁移必须可跨 SQLite 测试、PostgreSQL CI 和 MySQL 部署进行移植。
-避免特定于数据库的 JSON 路径逻辑或财务值的数字转换。</p>
-<p>所需索引包括：</p>
+<h2 id="16-database-migration-requirements">16. Database Migration Requirements<a class="headerlink" href="#16-database-migration-requirements" title="Permanent link">&para;</a></h2>
+<p>The migration must be portable across SQLite test, PostgreSQL CI, and MySQL deployment.
+Avoid database-specific JSON path logic or numeric casts for financial values.</p>
+<p>Required indexes include:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>settlement_rule:
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>  UNIQUE(uuid)
 <a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>  UNIQUE(code)
@@ -6265,180 +6774,180 @@
 <a id="__codelineno-33-38" name="__codelineno-33-38" href="#__codelineno-33-38"></a>  INDEX(published_at, available_at)
 <a id="__codelineno-33-39" name="__codelineno-33-39" href="#__codelineno-33-39"></a>  INDEX(claimed_at)
 </code></pre></div>
-<p>该模式将金融量子值存储在 <code>VARCHAR</code> 列中，并附有记录
-最大长度，不是 <code>BIGINT</code> 或 <code>DECIMAL</code>。应用程序级规范格式验证
-是强制性的；仅在可移植的情况下才可以添加可选的数据库检查。</p>
+<p>The schema stores financial quantum values in <code>VARCHAR</code> columns with a documented
+maximum length, not <code>BIGINT</code> or <code>DECIMAL</code>. Application-level canonical-format validation
+is mandatory; optional database checks may be added only where portable.</p>
 <hr />
-<h2 id="17">17. 实施阶段<a class="headerlink" href="#17" title="Permanent link">&para;</a></h2>
-<p>每个阶段都是可独立审查和测试的。后续阶段不得绕过
-与早期阶段相比不变。</p>
+<h2 id="17-implementation-phases">17. Implementation Phases<a class="headerlink" href="#17-implementation-phases" title="Permanent link">&para;</a></h2>
+<p>Each phase is independently reviewable and testable. A later phase must not bypass an
+invariant from an earlier phase.</p>
 <table>
 <thead>
 <tr>
-<th>Phase</th>
-<th>Scope</th>
-<th>Required evidence</th>
+<th>相</th>
+<th>范围</th>
+<th>所需证据</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>P0</td>
-<td>Add <code>brick/math</code>; exact amount/rounding primitives; unit tests.</td>
-<td>No float use; overflow and 18-scale tests.</td>
+<td>添加<code>brick/math</code>；精确数量/舍入基元；单元测试。</td>
+<td>不使用浮子；溢出和18级测试。</td>
 </tr>
 <tr>
 <td>P1</td>
-<td>Settlement schema, plan/allocation aggregates, rule versions, pure simulation.</td>
-<td>Rule and conservation integration tests.</td>
+<td>结算模式、计划/分配聚合、规则版本、纯模拟。</td>
+<td>规则和守恒集成测试。</td>
 </tr>
 <tr>
 <td>P2</td>
-<td>Context resolver/recipient resolver registries and one generic fixture adapter.</td>
-<td>Snapshot and plugin contract tests.</td>
+<td>上下文解析器/接收者解析器注册表和一个通用夹具适配器。</td>
+<td>快照和插件合约测试。</td>
 </tr>
 <tr>
 <td>P3</td>
-<td>Settlement inbox/outbox, posting port, fake adapter, allocation state machine.</td>
-<td>Duplicate, crash/retry, partial-post integration tests.</td>
+<td>结算收件箱/发件箱、发布端口、假适配器、分配状态机。</td>
+<td>重复、崩溃/重试、部分后期集成测试。</td>
 </tr>
 <tr>
 <td>P4</td>
-<td>Wallet Settlement adapter (voucher provider path only), immediate <code>T+0</code> posting, voucher receipt reconciliation.</td>
-<td>Real Wallet voucher transaction tests.</td>
+<td>钱包结算适配器（仅限优惠券提供商路径）、立即 <code>T+0</code> 过账、优惠券收据核对。</td>
+<td>真实钱包凭证交易测试。</td>
 </tr>
 <tr>
 <td>P5</td>
-<td>Payment outbox producer and generic refund guard/finality integration.</td>
-<td>Paid-to-posted and reversal-before-refund E2E tests.</td>
+<td>付款发件箱生产者和通用退款保护/最终性集成。</td>
+<td>付费发布和退款前撤销 E2E 测试。</td>
 </tr>
 <tr>
 <td>P6</td>
-<td>Settlement-side <code>T+N</code> and manual posting scheduling, posting cancel, scheduler delivery.</td>
-<td>Posting schedule, approval, and cancel race tests.</td>
+<td>结算端<code>T+N</code>及手动过账调度、过账取消、调度器投递。</td>
+<td>发布时间表、批准和取消比赛测试。</td>
 </tr>
 <tr>
 <td>P7</td>
-<td>Manage APIs, governance, observability, production runbook.</td>
-<td>Authorization, OpenAPI, metrics, smoke validation.</td>
+<td>管理 API、治理、可观察性、生产运行手册。</td>
+<td>授权、OpenAPI、指标、烟雾验证。</td>
 </tr>
 </tbody>
 </table>
-<p>Trade context adapters and non-Payment funding producers can be delivered independently
-after P2. The core remains generic even if P5 is the first production integration.</p>
+<p>贸易环境适配器和非支付资金生产者可以独立交付
+P2之后。即使 P5 是第一个生产集成，该核心仍然是通用的。</p>
 <hr />
-<h2 id="18-test-strategy-and-mandatory-invariants">18. Test Strategy And Mandatory Invariants<a class="headerlink" href="#18-test-strategy-and-mandatory-invariants" title="Permanent link">&para;</a></h2>
-<h3 id="181-unit-tests">18.1 Unit Tests<a class="headerlink" href="#181-unit-tests" title="Permanent link">&para;</a></h3>
+<h2 id="18">18. 测试策略和强制不变量<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
+<h3 id="181">18.1 单元测试<a class="headerlink" href="#181" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Area</th>
-<th>Required cases</th>
+<th>面积</th>
+<th>所需案例</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>QuantumAmount</code></td>
-<td>Canonical parsing, signs, zero, scale, extremely large strings, invalid format.</td>
+<td>规范解析、符号、零、小数位数、极大字符串、无效格式。</td>
 </tr>
 <tr>
-<td>Formula primitives</td>
-<td>Fixed/rate/cap/floor/remaining, nested composition, negative rejection, no float coercion.</td>
+<td>公式基元</td>
+<td>固定/利率/上限/下限/剩余，嵌套组合，负拒绝，无浮动强制。</td>
 </tr>
 <tr>
-<td>Exact math</td>
-<td><code>1/3</code>, 18-scale boundaries, huge multiplication, division behavior, overflow-safe conversion.</td>
+<td>精确的数学</td>
+<td><code>1/3</code>、18 尺度边界、巨大的乘法、除法行为、溢出安全转换。</td>
 </tr>
 <tr>
-<td>Rounding</td>
-<td>Largest remainder, equal-remainder UUID tie break, platform fallback, exact conservation.</td>
+<td>四舍五入</td>
+<td>最大余数、等余 UUID 平局决胜、平台回退、精确守恒。</td>
 </tr>
 <tr>
-<td>Eligibility</td>
-<td>All/any/not, missing fact, invalid fact type, effective-time boundary.</td>
+<td>资格</td>
+<td>全部/任何/非、缺失事实、无效事实类型、有效时间边界。</td>
 </tr>
 <tr>
-<td>Recipient resolver</td>
-<td>Literal/candidate/fallback and snapshot-only behavior.</td>
+<td>收件人解析器</td>
+<td>文字/候选/后备和仅快照行为。</td>
 </tr>
 <tr>
-<td>State machines</td>
-<td>Valid/invalid plan/allocation/reversal transitions.</td>
+<td>状态机</td>
+<td>有效/无效计划/分配/冲销转换。</td>
 </tr>
 </tbody>
 </table>
-<h3 id="182-integration-tests">18.2 Integration Tests<a class="headerlink" href="#182-integration-tests" title="Permanent link">&para;</a></h3>
+<h3 id="182">18.2 集成测试<a class="headerlink" href="#182" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Boundary</th>
-<th>Required cases</th>
+<th>边界</th>
+<th>所需案例</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Doctrine</td>
-<td>Every unique key, immutable snapshot behavior, query indexes where practical.</td>
+<td>学说</td>
+<td>每个唯一的键、不可变的快照行为、实用的查询索引。</td>
 </tr>
 <tr>
-<td>Funding inbox</td>
-<td>First delivery, same-event retry, new-event same funding, changed replay conflict.</td>
+<td>资金收件箱</td>
+<td>首次交付、同事件重试、新事件同资金、改变重播冲突。</td>
 </tr>
 <tr>
-<td>Plan creation</td>
-<td>Funding/plan/outbox atomic rollback and unallocated zero enforcement.</td>
+<td>计划制定</td>
+<td>资金/计划/发件箱原子回滚和未分配的零强制执行。</td>
 </tr>
 <tr>
-<td>Outbox</td>
-<td>Claim, publish, failure defer, retry, stale lease behavior.</td>
+<td>发件箱</td>
+<td>声明、发布、失败延迟、重试、过时的租赁行为。</td>
 </tr>
 <tr>
-<td>Posting</td>
-<td>Wallet success, duplicate after handler crash, non-retryable mapping failure, partial plan.</td>
+<td>发布</td>
+<td>钱包成功、处理程序崩溃后重复、不可重试的映射失败、部分计划。</td>
 </tr>
 <tr>
-<td>Posting schedule</td>
-<td>Immediate posts at plan creation; delayed posts only at/after <code>posting_available_at</code>; manual waits for approval; posting cancel before it runs.</td>
+<td>发布时间表</td>
+<td>计划制定后立即上岗；仅在<code>posting_available_at</code>/之后延迟发布；手册等待批准；在运行之前发布取消。</td>
 </tr>
 <tr>
-<td>Reversal</td>
-<td>Original receipt use, unposted allocation cancel (before or after a pending posting command), available-balance insufficiency.</td>
+<td>逆转</td>
+<td>原始收据使用、未过帐分配取消（在待处理过帐命令之前或之后）、可用余额不足。</td>
 </tr>
 <tr>
-<td>Payment</td>
-<td>First posting locks refund; full reversal and explicit unlock permit refund.</td>
+<td>付款</td>
+<td>首次发帖锁定退款；完全逆转和明确解锁许可退款。</td>
 </tr>
 <tr>
-<td>Context adapter</td>
-<td>Scalar projection, source missing, forbidden source state, snapshot unaffected by later mutation.</td>
+<td>上下文适配器</td>
+<td>标量投影、源缺失、禁止源状态、不受后来突变影响的快照。</td>
 </tr>
 </tbody>
 </table>
-<h3 id="183-architecture-tests">18.3 Architecture Tests<a class="headerlink" href="#183-architecture-tests" title="Permanent link">&para;</a></h3>
-<p>Automated architecture checks should enforce:</p>
+<h3 id="183">18.3 架构测试<a class="headerlink" href="#183" title="Permanent link">&para;</a></h3>
+<p>自动化架构检查应强制执行：</p>
 <ul>
-<li><code>src/Settlement</code> core does not import Trade, Payment, Wallet, Store, or Identity entity
-  namespaces.</li>
-<li>Rule implementations do not use the Symfony container, Doctrine EntityManager, or
-  network clients.</li>
-<li>Financial Settlement code does not use <code>float</code>, <code>round()</code>, <code>bc*</code>, native monetary
-  casts, or <code>number_format()</code> as a calculation input.</li>
-<li>Source adapters return only scalar contexts and <code>RecipientReference</code> value objects.</li>
-<li>Voucher port DTOs contain no Wallet entity type.</li>
+<li><code>src/Settlement</code>核心不导入贸易、支付、钱包、商店或身份实体
+  命名空间。</li>
+<li>规则实现不使用 Symfony 容器、Doctrine EntityManager 或
+  网络客户端。</li>
+<li>财务结算代码不使用<code>float</code>、<code>round()</code>、<code>bc*</code>、本机货币
+  强制转换或 <code>number_format()</code> 作为计算输入。</li>
+<li>源适配器仅返回标量上下文和<code>RecipientReference</code>值对象。</li>
+<li>凭证端口 DTO 不包含钱包实体类型。</li>
 </ul>
-<h3 id="184-end-to-end-scenarios">18.4 End-To-End Scenarios<a class="headerlink" href="#184-end-to-end-scenarios" title="Permanent link">&para;</a></h3>
-<p>At minimum, the disposable-environment smoke flow must prove:</p>
+<h3 id="184">18.4 端到端场景<a class="headerlink" href="#184" title="Permanent link">&para;</a></h3>
+<p>至少，一次性环境烟雾流量必须证明：</p>
 <ol>
-<li>Payment confirms one funding amount.</li>
-<li>Settlement creates an immutable, conserved plan with multiple recipients plus any
-   configured fallback allocation.</li>
-<li>Wallet receives exactly one voucher/transaction per allocation despite redelivery.</li>
-<li><code>T+0</code> recipient balance is available immediately.</li>
-<li>Payment refund is blocked after first allocation posting.</li>
-<li>Operator reversal reverses the exact posted vouchers.</li>
-<li>Explicit finality unlock enables the normal source refund.</li>
-<li>A <code>T+N</code> allocation is not posted until its scheduled time, then posts exactly once;
-   it can be cancelled before posting, and once posted it can only be reversed by the
-   original voucher (there is no held/release phase).</li>
+<li>付款确认一笔资金金额。</li>
+<li>和解创建了一个不可变的、保守的计划，其中包含多个接收者以及任何
+   配置后备分配。</li>
+<li>尽管重新交付，钱包每次分配只会收到一张优惠券/交易。</li>
+<li><code>T+0</code> 收款人余额立即可用。</li>
+<li>首次分配过帐后，付款退款将被阻止。</li>
+<li>操作员冲销冲销确切的过帐凭证。</li>
+<li>明确的最终性解锁可实现正常的来源退款。</li>
+<li><code>T+N</code> 分配在预定时间之前不会发布，然后只发布一次；
+   发布前可以取消，发布后只能通过
+   原始凭证（没有持有/释放阶段）。</li>
 </ol>
 <hr />
 <h2 id="19">19. 其余配置决策<a class="headerlink" href="#19" title="Permanent link">&para;</a></h2>

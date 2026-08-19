@@ -1,0 +1,3613 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/manual/integration-events/">
+      
+      
+        <link rel="prev" href="../development-contracts/">
+      
+      
+        <link rel="next" href="../database-and-migrations/">
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>整合活动 - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              整合活动
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发手册
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    开发手册
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    手册索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    入门
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    查询系统
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API合约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    开发合同
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    整合活动
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    整合活动
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 传输配置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 消息和信封
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 消息和信封">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 消息类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 信封结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 主题目录
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 发布流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.消费流量和幂等性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.消费流量和幂等性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 收件箱（消费事件）表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-eventid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 eventId 的幂等性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 相关性/因果关系追踪
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 参考流程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 参考流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 贸易订单→商店→库存预订
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 订单取消→商店→库存释放
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 过期预订
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 结算分配过账
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 操作注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据库和迁移
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    提取服务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Runbooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WeChat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试策略
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统演练和测试接缝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    业务不变量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构测试映射
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    失效模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    发布验证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 传输配置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 消息和信封
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 消息和信封">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 消息类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 信封结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 主题目录
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 发布流程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.消费流量和幂等性
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.消费流量和幂等性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 收件箱（消费事件）表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-eventid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 eventId 的幂等性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 相关性/因果关系追踪
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 参考流程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 参考流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 贸易订单→商店→库存预订
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 订单取消→商店→库存释放
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 过期预订
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 结算分配过账
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 操作注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">集成事件（发件箱/收件箱模式）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>本项目中的模块（交易、店铺、库存、结算、钱包、支付）共用一个
+内核、一个 Doctrine EntityManager 和一个 Messenger 总线，但它们不得<strong>触及
+彼此的实体或存储库。跨模块通信是事件驱动的
+持久：模块通过</strong>发件箱<strong>发出<em>它拥有的事实，并</em>消耗*来自其他模块的事实
+通过 </strong>收件箱** 模块，通过 Symfony Messenger 连接。</p>
+<p>该模式可防止两种故障模式：</p>
+<ul>
+<li><strong>丢失事件</strong> — 事件被写入与业务<em>相同的数据库事务</em>中
+  更改（事务发件箱），因此即使进程在运行中终止，它也永远不会丢失。</li>
+<li><strong>重复交付</strong> — 消费者在<em>同一事务</em>中记录消费事件行
+  作为业务效果，以 <code>eventId</code> （幂等收件箱）为键。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌────────────┐  outbox table   ┌──────────────┐  Messenger "async"  ┌────────────┐  inbox (consumed event) ┌───────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Business   │  (persisted in  │ publish cmd  │  (Doctrine transport)│ worker     │  (persisted in same     │ Consumer  │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│ operation  │──&gt; same txn) ──&gt;│ app:*:outbox │────────────────────&gt;│ (handlers) └─&gt; transform as txn with  │  (module) │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ (module A) │                 │ :publish     │                    │ module B   │  the business effect)    │           │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└────────────┘                 └──────────────┘                    └────────────┘                          └───────────┘
+</code></pre></div>
+<ul>
+<li><strong>生产者端（发件箱）：</strong> <code>*OutboxService::record(topic, aggregateType, aggregateId, payload)</code>
+  将一行插入模块的 <code>*_outbox_message</code> 表中。发布命令
+  （<code>app:&lt;module&gt;:outbox:publish</code>，每个模块一个）轮询表、声明行、构建
+  一个信封，并将 Messenger 消息分派到 <code>async</code> 传输上。</li>
+<li><strong>消费者端（收件箱）：</strong> <code>#[AsMessageHandler]</code> 验证信封，检查
+  模块的 <code>*_consumed_event</code> 表用于 <code>eventId</code>，并且在一个数据库事务内
+  应用效果并记录消耗事件行。</li>
+</ul>
+<hr />
+<h2 id="1">1. 传输配置<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p><code>config/packages/messenger.yaml</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">framework</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">messenger</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nt">failure_transport</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">failed</span><span class="w">          </span><span class="c1"># dead-letter queue (doctrine://default?queue_name=failed)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nt">transports</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">            </span><span class="nt">async</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">                </span><span class="nt">dsn</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(MESSENGER_TRANSPORT_DSN)%'</span><span class="w">   </span><span class="c1"># default: doctrine://default?auto_setup=0</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">                </span><span class="nt">options</span><span class="p">:</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">                    </span><span class="nt">use_notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">                    </span><span class="nt">check_delayed_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60000</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">                </span><span class="nt">retry_strategy</span><span class="p">:</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">                    </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">                    </span><span class="nt">multiplier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">            </span><span class="nt">failed</span><span class="p">:</span><span class="w"> </span><span class="s">'doctrine://default?queue_name=failed'</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="nt">routing</span><span class="p">:</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCreatedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+</code></pre></div>
+<ul>
+<li>所有集成消息路由到单个 <code>async</code> 传输（一个 Doctrine 表
+  <code>messenger_messages</code>)，由 <code>worker</code> Compose 服务使用：
+  <code>messenger:consume async --time-limit=3600 --memory-limit=256M</code>。</li>
+<li>Messenger 应用自己的传输中重试（3 次重试，指数乘数 2）；
+  耗尽的消息将转到 <code>failed</code> 传输。</li>
+<li>发件箱在顶部添加了自己的<strong>声明/延迟层</strong>（请参阅
+  <a href="#3-publishing-flow">Publishing flow</a>) 所以同一个信封永远不会被交给
+  Messenger 两次，即使两个调度程序发生争用。</li>
+</ul>
+<h2 id="2">2. 消息和信封<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 消息类<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p>大多数模块消息都是单个 <code>array $envelope</code> 的瘦 <code>final readonly</code> 载体：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">final readonly class TradeOrderCreatedMessage</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    /** @param array&lt;string, mixed&gt; $envelope */</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    public function __construct(public array $envelope) {}</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>留言</th>
+<th>制作者</th>
+<th>消耗于</th>
+<th>信封型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>App\Trade\Message\TradeOrderCreatedMessage</code></td>
+<td>贸易发件箱</td>
+<td>商店</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Trade\Message\TradeOrderCancelledMessage</code></td>
+<td>贸易发件箱</td>
+<td>商店</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>、<code>StoreOrderRejectedMessage</code></td>
+<td>商店发件箱</td>
+<td>贸易</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationRequestedMessage</code></td>
+<td>商店发件箱</td>
+<td>库存</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationReleaseRequestedMessage</code></td>
+<td>商店发件箱</td>
+<td>库存</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationConfirmedMessage</code></td>
+<td>库存发件箱</td>
+<td>商店</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationRejectedMessage</code></td>
+<td>库存发件箱</td>
+<td>商店</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Inventory\Message\ReservationReleasedMessage</code></td>
+<td>库存发件箱</td>
+<td>商店</td>
+<td>✅ <code>envelope</code></td>
+</tr>
+<tr>
+<td><code>App\Settlement\Message\SettlementAllocationPostingMessage</code></td>
+<td>结算发件箱</td>
+<td>结算</td>
+<td>❌ 显式字段（<code>allocationUuid</code>、<code>planUuid</code>）</td>
+</tr>
+<tr>
+<td><code>App\Settlement\Message\SettlementFundingConfirmedMessage</code></td>
+<td>外部生产者（异步）</td>
+<td>结算</td>
+<td>❌ 显式字段</td>
+</tr>
+</tbody>
+</table>
+<p>位于 <strong>Target</strong> 模块命名空间中的 Store 消息类被导入到
+生产者命令；例如<code>StoreOrderAcceptedMessage</code>/<code>StoreOrderRejectedMessage</code> 是
+<code>App\Trade\Message\*</code> 类被 <code>App\Trade\MessageHandler\*</code> 使用，而
+<code>ReservationRequestedMessage</code>/<code>ReservationReleaseRequestedMessage</code> 是
+<code>App\Inventory\Message\*</code>被<code>App\Inventory\MessageHandler\*</code>消耗。</p>
+<h3 id="22">2.2 信封结构<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<p>发布命令从发件箱行组装版本化信封。贸易
+出版商展示了最完整的形状：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$envelope = [</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">    'eventId'       =&gt; $message-&gt;getEventId(),                       // UUID v4, unique</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    'type'          =&gt; str_replace('.v1', '', $message-&gt;getTopic()), // 'trade.order.created'</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    'version'       =&gt; 1,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    'occurredAt'    =&gt; $message-&gt;getOccurredAt()-&gt;format(DATE_ATOM), // ISO-8601</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">    'aggregateType' =&gt; 'trade_order',</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">    'aggregateId'   =&gt; $message-&gt;getAggregateId(),                   // source aggregate uuid</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">    'correlationId' =&gt; $message-&gt;getAggregateId(),                   // trace scope</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">    'causationId'   =&gt; null,                                         // parent event (none at source)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="x">    'payload'       =&gt; $message-&gt;getPayload(),</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="x">];</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>信封键</th>
+<th style="text-align: center;">贸易</th>
+<th style="text-align: center;">商店</th>
+<th style="text-align: center;">库存</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eventId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>UUID v4；收件箱的幂等键</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>不带 <code>.v1</code> 后缀的主题</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>occurredAt</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>源事实何时发生 (ISO-8601 ATOM)</td>
+</tr>
+<tr>
+<td><code>aggregateType</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>来源聚合种类</td>
+</tr>
+<tr>
+<td><code>aggregateId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>源聚合 uuid</td>
+</tr>
+<tr>
+<td><code>correlationId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>追踪范围（按 Trade 设置为订单 uuid）</td>
+</tr>
+<tr>
+<td><code>causationId</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>父事件 ID（源事件为空）</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td>业务数据（数组）</td>
+</tr>
+</tbody>
+</table>
+<p><code>aggregate_type</code>、<code>aggregate_id</code>、<code>payload</code>、<code>occurred_at</code>、<code>available_at</code>、<code>published_at</code>、
+<code>attempts</code> 和 <code>last_error</code> 也保留在发件箱表本身中。</p>
+<p>和解 <code>AllocationPostingMessage</code> 和 <code>SettlementFundingConfirmedMessage</code> 代替
+携带 <strong>显式标量字段</strong> 而不是信封（请参阅
+<a href="#44-settlement-allocation-posting">Settlement flow</a>）。</p>
+<h3 id="23">2.3 主题目录<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>主题（<code>.v1</code>后缀=版本）</th>
+<th>发射器外箱</th>
+<th>消费者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trade.order.created.v1</code></td>
+<td><code>trade_outbox_message</code></td>
+<td>商店 (<code>TradeOrderCreatedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>trade.order.cancelled.v1</code></td>
+<td><code>trade_outbox_message</code></td>
+<td>商店 (<code>TradeOrderCancelledHandler</code>)</td>
+</tr>
+<tr>
+<td><code>store.order.accepted.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>贸易 (<code>StoreOrderAcceptedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>store.order.rejected.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>贸易 (<code>StoreOrderRejectedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.requested.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>库存 (<code>ReservationRequestedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.release.requested.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>库存 (<code>ReservationReleaseRequestedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.confirmed.v1</code></td>
+<td><code>inventory_outbox_message</code></td>
+<td>商店 (<code>ReservationConfirmedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.rejected.v1</code></td>
+<td><code>inventory_outbox_message</code></td>
+<td>商店 (<code>ReservationRejectedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>inventory.reservation.released.v1</code></td>
+<td><code>inventory_outbox_message</code></td>
+<td>商店 (<code>ReservationReleasedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>settlement.allocation.post.requested.v1</code></td>
+<td><code>settlement_outbox_message</code></td>
+<td>结算 (<code>SettlementAllocationPostingHandler</code>)</td>
+</tr>
+<tr>
+<td><code>settlement.funding.confirmed.v1</code></td>
+<td>—（异步，外部）</td>
+<td>结算 (<code>SettlementFundingConfirmedHandler</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3">3. 发布流程<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>每个带有发件箱的模块都有一个 <code>Command/PublishOutboxCommand.php</code> 注册为
+<code>app:&lt;module&gt;:outbox:publish</code>。 <code>compose.yaml</code> 中的调度程序每隔
+<code>OUTBOX_PUBLISH_INTERVAL</code>（默认<code>5</code>）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">scheduler</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">extends</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">command</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/sh</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-ec</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="no">while :; do</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="no">php bin/console app:trade:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="no">php bin/console app:store:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="no">php bin/console app:inventory:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="no">php bin/console app:inventory:reservations:release-expired --no-interaction</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="no">php bin/console app:settlement:allocations:requeue-due --no-interaction</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="no">php bin/console app:settlement:outbox:publish --no-interaction</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="no">sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">      </span><span class="no">done</span>
+</code></pre></div>
+<p>三个标准步骤（与贸易、商店、库存、结算相同）：</p>
+<ol>
+<li><strong>选择</strong>早于其 <code>available_at</code> 的未发布行
+   （<code>findUnpublished()</code> — <code>published_at IS NULL AND available_at &lt;= now ORDER BY id ASC LIMIT 100</code>）。</li>
+<li><strong>Claim</strong> — <code>claim($id, now + 1 minute)</code> 运行一个原子
+   <code>UPDATE … SET available_at = :until WHERE id = :id AND published_at IS NULL AND available_at &lt;= now</code>
+   仅当更新一行时才返回 <code>true</code>。这是并发防护：
+   第二个刻度（或重新启动的调度程序）将跳过其他工作人员已声明的行。</li>
+<li><strong>调度</strong>匹配的总线消息。成功<code>markPublished()</code>邮票
+   <code>published_at</code>。关于任何<code>\Throwable</code>（或不受支持的主题）<code>defer($id, $error, now + 5 min)</code>
+   递增 <code>attempts</code>，存储 <code>last_error</code>，并将 <code>available_at</code> 推出，以便该行
+   可以稍后重试。最后 EntityManager 被刷新一次。</li>
+</ol>
+<p>Trade 的发布者还将主题列入白名单，并将其他任何内容视为不受支持的主题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">if (!in_array($message-&gt;getTopic(), ['trade.order.created.v1', 'trade.order.cancelled.v1'], true)) {</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">    $this-&gt;repository-&gt;defer($id, 'Unsupported Trade outbox topic: ' . $message-&gt;getTopic(), new \DateTimeImmutable('+5 minutes'));</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    continue;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">}</span>
+</code></pre></div>
+<p>Inventory 发布者是异常值：它选择 <strong>数组投影</strong>
+(<code>findUnpublishedForPublishing()</code>) 并标记通过直接发布/记录的尝试
+存储库更新而不是通过工作单元，因此它不会刷新实体状态。</p>
+<blockquote>
+<p><strong>交付保证与订购。</strong> 交付至少一次并在 1 分钟内重试
+索取租约和 5 分钟退让。尽最大努力在<code>id</code>之前按发件箱订购；消费者
+必须是顺序容忍的（它们保护工作流/状态 <code>can()</code>），这正是
+处理程序会这样做。</p>
+</blockquote>
+<h2 id="4">4.消费流量和幂等性<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41">4.1 收件箱（消费事件）表<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>表</th>
+<th>编号</th>
+<th>事件 ID</th>
+<th>有效负载跟踪列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>store_consumed_event</code></td>
+<td>大智</td>
+<td><code>VARCHAR(36)</code> 独特</td>
+<td><code>aggregate_id</code>、<code>payload_hash(64)</code></td>
+</tr>
+<tr>
+<td><code>inventory_consumed_event</code></td>
+<td>大智</td>
+<td><code>VARCHAR(36)</code> 独特</td>
+<td><code>aggregate_id</code>、<code>payload_hash(64)</code></td>
+</tr>
+<tr>
+<td><code>settlement_consumed_event</code></td>
+<td>INT</td>
+<td><code>VARCHAR(64)</code> 独特</td>
+<td><code>source_aggregate_type</code>、<code>source_aggregate_id</code>、<code>payload_hash(64)</code></td>
+</tr>
+</tbody>
+</table>
+<p>所有三个共享 <code>topic</code>、<code>processed_at</code> 和 <code>payload_hash</code>（JSON 编码的 SHA-256）
+信封）。 Trade 没有收件箱表：它的处理程序由工作流程的保护
+<code>can(transition)</code> 检查加上事务内的 store-uuid 快照匹配，因此
+重复的 <code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</code> 是无操作。</p>
+<h3 id="42-eventid">4.2 <code>eventId</code> 的幂等性<a class="headerlink" href="#42-eventid" title="Permanent link">&para;</a></h3>
+<p>规范的消费者形状 - 读取检查，然后在交易内重新检查，以及
+以原子方式写入消耗的行，效果如下：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">public function __invoke(TradeOrderCreatedMessage $message): void</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    $eventId = $message-&gt;envelope['eventId'] ?? null;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    $payload = $message-&gt;envelope['payload'] ?? null;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    // ...validate...</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="x">    if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="x">        return; // already processed</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="x">    }</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="x">    $this-&gt;entityManager-&gt;wrapInTransaction(function () use ($eventId, ...): void {</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="x">        if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="x">            return; // re-check under the transaction (closes the race window)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="x">        }</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="x">        $this-&gt;entityManager-&gt;persist(new StoreConsumedEvent(</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="x">            $eventId,</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="x">            'trade.order.created.v1',</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="x">            (string) ($payload['orderUuid'] ?? ''),</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="x">            hash('sha256', json_encode($message-&gt;envelope, JSON_THROW_ON_ERROR)),</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="x">        ));</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="x">        // ...apply the business effect...</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="x">    });</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="x">}</span>
+</code></pre></div>
+<p>库存进一步收紧。它的<code>isAlreadyConsumed()</code>比较存储的
+<code>payload_hash</code> 以及使用 <code>hash_equals</code> 到达的信封的哈希值；一个重复使用的
+<code>eventId</code> 具有 <strong>不同</strong> 有效负载会引发 <code>InventoryMessageIntegrityException</code>
+（“事件 ID 已与不同的有效负载一起重复使用”）。结算的<code>exists($eventId)</code>支票是
+更简单：重复使用的 id 会被默默地跳过。</p>
+<h3 id="43">4.3 验证<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<p>处理程序在接触数据库之前会防御性地验证其信封：</p>
+<ul>
+<li><code>type</code> / <code>version</code> 完全匹配（例如 <code>'inventory.reservation.released'</code> / <code>1</code>）。</li>
+<li>必需的键存在于正确的标量类型中（<code>eventId</code> 是
+  商店管理员；库存处理程序还要求它是格式正确的 UUID）。</li>
+<li>库存另外验证：<code>aggregateId === payload['reservationId']</code>，
+  每个 id 的 UUID 格式 <code>^[0-9a-f]{8}-…-[1-8]…-[89ab]…$</code>，ISO-8601 时间戳
+  （允许使用小数秒）、唯一的线路 ID 和数量字符串匹配
+  <code>^[0-9]+(?:\.[0-9]{1,6})?$</code>。</li>
+<li>相关性交叉检查（例如<code>ReservationReleaseRequestedHandler</code>验证
+  信封中的 <code>storeUuid</code> / <code>tradeOrderUuid</code> / <code>storeOrderUuid</code> 与存储的匹配
+  保留，否则会抛出<code>InventoryMessageIntegrityException</code>）。</li>
+<li>使重试无害的业务防护：仅限<code>ReservationConfirmedHandler</code>
+  接受仍为 <code>awaiting_inventory</code> 且其
+  <code>reservationId == payload['reservationId']</code>； <code>SettlementService::postAllocation()</code>
+  对于已经 <code>posted</code> / <code>cancelled</code> / <code>reversed</code> 分配提前返回。</li>
+</ul>
+<h2 id="5">5. 相关性/因果关系追踪<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>交易</strong> 分配 <code>correlationId = aggregateId</code> （交易订单 uuid）和
+  <code>causationId = null</code> 在每个出站信封上 — 整个订单传奇（订单创建 →
+  店铺受理→库存预约→取消）共享该关联范围。</li>
+<li><strong>结算</strong> 是唯一将跟踪保存到其域模型中的模块：
+  <code>SettlementFundingConfirmedMessage</code> 带有 <code>correlationId</code>/<code>causationId</code>，并且
+  <code>settlement_plan</code> 存储 <code>correlation_id</code> 和 <code>causation_id</code> 列。的
+  <code>SettlementFundingConfirmedHandler</code> 将它们复制到 <code>SettlementFunding</code> 合约中。</li>
+<li><strong>商店/库存</strong>信封不带有相关性/因果关系标头；血统是
+  根据有效负载相关键重建 - <code>orderUuid</code>、<code>storeUuid</code>、
+  <code>tradeOrderUuid</code>、<code>storeOrderUuid</code>、<code>reservationId</code> — 以及来自消费事件
+  <code>aggregate_id</code> 列。</li>
+</ul>
+<h2 id="6">6. 参考流程<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h3 id="61">6.1 贸易订单→商店→库存预订<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Trade OrderService::createOrder()
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  └─ (same txn) workflow store_submit
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  └─ (same txn) TRADE outbox += trade.order.created.v1
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        {orderUuid, store:{...}, customerUserUuid, currency, totalAmount(cents),
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>         items:[{lineId,catalogReference,quantity,unitPrice,lineAmount,snapshot}],
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>         delivery, placedAt}
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  └─ app:trade:outbox:publish → TradeOrderCreatedMessage → async
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        └─ Store TradeOrderCreatedHandler
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>              (txn) STORE inbox += {eventId, 'trade.order.created.v1', payload_hash}
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>              store inactive? → STORE outbox += store.order.rejected.v1 ('STORE_UNAVAILABLE')
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>              INVENTORY_ENABLED=0? → accept immediately
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>              else → STORE outbox += inventory.reservation.requested.v1
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>                     {reservationId (new UUID), storeUuid, tradeOrderUuid, storeOrderUuid,
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>                      items (quantity as 'N.000000'), expiresAt (+30 min), requestedAt}
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        └─ app:store:outbox:publish → ReservationRequestedMessage → async
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>              └─ Inventory ReservationRequestedHandler
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>                    (txn) INVENTORY inbox += inventory.reservation.requested.v1
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>                    InventoryService::reserve(): build Reservation(request_hash),
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>                      resolve recipes→materials, lock stocks FOR UPDATE,
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>                      on shortfall → reject('OUT_OF_STOCK'|'SPECIFICATION_NOT_STOCKABLE'|…)
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>                      → INVENTORY outbox += inventory.reservation.rejected.v1
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>                      else reserve stock + ledger, confirm()
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>                      → INVENTORY outbox += inventory.reservation.confirmed.v1
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>        └─ app:inventory:outbox:publish → ReservationConfirmed/Rejected → async
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>              └─ Store ReservationConfirmedHandler
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>                    (txn) STORE inbox += …confirmed; storeOrder accept(reservationId)
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>                 Store ReservationRejectedHandler
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>                    (txn) STORE inbox += …rejected; storeOrder reject(reasonCode, reason)
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>                    → STORE outbox += store.order.rejected.v1
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>        └─ app:store:outbox:publish → StoreOrderRejectedMessage → async
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>              └─ Trade StoreOrderRejectedHandler: workflow store_reject
+<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>              (StoreOrderAcceptedHandler symmetrically applies store_accept)
+</code></pre></div>
+<h3 id="62">6.2 订单取消→商店→库存释放<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>OrderWorkflowListener (workflow.order.transition 'cancel')
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  └─ (same txn) if order has _store metadata:
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        TRADE outbox += trade.order.cancelled.v1 {orderUuid, storeUuid, cancelledAt}
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  └─ app:trade:outbox:publish → TradeOrderCancelledMessage → async
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        └─ Store TradeOrderCancelledHandler
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>              (txn) STORE inbox += trade.order.cancelled.v1
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>              store order exists?  → cancel it; if reservation_id → STORE outbox +=
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>                  inventory.reservation.release.requested.v1 {reservationId, reason:'trade_order_cancelled', …}
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>              store order missing? → persist StoreTradeOrderCancellation (applied later
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                  when the order arrives; conflicting store_uuid throws LogicException)
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        └─ app:store:outbox:publish → ReservationReleaseRequestedMessage → async
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>              └─ Inventory ReservationReleaseRequestedHandler
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>                    (txn) INVENTORY inbox += inventory.reservation.release.requested.v1
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>                    correlation check vs reservation, then InventoryService::release()
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>                    → stock released + ledger, INVENTORY outbox += inventory.reservation.released.v1
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        └─ app:inventory:outbox:publish → ReservationReleasedMessage → async
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>              └─ Store ReservationReleasedHandler: inbox dedup only
+</code></pre></div>
+<h3 id="63">6.3 过期预订<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
+<p><code>app:inventory:reservations:release-expired</code> →
+<code>InventoryService::releaseExpiredReservations()</code> 查找过去的 <code>confirmed</code> 预订
+<code>expires_at</code> 并以原因 <code>reservation expired</code> 释放它们，从而重新进入
+上面的标准 <code>inventory.reservation.released.v1</code> 发件箱流程。</p>
+<h3 id="64">6.4 结算分配过账<a class="headerlink" href="#64" title="Permanent link">&para;</a></h3>
+<p>结算是一个<strong>收件箱优先</strong>模块：资金确认从外部到达
+显式字段消息。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>external producer → SettlementFundingConfirmedMessage → async
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  └─ SettlementFundingConfirmedHandler
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        dedup exists(eventId)
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        (txn) SettlementService::createPlanFromFunding()
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            build SettlementPlan + SettlementAllocation rows (brick/math BigInteger totals)
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            SETTLEMENT outbox += settlement.allocation.post.requested.v1
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>                {allocationUuid, planUuid}  (one per allocation, same txn)
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            persist SettlementConsumedEvent(eventId, 'settlement.funding.confirmed.v1',
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>                source_aggregate_type=sourceType, source_aggregate_id=sourceId, payload_hash)
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  └─ app:settlement:outbox:publish → SettlementAllocationPostingMessage(allocationUuid, planUuid) → async
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        └─ SettlementAllocationPostingHandler → postAllocation($allocationUuid)
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>              mark posting_requested (flush first: durable idempotency claim)
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>              voucherPort-&gt;post() with posting_idempotency_key
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>                  ('settlement-credit:&lt;planUuid&gt;:&lt;allocationKey&gt;')
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>              success → markPosted(reference) | retryable → markRetryableFailure(next +60s)
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>                        | fatal → markFailed
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>              reconcilePlanState()
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>  └─ app:settlement:allocations:requeue-due
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>        findRetryableDue() (status=retryable_failure AND next_attempt_at &lt;= now)
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>        claimRetryDue() (status→planned, next_attempt_at→NULL)
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>        Record settlement.allocation.post.requested.v1 again → repeats the posting loop
+</code></pre></div>
+<p>结算重试循环使用的状态：分配<code>planned → posting_requested →
+posted</code>（终端<code>cancelled</code>/<code>failed</code>/<code>reversed</code>/<code>reversal_pending</code>），
+<code>retryable_failure</code>喂养<code>requeue-due</code>。在测试装置中，凭证边界是
+<code>InMemorySettlementVoucherPort</code>。</p>
+<h2 id="7">7. 操作注意事项<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>死信</strong>在<code>failed</code>传输上累积（<code>messenger_messages</code>与
+  <code>queue_name = 'failed'</code>);发件箱行未发布，因此可以手动
+  重新排队或修复。</li>
+<li><strong>卡住的行</strong>显示为带有非空 <code>last_error</code> 的 <code>published_at IS NULL</code>；他们是
+  在 <code>available_at</code> 通过后自动重新尝试。</li>
+<li><strong>比赛安全</strong>依赖于有条件的索赔更新（<code>published_at IS NULL AND
+  available_at &lt;= now</code>），加上每个发件箱上的索引<code>(published_at, available_at)</code>
+  表（库存附加<code>id</code>）。</li>
+<li><code>INVENTORY_ENABLED</code>环境切换决定商店是否跳过库存
+  完全并立即接受订单，或等待 <code>inventory.reservation.confirmed.v1</code>。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../javascripts/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>
