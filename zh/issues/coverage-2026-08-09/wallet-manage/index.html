@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2697,7 +2697,7 @@
 <li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:69</code>（createAction）和<code>:110</code>（depositAction）</li>
 <li>描述：<code>$status = str_ends_with($e-&gt;getMessage(), 'not found') ? 404 : 500;</code> — 404-vs-500 决定是通过嗅探异常<em>消息</em>来做出的。任何消息恰好以 <code>not found</code> 结尾的 <code>RuntimeException</code> 都会被报告为 404 客户端错误，甚至是真正的服务器故障（例如以 <code>... not found</code> 结尾的 DBAL/SQL 消息，或从不受信任的输入构建的消息）。</li>
 <li>影响：服务器端故障被屏蔽为 404（误导客户端、日志和监控；通常不会重试 4xx 响应），并且映射无法区分真正的“未找到钱包”与任何其他运行时故障。</li>
-<li>再现：服务抛出 <code>new \RuntimeException('Connection refused: schema not found')</code> → 端点返回 404 而不是 500。</li>
+<li>重现：服务抛出 <code>new \RuntimeException('Connection refused: schema not found')</code> → 端点返回 404 而不是 500。</li>
 <li>建议的修复：针对 <code>TransferService</code> 中未找到的情况引入专用域异常（例如 <code>WalletNotFoundException</code>），并从异常类型映射 404；让所有其他 <code>RuntimeException</code> 降到 500。</li>
 </ul>
 <h3 id="bug-3-empty-amount-0">BUG-3 — <code>empty()</code> 将 <code>amount = 0</code> 视为“缺失”，返回错误的验证消息（低）<a class="headerlink" href="#bug-3-empty-amount-0" title="Permanent link">&para;</a></h3>
@@ -2728,7 +2728,7 @@
 </ul>
 <h2 id="4">4. 注释<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>database is locked</code> /瞬态数据库错误是已记录的共享<code>var/test.db</code>问题；重试时，完整的 <code>tests/Wallet</code> 运行是干净的。这两个新的测试文件是纯单元测试（无数据库）。</li>
+<li><code>database is locked</code> /暂时性数据库错误是已记录的共享<code>var/test.db</code>问题；重试时，完整的 <code>tests/Wallet</code> 运行是干净的。这两个新的测试文件是纯单元测试（无数据库）。</li>
 <li>新的单元测试使用 <code>new \ReflectionProperty(...)-&gt;setValue(...)</code>，而不使用已弃用的 <code>ReflectionProperty::setAccessible()</code>（PHP 8.5 要求）；他们在 <code>phpunit.dist.xml</code> 下产生零弃用/通知/警告。</li>
 <li>没有更改 <code>src/</code> 文件。跳过的3个测试记录了BUG-3（创建+存款）和BUG-4；套房保持绿色。</li>
 </ul>

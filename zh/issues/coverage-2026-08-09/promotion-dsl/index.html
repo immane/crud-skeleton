@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2711,7 +2711,7 @@
 <li><strong>文件/行：</strong> <code>src/Promotion/Service/Dsl/Parser.php</code> — <code>parseLogicBlock()</code> 循环，第 148-171 行（块持续消耗直到 <em>section</em> 关键字）。</li>
 <li><strong>说明：</strong> 一旦进入逻辑块，后面的所有条件行都会被吸收到其中，因此混合表达式 <code>(a OR b) AND c</code> 会解析为 <code>a OR b OR c</code>。该语法无法表达逻辑块后面的条件。</li>
 <li><strong>影响：</strong> 误报匹配。旨在要求 <code>(cart &gt;= 1000 OR cart &lt;= 10) AND cart == 500</code> 在单独 <code>cart == 500</code> 时匹配的促销，因为 <code>== 500</code> 条件会泄漏到 <code>OR</code> 中。</li>
-<li><strong>复制：</strong> DSL <code>when:\n  or:\n    cart.subtotal &gt;= 1000\n    cart.subtotal &lt;= 10\n  cart.subtotal == 500</code> 和 <code>cart.subtotal = 500</code> 评估 <strong>true</strong> （预期：false）。由 <code>ParserBugReproTest::testOrBlockAbsorbsSiblingCondition*</code> 守护。</li>
+<li><strong>复制：</strong> DSL <code>when:\n  or:\n    cart.subtotal &gt;= 1000\n    cart.subtotal &lt;= 10\n  cart.subtotal == 500</code> 与 <code>cart.subtotal = 500</code> 评估 <strong>true</strong> （预期：false）。由 <code>ParserBugReproTest::testOrBlockAbsorbsSiblingCondition*</code> 守护。</li>
 <li><strong>建议的修复：</strong> 在第一个非缩进（顶级）条件上终止逻辑块，或需要显式块分隔符；例如跟踪标记中的缩进，因此当同级条件从父级缩进开始时 <code>parseLogicBlock()</code> 会停止。</li>
 </ul>
 <h3 id="bug-3-low">Bug 3 (LOW) — 带有尾随点的路径的误导性错误<a class="headerlink" href="#bug-3-low" title="Permanent link">&para;</a></h3>
@@ -2742,7 +2742,7 @@
 <ul>
 <li><strong>文件/行：</strong> <code>src/Promotion/Service/Dsl/Parser.php:37-39</code> 允许重复 <code>when:</code> 部分； <code>src/Promotion/Service/PromotionService.php:150-158</code> (<code>findWhenNode()</code>) 仅返回<strong>第一个</strong>； <code>src/Promotion/Service/PromotionTemplateService.php:81-92</code> (<code>simulate()</code>) 仅报告<strong>最后</strong>。</li>
 <li><strong>描述：</strong> 有两个 <code>when:</code> 块，实际评估仅强制执行第一个，而 <code>simulate()</code> 仅显示最后一个。没有错误，也没有两者的结合。</li>
-<li><strong>影响：</strong>第一个 <code>when:</code> 之后写入的条件在生产中会被默默忽略，从而更改促销实际匹配的内容。</li>
+<li><strong>影响：</strong>第一个 <code>when:</code> 之后写入的条件在生产中会被默默忽略，从而改变促销实际匹配的内容。</li>
 <li><strong>复制：</strong> <code>ParserBugReproTest::testParserAllowsMultipleWhenSections</code> 显示两个在解析中幸存下来的 <code>when</code> 节点。</li>
 <li><strong>建议的修复：</strong> 在解析时拒绝第二个 <code>when:</code> 部分，或者使两个 <code>findWhenNode()</code>/<code>simulate()</code> 遵循所有 <code>when:</code> 节点（并将它们放在一起）。</li>
 </ul>

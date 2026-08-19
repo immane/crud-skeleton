@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2564,7 +2564,7 @@
 <p>范围：<code>tests/Integration/</code>（仅限根级别，20 个文件，158 次测试 ≈ 51s 套件的 13s）。
 只读审核 — 没有修改 <code>src/</code> 或 <code>tests/</code> 文件。仅创建了此报告。
 分类：A=保留，B=删除候选（1 覆盖范围追踪，2 重复，3 实施细节，
-4 个冗余回归，5 个近乎空），C=合并建议。
+4 个冗余回归，5 个近空），C=合并建议。
 交叉引用引用覆盖测试（文件::方法）。跳过记录已知错误的测试将被保留。</p>
 </blockquote>
 <h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -2679,7 +2679,7 @@
 </tr>
 </tbody>
 </table>
-<p>跳过的（已记录的错误）在整个过程中算作“保留”：CoreDynamicQueryApiTest（跳过了 5 个：BUG-1/2/3/4），
+<p>跳过的（已记录的错误）在整个过程中都算作“保留”：CoreDynamicQueryApiTest（跳过了 5 个：BUG-1/2/3/4），
 CoreOpenApiEnricherApiTest::testStoreOrderEndpointsShouldBeTaggedStore (BUG-7)，
 CoreSystemEndpointsApiTest::testMissingEntityShouldReturn404Json (BUG-5)，
 StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGraceively（保留前发布 TODO）。</p>
@@ -2691,7 +2691,7 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGraceively�
   仅批准的评论，评论作者自动记录/状态被忽略，跨用户404）。应用程序评论
   集群与 <code>tests/Common/Integration/CommentApiExtraTest.php::testCommentCreateAndList</code> 中的一个冒烟测试重叠，
   但 AppApiRegressionTest 版本是一个超集 - 保留它。</li>
-<li><strong>CommonModulesApiRegressionTest</strong> (17)：规范管理 CRUD + 验证 + 批量创建六个
+<li><strong>CommonModulesApiRegressionTest</strong> (17)：规范管理-CRUD + 验证 + 批量创建六个
   通用模块。 <code>testMissingEntityAcrossAllModules</code>（第274行）是唯一的manage-GET/DELETE-404覆盖范围
   对于标签/媒体/页面/评论/设置 - 保留。</li>
 <li><strong>ContentRepositoryIntegrationTest</strong> (2): <code>testFindLatestReturnsNewestFirstAndRespectsLimit</code> 是唯一的
@@ -2785,7 +2785,7 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGraceively�
 <td>PaymentTradeIntegrationTest::testRefundFlowRefundsOrderAndReturnsMoney（相同的旅程 + 资金移动断言；仅付款方式不同：模拟 autoPaid 与钱包）</td>
 </tr>
 <tr>
-<td>TokenReservationIntegrationTest::testRefreshTokenIsRevokedAfterLogout</td>
+<td>TokenReplicationIntegrationTest::testRefreshTokenIsRevokedAfterLogout</td>
 <td>2（重复）— 注销然后使用已撤销的刷新令牌进行刷新 → 401</td>
 <td>高</td>
 <td>测试/身份/集成/AuthIntegrationTest :: testFullAuthFlow（步骤5-6：注销204→刷新401）</td>

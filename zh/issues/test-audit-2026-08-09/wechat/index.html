@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2667,9 +2667,9 @@
 <li><strong><code>Service/WechatAuthServiceTest.php</code></strong> — 两个提供商和两个 <code>bindPhone</code> 结果的现有/新用户路径；完全覆盖 <code>WechatAuthService</code>，并且在活动前已经 100%（这里没有覆盖范围流失）。</li>
 <li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>、<code>getPhoneNumber</code>、<code>getOAuthUser</code>成功/错误/空配置文件分支、<code>getOAuthRedirectUrl</code>（appid +范围）、小型应用程序/官方应用程序的延迟缓存。</li>
 <li><strong><code>Service/WechatServiceCoverageTest.php</code></strong> — 四个 <code>getPayApp()</code> 配置分支测试（平台证书/pub-key/两者/两者都不是；<code>WechatService.php:84-89</code>）是这些配置分支的<strong>唯一</strong>覆盖范围并断言真正的 EasyWeChat 配置密钥。</li>
-<li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — 本机/jsapi 成功、描述/<code>'Payment'</code> 后备、退款状态计算（成功全部/部分与待定）、所有三个 <code>notify()</code> 错误/成功路径以及 <code>getNotifySuccessResponse</code> 后备主体。</li>
+<li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — 本机/jsapi 成功、描述/<code>'Payment'</code> 后备、退款状态计算（成功全部/部分与待定）、所有三个 <code>notify()</code> 错误/成功路径以及 <code>getNotifySuccessResponse</code> 后备正文。</li>
 <li><strong><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></strong> — <code>testPayNativeClientWithoutPostJsonSupportThrows</code> 和 <code>testPayNativeClientReturningInvalidResponseThrows</code> 是 <code>postJson()</code> 防御分支 (<code>WechatPayGateway.php:199,204</code>) 的唯一覆盖范围。</li>
-<li><strong><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></strong> — 保留。跳过记录 Bug 1 的回归（notify 永远不会将请求传播到 EasyWeChat；<code>serve()</code> 读取空请求）。根据说明，跳过记录错误的测试将被保留。</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></strong> — 保留。跳过记录 Bug 1 的回归（notify 永远不会将请求传播到 EasyWeChat；<code>serve()</code> 读取空请求）。根据说明，跳过的记录错误的测试将被保留。</li>
 <li><strong><code>Controller/LoginControllerCoverageTest.php</code></strong> — 所有 3 个测试都是 <code>miniappPhone</code> 成功 (204)、<code>bindPhone</code> 错误 → 400 和 <code>oauthCallback</code> RuntimeException → 401 的唯一覆盖范围。保留内容（请参阅合并）。</li>
 </ul>
 <h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>

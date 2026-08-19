@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2572,7 +2572,7 @@
   <a href="#bug-c-otpservicemaskphone" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug C — OtpService::maskPhone() 泄露日志中的短电话号码
+        Bug C — OtpService::maskPhone() 在日志中泄露短电话号码
       
     </span>
   </a>
@@ -2787,10 +2787,10 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 <li><strong>建议的修复：</strong> 当 <code>findByPhone()</code> 没有为 <code>verify_phone</code> 生成用户时，返回 <code>404</code>/<code>401</code>，或者记录响应故意不透明（反用户枚举），并为未知电话返回中性消息，同时仅针对已知电话保留。请注意，当前行为是<em>可观察的</em>（它永远不会透露用户是否存在），因此如果这是意图，它至少应该与 <code>login</code> 目的一致。</li>
 <li><strong>测试：</strong> <code>OtpControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> 和 <code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> <strong>描述</strong>当前行为（它们通过）并在报告中将其固定下来。</li>
 </ul>
-<h3 id="bug-c-otpservicemaskphone">Bug C — <code>OtpService::maskPhone()</code> 泄露日志中的短电话号码<a class="headerlink" href="#bug-c-otpservicemaskphone" title="Permanent link">&para;</a></h3>
+<h3 id="bug-c-otpservicemaskphone">Bug C — <code>OtpService::maskPhone()</code> 在日志中泄露短电话号码<a class="headerlink" href="#bug-c-otpservicemaskphone" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>OtpService.php</code> 109–116 (<code>maskPhone</code>)。</li>
-<li><strong>描述：</strong> 对于任何长度超过 4 个字符的电话，<code>maskPhone()</code> 返回 <code>mb_substr($phone, 0, 3) . '****' . mb_substr($phone, -4)</code>。对于长度为 5-7 的电话，两个子字符串<strong>覆盖每个数字</strong>（例如 <code>'12345'</code> → <code>'123****2345'</code>），因此“屏蔽”值是插入星号的完整数字。</li>
+<li><strong>说明：</strong> 对于任何长度超过 4 个字符的电话，<code>maskPhone()</code> 返回 <code>mb_substr($phone, 0, 3) . '****' . mb_substr($phone, -4)</code>。对于长度为 5-7 的电话，两个子字符串<strong>覆盖每个数字</strong>（例如 <code>'12345'</code> → <code>'123****2345'</code>），因此“屏蔽”值是插入星号的完整数字。</li>
 <li><strong>影响：</strong> 对于短电话号码（5-7 位数字 — 例如传统/短国家/地区号码），OTP 日志行 <code>[OTP] Sent … phone=…</code> 会将完整号码公开给具有日志访问权限的任何人。对于典型的 E.164 11-14 位数字，当前掩码很好 (<code>+86****5678</code>)。</li>
 <li><strong>复制：</strong> 使用记录器调用<code>generateAndSend('12345', …)</code>；日志上下文 <code>phone</code> 是 <code>'123****2345'</code>（所有五个数字都存在）。</li>
 <li><strong>建议的修复：</strong> 通过前 N 个和最后 N 个带有尺寸保护的掩模，例如当 <code>strlen &lt; 8</code> 时隐藏除第一个/最后两个字符之外的所有字符，或者重复使用像 <code>substr($phone,0,2).'****'.substr($phone,-2)</code> 这样的常量掩码，并另外确保至少一个掩码中间字符。</li>
