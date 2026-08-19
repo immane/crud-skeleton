@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -1460,7 +1460,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1584,10 +1584,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -1595,10 +1595,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -1991,27 +1991,27 @@
 </tr>
 </tbody>
 </table>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<h2 id="_2">合并建议<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>TieredStrategyTest</strong> — convert the six overlapping tier cases into one table-driven test (all-match / none-match / partial-match / from-vs-less precedence / clamp / defaults), per TEST_STRATEGY's "prefer table-driven tests for a rule with many equivalent inputs". This would absorb candidates rows 18–19.</li>
-<li><strong>Strategy fallback pairs</strong> — <code>DiscountStrategyTest::testApplyWithMissingConfigRate</code> + <code>testApplyWithNonNumericRateDefaultsToZeroRate</code>, and <code>FullReductionStrategyTest::testApplyWithMissingConfigRef</code> + <code>testApplyWithNonNumericString</code>, are table rows of the same <code>resolveValue()</code> fallback-to-0 rule; table-drive them.</li>
-<li><strong>PromotionServiceTest time-window quartet</strong> — <code>testGetAvailableFiltersByStartTime</code>, <code>testGetAvailableFiltersByEndTime</code>, <code>testGetAvailablePromotionWithinTimeRange</code>, <code>testGetAvailableWithoutStartAndEndTime</code> are four rows of one filter rule; table-drive.</li>
-<li><strong>PromotionServiceTest apply no-action trio</strong> — <code>testApplyWithNoTemplate</code>, <code>testApplyWithNoAstCache</code>, <code>testApplyWithEmptyDoChildren</code>/<code>testApplyWithNoDoNode</code> are three early-return branches; merge the null-template pair (candidate) and the no-action pair into one parameterised test.</li>
-<li><strong>PromotionTemplateServiceTest simulate envelope trio</strong> — <code>testSimulateReturnsStructure</code>, <code>testSimulatePassesSampleContext</code>, <code>testSimulateWithEmptyContext</code> assert one no-<code>when</code> simulate path; merge into a single shape/passthrough test.</li>
-<li><strong>PromotionTemplateServiceTest parseDsl per-type smoke tests</strong> — <code>testParseDslFullReduction</code>, <code>testParseDslDiscountWithPercent</code>, <code>testParseDslTieredType</code>, <code>testParseDslNthDiscountType</code>, <code>testParseDslMemberDiscountType</code> are a table of wrapper-level round-trips (the per-type grammar is already covered by ParserTest); table-drive.</li>
-<li><strong>Manage controller whitelist tests</strong> — <code>Manage/PromotionControllerTest</code> and <code>Manage/PromotionTemplateControllerTest</code>'s reflection-based property assertions duplicate structurally. Replace with HTTP create/update integration tests that assert whitelist enforcement (field accepted / rejected), consistent with TEST_STRATEGY's API-layer rule and with the validate/dry-run action tests that already exist.</li>
-<li><strong>Best-price coverage</strong> — <code>PromotionCalculatorCoverageTest::testBestPricePromotionSkippedDuringStandardScan</code> / <code>::testBestPriceCandidateScanSkipsNonBestPricePromotions</code> overlap the pipeline-level best-price scenarios in <code>PromotionPricingPipelineIntegrationTest</code>. Keep both today (unit isolation vs E2E proof), but if the integration suite is judged sufficient, the two unit tests can be dropped together.</li>
+<li><strong>TieredStrategyTest</strong> — 根据 TEST_STRATEGY 的“对于具有许多等效输入的规则，首选表驱动测试”，将六个重叠层案例转换为一个表驱动测试（全匹配/不匹配/部分匹配/来自-与-较少优先级/钳位/默认）。这将吸收第 18-19 行的候选者。</li>
+<li><strong>策略回退对</strong> — <code>DiscountStrategyTest::testApplyWithMissingConfigRate</code> + <code>testApplyWithNonNumericRateDefaultsToZeroRate</code> 和 <code>FullReductionStrategyTest::testApplyWithMissingConfigRef</code> + <code>testApplyWithNonNumericString</code> 是同一 <code>resolveValue()</code> 回退到 0 规则的表行；表驱动它们。</li>
+<li><strong>PromotionServiceTest 时间窗口四重奏</strong> — <code>testGetAvailableFiltersByStartTime</code>、<code>testGetAvailableFiltersByEndTime</code>、<code>testGetAvailablePromotionWithinTimeRange</code>、<code>testGetAvailableWithoutStartAndEndTime</code> 是一条过滤规则的四行；工作台驱动。</li>
+<li><strong>PromotionServiceTest 应用无操作三重奏</strong> — <code>testApplyWithNoTemplate</code>、<code>testApplyWithNoAstCache</code>、<code>testApplyWithEmptyDoChildren</code>/<code>testApplyWithNoDoNode</code> 是三个早期返回分支；将空模板对（候选）和无操作对合并到一个参数化测试中。</li>
+<li><strong>PromotionTemplateServiceTest 模拟信封三重奏</strong> — <code>testSimulateReturnsStructure</code>、<code>testSimulatePassesSampleContext</code>、<code>testSimulateWithEmptyContext</code> 断言一个无 <code>when</code> 模拟路径；合并为单个形状/直通测试。</li>
+<li><strong>PromotionTemplateServiceTest parseDsl 每个类型冒烟测试</strong> — <code>testParseDslFullReduction</code>、<code>testParseDslDiscountWithPercent</code>、<code>testParseDslTieredType</code>、<code>testParseDslNthDiscountType</code>、<code>testParseDslMemberDiscountType</code> 是包装器级往返表（每个类型语法已被 ParserTest 覆盖）；工作台驱动。</li>
+<li><strong>管理控制器白名单测试</strong> - <code>Manage/PromotionControllerTest</code> 和 <code>Manage/PromotionTemplateControllerTest</code> 的基于反射的属性断言在结构上重复。替换为断言白名单强制执行（字段接受/拒绝）的 HTTP 创建/更新集成测试，与 TEST_STRATEGY 的 API 层规则以及已存在的验证/空运行操作测试一致。</li>
+<li><strong>最佳价格覆盖范围</strong> - <code>PromotionCalculatorCoverageTest::testBestPricePromotionSkippedDuringStandardScan</code> / <code>::testBestPriceCandidateScanSkipsNonBestPricePromotions</code> 与 <code>PromotionPricingPipelineIntegrationTest</code> 中的管道级最佳价格场景重叠。今天保留两者（单元隔离与 E2E 证明），但如果认为集成套件足够，则可以将这两个单元测试一起删除。</li>
 </ol>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<h2 id="_3">验证步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Confirm the module suite size and that it is green before any change:
-   <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Promotion</code> (expect 360 tests).</li>
-<li>For the <strong>HIGH-confidence</strong> candidates only (8 tests: 6 ParserCoverageTest dead-branch tests, <code>ParserCoverageTest::testLexerRoundTripItemsNumericRate</code>, <code>PromotionServiceTest::testApplyWithNullTemplateDoesNothing</code>), delete them, then re-run <code>tests/Promotion</code> plus the full suite — must stay green with zero failures/skips changes.</li>
-<li>Cross-check each ParserCoverageTest removal against <code>docs/issues/coverage-2026-08-09/promotion-dsl.md</code> Bug 7 (EOL-skip branches documented as dead for lexer output) and Bug 4/5/6 (other ParserCoverageTest cases) to confirm the retained error-path tests still pin the reachable grammar errors.</li>
-<li>Re-run the quality gates from TEST_STRATEGY after any deletion:
-   <code>composer phpstan</code> and <code>composer rector:types:check</code>.</li>
-<li>Re-check the 90% line-coverage gate: the removed HIGH-confidence tests only touched lines the campaign already documents as unreachable defensive code, so coverage should not regress below the gate; if it does, keep the tests rather than lowering the threshold.</li>
-<li>Record any accepted deletions in <code>TEST_MATRIX.md</code> / this audit as the module's retained evidence set (per the matrix-maintenance rule).</li>
+<li>确认模块套件大小并且在进行任何更改之前它是绿色的：
+   <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Promotion</code>（预计 360 次测试）。</li>
+<li>仅对于 <strong>高置信度</strong> 候选者（8 个测试：6 个 ParserCoverageTest 死分支测试，<code>ParserCoverageTest::testLexerRoundTripItemsNumericRate</code>、<code>PromotionServiceTest::testApplyWithNullTemplateDoesNothing</code>），删除它们，然后重新运行 <code>tests/Promotion</code> 以及完整套件 — 必须保持绿色，零失败/跳过更改。</li>
+<li>针对 <code>docs/issues/coverage-2026-08-09/promotion-dsl.md</code> Bug 7（EOL-skip 分支记录为词法分析器输出已死）和 Bug 4/5/6（其他 ParserCoverageTest 案例）交叉检查每个 ParserCoverageTest 删除，以确认保留的错误路径测试仍然固定可到达的语法错误。</li>
+<li>删除后从 TEST_STRATEGY 重新运行质量门：
+   <code>composer phpstan</code> 和 <code>composer rector:types:check</code>。</li>
+<li>重新检查 90% 线路覆盖率门：删除的高置信度测试仅触及活动已记录为无法访问的防御代码的线路，因此覆盖率不应低于门限；如果确实如此，请保留测试而不是降低阈值。</li>
+<li>将任何已接受的删除记录在<code>TEST_MATRIX.md</code>/本次审计中，作为模块保留的证据集（根据矩阵维护规则）。</li>
 </ol>
 
 

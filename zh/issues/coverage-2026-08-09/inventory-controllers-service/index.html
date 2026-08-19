@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -1460,7 +1460,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1601,22 +1601,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bugs-found" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bugs found
+        发现错误
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Bugs found">
+    <nav class="md-nav" aria-label="发现错误">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-quantitymultiply-contains-unreachable-padding-code-low-dead-code" class="md-nav__link">
+  <a href="#bug-1-quantitymultiply" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 1 — Quantity::multiply() contains unreachable padding code (LOW / dead code)
+        Bug 1 — Quantity::multiply() 包含无法访问的填充代码（低/死代码）
       
     </span>
   </a>
@@ -1624,10 +1624,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-inventoryservicereserve-idempotency-hash-is-timezone-sensitive-medium" class="md-nav__link">
+  <a href="#bug-2-inventoryservicereserve" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 2 — InventoryService::reserve() idempotency hash is timezone-sensitive (MEDIUM)
+        Bug 2 — InventoryService::reserve() 幂等性哈希对时区敏感（中）
       
     </span>
   </a>
@@ -1635,10 +1635,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-stockcontroller-injects-a-service-it-never-uses-low-dead-dependency" class="md-nav__link">
+  <a href="#bug-3-stockcontroller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 3 — StockController injects a service it never uses (LOW / dead dependency)
+        Bug 3 — StockController 注入一个它从不使用的服务（低/死依赖）
       
     </span>
   </a>
@@ -1646,10 +1646,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-inventoryservicerelease-partially-mutates-the-reservation-in-memory-before-failing-low-robustness" class="md-nav__link">
+  <a href="#bug-4-inventoryservicerelease" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 4 — InventoryService::release() partially mutates the reservation in memory before failing (LOW / robustness)
+        Bug 4 — InventoryService::release() 在失败之前部分改变内存中的预留（低/稳健性）
       
     </span>
   </a>
@@ -1662,10 +1662,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#skipped-tests" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Skipped tests
+        跳过测试
       
     </span>
   </a>
@@ -1673,10 +1673,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注释
+        Notes
       
     </span>
   </a>
@@ -1766,9 +1766,9 @@
 </tbody>
 </table>
 <p>控制器单元测试遵循现有的 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 模式：模拟协作者、<code>#[AllowMockObjectsWithoutExpectations]</code> 和 <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> 注入。数据库测试重用<code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>。任何地方都没有使用 <code>ReflectionProperty::setAccessible()</code>。</p>
-<p>对于 <code>RecipeController</code> 上的三个单行创建挂钩（第 35/44/49 行的 <code>defaultCreateValues</code>、<code>processCreateContent</code>、<code>afterCreated</code>），测试通过 <code>ReflectionMethod::invoke()</code> 调用它们（没有 <code>setAccessible()</code>，它在 PHP 8.5 中已弃用）。这些钩子只能通过 <code>UpdateApiViewMixin</code> 的创建模式 (<code>@mode=mixed</code>) 路径访问，该路径不是由该控制器自己的 <code>createAction</code> 连接的；直接调用是在不修改 <code>src/</code> 的情况下执行它们的唯一方法。</p>
+<p>对于 <code>RecipeController</code> 上的三个单行创建挂钩（第 35/44/49 行的 <code>defaultCreateValues</code>、<code>processCreateContent</code>、<code>afterCreated</code>），测试通过 <code>ReflectionMethod::invoke()</code> 调用它们（没有 <code>setAccessible()</code>，它在 PHP 8.5 中已弃用）。这些挂钩只能通过 <code>UpdateApiViewMixin</code> 的创建模式 (<code>@mode=mixed</code>) 路径访问，该路径不是由该控制器自己的 <code>createAction</code> 连接的；直接调用是在不修改 <code>src/</code> 的情况下执行它们的唯一方法。</p>
 <h2 id="_3">覆盖结果<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>来自 <code>var/uncovered-map.txt</code> 的基线（2026-08-09 生成）。通过运行带有 <code>XDEBUG_MODE=coverage</code> 的组合 Inventory 套件并从 Clover 报告中区分 <code>count="0"</code> 语句行来验证后值：</p>
+<p>来自 <code>var/uncovered-map.txt</code> 的基线（2026-08-09 生成）。通过使用 <code>XDEBUG_MODE=coverage</code> 运行组合的 Inventory 套件并从 Clover 报告中区分 <code>count="0"</code> 语句行来验证后值：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Inventory/** --coverage-clover /tmp/inv-final.xml
 </code></pre></div>
 <table>
@@ -1847,45 +1847,45 @@
 <p><strong><code>StockControllerTest</code></strong> — <code>detailAction</code> 成功 + 404、<code>adjustAction</code> 有效负载验证 (44)、成功 (57) 和 <code>catch</code> (58/59)、<code>policyAction</code> 验证 (68)、成功和 <code>catch</code> (77)。</p>
 <p><strong><code>QuantityCoverageTest</code></strong> — <strong>14</strong>（格式错误的十进制字符串，包括 7 位小数输入、指数、空）和 <strong>26</strong>（带有零/负数的 <code>positive=true</code>）。小产品 <code>multiply</code> 案例（<code>0.000000</code>、<code>0.000001 × n</code>）记录了填充区域。</p>
 <p><strong><code>InventoryEntityCoverageTest</code></strong> — <code>InventoryReservation::getId()</code> (91)、<code>InventoryStock::setAllowNegativeStock(false)</code> 可用余额为负 (91)、<code>Material</code> 设置器拒绝空白代码/名称/单位 (190)。</p>
-<p><strong><code>PublishOutboxCommandTest</code></strong> — <strong>32</strong> (claim returns false → <code>continue</code>), plus the confirmed/rejected/released dispatch successes, the unsupported-topic deferral, and the transport-failure retry path.</p>
-<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
-<h3 id="bug-1-quantitymultiply-contains-unreachable-padding-code-low-dead-code">Bug 1 — <code>Quantity::multiply()</code> contains unreachable padding code (LOW / dead code)<a class="headerlink" href="#bug-1-quantitymultiply-contains-unreachable-padding-code-low-dead-code" title="Permanent link">&para;</a></h3>
+<p><strong><code>PublishOutboxCommandTest</code></strong> — <strong>32</strong>（声明返回 false → <code>continue</code>），加上确认/拒绝/释放的调度成功、不支持的主题延迟和传输失败重试路径。</p>
+<h2 id="_5">发现错误<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-quantitymultiply">Bug 1 — <code>Quantity::multiply()</code> 包含无法访问的填充代码（低/死代码）<a class="headerlink" href="#bug-1-quantitymultiply" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Inventory/Service/Quantity.php:74-75</code></li>
-<li><strong>Description:</strong> <code>if (strlen($result) &lt;= 12) { $result = str_pad($result, 13, '0', STR_PAD_LEFT); }</code> can never be true. <code>Quantity::parts()</code> always returns the digits of a normalized value, which is at least <code>'0.000000'</code> → a 7-char digit string. The long-multiplication accumulator is built from <code>(string)$carry . $partial . str_repeat('0', $position)</code> where <code>$partial</code> is exactly <code>len(strrev(leftDigits)) = 7</code> chars; the running result therefore never has fewer than 14 characters by the final digit position. Verified empirically: every operand pair (including all-zero operands) yields a raw accumulator of length ≥ 14.</li>
-<li><strong>Impact:</strong> None functionally — dead code. It is the only statement left uncovered in <code>Quantity</code> (98.72%), and it cannot be covered through the public API because there is no input that makes the guard true.</li>
-<li><strong>Reproduction:</strong> instrumented copy of <code>multiply()</code> — <code>strlen($result)</code> is always ≥ 14 for <code>0.000000×0.000000</code>, <code>1×0.000001</code>, <code>2×3</code>, <code>0.5×0.25</code>, <code>10×0.000001</code>, etc.</li>
-<li><strong>Proposed fix:</strong> delete lines 74-75 (the split logic on lines 77-81 already handles the minimum-width case correctly, as the <code>0.5 × 0.25 = 0.125000</code> test proves).</li>
+<li><strong>文件/行：</strong> <code>src/Inventory/Service/Quantity.php:74-75</code></li>
+<li><strong>描述：</strong> <code>if (strlen($result) &lt;= 12) { $result = str_pad($result, 13, '0', STR_PAD_LEFT); }</code> 永远不可能是真的。 <code>Quantity::parts()</code> 始终返回规范化值的数字，该值至少是 <code>'0.000000'</code> → 7 个字符的数字字符串。长乘累加器由 <code>(string)$carry . $partial . str_repeat('0', $position)</code> 构建，其中 <code>$partial</code> 恰好是 <code>len(strrev(leftDigits)) = 7</code> 字符；因此，运行结果的最终数字位置绝不会少于 14 个字符。经验验证：每个操作数对（包括全零操作数）都会产生长度 ≥ 14 的原始累加器。</li>
+<li><strong>影响：</strong> 功能上无影响 — 死代码。它是 <code>Quantity</code> 中唯一未覆盖的语句（98.72%），并且无法通过公共 API 覆盖它，因为没有任何输入使防护为 true。</li>
+<li><strong>复制：</strong> <code>multiply()</code> 的检测副本 - 对于 <code>0.000000×0.000000</code>、<code>1×0.000001</code>、<code>2×3</code>、<code>0.5×0.25</code>、<code>10×0.000001</code> 等，<code>strlen($result)</code> 始终 ≥ 14。</li>
+<li><strong>建议的修复：</strong>删除第 74-75 行（第 77-81 行的分割逻辑已经正确处理最小宽度情况，正如 <code>0.5 × 0.25 = 0.125000</code> 测试所证明的那样）。</li>
 </ul>
-<h3 id="bug-2-inventoryservicereserve-idempotency-hash-is-timezone-sensitive-medium">Bug 2 — <code>InventoryService::reserve()</code> idempotency hash is timezone-sensitive (MEDIUM)<a class="headerlink" href="#bug-2-inventoryservicereserve-idempotency-hash-is-timezone-sensitive-medium" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-inventoryservicereserve">Bug 2 — <code>InventoryService::reserve()</code> 幂等性哈希对时区敏感（中）<a class="headerlink" href="#bug-2-inventoryservicereserve" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Inventory/Service/InventoryService.php:186-193</code> (specifically <code>'expiresAt' =&gt; $expiresAt?-&gt;format(DATE_ATOM)</code>)</li>
-<li><strong>Description:</strong> The idempotency hash embeds <code>expiresAt</code> serialized with <code>DATE_ATOM</code>, which keeps the original timezone offset. The same instant expressed in a different offset (e.g. <code>2026-07-27T00:00:00+00:00</code> vs <code>2026-07-27T08:00:00+08:00</code> — identical timestamps) produces a <strong>different hash</strong> (verified: <code>032530aa…</code> vs <code>47da849e…</code>).</li>
-<li><strong>Impact:</strong> A producer that retries the same reservation request (at-least-once delivery after a timeout) with <code>expiresAt</code> written in a different offset hits the <code>hash_equals</code> guard at line 205 and gets a spurious <code>InventoryReservationConflictException</code> ("Reservation ID was reused with a different request") instead of the original reservation, breaking idempotency for a semantically identical retry. The reservation/release message handlers in the same module round-trip <code>expiresAt</code> through ISO strings, so this is reachable from the messaging path.</li>
-<li><strong>Reproduction:</strong> <code>reserve(reservationId, store, trade, order, items, new DateTimeImmutable('2026-07-27T00:00:00+00:00'))</code> then retry with <code>new DateTimeImmutable('2026-07-27T08:00:00+08:00')</code> — same instant, different hashes.</li>
-<li><strong>Proposed fix:</strong> normalize <code>expiresAt</code> to UTC before hashing, e.g. <code>$expiresAt?-&gt;setTimezone(new \DateTimeZone('UTC'))-&gt;format(DATE_ATOM)</code>, so the hash is offset-independent.</li>
+<li><strong>文件/行：</strong> <code>src/Inventory/Service/InventoryService.php:186-193</code>（特别是<code>'expiresAt' =&gt; $expiresAt?-&gt;format(DATE_ATOM)</code>）</li>
+<li><strong>描述：</strong>幂等性哈希嵌入了用<code>DATE_ATOM</code>序列化的<code>expiresAt</code>，它保留了原始时区偏移量。以不同偏移量表示的同一时刻（例如 <code>2026-07-27T00:00:00+00:00</code> 与 <code>2026-07-27T08:00:00+08:00</code> — 相同的时间戳）会产生<strong>不同的哈希</strong>（已验证：<code>032530aa…</code> 与 <code>47da849e…</code>）。</li>
+<li><strong>影响：</strong> 使用以不同偏移量编写的 <code>expiresAt</code> 重试相同的预留请求（超时后至少一次传递）的生产者会遇到第 205 行的 <code>hash_equals</code> 防护，并得到一个虚假的 <code>InventoryReservationConflictException</code> （“预留 ID 已与不同的请求重用”）而不是原始预留，从而破坏了语义相同重试的幂等性。同一模块中的保留/释放消息处理程序通过 ISO 字符串往返 <code>expiresAt</code>，因此可以从消息传递路径访问它。</li>
+<li><strong>复制：</strong> <code>reserve(reservationId, store, trade, order, items, new DateTimeImmutable('2026-07-27T00:00:00+00:00'))</code> 然后使用 <code>new DateTimeImmutable('2026-07-27T08:00:00+08:00')</code> 重试 - 相同的瞬间，不同的哈希值。</li>
+<li><strong>建议的修复：</strong> 在散列之前将 <code>expiresAt</code> 标准化为 UTC，例如<code>$expiresAt?-&gt;setTimezone(new \DateTimeZone('UTC'))-&gt;format(DATE_ATOM)</code>，因此哈希值与偏移量无关。</li>
 </ul>
-<h3 id="bug-3-stockcontroller-injects-a-service-it-never-uses-low-dead-dependency">Bug 3 — <code>StockController</code> injects a service it never uses (LOW / dead dependency)<a class="headerlink" href="#bug-3-stockcontroller-injects-a-service-it-never-uses-low-dead-dependency" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-stockcontroller">Bug 3 — <code>StockController</code> 注入一个它从不使用的服务（低/死依赖）<a class="headerlink" href="#bug-3-stockcontroller" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Inventory/Controller/Manage/StockController.php:24</code> (<code>protected readonly InventoryStockServiceInterface $service</code>)</li>
-<li><strong>Description:</strong> The constructor property <code>$service</code> is never referenced; every action delegates to the <code>$inventory</code> (<code>InventoryServiceInterface</code>) dependency instead. The unused <code>InventoryStockService</code>/<code>InventoryStockServiceInterface</code> remains wired in DI.</li>
-<li><strong>Impact:</strong> Dead dependency — no functional effect, but the DI wiring and the interface are misleading: a reader expects the <code>service</code> property to back the list/detail endpoints, when in fact those are served by <code>InventoryService::getStockView()</code>.</li>
-<li><strong>Proposed fix:</strong> remove the unused constructor parameter (and its service wiring), leaving <code>StockController</code> with a single <code>InventoryServiceInterface</code> dependency.</li>
+<li><strong>文件/行：</strong> <code>src/Inventory/Controller/Manage/StockController.php:24</code> (<code>protected readonly InventoryStockServiceInterface $service</code>)</li>
+<li><strong>说明：</strong> 构造函数属性 <code>$service</code> 从未被引用；每个操作都委托给 <code>$inventory</code> (<code>InventoryServiceInterface</code>) 依赖项。未使用的 <code>InventoryStockService</code>/<code>InventoryStockServiceInterface</code> 保留在 DI 中。</li>
+<li><strong>影响：</strong> 死依赖 — 没有功能影响，但 DI 接线和接口具有误导性：读者期望 <code>service</code> 属性支持列表/详细信息端点，而实际上这些端点由 <code>InventoryService::getStockView()</code> 提供服务。</li>
+<li><strong>建议的修复：</strong> 删除未使用的构造函数参数（及其服务连接），使 <code>StockController</code> 具有单个 <code>InventoryServiceInterface</code> 依赖项。</li>
 </ul>
-<h3 id="bug-4-inventoryservicerelease-partially-mutates-the-reservation-in-memory-before-failing-low-robustness">Bug 4 — <code>InventoryService::release()</code> partially mutates the reservation in memory before failing (LOW / robustness)<a class="headerlink" href="#bug-4-inventoryservicerelease-partially-mutates-the-reservation-in-memory-before-failing-low-robustness" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4-inventoryservicerelease">Bug 4 — <code>InventoryService::release()</code> 在失败之前部分改变内存中的预留（低/稳健性）<a class="headerlink" href="#bug-4-inventoryservicerelease" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Inventory/Service/InventoryService.php:277-290</code></li>
-<li><strong>Description:</strong> <code>$reservation-&gt;release()</code> (line 277) flips the in-memory status to <code>RELEASED</code> and sets <code>releasedAt</code> before the loop can throw <code>Reservation material was not found.</code> (284) or <code>Reservation stock was not found.</code> (289). <code>wrapInTransaction</code> rolls the DB back, but the managed entity keeps its <code>RELEASED</code> in-memory state; Doctrine does not refresh/revert managed entities on rollback.</li>
-<li><strong>Impact:</strong> In the failure path the entity is left reporting <code>released</code> while the DB still holds <code>confirmed</code> and the reserved quantities remain allocated. If the exception is caught in the same request/worker and the entity manager is subsequently flushed, the half-applied release would be committed without releasing the stock — a reserved-quantity leak. Only reachable when the reservation/material/stock data is already inconsistent (e.g. a material row removed while a reservation is confirmed), which is why the existing green tests never exercised it.</li>
-<li><strong>Reproduction:</strong> persist a confirmed reservation whose line references a material that does not exist, then call <code>release()</code> — it throws at line 284 <em>after</em> <code>$reservation-&gt;release()</code> already returned <code>true</code>; <code>$reservation-&gt;getStatus()</code> reports <code>released</code> although nothing was persisted.</li>
-<li><strong>Proposed fix:</strong> pre-validate all lines (material + stock lookups) before calling <code>$reservation-&gt;release()</code>, or wrap the failure in a <code>$this-&gt;entityManager-&gt;refresh($reservation)</code> / re-fetch so the entity cannot retain the half-applied state.</li>
+<li><strong>文件/行：</strong> <code>src/Inventory/Service/InventoryService.php:277-290</code></li>
+<li><strong>描述：</strong> <code>$reservation-&gt;release()</code>（第277行）将内存状态翻转为<code>RELEASED</code>并在循环抛出<code>Reservation material was not found.</code>（284）或<code>Reservation stock was not found.</code>（289）之前设置<code>releasedAt</code>。 <code>wrapInTransaction</code>回滚数据库，但受管实体保持其<code>RELEASED</code>内存中状态； Doctrine 不会在回滚时刷新/恢复托管实体。</li>
+<li><strong>影响：</strong> 在故障路径中，实体将报告 <code>released</code>，而 DB 仍保留 <code>confirmed</code>，并且保留数量仍保持分配状态。如果在同一个请求/工作线程中捕获异常，并且实体管理器随后被刷新，则将提交一半应用的释放而不释放库存 - 保留数量泄漏。仅当预订/材料/库存数据已经不一致时才可访问（例如，在确认预订时删除了材料行），这就是现有绿色测试从未执行过它的原因。</li>
+<li><strong>复制：</strong> 保留一个已确认的预订，其行引用了不存在的材料，然后调用 <code>release()</code> — 它在第 284 行抛出 <em>after</em> <code>$reservation-&gt;release()</code> 已经返回 <code>true</code>； <code>$reservation-&gt;getStatus()</code> 报告 <code>released</code>，尽管没有任何内容被保留。</li>
+<li><strong>建议的修复：</strong> 在调用 <code>$reservation-&gt;release()</code> 之前预先验证所有行（材料 + 库存查找），或将失败包装在 <code>$this-&gt;entityManager-&gt;refresh($reservation)</code> / 重新获取中，以便实体无法保留半应用状态。</li>
 </ul>
-<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
-<p>没有任何。每个新测试都会通过当前的 <code>src/</code>（43 个测试，142 个断言，绿色）。由于 <code>src/</code> 错误，不必跳过正确行为测试 - InventoryService/控制器代码的行为与所有覆盖路径的记录相同。上述错误是通过检查/分析发现的，对于错误 1 ​​和错误 2，通过经验验证，但它们都不会导致需要记录为跳过的正确行为测试失败。</p>
-<h2 id="_5">注释<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">跳过测试<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>None. Every new test passes against the current <code>src/</code> (43 tests, 142 assertions, green). No correct-behavior test had to be skipped due to a <code>src/</code> bug — the InventoryService/controller code behaves as documented for all covered paths. The bugs above are found by inspection/analysis and, for Bug 1 and Bug 2, verified empirically, but none of them cause a failure of a correct-behavior test that needed to be recorded as skipped.</p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
-<li>当删除/重新创建 <code>var/test.db</code> 的集成类连续运行时，观察到瞬态 SQLite <code>database is locked</code> 错误；根据项目惯例，等待 10-15 秒并重新运行即可解决这些问题（所有运行均以绿色结束）。</li>
-<li>当所有 Inventory 测试一起运行时，完整的 <code>tests/Inventory</code> 目录显示 <code>InventoryReservationRequestedHandlerIntegrationTest</code> 中预先存在的不稳定情况（与这些更改无关）；新文件单独和一起都是绿色的。</li>
+<li>Transient SQLite <code>database is locked</code> errors were observed when integration classes that drop/recreate <code>var/test.db</code> run back-to-back; per the project convention, waiting 10–15 s and re-running resolved them (all runs ended green).</li>
+<li>The full <code>tests/Inventory</code> directory shows pre-existing flakiness in <code>InventoryReservationRequestedHandlerIntegrationTest</code> when all Inventory tests run together (unrelated to these changes); the new files are green both individually and together.</li>
 </ul>
 
 

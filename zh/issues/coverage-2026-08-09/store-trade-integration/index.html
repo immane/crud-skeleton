@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -1460,7 +1460,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1774,7 +1774,7 @@
 <p>实际执行生产中继：</p>
 <ol>
 <li>带有可信 <code>X-Store-Code</code> 标头的 HTTP <code>POST /api/v1/app/orders</code> → <code>202</code>，交易订单位于 <code>awaiting_store_acceptance</code> 中，<code>trade.order.created.v1</code> 位于交易发件箱中。</li>
-<li><code>app:trade:outbox:publish</code>针对真实DB运行；它的 <code>MessageBusInterface</code> 是一个同步 <code>MessageBus([HandleMessageMiddleware(HandlersLocator([...]))])</code>，将每个消息类映射到 <strong>真实</strong> 注册的处理程序。因此，claim/publish/<code>markPublished</code>/flush 代码路径和处理程序都会执行。</li>
+<li><code>app:trade:outbox:publish</code>针对真实数据库运行；它的 <code>MessageBusInterface</code> 是一个同步 <code>MessageBus([HandleMessageMiddleware(HandlersLocator([...]))])</code>，将每个消息类映射到 <strong>真实</strong> 注册的处理程序。因此，claim/publish/<code>markPublished</code>/flush 代码路径和处理程序都会执行。</li>
 <li><code>app:store:outbox:publish</code> / <code>app:inventory:outbox:publish</code> 同样，按照实际中继使用的顺序。</li>
 <li>每一步都会断言存储/交易状态。</li>
 </ol>

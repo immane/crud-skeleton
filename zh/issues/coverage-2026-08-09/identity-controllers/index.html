@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -1460,7 +1460,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1848,15 +1848,15 @@ all new coverage is pure unit tests with mocked collaborators.</p>
 <ul>
 <li><strong>文件/行：</strong> <code>AuthController.php</code> 294–300； <code>OtpController.php</code> 93–99。</li>
 <li><strong>描述：</strong>成功进行带有 <code>verify_phone</code> 目的的 OTP 验证后，控制器会查找用户，并且仅在用户存在时保留该标志，<strong>但始终</strong>返回 <code>['phone_verified' =&gt; true]</code> — 即使 <code>findByPhone()</code> 返回 <code>null</code> 时也是如此。 <code>login</code> 的目的不一致：它为缺失/未经验证的用户返回 <code>401</code>。</li>
-<li><strong>影响：</strong> 客户端被告知手机已验证，但没有任何结果；此后，用户仍将在 OTP 登录（或任何电话验证门）时被阻止。谎言只能被客户端察觉（重复请求会重新发出 OTP）。次要但不正确的成功合同。</li>
+<li><strong>影响：</strong> 客户端被告知手机已经过验证，但没有任何结果；此后，用户仍将在 OTP 登录（或任何电话验证门）时被阻止。谎言只能被客户端察觉（重复请求会重新发出 OTP）。次要但不正确的成功合同。</li>
 <li><strong>复制：</strong> (1) 为任何没有帐户的手机请求 <code>verify_phone</code> OTP（requestOtp 不检查是否存在），(2) 验证它→ HTTP 200 <code>{"phone_verified": true}</code>，即使没有更新任何行。</li>
 <li><strong>建议的修复：</strong> 当 <code>findByPhone()</code> 没有为 <code>verify_phone</code> 生成用户时，返回 <code>404</code>/<code>401</code>，或者记录响应故意不透明（反用户枚举），并为未知电话返回中性消息，同时仅针对已知电话保留。请注意，当前行为是<em>可观察的</em>（它永远不会透露用户是否存在），因此如果这是意图，它至少应该与 <code>login</code> 目的一致。</li>
-<li><strong>测试：</strong> <code>OtpControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> 和 <code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> <strong>描述</strong>当前行为（它们通过）并将其固定在报告中。</li>
+<li><strong>测试：</strong> <code>OtpControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> 和 <code>AuthControllerCoverageTest::testVerifyOtpVerifyPhoneReportsSuccessForUnknownUser</code> <strong>描述</strong>当前行为（它们通过）并在报告中将其固定下来。</li>
 </ul>
 <h3 id="bug-c-otpservicemaskphone">Bug C — <code>OtpService::maskPhone()</code> 泄露日志中的短电话号码<a class="headerlink" href="#bug-c-otpservicemaskphone" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>OtpService.php</code> 109–116 (<code>maskPhone</code>)。</li>
-<li><strong>说明：</strong> 对于任何长度超过 4 个字符的电话，<code>maskPhone()</code> 返回 <code>mb_substr($phone, 0, 3) . '****' . mb_substr($phone, -4)</code>。对于长度为 5-7 的电话，两个子字符串<strong>覆盖每个数字</strong>（例如 <code>'12345'</code> → <code>'123****2345'</code>），因此“屏蔽”值是插入星号的完整数字。</li>
+<li><strong>描述：</strong> 对于任何长度超过 4 个字符的电话，<code>maskPhone()</code> 返回 <code>mb_substr($phone, 0, 3) . '****' . mb_substr($phone, -4)</code>。对于长度为 5-7 的电话，两个子字符串<strong>覆盖每个数字</strong>（例如 <code>'12345'</code> → <code>'123****2345'</code>），因此“屏蔽”值是插入星号的完整数字。</li>
 <li><strong>影响：</strong> 对于短电话号码（5-7 位数字 — 例如传统/短国家/地区号码），OTP 日志行 <code>[OTP] Sent … phone=…</code> 会将完整号码公开给具有日志访问权限的任何人。对于典型的 E.164 11-14 位数字，当前掩码很好 (<code>+86****5678</code>)。</li>
 <li><strong>复制：</strong> 使用记录器调用<code>generateAndSend('12345', …)</code>；日志上下文 <code>phone</code> 是 <code>'123****2345'</code>（所有五个数字都存在）。</li>
 <li><strong>建议的修复：</strong> 通过前 N 个和最后 N 个带有尺寸保护的掩模，例如当 <code>strlen &lt; 8</code> 时隐藏除第一个/最后两个字符之外的所有字符，或者重复使用像 <code>substr($phone,0,2).'****'.substr($phone,-2)</code> 这样的常量掩码，并另外确保至少一个掩码中间字符。</li>

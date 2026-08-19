@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -1460,7 +1460,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1596,10 +1596,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#high-confidence-reasoning-exact-citations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        高置信度推理（精确引用）
+        HIGH-confidence reasoning (exact citations)
       
     </span>
   </a>
@@ -1607,7 +1607,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         中等置信度推理
@@ -1623,7 +1623,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         合并建议
@@ -1634,7 +1634,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         注释/非阻塞观察
@@ -1645,7 +1645,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -1788,7 +1788,7 @@
 <td>19 KEEP（MediaTest 的 1 个测试副本）</td>
 </tr>
 <tr>
-<td>测试/Common/Integration/PictureControllerTest.php</td>
+<td>测试/通用/集成/PictureControllerTest.php</td>
 <td>6</td>
 <td>保持</td>
 </tr>
@@ -1814,7 +1814,7 @@
 - <code>PictureControllerTest</code>（完整的 HTTP CRUD、验证、所有者范围隔离、图片存储库
   自定义方法）。没有其他文件触及 <code>/api/v1/{app,manage}/pictures</code>。
 - <code>MediaUploadIntegrationTest</code>核心上传历程：管理上传存储+删除文件，
-  没有尺寸的 PDF 上传、仅限所有者的应用程序删除、公共只读范围、丢失文件 /
+  没有尺寸的 PDF 上传、仅限所有者的应用程序删除、公共只读范围、丢失文件/
   未知存储/未知类别 400、<code>MediaService</code> 验证分支和存储
   故障处理。这些都是独一无二的。
 - <code>CommonRepoFullTest</code> 自定义存储库方法（<code>findBySlug</code>、<code>findRootCategories</code>、
@@ -1826,148 +1826,148 @@
 <table>
 <thead>
 <tr>
-<th>文件::方法</th>
-<th>原因</th>
-<th>信心</th>
-<th>涵盖范围</th>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>CategoryEntityCoverageTest::testGetChildrenReinitializesWhenPropertyIsNull</td>
-<td>CategoryEntityCoverageTest::testGetChildrenReinitializesWhenPropertyIsNull</td>
 <td>1/3</td>
-<td>1/3高</td>
+<td>HIGH</td>
+<td>CategoryTest::testConstructorInitializesFields, testParentChildRelationships</td>
 </tr>
 <tr>
 <td>CategoryEntityCoverageTest::testAddChildReinitializesNullCollection</td>
-<td>CategoryEntityCoverageTest::testAddChildReinitializesNullCollection</td>
 <td>1/3</td>
-<td>1/3高</td>
+<td>HIGH</td>
+<td>CategoryTest::testParentChildRelationships, testAddChildDoesNotDuplicate</td>
 </tr>
 <tr>
 <td>CategoryEntityCoverageTest::testChildrenFromReflectionWithoutConstructorAreLazilyInitialized</td>
 <td>1/3</td>
-<td>1/3高</td>
-<td>类别测试::testConstructorInitializesFields</td>
+<td>HIGH</td>
+<td>CategoryTest::testConstructorInitializesFields</td>
 </tr>
 <tr>
 <td>ContentEntityCoverageTest::testGetTagsReinitializesWhenPropertyIsNull</td>
-<td>ContentEntityCoverageTest::testGetTagsReinitializesWhenPropertyIsNull</td>
-<td>ContentEntityCoverageTest::testGetTagsReinitializesWhenPropertyIsNull 1/3</td>
-<td>1/3高</td>
+<td>1/3</td>
+<td>HIGH</td>
+<td>ContentTest::testConstructorInitializesCoreFields</td>
 </tr>
 <tr>
-<td>ContentEntityCoverageTest::testAddTagReinitializesNullCollection</td>
 <td>ContentEntityCoverageTest::testAddTagReinitializesNullCollection</td>
 <td>1/3</td>
-<td>1/3高</td>
+<td>HIGH</td>
+<td>ContentTest::testTagRelationships, testAddTagDoesNotDuplicate</td>
 </tr>
 <tr>
 <td>ContentEntityCoverageTest::testTagsFromReflectionWithoutConstructorAreLazilyInitialized</td>
-<td>ContentEntityCoverageTest::testTagsFromReflectionWithoutConstructorAreLazilyInitialized 1/3</td>
-<td>1/3高</td>
+<td>1/3</td>
+<td>HIGH</td>
 <td>ContentTest::testConstructorInitializesCoreFields</td>
 </tr>
 <tr>
 <td>CommentApiExtraTest::testCommentCreateAndList</td>
-<td>CommentApiExtraTest::testCommentCreateAndList</td>
-<td>CommentApiExtraTest::testCommentCreateAndList 2/5</td>
-<td>2/5高</td>
+<td>2/5</td>
+<td>HIGH</td>
+<td>AppApiRegressionTest::testAppCommentCreateDefaultsToPending, testAppCommentListOnlyReturnsApproved</td>
 </tr>
 <tr>
 <td>CommentControllerTest::testCreateWithAuthenticatedUserRecordsAuthorFields</td>
-<td>CommentControllerTest::testCreateWithAuthenticatedUserRecordsAuthorFields</td>
-<td>CommentControllerTest::testCreateWithAuthenticatedUserRecordsAuthorFields 2</td>
-<td>高</td>
-</tr>
-<tr>
-<td>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError</td>
-<td>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError</td>
-<td>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError 2</td>
-<td>高</td>
-</tr>
-<tr>
-<td>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults</td>
-<td>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults</td>
-<td>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults 2</td>
-<td>高</td>
-</tr>
-<tr>
-<td>设置ApiIntegrationTest::testCreateAndReadSettingViaManageApi</td>
 <td>2</td>
-<td>高</td>
+<td>HIGH</td>
+<td>AppApiRegressionTest::testAppCommentCreateDefaultsToPending</td>
+</tr>
+<tr>
+<td>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError</td>
+<td>2</td>
+<td>HIGH</td>
+<td>MediaUploadIntegrationTest::testUploadHandlesUnexpectedStorageFailure</td>
+</tr>
+<tr>
+<td>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults</td>
+<td>2</td>
+<td>HIGH</td>
+<td>MediaTest::testSettersAreFluent, MediaTest::testPrePersistWhenCreatedFromReflection</td>
+</tr>
+<tr>
+<td>SettingApiIntegrationTest::testCreateAndReadSettingViaManageApi</td>
+<td>2</td>
+<td>HIGH</td>
 <td>CommonModulesApiRegressionTest::testSettingCrudRegression</td>
 </tr>
 <tr>
 <td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus</td>
-<td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus</td>
-<td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus 1</td>
-<td>中</td>
+<td>1</td>
+<td>MEDIUM</td>
+<td>(null-user branch unreachable behind auth; see note)</td>
 </tr>
 <tr>
 <td>MediaControllerUploadTest::testManageUploadReturns500ForUnexpectedError</td>
-<td>MediaControllerUploadTest::testManageUploadReturns500ForUnexpectedError 2</td>
-<td>中</td>
-<td>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError、MediaUploadIntegrationTest::testUploadHandlesUnexpectedStorageFailure</td>
+<td>2</td>
+<td>MEDIUM</td>
+<td>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError, MediaUploadIntegrationTest::testUploadHandlesUnexpectedStorageFailure</td>
 </tr>
 <tr>
 <td>ContentControllerTest::testListReturnsAllContents</td>
-<td>ContentControllerTest::testListReturnsAllContents</td>
 <td>2/1</td>
-<td>中</td>
+<td>MEDIUM</td>
+<td>UpdateApiViewMixinTest / DetailApiViewMixinTest (mixin unit coverage)</td>
 </tr>
 <tr>
 <td>ContentControllerTest::testDetailReturnsContent</td>
-<td>内容控制器测试2/1</td>
-<td>中</td>
+<td>2/1</td>
+<td>MEDIUM</td>
 <td>DetailApiViewMixinTest::testDetailReturnsEntity</td>
 </tr>
 <tr>
 <td>ContentControllerTest::testDetailMissingReturns404</td>
 <td>2/1</td>
-<td>中</td>
+<td>MEDIUM</td>
 <td>DetailApiViewMixinTest::testDetailMissingEntityReturnsNotFound</td>
 </tr>
 <tr>
 <td>ContentControllerTest::testListRequiresAuthentication</td>
-<td>ContentControllerTest::testListRequiresAuthentication</td>
 <td>2</td>
-<td>中</td>
+<td>MEDIUM</td>
+<td>AppApiRegressionTest::testAppEndpointsRequireAuthentication (intent; <code>/app/contents</code> not in list)</td>
 </tr>
 <tr>
-<td>CommonBatchUpdateTest（全部 7 个：内容/类别/标签/页面/评论/设置/媒体）</td>
+<td>CommonBatchUpdateTest (all 7: Content/Category/Tag/Page/Comment/Setting/Media)</td>
 <td>2/5</td>
-<td>2/5中</td>
-<td>UpdateApiViewMixinTest::testBatchUpdate* (单位)、TradeApiIntegrationTest (HTTP 批量更新、真实结果断言)</td>
+<td>MEDIUM</td>
+<td>UpdateApiViewMixinTest::testBatchUpdate* (unit), TradeApiIntegrationTest (HTTP batch-update, real result asserts)</td>
 </tr>
 <tr>
-<td>CommonRepoTest（全部 7 个：内容/类别/评论/媒体/页面/设置/标签 findById+findAll）</td>
+<td>CommonRepoTest (all 7: Content/Category/Comment/Media/Page/Setting/Tag findById+findAll)</td>
 <td>4</td>
-<td>中</td>
-<td>ContentRepositoryIntegrationTest::testFindByIdReturnsEntityOrNull; CommonModulesIntegrationTest CRUD 流程； CommonRepoFullTest 自定义查询</td>
+<td>MEDIUM</td>
+<td>ContentRepositoryIntegrationTest::testFindByIdReturnsEntityOrNull; CommonModulesIntegrationTest CRUD flows; CommonRepoFullTest custom queries</td>
 </tr>
 <tr>
-<td>设置ApiIntegrationTest::testCreateSettingViaEntityManager</td>
+<td>SettingApiIntegrationTest::testCreateSettingViaEntityManager</td>
 <td>2/4</td>
-<td>中</td>
-<td>CommonRepoFullTest::testSettingFindByKey、CommonRepoTest::testSettingRepositoryFindByIdAndFindAll、CommonModulesIntegrationTest::testSettingCrudFlow</td>
+<td>MEDIUM</td>
+<td>CommonRepoFullTest::testSettingFindByKey, CommonRepoTest::testSettingRepositoryFindByIdAndFindAll, CommonModulesIntegrationTest::testSettingCrudFlow</td>
 </tr>
 <tr>
-<td>CommonRepoFullTest::testContentFindLatest</td>
 <td>CommonRepoFullTest::testContentFindLatest</td>
 <td>2</td>
-<td>中</td>
+<td>MEDIUM</td>
+<td>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit</td>
 </tr>
 <tr>
 <td>CommonRepoFullTest::testContentFindLatestWithDefaultLimit</td>
-<td>CommonRepoFullTest::testContentFindLatestWithDefaultLimit</td>
-<td>CommonRepoFullTest::testContentFindLatestWithDefaultLimit 2/5</td>
-<td>2/5中</td>
+<td>2/5</td>
+<td>MEDIUM</td>
+<td>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit (default-limit number never asserted)</td>
 </tr>
 </tbody>
 </table>
-<h3 id="_4">高置信度推理（精确引用）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<h3 id="high-confidence-reasoning-exact-citations">HIGH-confidence reasoning (exact citations)<a class="headerlink" href="#high-confidence-reasoning-exact-citations" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>CategoryEntityCoverageTest / ContentEntityCoverageTest（主动测试）。</strong> 每个都强制
   <code>null</code>通过<code>ReflectionProperty</code>/<code>newInstanceWithoutConstructor</code>集合来执行
@@ -2008,7 +2008,7 @@
   <code>CommonModulesApiRegressionTest::testSettingCrudRegression</code> 的子集（相同的 POST 断言，
   加上 GET 详细值、PUT、DELETE）。</li>
 </ul>
-<h3 id="_5">中等置信度推理<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<h3 id="_4">中等置信度推理<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>ContentControllerTest.</strong> <code>App\ContentController</code> 是 generic 的空子类
   <code>ListApiViewMixin</code>/<code>DetailApiViewMixin</code> mixins（无自定义逻辑）。清单/详情/404
@@ -2032,14 +2032,14 @@
 <li><strong>CommonRepoFullTest::testContentFindLatest</strong>*。 <code>findLatest()</code> 已下单+限额
   由 <code>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit</code> 断言；
   新测试添加了限制计数断言，无需排序和 <code>findLatest(1) → count 1</code>。
-  将默认限制变量折叠到预先存在的测试中，而不是重复。</li>
+  将默认限制变体折叠到预先存在的测试中，而不是重复。</li>
 <li><strong>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus.</strong> 应用程序评论创建
   受身份验证保护 (<code>AppApiRegressionTest::testAppCommentCreateUnauthenticated</code>)，因此
   <code>defaultCreateValues()</code> 的空用户分支在生产环境中无法访问；测试模拟
   <code>getUser() → null</code> 纯粹是为了覆盖该防御分支（文档块：“覆盖剩余的
   未覆盖的线 (50)")。无法到达的分支的覆盖范围追踪。</li>
 </ul>
-<h2 id="_6">合并建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_5">合并建议<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>CommonBatchUpdateTest</code>（7 个测试）→ 一个断言持久字段值的表驱动测试，
    不仅仅是 HTTP 200。</li>
@@ -2052,7 +2052,7 @@
 <li><code>CommentControllerTest</code>（如果保留）→ 将两个单元测试折叠到 HTTP 级别的覆盖范围中
    <code>AppApiRegressionTest</code> 而不是维护大量模拟的第二个副本。</li>
 </ol>
-<h2 id="_7">注释/非阻塞观察<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_6">注释/非阻塞观察<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>ContentTest::testSettersAreFluentAndTouchUpdatesTimestamp</code> 通过只是因为 <code>setBody()</code>
   触摸<code>updatedAt</code>；它没有捕获 <code>setTitle()</code> 缺失 - <code>touch()</code> 错误。这是一个
@@ -2061,7 +2061,7 @@
   错误已修复。</li>
 <li>该模块中没有标记跳过的测试；所有跳过记录活动错误并保留。</li>
 </ul>
-<h2 id="_8">验证步骤<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_7">验证步骤<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/Nayuki/Development/PHP/crud-skeleton
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Common/<span class="w">   </span><span class="c1"># 131 tests, 0 failures (baseline)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># After deleting HIGH-confidence candidates only:</span>

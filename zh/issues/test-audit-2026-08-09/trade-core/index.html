@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -1292,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -1460,7 +1460,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -1595,10 +1595,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#merge-suggestions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议
+        MERGE SUGGESTIONS
       
     </span>
   </a>
@@ -1606,10 +1606,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -1637,7 +1637,7 @@
 
 
 <h1 id="traderepo2026-08-09">Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09）<a class="headerlink" href="#traderepo2026-08-09" title="Permanent link">&para;</a></h1>
-<p><code>tests/Trade/Entity</code>、<code>tests/Trade/Service</code>、<code>tests/Trade/Service/Pricing</code>、的只读审核
+<p><code>tests/Trade/Entity</code>、<code>tests/Trade/Service</code>、<code>tests/Trade/Service/Pricing</code>、的只读审计
 <code>tests/Trade/Pricing</code>、<code>tests/Trade/Workflow</code>、<code>tests/Trade/Repository</code>、
 <code>tests/Trade/Command</code>和<code>tests/Trade/EventListener</code>。交叉阅读反对
 <code>src/Trade/</code> 和集成套件 (<code>tests/Trade/Integration/OrderWorkflowApiTest.php</code>,
@@ -2069,31 +2069,31 @@ bug (<code>docs/issues/coverage-2026-08-09/README.md</code>) 被保留。</p>
 </tr>
 </tbody>
 </table>
-<p>关于 <code>OrderWorkflowStateMachineTest</code> 时间戳测试的注意事项（第 27-36 行）：可以保留任一文件，
-但时间戳行为在 <code>OrderWorkflowListenerTest</code> 中断言是相同的。推荐：
-保留<code>OrderWorkflowStateMachineTest</code>的转换矩阵/保护探针并删除其Section-5
-时间戳重复；接线仍然由 happy-path 链验证。保留发件箱录音
-在 <code>OrderWorkflowListenerTest</code> 中进行测试（唯一）。不要删除两个副本。</p>
-<p>注意 <code>PublishOutboxCommandTest::testExecutePublishesCreatedMessageWithFullEnvelope</code>：它断言
-仅集成测试的完整信封（eventId/type/version/occurredAt/correlationId）
-部分检查；在删除之前，将这些信封字段断言折叠到
-<code>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase</code>。</p>
-<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>Note on <code>OrderWorkflowStateMachineTest</code> timestamp tests (rows 27–36): either file may be kept,
+but the timestamp behavior is asserted identically in <code>OrderWorkflowListenerTest</code>. Recommendation:
+keep <code>OrderWorkflowStateMachineTest</code>'s transition matrix/guard probes and delete its Section-5
+timestamp duplicates; wiring is still verified by the happy-path chain. Keep the outbox-recording
+tests in <code>OrderWorkflowListenerTest</code> (unique). Do NOT delete both copies.</p>
+<p>Note on <code>PublishOutboxCommandTest::testExecutePublishesCreatedMessageWithFullEnvelope</code>: it asserts
+the full envelope (eventId/type/version/occurredAt/correlationId) which the integration test only
+partially checks; before deleting, fold those envelope-field assertions into
+<code>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase</code>.</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong><code>OrderServicePaymentsTest.php</code> → <code>OrderServiceTest.php</code></strong> — 均测试 <code>src/Trade/Service/OrderService.php</code>
-   使用相同的基于反射的构造助手。这次分裂是竞选人为的（文件
-   标头甚至显示“OrderServiceTest 未执行的分支”）。合并为一个文件。</li>
-<li><strong><code>PriceCalculationResultTest.php</code> → <code>tests/Trade/Pricing/PricingTest.php</code></strong> — 结果 DTO
-   是一个值对象（<code>PriceCalculationResult::fromContext</code>是一个普通副本）；保留元复制
-   断言，删除重复的构造函数断言。</li>
-<li><strong><code>PublishOutboxCommandTest.php</code> → <code>TradeOutboxMessageRepositoryTest.php</code></strong> — 仅模拟命令
-   测试重复真实数据库命令测试；将信封字段断言折叠到积分中
-   测试并删除模拟文件。</li>
-<li><strong><code>OrderWorkflowStateMachineTest</code> 第 5 节时间戳测试 ↔ <code>OrderWorkflowListenerTest</code></strong> —
-   保留一层以防止时间戳副作用（参见上面的注释）。</li>
+<li><strong><code>OrderServicePaymentsTest.php</code> → <code>OrderServiceTest.php</code></strong> — both test <code>src/Trade/Service/OrderService.php</code>
+   with the same reflection-based construction helper. The split was campaign-artificial (the file
+   header even says "branches not exercised by OrderServiceTest"). Consolidate into one file.</li>
+<li><strong><code>PriceCalculationResultTest.php</code> → <code>tests/Trade/Pricing/PricingTest.php</code></strong> — the result DTO
+   is a value object (<code>PriceCalculationResult::fromContext</code> is a plain copy); keep the meta-copying
+   assertions, drop the duplicated constructor assertions.</li>
+<li><strong><code>PublishOutboxCommandTest.php</code> → <code>TradeOutboxMessageRepositoryTest.php</code></strong> — the mock-only command
+   tests duplicate the real-DB command tests; fold the envelope-field assertions into the integration
+   test and delete the mock file.</li>
+<li><strong><code>OrderWorkflowStateMachineTest</code> Section-5 timestamp tests ↔ <code>OrderWorkflowListenerTest</code></strong> —
+   keep one layer for timestamp side effects (see note above).</li>
 </ol>
-<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>从存储库根运行。 <code>src/</code>和<code>tests/</code>为只读；仅写入报告文件。</p>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Run from the repo root. Read-only for <code>src/</code> and <code>tests/</code>; only the report file is written.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">PHP</span><span class="o">=</span>/opt/homebrew/opt/php@8.5/bin/php
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># 1. Baseline: full suite + Trade coverage BEFORE any deletion</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span><span class="s2">"</span><span class="nv">$PHP</span><span class="s2">"</span><span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-html<span class="w"> </span>var/coverage-before-trade-audit
@@ -2113,9 +2113,9 @@ bug (<code>docs/issues/coverage-2026-08-09/README.md</code>) 被保留。</p>
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># 5. Full serial suite on the CI database flavour (PostgreSQL) to prove no ordering leak:</span>
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s2">"</span><span class="nv">$PHP</span><span class="s2">"</span><span class="w"> </span>./vendor/bin/phpunit
 </code></pre></div>
-<p>比较 <code>var/coverage-before-trade-audit</code> 与 <code>var/coverage-after-trade-audit</code> 的 <code>src/Trade</code>
-（期望相同的行/方法号）。如果 <code>src/Trade</code> 线路失去覆盖范围，则该测试不是
-多余的——恢复它。</p>
+<p>Compare <code>var/coverage-before-trade-audit</code> vs <code>var/coverage-after-trade-audit</code> for <code>src/Trade</code>
+(expect identical line/method numbers). If a <code>src/Trade</code> line loses coverage, that test is NOT
+redundant — restore it.</p>
 
 
 
