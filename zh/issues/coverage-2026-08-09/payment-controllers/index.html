@@ -27,7 +27,7 @@
     
     
       
-        <title>支付控制器 — 覆盖范围和错误报告 - CRUD Skeleton</title>
+        <title>Payment Controllers — Coverage & Bug Report - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#payment-controllers-coverage-bug-report" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              支付控制器 — 覆盖范围和错误报告
+              Payment Controllers — Coverage &amp; Bug Report
             
           </span>
         </div>
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2496,10 +2496,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-coverage-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 覆盖结果
+        1. Coverage results
       
     </span>
   </a>
@@ -2507,10 +2507,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2tests" class="md-nav__link">
+  <a href="#2-test-files-added-all-under-tests-all-green" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.添加测试文件（全部在tests/下，全绿色）
+        2. Test files added (all under tests/, all green)
       
     </span>
   </a>
@@ -2518,22 +2518,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#3-bugs-found-no-source-changes-made" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 发现错误（未更改源代码）
+        3. Bugs found (no source changes made)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. 发现错误（未更改源代码）">
+    <nav class="md-nav" aria-label="3. Bugs found (no source changes made)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-api" class="md-nav__link">
+  <a href="#bug-1-exception-messages-leaked-to-api-clients-high" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-1 — 异常消息泄露给 API 客户端（高）
+        BUG-1 — Exception messages leaked to API clients (High)
       
     </span>
   </a>
@@ -2541,10 +2541,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-markpaid" class="md-nav__link">
+  <a href="#bug-2-markpaid-does-not-verify-the-notifying-gatewaypayment-matches-the-invoice-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-2 — markPaid 未验证通知网关/付款与发票是否匹配（中）
+        BUG-2 — markPaid does not verify the notifying gateway/payment matches the invoice (Medium)
       
     </span>
   </a>
@@ -2552,10 +2552,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-options" class="md-nav__link">
+  <a href="#bug-3-refund-forwards-the-raw-request-body-as-gateway-options-mediumlow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-3 — 退款将原始请求正文作为网关 $options 转发（中/低）
+        BUG-3 — Refund forwards the raw request body as gateway $options (Medium/Low)
       
     </span>
   </a>
@@ -2620,22 +2620,22 @@
   
 
 
-<h1 id="_1">支付控制器 — 覆盖范围和错误报告<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="payment-controllers-coverage-bug-report">Payment Controllers — Coverage &amp; Bug Report<a class="headerlink" href="#payment-controllers-coverage-bug-report" title="Permanent link">&para;</a></h1>
 <ul>
-<li>日期：2026-08-09</li>
-<li>范围：<code>src/Payment/Controller/{Manage,App,Webhook}/InvoiceController|PaymentNotifyController</code>、<code>src/Payment/Service/InvoiceService.php</code>、<code>src/Payment/Entity/Invoice.php</code></li>
-<li>遵守约束：<strong>未修改 <code>src/</code> 文件</strong> — 仅添加 <code>tests/</code> 下的测试文件和此报告。</li>
+<li>Date: 2026-08-09</li>
+<li>Scope: <code>src/Payment/Controller/{Manage,App,Webhook}/InvoiceController|PaymentNotifyController</code>, <code>src/Payment/Service/InvoiceService.php</code>, <code>src/Payment/Entity/Invoice.php</code></li>
+<li>Constraint honored: <strong>no <code>src/</code> files modified</strong> — only test files under <code>tests/</code> and this report were added.</li>
 </ul>
-<h2 id="1">1. 覆盖结果<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>通过运行完整的 <code>tests/Payment</code> 套件来测量覆盖率
-<code>--coverage-filter src/Payment</code>（PHP 8.5.1、PHPUnit 12.5.30）。</p>
+<h2 id="1-coverage-results">1. Coverage results<a class="headerlink" href="#1-coverage-results" title="Permanent link">&para;</a></h2>
+<p>Coverage measured by running the full <code>tests/Payment</code> suite with
+<code>--coverage-filter src/Payment</code> (PHP 8.5.1, PHPUnit 12.5.30).</p>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>之前</th>
-<th>之后</th>
-<th>添加行</th>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
+<th>Lines added</th>
 </tr>
 </thead>
 <tbody>
@@ -2643,25 +2643,25 @@
 <td><code>src/Payment/Controller/Manage/InvoiceController.php</code></td>
 <td>74.55%</td>
 <td><strong>100%</strong></td>
-<td>66、67、80、81、82、83、92、98、99、108、113、121、122、131</td>
+<td>66, 67, 80, 81, 82, 83, 92, 98, 99, 108, 113, 121, 122, 131</td>
 </tr>
 <tr>
 <td><code>src/Payment/Controller/Webhook/PaymentNotifyController.php</code></td>
 <td>77.78%</td>
 <td><strong>100%</strong></td>
-<td>33、34</td>
+<td>33, 34</td>
 </tr>
 <tr>
 <td><code>src/Payment/Controller/App/InvoiceController.php</code></td>
 <td>81.82%</td>
 <td><strong>100%</strong></td>
-<td>49、50</td>
+<td>49, 50</td>
 </tr>
 <tr>
 <td><code>src/Payment/Service/InvoiceService.php</code></td>
 <td>94.57%</td>
 <td><strong>100%</strong></td>
-<td>43、69、77、83、86、155、178、200、217、279</td>
+<td>43, 69, 77, 83, 86, 155, 178, 200, 217, 279</td>
 </tr>
 <tr>
 <td><code>src/Payment/Entity/Invoice.php</code></td>
@@ -2671,63 +2671,63 @@
 </tr>
 </tbody>
 </table>
-<p>全套结果：<code>OK (76 tests, 341 assertions)</code>。</p>
-<h2 id="2tests">2.添加测试文件（全部在<code>tests/</code>下，全绿色）<a class="headerlink" href="#2tests" title="Permanent link">&para;</a></h2>
+<p>Full suite result: <code>OK (76 tests, 341 assertions)</code>.</p>
+<h2 id="2-test-files-added-all-under-tests-all-green">2. Test files added (all under <code>tests/</code>, all green)<a class="headerlink" href="#2-test-files-added-all-under-tests-all-green" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>覆盖目标</th>
-<th>笔记</th>
+<th>File</th>
+<th>Coverage targeted</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Payment/Controller/Manage/InvoiceControllerTest.php</code></td>
-<td>管理控制器守卫/捕获分支</td>
-<td>14个单元测试；模拟 <code>InvoiceServiceInterface</code>、<code>EntityManagerInterface</code>、<code>WorkflowInterface</code> + <code>#[AllowMockObjectsWithoutExpectations]</code> + <code>setRequestStack/setSerializer/setTranslator</code> （OrderControllerTest 模式）。涵盖创建/支付/取消/退款/转换成功、未找到 (404) 和服务抛出 (400) 分支，以及 <code>parseAmount('12.34') == 1234</code> 和付款人解析。</td>
+<td>Manage controller guard/catch branches</td>
+<td>14 unit tests; mocks <code>InvoiceServiceInterface</code>, <code>EntityManagerInterface</code>, <code>WorkflowInterface</code> + <code>#[AllowMockObjectsWithoutExpectations]</code> + <code>setRequestStack/setSerializer/setTranslator</code> (OrderControllerTest pattern). Covers create/pay/cancel/refund/transitions success, not-found (404), and service-throws (400) branches, plus <code>parseAmount('12.34') == 1234</code> and payer resolution.</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Controller/App/InvoiceControllerTest.php</code></td>
-<td>应用程序控制器 catch 分支 (49, 50)</td>
-<td>3个单元测试；真正的 <code>Container</code> 与 <code>security.token_storage</code> 返回经过身份验证的 <code>User</code> （PromotionControllerTest 模式）。涵盖成功、服务失败和付款人不匹配 404。</td>
+<td>App controller catch branch (49, 50)</td>
+<td>3 unit tests; real <code>Container</code> with <code>security.token_storage</code> returning an authenticated <code>User</code> (PromotionControllerTest pattern). Covers success, service-throws, and payer-mismatch 404.</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Controller/Webhook/PaymentNotifyControllerTest.php</code></td>
-<td>通用 <code>\Throwable</code> catch (33, 34)</td>
-<td>4个单元测试；真正的<code>PaymentGatewayRegistry</code> + <code>MockGateway</code>。涵盖成功响应、未知网关<code>FAIL</code>、验证<code>FAIL: message</code>和服务抛出<code>FAIL</code>。</td>
+<td>generic <code>\Throwable</code> catch (33, 34)</td>
+<td>4 unit tests; real <code>PaymentGatewayRegistry</code> + <code>MockGateway</code>. Covers success response, unknown-gateway <code>FAIL</code>, verification <code>FAIL: message</code>, and service-throws <code>FAIL</code>.</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Service/InvoiceServiceTest.php</code></td>
-<td>服务警卫/边缘分支机构</td>
-<td>9个单元测试；真实的 <code>Container</code> + 模拟的 EM/Workflow/Dispatcher，真实的 <code>PaymentGatewayRegistry</code>(MockGateway)/<code>PaymentAdjustmentRegistry</code>，加上内联 <code>FakeAdjustmentProvider</code> 固定装置。涵盖负金额、<code>start_pay</code> 防护、扣除超出金额、<code>gateway</code>/<code>tradeType</code> 选项、通知发票未找到、<code>mark_paid</code>/<code>fail</code>/<code>cancel</code>/退款转换防护。</td>
+<td>service guard/edge branches</td>
+<td>9 unit tests; real <code>Container</code> + mocked EM/Workflow/Dispatcher, real <code>PaymentGatewayRegistry</code>(MockGateway)/<code>PaymentAdjustmentRegistry</code>, plus an inline <code>FakeAdjustmentProvider</code> fixture. Covers negative amount, <code>start_pay</code> guard, deduction-exceeds-amount, <code>gateway</code>/<code>tradeType</code> options, notify-invoice-not-found, <code>mark_paid</code>/<code>fail</code>/<code>cancel</code>/refund transition guards.</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Entity/InvoiceCoverageTest.php</code></td>
-<td><code>Invoice::prePersist()</code> 重新初始化 <code>createdAt</code> (194)</td>
-<td>使用<code>ReflectionClass::newInstanceWithoutConstructor()</code> + <code>ReflectionProperty::isInitialized()</code>；故意避免已弃用的 <code>ReflectionProperty::setAccessible()</code>（类型化的不可空 <code>createdAt</code> 不能设置为 <code>null</code>）。</td>
+<td><code>Invoice::prePersist()</code> re-init of <code>createdAt</code> (194)</td>
+<td>Uses <code>ReflectionClass::newInstanceWithoutConstructor()</code> + <code>ReflectionProperty::isInitialized()</code>; deliberately avoids the deprecated <code>ReflectionProperty::setAccessible()</code> (typed non-nullable <code>createdAt</code> cannot be set to <code>null</code>).</td>
 </tr>
 </tbody>
 </table>
-<p>跳过的测试：<strong>无</strong> — 每个正确行为测试都通过当前 <code>src/</code>。</p>
-<h2 id="3">3. 发现错误（未更改源代码）<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
-<h3 id="bug-1-api">BUG-1 — 异常消息泄露给 API 客户端（高）<a class="headerlink" href="#bug-1-api" title="Permanent link">&para;</a></h3>
+<p>Skipped tests: <strong>none</strong> — every correct-behavior test passes against current <code>src/</code>.</p>
+<h2 id="3-bugs-found-no-source-changes-made">3. Bugs found (no source changes made)<a class="headerlink" href="#3-bugs-found-no-source-changes-made" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-exception-messages-leaked-to-api-clients-high">BUG-1 — Exception messages leaked to API clients (High)<a class="headerlink" href="#bug-1-exception-messages-leaked-to-api-clients-high" title="Permanent link">&para;</a></h3>
 <ul>
-<li>位置：<code>src/Payment/Controller/Manage/InvoiceController.php:67,83,99,122</code> 和 <code>src/Payment/Controller/App/InvoiceController.php:50</code></li>
-<li>描述：每个 <code>catch (\Throwable $e)</code> 在 HTTP 400 正文 (<code>return $this-&gt;warning($e-&gt;getMessage(), 400, '', 400);</code>) 中逐字返回 <code>$e-&gt;getMessage()</code>。内部异常（Doctrine/SQL 故障、网关内部、意外的运行时错误）会向最终用户显示，而不是通用消息。</li>
-<li>影响：信息披露；内部/文件路径/SQL 文本泄漏；与 Webhook 控制器不一致，它故意将非验证错误屏蔽为 <code>FAIL</code>。</li>
-<li>复制：发布触发任何 <code>\Throwable</code>（例如未注册网关）的发票支付/取消/退款，并观察 400 响应正文中的原始异常文本。</li>
-<li>建议的修复：捕获域异常（例如 <code>InvoiceInvalidTransitionException</code>、<code>InvoiceAmountMismatchException</code>、<code>InvalidArgumentException</code>）并将它们映射到其消息，但将意外的 <code>\Throwable</code> 包装在通用 <code>warning</code> 消息中（可以选择记录原始消息）。</li>
+<li>Location: <code>src/Payment/Controller/Manage/InvoiceController.php:67,83,99,122</code> and <code>src/Payment/Controller/App/InvoiceController.php:50</code></li>
+<li>Description: every <code>catch (\Throwable $e)</code> returns <code>$e-&gt;getMessage()</code> verbatim in the HTTP 400 body (<code>return $this-&gt;warning($e-&gt;getMessage(), 400, '', 400);</code>). Internal exceptions (Doctrine/SQL failures, gateway internals, unexpected runtime errors) are surfaced to end users instead of a generic message.</li>
+<li>Impact: information disclosure; leak of internals/file paths/SQL text; inconsistent with the Webhook controller, which deliberately masks non-verification errors as <code>FAIL</code>.</li>
+<li>Reproduction: post an invoice pay/cancel/refund that triggers any <code>\Throwable</code> (e.g. unregistered gateway) and observe the raw exception text in the 400 response body.</li>
+<li>Proposed fix: catch domain exceptions (e.g. <code>InvoiceInvalidTransitionException</code>, <code>InvoiceAmountMismatchException</code>, <code>InvalidArgumentException</code>) and map them to their messages, but wrap unexpected <code>\Throwable</code> in a generic <code>warning</code> message (optionally log the original).</li>
 </ul>
-<h3 id="bug-2-markpaid">BUG-2 — <code>markPaid</code> 未验证通知网关/付款与发票是否匹配（中）<a class="headerlink" href="#bug-2-markpaid" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-markpaid-does-not-verify-the-notifying-gatewaypayment-matches-the-invoice-medium">BUG-2 — <code>markPaid</code> does not verify the notifying gateway/payment matches the invoice (Medium)<a class="headerlink" href="#bug-2-markpaid-does-not-verify-the-notifying-gatewaypayment-matches-the-invoice-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li>位置：<code>src/Payment/Service/InvoiceService.php:182</code> (<code>$invoice-&gt;setPayment($result-&gt;payment);</code>)； <code>:153</code> 的查找仅由 <code>outTradeNo</code> 进行。</li>
-<li>描述：<code>markPaid</code> 验证金额和货币，但从不检查 <code>$result-&gt;payment</code> 是否等于发票上记录的付款方式（在 <code>pay()</code> 期间设置）。任何具有匹配金额+货币的通知结果都会将发票转换为已付款状态，并以静默方式覆盖 <code>payment</code> 字段。</li>
-<li>影响：纵深防御缺口——路由到错误网关的通知，或带有错误 <code>payment</code> 的直接服务调用将被接受，并可能重写记录的支付方式；然后下游逻辑（退款路由、报告）使用错误的网关。</li>
-<li>复制：<code>pay()</code> 通过 <code>mock</code> 获取发票，然后使用 <code>payment: 'wechat'</code> 和正确的金额/货币调用 <code>handleNotifyResult()</code>/<code>markPaid()</code>；发票变为 <code>paid</code> 和 <code>payment = wechat</code>。</li>
-<li>建议的修复：在<code>markPaid</code>中，在应用转换之前需要<code>$result-&gt;payment === $invoice-&gt;getPayment()</code>（或预期的网关）；否则抛出 <code>InvoiceAmountMismatchException</code>/<code>InvoiceInvalidTransitionException</code>。</li>
+<li>Location: <code>src/Payment/Service/InvoiceService.php:182</code> (<code>$invoice-&gt;setPayment($result-&gt;payment);</code>); lookup at <code>:153</code> is by <code>outTradeNo</code> only.</li>
+<li>Description: <code>markPaid</code> validates amount and currency but never checks that <code>$result-&gt;payment</code> equals the payment method recorded on the invoice (set during <code>pay()</code>). Any notify result with a matching amount+currency transitions the invoice to paid and silently overwrites the <code>payment</code> field.</li>
+<li>Impact: defense-in-depth gap — a notify routed to the wrong gateway, or a direct service call with a wrong <code>payment</code>, would be accepted and could rewrite the recorded payment method; downstream logic (refund routing, reporting) then uses the wrong gateway.</li>
+<li>Reproduction: <code>pay()</code> an invoice via <code>mock</code>, then call <code>handleNotifyResult()</code>/<code>markPaid()</code> with <code>payment: 'wechat'</code> and the correct amount/currency; the invoice becomes <code>paid</code> with <code>payment = wechat</code>.</li>
+<li>Proposed fix: in <code>markPaid</code>, require <code>$result-&gt;payment === $invoice-&gt;getPayment()</code> (or the intended gateway) before applying the transition; throw <code>InvoiceAmountMismatchException</code>/<code>InvoiceInvalidTransitionException</code> otherwise.</li>
 </ul>
-<h3 id="bug-3-options">BUG-3 — 退款将原始请求正文作为网关 <code>$options</code> 转发（中/低）<a class="headerlink" href="#bug-3-options" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-refund-forwards-the-raw-request-body-as-gateway-options-mediumlow">BUG-3 — Refund forwards the raw request body as gateway <code>$options</code> (Medium/Low)<a class="headerlink" href="#bug-3-refund-forwards-the-raw-request-body-as-gateway-options-mediumlow" title="Permanent link">&para;</a></h3>
 <ul>
 <li>位置：<code>src/Payment/Controller/Manage/InvoiceController.php:118</code>（<code>... $content</code> 作为选项）→ <code>src/Payment/Service/InvoiceService.php:264</code> (<code>$gateway-&gt;refund(..., $options)</code>)。</li>
 <li>描述：完整的请求正文作为 <code>$options</code> 传递到网关退款调用。客户端可以在正文中包含提供者选项，例如 <code>refundId</code>； <code>MockGateway</code> 直接使用 <code>$options['refundId']</code> 作为幂等键，因此调用者可以覆盖提供者退款引用。</li>

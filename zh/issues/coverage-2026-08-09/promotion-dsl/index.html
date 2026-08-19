@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2563,10 +2563,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-low-priority-x-desc-flag-is-parsed-but-never-used" class="md-nav__link">
+  <a href="#bug-4-priority-x-desc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 4 (LOW) — priority: X desc flag is parsed but never used
+        Bug 4（低）- priority: X desc 标志已解析但从未使用
       
     </span>
   </a>
@@ -2574,10 +2574,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-5-low-simulate-disagrees-with-the-real-pipeline-for-templates-without-when" class="md-nav__link">
+  <a href="#bug-5-simulate-when" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 5 (LOW) — simulate() disagrees with the real pipeline for templates without when:
+        Bug 5（低）- simulate() 与没有 when: 的模板的真实管道不一致
       
     </span>
   </a>
@@ -2585,10 +2585,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-6-low-multiple-when-sections-are-handled-inconsistently" class="md-nav__link">
+  <a href="#bug-6-low-when" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 6 (LOW) — multiple when: sections are handled inconsistently
+        Bug 6 (LOW) — 多个 when: 部分的处理不一致
       
     </span>
   </a>
@@ -2596,10 +2596,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-7-low-robustness-parser-eol-skip-branches-are-unreachable-from-lexer-output" class="md-nav__link">
+  <a href="#bug-7-eol-skip" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 7 (LOW, robustness) — parser EOL-skip branches are unreachable from lexer output
+        Bug 7（低，稳健性） - 解析器 EOL-skip 分支无法从词法分析器输出访问
       
     </span>
   </a>
@@ -2612,10 +2612,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes
+        注释
       
     </span>
   </a>
@@ -2722,43 +2722,43 @@
 <li><strong>复制：</strong> <code>ParserBugReproTest::testTrailingDotPathRejectedWithConfusingMessage</code>。</li>
 <li><strong>建议的修复：</strong>在<code>parseDottedPath()</code>中，使用<code>.</code>后，验证以下标记是<code>IDENTIFIER</code>（或者点不是路径上的最后一个标记）并抛出<code>Expected property name after '.'</code>。</li>
 </ul>
-<h3 id="bug-4-low-priority-x-desc-flag-is-parsed-but-never-used">Bug 4 (LOW) — <code>priority: X desc</code> flag is parsed but never used<a class="headerlink" href="#bug-4-low-priority-x-desc-flag-is-parsed-but-never-used" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4-priority-x-desc">Bug 4（低）- <code>priority: X desc</code> 标志已解析但从未使用<a class="headerlink" href="#bug-4-priority-x-desc" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File / line:</strong> <code>src/Promotion/Service/Dsl/Parser.php:586-589</code> writes <code>data['desc']</code>; <code>src/Promotion/Service/PromotionService.php:201-226</code> (<code>getPriority()</code>) reads only <code>value</code>; <code>getAvailable()</code> always sorts descending (<code>usort($sorted, fn($a,$b) =&gt; getPriority($b) &lt;=&gt; getPriority($a))</code>, line 75-77).</li>
-<li><strong>Description:</strong> the <code>desc</code> modifier is stored in the AST but has no consumer anywhere in <code>src/Promotion</code> (grep confirms). Because sorting is already always descending, the flag is a silent no-op — users writing <code>priority: 100 desc</code> get no direction change and no error.</li>
-<li><strong>Impact:</strong> dead feature / misleading DSL; a future "asc" direction would also be ignored.</li>
-<li><strong>Reproduction:</strong> <code>ParserBugReproTest::testPriorityDescFlagIsParsedButUnused</code>.</li>
-<li><strong>Proposed fix:</strong> either honour <code>desc</code> in the comparator, or reject <code>desc</code> (or any direction word) with a clear error.</li>
+<li><strong>文件/行：</strong> <code>src/Promotion/Service/Dsl/Parser.php:586-589</code> 写入 <code>data['desc']</code>； <code>src/Promotion/Service/PromotionService.php:201-226</code> (<code>getPriority()</code>) 只读<code>value</code>； <code>getAvailable()</code> 始终按降序排序（<code>usort($sorted, fn($a,$b) =&gt; getPriority($b) &lt;=&gt; getPriority($a))</code>，第 75-77 行）。</li>
+<li><strong>描述：</strong> <code>desc</code> 修饰符存储在 AST 中，但在 <code>src/Promotion</code> 中没有消费者（grep 确认）。因为排序已经总是降序，所以该标志是无声的无操作 - 用户编写 <code>priority: 100 desc</code> 不会发生方向变化，也不会出现错误。</li>
+<li><strong>影响：</strong> 失效功能/误导性 DSL；未来的“asc”方向也将被忽略。</li>
+<li><strong>复制：</strong> <code>ParserBugReproTest::testPriorityDescFlagIsParsedButUnused</code>。</li>
+<li><strong>建议的修复：</strong> 要么在比较器中尊重 <code>desc</code>，要么拒绝 <code>desc</code> （或任何方向词）并出现明显错误。</li>
 </ul>
-<h3 id="bug-5-low-simulate-disagrees-with-the-real-pipeline-for-templates-without-when">Bug 5 (LOW) — <code>simulate()</code> disagrees with the real pipeline for templates without <code>when:</code><a class="headerlink" href="#bug-5-low-simulate-disagrees-with-the-real-pipeline-for-templates-without-when" title="Permanent link">&para;</a></h3>
+<h3 id="bug-5-simulate-when">Bug 5（低）- <code>simulate()</code> 与没有 <code>when:</code> 的模板的真实管道不一致<a class="headerlink" href="#bug-5-simulate-when" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File / line:</strong> <code>src/Promotion/Service/PromotionTemplateService.php:76-100</code> (<code>$matched</code> stays <code>false</code> when no <code>when</code> child exists) vs <code>src/Promotion/Service/PromotionService.php:126-134</code> (<code>evaluateDslConditions()</code> returns <code>true</code> when there is no <code>when</code> node).</li>
-<li><strong>Description:</strong> an always-on promotion (a <code>do:</code> block with no <code>when:</code>) is applied by the pricing pipeline but <code>simulate()</code> reports <code>matched = false</code>.</li>
-<li><strong>Impact:</strong> the simulation/preview UI under-reports matches for always-on campaigns; a user may believe the campaign is not active.</li>
-<li><strong>Reproduction:</strong> <code>testSimulateReturnsStructure</code> in the existing suite already codifies <code>matched=false</code>; intended behaviour is documented in <code>ParserBugReproTest::testSimulateNoWhenNodeAlwaysMatches</code> (skipped).</li>
-<li><strong>Proposed fix:</strong> initialise <code>$matched</code> to <code>true</code> when the AST contains a <code>do:</code> block but no <code>when:</code> node (mirroring <code>evaluateDslConditions()</code>).</li>
+<li><strong>文件/行：</strong> <code>src/Promotion/Service/PromotionTemplateService.php:76-100</code>（当不存在 <code>when</code> 子节点时，<code>$matched</code> 保持 <code>false</code>）与 <code>src/Promotion/Service/PromotionService.php:126-134</code>（当不存在 <code>when</code> 节点时，<code>evaluateDslConditions()</code> 返回 <code>true</code>）。</li>
+<li><strong>描述：</strong> 始终有效的促销（没有 <code>when:</code> 的 <code>do:</code> 块）由定价管道应用，但 <code>simulate()</code> 报告 <code>matched = false</code>。</li>
+<li><strong>影响：</strong> 模拟/预览 UI 报告不足，与始终在线的营销活动相匹配；用户可能认为该活动不活跃。</li>
+<li><strong>复制：</strong> 现有套件中的 <code>testSimulateReturnsStructure</code> 已经编码了 <code>matched=false</code>；预期行为记录在 <code>ParserBugReproTest::testSimulateNoWhenNodeAlwaysMatches</code> 中（已跳过）。</li>
+<li><strong>建议的修复：</strong> 当 AST 包含 <code>do:</code> 块但没有 <code>when:</code> 节点（镜像 <code>evaluateDslConditions()</code>）时，将 <code>$matched</code> 初始化为 <code>true</code>。</li>
 </ul>
-<h3 id="bug-6-low-multiple-when-sections-are-handled-inconsistently">Bug 6 (LOW) — multiple <code>when:</code> sections are handled inconsistently<a class="headerlink" href="#bug-6-low-multiple-when-sections-are-handled-inconsistently" title="Permanent link">&para;</a></h3>
+<h3 id="bug-6-low-when">Bug 6 (LOW) — 多个 <code>when:</code> 部分的处理不一致<a class="headerlink" href="#bug-6-low-when" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File / line:</strong> <code>src/Promotion/Service/Dsl/Parser.php:37-39</code> allows repeated <code>when:</code> sections; <code>src/Promotion/Service/PromotionService.php:150-158</code> (<code>findWhenNode()</code>) returns only the <strong>first</strong>; <code>src/Promotion/Service/PromotionTemplateService.php:81-92</code> (<code>simulate()</code>) reports only the <strong>last</strong>.</li>
-<li><strong>Description:</strong> with two <code>when:</code> blocks, real evaluation enforces only the first while <code>simulate()</code> shows only the last. There is no error and no combination of both.</li>
-<li><strong>Impact:</strong> conditions written after the first <code>when:</code> are silently ignored in production, changing what promotions actually match.</li>
-<li><strong>Reproduction:</strong> <code>ParserBugReproTest::testParserAllowsMultipleWhenSections</code> shows two <code>when</code> nodes surviving the parse.</li>
-<li><strong>Proposed fix:</strong> reject a second <code>when:</code> section at parse time, or make both <code>findWhenNode()</code>/<code>simulate()</code> honour all <code>when:</code> nodes (AND them together).</li>
+<li><strong>文件/行：</strong> <code>src/Promotion/Service/Dsl/Parser.php:37-39</code> 允许重复 <code>when:</code> 部分； <code>src/Promotion/Service/PromotionService.php:150-158</code> (<code>findWhenNode()</code>) 仅返回<strong>第一个</strong>； <code>src/Promotion/Service/PromotionTemplateService.php:81-92</code> (<code>simulate()</code>) 仅报告<strong>最后</strong>。</li>
+<li><strong>描述：</strong> 有两个 <code>when:</code> 块，实际评估仅强制执行第一个，而 <code>simulate()</code> 仅显示最后一个。没有错误，也没有两者的结合。</li>
+<li><strong>影响：</strong>第一个 <code>when:</code> 之后写入的条件在生产中会被默默忽略，从而更改促销实际匹配的内容。</li>
+<li><strong>复制：</strong> <code>ParserBugReproTest::testParserAllowsMultipleWhenSections</code> 显示两个在解析中幸存下来的 <code>when</code> 节点。</li>
+<li><strong>建议的修复：</strong> 在解析时拒绝第二个 <code>when:</code> 部分，或者使两个 <code>findWhenNode()</code>/<code>simulate()</code> 遵循所有 <code>when:</code> 节点（并将它们放在一起）。</li>
 </ul>
-<h3 id="bug-7-low-robustness-parser-eol-skip-branches-are-unreachable-from-lexer-output">Bug 7 (LOW, robustness) — parser EOL-skip branches are unreachable from lexer output<a class="headerlink" href="#bug-7-low-robustness-parser-eol-skip-branches-are-unreachable-from-lexer-output" title="Permanent link">&para;</a></h3>
+<h3 id="bug-7-eol-skip">Bug 7（低，稳健性） - 解析器 EOL-skip 分支无法从词法分析器输出访问<a class="headerlink" href="#bug-7-eol-skip" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File / line:</strong> <code>src/Promotion/Service/Dsl/Lexer.php:39-41</code> (blank/comment lines are skipped, so at most one <code>EOL</code> exists per physical line) vs the parser's "consume stray EOL and continue" branches (<code>Parser.php</code> 152–153, 185, 293–294, 521–522, 607–608).</li>
-<li><strong>Description:</strong> consecutive <code>EOL</code> tokens cannot be produced by the lexer, so those defensive branches are dead for any DSL string. They are only reachable by feeding hand-built token arrays to <code>Parser::parse()</code> (as <code>ParserCoverageTest</code> does).</li>
-<li><strong>Impact:</strong> latent fragility rather than an observable defect; if the lexer ever changes (e.g. to preserve blank lines), the parser behaviour would silently change.</li>
-<li><strong>Reproduction:</strong> <code>ParserBugReproTest::testLexerNeverEmitsConsecutiveEolTokens</code>.</li>
-<li><strong>Proposed fix:</strong> none required; document, or decide whether blank lines should be preserved and emit real <code>EOL</code>s.</li>
+<li><strong>文件/行：</strong> <code>src/Promotion/Service/Dsl/Lexer.php:39-41</code> （跳过空白/注释行，因此每个物理行最多存在一个 <code>EOL</code>）与解析器的“消耗杂散 EOL 并继续”分支（<code>Parser.php</code> 152–153、185、293–294、521–522、607–608）。</li>
+<li><strong>描述：</strong> 词法分析器无法生成连续的 <code>EOL</code> 标记，因此这些防御分支对于任何 DSL 字符串都是无效的。它们只能通过将手工构建的令牌数组提供给 <code>Parser::parse()</code> 来访问（就像 <code>ParserCoverageTest</code> 那样）。</li>
+<li><strong>影响：</strong>潜在的脆弱性而不是可观察到的缺陷；如果词法分析器发生变化（例如保留空行），解析器行为将悄然发生变化。</li>
+<li><strong>复制：</strong> <code>ParserBugReproTest::testLexerNeverEmitsConsecutiveEolTokens</code>。</li>
+<li><strong>建议的修复：</strong> 不需要；文档，或决定是否应保留空白行并发出真正的 <code>EOL</code>。</li>
 </ul>
-<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<h2 id="_2">注释<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Coverage targets were the lines listed in <code>var/uncovered-map.txt</code>; every one of them is now executed (Parser 29,30,152,153,185,229–233,267,293,294,366,389,396,411,418,437,444,449,464,497,502,521,522,528,552,570,575–580,607,608,614,651,677; Evaluator 124,168,171; PromotionCalculator 64,143; PromotionService 225; PromotionTemplateService 125,128).</li>
-<li>Bugs are reported only — <strong>no source files were modified</strong>.</li>
-<li>The three skipped tests (<code>ParserBugReproTest</code>) encode intended behaviour that the current source cannot satisfy; un-skipping them fails, as documented per bug.</li>
+<li>覆盖目标是<code>var/uncovered-map.txt</code>中列出的行；现在它们中的每一个都被执行（解析器29,30,152,153,185,229–233,267,293,294,366,389,396,411,418,437,444 ,449,464,497,502,521,522,528,552,570,575–580,607,608,614,651,677;评估器 124,168,171；促销计算器 64,143；促销模板服务 125,128)。</li>
+<li>仅报告错误 - <strong>未修改源文件</strong>。</li>
+<li>三个跳过的测试（<code>ParserBugReproTest</code>）编码当前源无法满足的预期行为；根据每个错误的记录，取消跳过它们会失败。</li>
 </ul>
 
 

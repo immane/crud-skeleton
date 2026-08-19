@@ -27,7 +27,7 @@
     
     
       
-        <title>Core (Utils/Listener/Controller/Serializer) test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>核心（Utils/Listener/Controller/Serializer）测试审核（2026-08-09） - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#core-utilslistenercontrollerserializer-test-audit-2026-08-09" class="md-skip">
+        <a href="#utilslistenercontrollerserializer2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Core (Utils/Listener/Controller/Serializer) test audit (2026-08-09)
+              核心（Utils/Listener/Controller/Serializer）测试审核（2026-08-09）
             
           </span>
         </div>
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2496,32 +2496,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary-table" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary — table
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep-bullet-list" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        KEEP — bullet list
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        删除候选人 — 表
+        摘要 — 表
       
     </span>
   </a>
@@ -2532,7 +2510,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议
+        保留 — 项目符号列表
       
     </span>
   </a>
@@ -2541,6 +2519,28 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除候选人 — 表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并建议
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -2570,263 +2570,263 @@
   
 
 
-<h1 id="core-utilslistenercontrollerserializer-test-audit-2026-08-09">Core (Utils/Listener/Controller/Serializer) test audit (2026-08-09)<a class="headerlink" href="#core-utilslistenercontrollerserializer-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Read-only audit of <code>tests/Core/Utils</code>, <code>tests/Core/EventListener</code>, <code>tests/Core/Controller</code> (root + <code>System/</code>), <code>tests/Core/Serializer</code> (+ <code>Normalizer/</code>), <code>tests/Core/Exception</code>, <code>tests/Core/DependencyInjection</code>. Cross-referenced against <code>src/Core/*</code> and the integration suite (<code>tests/Integration/Core*ApiTest</code>).</p>
-<p>Context: the 2026-08-09 coverage campaign (see <code>docs/issues/coverage-2026-08-09/README.md</code>) added many <code>*CoverageTest</code> / <code>*ExtendedTest</code> / <code>*Coverage2Test</code> files pushing line coverage to 99.46%. Several duplicate behavior already locked by pre-existing tests, or assert only that lines run. Skipped tests that document <code>src/</code> bugs (Location L-2, Math M-1/M-2) are <strong>KEEP</strong> by policy.</p>
-<h2 id="summary-table">Summary — table<a class="headerlink" href="#summary-table" title="Permanent link">&para;</a></h2>
+<h1 id="utilslistenercontrollerserializer2026-08-09">核心（Utils/Listener/Controller/Serializer）测试审核（2026-08-09）<a class="headerlink" href="#utilslistenercontrollerserializer2026-08-09" title="Permanent link">&para;</a></h1>
+<p><code>tests/Core/Utils</code>、<code>tests/Core/EventListener</code>、<code>tests/Core/Controller</code>（root + <code>System/</code>）、<code>tests/Core/Serializer</code>（+ <code>Normalizer/</code>）、<code>tests/Core/Exception</code>、<code>tests/Core/DependencyInjection</code> 的只读审核。针对 <code>src/Core/*</code> 和集成套件 (<code>tests/Integration/Core*ApiTest</code>) 进行交叉引用。</p>
+<p>背景：2026 年 8 月 9 日的覆盖率活动（参见 <code>docs/issues/coverage-2026-08-09/README.md</code>）添加了许多 <code>*CoverageTest</code> / <code>*ExtendedTest</code> / <code>*Coverage2Test</code> 文件，将线路覆盖率推至 99.46%。一些重复的行为已经被预先存在的测试锁定，或者仅断言该行运行。根据策略，跳过的记录 <code>src/</code> 错误（位置 L-2，数学 M-1/M-2）的测试是<strong>保留</strong>。</p>
+<h2 id="_1">摘要 — 表<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Utils/ArrayCollectionTest.php</code></td>
 <td>11</td>
-<td>KEEP (some trivial init cases → trim)</td>
+<td>11 KEEP（一些琐碎的初始情况→修剪）</td>
 </tr>
 <tr>
 <td><code>Utils/ArrayCommonTest.php</code></td>
 <td>3</td>
-<td>MERGE into Extended</td>
+<td>合并到扩展</td>
 </tr>
 <tr>
 <td><code>Utils/ArrayCommonExtendedTest.php</code></td>
 <td>11</td>
-<td>KEEP</td>
+<td>11保持</td>
 </tr>
 <tr>
 <td><code>Utils/FilterDateTimeTest.php</code></td>
 <td>1</td>
-<td>DELETE candidate (near-empty wrapper, dead util)</td>
+<td>删除候选者（近空包装器，死实用程序）</td>
 </tr>
 <tr>
 <td><code>Utils/FixJSONTest.php</code></td>
 <td>11</td>
-<td>KEEP (base)</td>
+<td>11保持（基础）</td>
 </tr>
 <tr>
 <td><code>Utils/FixJSONExtendedTest.php</code></td>
 <td>10</td>
-<td>PARTIAL-DELETE (5 dup of base)</td>
+<td>10部分删除（5 个碱基重复）</td>
 </tr>
 <tr>
 <td><code>Utils/InflectTest.php</code></td>
 <td>2</td>
-<td>DELETE (fully subsumed by Extended)</td>
+<td>删除（完全包含在扩展中）</td>
 </tr>
 <tr>
 <td><code>Utils/InflectExtendedTest.php</code></td>
 <td>15</td>
-<td>KEEP</td>
+<td>15保持</td>
 </tr>
 <tr>
 <td><code>Utils/InflectCoverageTest.php</code></td>
 <td>3</td>
-<td>DELETE candidate (trivial, dup of round-trip)</td>
+<td>删除候选者（简单，往返的重复）</td>
 </tr>
 <tr>
 <td><code>Utils/LocationTest.php</code></td>
-<td>5 (1 skipped)</td>
-<td>KEEP (documents broken class + L-2 bug)</td>
+<td>5（跳过 1）</td>
+<td>KEEP（文档损坏类+L-2 bug）</td>
 </tr>
 <tr>
 <td><code>Utils/MathTest.php</code></td>
 <td>13</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>Utils/MathExtendedTest.php</code></td>
 <td>25</td>
-<td>PARTIAL-DELETE (2 tautological / dup)</td>
+<td>25部分删除（2 同义反复/重复）</td>
 </tr>
 <tr>
 <td><code>Utils/MathCoverageTest.php</code></td>
-<td>8 (3 skipped)</td>
-<td>KEEP (skips document M-1/M-2)</td>
+<td>8（跳过 3）</td>
+<td>KEEP（跳过文档 M-1/M-2）</td>
 </tr>
 <tr>
 <td><code>Utils/RsaClientTest.php</code></td>
 <td>25</td>
-<td>KEEP (only real crypto coverage)</td>
+<td>25 KEEP（仅真正的加密覆盖范围）</td>
 </tr>
 <tr>
 <td><code>Utils/StringCaseTest.php</code></td>
 <td>1</td>
-<td>MERGE into Extended</td>
+<td>合并到扩展</td>
 </tr>
 <tr>
 <td><code>Utils/StringCaseExtendedTest.php</code></td>
 <td>13</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>Utils/UUIDTest.php</code></td>
 <td>2</td>
-<td>DELETE (1 exact dup + 1 subsumed)</td>
+<td>删除（1 个精确重复 + 1 个包含）</td>
 </tr>
 <tr>
 <td><code>Utils/UUIDExtendedTest.php</code></td>
 <td>15</td>
-<td>KEEP</td>
+<td>15保持</td>
 </tr>
 <tr>
 <td><code>EventListener/AccessLogListenerTest.php</code></td>
 <td>18</td>
-<td>KEEP</td>
+<td>18保持</td>
 </tr>
 <tr>
 <td><code>EventListener/ControllerListenerTest.php</code></td>
 <td>1</td>
-<td>DELETE (dup of Extended)</td>
+<td>删除（扩展的重复）</td>
 </tr>
 <tr>
 <td><code>EventListener/ControllerListenerExtendedTest.php</code></td>
 <td>5</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>EventListener/ExceptionInterceptorTest.php</code></td>
 <td>1</td>
-<td>DELETE (dup of Extended)</td>
+<td>删除（扩展的重复）</td>
 </tr>
 <tr>
 <td><code>EventListener/ExceptionInterceptorExtendedTest.php</code></td>
 <td>11</td>
-<td>KEEP</td>
+<td>11保持</td>
 </tr>
 <tr>
 <td><code>EventListener/LocaleListenerTest.php</code></td>
 <td>13</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>EventListener/LocaleListenerCoverageTest.php</code></td>
 <td>1</td>
-<td>DELETE (dup of LocaleListenerTest)</td>
+<td>删除（LocaleListenerTest 的重复）</td>
 </tr>
 <tr>
 <td><code>EventListener/OpenApiEnricherListenerCoverageTest.php</code></td>
 <td>4</td>
-<td>KEEP (guards not covered elsewhere; 2 of the 4 are the same branch)</td>
+<td>KEEP（其他地方未涵盖的守卫；4 个中的 2 个是同一分支）</td>
 </tr>
 <tr>
 <td><code>Controller/RestControllerTest.php</code></td>
 <td>11</td>
-<td>KEEP</td>
+<td>11保持</td>
 </tr>
 <tr>
 <td><code>Controller/RestControllerExtendedTest.php</code></td>
 <td>11</td>
-<td>KEEP</td>
+<td>11保持</td>
 </tr>
 <tr>
 <td><code>Controller/RestControllerCoverageTest.php</code></td>
 <td>12</td>
-<td>PARTIAL-DELETE (3 exact dups)</td>
+<td>12部分删除（3 个精确重复）</td>
 </tr>
 <tr>
 <td><code>Controller/RestControllerCoverage2Test.php</code></td>
 <td>13</td>
-<td>KEEP (note 4 IMPLEMENTATION-DETAIL getter tests)</td>
+<td>KEEP（注释 4 实现细节 getter 测试）</td>
 </tr>
 <tr>
 <td><code>Controller/RestControllerPaginationIntegrationTest.php</code></td>
 <td>1</td>
-<td>KEEP (unique real-DB path)</td>
+<td>KEEP（唯一的真实数据库路径）</td>
 </tr>
 <tr>
 <td><code>Controller/System/EntityControllerTest.php</code></td>
 <td>5</td>
-<td>PARTIAL-DELETE (2 dups of Extended)</td>
+<td>部分删除（扩展的 2 个副本）</td>
 </tr>
 <tr>
 <td><code>Controller/System/EntityControllerExtendedTest.php</code></td>
 <td>10</td>
-<td>KEEP</td>
+<td>10保持</td>
 </tr>
 <tr>
 <td><code>Controller/System/RouterControllerTest.php</code></td>
 <td>3</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>Controller/System/RouterControllerExtendedTest.php</code></td>
 <td>5</td>
-<td>PARTIAL-DELETE (4 tautological)</td>
+<td>部分删除（4 个同义反复）</td>
 </tr>
 <tr>
 <td><code>Serializer/CircularReferenceHandlerTest.php</code></td>
 <td>2</td>
-<td>KEEP (weak fallback assertion)</td>
+<td>KEEP（弱后备断言）</td>
 </tr>
 <tr>
 <td><code>Serializer/ObjectCallbackTest.php</code></td>
 <td>2</td>
-<td>KEEP (tests unwired class)</td>
+<td>KEEP（测试无线类）</td>
 </tr>
 <tr>
 <td><code>Serializer/SerializerContextFactoryTest.php</code></td>
 <td>1</td>
-<td>DELETE (passes even if SUT is a no-op)</td>
+<td>DELETE（即使 SUT 是无操作也会通过）</td>
 </tr>
 <tr>
 <td><code>Serializer/Normalizer/CircularReferenceHandlerTest.php</code></td>
 <td>5</td>
-<td>KEEP (tests orphaned duplicate class)</td>
+<td>KEEP（测试孤立的重复类）</td>
 </tr>
 <tr>
 <td><code>Serializer/Normalizer/FlatNormalizerExtendedTest.php</code></td>
 <td>9</td>
-<td>PARTIAL-DELETE (2 NEAR-EMPTY <code>assertTrue(true)</code>)</td>
+<td>部分删除（2 近空 <code>assertTrue(true)</code>）</td>
 </tr>
 <tr>
 <td><code>Serializer/Normalizer/FlatNormalizerCoverageTest.php</code></td>
 <td>12</td>
-<td>KEEP (unique branches + JSON-string-corruption bug doc)</td>
+<td>12 KEEP（独特的分支+ JSON 字符串损坏错误文档）</td>
 </tr>
 <tr>
 <td><code>Exception/MessageHttpExceptionTest.php</code></td>
 <td>2</td>
-<td>DELETE (subsumed by Extended)</td>
+<td>删除（包含在扩展中）</td>
 </tr>
 <tr>
 <td><code>Exception/MessageHttpExceptionExtendedTest.php</code></td>
 <td>7</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>DependencyInjection/ConfigurationTest.php</code></td>
 <td>4</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>DependencyInjection/CoreExtensionTest.php</code></td>
 <td>3</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 </tbody>
 </table>
-<h2 id="keep-bullet-list">KEEP — bullet list<a class="headerlink" href="#keep-bullet-list" title="Permanent link">&para;</a></h2>
-<p><strong>Utils</strong>
-- <code>ArrayCommonExtendedTest</code> — real ExpressionLanguage <code>filter/map/reduce</code> behavior; the only place these helpers are validated.
-- <code>ArrayCommonTest</code> — small but includes <code>testMergeMatchesCurrentLegacyBehavior</code>, a genuine regression guard for the surprising <code>array_merge($arrays)</code> wrapping.
-- <code>FixJSONTest</code> — base coverage of <code>getJSONType</code>/<code>fixJSON</code>, both used in <code>RestController</code> and <code>CreateApiViewMixin</code>.
-- <code>InflectExtendedTest</code> — the substantive inflector rule table (irregular/uncountable/x-ch-sh/round-trip). <code>Inflect::singularize</code> is used in <code>BaseServiceMutationTrait</code>.
-- <code>LocationTest</code> — the only harness that can run <code>Location</code> (its <code>php-curl-class</code> dependency is absent); the skipped <code>testGetAddressIsBrokenByStringMethodCall</code> documents bug L-2. KEEP, incl. the skip.
-- <code>MathCoverageTest</code> — the three <code>markTestSkipped</code> cases document real bugs M-1 (<code>mt_rand()/rand()</code> one-arg crash on PHP 8.5) and M-2 (<code>lcg_value()</code> deprecation).
-- <code>MathTest</code> — real boundary assertions for <code>random</code>, <code>abs</code>, <code>round</code>, <code>locationDistance</code>, exact constant equality.
-- <code>RsaClientTest</code> — the only real RSA sign/verify/encrypt round-trip coverage; documents the MD5-signing and undefined-variable bugs (R-1/R-2). None skipped, all assert current behavior.
-- <code>StringCaseExtendedTest</code> — full dash→camel behavior matrix.
-- <code>UUIDExtendedTest</code> — v3/v4/v5 format bits, namespaces, determinism, whitespace rejection; <code>UUID</code> is used across every module.
-- <code>UUIDTest::testV4ProducesValidUuid</code> behavior is subsumed, but harmless until deletion of the file (see DELETE).</p>
-<p><strong>EventListener</strong>
-- <code>AccessLogListenerTest</code> — thorough and unique: method whitelist, auth-path body hiding, truncation, binary/empty bodies, anon/username resolution.
-- <code>ControllerListenerExtendedTest</code>, <code>ExceptionInterceptorExtendedTest</code>, <code>LocaleListenerTest</code> — the substantive branch tables.
-- <code>OpenApiEnricherListenerCoverageTest</code> — the four early-return guards are not exercised by <code>CoreOpenApiEnricherApiTest</code> (which only hits the happy path). Note: <code>testJsonContentWithoutPathsReturnsEarly</code> and <code>testJsonArrayContentWithoutPathsReturnsEarly</code> hit the <em>same</em> <code>!is_array($spec) || !isset($spec['paths'])</code> guard — collapse those two.</p>
+<h2 id="_2">保留 — 项目符号列表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><strong>实用程序</strong>
+- <code>ArrayCommonExtendedTest</code> — 真正的 ExpressionLanguage <code>filter/map/reduce</code> 行为；这些助手被验证的唯一地方。
+- <code>ArrayCommonTest</code> — 小但包含 <code>testMergeMatchesCurrentLegacyBehavior</code>，一个真正的回归保护，用于令人惊讶的 <code>array_merge($arrays)</code> 包装。
+- <code>FixJSONTest</code> — <code>getJSONType</code>/<code>fixJSON</code> 的基本覆盖范围，均用于 <code>RestController</code> 和 <code>CreateApiViewMixin</code>。
+- <code>InflectExtendedTest</code> — 实质性变形规则表（不规则/不可数/x-ch-sh/往返）。 <code>Inflect::singularize</code> 用于<code>BaseServiceMutationTrait</code>。
+- <code>LocationTest</code> — 唯一可以运行 <code>Location</code> 的工具（不存在其 <code>php-curl-class</code> 依赖项）；跳过的 <code>testGetAddressIsBrokenByStringMethodCall</code> 记录了 bug L-2。保留，包括。跳过。
+- <code>MathCoverageTest</code> — 三个 <code>markTestSkipped</code> 案例记录了真正的错误 M-1（<code>mt_rand()/rand()</code> 在 PHP 8.5 上的单参数崩溃）和 M-2（<code>lcg_value()</code> 弃用）。
+- <code>MathTest</code> — <code>random</code>、<code>abs</code>、<code>round</code>、<code>locationDistance</code> 的真实边界断言，精确常量相等。
+- <code>RsaClientTest</code> — 唯一真正的 RSA 签名/验证/加密往返覆盖范围；记录 MD5 签名和未定义变量错误 (R-1/R-2)。没有跳过，全部断言当前行为。
+- <code>StringCaseExtendedTest</code> — 全破折号→骆驼行为矩阵。
+- <code>UUIDExtendedTest</code> — v3/v4/v5 格式位、命名空间、确定性、空格拒绝； <code>UUID</code> 用于每个模块。
+- <code>UUIDTest::testV4ProducesValidUuid</code> 行为被包含，但在删除文件之前是无害的（请参阅删除）。</p>
+<p><strong>事件监听器</strong>
+- <code>AccessLogListenerTest</code> — 彻底且独特：方法白名单、身份验证路径主体隐藏、截断、二进制/空主体、匿名/用户名解析。
+- <code>ControllerListenerExtendedTest</code>、<code>ExceptionInterceptorExtendedTest</code>、<code>LocaleListenerTest</code> — 实质性分支表。
+- <code>OpenApiEnricherListenerCoverageTest</code> — 四个提前返回的守卫不被 <code>CoreOpenApiEnricherApiTest</code> 行使（它只到达快乐路径）。注意：<code>testJsonContentWithoutPathsReturnsEarly</code>和<code>testJsonArrayContentWithoutPathsReturnsEarly</code>击中了<em>相同</em><code>!is_array($spec) || !isset($spec['paths'])</code>守卫——折叠这两个。</p>
 <p><strong>控制器</strong>
 - <code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> — 信封形状，<code>@display</code>（复杂/减少/表达式），<code>@expands</code>，分页切片，204。
 - <code>RestControllerCoverage2Test</code> — 独特的错误/边缘分支（<code>resolveService</code>、扩展链移位、静默吸气剂/表达式吞咽）。四个依赖项获取器异常测试（<code>getRequestStack</code>/<code>getSerializer</code>/<code>getTranslator</code>/<code>getService</code>）是薄的实现细节——在合并后考虑。
@@ -2838,7 +2838,7 @@
 - <code>Normalizer/CircularReferenceHandlerTest</code> — 保留只是因为它仍然记录了<em>可能</em>被未来连线引用的类的契约；请注意，该类今天是孤立类（<code>src/</code>/<code>config/</code> 中没有任何内容引用 <code>App\Core\Serializer\Normalizer\CircularReferenceHandler</code>）。
 - <code>MessageHttpExceptionExtendedTest</code> — 保留为规范文件。
 - <code>Serializer/CircularReferenceHandlerTest</code> — keep（这是实际连接在<code>config/packages/serializer.yaml</code>中的处理程序）。</p>
-<h2 id="_1">删除候选人 — 表<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_3">删除候选人 — 表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3079,7 +3079,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_2">合并建议<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>合并候选（将 <code>Extended</code>/<code>Coverage</code> 文件合并回其库中，仅保留上面列出的非重复案例）：</p>
 <ol>
 <li><code>FixJSONTest</code> + <code>FixJSONExtendedTest</code> → 一个<code>FixJSONTest</code>。</li>
@@ -3096,7 +3096,7 @@
 <li><code>InflectExtendedTest</code> + <code>InflectCoverageTest</code> → 删除库后的一个文件。</li>
 <li><code>OpenApiEnricherListenerCoverageTest</code> — 将 <code>testJsonContentWithoutPathsReturnsEarly</code> + <code>testJsonArrayContentWithoutPathsReturnsEarly</code> 合二为一。</li>
 </ol>
-<h2 id="_3">验证步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>每次删除后运行（每个 TEST_STRATEGY 的 PHP 8.4+ 运行时）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Core/Utils<span class="w"> </span>tests/Core/EventListener<span class="w"> </span>tests/Core/Controller<span class="w"> </span>tests/Core/Serializer<span class="w"> </span>tests/Core/Exception<span class="w"> </span>tests/Core/DependencyInjection
 </code></pre></div>

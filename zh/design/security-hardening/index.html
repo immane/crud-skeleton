@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2674,10 +2674,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#serialization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        序列化
+        Serialization
       
     </span>
   </a>
@@ -2690,22 +2690,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#p3" class="md-nav__link">
+  <a href="#priority-p3-ongoing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        优先 P3 — 正在进行
+        Priority P3 — Ongoing
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="优先 P3 — 正在进行">
+    <nav class="md-nav" aria-label="Priority P3 — Ongoing">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_13" class="md-nav__link">
+  <a href="#cross-cutting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        横切
+        Cross-Cutting
       
     </span>
   </a>
@@ -2840,29 +2840,29 @@
 </ul>
 <h3 id="dos_1">DoS/查询安全<a class="headerlink" href="#dos_1" title="Permanent link">&para;</a></h3>
 <ul>
-<li>[ ] 为每个实体或一个实体添加允许的 <code>@order</code> 和 <code>@groupBy</code> 字段的允许列表
-  排序/分组列的最大数量。</li>
-<li>[ ] 在<code>ExpressionDqlParser::recursiveCompile</code>中添加最大递归深度保护。</li>
-<li>[ ] 为 <code>@hints</code> 添加允许的 Doctrine 查询提示的允许列表。</li>
+<li>[ ] Add an allow-list of permitted <code>@order</code> and <code>@groupBy</code> fields for each entity or a
+  maximum number of sort/group columns.</li>
+<li>[ ] Add a maximum recursion depth guard in <code>ExpressionDqlParser::recursiveCompile</code>.</li>
+<li>[ ] Add an allow-list of permitted Doctrine query hints for <code>@hints</code>.</li>
 </ul>
-<h3 id="_12">序列化<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<h3 id="serialization">Serialization<a class="headerlink" href="#serialization" title="Permanent link">&para;</a></h3>
 <ul>
-<li>[ ] 从 API 错误响应信封中删除异常类名称。</li>
-<li>[ ] 将 <code>/system/entities/{entityName}</code> 限制为 <code>ROLE_ADMIN</code> 或删除敏感元数据
-  （列类型、长度）来自响应。</li>
+<li>[ ] Remove the exception class name from the API error response envelope.</li>
+<li>[ ] Restrict <code>/system/entities/{entityName}</code> to <code>ROLE_ADMIN</code> or remove sensitive metadata
+  (column types, lengths) from the response.</li>
 </ul>
 <hr />
-<h2 id="p3">优先 P3 — 正在进行<a class="headerlink" href="#p3" title="Permanent link">&para;</a></h2>
-<h3 id="_13">横切<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<h2 id="priority-p3-ongoing">Priority P3 — Ongoing<a class="headerlink" href="#priority-p3-ongoing" title="Permanent link">&para;</a></h2>
+<h3 id="cross-cutting">Cross-Cutting<a class="headerlink" href="#cross-cutting" title="Permanent link">&para;</a></h3>
 <ul>
-<li>[ ] 集成自动依赖漏洞扫描（Dependabot / GitHub Advisory
-  数据库）（如果尚未激活）。</li>
-<li>[ ] 检查任何媒体或用户拥有的实体的 <code>ON DELETE SET NULL</code> 外键 — 确保
-  删除的用户不会导致以前的私人数据变得公开。</li>
-<li>[ ] 对所有应用控制器运行定期手动 IDOR 审核：验证 <code>commonFilter</code> +
-  显式所有权检查涵盖 <code>detail</code>、<code>update</code>、<code>delete</code> 和任何自定义操作方法。</li>
-<li>[ ] 添加敏感操作的审核日志记录（媒体删除、支付状态更改、钱包
-  调整）以支持取证分析。</li>
+<li>[ ] Integrate automated dependency vulnerability scanning (Dependabot / GitHub Advisory
+  Database) if not already active.</li>
+<li>[ ] Review <code>ON DELETE SET NULL</code> foreign keys for any media or user-owned entities — ensure
+  deleted users do not cause previously private data to become public.</li>
+<li>[ ] Run a periodic manual IDOR review on all App controllers: verify that <code>commonFilter</code> +
+  explicit ownership checks cover <code>detail</code>, <code>update</code>, <code>delete</code>, and any custom action methods.</li>
+<li>[ ] Add audit logging for sensitive operations (media deletion, payment state changes, wallet
+  adjustments) to support forensic analysis.</li>
 </ul>
 
 

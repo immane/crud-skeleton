@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2507,10 +2507,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delete-candidates-filemethod-reason-confidence-covered-by" class="md-nav__link">
+  <a href="#filemethod" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DELETE CANDIDATES — File::method | Reason | Confidence | Covered by
+        删除候选者 — File::method |原因 |信心|覆盖范围
       
     </span>
   </a>
@@ -2717,16 +2717,16 @@
 </table>
 <p>＃＃ 保持</p>
 <ul>
-<li><strong>DSL behavioral tests</strong> — <code>LexerTest</code>, <code>ParserTest</code>, <code>EvaluatorTest</code>, <code>ParserBugReproTest</code>. The lexer/parser/evaluator are the module's core rule engine; these tests pin token/grammar/evaluation semantics. <code>ParserBugReproTest</code> pins known defects (tiered-type unparseable, OR-block absorption, trailing-dot error, unused <code>desc</code>, multiple <code>when:</code>, missing <code>when:</code> simulate mismatch) and its 3 skipped tests document intended behavior — explicitly KEEP per campaign rules.</li>
-<li><strong>Pipeline integration</strong> — <code>PromotionPricingPipelineIntegrationTest</code> (store scoping, global campaigns, best-price selection, multi-SKU stacking, expiry) is the evidence for the BUSINESS_INVARIANTS "Promotions" row.</li>
-<li><strong>Calculator conflict modes</strong> — <code>PromotionCalculatorTest</code> (stackable loop, lock_item) + <code>PromotionCalculatorCoverageTest</code> (exclusive break, best-price scan skip) are complementary: the coverage file covers the two conflict modes the main test omits.</li>
-<li><strong>PromotionService filtering/priority/apply</strong> — the 30+ <code>PromotionServiceTest</code> filtering, time-window, DSL-condition, and sorting tests plus the coverage-test priority fallback.</li>
-<li><strong>PromotionTemplateService parse/simulate/update</strong> + coverage (type/phase mismatch validation).</li>
-<li><strong>Strategy core rules</strong> — the primary case per strategy (Discount rate/cap/items, FullReduction value, Gift add, Member level gate, Nth item, Tiered best-match, FreeShipping meta).</li>
-<li><strong>Repository + Entity tests</strong> — Doctrine mapping validation on persisted state (<code>findById</code> with template/config/time fields), entity constructor/accessor/touch contracts.</li>
-<li><strong>PromotionTemplateControllerTest validate/dry-run action tests</strong> — the only controller tests asserting actual status codes (200/422/404).</li>
+<li><strong>DSL 行为测试</strong> — <code>LexerTest</code>、<code>ParserTest</code>、<code>EvaluatorTest</code>、<code>ParserBugReproTest</code>。词法分析器/解析器/评估器是模块的核心规则引擎；这些测试固定令牌/语法/评估语义。 <code>ParserBugReproTest</code> 固定已知缺陷（分层类型不可解析、OR 块吸收、尾随点错误、未使用的 <code>desc</code>、多个 <code>when:</code>、缺少 <code>when:</code> 模拟不匹配）及其 3 个跳过的测试记录了预期行为 - 根据活动规则明确保留。</li>
+<li><strong>管道集成</strong> — <code>PromotionPricingPipelineIntegrationTest</code>（商店范围、全球营销活动、最优惠价格选择、多 SKU 堆叠、到期）是 BUSINESS_INVARIANTS“促销”行的证据。</li>
+<li><strong>计算器冲突模式</strong> - <code>PromotionCalculatorTest</code>（可堆叠循环，lock_item）+ <code>PromotionCalculatorCoverageTest</code>（独占中断，最佳价格扫描跳过）是互补的：覆盖文件涵盖了主要测试省略的两种冲突模式。</li>
+<li><strong>PromotionService 过滤/优先级/应用</strong> — 30 多个 <code>PromotionServiceTest</code> 过滤、时间窗口、DSL 条件和排序测试以及覆盖测试优先级回退。</li>
+<li><strong>PromotionTemplateService 解析/模拟/更新</strong> + 覆盖范围（类型/阶段不匹配验证）。</li>
+<li><strong>策略核心规则</strong> - 每个策略的主要案例（折扣率/上限/商品、FullReduction 值、礼品添加、会员级别门、第 N 个商品、分层最佳匹配、FreeShipping 元）。</li>
+<li><strong>存储库 + 实体测试</strong> — 持久状态（带有模板/配置/时间字段的 <code>findById</code>）、实体构造函数/访问器/触摸合约的学说映射验证。</li>
+<li><strong>PromotionTemplateControllerTest 验证/空运行操作测试</strong> — 唯一断言实际状态代码 (200/422/404) 的控制器测试。</li>
 </ul>
-<h2 id="delete-candidates-filemethod-reason-confidence-covered-by">DELETE CANDIDATES — File::method | Reason | Confidence | Covered by<a class="headerlink" href="#delete-candidates-filemethod-reason-confidence-covered-by" title="Permanent link">&para;</a></h2>
+<h2 id="filemethod">删除候选者 — File::method |原因 |信心|覆盖范围<a class="headerlink" href="#filemethod" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
