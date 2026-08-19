@@ -27,7 +27,7 @@
     
     
       
-        <title>Integration tests audit (2026-08-09) - CRUD Skeleton</title>
+        <title>集成测试审核 (2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#integration-tests-audit-2026-08-09" class="md-skip">
+        <a href="#2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Integration tests audit (2026-08-09)
+              集成测试审核 (2026-08-09)
             
           </span>
         </div>
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2496,32 +2496,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        KEEP
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        删除候选者
+        总结
       
     </span>
   </a>
@@ -2532,7 +2510,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议（预计节省时间）
+        删除候选者
       
     </span>
   </a>
@@ -2541,6 +2519,17 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        合并建议（预计节省时间）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -2570,131 +2559,131 @@
   
 
 
-<h1 id="integration-tests-audit-2026-08-09">Integration tests audit (2026-08-09)<a class="headerlink" href="#integration-tests-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<h1 id="2026-08-09">集成测试审核 (2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Scope: <code>tests/Integration/</code> (root level only, 20 files, 158 tests ≈ 13s of the 51s suite).
-READ-ONLY audit — no <code>src/</code> or <code>tests/</code> file was modified. Only this report was created.
-Classification: A=KEEP, B=DELETE candidate (1 coverage-chasing, 2 duplicate, 3 implementation-detail,
-4 redundant-regression, 5 near-empty), C=merge suggestion.
-Cross-references cite the covering test (file::method). Skipped tests that document known bugs are KEEP.</p>
+<p>范围：<code>tests/Integration/</code>（仅限根级别，20 个文件，158 次测试 ≈ 51s 套件的 13s）。
+只读审核 — 没有修改 <code>src/</code> 或 <code>tests/</code> 文件。仅创建了此报告。
+分类：A=保留，B=删除候选（1 覆盖范围追踪，2 重复，3 实施细节，
+4 个冗余回归，5 个近空），C=合并建议。
+交叉引用引用覆盖测试（文件::方法）。跳过记录已知错误的测试将被保留。</p>
 </blockquote>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>ApiRegressionTest</td>
+<td>Api回归测试</td>
 <td>3</td>
-<td>A — KEEP (only manage-contents CRUD)</td>
+<td>A — KEEP（仅管理内容 CRUD）</td>
 </tr>
 <tr>
-<td>AppApiRegressionTest</td>
+<td>AppApi回归测试</td>
 <td>25</td>
-<td>A — KEEP (App boundary; distinct filters/ownership)</td>
+<td>25 A — KEEP（应用程序边界；不同的过滤器/所有权）</td>
 </tr>
 <tr>
-<td>BaseServiceIntegrationTest</td>
+<td>基础服务集成测试</td>
 <td>2</td>
-<td>C — MERGE into CommonModulesIntegrationTest</td>
+<td>C — 合并到 CommonModulesIntegrationTest</td>
 </tr>
 <tr>
-<td>CommonModulesApiRegressionTest</td>
+<td>CommonModulesApi 回归测试</td>
 <td>17</td>
-<td>A — KEEP (canonical manage-CRUD layer)</td>
+<td>17 A — KEEP（规范管理 CRUD 层）</td>
 </tr>
 <tr>
-<td>CommonModulesIntegrationTest</td>
+<td>通用模块集成测试</td>
 <td>8</td>
-<td>B-2 (MEDIUM) / C — merge into BaseService layer</td>
+<td>B-2（中）/C — 合并到 BaseService 层</td>
 </tr>
 <tr>
-<td>ContentRepositoryIntegrationTest</td>
+<td>内容存储库集成测试</td>
 <td>2</td>
-<td>A — KEEP (newest-first ordering is unique)</td>
+<td>A — KEEP（最新优先顺序是唯一的）</td>
 </tr>
 <tr>
-<td>CoreAccessLogAndPaginationApiTest</td>
+<td>CoreAccessLogAndPaginationApi 测试</td>
 <td>7</td>
-<td>A — KEEP (access.log + pagination edge cases unique)</td>
+<td>A — KEEP（access.log + 分页边缘情况唯一）</td>
 </tr>
 <tr>
-<td>CoreDynamicQueryApiTest</td>
+<td>CoreDynamicQueryApi 测试</td>
 <td>23</td>
-<td>B-2/B-4 (partial: @showDQL + BUG-1 x4)</td>
+<td>23 B-2/B-4（部分：@showDQL + BUG-1 x4）</td>
 </tr>
 <tr>
-<td>CoreExceptionInterceptorApiTest</td>
+<td>CoreExceptionInterceptorApi测试</td>
 <td>7</td>
-<td>A — KEEP (canonical envelope tests)</td>
+<td>A — KEEP（规范包络测试）</td>
 </tr>
 <tr>
 <td>CoreListenerHttpIntegrationTest</td>
+<td>CoreListenerHttpIntegrationTest</td>
 <td>2</td>
-<td>B-2/B-5 — DELETE whole file</td>
 </tr>
 <tr>
-<td>CoreLocaleDetectionApiTest</td>
+<td>CoreLocaleDetectionApi测试</td>
 <td>9</td>
-<td>A — KEEP (locale mapping unique)</td>
+<td>A — KEEP（区域设置映射唯一）</td>
 </tr>
 <tr>
-<td>CoreOpenApiEnricherApiTest</td>
+<td>CoreOpenApiEnricherApi测试</td>
 <td>9</td>
-<td>A — KEEP (canonical OpenAPI tags)</td>
+<td>A — KEEP（规范 OpenAPI 标签）</td>
 </tr>
 <tr>
-<td>CoreServiceIntegrationTest</td>
+<td>核心服务集成测试</td>
 <td>5</td>
-<td>A — KEEP (ExpressionService/DQL ≠ BaseService)</td>
+<td>A — KEEP（ExpressionService/DQL ≠ BaseService）</td>
 </tr>
 <tr>
-<td>CoreSystemEndpointsApiTest</td>
+<td>CoreSystemEndpointsApi 测试</td>
 <td>10</td>
-<td>A — KEEP (HTTP layer of system endpoints)</td>
+<td>10 A — KEEP（系统端点的 HTTP 层）</td>
 </tr>
 <tr>
-<td>OpenApiIntegrationTest</td>
+<td>OpenApi 集成测试</td>
 <td>1</td>
-<td>B-2 (MEDIUM-HIGH) / C — merge into CoreOpenApiEnricherApiTest</td>
+<td>B-2（中-高）/C — 合并到 CoreOpenApiEnricherApiTest</td>
 </tr>
 <tr>
-<td>PaymentTradeIntegrationTest</td>
+<td>支付贸易集成测试</td>
 <td>14</td>
-<td>A — KEEP (survivor of payment cluster)</td>
+<td>14 A — KEEP（支付集群的幸存者）</td>
 </tr>
 <tr>
-<td>StoreTradeFlowTest</td>
+<td>商店贸易流程测试</td>
 <td>8</td>
-<td>A — KEEP (E2E, inventory disabled)</td>
+<td>A — KEEP（E2E，库存禁用）</td>
 </tr>
 <tr>
-<td>StoreTradeFlowTestCase</td>
+<td>StoreTradeFlow 测试用例</td>
 <td>0</td>
-<td>infra — KEEP</td>
+<td>基础设施-保持</td>
 </tr>
 <tr>
-<td>StoreTradeInventoryEnabledFlowTest</td>
+<td>StoreTradeInventoryEnabledFlow 测试</td>
 <td>3</td>
-<td>A — KEEP (NOT a duplicate of StoreTradeFlowTest)</td>
+<td>A — 保留（不是 StoreTradeFlowTest 的重复）</td>
 </tr>
 <tr>
-<td>TokenRevocationIntegrationTest</td>
+<td>令牌撤销集成测试</td>
 <td>3</td>
-<td>B-2/B-5 (partial: 2 of 3)</td>
+<td>B-2/B-5（部分：3 中的 2）</td>
 </tr>
 </tbody>
 </table>
-<p>Skipped (documented bugs) counted as KEEP throughout: CoreDynamicQueryApiTest (5 skipped: BUG-1/2/3/4),
-CoreOpenApiEnricherApiTest::testStoreOrderEndpointsShouldBeTaggedStore (BUG-7),
-CoreSystemEndpointsApiTest::testMissingEntityShouldReturn404Json (BUG-5),
-StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully (release-before-reserve TODO).</p>
-<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>跳过的（已记录的错误）在整个过程中都算作“保留”：CoreDynamicQueryApiTest（跳过了 5 个：BUG-1/2/3/4），
+CoreOpenApiEnricherApiTest::testStoreOrderEndpointsShouldBeTaggedStore (BUG-7)，
+CoreSystemEndpointsApiTest::testMissingEntityShouldReturn404Json (BUG-5)，
+StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGraceively（保留前发布 TODO）。</p>
+<p>＃＃ 保持</p>
 <ul>
 <li><strong>ApiRegressionTest</strong> (3)：<code>Content</code> 唯一完整的管理 CRUD 流程； “标题为必填项”
   其他 API 文件未涵盖验证断言（第 82 行）和管理内容 404。</li>
@@ -2730,7 +2719,7 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully 
 <li><strong>CoreDynamicQueryApiTest</strong>（部分）：过滤器/订单/选择/groupBy/显示/转换/限制验证
   测试和所有 5 个跳过的 BUG 回归。</li>
 </ul>
-<h2 id="_1">删除候选者<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_2">删除候选者<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2815,7 +2804,7 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully 
 </tr>
 </tbody>
 </table>
-<h2 id="_2">合并建议（预计节省时间）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">合并建议（预计节省时间）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong><code>BaseServiceIntegrationTest</code>（2个测试）→合并到<code>CommonModulesIntegrationTest</code></strong>（8个测试），保留1个
    服务层文件。两者都实例化一个 <code>BaseService</code> 子类并启动内核以执行相同的操作
@@ -2836,7 +2825,7 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully 
 </ol>
 <p>估计节省总计：<strong> ≈ 13s 集成组的 2.5–4 秒（大约 20–30%）</strong> 通过删除 10–12 个冗余
 测试并折叠 3-4 个文件，而不会丢失任何记录为已知错误的行为。</p>
-<h2 id="_3">验证步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
 <li>任何删除后，在 CI PostgreSQL 上运行完整套件以确认零失败和零新跳过的测试：
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code>。</li>

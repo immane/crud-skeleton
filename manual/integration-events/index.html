@@ -2989,12 +2989,24 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <li><strong>Duplicate delivery</strong> — consumers record a consumed-event row in the <em>same transaction</em>
   as the business effect, keyed by <code>eventId</code> (idempotent inbox).</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌────────────┐  outbox table   ┌──────────────┐  Messenger "async"  ┌────────────┐  inbox (consumed event) ┌───────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ Business   │  (persisted in  │ publish cmd  │  (Doctrine transport)│ worker     │  (persisted in same     │ Consumer  │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│ operation  │──&gt; same txn) ──&gt;│ app:*:outbox │────────────────────&gt;│ (handlers) └─&gt; transform as txn with  │  (module) │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│ (module A) │                 │ :publish     │                    │ module B   │  the business effect)    │           │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└────────────┘                 └──────────────┘                    └────────────┘                          └───────────┘
-</code></pre></div>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Producer["Producer (module A)"]
+        A[Business operation]
+        O[Outbox table&lt;br/&gt;*_outbox_message]
+        P[Publish command&lt;br/&gt;app:*:outbox:publish]
+    end
+
+    subgraph Consumer["Consumer (module B)"]
+        H[Worker / handlers]
+        I[Inbox table&lt;br/&gt;*_consumed_event]
+        B[Business effect]
+    end
+
+    A -- "same DB transaction" --&gt; O
+    O -- "poll + claim" --&gt; P
+    P -- "Messenger 'async'&lt;br/&gt;(Doctrine transport)" --&gt; H
+    H -- "same DB transaction" --&gt; I
+    H -- "apply" --&gt; B</code></pre>
 <ul>
 <li><strong>Producer side (outbox):</strong> <code>*OutboxService::record(topic, aggregateType, aggregateId, payload)</code>
   inserts a row into the module's <code>*_outbox_message</code> table. A publish command
@@ -3007,33 +3019,33 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <hr />
 <h2 id="1-transport-configuration">1. Transport configuration<a class="headerlink" href="#1-transport-configuration" title="Permanent link">&para;</a></h2>
 <p><code>config/packages/messenger.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">framework</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">messenger</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nt">failure_transport</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">failed</span><span class="w">          </span><span class="c1"># dead-letter queue (doctrine://default?queue_name=failed)</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nt">transports</span><span class="p">:</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">            </span><span class="nt">async</span><span class="p">:</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">                </span><span class="nt">dsn</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(MESSENGER_TRANSPORT_DSN)%'</span><span class="w">   </span><span class="c1"># default: doctrine://default?auto_setup=0</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">                </span><span class="nt">options</span><span class="p">:</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">                    </span><span class="nt">use_notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">                    </span><span class="nt">check_delayed_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60000</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">                </span><span class="nt">retry_strategy</span><span class="p">:</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">                    </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">                    </span><span class="nt">multiplier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">            </span><span class="nt">failed</span><span class="p">:</span><span class="w"> </span><span class="s">'doctrine://default?queue_name=failed'</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="nt">routing</span><span class="p">:</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCreatedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">framework</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">messenger</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">failure_transport</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">failed</span><span class="w">          </span><span class="c1"># dead-letter queue (doctrine://default?queue_name=failed)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="nt">transports</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">            </span><span class="nt">async</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">                </span><span class="nt">dsn</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(MESSENGER_TRANSPORT_DSN)%'</span><span class="w">   </span><span class="c1"># default: doctrine://default?auto_setup=0</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">                </span><span class="nt">options</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">                    </span><span class="nt">use_notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">                    </span><span class="nt">check_delayed_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60000</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                </span><span class="nt">retry_strategy</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">                    </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">                    </span><span class="nt">multiplier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">            </span><span class="nt">failed</span><span class="p">:</span><span class="w"> </span><span class="s">'doctrine://default?queue_name=failed'</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="nt">routing</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCreatedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 </code></pre></div>
 <ul>
 <li>All integration messages route to the single <code>async</code> transport (a Doctrine table
@@ -3048,11 +3060,11 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <h2 id="2-messages-and-envelopes">2. Messages and envelopes<a class="headerlink" href="#2-messages-and-envelopes" title="Permanent link">&para;</a></h2>
 <h3 id="21-message-classes">2.1 Message classes<a class="headerlink" href="#21-message-classes" title="Permanent link">&para;</a></h3>
 <p>Most module messages are thin <code>final readonly</code> carriers of a single <code>array $envelope</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">final readonly class TradeOrderCreatedMessage</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">{</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    /** @param array&lt;string, mixed&gt; $envelope */</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    public function __construct(public array $envelope) {}</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">final readonly class TradeOrderCreatedMessage</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    /** @param array&lt;string, mixed&gt; $envelope */</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    public function __construct(public array $envelope) {}</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3134,17 +3146,17 @@ producer command; e.g. <code>StoreOrderAcceptedMessage</code>/<code>StoreOrderRe
 <h3 id="22-envelope-structure">2.2 Envelope structure<a class="headerlink" href="#22-envelope-structure" title="Permanent link">&para;</a></h3>
 <p>The publish commands assemble a versioned envelope from the outbox row. The Trade
 publisher shows the fullest shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$envelope = [</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">    'eventId'       =&gt; $message-&gt;getEventId(),                       // UUID v4, unique</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    'type'          =&gt; str_replace('.v1', '', $message-&gt;getTopic()), // 'trade.order.created'</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    'version'       =&gt; 1,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    'occurredAt'    =&gt; $message-&gt;getOccurredAt()-&gt;format(DATE_ATOM), // ISO-8601</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">    'aggregateType' =&gt; 'trade_order',</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">    'aggregateId'   =&gt; $message-&gt;getAggregateId(),                   // source aggregate uuid</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">    'correlationId' =&gt; $message-&gt;getAggregateId(),                   // trace scope</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">    'causationId'   =&gt; null,                                         // parent event (none at source)</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="x">    'payload'       =&gt; $message-&gt;getPayload(),</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="x">];</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$envelope = [</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">    'eventId'       =&gt; $message-&gt;getEventId(),                       // UUID v4, unique</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    'type'          =&gt; str_replace('.v1', '', $message-&gt;getTopic()), // 'trade.order.created'</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    'version'       =&gt; 1,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">    'occurredAt'    =&gt; $message-&gt;getOccurredAt()-&gt;format(DATE_ATOM), // ISO-8601</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">    'aggregateType' =&gt; 'trade_order',</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">    'aggregateId'   =&gt; $message-&gt;getAggregateId(),                   // source aggregate uuid</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="x">    'correlationId' =&gt; $message-&gt;getAggregateId(),                   // trace scope</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="x">    'causationId'   =&gt; null,                                         // parent event (none at source)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="x">    'payload'       =&gt; $message-&gt;getPayload(),</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="x">];</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3298,22 +3310,22 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <p>Every module with an outbox has a <code>Command/PublishOutboxCommand.php</code> registered as
 <code>app:&lt;module&gt;:outbox:publish</code>. The scheduler in <code>compose.yaml</code> runs them every
 <code>OUTBOX_PUBLISH_INTERVAL</code> (default <code>5</code>s).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">scheduler</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">extends</span><span class="p">:</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">command</span><span class="p">:</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/sh</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-ec</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="no">while :; do</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="no">php bin/console app:trade:outbox:publish --no-interaction</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="no">php bin/console app:store:outbox:publish --no-interaction</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="no">php bin/console app:inventory:outbox:publish --no-interaction</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="no">php bin/console app:inventory:reservations:release-expired --no-interaction</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="no">php bin/console app:settlement:allocations:requeue-due --no-interaction</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="no">php bin/console app:settlement:outbox:publish --no-interaction</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="no">sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">      </span><span class="no">done</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">scheduler</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">extends</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">command</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/sh</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-ec</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="no">while :; do</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="no">php bin/console app:trade:outbox:publish --no-interaction</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="no">php bin/console app:store:outbox:publish --no-interaction</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="no">php bin/console app:inventory:outbox:publish --no-interaction</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="no">php bin/console app:inventory:reservations:release-expired --no-interaction</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="no">php bin/console app:settlement:allocations:requeue-due --no-interaction</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="no">php bin/console app:settlement:outbox:publish --no-interaction</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="no">sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="no">done</span>
 </code></pre></div>
 <p>The three standard steps (identical for Trade, Store, Inventory, Settlement):</p>
 <ol>
@@ -3329,10 +3341,10 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
    can be retried by a later tick. Finally the EntityManager is flushed once.</li>
 </ol>
 <p>Trade's publisher also whitelists topics and treats anything else as an unsupported topic:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">if (!in_array($message-&gt;getTopic(), ['trade.order.created.v1', 'trade.order.cancelled.v1'], true)) {</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">    $this-&gt;repository-&gt;defer($id, 'Unsupported Trade outbox topic: ' . $message-&gt;getTopic(), new \DateTimeImmutable('+5 minutes'));</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    continue;</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">if (!in_array($message-&gt;getTopic(), ['trade.order.created.v1', 'trade.order.cancelled.v1'], true)) {</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    $this-&gt;repository-&gt;defer($id, 'Unsupported Trade outbox topic: ' . $message-&gt;getTopic(), new \DateTimeImmutable('+5 minutes'));</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    continue;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">}</span>
 </code></pre></div>
 <p>The Inventory publisher is the outlier: it selects an <strong>array projection</strong>
 (<code>findUnpublishedForPublishing()</code>) and marks published/records attempts through direct
@@ -3382,29 +3394,29 @@ duplicate <code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</
 <h3 id="42-idempotency-by-eventid">4.2 Idempotency by <code>eventId</code><a class="headerlink" href="#42-idempotency-by-eventid" title="Permanent link">&para;</a></h3>
 <p>The canonical consumer shape — read-check, then re-check inside the transaction, and
 write the consumed row atomically with the effect:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">public function __invoke(TradeOrderCreatedMessage $message): void</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">{</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    $eventId = $message-&gt;envelope['eventId'] ?? null;</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    $payload = $message-&gt;envelope['payload'] ?? null;</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    // ...validate...</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="x">    if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="x">        return; // already processed</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="x">    }</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="x">    $this-&gt;entityManager-&gt;wrapInTransaction(function () use ($eventId, ...): void {</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="x">        if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="x">            return; // re-check under the transaction (closes the race window)</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="x">        }</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="x">        $this-&gt;entityManager-&gt;persist(new StoreConsumedEvent(</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="x">            $eventId,</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="x">            'trade.order.created.v1',</span>
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="x">            (string) ($payload['orderUuid'] ?? ''),</span>
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="x">            hash('sha256', json_encode($message-&gt;envelope, JSON_THROW_ON_ERROR)),</span>
-<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="x">        ));</span>
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="x">        // ...apply the business effect...</span>
-<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="x">    });</span>
-<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">public function __invoke(TradeOrderCreatedMessage $message): void</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    $eventId = $message-&gt;envelope['eventId'] ?? null;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">    $payload = $message-&gt;envelope['payload'] ?? null;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    // ...validate...</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">        return; // already processed</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="x">    }</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    $this-&gt;entityManager-&gt;wrapInTransaction(function () use ($eventId, ...): void {</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">        if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">            return; // re-check under the transaction (closes the race window)</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">        }</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="x">        $this-&gt;entityManager-&gt;persist(new StoreConsumedEvent(</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">            $eventId,</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">            'trade.order.created.v1',</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="x">            (string) ($payload['orderUuid'] ?? ''),</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="x">            hash('sha256', json_encode($message-&gt;envelope, JSON_THROW_ON_ERROR)),</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="x">        ));</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="x">        // ...apply the business effect...</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="x">    });</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="x">}</span>
 </code></pre></div>
 <p>Inventory tightens this further. Its <code>isAlreadyConsumed()</code> compares the stored
 <code>payload_hash</code> with the hash of the arriving envelope using <code>hash_equals</code>; a reused
@@ -3445,58 +3457,65 @@ simpler: a reused id is silently skipped.</p>
 </ul>
 <h2 id="6-reference-flows">6. Reference flows<a class="headerlink" href="#6-reference-flows" title="Permanent link">&para;</a></h2>
 <h3 id="61-trade-order-store-inventory-reservation">6.1 Trade order → Store → Inventory reservation<a class="headerlink" href="#61-trade-order-store-inventory-reservation" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Trade OrderService::createOrder()
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  └─ (same txn) workflow store_submit
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  └─ (same txn) TRADE outbox += trade.order.created.v1
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        {orderUuid, store:{...}, customerUserUuid, currency, totalAmount(cents),
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>         items:[{lineId,catalogReference,quantity,unitPrice,lineAmount,snapshot}],
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>         delivery, placedAt}
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  └─ app:trade:outbox:publish → TradeOrderCreatedMessage → async
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        └─ Store TradeOrderCreatedHandler
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>              (txn) STORE inbox += {eventId, 'trade.order.created.v1', payload_hash}
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>              store inactive? → STORE outbox += store.order.rejected.v1 ('STORE_UNAVAILABLE')
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>              INVENTORY_ENABLED=0? → accept immediately
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>              else → STORE outbox += inventory.reservation.requested.v1
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>                     {reservationId (new UUID), storeUuid, tradeOrderUuid, storeOrderUuid,
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>                      items (quantity as 'N.000000'), expiresAt (+30 min), requestedAt}
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        └─ app:store:outbox:publish → ReservationRequestedMessage → async
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>              └─ Inventory ReservationRequestedHandler
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>                    (txn) INVENTORY inbox += inventory.reservation.requested.v1
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>                    InventoryService::reserve(): build Reservation(request_hash),
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>                      resolve recipes→materials, lock stocks FOR UPDATE,
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>                      on shortfall → reject('OUT_OF_STOCK'|'SPECIFICATION_NOT_STOCKABLE'|…)
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>                      → INVENTORY outbox += inventory.reservation.rejected.v1
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>                      else reserve stock + ledger, confirm()
-<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>                      → INVENTORY outbox += inventory.reservation.confirmed.v1
-<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>        └─ app:inventory:outbox:publish → ReservationConfirmed/Rejected → async
-<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>              └─ Store ReservationConfirmedHandler
-<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>                    (txn) STORE inbox += …confirmed; storeOrder accept(reservationId)
-<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>                 Store ReservationRejectedHandler
-<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>                    (txn) STORE inbox += …rejected; storeOrder reject(reasonCode, reason)
-<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>                    → STORE outbox += store.order.rejected.v1
-<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>        └─ app:store:outbox:publish → StoreOrderRejectedMessage → async
-<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>              └─ Trade StoreOrderRejectedHandler: workflow store_reject
-<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>              (StoreOrderAcceptedHandler symmetrically applies store_accept)
-</code></pre></div>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant T as Trade
+    participant TO as Trade Outbox
+    participant S as Store
+    participant SO as Store Outbox
+    participant I as Inventory
+    participant IO as Inventory Outbox
+
+    T-&gt;&gt;T: OrderService::createOrder()&lt;br/&gt;(txn) workflow store_submit
+    T-&gt;&gt;TO: (txn) += trade.order.created.v1
+    TO-&gt;&gt;S: app:trade:outbox:publish → TradeOrderCreatedMessage
+    S-&gt;&gt;S: (txn) inbox += trade.order.created.v1
+    alt store inactive
+        S-&gt;&gt;SO: (txn) += store.order.rejected.v1 (STORE_UNAVAILABLE)
+    else INVENTORY_ENABLED=0
+        S-&gt;&gt;S: accept immediately
+    else reserve
+        S-&gt;&gt;SO: (txn) += inventory.reservation.requested.v1
+        SO-&gt;&gt;I: app:store:outbox:publish → ReservationRequestedMessage
+        I-&gt;&gt;I: (txn) inbox += requested; InventoryService::reserve()
+        alt shortfall
+            I-&gt;&gt;IO: (txn) += inventory.reservation.rejected.v1
+        else success
+            I-&gt;&gt;IO: (txn) += inventory.reservation.confirmed.v1
+        end
+        IO-&gt;&gt;S: app:inventory:outbox:publish → ReservationConfirmed/Rejected
+        S-&gt;&gt;S: (txn) inbox += outcome; accept/reject storeOrder
+        S-&gt;&gt;SO: (txn) += store.order.rejected.v1 (if rejected)
+        SO-&gt;&gt;T: app:store:outbox:publish → StoreOrderRejectedMessage
+        T-&gt;&gt;T: workflow store_reject / store_accept
+    end</code></pre>
 <h3 id="62-order-cancellation-store-inventory-release">6.2 Order cancellation → Store → Inventory release<a class="headerlink" href="#62-order-cancellation-store-inventory-release" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>OrderWorkflowListener (workflow.order.transition 'cancel')
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  └─ (same txn) if order has _store metadata:
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        TRADE outbox += trade.order.cancelled.v1 {orderUuid, storeUuid, cancelledAt}
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  └─ app:trade:outbox:publish → TradeOrderCancelledMessage → async
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        └─ Store TradeOrderCancelledHandler
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>              (txn) STORE inbox += trade.order.cancelled.v1
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>              store order exists?  → cancel it; if reservation_id → STORE outbox +=
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>                  inventory.reservation.release.requested.v1 {reservationId, reason:'trade_order_cancelled', …}
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>              store order missing? → persist StoreTradeOrderCancellation (applied later
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                  when the order arrives; conflicting store_uuid throws LogicException)
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        └─ app:store:outbox:publish → ReservationReleaseRequestedMessage → async
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>              └─ Inventory ReservationReleaseRequestedHandler
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>                    (txn) INVENTORY inbox += inventory.reservation.release.requested.v1
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>                    correlation check vs reservation, then InventoryService::release()
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>                    → stock released + ledger, INVENTORY outbox += inventory.reservation.released.v1
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        └─ app:inventory:outbox:publish → ReservationReleasedMessage → async
-<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>              └─ Store ReservationReleasedHandler: inbox dedup only
-</code></pre></div>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant T as Trade
+    participant TO as Trade Outbox
+    participant S as Store
+    participant SO as Store Outbox
+    participant I as Inventory
+    participant IO as Inventory Outbox
+
+    T-&gt;&gt;T: OrderWorkflowListener (transition 'cancel')
+    alt order has store metadata
+        T-&gt;&gt;TO: (txn) += trade.order.cancelled.v1
+        TO-&gt;&gt;S: app:trade:outbox:publish → TradeOrderCancelledMessage
+        S-&gt;&gt;S: (txn) inbox += trade.order.cancelled.v1
+        alt store order exists
+            S-&gt;&gt;S: cancel it
+            S-&gt;&gt;SO: (txn) += inventory.reservation.release.requested.v1
+            SO-&gt;&gt;I: app:store:outbox:publish → ReservationReleaseRequestedMessage
+            I-&gt;&gt;I: (txn) inbox += release.requested; InventoryService::release()
+            I-&gt;&gt;IO: (txn) += inventory.reservation.released.v1
+            IO-&gt;&gt;S: app:inventory:outbox:publish → ReservationReleasedMessage
+            S-&gt;&gt;S: inbox dedup only
+        else store order missing
+            S-&gt;&gt;S: persist StoreTradeOrderCancellation (applied later)
+        end
+    end</code></pre>
 <h3 id="63-expired-reservations">6.3 Expired reservations<a class="headerlink" href="#63-expired-reservations" title="Permanent link">&para;</a></h3>
 <p><code>app:inventory:reservations:release-expired</code> →
 <code>InventoryService::releaseExpiredReservations()</code> finds <code>confirmed</code> reservations past
@@ -3505,28 +3524,33 @@ standard <code>inventory.reservation.released.v1</code> outbox flow above.</p>
 <h3 id="64-settlement-allocation-posting">6.4 Settlement allocation posting<a class="headerlink" href="#64-settlement-allocation-posting" title="Permanent link">&para;</a></h3>
 <p>Settlement is an <strong>inbox-first</strong> module: funding confirmations arrive from outside as
 explicit-field messages.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>external producer → SettlementFundingConfirmedMessage → async
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  └─ SettlementFundingConfirmedHandler
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        dedup exists(eventId)
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        (txn) SettlementService::createPlanFromFunding()
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            build SettlementPlan + SettlementAllocation rows (brick/math BigInteger totals)
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            SETTLEMENT outbox += settlement.allocation.post.requested.v1
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>                {allocationUuid, planUuid}  (one per allocation, same txn)
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            persist SettlementConsumedEvent(eventId, 'settlement.funding.confirmed.v1',
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>                source_aggregate_type=sourceType, source_aggregate_id=sourceId, payload_hash)
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  └─ app:settlement:outbox:publish → SettlementAllocationPostingMessage(allocationUuid, planUuid) → async
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        └─ SettlementAllocationPostingHandler → postAllocation($allocationUuid)
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>              mark posting_requested (flush first: durable idempotency claim)
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>              voucherPort-&gt;post() with posting_idempotency_key
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>                  ('settlement-credit:&lt;planUuid&gt;:&lt;allocationKey&gt;')
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>              success → markPosted(reference) | retryable → markRetryableFailure(next +60s)
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>                        | fatal → markFailed
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>              reconcilePlanState()
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>  └─ app:settlement:allocations:requeue-due
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>        findRetryableDue() (status=retryable_failure AND next_attempt_at &lt;= now)
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>        claimRetryDue() (status→planned, next_attempt_at→NULL)
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>        Record settlement.allocation.post.requested.v1 again → repeats the posting loop
-</code></pre></div>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant P as External producer
+    participant H as SettlementFundingConfirmedHandler
+    participant S as SettlementService
+    participant SO as Settlement Outbox
+    participant A as SettlementAllocationPostingHandler
+    participant V as Wallet voucher port
+
+    P-&gt;&gt;H: SettlementFundingConfirmedMessage (async)
+    H-&gt;&gt;H: dedup exists(eventId)
+    H-&gt;&gt;S: (txn) createPlanFromFunding()
+    S-&gt;&gt;S: build SettlementPlan + SettlementAllocation rows
+    S-&gt;&gt;SO: (txn) += settlement.allocation.post.requested.v1 (per allocation)
+    H-&gt;&gt;H: (txn) persist SettlementConsumedEvent
+    SO-&gt;&gt;A: app:settlement:outbox:publish → SettlementAllocationPostingMessage
+    A-&gt;&gt;A: mark posting_requested (flush first)
+    A-&gt;&gt;V: voucherPort-&gt;post() (posting_idempotency_key)
+    alt success
+        V--&gt;&gt;A: markPosted(reference)
+    else retryable
+        V--&gt;&gt;A: markRetryableFailure (next +60s)
+    else fatal
+        V--&gt;&gt;A: markFailed
+    end
+    A-&gt;&gt;A: reconcilePlanState()
+    Note over SO: app:settlement:allocations:requeue-due&lt;br/&gt;re-queues retryable_failure rows</code></pre>
 <p>Statuses used by the settlement retry loop: allocation <code>planned → posting_requested →
 posted</code> (terminal <code>cancelled</code>/<code>failed</code>/<code>reversed</code>/<code>reversal_pending</code>), with
 <code>retryable_failure</code> feeding <code>requeue-due</code>. In test fixtures the voucher boundary is the

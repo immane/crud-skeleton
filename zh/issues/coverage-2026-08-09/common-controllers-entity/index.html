@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2574,10 +2574,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verified-non-bugs-investigated-and-cleared" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verified NON-bugs (investigated and cleared)
+        已验证的非错误（已调查并清除）
       
     </span>
   </a>
@@ -2585,10 +2585,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#skipped-items" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Skipped items
+        跳过的项目
       
     </span>
   </a>
@@ -2596,10 +2596,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#final-test-run" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Final test run
+        最终测试运行
       
     </span>
   </a>
@@ -2734,26 +2734,26 @@
 </ul>
 <h3 id="bug-2-parent-medium">Bug 2 - 应用程序评论创建接受来自不同实体范围的 <code>parent</code> (MEDIUM)<a class="headerlink" href="#bug-2-parent-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Common/Controller/App/CommentController.php:22</code> (<code>protected array $acceptedCreateProperties = ['parent'];</code>), combined with <code>CreateApiViewMixin::createAction()</code> (<code>src/Core/View/CreateApiViewMixin.php:118-124</code>) forwarding <code>parent</code> straight into <code>CommentService::update()</code>. There is no validation of the parent's <code>entityType</code>/<code>entityId</code> anywhere in the flow (<code>CommentService</code> is an empty <code>BaseService</code> subclass; <code>Comment</code> has no constraints on the parent relation).</li>
-<li><strong>Description:</strong> <code>POST /api/v1/app/comments</code> accepts any integer <code>parent</code> id. <code>update()</code> (<code>src/Core/Service/Concern/BaseServiceMutationTrait.php:70-89</code>) only resolves the ManyToOne target by id; it never verifies that the parent comment shares the same <code>entityType</code>/<code>entityId</code> as the new comment.</li>
-<li><strong>Impact:</strong> A client can build a "reply" whose <code>entityType</code>/<code>entityId</code> point at content A while its <code>parent</code> belongs to content B. <code>CommentRepository::findByEntity()</code> (which drives approved-thread listing per entity) will then render the reply under A's thread even though its parent lives under B — orphaned/cross-entity threads that cannot be traversed consistently, and the moderation state of one entity's thread leaks into another's.</li>
-<li><strong>Reproduction:</strong> create a parent comment on <code>Page/1</code> (approved), then <code>POST /api/v1/app/comments</code> with <code>{"entityType":"Content","entityId":99,"parent":&lt;parentId&gt;}</code> → returns 201 instead of rejecting the mismatch.</li>
-<li><strong>Correct-behaviour test:</strong> <code>App\Tests\Common\Controller\CommentParentScopeIntegrationTest::testReplyParentMustBelongToSameEntityScope</code> asserts a 400 for the cross-entity reply; it <strong>fails</strong> against the current code (201) and is therefore <strong>skipped</strong>.</li>
-<li><strong>Proposed fix:</strong> in <code>CommentController::processCreateContent()</code> (or in the service) reject when <code>parent</code> is set and <code>parent.entityType !== entityType || parent.entityId !== entityId</code> (return 400), mirroring the entity-scope constraint already enforced by <code>CommentRepository::findByEntity()</code>.</li>
+<li><strong>文件/行：</strong> <code>src/Common/Controller/App/CommentController.php:22</code> (<code>protected array $acceptedCreateProperties = ['parent'];</code>)，与 <code>CreateApiViewMixin::createAction()</code> (<code>src/Core/View/CreateApiViewMixin.php:118-124</code>) 结合，将 <code>parent</code> 直接转发到 <code>CommentService::update()</code>。流程中的任何位置都不会验证父级的 <code>entityType</code>/<code>entityId</code>（<code>CommentService</code> 是一个空的 <code>BaseService</code> 子类；<code>Comment</code> 对父级关系没有任何约束）。</li>
+<li><strong>描述：</strong> <code>POST /api/v1/app/comments</code> 接受任何整数 <code>parent</code> id。 <code>update()</code> (<code>src/Core/Service/Concern/BaseServiceMutationTrait.php:70-89</code>) 仅通过 id 解析 ManyToOne 目标；它从不验证父评论是否与新评论共享相同的 <code>entityType</code>/<code>entityId</code>。</li>
+<li><strong>影响：</strong> 客户端可以构建一个“回复”，其 <code>entityType</code>/<code>entityId</code> 指向内容 A，而其 <code>parent</code> 属于内容 B。<code>CommentRepository::findByEntity()</code>（驱动每个实体批准的线程列表）将在 A 的线程下呈现回复，即使其父级位于 B 下 - 无法一致遍历的孤立/跨实体线程，并且一个实体线程的审核状态会泄漏到另一个的。</li>
+<li><strong>复制：</strong> 在 <code>Page/1</code> 上创建父级注释（已批准），然后使用 <code>POST /api/v1/app/comments</code> 和 <code>{"entityType":"Content","entityId":99,"parent":&lt;parentId&gt;}</code> → 返回 201，而不是拒绝不匹配。</li>
+<li><strong>正确行为测试：</strong> <code>App\Tests\Common\Controller\CommentParentScopeIntegrationTest::testReplyParentMustBelongToSameEntityScope</code> 断言跨实体回复为 400；它根据当前代码（201）<strong>失败</strong>，因此被<strong>跳过</strong>。</li>
+<li><strong>建议的修复：</strong>在设置 <code>parent</code> 和 <code>parent.entityType !== entityType || parent.entityId !== entityId</code> （返回 400）时拒绝 <code>CommentController::processCreateContent()</code> （或在服务中），镜像已由 <code>CommentRepository::findByEntity()</code> 强制执行的实体范围约束。</li>
 </ul>
-<h2 id="verified-non-bugs-investigated-and-cleared">Verified NON-bugs (investigated and cleared)<a class="headerlink" href="#verified-non-bugs-investigated-and-cleared" title="Permanent link">&para;</a></h2>
+<h2 id="_5">已验证的非错误（已调查并清除）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>CommentController::defaultCreateValues()</code> line 50 (non-<code>User</code> branch) is unreachable over HTTP</strong> — <code>security.yaml</code> gates every <code>/api</code> route behind <code>IS_AUTHENTICATED_FULLY</code>, so <code>getUser()</code> always returns a real <code>User</code> in the API flow. The branch is defensive dead code; it is now covered by the unit test but is not a bug.</li>
-<li><strong><code>CommentController::commonFilter()</code> returning <code>['author' =&gt; $this-&gt;getUser()]</code></strong> — the App list/detail endpoints intentionally scope comments to the current user. Whether pending comments should be excluded from the App list is a product decision; the current behaviour (author-filter only) is consistent with the existing integration suite (<code>testAppCommentPendingNotVisibleInAppList</code> explicitly asserts pending comments DO appear), so the test named <code>testAppCommentListOnlyReturnsApproved</code> is simply mis-named, not buggy.</li>
-<li><strong><code>Content</code>/<code>Category</code> lazy collection re-init and <code>prePersist</code></strong> — <code>getTags()</code>/<code>getChildren()</code> returning a fresh <code>ArrayCollection</code> when the property is null is consistent with how the repositories/list views consume the collections; no correctness issue found.</li>
+<li><strong><code>CommentController::defaultCreateValues()</code> 第 50 行（非 <code>User</code> 分支）无法通过 HTTP 访问</strong> — <code>security.yaml</code> 控制 <code>IS_AUTHENTICATED_FULLY</code> 后面的每个 <code>/api</code> 路由，因此 <code>getUser()</code> 始终在 API 流中返回真实的 <code>User</code>。该分支是防御性死代码；它现在已被单元测试覆盖，但不是一个错误。</li>
+<li><strong><code>CommentController::commonFilter()</code> 返回 <code>['author' =&gt; $this-&gt;getUser()]</code></strong> — 应用程序列表/详细信息端点有意将评论范围限制为当前用户。待处理评论是否应从应用程序列表中排除是产品决定；当前行为（仅限作者过滤器）与现有集成套件一致（<code>testAppCommentPendingNotVisibleInAppList</code> 显式断言待处理评论确实出现），因此名为 <code>testAppCommentListOnlyReturnsApproved</code> 的测试只是命名错误，而不是有错误。</li>
+<li><strong><code>Content</code>/<code>Category</code> 延迟集合重新初始化和 <code>prePersist</code></strong> — <code>getTags()</code>/<code>getChildren()</code> 当属性为 null 时返回新的 <code>ArrayCollection</code> 与存储库/列表视图使用集合的方式一致；未发现正确性问题。</li>
 </ul>
-<h2 id="skipped-items">Skipped items<a class="headerlink" href="#skipped-items" title="Permanent link">&para;</a></h2>
+<h2 id="_6">跳过的项目<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>App\Tests\Common\Entity\ContentEntityCoverageTest::testSetTitleTouchesUpdatedAt</code> — <strong>skipped</strong> (asserts correct behaviour; fails on Bug 1).</li>
-<li><code>App\Tests\Common\Entity\ContentEntityCoverageTest::testAddTagTouchesUpdatedAt</code> — <strong>skipped</strong> (asserts correct behaviour; fails on Bug 1).</li>
-<li><code>App\Tests\Common\Controller\CommentParentScopeIntegrationTest::testReplyParentMustBelongToSameEntityScope</code> — <strong>skipped</strong> (asserts correct behaviour; fails on Bug 2).</li>
+<li><code>App\Tests\Common\Entity\ContentEntityCoverageTest::testSetTitleTouchesUpdatedAt</code> — <strong>跳过</strong>（断言行为正确；在 Bug 1 上失败）。</li>
+<li><code>App\Tests\Common\Entity\ContentEntityCoverageTest::testAddTagTouchesUpdatedAt</code> — <strong>跳过</strong>（断言行为正确；在 Bug 1 上失败）。</li>
+<li><code>App\Tests\Common\Controller\CommentParentScopeIntegrationTest::testReplyParentMustBelongToSameEntityScope</code> — <strong>跳过</strong>（断言行为正确；在 Bug 2 上失败）。</li>
 </ul>
-<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
+<h2 id="_7">最终测试运行<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    tests/Common/Controller/ContentControllerTest.php \
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    tests/Common/Controller/CommentControllerTest.php \
@@ -2764,7 +2764,7 @@
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>OK, but some tests were skipped!
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>Tests: 15, Assertions: 30, Skipped: 3.
 </code></pre></div>
-<p>15 test cases (5 ContentController HTTP, 2 CommentController unit, 1 CommentParentScope skipped integration, 3 + 2 skipped Content entity, 3 Category entity), 0 failures/errors/notices/warnings/deprecations, 3 skipped (Bug 1 ×2 and Bug 2 documentation). A full <code>tests/Common/Controller</code> + <code>tests/Common/Entity</code> run stays green (77 tests, 235 assertions, 3 skipped).</p>
+<p>15 个测试用例（5 个 ContentController HTTP、2 个 CommentController 单元、1 个 CommentParentScope 跳过集成、3 + 2 个跳过内容实体、3 个类别实体）、0 个失败/错误/通知/警告/弃用、3 个跳过（Bug 1 ×2 和 Bug 2 文档）。完整的 <code>tests/Common/Controller</code> + <code>tests/Common/Entity</code> 运行保持绿色（77 个测试，235 个断言，3 个被跳过）。</p>
 
 
 
