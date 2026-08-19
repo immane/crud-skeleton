@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2828,7 +2828,7 @@
 <li><code>/system/entities</code> 列表、<code>/system/entities/{name}</code> 元数据（types/columnName/nullable + ManyToOne targetEntity）、<code>/system/router</code> 路由转储 — 所有 200 个都带有 <code>{data,code:0,message:"SUCCESS"}</code>。</li>
 <li>通过<code>?_locale=zh|zh_Hant|ja</code>和<code>Accept-Language: en-US</code>进行字段名称翻译。</li>
 <li>每个语言环境的消息翻译：<code>Entity is not found</code> → zh <code>实体未找到。</code>、zh_Hant <code>實體未找到。</code>、ja <code>エンティティが見つかりません。</code>、en <code>Entity is not found</code>。</li>
-<li><code>/api/doc.json</code>：存在模块标签（<code>Auth,System,Wechat,Products,Orders,Categories,…,Payment,Wallet</code>），<code>tags</code>或任何操作中都没有留下<code>List/Detail/Create/Update/Delete/Workflow</code>；关键端点映射到正确的模块。</li>
+<li><code>/api/doc.json</code>：存在模块标签（<code>Auth,System,Wechat,Products,Orders,Categories,…,Payment,Wallet</code>），<code>tags</code>中或任何操作中都没有留下<code>List/Detail/Create/Update/Delete/Workflow</code>；关键端点映射到正确的模块。</li>
 <li>AccessLogListener 写入真实行 (<code>@testauth#1 POST /api/v1/manage/categories | 201 | REQ: … | RES: …</code>) 并且不记录 GET。</li>
 <li>分页：页面超出范围→空项+正确的<code>has_next=false</code>；负页→强制为1； <code>limit=0</code> → 强制为 1；完整的<code>{total,page,limit,pages,has_previous,has_next}</code>形状。</li>
 <li>信封形状：成功列表<code>{data,code,message,paginator}</code>；成功详细信息<code>{data,code,message}</code>（无分页器）；警告<code>{code,message,raw_data}</code>（无<code>data</code>）；异常<code>{code,message,class}</code>。</li>
@@ -2873,7 +2873,7 @@
 <h3 id="bug-5-500-html-404-json">BUG-5 — 系统端点为未知实体返回 500 HTML（不是 404 JSON） — <strong>中</strong><a class="headerlink" href="#bug-5-500-html-404-json" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>位置：</strong> <code>src/Core/EventListener/ExceptionInterceptor.php:21</code> (<code>EFFECTIVE_PATTERN = '/^\/(api)\/.*$/'</code>); <code>src/Core/Controller/System/EntityController.php:66-67</code>（<code>getClassMetadata</code> 对于未知的 FQCN 抛出异常）。</li>
-<li><strong>描述：</strong>拦截器仅处理 <code>/api/*</code> 路径，因此 <code>/system/entities/{name}</code> 上的 <code>MappingException</code> （未知实体）会绕过 JSON 错误信封并呈现 Symfony 的 HTML 错误页面 (500)。 <code>docs/ai/context.md</code> §12 中的文档暗示这些是 API 式系统端点；消费者获得 HTML。</li>
+<li><strong>描述：</strong>拦截器仅处理 <code>/api/*</code> 路径，因此 <code>/system/entities/{name}</code> 上的 <code>MappingException</code> （未知实体）会绕过 JSON 错误信封并呈现 Symfony 的 HTML 错误页面 (500)。 <code>docs/ai/context.md</code> §12 中的文档暗示这些是 API 风格的系统端点；消费者获得 HTML。</li>
 <li><strong>影响：</strong> 系统端点没有 JSON 错误契约；错误的实体名称是 500（服务器错误）而不是 404。</li>
 <li><strong>复制：</strong> <code>GET /system/entities/App/Does/Not/Exist</code> → <code>500 text/html</code> 与 <code>Doctrine\Persistence\Mapping\MappingException: Class 'App\Does\Not\Exist' does not exist</code>。</li>
 <li><strong>建议的修复：</strong> 将拦截器模式扩展到 <code>/system</code> （或在 <code>EntityController::retrieveAction()</code> 和 <code>warning(…, 404, …, 404)</code> 中捕获 <code>MappingException</code>）。</li>

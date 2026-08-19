@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2563,10 +2563,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-r-4-openssl_free_key-php-80" class="md-nav__link">
+  <a href="#bug-r-4-openssl_free_key-is-deprecated-since-php-80-low" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug R-4 — openssl_free_key() 自 PHP 8.0（低）起已弃用
+        Bug R-4 — openssl_free_key() is deprecated since PHP 8.0 (LOW)
       
     </span>
   </a>
@@ -2574,10 +2574,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-m-1-mathmt_rand-mathrand-php-85" class="md-nav__link">
+  <a href="#bug-m-1-mathmt_rand-and-mathrand-always-throw-on-php-85-high" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug M-1 - Math::mt_rand() 和 Math::rand() 总是在 PHP 8.5 上抛出（高）
+        Bug M-1 — Math::mt_rand() and Math::rand() always throw on PHP 8.5 (HIGH)
       
     </span>
   </a>
@@ -2585,10 +2585,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-m-2-mathlcg_value-php-84" class="md-nav__link">
+  <a href="#bug-m-2-mathlcg_value-delegates-to-a-function-deprecated-since-php-84-low" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug M-2 — Math::lcg_value() 委托自 PHP 8.4 以来已弃用的函数（低）
+        Bug M-2 — Math::lcg_value() delegates to a function deprecated since PHP 8.4 (LOW)
       
     </span>
   </a>
@@ -2596,10 +2596,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-l-1-location-php-curl-classphp-curl-class" class="md-nav__link">
+  <a href="#bug-l-1-location-depends-on-php-curl-classphp-curl-class-which-is-not-installed-critical" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug L-1 — Location 依赖于 php-curl-class/php-curl-class，但未安装（严重）
+        Bug L-1 — Location depends on php-curl-class/php-curl-class, which is not installed (CRITICAL)
       
     </span>
   </a>
@@ -2607,10 +2607,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-l-2-getaddress-getresponse-high" class="md-nav__link">
+  <a href="#bug-l-2-getaddress-calls-getresponse-on-a-string-high" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug L-2 — getAddress() 在字符串上调用 getResponse() (HIGH)
+        Bug L-2 — getAddress() calls getResponse() on a string (HIGH)
       
     </span>
   </a>
@@ -2618,10 +2618,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-l-3-json-statusvalidity" class="md-nav__link">
+  <a href="#bug-l-3-json-responses-are-dereferenced-without-checking-statusvalidity-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug L-3 — JSON 响应在不检查 status/validity 的情况下取消引用（中）
+        Bug L-3 — JSON responses are dereferenced without checking status/validity (MEDIUM)
       
     </span>
   </a>
@@ -2629,10 +2629,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-l-4" class="md-nav__link">
+  <a href="#bug-l-4-inconsistent-error-contract-across-the-three-methods-low" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug L-4 — 三种方法之间的错误契约不一致（低）
+        Bug L-4 — inconsistent error contract across the three methods (LOW)
       
     </span>
   </a>
@@ -2640,10 +2640,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-i-1-inflectpluralize" class="md-nav__link">
+  <a href="#bug-i-1-inflectpluralize-fall-through-is-dead-code-low" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug I-1 — Inflect::pluralize() 失败是死代码（低）
+        Bug I-1 — Inflect::pluralize() fall-through is dead code (LOW)
       
     </span>
   </a>
@@ -2723,7 +2723,7 @@
 <ul>
 <li>日期：2026-08-09</li>
 <li>范围：<code>src/Core/Utils/{RsaClient,Location,Math,Inflect}.php</code>、<code>src/Core/DependencyInjection/{Configuration,CoreExtension}.php</code>、<code>src/Core/Serializer/Normalizer/CircularReferenceHandler.php</code></li>
-<li>任务：将线路覆盖率提高到约 100% 并查找错误。</li>
+<li>任务：将线路覆盖率提高到 100% 并查找错误。</li>
 <li>遵守约束：<strong><code>src/</code> 下的任何内容均未修改</strong>。仅添加了 <code>tests/</code> 下的新测试文件和此报告。</li>
 </ul>
 <h2 id="_1">添加测试文件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -2838,7 +2838,7 @@
 <li><strong>说明：</strong> 所有签名/验证操作均使用 MD5 作为摘要算法。</li>
 <li><strong>影响：</strong> MD5被破坏（碰撞/伪造攻击）；签名不防篡改。 FIPS 140-2/3 环境通常会禁用 MD5，因此 <code>openssl_sign</code>/<code>openssl_verify</code> 在这些环境中会默默失败。该类是一个支付/RSA 签名助手，这使其成为一个安全缺陷。</li>
 <li><strong>复制：</strong> <code>(new RsaClient())</code> 具有有效的密钥 - <code>openssl_get_md5_methods()</code> 仍然在 PHP 8.5 上列出 <code>md5</code>，因此它可以工作，但只是因为环境允许 MD5。</li>
-<li><strong>建议的修复：</strong> 使用 <code>OPENSSL_ALGO_SHA256</code> （或使用 <code>SHA-256</code> 与 <code>openssl</code> CLI 兼容的对等点）。</li>
+<li><strong>建议的修复：</strong> 使用 <code>OPENSSL_ALGO_SHA256</code> （或使用 <code>SHA-256</code> 与 <code>openssl</code> CLI 来兼容对等点）。</li>
 </ul>
 <h3 id="bug-r-2-openssl_sign-sign-base64">Bug R-2 — 当 <code>openssl_sign()</code> 失败时，<code>sign()</code> 对未定义的变量进行 base64 编码（高）<a class="headerlink" href="#bug-r-2-openssl_sign-sign-base64" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2860,76 +2860,76 @@
 <li><strong>复制：</strong> <code>$c-&gt;getSignContent(['a' =&gt; ['nested']])</code> → <code>"a=Array"</code> + 警告。</li>
 <li><strong>建议的修复：</strong> 在连接之前验证 <code>$k</code>/<code>$v</code> 是标量（或 JSON 编码的复杂值）；至少检查<code>is_scalar($v)</code>。</li>
 </ul>
-<h3 id="bug-r-4-openssl_free_key-php-80">Bug R-4 — <code>openssl_free_key()</code> 自 PHP 8.0（低）起已弃用<a class="headerlink" href="#bug-r-4-openssl_free_key-php-80" title="Permanent link">&para;</a></h3>
+<h3 id="bug-r-4-openssl_free_key-is-deprecated-since-php-80-low">Bug R-4 — <code>openssl_free_key()</code> is deprecated since PHP 8.0 (LOW)<a class="headerlink" href="#bug-r-4-openssl_free_key-is-deprecated-since-php-80-low" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/RsaClient.php:55</code> 和 <code>:104</code>。</li>
-<li><strong>说明：</strong> <code>openssl_free_key()</code> 自 PHP 8.0 起已弃用（无操作）； <code>OpenSSLAsymmetricKey</code> 对象会自动释放。</li>
-<li><strong>影响：</strong> 每个从 <strong>文件路径</strong> 加载密钥的 <code>sign()</code>/<code>verifySign()</code> 都会发出弃用通知（破坏 <code>failOnDeprecation</code> CI）。因此，第 54-56 行和第 103-105 行无法在不触发弃用的情况下被覆盖——它们仍然未被覆盖。</li>
-<li><strong>复制：</strong> <code>$c-&gt;rsaPrivateKeyFilePath = 'key.pem'; $c-&gt;sign('data');</code> → <code>Function openssl_free_key() is deprecated since 8.0</code>。</li>
-<li><strong>建议的修复：</strong> 删除两个 <code>if ($res instanceof \OpenSSLAsymmetricKey) { openssl_free_key($res); }</code> 块。</li>
+<li><strong>File/line:</strong> <code>src/Core/Utils/RsaClient.php:55</code> and <code>:104</code>.</li>
+<li><strong>Description:</strong> <code>openssl_free_key()</code> is deprecated (no-op) since PHP 8.0; <code>OpenSSLAsymmetricKey</code> objects are freed automatically.</li>
+<li><strong>Impact:</strong> every <code>sign()</code>/<code>verifySign()</code> that loads a key from a <strong>file path</strong> emits a deprecation notice (breaks <code>failOnDeprecation</code> CI). Because of this, lines 54–56 and 103–105 cannot be covered without triggering a deprecation — they remain uncovered.</li>
+<li><strong>Reproduction:</strong> <code>$c-&gt;rsaPrivateKeyFilePath = 'key.pem'; $c-&gt;sign('data');</code> → <code>Function openssl_free_key() is deprecated since 8.0</code>.</li>
+<li><strong>Proposed fix:</strong> remove both <code>if ($res instanceof \OpenSSLAsymmetricKey) { openssl_free_key($res); }</code> blocks.</li>
 </ul>
-<h3 id="bug-m-1-mathmt_rand-mathrand-php-85">Bug M-1 - <code>Math::mt_rand()</code> 和 <code>Math::rand()</code> 总是在 PHP 8.5 上抛出（高）<a class="headerlink" href="#bug-m-1-mathmt_rand-mathrand-php-85" title="Permanent link">&para;</a></h3>
+<h3 id="bug-m-1-mathmt_rand-and-mathrand-always-throw-on-php-85-high">Bug M-1 — <code>Math::mt_rand()</code> and <code>Math::rand()</code> always throw on PHP 8.5 (HIGH)<a class="headerlink" href="#bug-m-1-mathmt_rand-and-mathrand-always-throw-on-php-85-high" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Math.php:85</code> (<code>return mt_rand($x);</code>) 和 <code>:91</code> (<code>return rand($x);</code>)。</li>
-<li><strong>描述：</strong> <code>mt_rand()</code>/<code>rand()</code> 的单参数形式（单个参数被视为 max）在 PHP 8.3 中已被弃用，现在在 PHP 8.5 中是一个错误：两个本机函数 <strong>都需要两个参数</strong>。</li>
-<li><strong>影响：</strong> <code>Math::mt_rand($n)</code> / <code>Math::rand($n)</code> 的任何调用者都会因未捕获的 <code>ArgumentCountError</code> 而崩溃。</li>
-<li><strong>复制：</strong>
+<li><strong>File/line:</strong> <code>src/Core/Utils/Math.php:85</code> (<code>return mt_rand($x);</code>) and <code>:91</code> (<code>return rand($x);</code>).</li>
+<li><strong>Description:</strong> the one-argument form of <code>mt_rand()</code>/<code>rand()</code> (single arg treated as max) was deprecated in PHP 8.3 and is now an error in PHP 8.5: both native functions <strong>require exactly two arguments</strong>.</li>
+<li><strong>Impact:</strong> any caller of <code>Math::mt_rand($n)</code> / <code>Math::rand($n)</code> crashes with an uncaught <code>ArgumentCountError</code>.</li>
+<li><strong>Reproduction:</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">Math::rand(10); // ArgumentCountError: rand() expects exactly 2 arguments, 1 given</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">Math::mt_rand(10); // ArgumentCountError: mt_rand() expects exactly 2 arguments, 1 given</span>
 </code></pre></div></li>
-<li><strong>建议的修复：</strong> <code>return mt_rand(0, $x);</code> 和 <code>return rand(0, $x);</code> （与预期的“仅最大”签名匹配）。</li>
+<li><strong>Proposed fix:</strong> <code>return mt_rand(0, $x);</code> and <code>return rand(0, $x);</code> (matches the intended “max only” signature).</li>
 </ul>
-<h3 id="bug-m-2-mathlcg_value-php-84">Bug M-2 — <code>Math::lcg_value()</code> 委托自 PHP 8.4 以来已弃用的函数（低）<a class="headerlink" href="#bug-m-2-mathlcg_value-php-84" title="Permanent link">&para;</a></h3>
+<h3 id="bug-m-2-mathlcg_value-delegates-to-a-function-deprecated-since-php-84-low">Bug M-2 — <code>Math::lcg_value()</code> delegates to a function deprecated since PHP 8.4 (LOW)<a class="headerlink" href="#bug-m-2-mathlcg_value-delegates-to-a-function-deprecated-since-php-84-low" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Math.php:78</code> (<code>return lcg_value();</code>)。</li>
-<li><strong>描述：</strong> 自 PHP 8.4 起，<code>lcg_value()</code> 已被弃用，取而代之的是 <code>\Random\Randomizer::getFloat()</code>。</li>
-<li><strong>影响：</strong> 调用 <code>Math::lcg_value()</code> 会引发弃用（破坏 <code>failOnDeprecation</code> CI）；如果不弃用，则无法覆盖该行。</li>
-<li><strong>复制：</strong> <code>Math::lcg_value();</code> → <code>Function lcg_value() is deprecated since 8.4</code>。</li>
-<li><strong>建议的修复：</strong> 重新实现为 <code>Randomizer::getFloat()</code> 或 <code>Math::random(0, 1)</code>。</li>
+<li><strong>File/line:</strong> <code>src/Core/Utils/Math.php:78</code> (<code>return lcg_value();</code>).</li>
+<li><strong>Description:</strong> <code>lcg_value()</code> is deprecated since PHP 8.4 in favour of <code>\Random\Randomizer::getFloat()</code>.</li>
+<li><strong>Impact:</strong> calling <code>Math::lcg_value()</code> raises a deprecation (breaks <code>failOnDeprecation</code> CI); the line cannot be covered without a deprecation.</li>
+<li><strong>Reproduction:</strong> <code>Math::lcg_value();</code> → <code>Function lcg_value() is deprecated since 8.4</code>.</li>
+<li><strong>Proposed fix:</strong> reimplement as <code>Randomizer::getFloat()</code> or <code>Math::random(0, 1)</code>.</li>
 </ul>
-<h3 id="bug-l-1-location-php-curl-classphp-curl-class">Bug L-1 — <code>Location</code> 依赖于 <code>php-curl-class/php-curl-class</code>，但未安装（严重）<a class="headerlink" href="#bug-l-1-location-php-curl-classphp-curl-class" title="Permanent link">&para;</a></h3>
+<h3 id="bug-l-1-location-depends-on-php-curl-classphp-curl-class-which-is-not-installed-critical">Bug L-1 — <code>Location</code> depends on <code>php-curl-class/php-curl-class</code>, which is not installed (CRITICAL)<a class="headerlink" href="#bug-l-1-location-depends-on-php-curl-classphp-curl-class-which-is-not-installed-critical" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:5</code> (<code>use Curl\Curl;</code>)、<code>:18</code>、<code>:33</code>、<code>:50</code> (<code>new Curl();</code>)。</li>
-<li><strong>描述：</strong>该类从 <code>php-curl-class/php-curl-class</code> 包实例化 <code>Curl\Curl</code>，但该包<strong>未在 <code>composer.json</code> 中声明，也不存在于 <code>vendor/</code></strong> 中（<code>class_exists('Curl\Curl')</code> → <code>false</code>）。</li>
-<li><strong>影响：</strong> 每次调用 <code>getLocation()</code>、<code>getAddress()</code> 或 <code>getDistance()</code> 都会抛出 <code>Error: Class "Curl\Curl" not found</code>。因为抛出的 <code>Error</code> 不是 <code>\ErrorException</code>，所以 <code>catch (\ErrorException)</code> 块<strong>不会</strong>捕获它 - 这些方法在真实应用程序中完全被破坏。</li>
-<li><strong>复制：</strong> <code>Location::getLocation('x');</code> → <code>Error: Class "Curl\Curl" not found</code>。</li>
-<li><strong>建议的修复：</strong> 将 <code>php-curl-class/php-curl-class</code> 添加到 <code>composer.json</code>，或者重构为可注入的 HTTP 客户端（请参阅可测试性说明），以便测试可以对其进行存根。</li>
+<li><strong>File/line:</strong> <code>src/Core/Utils/Location.php:5</code> (<code>use Curl\Curl;</code>), <code>:18</code>, <code>:33</code>, <code>:50</code> (<code>new Curl();</code>).</li>
+<li><strong>Description:</strong> the class instantiates <code>Curl\Curl</code> from the <code>php-curl-class/php-curl-class</code> package, but that package is <strong>not declared in <code>composer.json</code> and not present in <code>vendor/</code></strong> (<code>class_exists('Curl\Curl')</code> → <code>false</code>).</li>
+<li><strong>Impact:</strong> every call to <code>getLocation()</code>, <code>getAddress()</code> or <code>getDistance()</code> throws <code>Error: Class "Curl\Curl" not found</code>. Because the thrown <code>Error</code> is not an <code>\ErrorException</code>, the <code>catch (\ErrorException)</code> blocks do <strong>not</strong> catch it — the methods are completely broken in the real app.</li>
+<li><strong>Reproduction:</strong> <code>Location::getLocation('x');</code> → <code>Error: Class "Curl\Curl" not found</code>.</li>
+<li><strong>Proposed fix:</strong> either add <code>php-curl-class/php-curl-class</code> to <code>composer.json</code>, or refactor to an injectable HTTP client (see Testability note) so tests can stub it.</li>
 </ul>
-<h3 id="bug-l-2-getaddress-getresponse-high">Bug L-2 — <code>getAddress()</code> 在字符串上调用 <code>getResponse()</code> (HIGH)<a class="headerlink" href="#bug-l-2-getaddress-getresponse-high" title="Permanent link">&para;</a></h3>
+<h3 id="bug-l-2-getaddress-calls-getresponse-on-a-string-high">Bug L-2 — <code>getAddress()</code> calls <code>getResponse()</code> on a string (HIGH)<a class="headerlink" href="#bug-l-2-getaddress-calls-getresponse-on-a-string-high" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:35</code> (<code>$data = json_decode($data-&gt;getResponse());</code>)。</li>
-<li><strong>描述：</strong>方法不一致：<code>getLocation()</code>（第20行）和<code>getDistance()</code>（第52行）执行<code>json_decode($data)</code>，其中<code>$data</code>是<code>Curl::get()</code>返回的<strong>字符串主体</strong>（在php-curl-class中确认：<code>exec()</code>返回<code>$this-&gt;response</code>）。 <code>getAddress()</code> 而是在该字符串上调用 <code>$data-&gt;getResponse()</code>。</li>
-<li><strong>影响：</strong> 字符串上的 <code>$data-&gt;getResponse()</code> 会引发 <code>Error: Call to a member function getResponse() on string</code>，它不是 <code>\ErrorException</code>，因此第 38 行的 <code>catch</code> 永远不会触发，并且该方法会致命。</li>
-<li><strong>复制：</strong>任何 <code>getAddress($lat, $lng)</code> 调用。</li>
-<li><strong>建议的修复：</strong> 镜像其他两种方法：
+<li><strong>File/line:</strong> <code>src/Core/Utils/Location.php:35</code> (<code>$data = json_decode($data-&gt;getResponse());</code>).</li>
+<li><strong>Description:</strong> the methods are inconsistent: <code>getLocation()</code> (line 20) and <code>getDistance()</code> (line 52) do <code>json_decode($data)</code> where <code>$data</code> is the <strong>string body</strong> returned by <code>Curl::get()</code> (confirmed in php-curl-class: <code>exec()</code> returns <code>$this-&gt;response</code>). <code>getAddress()</code> instead calls <code>$data-&gt;getResponse()</code> on that string.</li>
+<li><strong>Impact:</strong> <code>$data-&gt;getResponse()</code> on a string raises <code>Error: Call to a member function getResponse() on string</code>, which is not an <code>\ErrorException</code>, so the <code>catch</code> at line 38 never fires and the method fatals.</li>
+<li><strong>Reproduction:</strong> any <code>getAddress($lat, $lng)</code> call.</li>
+<li><strong>Proposed fix:</strong> mirror the other two methods:
   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$data = $curl-&gt;get($api_url);</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">$data = json_decode($data);</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">return $data-&gt;result-&gt;address ?? null;</span>
 </code></pre></div>
-  （注意：即使在此修复之后，<code>getAddress()</code> 也会在出错时返回 <code>$e-&gt;getMessage()</code>，而其他两种方法会返回 <code>null</code> — Bug L-4。）</li>
+  (Note: even after this fix, <code>getAddress()</code> returns <code>$e-&gt;getMessage()</code> on error while the other two methods return <code>null</code> — Bug L-4.)</li>
 </ul>
-<h3 id="bug-l-3-json-statusvalidity">Bug L-3 — JSON 响应在不检查 <code>status</code>/validity 的情况下取消引用（中）<a class="headerlink" href="#bug-l-3-json-statusvalidity" title="Permanent link">&para;</a></h3>
+<h3 id="bug-l-3-json-responses-are-dereferenced-without-checking-statusvalidity-medium">Bug L-3 — JSON responses are dereferenced without checking <code>status</code>/validity (MEDIUM)<a class="headerlink" href="#bug-l-3-json-responses-are-dereferenced-without-checking-statusvalidity-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:22</code>、<code>:37</code>、<code>:54</code>。</li>
-<li><strong>描述：</strong>在<code>json_decode</code>之后，代码访问<code>$data-&gt;result-&gt;location</code>（等），而不检查<code>json_last_error()</code>、API <code>status</code>字段或空结果。腾讯错误正文 (<code>{"status":310,"message":"..."}</code>) 生成 <code>$data-&gt;result === null</code>，<code>null-&gt;location</code> 引发“尝试读取 null 属性”警告 (PHP 8) 并返回 <code>null</code>。</li>
-<li><strong>影响：</strong> 警告 + 令人困惑的 <code>null</code>/<code>false</code> 返回而不是结构化错误；掩盖 API 故障。</li>
-<li><strong>复制：</strong> 存根响应 <code>{"status":310,"message":"QUERY_FAULT"}</code> （或任何非 200 状态）→ 警告 + <code>null</code>。</li>
-<li><strong>建议修复：</strong> <code>if (json_decode(...) === null || ($data-&gt;status ?? 0) !== 0) return null;</code> 在属性访问之前。</li>
+<li><strong>File/line:</strong> <code>src/Core/Utils/Location.php:22</code>, <code>:37</code>, <code>:54</code>.</li>
+<li><strong>Description:</strong> after <code>json_decode</code>, the code accesses <code>$data-&gt;result-&gt;location</code> (etc.) without checking <code>json_last_error()</code>, the API <code>status</code> field, or null result. A Tencent error body (<code>{"status":310,"message":"..."}</code>) yields <code>$data-&gt;result === null</code>, and <code>null-&gt;location</code> raises an “Attempt to read property on null” warning (PHP 8) and returns <code>null</code>.</li>
+<li><strong>Impact:</strong> warnings + confusing <code>null</code>/<code>false</code> returns instead of a structured error; masks API failures.</li>
+<li><strong>Reproduction:</strong> stub a response <code>{"status":310,"message":"QUERY_FAULT"}</code> (or any non-200 status) → warning + <code>null</code>.</li>
+<li><strong>Proposed fix:</strong> <code>if (json_decode(...) === null || ($data-&gt;status ?? 0) !== 0) return null;</code> before property access.</li>
 </ul>
-<h3 id="bug-l-4">Bug L-4 — 三种方法之间的错误契约不一致（低）<a class="headerlink" href="#bug-l-4" title="Permanent link">&para;</a></h3>
+<h3 id="bug-l-4-inconsistent-error-contract-across-the-three-methods-low">Bug L-4 — inconsistent error contract across the three methods (LOW)<a class="headerlink" href="#bug-l-4-inconsistent-error-contract-across-the-three-methods-low" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Location.php:24</code> (<code>return null;</code>)、<code>:39</code> (<code>return $e-&gt;getMessage();</code>)、<code>:56</code> (<code>return null;</code>)。</li>
-<li><strong>描述：</strong> <code>getLocation</code>/<code>getDistance</code> 失败时返回 <code>null</code>，但 <code>getAddress</code> 返回异常消息字符串。</li>
-<li><strong>影响：</strong>调用者无法统一检测失败； <code>getAddress</code> 出错时返回真实字符串。</li>
-<li><strong>建议的修复：</strong> 使所有三个在失败时返回 <code>null</code>。</li>
+<li><strong>File/line:</strong> <code>src/Core/Utils/Location.php:24</code> (<code>return null;</code>), <code>:39</code> (<code>return $e-&gt;getMessage();</code>), <code>:56</code> (<code>return null;</code>).</li>
+<li><strong>Description:</strong> <code>getLocation</code>/<code>getDistance</code> return <code>null</code> on failure but <code>getAddress</code> returns the exception message string.</li>
+<li><strong>Impact:</strong> callers cannot uniformly detect failure; <code>getAddress</code> returns a truthy string on error.</li>
+<li><strong>Proposed fix:</strong> make all three return <code>null</code> on failure.</li>
 </ul>
-<h3 id="bug-i-1-inflectpluralize">Bug I-1 — <code>Inflect::pluralize()</code> 失败是死代码（低）<a class="headerlink" href="#bug-i-1-inflectpluralize" title="Permanent link">&para;</a></h3>
+<h3 id="bug-i-1-inflectpluralize-fall-through-is-dead-code-low">Bug I-1 — <code>Inflect::pluralize()</code> fall-through is dead code (LOW)<a class="headerlink" href="#bug-i-1-inflectpluralize-fall-through-is-dead-code-low" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Core/Utils/Inflect.php:135</code> (<code>return $string;</code>)。</li>
-<li><strong>说明：</strong> 最终的复数规则 <code>'/$' =&gt; "s"</code> (<code>:54</code>) 匹配每个字符串，因此 <code>pluralize()</code> 始终返回转换后的值，并且第 135 行的尾随 <code>return $string;</code> 永远无法执行。</li>
-<li><strong>影响：</strong>功能上无影响；该线路永久未被覆盖（无法测试）。</li>
-<li><strong>复制：</strong> <code>Inflect::pluralize('apple')</code> → <code>'apples'</code> （永远不会失败）。</li>
-<li><strong>建议的修复：</strong> 删除无法访问的 <code>return $string;</code> （或删除包罗万象的规则，如果无意的话）。</li>
+<li><strong>File/line:</strong> <code>src/Core/Utils/Inflect.php:135</code> (<code>return $string;</code>).</li>
+<li><strong>Description:</strong> the final plural rule <code>'/$' =&gt; "s"</code> (<code>:54</code>) matches every string, so <code>pluralize()</code> always returns a transformed value and the trailing <code>return $string;</code> at line 135 can never execute.</li>
+<li><strong>Impact:</strong> none functionally; the line is permanently uncovered (cannot be tested).</li>
+<li><strong>Reproduction:</strong> <code>Inflect::pluralize('apple')</code> → <code>'apples'</code> (never falls through).</li>
+<li><strong>Proposed fix:</strong> remove the unreachable <code>return $string;</code> (or remove the catch-all rule if unintended).</li>
 </ul>
 <h2 id="location-blocker">可测试性发现 — <code>Location</code> （用于完全覆盖的 BLOCKER）<a class="headerlink" href="#location-blocker" title="Permanent link">&para;</a></h2>
 <p><code>Location</code> 是一个静态类，它对 <code>new Curl()</code>（第 18、33、50 行）和 <code>const</code> 值中的腾讯 URL 进行硬编码。它<strong>不可依赖注入</strong>，因此在没有网络或 <code>Curl\Curl</code> 类存在的情况下无法执行真实的类。此外，该软件包<strong>未安装</strong>，因此真正的方法根本无法运行。</p>

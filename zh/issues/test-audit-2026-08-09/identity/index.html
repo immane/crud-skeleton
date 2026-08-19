@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2529,10 +2529,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -2540,10 +2540,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -2613,7 +2613,7 @@
 <tr>
 <td><code>Controller/AuthControllerTest.php</code></td>
 <td>20</td>
-<td>保持</td>
+<td>20保持</td>
 </tr>
 <tr>
 <td><code>Controller/AuthControllerCoverageTest.php</code></td>
@@ -3152,60 +3152,60 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Note on the OtpController pair (HIGH).</strong> <code>src/Identity/Controller/OtpController.php</code>
-is a copy-paste of <code>AuthController::requestOtp/verifyOtp</code> (identical bodies,
-<code>/api/auth/otp/request</code> + <code>/api/auth/otp/verify</code>). <code>debug:router</code> registers
-both controllers for the same two paths; the <code>sys-auth-*</code> routes sort before the
-<code>sys-auth-otp-*</code> routes, so <strong>OtpController is shadowed/unreachable dead code</strong>
-and its tests only exercise an offline copy of the live AuthController logic.
-The whole OtpController test surface is therefore redundant while the duplicate
-controller still exists. The one exception is
+<p><strong>关于 OtpController 对（高）的注意事项。</strong> <code>src/Identity/Controller/OtpController.php</code>
+是 <code>AuthController::requestOtp/verifyOtp</code> 的复制粘贴（相同的主体，
+<code>/api/auth/otp/request</code> + <code>/api/auth/otp/verify</code>）。 <code>debug:router</code> 寄存器
+两个控制器都用于相同的两条路径； <code>sys-auth-*</code> 路由排序在
+<code>sys-auth-otp-*</code> 路由，因此 <strong>OtpController 是隐藏/无法访问的死代码</strong>
+它的测试仅执行实时 AuthController 逻辑的离线副本。
+因此，整个 OtpController 测试表面是多余的，而重复的
+控制器仍然存在。唯一的例外是
 <code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code>
-(skipped, Bug A) — that documentation must be preserved (move its description to
-<code>AuthControllerCoverageTest</code>, since AuthController carries the same unguarded
-<code>json_decode</code>), so the skipped test itself is KEEP.</p>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+（已跳过，Bug A）——必须保留该文档（将其描述移至
+<code>AuthControllerCoverageTest</code>，因为 AuthController 带有相同的不受保护的
+<code>json_decode</code>)，因此跳过的测试本身是 KEEP。</p>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>OtpControllerTest</code> + <code>OtpControllerCoverageTest</code> → fold into the AuthController
-  OTP tests</strong> after the shadowed <code>OtpController</code> is removed from <code>src/</code> (a
-  <code>src/</code> change, out of scope here). All 13 runnable OTP tests are already
-  covered by the AuthController pair.</li>
-<li><strong><code>Integration/AuthIntegrationTest</code> + <code>Integration/AuthBlackBoxIntegrationTest</code> → one
-  auth black-box file.</strong> They overlap on refresh-rotation/reuse-detection and on
-  the 400/401 login-denial cases; consolidating removes ~3 duplicated tests and
-  keeps the end-to-end logout + reuse-revokes-all assertions.</li>
-<li><strong><code>Integration/UserApiIntegrationTest</code> → relocate the 10 Wallet tests and 4
-  Trade specification tests to <code>tests/Wallet/</code> and <code>tests/Trade/</code></strong> where the
-  owning module suites live. The file keeps its Identity scope (register,
-  profile, password, manage-user CRUD, ownership/404 edges).</li>
-<li><strong><code>Entity/ProfileTest</code> accessor tests → collapse into a single table-driven
-  set/get + touch test</strong> (nickname/avatar/metadata/joinedAt), dropping the
-  duplicated <code>testUuidMatchesV4Format</code> and <code>testDefaultProfileFieldsAreNull</code>.</li>
-<li><strong><code>ProfileServiceTest</code> generic CRUD (<code>new/get/update/remove</code>) → drop the
-  delegation-only tests</strong> and keep <code>testJoinAsMember*</code> (the only Profile-specific
-  logic); the generic machinery is owned by <code>tests/Core/Service/BaseService*</code>.</li>
-<li><strong><code>Controller/App/UserControllerTest</code> → one guard test</strong> for the shared
-  "unauthenticated → 401" path instead of three identical copies.</li>
+<li><strong><code>OtpControllerTest</code> + <code>OtpControllerCoverageTest</code> → 折叠到 AuthController 中
+  从 <code>src/</code> 中删除阴影 <code>OtpController</code> 后进行 OTP 测试</strong>（a
+  <code>src/</code> 更改，超出此处的范围）。所有 13 个可运行的 OTP 测试均已完成
+  由 AuthController 对覆盖。</li>
+<li><strong><code>Integration/AuthIntegrationTest</code> + <code>Integration/AuthBlackBoxIntegrationTest</code> → 一
+  auth 黑盒文件。</strong> 它们在刷新旋转/重用检测和上重叠
+  400/401 拒绝登录案例；合并删除了~3个重复的测试并且
+  保留端到端注销+重用撤销所有断言。</li>
+<li><strong><code>Integration/UserApiIntegrationTest</code> → 重新定位 10 个钱包测试和 4 个
+  交易规范测试 <code>tests/Wallet/</code> 和 <code>tests/Trade/</code></strong> 其中
+  拥有实时模块套件。该文件保留其身份范围（注册，
+  配置文件、密码、管理用户 CRUD、所有权/404 边缘）。</li>
+<li><strong><code>Entity/ProfileTest</code> 访问器测试 → 折叠成单个表驱动
+  设置/获取+触摸测试</strong>（昵称/头像/元数据/joinedAt），删除
+  重复的 <code>testUuidMatchesV4Format</code> 和 <code>testDefaultProfileFieldsAreNull</code>。</li>
+<li><strong><code>ProfileServiceTest</code> 通用 CRUD (<code>new/get/update/remove</code>) → 删除
+  仅委托测试</strong>并保留 <code>testJoinAsMember*</code> （唯一特定于配置文件的
+  逻辑）；通用机械归<code>tests/Core/Service/BaseService*</code>所有。</li>
+<li><strong><code>Controller/App/UserControllerTest</code> → 共享的一个守卫测试</strong>
+  “未经验证 → 401”路径而不是三个相同的副本。</li>
 </ul>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>Before acting on any recommendation, verify locally (project PHP 8.4+ runtime):</p>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>在根据任何建议采取行动之前，请在本地验证（项目 PHP 8.4+ 运行时）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span>Identity
 </code></pre></div>
 <ul>
-<li>To confirm a HIGH-confidence DUPLICATE is safe to remove, run the covering test
-  with the candidate excluded (e.g. temporarily use <code>--filter</code> to run only the
-  covering test), then delete the candidate and re-run the Identity filter green.</li>
-<li>For the OtpController claim, re-run <code>bin/console debug:router | grep otp</code> to
-  confirm the <code>sys-auth-*</code> routes still shadow <code>sys-auth-otp-*</code>; if route order
-  ever changes, re-evaluate before deleting.</li>
-<li>For the Wallet/Trade cross-module candidates, run
-  <code>--filter 'Wallet|Trade'</code> to confirm the owning suites pass without the
-  Identity-file copies.</li>
-<li>Never delete a skipped (<code>markTestSkipped</code>) test — each documents a known bug
-  (Bug A, B, D, E, RedisOtpStorage Bug #1) and is part of the KEEP baseline.</li>
-<li>After any deletion, confirm the Identity line-coverage budget for
-  <code>src/Identity/</code> does not drop below the 90% gate; the removed tests are all
-  covered by surviving tests or the Core/Wallet/Trade suites, so this should hold.</li>
+<li>要确认高置信度重复项可以安全删除，请运行覆盖测试
+  排除候选人（例如暂时使用 <code>--filter</code> 仅运行
+  覆盖测试），然后删除候选并重新运行身份过滤器绿色。</li>
+<li>对于 OtpController 声明，重新运行 <code>bin/console debug:router | grep otp</code> 以
+  确认<code>sys-auth-*</code>路由仍然影子<code>sys-auth-otp-*</code>；如果路线顺序
+  一旦发生变化，请在删除之前重新评估。</li>
+<li>对于钱包/交易跨模块候选人，运行
+  <code>--filter 'Wallet|Trade'</code> 确认所属套房通过，无需
+  身份文件副本。</li>
+<li>切勿删除跳过的 (<code>markTestSkipped</code>) 测试 - 每个测试都记录一个已知的错误
+  （错误 A、B、D、E、RedisOtpStorage 错误 #1）并且是 KEEP 基线的一部分。</li>
+<li>任何删除后，确认身份线覆盖预算
+  <code>src/Identity/</code> 不会低于 90% 门限；删除的测试都是
+  幸存的测试或核心/钱包/贸易套件涵盖了，所以这应该成立。</li>
 </ul>
 
 

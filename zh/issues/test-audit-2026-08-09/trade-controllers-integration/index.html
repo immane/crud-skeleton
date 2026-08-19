@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -2081,7 +2081,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2704,7 +2704,7 @@
 <tr>
 <td><code>tests/Trade/Controller/Manage/OrderControllerTest.php</code></td>
 <td>26</td>
-<td>26 <strong>REDUCE</strong> — 9× 几乎相同的 404 单元测试（合并），5 个集成的保护消息重复，1 个冗余跳过的篡改双胞胎</td>
+<td>26 <strong>减少</strong> — 9×几乎相同的 404 单元测试（合并），5 个集成的保护消息重复，1 个冗余跳过的篡改双胞胎</td>
 </tr>
 <tr>
 <td><code>tests/Trade/Controller/Manage/OrderItemControllerTest.php</code></td>
@@ -3130,8 +3130,8 @@
 </code></pre></div></li>
 <li>应用删除，然后首先隔离地重新运行幸存者：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>tests/Trade/Integration/TradeRepoFullTest.php<span class="w"> </span>--no-coverage
-</code></pre></div>
-3.证明没有<code>src/Trade</code>覆盖回归：在受影响区域之前/之后捕获三叶草
+</code></pre></div></li>
+<li>证明没有<code>src/Trade</code>覆盖回归：在受影响区域之前/之后捕获三叶草
    并区分 <code>count="0"</code> 语句（该活动自己的技术）：
    <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml

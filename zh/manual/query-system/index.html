@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -911,7 +911,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -995,7 +995,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -2364,7 +2364,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -3310,7 +3310,7 @@ DQL 编译必须是安全的。</p>
 <hr />
 <h2 id="3">3.视图级参数<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <p>在查询之后应用，在 <code>RestController::success()</code>/<code>requestProcess()</code> 中，并且
-在创建/更新 mixins 中。</p>
+在创建/更新 mixin 中。</p>
 <h3 id="expands"><code>@expands</code><a class="headerlink" href="#expands" title="Permanent link">&para;</a></h3>
 <p>点关系的 JSON 数组（允许单引号，<code>FixJSON</code> 处理它们）
 通过附加 <code>__metadata</code> 属性（对象本身）来扩展链
@@ -3332,7 +3332,7 @@ DQL 编译必须是安全的。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># GET /api/v1/app/products?@display={"title":"entity.name","score":"Math.round(entity.price/100)"}
 </code></pre></div>
 <h3 id="transform"><code>@transform</code><a class="headerlink" href="#transform" title="Permanent link">&para;</a></h3>
-<p>由 <code>CreateApiViewMixin</code>、<code>UpdateApiViewMixin</code> 和 <code>Single*</code> mixins 使用。一个
+<p>由 <code>CreateApiViewMixin</code>、<code>UpdateApiViewMixin</code> 和 <code>Single*</code> mixin 使用。一个
 JSON 对象将字段映射到重写的 <code>ExpressionLanguage</code> 表达式
 提交的内容。 <code>:value</code> 替换为提交的字段值，并且
 <code>Service</code>（相关实体服务的网关）、<code>entity</code>、<code>Math</code>、
@@ -3432,7 +3432,7 @@ JSON 对象将字段映射到重写的 <code>ExpressionLanguage</code> 表达式
 <h2 id="6">6. 操作员和人员注释<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <ul>
 <li>链式属性访问使用根别名 <code>entity.getX().getY()</code> 形式
-  <code>@filter</code>； DQL 层将它们映射到联接 (<code>filter_entity_x_y</code>)。</li>
+  <code>@filter</code>; DQL 层将它们映射到联接 (<code>filter_entity_x_y</code>)。</li>
 <li><code>matches</code> 与 <code>/pattern/flags</code> 值编译为 <code>REGEXP(...) = TRUE</code>
   （支持的标志 <code>gimsux</code>）；普通字符串编译为 <code>LIKE '%...%'</code>
   <code>!</code> 转义。</li>

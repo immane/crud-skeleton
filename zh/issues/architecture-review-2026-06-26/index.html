@@ -31,7 +31,7 @@
     
     
       
-        <title>Architecture Review 2026-06-26 - CRUD Skeleton</title>
+        <title>架构回顾 2026-06-26 - CRUD Skeleton</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Architecture Review 2026-06-26
+              架构回顾 2026-06-26
             
           </span>
         </div>
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -632,7 +632,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -716,7 +716,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -2094,7 +2094,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2112,7 +2112,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -3048,7 +3048,7 @@
 <p><strong>影响：</strong> 如果 DQL 编译失败，该服务会在 PHP 中加载完整的结果集和筛选器，这对于大型表来说可能会很昂贵。</p>
 <p><strong>证据：</strong></p>
 <ul>
-<li>当过滤器编译失败或使用 <code>@sort</code> 时，<code>BaseServiceReadListTrait::list()</code> 回退到 <code>$query-&gt;getResult()</code>，然后回退到 <code>array_filter()</code>。</li>
+<li>当过滤器编译失败或使用 <code>@sort</code> 时，<code>BaseServiceReadListTrait::list()</code> 回退到 <code>$query-&gt;getResult()</code>，然后是 <code>array_filter()</code>。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>对于生产 API 端点，当过滤器编译失败时，使用 <code>400 Bad Request</code> 快速失败。仅针对开发/调试或显式较小的集合保留内存中回退。</p>
