@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#ai-development-process" class="md-skip">
           跳转至
         </a>
       
@@ -861,7 +861,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -945,7 +945,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -1942,10 +1942,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#change-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        变更流程
+        Change Flow
       
     </span>
   </a>
@@ -1953,10 +1953,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#review-gate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        审核门
+        Review Gate
       
     </span>
   </a>
@@ -1964,10 +1964,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#human-responsibility" class="md-nav__link">
     <span class="md-ellipsis">
       
-        人类的责任
+        Human Responsibility
       
     </span>
   </a>
@@ -2071,10 +2071,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#change-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        变更流程
+        Change Flow
       
     </span>
   </a>
@@ -2082,10 +2082,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#review-gate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        审核门
+        Review Gate
       
     </span>
   </a>
@@ -2093,10 +2093,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#human-responsibility" class="md-nav__link">
     <span class="md-ellipsis">
       
-        人类的责任
+        Human Responsibility
       
     </span>
   </a>
@@ -2123,70 +2123,70 @@
   
 
 
-<h1 id="_1">人工智能开发流程<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>人工智能辅助的变更遵循与人类创作的变更相同的工程大门。
-在存储库中进行审查和验证之前，人工智能输出是不可信的。</p>
-<h2 id="_2">变更流程<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h1 id="ai-development-process">AI Development Process<a class="headerlink" href="#ai-development-process" title="Permanent link">&para;</a></h1>
+<p>AI-assisted changes follow the same engineering gates as human-authored changes.
+AI output is untrusted until reviewed and verified in the repository.</p>
+<h2 id="change-flow">Change Flow<a class="headerlink" href="#change-flow" title="Permanent link">&para;</a></h2>
 <ol>
-<li>识别受影响的模块、公共合约、交易边界以及
-   编辑前的不变量。</li>
-<li>实施保留模块边界和现有功能的最小更改
-   合同。</li>
-<li>使用<code>TEST_STRATEGY.md</code>中的选择规则添加或更新测试。</li>
-<li>开发过程中运行最小的相关测试集，然后是所需的
-   合并前的完整质量门。</li>
-<li>检查最终差异的安全性、数据完整性、迁移安全性和
-   文档漂移。</li>
-<li>将矩阵/不变量中的新关键路径和逃逸缺陷记录为
-   重点回归测试。</li>
+<li>Identify the affected module, public contract, transaction boundary, and
+   invariants before editing.</li>
+<li>Implement the smallest change that preserves module boundaries and existing
+   contracts.</li>
+<li>Add or update tests using the selection rules in <code>TEST_STRATEGY.md</code>.</li>
+<li>Run the smallest relevant test set during development, then the required
+   full quality gates before merge.</li>
+<li>Review the final diff for security, data integrity, migration safety, and
+   documentation drift.</li>
+<li>Record new critical paths in the matrix/invariants and escaped defects as
+   focused regression tests.</li>
 </ol>
-<h2 id="_3">审核门<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="review-gate">Review Gate<a class="headerlink" href="#review-gate" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>面积</th>
-<th>审阅者必须确定</th>
+<th>Area</th>
+<th>Reviewer must establish</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>建筑</td>
-<td>依赖关系遵循模块边界；没有不相关的框架耦合或隐藏的全局状态</td>
+<td>Architecture</td>
+<td>dependencies follow module boundaries; no unrelated framework coupling or hidden global state</td>
 </tr>
 <tr>
-<td>公共合同</td>
-<td>API 响应、HTTP 状态、授权范围、i18n 和 OpenAPI 影响经过深思熟虑</td>
+<td>Public contract</td>
+<td>API responses, HTTP status, authorization scope, i18n, and OpenAPI impact are deliberate</td>
 </tr>
 <tr>
-<td>业务逻辑</td>
-<td>每个受影响的不变量都有一个可测试的结果；货币使用整数美分；工作流程守卫完好无损</td>
+<td>Business logic</td>
+<td>each affected invariant has a testable outcome; money uses integer cents; workflow guards remain intact</td>
 </tr>
 <tr>
-<td>可靠性</td>
-<td>处理事务、幂等性键、发件箱/收件箱语义、排序、重试和补偿</td>
+<td>Reliability</td>
+<td>transactions, idempotency keys, outbox/inbox semantics, ordering, retries, and compensation are addressed</td>
 </tr>
 <tr>
-<td>数据库</td>
-<td>学说映射和迁移可移植到预期的部署数据库；破坏性变革已有推出计划</td>
+<td>Database</td>
+<td>Doctrine mapping and migration are portable to the intended deployment database; destructive changes have a rollout plan</td>
 </tr>
 <tr>
-<td>测试</td>
-<td>测试断言正确层的结果，包括拒绝/失败案例，保持确定性，并且不仅扩大覆盖范围</td>
+<td>Tests</td>
+<td>tests assert outcomes at the right layer, include denial/failure cases, remain deterministic, and do not only inflate coverage</td>
 </tr>
 <tr>
-<td>运营</td>
-<td>涵盖配置、工作线程/调度程序、外部提供程序、日志记录、指标和回滚影响</td>
+<td>Operations</td>
+<td>configuration, worker/scheduler, external provider, logging, metrics, and rollback implications are covered</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_4">人类的责任<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="human-responsibility">Human Responsibility<a class="headerlink" href="#human-responsibility" title="Permanent link">&para;</a></h2>
 <ul>
-<li>自己的架构、业务决策、风险接受、凭证和
-  最终批准。</li>
-<li>不要仅因为 AI 认为测试已足够或存在问题而批准更改
-  覆盖数量增加。</li>
-<li>在启用之前需要类似生产的并发性和操作审查
-  库存或引入新的支付/提供商集成。</li>
+<li>Own architecture, business decisions, risk acceptance, credentials, and the
+  final approval.</li>
+<li>Do not approve a change solely because an AI says tests are sufficient or a
+  coverage number increased.</li>
+<li>Require a production-like concurrency and operational review before enabling
+  Inventory or introducing a new payment/provider integration.</li>
 </ul>
 
 

@@ -857,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -941,7 +941,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2009,10 +2009,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#merge-suggestions-with-estimated-time-savings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议（预计节省时间）
+        MERGE SUGGESTIONS (with estimated time savings)
       
     </span>
   </a>
@@ -2020,7 +2020,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -2214,88 +2214,88 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGraceively�
 <table>
 <thead>
 <tr>
-<th>文件::方法</th>
-<th>原因</th>
-<th>信心</th>
-<th>涵盖范围</th>
+<th>File::method</th>
+<th>Reason</th>
+<th>Confidence</th>
+<th>Covered by</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>CoreListenerHttpIntegrationTest::testExceptionInterceptorReturnsJsonOnApiErrorInTestEnv</td>
-<td>CoreListenerHttpIntegrationTest::testExceptionInterceptorReturnsJsonOnApiErrorInTestEnv</td>
-<td>2 (重复) — 相同的 POST-bad-JSON → JSON-envelope 行为，仅松散地断言 (<code>in_array([200,400])</code>)</td>
-<td>高</td>
+<td>2 (DUPLICATE) — same POST-bad-JSON → JSON-envelope behavior, asserted only loosely (<code>in_array([200,400])</code>)</td>
+<td>HIGH</td>
+<td>CoreExceptionInterceptorApiTest::testInvalidJsonReturnsWarningEnvelope (asserts 400 + <code>Invalid JSON</code> + warning shape)</td>
 </tr>
 <tr>
 <td>CoreListenerHttpIntegrationTest::testCoreListenersDoNotBreakNormalApiFlow</td>
-<td>CoreListenerHttpIntegrationTest::testCoreListenersDoNotBreakNormalApiFlow</td>
-<td>5 (NEAR-EMPTY) — 简单的“GET list returns 200 JSON”smoke</td>
-<td>高</td>
+<td>5 (NEAR-EMPTY) — plain "GET list returns 200 JSON" smoke</td>
+<td>HIGH</td>
+<td>CoreExceptionInterceptorApiTest::testSuccessListEnvelopeShape (GET list → 200 + envelope)</td>
 </tr>
 <tr>
 <td>CoreDynamicQueryApiTest::testShowDqlRejectedOutsideDev</td>
-<td>CoreDynamicQueryApiTest::testShowDqlRejectedOutsideDev 2 (DUPLICATE) — 相同的请求 <code>GET /api/v1/manage/categories?@showDQL=1</code>，相同的 403 门</td>
-<td>高</td>
-<td>CoreExceptionInterceptorApiTest::testAccessDeniedOnShowDqlReturnsJsonEnvelope （相同请求 + 403；保留信封方面；在删除之前将 <code>@showDQL is only available in the dev environment</code> 消息断言折叠到其中）</td>
+<td>2 (DUPLICATE) — identical request <code>GET /api/v1/manage/categories?@showDQL=1</code>, same 403 gate</td>
+<td>HIGH</td>
+<td>CoreExceptionInterceptorApiTest::testAccessDeniedOnShowDqlReturnsJsonEnvelope (same request + 403; keeps the envelope facet; fold the <code>@showDQL is only available in the dev environment</code> message assertion into it before deleting)</td>
 </tr>
 <tr>
-<td>CoreDynamicQueryApiTest::testSortRestrictedForEveryone 当前</td>
-<td>4 (冗余回归) — 相同的 BUG-1 (BaseService::$user null → 管理门控参数 403)，为 @dql/@sort/@hints/@filter-fallback 保留 4×</td>
-<td>中高</td>
-<td>保留一名代表 (<code>testDqlRestrictedForEveryoneCurrently</code>) + 2 个跳过的 BUG-1 测试</td>
+<td>CoreDynamicQueryApiTest::testSortRestrictedForEveryoneCurrently</td>
+<td>4 (REDUNDANT-REGRESSION) — same BUG-1 (BaseService::$user null → admin-gated params 403), kept 4× for @dql/@sort/@hints/@filter-fallback</td>
+<td>MEDIUM-HIGH</td>
+<td>Keep one representative (<code>testDqlRestrictedForEveryoneCurrently</code>) + the 2 skipped BUG-1 tests</td>
 </tr>
 <tr>
-<td>CoreDynamicQueryApiTest::testHintsRestrictedForEveryone 当前</td>
-<td>4（冗余回归）- 与上面相同的 BUG-1</td>
-<td>中高</td>
-<td>同上</td>
+<td>CoreDynamicQueryApiTest::testHintsRestrictedForEveryoneCurrently</td>
+<td>4 (REDUNDANT-REGRESSION) — same BUG-1 as above</td>
+<td>MEDIUM-HIGH</td>
+<td>same as above</td>
 </tr>
 <tr>
-<td>CoreDynamicQueryApiTest::testInvalidFilterFallsToAdminGate当前</td>
-<td>4（冗余回归）- 与上面相同的 BUG-1</td>
-<td>中高</td>
-<td>同上</td>
+<td>CoreDynamicQueryApiTest::testInvalidFilterFallsToAdminGateCurrently</td>
+<td>4 (REDUNDANT-REGRESSION) — same BUG-1 as above</td>
+<td>MEDIUM-HIGH</td>
+<td>same as above</td>
 </tr>
 <tr>
 <td>OpenApiIntegrationTest::testSwaggerUiAndJsonEndpointsAreAvailable</td>
-<td>OpenApiIntegrationTest::testSwaggerUiAndJsonEndpointsAreAvailable</td>
-<td>2（重复，部分）- openapi 3.1.0、<code>/api/v1/manage/contents</code> 路径、微信/支付标签均在 CoreOpenApiEnricherApiTest</td>
-<td>中重新断言中高</td>
+<td>2 (DUPLICATE, partial) — openapi 3.1.0, <code>/api/v1/manage/contents</code> path, Wechat/Payment tags all re-asserted in CoreOpenApiEnricherApiTest</td>
+<td>MEDIUM-HIGH</td>
+<td>CoreOpenApiEnricherApiTest::testSpecIsOpenApi31 + testKeyEndpointsTaggedByModule (keep its unique Media-schema + <code>/api/doc</code> UI assertions by merging, see below)</td>
 </tr>
 <tr>
 <td>TradePaymentIntegrationTest::testOrderPaymentWithWalletDeductionAndMockRemainder</td>
-<td>TradePaymentIntegrationTest::testOrderPaymentWithWalletDeductionAndMockRemainder</td>
-<td>2（重复）—相同的部分钱包扣除+模拟剩余付款（订单已支付，用户/系统余额已移动）</td>
-<td>高</td>
+<td>2 (DUPLICATE) — same partial-wallet-deduction + mock-remainder pay (order paid, user/system balances moved)</td>
+<td>HIGH</td>
+<td>PaymentTradeIntegrationTest::testWalletDeductionPartialReducesMockGatewayAmount (same scenario, also asserts gateway amount + webhook confirm)</td>
 </tr>
 <tr>
-<td>TradePaymentIntegrationTest::测试OrderPaymentAndRefundThroughInvoiceEvents</td>
-<td>2（重复）— 相同的支付→履行→完成→退款旅程结束 <code>REFUNDED</code> + <code>paymentStatus=refunded</code></td>
-<td>中</td>
-<td>PaymentTradeIntegrationTest::testRefundFlowRefundsOrderAndReturnsMoney（相同的旅程 + 资金移动断言；仅付款方式不同：模拟 autoPaid 与钱包）</td>
+<td>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</td>
+<td>2 (DUPLICATE) — same pay→fulfill→complete→refund journey ending <code>REFUNDED</code> + <code>paymentStatus=refunded</code></td>
+<td>MEDIUM</td>
+<td>PaymentTradeIntegrationTest::testRefundFlowRefundsOrderAndReturnsMoney (same journey + money-movement assertions; only the payment method differs: mock autoPaid vs wallet)</td>
 </tr>
 <tr>
-<td>TokenReplicationIntegrationTest::testRefreshTokenIsRevokedAfterLogout</td>
-<td>2（重复）— 注销然后使用已撤销的刷新令牌进行刷新 → 401</td>
-<td>高</td>
-<td>测试/身份/集成/AuthIntegrationTest :: testFullAuthFlow（步骤5-6：注销204→刷新401）</td>
+<td>TokenRevocationIntegrationTest::testRefreshTokenIsRevokedAfterLogout</td>
+<td>2 (DUPLICATE) — logout then refresh with revoked refresh token → 401</td>
+<td>HIGH</td>
+<td>tests/Identity/Integration/AuthIntegrationTest::testFullAuthFlow (steps 5–6: logout 204 → refresh 401)</td>
 </tr>
 <tr>
-<td>TokenReplicationIntegrationTest::testAccessTokenStillWorksBeforeLogout</td>
-<td>TokenReplicationIntegrationTest::testAccessTokenStillWorksBeforeLogout 5 (NEAR-EMPTY) — 经过身份验证的 GET 返回 200；已在同一文件的 <code>testAccessTokenIsRevokedAfterLogout</code> 中断言（注销前 200，第 40–41 行）</td>
-<td>高</td>
-<td>TokenRecationIntegrationTest::testAccessTokenIsRevokedAfterLogout（文件内）</td>
+<td>TokenRevocationIntegrationTest::testAccessTokenStillWorksBeforeLogout</td>
+<td>5 (NEAR-EMPTY) — authenticated GET returns 200; already asserted in the same file's <code>testAccessTokenIsRevokedAfterLogout</code> (pre-logout 200, lines 40–41)</td>
+<td>HIGH</td>
+<td>TokenRevocationIntegrationTest::testAccessTokenIsRevokedAfterLogout (in-file)</td>
 </tr>
 <tr>
-<td>CommonModulesIntegrationTest（整个文件，8 个测试）</td>
-<td>2（重复）——相同的六模块创建→读取→更新→列表→删除在HTTP管理层断言的往返； <code>testUpdateForAllModuleTypes</code> 是纯粹的覆盖范围追逐（仅限 <code>assertNotNull</code>）</td>
-<td>中</td>
-<td>CommonModulesApiRegressionTest::test{类别、标签、媒体、页面、评论、设置}CrudRegression + AppApiRegressionTest::testApp{类别、标签、媒体、页面、评论、设置}*; <code>testCategoryHierarchy</code> → CommonModulesApiRegressionTest::testCategoryHierarchyApi</td>
+<td>CommonModulesIntegrationTest (whole file, 8 tests)</td>
+<td>2 (DUPLICATE) — same six-module create→read→update→list→remove round-trips asserted at HTTP manage layer; <code>testUpdateForAllModuleTypes</code> is pure coverage-chasing (<code>assertNotNull</code> only)</td>
+<td>MEDIUM</td>
+<td>CommonModulesApiRegressionTest::test{Category,Tag,Media,Page,Comment,Setting}CrudRegression + AppApiRegressionTest::testApp{Category,Tag,Media,Page,Comment,Setting}*; <code>testCategoryHierarchy</code> → CommonModulesApiRegressionTest::testCategoryHierarchyApi</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_3">合并建议（预计节省时间）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="merge-suggestions-with-estimated-time-savings">MERGE SUGGESTIONS (with estimated time savings)<a class="headerlink" href="#merge-suggestions-with-estimated-time-savings" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong><code>BaseServiceIntegrationTest</code>（2个测试）→合并到<code>CommonModulesIntegrationTest</code></strong>（8个测试），保留1个
    服务层文件。两者都实例化一个 <code>BaseService</code> 子类并启动内核以执行相同的操作
@@ -2316,7 +2316,7 @@ StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGraceively�
 </ol>
 <p>估计节省总计：<strong> ≈ 13s 集成组的 2.5–4 秒（大约 20–30%）</strong> 通过删除 10–12 个冗余
 测试并折叠 3-4 个文件，而不会丢失任何记录为已知错误的行为。</p>
-<h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_3">验证步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ol>
 <li>任何删除后，在 CI PostgreSQL 上运行完整套件以确认零失败和零新跳过的测试：
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code>。</li>

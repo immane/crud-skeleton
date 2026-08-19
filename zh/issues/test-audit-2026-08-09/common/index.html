@@ -857,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -941,7 +941,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2032,10 +2032,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#medium-confidence-reasoning" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MEDIUM-confidence reasoning
+        中等置信度推理
       
     </span>
   </a>
@@ -2048,10 +2048,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -2059,7 +2059,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         注释/非阻塞观察
@@ -2070,7 +2070,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -2394,77 +2394,77 @@
 </table>
 <h3 id="_4">高置信度推理（精确引用）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>CategoryEntityCoverageTest / ContentEntityCoverageTest (active tests).</strong> Each forces a
-  <code>null</code> collection via <code>ReflectionProperty</code>/<code>newInstanceWithoutConstructor</code> to execute the
-  defensive lazy-init guard in <code>Category::getChildren()</code> (<code>src/Common/Entity/Category.php:120-122</code>)
-  / <code>Content::getTags()</code> (<code>src/Common/Entity/Content.php:102-104</code>). The state is unreachable
-  through the public constructor, which always initializes the <code>ArrayCollection</code>
-  (<code>Category.php:53</code>, <code>Content.php:46</code>). The asserted behavior (collection membership,
-  dedup, parent linking) is already asserted in the base tests listed. The docblocks state
-  the purpose outright: "Covers the last uncovered branch". These pin an implementation
-  detail purely for line coverage.</li>
-<li><strong>CommentApiExtraTest::testCommentCreateAndList.</strong> POST <code>/api/v1/app/comments</code> → 201 and
-  GET <code>/api/v1/app/comments</code> → 200/<code>code=0</code> is a strict subset of
-  <code>AppApiRegressionTest::testAppCommentCreateDefaultsToPending</code> (201 + <code>code=0</code> + fields) and
-  <code>testAppCommentListOnlyReturnsApproved</code> / <code>testAppCommentPendingNotVisibleInAppList</code> (GET
-  list). It asserts only status codes and <code>code=0</code>.</li>
-<li><strong>CommentControllerTest::testCreateWithAuthenticatedUserRecordsAuthorFields.</strong> Asserts via a
-  <code>FakeCommentService</code> that <code>defaultCreateValues()</code> records <code>authorName</code>/<code>authorEmail</code>/<code>status
-  = pending</code> from the current user — exactly what <code>AppApiRegressionTest::testAppCommentCreateDefaultsToPending</code>
-  asserts over the real HTTP stack (<code>authorName = 'testauth'</code>, <code>authorEmail = 'testauth@example.com'</code>,
-  <code>status = 'pending'</code>).</li>
-<li><strong>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError.</strong> Identical to
-  <code>MediaUploadIntegrationTest::testUploadHandlesUnexpectedStorageFailure</code>: same inherited
+<li><strong>CategoryEntityCoverageTest / ContentEntityCoverageTest（主动测试）。</strong> 每个都强制
+  <code>null</code>通过<code>ReflectionProperty</code>/<code>newInstanceWithoutConstructor</code>集合来执行
+  <code>Category::getChildren()</code> (<code>src/Common/Entity/Category.php:120-122</code>) 中的防御性惰性初始化守卫
+  / <code>Content::getTags()</code> (<code>src/Common/Entity/Content.php:102-104</code>)。状态无法到达
+  通过公共构造函数，它总是初始化 <code>ArrayCollection</code>
+  （<code>Category.php:53</code>、<code>Content.php:46</code>）。所断言的行为（集合成员资格，
+  dedup、父链接）已在列出的基本测试中断言。文档块状态
+  彻底的目的是：“覆盖最后一个未覆盖的树枝”。这些固定实现
+  纯粹用于线路覆盖的细节。</li>
+<li><strong>CommentApiExtraTest::testCommentCreateAndList.</strong> POST <code>/api/v1/app/comments</code> → 201 和
+  GET <code>/api/v1/app/comments</code> → 200/<code>code=0</code> 是一个严格的子集
+  <code>AppApiRegressionTest::testAppCommentCreateDefaultsToPending</code>（201 + <code>code=0</code> + 字段）和
+  <code>testAppCommentListOnlyReturnsApproved</code> / <code>testAppCommentPendingNotVisibleInAppList</code>（获取
+  列表）。它仅断言状态代码和 <code>code=0</code>。</li>
+<li><strong>CommentControllerTest::testCreateWithAuthenticatedUserRecordsAuthorFields.</strong> 通过断言
+  <code>FakeCommentService</code> 表示 <code>defaultCreateValues()</code> 记录来自当前用户的 <code>authorName</code>/<code>authorEmail</code>/<code>status
+  = pending</code> — 正是 <code>AppApiRegressionTest::testAppCommentCreateDefaultsToPending</code>
+  在真实的 HTTP 堆栈上断言（<code>authorName = 'testauth'</code>、<code>authorEmail = 'testauth@example.com'</code>、
+  <code>status = 'pending'</code>）。</li>
+<li><strong>MediaControllerUploadTest::testAppUploadReturns500ForUnexpectedError.</strong> 等同于
+  <code>MediaUploadIntegrationTest::testUploadHandlesUnexpectedStorageFailure</code>：同样继承
   <code>App\Common\Controller\App\MediaController::uploadAction()</code> <code>catch (\Throwable) → 500 +
-  message</code>, same fake <code>MediaServiceInterface</code> throwing, same <code>uploadOwner() → null</code>. The
-  integration variant is strictly stronger (real container serializer/translator/request
-  stack).</li>
+  message</code>，同样的假<code>MediaServiceInterface</code>投掷，同样的<code>uploadOwner() → null</code>。的
+  集成变体严格来说更强（真正的容器序列化器/翻译器/请求
+  堆栈）。</li>
 <li><strong>MediaControllerUploadTest::testManageUploadReturns500ForUnexpectedError.</strong> <code>Manage\MediaController</code>
-  extends <code>App\MediaController</code> and inherits <code>uploadAction()</code>; with <code>uploadOwner() → null</code> the
-  exercised <code>catch (\Throwable) → 500</code> path is the same code as the App test, differing only
-  in the thrown message. Two tests for one code path.</li>
-<li><strong>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults.</strong> Reproduces
-  <code>MediaTest::testSettersAreFluent</code> (same six setters, same assertions on
-  filename/originalFilename/mimeType/size/path/storage + <code>getUpdatedAt()</code>) and
-  <code>MediaTest::testPrePersistWhenCreatedFromReflection</code> (reflection <code>newInstanceWithoutConstructor</code></li>
-<li><code>prePersist()</code> + <code>createdAt</code>). Pure entity unit testing embedded in an integration file.</li>
+  扩展<code>App\MediaController</code>并继承<code>uploadAction()</code>；与 <code>uploadOwner() → null</code>
+  执行的<code>catch (\Throwable) → 500</code>路径与App测试的代码相同，仅不同
+  在抛出的消息中。一个代码路径的两次测试。</li>
+<li><strong>MediaUploadIntegrationTest::testMediaEntityAccessorsAndPrePersistDefaults.</strong> 复制
+  <code>MediaTest::testSettersAreFluent</code> （相同的六个 setter，相同的断言
+  文件名/原始文件名/mimeType/大小/路径/存储 + <code>getUpdatedAt()</code>) 和
+  <code>MediaTest::testPrePersistWhenCreatedFromReflection</code>（反射<code>newInstanceWithoutConstructor</code></li>
+<li><code>prePersist()</code> + <code>createdAt</code>）。嵌入集成文件中的纯实体单元测试。</li>
 <li><strong>SettingApiIntegrationTest::testCreateAndReadSettingViaManageApi.</strong> POST <code>/api/v1/manage/settings</code>
-  (201, key/value asserted) + GET <code>/api/v1/manage/settings/{id}</code> (key asserted) is a strict
-  subset of <code>CommonModulesApiRegressionTest::testSettingCrudRegression</code> (same POST assertions,
-  plus GET detail value, PUT, DELETE).</li>
+  (201, 键/值断言) + GET <code>/api/v1/manage/settings/{id}</code> (键断言) 是严格的
+  <code>CommonModulesApiRegressionTest::testSettingCrudRegression</code> 的子集（相同的 POST 断言，
+  加上 GET 详细值、PUT、DELETE）。</li>
 </ul>
-<h3 id="medium-confidence-reasoning">MEDIUM-confidence reasoning<a class="headerlink" href="#medium-confidence-reasoning" title="Permanent link">&para;</a></h3>
+<h3 id="_5">中等置信度推理<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>ContentControllerTest.</strong> <code>App\ContentController</code> is an empty subclass of generic
-  <code>ListApiViewMixin</code>/<code>DetailApiViewMixin</code> mixins (no custom logic). The list/detail/404
-  behaviors are covered at unit level by <code>tests/Core/View/DetailApiViewMixinTest</code> and the
-  batch/list mixin tests; 404-on-missing is also covered HTTP-level for every other entity.
-  What the file uniquely adds is route wiring + auth smoke for <code>/api/v1/app/contents</code>
-  (<code>/app/contents</code> is absent from <code>AppApiRegressionTest::testAppEndpointsRequireAuthentication</code>).
-  Borderline — flag only if the team wants one representative "app list/detail + auth" test
-  per module; the mixin-level coverage makes this file redundant.</li>
-<li><strong>CommonBatchUpdateTest.</strong> Each of the 7 tests is structurally identical (create two rows,
-  POST <code>batch-update</code>, assert HTTP 200). Asserting only 200 means the tests pass even if the
-  update were a no-op (weak/no persistence verification). The <code>batchUpdateAction</code> behavior is
-  covered by <code>UpdateApiViewMixinTest</code> (unit) and <code>TradeApiIntegrationTest</code> (HTTP, with real
-  result assertions). Merge into one parameterized test that verifies persisted values, or
-  drop in favour of the generic coverage.</li>
-<li><strong>CommonRepoTest.</strong> All 7 tests are the same pattern <code>persist → flush → findById → same
-  entity → findAll non-empty</code>, exercising only generic Doctrine <code>EntityRepository</code> methods
-  (no custom repository logic). <code>findById</code> round-trips are already proven by
-  <code>ContentRepositoryIntegrationTest::testFindByIdReturnsEntityOrNull</code> and every
-  <code>CommonModulesIntegrationTest</code> CRUD flow. Merge into one parameterized mapping test.</li>
-<li><strong>CommonRepoFullTest::testContentFindLatest</strong>*. <code>findLatest()</code> ordering+limit is already
-  asserted by <code>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit</code>;
-  the new tests add a limit-count assertion without ordering and <code>findLatest(1) → count 1</code>.
-  Fold the default-limit variant into the pre-existing test instead of duplicating.</li>
-<li><strong>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus.</strong> App comment create
-  is auth-protected (<code>AppApiRegressionTest::testAppCommentCreateUnauthenticated</code>), so the
-  null-user branch of <code>defaultCreateValues()</code> is unreachable in production; the test mocks
-  <code>getUser() → null</code> purely to cover that defensive branch (docblock: "Covers the remaining
-  uncovered line (50)"). Coverage-chasing of an unreachable branch.</li>
+<li><strong>ContentControllerTest.</strong> <code>App\ContentController</code> 是 generic 的空子类
+  <code>ListApiViewMixin</code>/<code>DetailApiViewMixin</code> mixins（无自定义逻辑）。清单/详情/404
+  <code>tests/Core/View/DetailApiViewMixinTest</code> 涵盖了单元级别的行为，并且
+  批量/列表混合测试； 404-on-missing 也涵盖了每个其他实体的 HTTP 级别。
+  该文件唯一添加的是 <code>/api/v1/app/contents</code> 的路由布线 + auth Smoke
+  （<code>/app/contents</code> 不存在于 <code>AppApiRegressionTest::testAppEndpointsRequireAuthentication</code> 中）。
+  边界 - 仅当团队想要一个代表性的“应用程序列表/详细信息 + 身份验证”测试时才进行标记
+  每个模块； mixin 级别的覆盖使该文件变得多余。</li>
+<li><strong>CommonBatchUpdateTest.</strong> 7 个测试中的每一个在结构上都是相同的（创建两行，
+  POST <code>batch-update</code>，断言 HTTP 200）。仅断言 200 意味着测试通过，即使
+  更新是无操作（弱/无持久性验证）。 <code>batchUpdateAction</code> 的行为是
+  由<code>UpdateApiViewMixinTest</code>（单位）和<code>TradeApiIntegrationTest</code>（HTTP，带有真实的
+  结果断言）。合并到一个验证持久值的参数化测试中，或者
+  放弃支持一般覆盖范围。</li>
+<li><strong>CommonRepoTest.</strong> 所有 7 个测试都是相同的模式 <code>persist → flush → findById → same
+  entity → findAll non-empty</code>，仅运用通用 Doctrine <code>EntityRepository</code> 方法
+  （没有自定义存储库逻辑）。 <code>findById</code> 往返行程已被证明
+  <code>ContentRepositoryIntegrationTest::testFindByIdReturnsEntityOrNull</code> 以及每个
+  <code>CommonModulesIntegrationTest</code> CRUD 流程。合并到一个参数化映射测试中。</li>
+<li><strong>CommonRepoFullTest::testContentFindLatest</strong>*。 <code>findLatest()</code> 已下单+限额
+  由 <code>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit</code> 断言；
+  新测试添加了限制计数断言，无需排序和 <code>findLatest(1) → count 1</code>。
+  将默认限制变量折叠到预先存在的测试中，而不是重复。</li>
+<li><strong>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus.</strong> 应用程序评论创建
+  受身份验证保护 (<code>AppApiRegressionTest::testAppCommentCreateUnauthenticated</code>)，因此
+  <code>defaultCreateValues()</code> 的空用户分支在生产环境中无法访问；测试模拟
+  <code>getUser() → null</code> 纯粹是为了覆盖该防御分支（文档块：“覆盖剩余的
+  未覆盖的线 (50)")。无法到达的分支的覆盖范围追踪。</li>
 </ul>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<h2 id="_6">合并建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>CommonBatchUpdateTest</code>（7 个测试）→ 一个断言持久字段值的表驱动测试，
    不仅仅是 HTTP 200。</li>
@@ -2477,7 +2477,7 @@
 <li><code>CommentControllerTest</code>（如果保留）→ 将两个单元测试折叠到 HTTP 级别的覆盖范围中
    <code>AppApiRegressionTest</code> 而不是维护大量模拟的第二个副本。</li>
 </ol>
-<h2 id="_5">注释/非阻塞观察<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_7">注释/非阻塞观察<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>ContentTest::testSettersAreFluentAndTouchUpdatesTimestamp</code> 通过只是因为 <code>setBody()</code>
   触摸<code>updatedAt</code>；它没有捕获 <code>setTitle()</code> 缺失 - <code>touch()</code> 错误。这是一个
@@ -2486,7 +2486,7 @@
   错误已修复。</li>
 <li>该模块中没有标记跳过的测试；所有跳过记录活动错误并保留。</li>
 </ul>
-<h2 id="_6">验证步骤<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_8">验证步骤<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/Nayuki/Development/PHP/crud-skeleton
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Common/<span class="w">   </span><span class="c1"># 131 tests, 0 failures (baseline)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># After deleting HIGH-confidence candidates only:</span>

@@ -1768,7 +1768,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1852,7 +1852,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -4598,11 +4598,11 @@ Store端权威记录，集成事件也有同样的记录
 </tbody>
 </table>
 <p>收件箱的唯一性可防止重播的代理消息重复存储决策。的
-business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory defense in depth.</p>
+<code>StoreOrder.tradeOrderUuid</code>上的业务唯一键仍然是强制纵深防御。</p>
 <hr />
 <h2 id="6">6. 交易订单状态机扩展<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <h3 id="61">6.1 目标国家<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
-<p>The target Trade workflow replaces the pre-payment path with Store confirmation.</p>
+<p>目标交易工作流程将预付款路径替换为商店确认。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>draft
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  -&gt; awaiting_store_acceptance
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  -&gt; store_accepted
@@ -4620,10 +4620,10 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 <p>精确的命名可以与交易工作流程所有者一起调整，但是这些不变量
 需要：</p>
 <ol>
-<li>Trade emits <code>trade.order.created.v1</code> only after it has an immutable order UUID and
+<li>Trade 仅在具有不可变订单 UUID 且
    存储快照。</li>
-<li>A payment invoice cannot be created or paid before Store acceptance.</li>
-<li>A Store rejection or acceptance timeout makes the commercial order terminally
+<li>在商店接受之前，无法创建或支付付款发票。</li>
+<li>商店拒绝或接受超时使商业订单终止
    付款前取消。
 4.存储接受/拒绝消费者是幂等的。</li>
 </ol>
@@ -4632,7 +4632,7 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 当订单等待商店接受时，必须返回冲突响应。这是一个
 业务门，而不是 UI 约定。</p>
 <h3 id="63">6.3 订单创建响应<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
-<p>Because Store validation is asynchronous, a successful initial request returns <code>202</code>:</p>
+<p>由于存储验证是异步的，因此成功的初始请求将返回 <code>202</code>：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
@@ -4646,7 +4646,7 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 <a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Order submitted for store acceptance"</span>
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="p">}</span>
 </code></pre></div>
-<p>The client polls the existing order detail endpoint or consumes its own notification
+<p>客户端轮询现有订单详细信息端点或使用自己的通知
 频道。不得假设 <code>202</code> 响应意味着商店有库存。</p>
 <hr />
 <h2 id="7">7. 集成事件合约<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
@@ -4667,12 +4667,12 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 <p>规则：</p>
 <ul>
 <li><code>eventId</code> 是不可变的并且全局唯一。</li>
-<li><code>aggregateId</code> is the aggregate UUID, never an internal database id.</li>
+<li><code>aggregateId</code> 是聚合 UUID，而不是内部数据库 ID。</li>
 <li><code>correlationId</code>遵循跨服务的业务流程；对于这个流程，它开始于
   交易订单 UUID。</li>
 <li><code>causationId</code> 是触发事件 ID，或者 <code>null</code> 是初始 HTTP 命令。</li>
 <li>重大负载更改会创建新的事件版本/主题；它永远不会改变 v1。</li>
-<li>Payloads must contain only data safe for the receiving domain.不公开秘密，
+<li>有效负载必须仅包含对接收域安全的数据。不公开秘密，
   付款凭据、原始提供商回调或不必要的 PII。</li>
 </ul>
 <h3 id="72-tradeordercreatedv1">7.2 <code>trade.order.created.v1</code><a class="headerlink" href="#72-tradeordercreatedv1" title="Permanent link">&para;</a></h3>
@@ -4706,7 +4706,7 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 <p>该事件是历史放置快照。商店不会重新读取交易表
 完成有效负载。</p>
 <h3 id="73-storeorderacceptedv1">7.3 <code>store.order.accepted.v1</code><a class="headerlink" href="#73-storeorderacceptedv1" title="Permanent link">&para;</a></h3>
-<p><strong>Publisher:</strong> Store, after local validation and the future inventory reservation
+<p><strong>发布者：</strong> 商店，经过本地验证和未来库存预留
 合约成功。</p>
 <p><strong>消费者：</strong> 交易订单决策消费者。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
@@ -4721,7 +4721,7 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 服务器写入的订单快照，订单正在等待商店接受。重复项
 是无操作的。</p>
 <h3 id="74-storeorderrejectedv1">7.4 <code>store.order.rejected.v1</code><a class="headerlink" href="#74-storeorderrejectedv1" title="Permanent link">&para;</a></h3>
-<p><strong>Publisher:</strong> Store, when validation or inventory reservation cannot succeed.</p>
+<p><strong>发布者：</strong> 存储，当验证或库存预留无法成功时。</p>
 <p><strong>消费者：</strong> 交易订单决策消费者。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
@@ -4845,9 +4845,9 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 <a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>  -&gt; on transient error: increment attempts and retry later
 <a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>  -&gt; on retry exhaustion: retain record and alert/DLQ
 </code></pre></div>
-<p>Initial deployment may use Symfony Messenger with Doctrine transport.业务
+<p>初始部署可以使用带有 Doctrine 传输的 Symfony Messenger。业务
 合同不得取决于该选择。 RabbitMQ、Kafka、SQS 或 HTTP 事件中继
-can replace the transport without changing StoreOrder business code.</p>
+可以在不改变StoreOrder业务代码的情况下更换运输。</p>
 <h3 id="83">8.3 重试分类<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4889,10 +4889,10 @@ can replace the transport without changing StoreOrder business code.</p>
 </table>
 <h3 id="84">8.4 排序和并发<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
 <ul>
-<li>The Store consumer serializes concurrent decisions by <code>tradeOrderUuid</code> through the
+<li>Store 消费者通过 <code>tradeOrderUuid</code> 通过
   必要时有唯一的 StoreOrder 密钥和事务锁定。</li>
 <li>事件主题应在传输支持的情况下保留每个聚合键的排序
-  it, but correctness must not rely on global ordering.</li>
+  它，但正确性不能依赖于全局排序。</li>
 <li>终端后商店接受 贸易取消是无害的：贸易忽略
   陈旧的接受事件和 Store 消耗 <code>trade.order.cancelled.v1</code> 来释放工作。</li>
 <li>所有结果处理程序在应用转换之前都会验证预期的源状态。</li>
@@ -4925,7 +4925,7 @@ can replace the transport without changing StoreOrder business code.</p>
 </tbody>
 </table>
 <p>这些端点不创建订单。店面使用选定的商店上下文
-when calling the existing Trade quote/order APIs.</p>
+调用现有的交易报价/订单 API 时。</p>
 <h3 id="92">9.2 客户商店订单读取视图<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5085,25 +5085,25 @@ StoreOrder 的本地商店关系，而不是请求提供的商店标识符。</p
 <li>存储角色仅存在于<code>Membership</code>中。</li>
 <li>Store 控制器将经过身份验证的 Identity 用户解析为标量 <code>userUuid</code> 并
    查询 在本地存储成员资格。</li>
-<li><code>ROLE_ADMIN</code> bypasses membership checks only on explicitly administrative routes.</li>
-<li>Store staff cannot elevate a Trade order's commercial status directly.
+<li><code>ROLE_ADMIN</code> 仅在明确的管理路由上绕过成员资格检查。</li>
+<li>商店工作人员无法直接提升贸易订单的商业状态。
 6、门店员工行为产生门店事件；贸易仅适用于商业转型
    通过它自己的事件消费者和工作流守卫。</li>
 </ol>
 <hr />
 <h2 id="11_1">11. 商店背景和促销合同<a class="headerlink" href="#11_1" title="Permanent link">&para;</a></h2>
-<p>Promotion currently uses a <code>storeCode</code> within Trade's price calculation context.的
-Store bundle gives that value an authoritative source:</p>
+<p>促销目前在交易的价格计算上下文中使用 <code>storeCode</code>。的
+商店捆绑包为该值提供了权威来源：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>request -&gt; StoreContextResolver -&gt; active Store -&gt; StoreContext.storeCode
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>        -&gt; Trade calculatePrices(..., storeCode, ...)
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>        -&gt; Promotion storeCode filtering
 </code></pre></div>
 <p>规则：</p>
 <ul>
-<li>The client cannot select an arbitrary promotion store by posting <code>storeCode</code>.</li>
+<li>客户不能通过发布<code>storeCode</code>来选择任意促销商店。</li>
 <li>Trade 将解析器生成的代码传递到定价管道。</li>
-<li>A Store snapshot is persisted with the order-created event so the Store consumer can
-  validate that the order was priced for the intended Store.</li>
+<li>商店快照与订单创建事件一起保存，以便商店消费者可以
+  验证订单的定价是否适用于预期商店。</li>
 <li>促销保持独立：它不引用存储表或实体。</li>
 <li>全球促销仍以现有的空商店代码约定为代表；
   商店选择决不能无意中将一个不知名的商店变成全球定价。</li>
@@ -5136,7 +5136,7 @@ Store bundle gives that value an authoritative source:</p>
 <h2 id="13_1">13. 超时和补偿<a class="headerlink" href="#13_1" title="Permanent link">&para;</a></h2>
 <h3 id="131">13.1 接受超时<a class="headerlink" href="#131" title="Permanent link">&para;</a></h3>
 <p>Trade 在创建订单时记录可配置的接受截止日期。预定的
-Trade job finds orders still awaiting Store acceptance after the deadline and:</p>
+贸易工作发现订单在截止日期后仍在等待商店接受，并且：</p>
 <ol>
 <li>应用取消转换。</li>
 <li>将<code>trade.order.cancelled.v1</code>写入交易发件箱，原因为<code>ACCEPTANCE_TIMEOUT</code>。</li>
@@ -5207,7 +5207,7 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 <thead>
 <tr>
 <th>类别</th>
-<th>HTTP/Event behavior</th>
+<th>HTTP/事件行为</th>
 <th>记录</th>
 </tr>
 </thead>
@@ -5229,13 +5229,13 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 </tr>
 <tr>
 <td>消费者瞬态故障</td>
-<td>Retry</td>
+<td>重试</td>
 <td>尝试计数警告</td>
 </tr>
 <tr>
 <td>快照不匹配</td>
 <td>不要改变现有的 StoreOrder</td>
-<td>Critical alert</td>
+<td>严重警报</td>
 </tr>
 <tr>
 <td>发件箱发布失败</td>
@@ -5255,7 +5255,7 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 <p>目标部署至少导出：</p>
 <ul>
 <li>发件箱积压计数和最早的未发布年龄。</li>
-<li>Consumer lag by topic.</li>
+<li>消费者按主题滞后。</li>
 <li>按商店和原因代码的接受/拒绝计数。</li>
 <li>从交易订单创建到商店决策的接受延迟。</li>
 <li>超时取消计数。</li>
@@ -5318,7 +5318,7 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 </tr>
 <tr>
 <td>相同交易 UUID/不同负载</td>
-<td>No overwrite;严重故障/DLQ</td>
+<td>不覆盖；严重故障/DLQ</td>
 </tr>
 <tr>
 <td>商店工作人员读取另一张商店订单</td>
@@ -5405,15 +5405,15 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 </thead>
 <tbody>
 <tr>
-<td>Single order entry</td>
+<td>单一订单输入</td>
 <td>没有商店端点创建商业订单；贸易仍然是切入点</td>
 </tr>
 <tr>
-<td>Store isolation</td>
+<td>商店隔离</td>
 <td>商店没有与贸易、支付、身份或库存相关的学说关联/FK</td>
 </tr>
 <tr>
-<td>Context integrity</td>
+<td>上下文完整性</td>
 <td>商店标识来自服务器解析的 StoreContext，而不是客户端正文字段</td>
 </tr>
 <tr>
@@ -5421,7 +5421,7 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 <td>每个交易订单 UUID 都会幂等地创建一个 StoreOrder</td>
 </tr>
 <tr>
-<td>Event isolation</td>
+<td>事件隔离</td>
 <td>集成事件有效负载是版本化标量/JSON 合约，而不是 Doctrine 实体</td>
 </tr>
 <tr>
@@ -5437,7 +5437,7 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 <td>商店范围内的订单在商店接受之前无法开始付款</td>
 </tr>
 <tr>
-<td>Rejection/timeout</td>
+<td>拒绝/超时</td>
 <td>Trade 在商店拒绝或接受超时时取消未付款的订单</td>
 </tr>
 <tr>
@@ -5445,11 +5445,11 @@ Trade job finds orders still awaiting Store acceptance after the deadline and:</
 <td>店铺会员范围 店铺运营；平台管理员保留显式覆盖</td>
 </tr>
 <tr>
-<td>Inventory boundary</td>
+<td>库存边界</td>
 <td>商店有预订合同挂钩，但没有嵌入式库存分类账</td>
 </tr>
 <tr>
-<td>Extraction readiness</td>
+<td>提取准备</td>
 <td>存储可以移动到单独的数据库/使用者，无需跨模式连接或事务</td>
 </tr>
 </tbody>

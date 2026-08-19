@@ -857,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -941,7 +941,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2206,7 +2206,7 @@
 <h3 id="bug-3-envelope-aggregatetype">Bug #3（潜在）- Envelope <code>aggregateType</code> 是硬编码的，而不是从实体中读取<a class="headerlink" href="#bug-3-envelope-aggregatetype" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Trade/Command/PublishOutboxCommand.php:45</code>; <code>src/Trade/Entity/TradeOutboxMessage.php</code>（存储<code>aggregate_type</code>，但公开<strong>没有<code>getAggregateType()</code></strong> getter）。</li>
-<li><strong>描述：</strong> 该命令按字面意义发出 <code>'aggregateType' =&gt; 'trade_order'</code> 而不是 <code>$message-&gt;getAggregateType()</code>。该实体已存储该值（构造函数 arg <code>$aggregateType</code>）。</li>
+<li><strong>描述：</strong> 该命令按字面意思发出 <code>'aggregateType' =&gt; 'trade_order'</code> 而不是 <code>$message-&gt;getAggregateType()</code>。该实体已存储该值（构造函数 arg <code>$aggregateType</code>）。</li>
 <li><strong>影响：</strong> 当前没有运行时影响 — 每个交易发件箱行均记录有 <code>aggregate_type = 'trade_order'</code>（<code>OrderService::createOrder</code> 和 <code>OrderWorkflowListener</code>）。这是一个潜在的一致性差距：当任何生产者记录不同的聚合类型时，发布的信封仍然会声明 <code>trade_order</code>，从而破坏下游信封语义。</li>
 <li><strong>复制：</strong>用<code>'trade_order'</code>以外的任何<code>aggregateType</code>记录一行；观察已发送的 <code>TradeOrderCreatedMessage</code>/<code>TradeOrderCancelledMessage</code> 信封，其中仍载有 <code>'aggregateType' =&gt; 'trade_order'</code>。</li>
 <li><strong>建议的修复：</strong> 将 <code>getAggregateType(): string</code> 添加到 <code>TradeOutboxMessage</code> 并在 <code>PublishOutboxCommand.php:45</code> 中使用它（镜像已经公开 <code>getAggregateType()</code> 等的更丰富的 <code>StoreOutboxMessage</code> API）。</li>

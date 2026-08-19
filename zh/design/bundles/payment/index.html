@@ -1940,10 +1940,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#19-acceptance-criteria" class="md-nav__link">
+  <a href="#19" class="md-nav__link">
     <span class="md-ellipsis">
       
-        19. Acceptance Criteria
+        19. 验收标准
       
     </span>
   </a>
@@ -2001,7 +2001,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -2085,7 +2085,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -4213,10 +4213,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#19-acceptance-criteria" class="md-nav__link">
+  <a href="#19" class="md-nav__link">
     <span class="md-ellipsis">
       
-        19. Acceptance Criteria
+        19. 验收标准
       
     </span>
   </a>
@@ -6241,99 +6241,99 @@ Fuiou 和 Huifu 仅作为未来网关适配器经过验证的遗留架构输入�
 <table>
 <thead>
 <tr>
-<th>Question</th>
-<th>Default Decision</th>
+<th>问题</th>
+<th>默认决定</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Should invoice source id use order id or uuid?</td>
-<td>Use order uuid for external stability</td>
+<td>发票来源 ID 应该使用订单 ID 还是 UUID？</td>
+<td>使用订单 uuid 实现外部稳定</td>
 </tr>
 <tr>
-<td>Should invoice relate to User directly?</td>
-<td>Optional <code>payer</code>, plus source metadata</td>
+<td>发票应该与用户直接相关吗？</td>
+<td>可选 <code>payer</code>，加上源元数据</td>
 </tr>
 <tr>
-<td>Should Trade hold ORM relation to Invoice?</td>
-<td>No, store lightweight invoice reference fields</td>
+<td>Trade 是否应该持有与 Invoice 相关的 ORM？</td>
+<td>否，存储轻量级发票参考字段</td>
 </tr>
 <tr>
-<td>Should provider gateway update Order directly?</td>
-<td>No, events only</td>
+<td>提供商网关是否应该直接更新订单？</td>
+<td>不，仅限活动</td>
 </tr>
 <tr>
-<td>Should Fuiou/Huifu be standalone bundles?</td>
-<td>No, future gateway adapters under Payment</td>
+<td>Fuiou/Huifu 应该是独立捆绑包吗？</td>
+<td>不，付款</td>
 </tr>
 <tr>
-<td>Should PaymentRequisition be included?</td>
-<td>No, separate Finance/Approval module later</td>
+<td>应包括 PaymentRequisition 吗？</td>
+<td>不，稍后单独财务/审批模块</td>
 </tr>
 <tr>
-<td>Should wallet balance deduction be owned by Payment?</td>
-<td>No, Wallet owns wallet deduction internals and implements Payment adjustment provider</td>
+<td>钱包余额扣除是否应归Payment所有？</td>
+<td>不，Wallet 拥有钱包扣除内部结构并实现支付调整提供商</td>
 </tr>
 <tr>
-<td>Which adjustment type is implemented first?</td>
-<td>Only <code>wallet_balance</code> for the invoice currency</td>
+<td>首先实施哪种调整类型？</td>
+<td>发票货币仅限 <code>wallet_balance</code></td>
 </tr>
 <tr>
-<td>How should full wallet deduction be recorded?</td>
-<td>Set <code>invoice.payment = wallet</code> and mark invoice paid after deduction applies</td>
+<td>钱包全额扣款该如何记录？</td>
+<td>设置<code>invoice.payment = wallet</code>并标记扣除后已付款的发票适用</td>
 </tr>
 <tr>
-<td>Should deducted invoices support partial refund first?</td>
-<td>No, only full refund until allocation rules are designed</td>
+<td>已扣除的发票是否可以先支持部分退款？</td>
+<td>不，只有全额退款，直到分配规则设计出来</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="19-acceptance-criteria">19. Acceptance Criteria<a class="headerlink" href="#19-acceptance-criteria" title="Permanent link">&para;</a></h2>
-<p>The Payment module design is implemented when:</p>
+<h2 id="19">19. 验收标准<a class="headerlink" href="#19" title="Permanent link">&para;</a></h2>
+<p>支付模块设计在以下情况下实施：</p>
 <table>
 <thead>
 <tr>
-<th>Criteria</th>
-<th>Requirement</th>
+<th>标准</th>
+<th>要求</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Invoice entity</td>
-<td>Exists with cents-based amount and workflow status</td>
+<td>发票实体</td>
+<td>存在基于美分的金额和工作流程状态</td>
 </tr>
 <tr>
-<td>Gateway registry</td>
-<td>Resolves tagged gateways by name</td>
+<td>网关注册</td>
+<td>按名称解析标记的网关</td>
 </tr>
 <tr>
-<td>Mock gateway</td>
-<td>Supports deterministic pay/notify/refund tests</td>
+<td>模拟网关</td>
+<td>支持确定性支付/通知/退款测试</td>
 </tr>
 <tr>
-<td>Webhook</td>
-<td>Updates invoice through service, not controller logic</td>
+<td>网络钩子</td>
+<td>通过服务更新发票，而不是控制器逻辑</td>
 </tr>
 <tr>
-<td>Events</td>
-<td>Invoice paid/refunded/cancelled events dispatched</td>
+<td>活动</td>
+<td>已发送发票支付/退款/取消事件</td>
 </tr>
 <tr>
-<td>Trade integration</td>
-<td>Order can be paid through invoice event flow</td>
+<td>贸易一体化</td>
+<td>订单可通过发票事件流支付</td>
 </tr>
 <tr>
-<td>Adjustment</td>
-<td>Payment supports generic adjustment providers; Wallet supports first-phase <code>wallet_balance</code> deduction without gateway <code>payAmount</code> coupling</td>
+<td>调整</td>
+<td>支付支持通用调整提供商；钱包支持首期<code>wallet_balance</code>扣款，无需网关<code>payAmount</code>耦合</td>
 </tr>
 <tr>
-<td>Tests</td>
-<td>Unit and integration tests cover idempotency and invalid transitions</td>
+<td>测试</td>
+<td>单元和集成测试涵盖幂等性和无效转换</td>
 </tr>
 <tr>
 <td>CI</td>
-<td>Coverage remains at or above required threshold</td>
+<td>覆盖率保持在或高于要求的阈值</td>
 </tr>
 </tbody>
 </table>

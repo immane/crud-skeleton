@@ -857,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -941,7 +941,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2735,10 +2735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#18-acceptance-criteria" class="md-nav__link">
+  <a href="#18" class="md-nav__link">
     <span class="md-ellipsis">
       
-        18. Acceptance Criteria
+        18. 验收标准
       
     </span>
   </a>
@@ -4002,95 +4002,95 @@
 <table>
 <thead>
 <tr>
-<th>Question</th>
-<th>Current Decision</th>
+<th>问题</th>
+<th>当前决定</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Should DSL support inline math expressions? (e.g., <code>cart.subtotal * 0.8 &gt;= 100</code>)</td>
-<td>No — keep DSL simple. Complex math belongs in strategy classes.</td>
+<td>DSL 应该支持内联数学表达式吗？ （例如，<code>cart.subtotal * 0.8 &gt;= 100</code>）</td>
+<td>不——保持 DSL 简单。复杂的数学属于策略类。</td>
 </tr>
 <tr>
-<td>Should <code>fields</code> declarations auto-generate admin form?</td>
-<td>Reserved: frontend task. <code>fields</code> is the contract.</td>
+<td><code>fields</code> 声明应该自动生成管理表单吗？</td>
+<td>保留：前端任务。 <code>fields</code> 是合同。</td>
 </tr>
 <tr>
-<td>Should <code>appliedPromotions</code> be persisted on Order?</td>
-<td>No. Results stored in <code>context.meta['promotion']</code>, passed through <code>PriceCalculationResult.meta</code> to frontend.</td>
+<td><code>appliedPromotions</code> 应该在订单上保留吗？</td>
+<td>否。结果存储在 <code>context.meta['promotion']</code> 中，通过 <code>PriceCalculationResult.meta</code> 传递到前端。</td>
 </tr>
 <tr>
-<td>Max loop iterations?</td>
-<td>20, configurable constant in <code>PromotionCalculator</code>.</td>
+<td>最大循环迭代次数？</td>
+<td>20、<code>PromotionCalculator</code>中可配置常量。</td>
 </tr>
 <tr>
-<td>AST cache storage: DB JSON column or filesystem?</td>
-<td>DB JSON column (<code>astCache</code>). Zero deployment dependency.</td>
+<td>AST 缓存存储：DB JSON 列还是文件系统？</td>
+<td>数据库 JSON 列 (<code>astCache</code>)。零部署依赖。</td>
 </tr>
 <tr>
-<td>How to handle circular promotions?</td>
-<td>Max iteration + appliedId tracking + lock_item mode.</td>
+<td>如何应对循环促销？</td>
+<td>最大迭代+applyId跟踪+lock_item模式。</td>
 </tr>
 <tr>
-<td>Should DSL support <code>import</code> for template composition?</td>
-<td>No — keep each template self-contained. Composition via separate instances.</td>
+<td>DSL 是否应该支持 <code>import</code> 进行模板组合？</td>
+<td>否 - 保持每个模板独立。通过单独的实例进行组合。</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="18-acceptance-criteria">18. Acceptance Criteria<a class="headerlink" href="#18-acceptance-criteria" title="Permanent link">&para;</a></h2>
-<p>The Promotion module is complete when:</p>
+<h2 id="18">18. 验收标准<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
+<p>促销模块在以下情况下完成：</p>
 <table>
 <thead>
 <tr>
-<th>Criteria</th>
-<th>Requirement</th>
+<th>标准</th>
+<th>要求</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Entities</td>
-<td>PromotionTemplate and Promotion entities exist with PHP 8 attributes</td>
+<td>实体</td>
+<td>PromotionTemplate 和 Promotion 实体具有 PHP 8 属性</td>
 </tr>
 <tr>
-<td>DSL Parser</td>
-<td>Lexer + Parser correctly tokenize and AST-build all 7 DSL examples; errors carry line:col</td>
+<td>DSL 解析器</td>
+<td>Lexer + Parser 正确标记和 AST 构建所有 7 个 DSL 示例；错误携带行：col</td>
 </tr>
 <tr>
-<td>CRUD</td>
-<td>Admin can CRUD templates and promotions via API</td>
+<td>增删改查</td>
+<td>管理员可以通过 API 进行 CRUD 模板和促销</td>
 </tr>
 <tr>
-<td>Save-time validation</td>
-<td>DSL is parsed on template save; invalid DSL is rejected with precise errors</td>
+<td>节省时间验证</td>
+<td>DSL 在模板保存时解析；无效 DSL 被拒绝并出现精确错误</td>
 </tr>
 <tr>
-<td>Calculator</td>
-<td><code>PromotionCalculator</code> is auto-discovered and runs in price pipeline</td>
+<td>计算器</td>
+<td><code>PromotionCalculator</code> 自动发现并在价格管道中运行</td>
 </tr>
 <tr>
-<td>Strategies</td>
-<td>All 7 promotion types (full_reduction, discount, gift, nth_discount, tiered, free_shipping, member_discount) execute correctly</td>
+<td>策略</td>
+<td>所有 7 种促销类型（full_reduction、discount、gift、nth_discount、tiered、free_shipping、member_discount）均正确执行</td>
 </tr>
 <tr>
-<td>Chaining</td>
-<td>Multiple promotions can apply sequentially (max 20 iterations)</td>
+<td>链接</td>
+<td>可以连续应用多个促销活动（最多 20 次迭代）</td>
 </tr>
 <tr>
-<td>Conflict modes</td>
-<td>exclusive, lock_item, stackable all behave correctly</td>
+<td>冲突模式</td>
+<td>Exclusive、lock_item、stackable 均正常运行</td>
 </tr>
 <tr>
-<td>Multi-store</td>
-<td>Promotions filter by storeCode; same template serves multiple stores</td>
+<td>多店</td>
+<td>促销活动按商店代码过滤；同一模板服务多个商店</td>
 </tr>
 <tr>
-<td>Decoupling</td>
-<td>Trade <code>OrderService</code> has zero promotion-specific code</td>
+<td>解耦</td>
+<td>贸易 <code>OrderService</code> 的促销特定代码为零</td>
 </tr>
 <tr>
-<td>Tests</td>
-<td>Unit tests cover DSL parser, evaluator, all strategies, engine, pipeline integration</td>
+<td>测试</td>
+<td>单元测试涵盖 DSL 解析器、评估器、所有策略、引擎、管道集成</td>
 </tr>
 </tbody>
 </table>

@@ -857,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -941,7 +941,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2194,28 +2194,28 @@
 <h3 id="bug-3-empty-amount-0">BUG-3 — <code>empty()</code> 将 <code>amount = 0</code> 视为“缺失”，返回错误的验证消息（低）<a class="headerlink" href="#bug-3-empty-amount-0" title="Permanent link">&para;</a></h3>
 <ul>
 <li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:32</code> 和 <code>:79</code></li>
-<li>Description: the presence check <code>empty($content['amount'])</code> evaluates true for <code>0</code>, <code>"0"</code>, and <code>false</code>, so a request with <code>amount: 0</code> is rejected with <code>'fromWalletId, toWalletId, and amount are required'</code> (deposit: <code>'toWalletId and amount are required'</code>) instead of <code>'Amount must be positive'</code>. HTTP 代码仍然是 400，但该消息具有误导性。</li>
+<li>描述：存在检查 <code>empty($content['amount'])</code> 对于 <code>0</code>、<code>"0"</code> 和 <code>false</code> 评估为 true，因此带有 <code>amount: 0</code> 的请求会被 <code>'fromWalletId, toWalletId, and amount are required'</code>（存款：<code>'toWalletId and amount are required'</code>）而不是 <code>'Amount must be positive'</code> 拒绝。 HTTP 代码仍然是 400，但该消息具有误导性。</li>
 <li>影响：令人困惑的验证错误；对于文字值 <code>0</code> 来说，数量正分支（将给出准确的消息）是无法到达的。</li>
 <li>复制：<code>POST /api/v1/manage/transfers</code> 和 <code>amount: 0</code>（有效 ID）→ 正文消息表示这些字段是必填字段。</li>
-<li>Proposed fix: split the checks — require presence with <code>array_key_exists</code>/<code>isset</code> (or check each of <code>fromWalletId</code>/<code>toWalletId</code>/<code>amount</code> independently) and apply the positivity check on the parsed integer, so <code>0</code> reaches the "Amount must be positive" branch.</li>
+<li>建议的修复：拆分检查 - 要求存在 <code>array_key_exists</code>/<code>isset</code>（或独立检查每个 <code>fromWalletId</code>/<code>toWalletId</code>/<code>amount</code>）并对解析的整数应用正性检查，因此 <code>0</code> 到达“金额必须为正”分支。</li>
 <li>测试：<code>testCreateActionZeroAmountShouldReportAmountNotPositive</code> / <code>testDepositActionZeroAmountShouldReportAmountNotPositive</code>（跳过，断言正确的行为）。</li>
 </ul>
 <h3 id="bug-4-201">BUG-4 — 幂等重放返回内部不一致的 201 主体（中）<a class="headerlink" href="#bug-4-201" title="Permanent link">&para;</a></h3>
 <ul>
 <li>位置：<code>src/Wallet/Controller/Manage/TransferController.php:53-54</code>（createAction）和<code>:98-99</code>（depositAction）；根本原因在 <code>src/Wallet/Service/TransferService.php:53-57</code> / <code>:169-174</code></li>
-<li>Description: on an idempotent replay (request carries a <code>referenceId</code> that already exists) <code>TransferService</code> returns the <strong>stored</strong> transaction while ignoring the new request's amount. The controller builds the response from the <strong>request</strong> for the integer <code>amount</code> field (<code>'amount' =&gt; $amount</code>) but from the <strong>stored transaction</strong> for <code>amountFloat</code> and <code>transactionId</code>.不同数量的重播会产生例如<code>"amount": 99999</code> 与 <code>"amountFloat": 500.0</code> 一起位于同一 201 正文中。</li>
-<li>Impact: no double-spend (that is the point of idempotency), but any client/audit that reads the response <code>amount</code> field gets a value that disagrees with the returned transaction and <code>amountFloat</code>;监督和簿记可能会被误导。</li>
+<li>描述：在幂等重放时（请求携带已存在的 <code>referenceId</code>）<code>TransferService</code> 返回<strong>存储的</strong>交易，同时忽略新请求的金额。控制器从整数 <code>amount</code> 字段 (<code>'amount' =&gt; $amount</code>) 的 <strong>请求</strong> 构建响应，但从 <code>amountFloat</code> 和 <code>transactionId</code> 的 <strong>存储事务</strong> 构建响应。不同数量的重播会产生例如<code>"amount": 99999</code> 与 <code>"amountFloat": 500.0</code> 一起位于同一 201 正文中。</li>
+<li>影响：无双花（即幂等点），但任何读取响应 <code>amount</code> 字段的客户端/审计都会得到与返回的交易和 <code>amountFloat</code> 不一致的值；监督和簿记可能会被误导。</li>
 <li>复制：通过<code>referenceId = REF-1</code>转账，金额50000（201）；使用 <code>amount = 99999</code> 重播相同的 <code>referenceId</code> → 201 使用 <code>data.amount = 99999</code> 但使用 <code>data.amountFloat = 500.0</code> 和原始 <code>transactionId</code>。 （现有集成测试 <code>testTransferApiIdempotency</code> 重新发送<em>相同</em>数量，因此不会暴露差异。）</li>
-<li>Proposed fix: build the success payload from the returned transaction (<code>$result-&gt;transaction-&gt;getAmount()</code> and <code>$result-&gt;transaction</code>'s wallet ids) rather than echoing the request values, or have <code>TransferService</code> surface the actually-applied amount/ids.</li>
+<li>建议的修复：从返回的交易（<code>$result-&gt;transaction-&gt;getAmount()</code> 和 <code>$result-&gt;transaction</code> 的钱包 ID）构建成功负载，而不是回显请求值，或者让 <code>TransferService</code> 显示实际应用的金额/ID。</li>
 <li>测试：<code>testCreateActionIdempotentReplayEchoesStoredAmount</code>（跳过，断言响应金额等于存储的交易金额）。</li>
 </ul>
 <h3 id="bug-5-walletservicereconcile">BUG-5 — <code>WalletService::reconcile()</code> 不是原子的（低）<a class="headerlink" href="#bug-5-walletservicereconcile" title="Permanent link">&para;</a></h3>
 <ul>
 <li>地点：<code>src/Wallet/Service/WalletService.php:124-125</code></li>
 <li>描述：<code>$this-&gt;em-&gt;persist($tx); $this-&gt;em-&gt;flush();</code> 在每个钱包循环内运行，没有包装交易。如果钱包 <em>n</em> 的协调抛出（例如数据库错误、<code>getExpectedBalance</code> 失败），则已刷新的钱包 <em>1..n-1</em> 的调整仍然保留 - 仅部分应用协调。</li>
-<li>Impact: a failed reconcile run leaves partial adjustment deposits committed (recoverable on re-run since reconcile is idempotent, but surprising for an ops tool and it inflates <code>totalDeposited</code>/expected balances until re-run completes).</li>
-<li>Reproduction: two wallets where the second fails during <code>getExpectedBalance()</code>/<code>flush()</code> → the first wallet's adjustment transaction is committed despite the command failing.</li>
-<li>Proposed fix: wrap the loop in a single transaction (<code>beginTransaction</code>/<code>commit</code>, <code>rollback</code> in a catch) so reconcile is all-or-nothing, or at minimum document/emit the partial state.</li>
+<li>影响：协调运行失败会留下部分调整存款（由于协调是幂等的，因此可以在重新运行时恢复，但对于操作工具来说令人惊讶，它会增加 <code>totalDeposited</code>/预期余额，直到重新运行完成为止）。</li>
+<li>复制：两个钱包，其中第二个在 <code>getExpectedBalance()</code>/<code>flush()</code> 期间失败 → 尽管命令失败，第一个钱包的调整交易仍被提交。</li>
+<li>建议的修复：将循环包装在单个事务中（<code>beginTransaction</code>/<code>commit</code>、<code>rollback</code> 在 catch 中），以便协调是全有或全无，或者至少记录/发出部分状态。</li>
 </ul>
 <h2 id="4">4. 注释<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <ul>
