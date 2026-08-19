@@ -854,6 +854,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1470,7 +1498,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1526,7 +1554,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1582,7 +1610,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1988,8 +2016,8 @@
 <p>在 <code>services_wechat.yaml</code> 中添加显式标签：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">App\Wechat\Service\Gateway\WechatPayGateway</span><span class="p">:</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_NOTIFY_URL)%&#39;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_PAY_NOTIFY_URL)%'</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'payment.gateway'</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>或者，在 <code>PaymentGatewayInterface</code> 的微信服务配置中添加 <code>_instanceof</code> 规则。</p>
 <h3 id="2-system">2. <code>/system/*</code> 内省端点实际上是公开的<a class="headerlink" href="#2-system" title="Permanent link">&para;</a></h3>
@@ -2030,7 +2058,7 @@
 <li><code>InvoiceService::pay()</code> 打开一个事务，然后在其中调用 <code>$gateway-&gt;pay()</code>。</li>
 <li><code>WechatPayGateway::pay()</code>执行出站微信API调用。</li>
 <li><code>TransferService</code>手动启动与<code>beginTransaction()</code>的事务。</li>
-<li><code>Trade\Controller\Manage\OrderController</code> 中的注释假定嵌套保存点行为，但未找到显式 Doctrine 保存点配置。</li>
+<li><code>Trade\Controller\Manage\OrderController</code> 中的注释假设嵌套保存点行为，但未找到显式 Doctrine 保存点配置。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>独立的本地和外部支付流程：</p>
@@ -2078,7 +2106,7 @@
 <p><strong>影响：</strong> 客户端可能会请求非常大的 <code>limit</code>，从而导致大量数据库查询或大量序列化响应。</p>
 <p><strong>证据：</strong></p>
 <ul>
-<li><code>RestController::pagination()</code> 使用带有默认 <code>100</code> 的 <code>max(1, request limit)</code>，但不限制上限。</li>
+<li><code>RestController::pagination()</code> 使用 <code>max(1, request limit)</code> 和默认的 <code>100</code>，但不限制上限。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>添加全局最大值，例如 <code>min(200, max(1, $request-&gt;query-&gt;getInt('limit', 100)))</code>，或使最大值可配置。</p>
@@ -2086,7 +2114,7 @@
 <p><strong>影响：</strong> 如果 DQL 编译失败，该服务会在 PHP 中加载完整的结果集和筛选器，这对于大型表来说可能会很昂贵。</p>
 <p><strong>证据：</strong></p>
 <ul>
-<li>当过滤器编译失败或使用 <code>@sort</code> 时，<code>BaseServiceReadListTrait::list()</code> 回退到 <code>$query-&gt;getResult()</code>，然后回退到 <code>array_filter()</code>。</li>
+<li>当过滤器编译失败或使用 <code>@sort</code> 时，<code>BaseServiceReadListTrait::list()</code> 回退到 <code>$query-&gt;getResult()</code>，然后是 <code>array_filter()</code>。</li>
 </ul>
 <p><strong>推荐：</strong></p>
 <p>对于生产 API 端点，当过滤器编译失败时，使用 <code>400 Bad Request</code> 快速失败。仅针对开发/调试或显式较小的集合保留内存中回退。</p>

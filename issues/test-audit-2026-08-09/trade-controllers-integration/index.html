@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -2171,8 +2199,8 @@ asserts inclusion/exclusion precisely instead of <code>assertNotEmpty()</code>/<
 </code></pre></div></li>
 <li>Prove no <code>src/Trade</code> coverage regression: capture clover before/after on the affected areas
    and diff the <code>count="0"</code> statements (the campaign's own technique):
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;Trade|OrderWorkflow|OrderItem|Specification&#39;</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;Trade|OrderWorkflow|OrderItem|Specification&#39;</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml
 </code></pre></div>
    Expected result: <code>OrderWorkflowApiTest</code> keeps the state-machine lines covered; <code>TradeRepoFullTest</code>
    keeps the repository lines covered; the deleted <code>TradeRepositoryIntegrationTest</code> adds no unique lines.</li>

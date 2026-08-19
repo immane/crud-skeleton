@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1799,10 +1827,10 @@
 <li><strong>Description:</strong> Every non-numeric string attribute read via the property accessor is passed through <code>json_decode()</code>. If the string happens to be valid JSON, the attribute value is silently replaced with the decoded PHP value — regardless of whether the attribute is a JSON column or an ordinary text field.</li>
 <li><strong>Impact:</strong> Type corruption in normalized API output: a plain-text note <code>"true"</code> becomes boolean <code>true</code>, <code>"null"</code> becomes <code>null</code>, <code>"{}"</code> / <code>"[]"</code> become empty arrays, <code>"123.0"</code>… (numeric strings are excluded, but <code>"1e2"</code> → <code>100</code> is not). Consumers of the API receive wrong types and lose data fidelity. There is no way to opt a column out.</li>
 <li><strong>Reproduction:</strong>
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$obj = new class { public string $note = &#39;true&#39;; public string $empty = &#39;{}&#39;; };</span>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$obj = new class { public string $note = 'true'; public string $empty = '{}'; };</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">(new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor()))</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    -&gt;normalize($obj, &#39;json&#39;);</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">// [&#39;note&#39; =&gt; true, &#39;empty&#39; =&gt; []]   ← strings replaced by non-strings</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    -&gt;normalize($obj, 'json');</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">// ['note' =&gt; true, 'empty' =&gt; []]   ← strings replaced by non-strings</span>
 </code></pre></div></li>
 <li><strong>Proposed fix:</strong> Only JSON-decode when the attribute is known to be a JSON column (e.g. driven by a configured column allow-list or a <code>json</code> Doctrine mapping hint passed via context), or keep the string when the decoded value is not an array/object; do not blanket-decode every string field.</li>
 </ul>
@@ -1820,9 +1848,9 @@
 <li><strong>Description:</strong> <code>parseAcceptLanguage()</code> splits on the exact token <code>;q=</code>. RFC 7230/7231 permits optional whitespace around the <code>;</code>/<code>=</code> separators and case-insensitive parameter names. A header like <code>zh-CN; q=1.0, en; q=0.5</code> (space after <code>;</code>, emitted by some clients) is not split, so <code>lang</code> becomes <code>"zh-CN; q=1.0"</code>, fails <code>resolveLocale()</code>, and the request silently falls back to the default locale <code>en</code>. Same for <code>fr;Q=1.0</code>.</li>
 <li><strong>Impact:</strong> Well-formed browsers/proxies can be served the wrong language. (Confirmed: <code>zh-CN; q=1.0, en; q=0.5</code> yields locale <code>en</code> instead of <code>zh</code>.)</li>
 <li><strong>Reproduction:</strong>
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$request-&gt;headers-&gt;set(&#39;Accept-Language&#39;, &#39;zh-CN; q=1.0, en; q=0.5&#39;);</span>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$request-&gt;headers-&gt;set('Accept-Language', 'zh-CN; q=1.0, en; q=0.5');</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === &#39;en&#39;  (expected &#39;zh&#39;)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === 'en'  (expected 'zh')</span>
 </code></pre></div></li>
 <li><strong>Proposed fix:</strong> Normalize each item first (collapse whitespace / lowercase <code>q</code>), e.g. <code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> instead of a literal <code>explode(';q=', ...)</code>, and also trim the language tag.</li>
 </ul>

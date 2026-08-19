@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/bundles/exchange/">
       
       
-        <link rel="prev" href="../wallet/">
+        <link rel="prev" href="../settlement/">
       
       
         <link rel="next" href="../identity/">
@@ -834,6 +834,34 @@
     
   
     Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
   
 
     
@@ -1691,7 +1719,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1747,7 +1775,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1803,7 +1831,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2551,7 +2579,7 @@
 <tr>
 <td><code>rate</code></td>
 <td>小数(20,8) 字符串</td>
-<td><code>CHECK rate &gt; 0</code>；方向 <code>1 base = rate quote</code></td>
+<td><code>CHECK rate &gt; 0</code>;方向 <code>1 base = rate quote</code></td>
 </tr>
 <tr>
 <td><code>source</code></td>
@@ -2801,9 +2829,9 @@
 <p>没有漂浮物。以字符串数学形式实现：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">private function bcRoundHalfUp(string $value): int</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">{</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    $sign = $value[0] === &#39;-&#39; ? -1 : 1;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    $sign = $value[0] === '-' ? -1 : 1;</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    $abs  = $sign &lt; 0 ? substr($value, 1) : $value;</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    $rounded = bcadd($abs, &#39;0.5&#39;, 0);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    $rounded = bcadd($abs, '0.5', 0);</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">    return $sign * (int) $rounded;</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">}</span>
 </code></pre></div>
@@ -2865,13 +2893,13 @@
 <p>每次转换都被记录为池中配对、相等和相反的条目→<strong>在铸造之外不会创建或销毁货币</strong>；每种货币的总余额得以保留。</p>
 <h3 id="71">7.1 承诺<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>wrapInTransaction:
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Ledger.transfer(pledgor → pool[CNY], 1_0000, ref, &#39;pledge&#39;)   # collateral into pool
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Ledger.transfer(pledgor → pool[CNY], 1_0000, ref, 'pledge')   # collateral into pool
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  Pledge(active) + PoolAccount.outstanding/Ceiling updated
 </code></pre></div>
 <h3 id="72">7.2 薄荷<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>wrapInTransaction:
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  assert Σminted(unit) − Σredeemed(unit) ≤ Σactive_pledges × coefficient   # solvency
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  Ledger.credit(pool[POINT], Y, ref, &#39;mint&#39;)                                # mint into pool
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  Ledger.credit(pool[POINT], Y, ref, 'mint')                                # mint into pool
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  MintRecord
 </code></pre></div>
 <h3 id="73-cny-point">7.3 兑换 — 用户CNY → POINT<a class="headerlink" href="#73-cny-point" title="Permanent link">&para;</a></h3>
@@ -2913,7 +2941,7 @@
 <h2 id="9">9. 配置<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># config/packages/exchange.yaml</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">parameters</span><span class="p">:</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nt">exchange.base_currency</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;USD&#39;</span><span class="w">   </span><span class="c1"># anchor currency (configurable; &#39;CNY&#39; also sensible)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nt">exchange.base_currency</span><span class="p">:</span><span class="w"> </span><span class="s">'USD'</span><span class="w">   </span><span class="c1"># anchor currency (configurable; 'CNY' also sensible)</span>
 </code></pre></div>
 <p><code>CurrencyConverter</code> 通过 <code>#[Autowire('%exchange.base_currency%')]</code> 注入 <code>exchange.base_currency</code>。</p>
 <p>捆绑包 (<code>config/packages/doctrine.yaml</code>) 的学说映射：</p>
@@ -2921,7 +2949,7 @@
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nt">orm</span><span class="p">:</span>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">        </span><span class="nt">mappings</span><span class="p">:</span>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">            </span><span class="nt">ExchangeBundle</span><span class="p">:</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">                </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%kernel.project_dir%/src/ExchangeBundle/Domain/*/Entity&#39;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">                </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">'%kernel.project_dir%/src/ExchangeBundle/Domain/*/Entity'</span>
 <a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">                </span><span class="nt">is_bundle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">                </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">App\ExchangeBundle\Domain</span>
 </code></pre></div>

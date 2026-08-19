@@ -854,6 +854,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../exchange/" class="md-nav__link">
         
   
@@ -2156,11 +2184,11 @@ Membership points are stored in Wallet (currency=POINTS), not on Profile.</p>
 </tbody>
 </table>
 <p><strong>Level Constants:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">public const LEVEL_BRONZE = &#39;bronze&#39;;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">public const LEVEL_SILVER = &#39;silver&#39;;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">public const LEVEL_GOLD = &#39;gold&#39;;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">public const LEVEL_PLATINUM = &#39;platinum&#39;;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">public const LEVEL_DIAMOND = &#39;diamond&#39;;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">public const LEVEL_BRONZE = 'bronze';</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">public const LEVEL_SILVER = 'silver';</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">public const LEVEL_GOLD = 'gold';</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">public const LEVEL_PLATINUM = 'platinum';</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">public const LEVEL_DIAMOND = 'diamond';</span>
 </code></pre></div>
 <p><strong>Level Hierarchy (for <code>findByLevelOrAbove</code>):</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>bronze (0) &lt; silver (1) &lt; gold (2) &lt; platinum (3) &lt; diamond (4)
@@ -2241,7 +2269,7 @@ all User creation paths: <code>UserService::register()</code>, admin CRUD, progr
 </table>
 <p><strong>User Entity Relationship:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">// User has inverse side OneToOne</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">#[ORM\OneToOne(mappedBy: &#39;user&#39;, targetEntity: Profile::class, cascade: [&#39;persist&#39;, &#39;remove&#39;])]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">#[ORM\OneToOne(mappedBy: 'user', targetEntity: Profile::class, cascade: ['persist', 'remove'])]</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">private ?Profile $profile = null;</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">public function getProfile(): ?Profile;</span>
@@ -2257,7 +2285,7 @@ all User creation paths: <code>UserService::register()</code>, admin CRUD, progr
 </code></pre></div>
 <p><strong>Points via Wallet:</strong></p>
 <p>Profile points use the Wallet module. A user's points are stored as:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Wallet for user_id=X, currency=&quot;POINTS&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Wallet for user_id=X, currency="POINTS"
 </code></pre></div>
 <p>No points field exists on Profile. Promotion conditions use <code>user.profile.level</code> for
 level-based rules and reference Wallet for point-based rules.</p>
@@ -2265,25 +2293,25 @@ level-based rules and reference Wallet for point-based rules.</p>
 <p>The App ProfileController uses <code>SingleDetailApiViewMixin</code> (GET) and
 <code>SingleCreateAndUpdateApiViewMixin</code> (PUT). Property filtering is handled
 by the mixin via <code>acceptedCreateProperties</code> / <code>acceptedUpdateProperties</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[Route(&#39;/app/profiles&#39;, name: &#39;app-profiles-&#39;)]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">#[IsGranted(&#39;ROLE_USER&#39;)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[Route('/app/profiles', name: 'app-profiles-')]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">#[IsGranted('ROLE_USER')]</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">class ProfileController extends RestController</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">{</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    use ApiView, SingleDetailApiViewMixin, SingleCreateAndUpdateApiViewMixin;</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    protected array $acceptedCreateProperties = [&#39;nickname&#39;, &#39;avatar&#39;, &#39;metadata&#39;];</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">    protected array $acceptedUpdateProperties = [&#39;nickname&#39;, &#39;avatar&#39;, &#39;metadata&#39;];</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    protected array $acceptedCreateProperties = ['nickname', 'avatar', 'metadata'];</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">    protected array $acceptedUpdateProperties = ['nickname', 'avatar', 'metadata'];</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
 <a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="x">    protected function commonFilter(): array</span>
 <a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    {</span>
 <a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">        $user = $this-&gt;getUser();</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">        return $user instanceof User ? [&#39;user&#39; =&gt; $user] : [&#39;id&#39; =&gt; -1];</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">        return $user instanceof User ? ['user' =&gt; $user] : ['id' =&gt; -1];</span>
 <a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">    }</span>
 <a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
 <a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">    protected function defaultCreateValues(): array</span>
 <a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">    {</span>
 <a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="x">        $user = $this-&gt;getUser();</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="x">        return [&#39;user&#39; =&gt; $user, &#39;level&#39; =&gt; Profile::LEVEL_BRONZE];</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="x">        return ['user' =&gt; $user, 'level' =&gt; Profile::LEVEL_BRONZE];</span>
 <a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="x">    }</span>
 <a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="x">}</span>
 </code></pre></div>

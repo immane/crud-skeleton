@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../exchange/" class="md-nav__link">
         
   
@@ -2785,10 +2813,10 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  and:
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    - cart.subtotal &gt;= config.threshold
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    - or:
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        - user.level &gt;= &quot;vip&quot;
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        - item.tags includes &quot;promo&quot;
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        - user.level &gt;= "vip"
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        - item.tags includes "promo"
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  not:
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    item.tags includes &quot;excluded&quot;
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    item.tags includes "excluded"
 </code></pre></div>
 <h3 id="53-action-syntax">5.3 Action Syntax<a class="headerlink" href="#53-action-syntax" title="Permanent link">&para;</a></h3>
 <table>
@@ -3050,21 +3078,21 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">services</span><span class="p">:</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">        </span><span class="nt">App\Promotion\Strategy\PromotionStrategyInterface</span><span class="p">:</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;promotion.strategy&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'promotion.strategy'</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">interface PromotionStrategyInterface</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="x">{</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">    public static function supportedType(): string;   // e.g. &#39;full_reduction&#39;</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">    public static function supportedType(): string;   // e.g. 'full_reduction'</span>
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="x">    public function apply(AstNode $action, PriceCalculationContext $context, array $config): void;</span>
 <a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="x">}</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">// FullReductionStrategy.php</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">#[AutoconfigureTag(&#39;promotion.strategy&#39;)]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">#[AutoconfigureTag('promotion.strategy')]</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="x">class FullReductionStrategy implements PromotionStrategyInterface</span>
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="x">{</span>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="x">    public static function supportedType(): string</span>
 <a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="x">    {</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="x">        return &#39;full_reduction&#39;;</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="x">        return 'full_reduction';</span>
 <a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="x">    }</span>
 <a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
 <a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="x">    public function apply(AstNode $action, PriceCalculationContext $context, array $config): void</span>
@@ -3098,7 +3126,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="x">    ): ?Promotion;</span>
 <a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>
 <a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="x">    /**</span>
-<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="x">     * Apply a promotion&#39;s actions to mutate the context.</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="x">     * Apply a promotion's actions to mutate the context.</span>
 <a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="x">     */</span>
 <a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a><span class="x">    public function apply(</span>
 <a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="x">        Promotion $promotion,</span>
@@ -3145,20 +3173,20 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="x">            $this-&gt;promotionService-&gt;apply($promotion, $context);</span>
 <a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>
 <a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="x">            $innerApplied[] = [</span>
-<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="x">                &#39;promotion_id&#39; =&gt; $promotion-&gt;getId(),</span>
-<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="x">                &#39;promotion_name&#39; =&gt; $promotion-&gt;getName(),</span>
-<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="x">                &#39;template_name&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getName(),</span>
-<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="x">                &#39;type&#39; =&gt; $promotion-&gt;getTemplate()-&gt;getType(),</span>
-<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="x">                &#39;config&#39; =&gt; $promotion-&gt;getConfig(),</span>
-<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="x">                &#39;context_snapshot&#39; =&gt; [</span>
-<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="x">                    &#39;totalAmount&#39; =&gt; $context-&gt;totalAmount,</span>
-<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="x">                    &#39;items_count&#39; =&gt; count($context-&gt;items),</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="x">                'promotion_id' =&gt; $promotion-&gt;getId(),</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="x">                'promotion_name' =&gt; $promotion-&gt;getName(),</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="x">                'template_name' =&gt; $promotion-&gt;getTemplate()-&gt;getName(),</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="x">                'type' =&gt; $promotion-&gt;getTemplate()-&gt;getType(),</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="x">                'config' =&gt; $promotion-&gt;getConfig(),</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="x">                'context_snapshot' =&gt; [</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="x">                    'totalAmount' =&gt; $context-&gt;totalAmount,</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="x">                    'items_count' =&gt; count($context-&gt;items),</span>
 <a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="x">                ],</span>
-<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="x">                &#39;iteration&#39; =&gt; $i,</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="x">                'iteration' =&gt; $i,</span>
 <a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="x">            ];</span>
 <a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>
-<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="x">            if ($promotion-&gt;getConflictMode() === &#39;exclusive&#39;) break;</span>
-<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="x">            if ($promotion-&gt;getConflictMode() === &#39;lock_item&#39;) {</span>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="x">            if ($promotion-&gt;getConflictMode() === 'exclusive') break;</span>
+<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="x">            if ($promotion-&gt;getConflictMode() === 'lock_item') {</span>
 <a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a><span class="x">                $appliedIds[] = $promotion-&gt;getId();</span>
 <a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a><span class="x">            }</span>
 <a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a><span class="x">        }</span>
@@ -3170,7 +3198,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a><span class="x">        );</span>
 <a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a><span class="x">        if ($outerPromotion) {</span>
 <a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a><span class="x">            $this-&gt;promotionService-&gt;apply($outerPromotion, $context);</span>
-<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a><span class="x">            $context-&gt;meta[&#39;promotion&#39;] = [&#39;inner&#39; =&gt; $innerApplied, &#39;outer&#39; =&gt; [...]];</span>
+<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a><span class="x">            $context-&gt;meta['promotion'] = ['inner' =&gt; $innerApplied, 'outer' =&gt; [...]];</span>
 <a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a><span class="x">        }</span>
 <a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a><span class="x">    }</span>
 <a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a>
@@ -3192,11 +3220,11 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="x">    public ?string $storeCode = null;</span>
 <a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="x">}</span>
 <a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>
-<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="x">// Promotion results are written to context.meta[&#39;promotion&#39;] —</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="x">// Promotion results are written to context.meta['promotion'] —</span>
 <a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="x">// Trade never reads this structure, maintaining full decoupling.</span>
 </code></pre></div>
 <h3 id="92-orderservice-change">9.2 OrderService Change<a class="headerlink" href="#92-orderservice-change" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="x">public function calculatePrices(array $items, string $currency = &#39;CNY&#39;, ?string $storeCode = null, array $meta = []): PriceCalculationResult</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="x">public function calculatePrices(array $items, string $currency = 'CNY', ?string $storeCode = null, array $meta = []): PriceCalculationResult</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="x">{</span>
 <a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="x">    $context = new PriceCalculationContext($items, $currency);</span>
 <a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="x">    $context-&gt;user = $this-&gt;user;</span>
@@ -3352,26 +3380,26 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <hr />
 <h2 id="12-controller-design">12. Controller Design<a class="headerlink" href="#12-controller-design" title="Permanent link">&para;</a></h2>
 <h3 id="121-promotetemplatecontroller">12.1 PromoteTemplateController<a class="headerlink" href="#121-promotetemplatecontroller" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">#[Route(&#39;/manage/promotion-templates&#39;, name: &#39;manage-promotion-templates-&#39;)]</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">#[Route('/manage/promotion-templates', name: 'manage-promotion-templates-')]</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
 <a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="x">class PromotionTemplateController extends RestController</span>
 <a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="x">{</span>
 <a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="x">    use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
 <a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="x">        CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
 <a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="x">    protected array $requiredCreateProperties = [&#39;name&#39;, &#39;type&#39;, &#39;dsl&#39;];</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="x">    protected array $requiredCreateProperties = ['name', 'type', 'dsl'];</span>
 <a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="x">    protected array $acceptedCreateProperties = [</span>
-<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;type&#39;, &#39;phase&#39;, &#39;enabled&#39;, &#39;dsl&#39;, &#39;fields&#39;,</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="x">        'name', 'description', 'type', 'phase', 'enabled', 'dsl', 'fields',</span>
 <a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="x">    ];</span>
 <a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="x">    protected array $acceptedUpdateProperties = [</span>
-<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;type&#39;, &#39;phase&#39;, &#39;enabled&#39;, &#39;dsl&#39;, &#39;fields&#39;,</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="x">        'name', 'description', 'type', 'phase', 'enabled', 'dsl', 'fields',</span>
 <a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="x">    ];</span>
 <a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>
 <a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a><span class="x">    public function __construct(</span>
 <a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="x">        protected readonly PromotionTemplateServiceInterface $service,</span>
 <a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="x">    ) {}</span>
 <a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>
-<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="x">    #[Route(&#39;/{id}/validate&#39;, name: &#39;validate&#39;, methods: [&#39;POST&#39;])]</span>
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="x">    #[Route('/{id}/validate', name: 'validate', methods: ['POST'])]</span>
 <a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a><span class="x">    public function validateAction(int $id): JsonResponse</span>
 <a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a><span class="x">    {</span>
 <a id="__codelineno-22-23" name="__codelineno-22-23" href="#__codelineno-22-23"></a><span class="x">        /** @var PromotionTemplate $template */</span>
@@ -3380,7 +3408,7 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <a id="__codelineno-22-26" name="__codelineno-22-26" href="#__codelineno-22-26"></a><span class="x">        return $this-&gt;success($result);</span>
 <a id="__codelineno-22-27" name="__codelineno-22-27" href="#__codelineno-22-27"></a><span class="x">    }</span>
 <a id="__codelineno-22-28" name="__codelineno-22-28" href="#__codelineno-22-28"></a>
-<a id="__codelineno-22-29" name="__codelineno-22-29" href="#__codelineno-22-29"></a><span class="x">    #[Route(&#39;/{id}/dry-run&#39;, name: &#39;dry-run&#39;, methods: [&#39;POST&#39;])]</span>
+<a id="__codelineno-22-29" name="__codelineno-22-29" href="#__codelineno-22-29"></a><span class="x">    #[Route('/{id}/dry-run', name: 'dry-run', methods: ['POST'])]</span>
 <a id="__codelineno-22-30" name="__codelineno-22-30" href="#__codelineno-22-30"></a><span class="x">    public function dryRunAction(int $id): JsonResponse</span>
 <a id="__codelineno-22-31" name="__codelineno-22-31" href="#__codelineno-22-31"></a><span class="x">    {</span>
 <a id="__codelineno-22-32" name="__codelineno-22-32" href="#__codelineno-22-32"></a><span class="x">        /** @var PromotionTemplate $template */</span>
@@ -3393,21 +3421,21 @@ price calculation pipeline as a tagged calculator, fully decoupled from Trade in
 <p>DSL parsing is triggered inside <code>PromotionTemplateService::update()</code> before persisting.
 If parse fails, a 422 response is returned with error details including line:column.</p>
 <h3 id="122-promotioncontroller-manage">12.2 PromotionController (Manage)<a class="headerlink" href="#122-promotioncontroller-manage" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="x">#[Route(&#39;/manage/promotions&#39;, name: &#39;manage-promotions-&#39;)]</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="x">#[IsGranted(&#39;ROLE_ADMIN&#39;)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="x">#[Route('/manage/promotions', name: 'manage-promotions-')]</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
 <a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="x">class PromotionController extends RestController</span>
 <a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="x">{</span>
 <a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="x">    use ApiView, DetailApiViewMixin, ListApiViewMixin,</span>
 <a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="x">        CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;</span>
 <a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>
-<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="x">    protected array $requiredCreateProperties = [&#39;name&#39;, &#39;template&#39;, &#39;storeCode&#39;];</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="x">    protected array $requiredCreateProperties = ['name', 'template', 'storeCode'];</span>
 <a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="x">    protected array $acceptedCreateProperties = [</span>
-<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;template&#39;, &#39;storeCode&#39;,</span>
-<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="x">        &#39;enabled&#39;, &#39;startTime&#39;, &#39;endTime&#39;, &#39;config&#39;, &#39;specifications&#39;, &#39;conflictMode&#39;,</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="x">        'name', 'description', 'template', 'storeCode',</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="x">        'enabled', 'startTime', 'endTime', 'config', 'specifications', 'conflictMode',</span>
 <a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a><span class="x">    ];</span>
 <a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="x">    protected array $acceptedUpdateProperties = [</span>
-<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a><span class="x">        &#39;name&#39;, &#39;description&#39;, &#39;template&#39;, &#39;storeCode&#39;,</span>
-<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="x">        &#39;enabled&#39;, &#39;startTime&#39;, &#39;endTime&#39;, &#39;config&#39;, &#39;specifications&#39;, &#39;conflictMode&#39;,</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a><span class="x">        'name', 'description', 'template', 'storeCode',</span>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="x">        'enabled', 'startTime', 'endTime', 'config', 'specifications', 'conflictMode',</span>
 <a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a><span class="x">    ];</span>
 <a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>
 <a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a><span class="x">    public function __construct(</span>
@@ -3439,13 +3467,13 @@ If parse fails, a 422 response is returned with error details including line:col
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nt">services</span><span class="p">:</span>
 <a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">_instanceof</span><span class="p">:</span>
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">        </span><span class="nt">App\Promotion\Strategy\PromotionStrategyInterface</span><span class="p">:</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;promotion.strategy&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">            </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'promotion.strategy'</span><span class="p p-Indicator">]</span>
 <a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
 <a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="nt">App\Promotion\Service\Dsl\</span><span class="p">:</span>
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../../Dsl/&#39;</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">'../../Dsl/'</span>
 <a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
 <a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">    </span><span class="nt">App\Promotion\Strategy\</span><span class="p">:</span>
-<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../../Strategy/&#39;</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">        </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">'../../Strategy/'</span>
 </code></pre></div>
 <p><code>App\</code> autowiring covers the rest. <code>#[AutoconfigureTag('trade.price_calculator')]</code>
 on <code>PromotionCalculator</code> handles the pipeline tag.</p>

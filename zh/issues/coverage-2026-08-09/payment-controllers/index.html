@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1768,7 +1796,7 @@
 <h3 id="bug-3-options">BUG-3 — 退款将原始请求正文作为网关 <code>$options</code> 转发（中/低）<a class="headerlink" href="#bug-3-options" title="Permanent link">&para;</a></h3>
 <ul>
 <li>位置：<code>src/Payment/Controller/Manage/InvoiceController.php:118</code>（<code>... $content</code> 作为选项）→ <code>src/Payment/Service/InvoiceService.php:264</code> (<code>$gateway-&gt;refund(..., $options)</code>)。</li>
-<li>说明：完整的请求正文作为 <code>$options</code> 传递到网关退款调用。客户端可以在正文中包含提供者选项，例如 <code>refundId</code>； <code>MockGateway</code> 直接使用 <code>$options['refundId']</code> 作为幂等键，因此调用者可以覆盖提供者退款引用。</li>
+<li>描述：完整的请求正文作为 <code>$options</code> 传递到网关退款调用。客户端可以在正文中包含提供者选项，例如 <code>refundId</code>； <code>MockGateway</code> 直接使用 <code>$options['refundId']</code> 作为幂等键，因此调用者可以覆盖提供者退款引用。</li>
 <li>影响：不受信任的输入到达网关选项；退款幂等性密钥由攻击者控制（对 <code>MockGateway</code> 的影响较小，对于尊重选项密钥的真实网关来说是潜在的）。</li>
 <li>复制：<code>POST /api/v1/manage/invoices/{id}/refund</code> 和 <code>{"amount": 100, "reason": "x", "refundId": "spoofed-id"}</code> — 存储的 <code>extraData</code> 和返回的 <code>refundId</code> 变成 <code>spoofed-id</code>。</li>
 <li>建议的修复：将转发到<code>InvoiceService::refund()</code>（和<code>pay()</code>）中网关的选项列入白名单，或在转发之前剥离仅正文键（<code>amount</code>、<code>reason</code>）。</li>

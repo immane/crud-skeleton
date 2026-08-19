@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1728,9 +1756,9 @@
 </table>
 <h2 id="inventory_enabled-toggling-documented-per-the-task">INVENTORY_ENABLED toggling (documented per the task)<a class="headerlink" href="#inventory_enabled-toggling-documented-per-the-task" title="Permanent link">&para;</a></h2>
 <p><code>StoreTradeInventoryEnabledFlowTest::setUpBeforeClass()</code> sets <strong>before any kernel boot</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">$_ENV[&#39;INVENTORY_ENABLED&#39;] = &#39;1&#39;;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">$_SERVER[&#39;INVENTORY_ENABLED&#39;] = &#39;1&#39;;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">putenv(&#39;INVENTORY_ENABLED=1&#39;);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">$_ENV['INVENTORY_ENABLED'] = '1';</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">$_SERVER['INVENTORY_ENABLED'] = '1';</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">putenv('INVENTORY_ENABLED=1');</span>
 </code></pre></div>
 <p><code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:28</code> reads the toggle via
 <code>#[Autowire('%env(bool:INVENTORY_ENABLED)%')]</code>, which Symfony resolves at runtime

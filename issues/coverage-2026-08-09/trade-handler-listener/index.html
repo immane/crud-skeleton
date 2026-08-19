@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1733,7 +1761,7 @@ Goal: raise line coverage to ~100% and document bugs. <strong>No code under <cod
 <li><strong>Proposed fix:</strong> only reuse the linked invoice when it is still payable, otherwise create a fresh one and re-link:
   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">$invoice = null;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">if ($order-&gt;getInvoiceId() !== null) {</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">    $candidate = $this-&gt;invoiceService-&gt;get([&#39;uuid&#39; =&gt; $order-&gt;getInvoiceId()]);</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">    $candidate = $this-&gt;invoiceService-&gt;get(['uuid' =&gt; $order-&gt;getInvoiceId()]);</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">    if ($candidate instanceof Invoice</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">        &amp;&amp; in_array($candidate-&gt;getStatus(), [Invoice::STATUS_PENDING, Invoice::STATUS_PAYING], true)) {</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">        $invoice = $candidate;</span>
@@ -1757,7 +1785,7 @@ Goal: raise line coverage to ~100% and document bugs. <strong>No code under <cod
   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">$orderUser = $order-&gt;getUser();</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">if ($invoice-&gt;getPayer() !== null &amp;&amp; $orderUser !== null</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    &amp;&amp; $invoice-&gt;getPayer()-&gt;getId() !== $orderUser-&gt;getId()) {</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    $this-&gt;logger-&gt;critical(&#39;Invoice/order payer mismatch&#39;, [&#39;invoice&#39; =&gt; $invoice-&gt;getOutTradeNo(), &#39;order&#39; =&gt; $order-&gt;getUuid()]);</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    $this-&gt;logger-&gt;critical('Invoice/order payer mismatch', ['invoice' =&gt; $invoice-&gt;getOutTradeNo(), 'order' =&gt; $order-&gt;getUuid()]);</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">    return;</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">}</span>
 </code></pre></div></li>

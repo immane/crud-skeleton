@@ -1295,6 +1295,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../bundles/exchange/" class="md-nav__link">
         
   
@@ -2435,7 +2463,7 @@
 </tbody>
 </table>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">#[ORM\Entity(repositoryClass: XxxRepository::class)]</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">#[ORM\Table(name: &#39;module_table_name&#39;)]</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">#[ORM\Table(name: 'module_table_name')]</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">#[ORM\HasLifecycleCallbacks]</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">class Xxx</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">{</span>
@@ -2843,7 +2871,7 @@ still receive a UUID.</p>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Event aggregateId, sourceId, correlationId: uuid
 </code></pre></div>
 <p>New cross-boundary entities use a canonical UUID string alongside the integer <code>id</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Column(type: &#39;string&#39;, length: 36, unique: true)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Column(type: 'string', length: 36, unique: true)]</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">private string $uuid;</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">public function __construct() {</span>
@@ -2870,7 +2898,7 @@ authorization and ownership checks.</p>
 <p><strong>Consequence</strong>: All queries MUST filter <code>isDeleted = false</code> (via <code>commonFilter()</code> in controller).</p>
 <h3 id="73-value-snapshot">7.3 Value Snapshot<a class="headerlink" href="#73-value-snapshot" title="Permanent link">&para;</a></h3>
 <p>When an entity captures a point-in-time copy of another entity's state:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[ORM\Column(type: 'json', nullable: true)]</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">private ?array $snapshot = null;</span>
 </code></pre></div>
 <p><strong>Populated at creation</strong> (in <code>#[ORM\PrePersist]</code> or service method), never updated.</p>
@@ -2883,17 +2911,17 @@ authorization and ownership checks.</p>
 <h3 id="75-polymorphic-association">7.5 Polymorphic Association<a class="headerlink" href="#75-polymorphic-association" title="Permanent link">&para;</a></h3>
 <p>For comments/reactions referencing different entity types:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., 'App\Common\Entity\Content'</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column]</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private int $entityId;</span>
 </code></pre></div>
 <p><strong>No FK constraint</strong> (resolved in application layer).</p>
 <h3 id="76-json-metadata-extra-data">7.6 JSON Metadata / Extra Data<a class="headerlink" href="#76-json-metadata-extra-data" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: 'json', nullable: true)]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">private ?array $metadata = null;</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">#[ORM\Column(type: 'json', nullable: true)]</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="x">private ?array $extraData = null;</span>
 </code></pre></div>
 <p><strong>Use when</strong>: Extensible fields that don't warrant dedicated columns.</p>

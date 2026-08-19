@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1758,7 +1786,7 @@
 </tr>
 <tr>
 <td><code>Event/InvoiceEventTest.php::testEventPayloads</code></td>
-<td>B1（覆盖范围）：对哑事件值对象的同义反复 getter 断言</td>
+<td>B1（覆盖范围追踪）：对哑事件值对象的同义反复 getter 断言</td>
 <td>中等</td>
 <td>事件由 <code>InvoiceServiceIntegrationTest.php</code> 构造/调度； getters 添加无合约</td>
 </tr>
@@ -1796,13 +1824,13 @@
 <td><code>Service/MockGatewayTest.php::testPayNotifyRefundAndResponse</code> + <code>::testNotifyRejectsInvalidSecret</code></td>
 <td>B2（重复）：MockGateway 是一个测试替身，其全部表面由每个集成支付/通知/退款以及 webhook 测试执行</td>
 <td>中等</td>
-<td><code>PaymentApiIntegrationTest::testManageAndAppInvoiceApiFlow</code> + <code>::testWebhookInvalidSecretReturnsFailure</code>; <code>PaymentTradeIntegrationTest::testOrderPaidViaMockGatewayAndNotifyWebhook</code>； <code>PaymentNotifyControllerTest</code></td>
+<td><code>PaymentApiIntegrationTest::testManageAndAppInvoiceApiFlow</code> + <code>::testWebhookInvalidSecretReturnsFailure</code>； <code>PaymentTradeIntegrationTest::testOrderPaidViaMockGatewayAndNotifyWebhook</code>； <code>PaymentNotifyControllerTest</code></td>
 </tr>
 <tr>
 <td><code>Service/PaymentGatewayRegistryTest.php::testRegistryResolvesGatewayNames</code> + <code>::testUnknownGatewayThrows</code></td>
 <td>B2（重复）：集成/HTTP 时断言注册表存在/名称 + 未知网关错误</td>
 <td>中等</td>
-<td><code>Integration/InvoiceServiceIntegrationTest.php::testGatewayRegistryFromContainer</code>; <code>PaymentAdjustmentMultiGatewayIntegrationTest::testAllThreeGatewayNamesAreKnown</code> + <code>::testDeductedInvoiceWithMockReleasesOnGatewayFailure</code>; <code>PaymentTradeIntegrationTest::testBadPathGuards</code>（未知网关 → 400）</td>
+<td><code>Integration/InvoiceServiceIntegrationTest.php::testGatewayRegistryFromContainer</code>； <code>PaymentAdjustmentMultiGatewayIntegrationTest::testAllThreeGatewayNamesAreKnown</code> + <code>::testDeductedInvoiceWithMockReleasesOnGatewayFailure</code>; <code>PaymentTradeIntegrationTest::testBadPathGuards</code>（未知网关 → 400）</td>
 </tr>
 <tr>
 <td><code>Controller/App/InvoiceControllerTest.php::testPayActionReturnsSuccessWhenPayerMatches</code></td>
@@ -1854,9 +1882,9 @@
 </tr>
 <tr>
 <td><code>Controller/Manage/InvoiceControllerTest.php</code>（剩余9个：支付成功、取消/退款/未找到转换、退款金额/原因缺失、4×服务抛出）</td>
-<td>B1/B2 (COVERAGE-CHASING / DUPLICATE)：与 HTTP 层 <code>PaymentApiIntegrationTest</code> 拥有的相同路由；其余分支是带有模拟服务的通用警告信封传递</td>
-<td>中等</td>
+<td>B1/B2 (COVERAGE-CHASING / DUPLICATE)：与 HTTP 层 <code>PaymentApiIntegrationTest</code> 拥有的相同路由；其余分支是带有模拟服务的通用警告信封传递中等</td>
 <td><code>PaymentApiIntegrationTest::testManageAndAppInvoiceApiFlow</code>、<code>::testManageValidationWarnings</code>、<code>::testManageCancelTransitionsAndAppNotFoundBranches</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>Controller/Webhook/PaymentNotifyControllerTest.php::testNotifyActionReturnsGatewaySuccessResponse</code></td>

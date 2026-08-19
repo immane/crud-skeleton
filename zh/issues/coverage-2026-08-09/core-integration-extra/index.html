@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1645,10 +1673,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-7-openapienricherlistenerdetecttag-prefix-checks-never-match-method-prefixed-operationids-store-endpoints-left-untagged-medium" class="md-nav__link">
+  <a href="#bug-7-openapienricherlistenerdetecttag-ids" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-7 — OpenApiEnricherListener::detectTag() prefix checks never match method-prefixed operationIds — Store endpoints left untagged — MEDIUM
+        BUG-7 — OpenApiEnricherListener::detectTag() 前缀检查永远不会匹配方法前缀的操作Ids — 存储未标记的端点 — 中
       
     </span>
   </a>
@@ -1656,10 +1684,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#additional-observations-not-blocking" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Additional observations (not blocking)
+        附加观察结果（不阻塞）
       
     </span>
   </a>
@@ -1672,10 +1700,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-skipped-tests-all-reference-the-bugs-above-suite-stays-green" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Skipped tests (all reference the bugs above; suite stays green)
+        5. 跳过测试（所有参考上述错误；套件保持绿色）
       
     </span>
   </a>
@@ -1683,10 +1711,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-suggested-follow-ups" class="md-nav__link">
+  <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Suggested follow-ups
+        6. 建议的后续行动
       
     </span>
   </a>
@@ -1919,35 +1947,35 @@
 </ul>
 <h3 id="bug-6-default_locale-zh">BUG-6 — <code>default_locale: zh</code> 不会成为活动区域设置 — 有效默认值为英语 — <strong>低</strong><a class="headerlink" href="#bug-6-default_locale-zh" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Location:</strong> <code>config/packages/translation.yaml:2</code> (<code>default_locale: zh</code>); framework <code>Symfony\Component\HttpKernel\EventListener\LocaleListener</code> sets only the <em>default</em> locale at priority 100 and never activates it without an explicit <code>_locale</code>; the app’s custom <code>App\Core\EventListener\LocaleListener</code> (priority 20) only overrides on a matched <code>?_locale</code>/Accept-Language.</li>
-<li><strong>Description:</strong> with no locale hint the active request locale stays <code>en</code> (PHP <code>Request</code> default) — verified <code>reqLocale=en</code>/<code>translatorLocale=en</code> while <code>reqDefaultLocale=zh</code>. <code>default_locale: zh</code> therefore only feeds the translator fallback for missing keys (which can produce a weird en-with-zh-fallback mix). The LocaleListener docblock and <code>docs/ai/context.md</code> both claim fallback <code>en</code>, which matches the <em>effective</em> behavior but contradicts the config.</li>
-<li><strong>Impact:</strong> misconfiguration — the app defaults to English responses even though <code>default_locale</code> says Chinese; docs/config mismatch.</li>
-<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories/999999</code> (no hints) → <code>message: "Entity is not found"</code> (en); <code>fr-FR</code> header → also en.</li>
-<li><strong>Proposed fix:</strong> either set <code>default_locale: en</code> to match reality, or make the custom LocaleListener apply the configured default when no hint matches.</li>
-<li><strong>Tests:</strong> <code>testNoLocaleHintUsesEffectiveEnglishDefault</code>, <code>testUnsupportedLocaleLeavesEffectiveEnglishFallback</code> (assert actual behavior, pass).</li>
+<li><strong>位置：</strong> <code>config/packages/translation.yaml:2</code> (<code>default_locale: zh</code>);框架 <code>Symfony\Component\HttpKernel\EventListener\LocaleListener</code> 仅将<em>默认</em>语言环境设置为优先级 100，并且在没有显式 <code>_locale</code> 的情况下绝不会激活它；应用程序的自定义 <code>App\Core\EventListener\LocaleListener</code> （优先级 20）仅覆盖匹配的 <code>?_locale</code>/Accept-Language。</li>
+<li><strong>描述：</strong>没有区域设置提示，活动请求区域设置保持 <code>en</code> （PHP <code>Request</code> 默认） - 在 <code>reqDefaultLocale=zh</code> 时验证 <code>reqLocale=en</code>/<code>translatorLocale=en</code>。因此，<code>default_locale: zh</code> 只为翻译器提供缺失键的后备（这可能会产生奇怪的 en-with-zh-fallback 混合）。 LocaleListener 文档块和 <code>docs/ai/context.md</code> 都声明回退 <code>en</code>，它与<em>有效</em>行为匹配，但与配置相矛盾。</li>
+<li><strong>影响：</strong>配置错误 - 即使 <code>default_locale</code> 说中文，应用程序默认为英文响应；文档/配置不匹配。</li>
+<li><strong>复制：</strong> <code>GET /api/v1/manage/categories/999999</code>（无提示）→ <code>message: "Entity is not found"</code>（en）； <code>fr-FR</code> 标头 → 也 en。</li>
+<li><strong>建议的修复：</strong> 设置 <code>default_locale: en</code> 以匹配实际情况，或者使自定义 LocaleListener 在没有提示匹配时应用配置的默认值。</li>
+<li><strong>测试：</strong> <code>testNoLocaleHintUsesEffectiveEnglishDefault</code>、<code>testUnsupportedLocaleLeavesEffectiveEnglishFallback</code>（断言实际行为，通过）。</li>
 </ul>
-<h3 id="bug-7-openapienricherlistenerdetecttag-prefix-checks-never-match-method-prefixed-operationids-store-endpoints-left-untagged-medium">BUG-7 — OpenApiEnricherListener::detectTag() prefix checks never match method-prefixed operationIds — Store endpoints left untagged — <strong>MEDIUM</strong><a class="headerlink" href="#bug-7-openapienricherlistenerdetecttag-prefix-checks-never-match-method-prefixed-operationids-store-endpoints-left-untagged-medium" title="Permanent link">&para;</a></h3>
+<h3 id="bug-7-openapienricherlistenerdetecttag-ids">BUG-7 — OpenApiEnricherListener::detectTag() 前缀检查永远不会匹配方法前缀的操作Ids — 存储未标记的端点 — <strong>中</strong><a class="headerlink" href="#bug-7-openapienricherlistenerdetecttag-ids" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Location:</strong> <code>src/Core/EventListener/OpenApiEnricherListener.php:259-262</code> (<code>str_starts_with($opId, 'system-')</code>, <code>'wechat-'</code>, <code>'store-'</code>).</li>
-<li><strong>Description:</strong> Nelmio prefixes operationIds with the HTTP method (<code>get_store-orders-list</code>, <code>post_store-orders-accept</code>), so the anchored <code>str_starts_with</code> checks never fire. The unanchored <code>manage|app|public</code> regex and the <code>str_contains(…, 'sys-auth')</code> check still work, which is why <code>system-*</code>/<code>wechat-*</code> endpoints with explicit OA <code>tags</code> survive. Store endpoints (no explicit OA tags, no META entry) end up with <strong>no tag at all</strong>.</li>
-<li><strong>Impact:</strong> <code>/api/v1/store/stores/{scopeId}/orders…</code> (list/detail/accept/reject/fulfill) have empty <code>tags</code> in the enriched spec → missing module tag in the docs UI.</li>
-<li><strong>Reproduction:</strong> <code>GET /api/doc.json</code> → <code>paths['/api/v1/store/stores/{scopeId}/orders/{orderUuid}/accept']['post']['tags'] === []</code>.</li>
-<li><strong>Proposed fix:</strong> strip the method prefix before detection (e.g. <code>preg_replace('/^(get|post|put|delete|patch)_/', '', $opId)</code>), or use <code>str_contains</code> for the prefix checks.</li>
-<li><strong>Tests:</strong> <code>testStoreOrderEndpointsAreLeftUntaggedCurrently</code> (regression, pass); <code>testStoreOrderEndpointsShouldBeTaggedStore</code> (correct-behavior, <strong>skipped</strong>).</li>
+<li><strong>位置：</strong> <code>src/Core/EventListener/OpenApiEnricherListener.php:259-262</code>（<code>str_starts_with($opId, 'system-')</code>、<code>'wechat-'</code>、<code>'store-'</code>）。</li>
+<li><strong>描述：</strong> Nelmio 使用 HTTP 方法（<code>get_store-orders-list</code>、<code>post_store-orders-accept</code>）为操作 ID 添加前缀，因此锚定的 <code>str_starts_with</code> 检查永远不会触发。未锚定的 <code>manage|app|public</code> 正则表达式和 <code>str_contains(…, 'sys-auth')</code> 检查仍然有效，这就是具有显式 OA <code>tags</code> 的 <code>system-*</code>/<code>wechat-*</code> 端点能够生存的原因。存储端点（没有显式的 OA 标签，没有 META 条目）最终<strong>根本没有标签</strong>。</li>
+<li><strong>影响：</strong> <code>/api/v1/store/stores/{scopeId}/orders…</code> (list/detail/accept/reject/fulfill) 在丰富的规范中具有空的 <code>tags</code> → 文档 UI 中缺少模块标记。</li>
+<li><strong>复制：</strong> <code>GET /api/doc.json</code> → <code>paths['/api/v1/store/stores/{scopeId}/orders/{orderUuid}/accept']['post']['tags'] === []</code>。</li>
+<li><strong>建议的修复：</strong> 在检测之前去除方法前缀（例如 <code>preg_replace('/^(get|post|put|delete|patch)_/', '', $opId)</code>），或使用 <code>str_contains</code> 进行前缀检查。</li>
+<li><strong>测试：</strong> <code>testStoreOrderEndpointsAreLeftUntaggedCurrently</code>（回归，通过）； <code>testStoreOrderEndpointsShouldBeTaggedStore</code>（正确行为，<strong>跳过</strong>）。</li>
 </ul>
-<h3 id="additional-observations-not-blocking">Additional observations (not blocking)<a class="headerlink" href="#additional-observations-not-blocking" title="Permanent link">&para;</a></h3>
+<h3 id="_1">附加观察结果（不阻塞）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>@order=entity.sortOrder|UP</code> (invalid direction) and <code>@order=entity.nope|ASC</code> (unknown field) surface as <strong>500</strong> <code>QueryException</code> instead of 400 — no validation of <code>@order</code> tokens.</li>
-<li><code>TransformContent</code> (<code>src/Core/View/TransformContent.php:156-157</code>) silently swallows <code>@transform</code> evaluation failures — a malformed transform expression no-ops instead of erroring.</li>
-<li>Docs (<code>docs/ai/context.md</code> §5) show <code>Math.mul(value, 100)</code>, but <code>src/Core/Utils/Math.php</code> has no <code>mul</code> method.</li>
-<li><code>translations/messages.ja.yaml:293</code> maps <code>"SUCCESS"</code> to the Chinese string <code>操作成功。</code> (should likely be a Japanese equivalent).</li>
+<li><code>@order=entity.sortOrder|UP</code>（无效方向）和<code>@order=entity.nope|ASC</code>（未知字段）表面为 <strong>500</strong> <code>QueryException</code> 而不是 400 — 不验证 <code>@order</code> 标记。</li>
+<li><code>TransformContent</code> (<code>src/Core/View/TransformContent.php:156-157</code>) 默默地吞下 <code>@transform</code> 计算失败 — 格式错误的转换表达式无操作而不是出错。</li>
+<li>文档（<code>docs/ai/context.md</code> §5）显示<code>Math.mul(value, 100)</code>，但<code>src/Core/Utils/Math.php</code>没有<code>mul</code>方法。</li>
+<li><code>translations/messages.ja.yaml:293</code> 将 <code>"SUCCESS"</code> 映射到中文字符串 <code>操作成功。</code> （应该是日语字符串）。</li>
 </ul>
-<h2 id="5-skipped-tests-all-reference-the-bugs-above-suite-stays-green">5. Skipped tests (all reference the bugs above; suite stays green)<a class="headerlink" href="#5-skipped-tests-all-reference-the-bugs-above-suite-stays-green" title="Permanent link">&para;</a></h2>
+<h2 id="5">5. 跳过测试（所有参考上述错误；套件保持绿色）<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Test</th>
-<th>Reason</th>
+<th>测试</th>
+<th>原因</th>
 </tr>
 </thead>
 <tbody>
@@ -1961,33 +1989,33 @@
 </tr>
 <tr>
 <td><code>testExpandsReturnsMetadataWithoutDeprecation</code></td>
-<td>BUG-2</td>
+<td>错误2</td>
 </tr>
 <tr>
 <td><code>testArraySelectReturns400</code></td>
-<td>BUG-3</td>
+<td>错误3</td>
 </tr>
 <tr>
 <td><code>testRegexMatchesWorksOnCurrentDb</code></td>
-<td>BUG-4</td>
+<td>错误4</td>
 </tr>
 <tr>
 <td><code>testMissingEntityShouldReturn404Json</code></td>
-<td>BUG-5</td>
+<td>错误5</td>
 </tr>
 <tr>
 <td><code>testStoreOrderEndpointsShouldBeTaggedStore</code></td>
-<td>BUG-7</td>
+<td>错误7</td>
 </tr>
 </tbody>
 </table>
-<h2 id="6-suggested-follow-ups">6. Suggested follow-ups<a class="headerlink" href="#6-suggested-follow-ups" title="Permanent link">&para;</a></h2>
+<h2 id="6">6. 建议的后续行动<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Fix BUG-1 (request-time user resolution) — unlocks <code>@dql/@sort/@hints</code> + the <code>@filter</code> in-memory fallback, which are the highest-value dynamic-query features.</li>
-<li>Fix BUG-2 (typed <code>__metadata</code> / no dynamic property) so <code>@expands</code> stops failing <code>failOnDeprecation</code>.</li>
-<li>Make <code>ListApiViewMixin</code> map <code>ValidatorException</code> → 400 (BUG-3) and validate <code>@order</code>.</li>
-<li>Add the <code>/system</code> prefix to the ExceptionInterceptor (BUG-5) and catch <code>MappingException</code> for 404 JSON.</li>
-<li>Normalize operationIds before tag detection (BUG-7) and align <code>default_locale</code> config with actual behavior (BUG-6).</li>
+<li>修复 BUG-1（请求时用户解析）——解锁 <code>@dql/@sort/@hints</code> + <code>@filter</code> 内存回退，这是价值最高的动态查询功能。</li>
+<li>修复 BUG-2（键入 <code>__metadata</code>/无动态属性），使 <code>@expands</code> 不再失败 <code>failOnDeprecation</code>。</li>
+<li>制作<code>ListApiViewMixin</code>映射<code>ValidatorException</code>→400（BUG-3）并验证<code>@order</code>。</li>
+<li>将 <code>/system</code> 前缀添加到 ExceptionInterceptor (BUG-5) 并捕获 404 JSON 的 <code>MappingException</code>。</li>
+<li>在标签检测之前规范化操作Id (BUG-7) 并将 <code>default_locale</code> 配置与实际行为对齐 (BUG-6)。</li>
 </ol>
 
 

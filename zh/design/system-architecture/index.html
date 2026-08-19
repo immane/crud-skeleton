@@ -1229,6 +1229,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../bundles/exchange/" class="md-nav__link">
         
   
@@ -1615,7 +1643,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1671,7 +1699,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1727,7 +1755,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2378,7 +2406,7 @@
 <tbody>
 <tr>
 <td>实体类</td>
-<td>PHP 8 属性（Doctrine ORM），整数自动递增 <code>id</code></td>
+<td>PHP 8 属性（Doctrine ORM），整数自增 <code>id</code></td>
 </tr>
 <tr>
 <td>存储库类</td>
@@ -2489,7 +2517,7 @@
 <td>UUID 或记录的不可变业务密钥</td>
 </tr>
 <tr>
-<td>集成事件聚合/源/关联 ID</td>
+<td>集成事件聚合/源/相关 ID</td>
 <td>UUID</td>
 </tr>
 <tr>
@@ -2605,8 +2633,8 @@ Doctrine 实体、存储库、EntityManager 或本地主键作为持久的
 <p>实现管道接口的服务会被自动标记：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">services</span><span class="p">:</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">App\Trade\Service\Pricing\</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/Trade/Service/Pricing/&#39;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;trade.price_calculator&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w"> </span><span class="s">'../src/Trade/Service/Pricing/'</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'trade.price_calculator'</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p>通过<code>getPriority(): int</code>方法排序，按优先级顺序执行。</p>
 <hr />

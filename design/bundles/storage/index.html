@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../exchange/" class="md-nav__link">
         
   
@@ -2012,7 +2040,7 @@ and provides exactly one capability:</p>
 <p><strong>File</strong>: <code>src/Storage/Service/MediaStorageInterface.php</code></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">interface MediaStorageInterface</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    /** Driver name used in registry and the `storage` query parameter, e.g. &quot;local&quot;, &quot;qiniu&quot;. */</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    /** Driver name used in registry and the `storage` query parameter, e.g. "local", "qiniu". */</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    public static function getName(): string;</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="x">    /**</span>
@@ -2036,7 +2064,7 @@ and provides exactly one capability:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">final class MediaStorageRegistry</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    /** @param iterable&lt;MediaStorageInterface&gt; $drivers */</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    public function __construct(#[AutowireIterator(&#39;media.storage&#39;)] iterable $drivers) {}</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    public function __construct(#[AutowireIterator('media.storage')] iterable $drivers) {}</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">    /** @throws \RuntimeException when driver name is unknown */</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">    public function get(string $name): MediaStorageInterface {}</span>
@@ -2173,13 +2201,13 @@ the physical file, without requiring the caller to remember which driver was use
 talks to <code>MediaStorageInterface</code> through the registry.</p>
 <h3 id="53-controller-upload-action">5.3 Controller Upload Action<a class="headerlink" href="#53-controller-upload-action" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">// App/MediaController</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">#[Route(&#39;/upload&#39;, name: &#39;upload&#39;, methods: [&#39;POST&#39;])]</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">#[Route('/upload', name: 'upload', methods: ['POST'])]</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">public function uploadAction(Request $request): Response</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">{</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    $file = $request-&gt;files-&gt;get(&#39;file&#39;);</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    $storage = $request-&gt;request-&gt;get(&#39;storage&#39;, &#39;local&#39;);</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    $file = $request-&gt;files-&gt;get('file');</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    $storage = $request-&gt;request-&gt;get('storage', 'local');</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">    $media = $this-&gt;service-&gt;createFromUpload($file, $storage, $request-&gt;request-&gt;all());</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="x">    return $this-&gt;success($media, &#39;Uploaded&#39;, 201);</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="x">    return $this-&gt;success($media, 'Uploaded', 201);</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="x">}</span>
 </code></pre></div>
 <p>The same action pattern is repeated in <code>Manage/MediaController</code>.</p>
@@ -2187,10 +2215,10 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 <h2 id="6-configuration">6. Configuration<a class="headerlink" href="#6-configuration" title="Permanent link">&para;</a></h2>
 <p><strong>File</strong>: <code>config/packages/media.yaml</code></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">parameters</span><span class="p">:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">media.storage.default</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;local&#39;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">media.storage.default</span><span class="p">:</span><span class="w"> </span><span class="s">'local'</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">media.local.upload_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%kernel.project_dir%/public/uploads&#39;</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">media.local.base_url</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/uploads&#39;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">media.local.upload_path</span><span class="p">:</span><span class="w"> </span><span class="s">'%kernel.project_dir%/public/uploads'</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">media.local.base_url</span><span class="p">:</span><span class="w"> </span><span class="s">'/uploads'</span>
 </code></pre></div>
 <p><strong>File</strong>: <code>.env</code></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">### Storage ###</span>
@@ -2210,20 +2238,20 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nt">App\Storage\Service\LocalStorage</span><span class="p">:</span>
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">            </span><span class="nt">$basePath</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%media.local.upload_path%&#39;</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">            </span><span class="nt">$baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%media.local.base_url%&#39;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">            </span><span class="nt">$basePath</span><span class="p">:</span><span class="w"> </span><span class="s">'%media.local.upload_path%'</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">            </span><span class="nt">$baseUrl</span><span class="p">:</span><span class="w"> </span><span class="s">'%media.local.base_url%'</span>
 <a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
 <a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="nt">App\Storage\Service\QiniuStorage</span><span class="p">:</span>
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">            </span><span class="nt">$accessKey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_ACCESS_KEY)%&#39;</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">            </span><span class="nt">$secretKey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_SECRET_KEY)%&#39;</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">            </span><span class="nt">$bucket</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_BUCKET)%&#39;</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">            </span><span class="nt">$domain</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(QINIU_DOMAIN)%&#39;</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">            </span><span class="nt">$accessKey</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(QINIU_ACCESS_KEY)%'</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">            </span><span class="nt">$secretKey</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(QINIU_SECRET_KEY)%'</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">            </span><span class="nt">$bucket</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(QINIU_BUCKET)%'</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">            </span><span class="nt">$domain</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(QINIU_DOMAIN)%'</span>
 </code></pre></div>
 <p><strong>File</strong>: <code>config/services.yaml</code> (addition)</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">_instanceof</span><span class="p">:</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'media.storage'</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <hr />
 <h2 id="7-request-flow">7. Request Flow<a class="headerlink" href="#7-request-flow" title="Permanent link">&para;</a></h2>
@@ -2231,15 +2259,15 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  Content-Type: multipart/form-data
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Body:
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    file: &lt;binary&gt;
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    storage: &quot;qiniu&quot;        (optional, defaults to &quot;local&quot;)
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    alt: &quot;描述文字&quot;           (optional)
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    storage: "qiniu"        (optional, defaults to "local")
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    alt: "描述文字"           (optional)
 <a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
 <a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>Controller::uploadAction()
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>  → $request-&gt;files-&gt;get(&#39;file&#39;)
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>  → $request-&gt;files-&gt;get('file')
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  → MediaService::createFromUpload(file, storage, meta)
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      → MediaStorageRegistry::get(&#39;qiniu&#39;)
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      → QiniuStorage::store(file, uuid.ext) → &quot;https://cdn.example.com/abc.jpg&quot;
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      → persist Media { storage: &quot;qiniu&quot;, path: &quot;https://cdn.example.com/abc.jpg&quot;, ... }
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      → MediaStorageRegistry::get('qiniu')
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      → QiniuStorage::store(file, uuid.ext) → "https://cdn.example.com/abc.jpg"
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      → persist Media { storage: "qiniu", path: "https://cdn.example.com/abc.jpg", ... }
 <a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      → return Media JSON
 </code></pre></div>
 <h3 id="71-delete-flow">7.1 Delete Flow<a class="headerlink" href="#71-delete-flow" title="Permanent link">&para;</a></h3>
@@ -2258,12 +2286,12 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># config/services.yaml</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nt">_instanceof</span><span class="p">:</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">App\Storage\Service\MediaStorageInterface</span><span class="p">:</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;media.storage&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'media.storage'</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">final class MediaStorageRegistry</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="x">{</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="x">    public function __construct(</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="x">        #[AutowireIterator(&#39;media.storage&#39;)]</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="x">        #[AutowireIterator('media.storage')]</span>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="x">        iterable $drivers,</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="x">    ) {</span>
 <a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="x">        foreach ($drivers as $driver) {</span>

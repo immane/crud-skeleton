@@ -976,6 +976,34 @@
   
   
     <li class="md-nav__item">
+      <a href="design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1362,7 +1390,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1418,7 +1446,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1474,7 +1502,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1818,7 +1846,7 @@
 <h2 id="_3">主要特点<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>基于表达式的动态查询</strong>：带有 DQL 编译的 <code>@filter</code>、<code>@sort</code>、<code>@dql</code>、<code>@order</code>、<code>@select</code> 查询参数</li>
-<li><strong>基于特征的控制器组合</strong>：9 个 PHP 特征（List、Detail、Create、Update、Delete、Workflow 等）组装成控制器</li>
+<li><strong>基于特征的控制器组合</strong>：将 9 个 PHP 特征（列表、详细信息、创建、更新、删除、工作流等）组装到控制器中</li>
 <li><strong>可插拔的价格计算管道</strong>：用于电子商务订单定价的优先顺序计算器</li>
 <li><strong>状态机</strong>：订单生命周期（草稿 -&gt; 已完成）和发票生命周期（待处理 -&gt; 已付款/退款）的 Symfony 工作流</li>
 <li><strong>基于发票的支付框架</strong>：网关抽象（模拟/钱包/微信）、webhooks、与提供商无关的发票事件</li>
@@ -1839,7 +1867,7 @@
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># Create an admin user</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">'P@ssw0rd'</span><span class="w"> </span>--admin
 </code></pre></div>
 <h2 id="_5">文档<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1854,7 +1882,7 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span>--coverage-text
 </code></pre></div>
 <p>PHPStan 和 Rector 作业使用独立的 SQLite URL，因此 Composer 的缓存清除
-脚本无需本地配置的开发数据库即可运行。</p>
+脚本可以在没有本地配置的开发数据库的情况下运行。</p>
 <h2 id="_7">许可证<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>阿帕奇-2.0</p>
 

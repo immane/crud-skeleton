@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1886,7 +1914,7 @@
 <li><strong>Reproduction:</strong> <code>$c = new RsaClient(); $c-&gt;rsaPrivateKey = 'garbage'; echo $c-&gt;sign('data');</code> — <code>getPrivateKey()</code> wraps the garbage into a truthy PEM, <code>openssl_sign</code> returns <code>false</code>, <code>base64_encode($sign)</code> warns on undefined <code>$sign</code>.</li>
 <li><strong>Proposed fix:</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">if (!openssl_sign((string) $data, $sign, $res, OPENSSL_ALGO_SHA256)) {</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">    return &#39;&#39;;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">    return '';</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">}</span>
 </code></pre></div></li>
 </ul>

@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1786,7 +1814,7 @@
 - <code>PictureControllerTest</code>（完整的 HTTP CRUD、验证、所有者范围隔离、图片存储库
   自定义方法）。没有其他文件触及 <code>/api/v1/{app,manage}/pictures</code>。
 - <code>MediaUploadIntegrationTest</code>核心上传历程：管理上传存储+删除文件，
-  没有尺寸的 PDF 上传、仅限所有者的应用程序删除、公共只读范围、丢失文件/
+  没有尺寸的 PDF 上传、仅限所有者的应用程序删除、公共只读范围、丢失文件 /
   未知存储/未知类别 400、<code>MediaService</code> 验证分支和存储
   故障处理。这些都是独一无二的。
 - <code>CommonRepoFullTest</code> 自定义存储库方法（<code>findBySlug</code>、<code>findRootCategories</code>、
@@ -1873,9 +1901,9 @@
 </tr>
 <tr>
 <td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus</td>
+<td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus</td>
 <td>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus 1</td>
 <td>中</td>
-<td>（空用户分支在身份验证后无法访问；请参阅注释）</td>
 </tr>
 <tr>
 <td>MediaControllerUploadTest::testManageUploadReturns500ForUnexpectedError</td>
@@ -1976,7 +2004,7 @@
   <code>MediaTest::testPrePersistWhenCreatedFromReflection</code>（反射<code>newInstanceWithoutConstructor</code></li>
 <li><code>prePersist()</code> + <code>createdAt</code>）。嵌入集成文件中的纯实体单元测试。</li>
 <li><strong>SettingApiIntegrationTest::testCreateAndReadSettingViaManageApi.</strong> POST <code>/api/v1/manage/settings</code>
-  （201，键/值断言）+ GET <code>/api/v1/manage/settings/{id}</code>（键断言）是严格的
+  (201, 键/值断言) + GET <code>/api/v1/manage/settings/{id}</code> (键断言) 是严格的
   <code>CommonModulesApiRegressionTest::testSettingCrudRegression</code> 的子集（相同的 POST 断言，
   加上 GET 详细值、PUT、DELETE）。</li>
 </ul>
@@ -2004,7 +2032,7 @@
 <li><strong>CommonRepoFullTest::testContentFindLatest</strong>*。 <code>findLatest()</code> 已下单+限额
   由 <code>ContentRepositoryIntegrationTest::testFindLatestReturnsNewestFirstAndRespectsLimit</code> 断言；
   新测试添加了限制计数断言，无需排序和 <code>findLatest(1) → count 1</code>。
-  将默认限制变体折叠到预先存在的测试中，而不是重复。</li>
+  将默认限制变量折叠到预先存在的测试中，而不是重复。</li>
 <li><strong>CommentControllerTest::testCreateWithoutUserFallsBackToPendingStatus.</strong> 应用程序评论创建
   受身份验证保护 (<code>AppApiRegressionTest::testAppCommentCreateUnauthenticated</code>)，因此
   <code>defaultCreateValues()</code> 的空用户分支在生产环境中无法访问；测试模拟
@@ -2037,7 +2065,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/Nayuki/Development/PHP/crud-skeleton
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Common/<span class="w">   </span><span class="c1"># 131 tests, 0 failures (baseline)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># After deleting HIGH-confidence candidates only:</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s2">&quot;CategoryEntityCoverageTest|ContentEntityCoverageTest|CommentApiExtraTest|CommentControllerTest|MediaControllerUploadTest|SettingApiIntegrationTest&quot;</span><span class="w"> </span>--testsuite<span class="w"> </span>unit<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s2">"CategoryEntityCoverageTest|ContentEntityCoverageTest|CommentApiExtraTest|CommentControllerTest|MediaControllerUploadTest|SettingApiIntegrationTest"</span><span class="w"> </span>--testsuite<span class="w"> </span>unit<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Confirm remaining coverage: run with Xdebug and diff var/coverage for src/Common</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-text<span class="w"> </span>--filter<span class="w"> </span>Common
 </code></pre></div>

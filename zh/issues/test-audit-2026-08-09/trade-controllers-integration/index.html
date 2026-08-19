@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1650,10 +1678,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -1775,7 +1803,7 @@
   （仅保留两个篡改双胞胎之一 - 请参阅删除表）加上范围外的跳过。</li>
 <li><strong><code>OrderWorkflowApiTest</code></strong> — 订单状态机的权威 HTTP 层：
   数据驱动的从每个状态取消、每个状态 <code>/transitions</code> 列表、<code>/todo</code> 语义、
-  钱包转账支付/退款成功，通过准确的消息防止拒绝。这是
+  钱包转账付款/退款成功，以准确消息防范拒绝。这是
   Trade API 工作流程测试的 NAME 覆盖幸存者。</li>
 <li><strong><code>TradeRepoFullTest</code></strong> — 存储库查询的幸存者（<code>findNotDeleted</code>/<code>findActive</code>，
   <code>findByProduct</code>/<code>findActiveByProduct</code>、<code>findById</code>、<code>findByUser</code>、<code>findByOrder</code>）
@@ -1791,7 +1819,7 @@
 <li><strong><code>TradeApiIntegrationTest</code></strong> 独特的端点（在冗余工作流程后仍然存在）
   测试已删除）：产品/规范 CRUD（嵌套 <code>/manage/products/{id}/specifications</code>），
   批量更新模式、分页、应用程序产品非活动/删除过滤器、订单项目
-  子资源（管理+应用所有权404），<code>testManageOrderCreateWithUserId</code>，
+  子资源（管理+应用程序所有权404），<code>testManageOrderCreateWithUserId</code>，
   <code>testOrderItemSnapshotsAreCreated</code>，应用程序订单元数据/接收者往返。</li>
 <li><strong><code>App/OrderControllerTest</code></strong> 和未列出的 <code>Manage/OrderControllerTest</code> 方法 —
   覆盖控制器分支的快速单元测试（价格引擎抛出、交易关闭
@@ -2154,35 +2182,35 @@
    删除约 90 条重复行。）</p>
 </li>
 <li>
-<p><strong><code>TradePaymentIntegrationTest::testAppUserCanSubmitConfirmAndPayOwnOrder</code></strong> 重新断言
-   <code>OrderWorkflowApiTest::testAppUserSubmitConfirmAndCancelOwnOrder</code> 已涵盖应用程序提交/确认步骤；
-   仅保留基于发票的付款步骤（自动付款模拟）作为唯一增量，或将其折叠到
-   通过应用程序流程测试。</p>
+<p><strong><code>TradePaymentIntegrationTest::testAppUserCanSubmitConfirmAndPayOwnOrder</code></strong> re-asserts the
+   app submit/confirm steps already covered by <code>OrderWorkflowApiTest::testAppUserSubmitConfirmAndCancelOwnOrder</code>;
+   keep only the invoice-based pay step (autoPaid mock) as the unique delta, or fold it into the
+   surviving app-flow test.</p>
 </li>
 </ol>
-<h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>遵循该策略的强制性命令和 2026-08-09 报告惯例：</p>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Follow the strategy's mandatory commands and the 2026-08-09 report conventions:</p>
 <ol>
-<li>基线：在编辑之前运行两个最大的文件并捕获计时：
+<li>Baseline: run the two biggest files and capture timings before edits:
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/TradeApiIntegrationTest.php<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>--no-coverage
 </code></pre></div></li>
-<li>应用删除，然后首先隔离地重新运行幸存者：
+<li>Apply deletions, then re-run the survivors in isolation first:
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>tests/Trade/Integration/OrderWorkflowApiTest.php<span class="w"> </span>tests/Trade/Integration/TradeRepoFullTest.php<span class="w"> </span>--no-coverage
+</code></pre></div></li>
+<li>Prove no <code>src/Trade</code> coverage regression: capture clover before/after on the affected areas
+   and diff the <code>count="0"</code> statements (the campaign's own technique):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">'Trade|OrderWorkflow|OrderItem|Specification'</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml
 </code></pre></div>
-3.证明没有<code>src/Trade</code>覆盖回归：在受影响区域之前/之后捕获三叶草
-   并区分 <code>count="0"</code> 语句（该活动自己的技术）：
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;Trade|OrderWorkflow|OrderItem|Specification&#39;</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-before.xml
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;Trade|OrderWorkflow|OrderItem|Specification&#39;</span><span class="w"> </span>--coverage-clover<span class="w"> </span>/tmp/trade-after.xml
-</code></pre></div>
-   预期结果：<code>OrderWorkflowApiTest</code> 保持状态机线被覆盖； <code>TradeRepoFullTest</code>
-   保持存储库线被覆盖；删除的 <code>TradeRepositoryIntegrationTest</code> 不添加任何唯一行。</li>
-<li>CI PostgreSQL 上的全套套件必须保持绿色（2686 → 更少的测试，同一行覆盖率≥ 90%）：
-   <code>composer phpstan</code>、<code>composer rector:types:check</code>、完整<code>phpunit</code>运行。</li>
-<li>准确确认 1 个跳过的 doTransition-tamper 回归仍然存在（集成双胞胎
-   <code>OrderWorkflowApiTest</code>)，并更新<code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> /
-   <code>trade-workflow-badpaths.md</code> 如果引用的单元测试被删除。</li>
-<li>确认跳过的Bug-1测试(<code>App/OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code>)
-   所有其他错误记录跳过都保持不变。</li>
+   Expected result: <code>OrderWorkflowApiTest</code> keeps the state-machine lines covered; <code>TradeRepoFullTest</code>
+   keeps the repository lines covered; the deleted <code>TradeRepositoryIntegrationTest</code> adds no unique lines.</li>
+<li>Full suite on CI PostgreSQL must stay green (2686 → fewer tests, same line coverage ≥ 90%):
+   <code>composer phpstan</code>, <code>composer rector:types:check</code>, full <code>phpunit</code> run.</li>
+<li>Confirm exactly ONE skipped doTransition-tamper regression remains (the integration twin in
+   <code>OrderWorkflowApiTest</code>), and update <code>docs/issues/coverage-2026-08-09/trade-controllers.md</code> /
+   <code>trade-workflow-badpaths.md</code> if the referenced unit test is removed.</li>
+<li>Confirm the skipped Bug-1 test (<code>App/OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code>)
+   and all other bug-documenting skips are untouched.</li>
 </ol>
 
 

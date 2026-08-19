@@ -854,6 +854,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../exchange/" class="md-nav__link">
         
   
@@ -3167,12 +3195,12 @@
     user &lt;--&gt;|"OneToOne"| wechatUser</code></pre>
 <h3 id="mapping">Mapping<a class="headerlink" href="#mapping" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Entity(repositoryClass: WechatUserRepository::class)]</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">#[ORM\Table(name: &#39;wechat_user&#39;)]</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">#[ORM\UniqueConstraint(name: &#39;uniq_wechat_user_openid&#39;, columns: [&#39;openid&#39;])]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">#[ORM\Table(name: 'wechat_user')]</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">#[ORM\UniqueConstraint(name: 'uniq_wechat_user_openid', columns: ['openid'])]</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">class WechatUser</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">{</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">    #[ORM\OneToOne(targetEntity: \App\Identity\Entity\User::class)]</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">    #[ORM\JoinColumn(name: &#39;user_id&#39;, referencedColumnName: &#39;id&#39;, nullable: false, onDelete: &#39;CASCADE&#39;)]</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="x">    private User $user;</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="x">    // getters / setters ...</span>
@@ -3215,8 +3243,8 @@
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">getPayApp(): \EasyWeChat\Pay\Application          // singleton cache</span>
 </code></pre></div>
 <h3 id="apptype-constants">AppType Constants<a class="headerlink" href="#apptype-constants" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">public const APP_TYPE_MINIAPP = &#39;miniapp&#39;;</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">public const APP_TYPE_OFFICIAL = &#39;official&#39;;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">public const APP_TYPE_MINIAPP = 'miniapp';</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">public const APP_TYPE_OFFICIAL = 'official';</span>
 </code></pre></div>
 <hr />
 <h2 id="service-wechatauthservice">Service: WechatAuthService<a class="headerlink" href="#service-wechatauthservice" title="Permanent link">&para;</a></h2>
@@ -3253,7 +3281,7 @@
 <hr />
 <h2 id="controller-logincontroller">Controller: LoginController<a class="headerlink" href="#controller-logincontroller" title="Permanent link">&para;</a></h2>
 <h3 id="class-declaration">Class Declaration<a class="headerlink" href="#class-declaration" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">#[Route(&#39;/api/wechat&#39;, name: &#39;wechat-&#39;)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">#[Route('/api/wechat', name: 'wechat-')]</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="x">class LoginController</span>
 </code></pre></div>
 <p>Follows the <code>AuthController</code> pattern: does not extend <code>RestController</code>, manually returns <code>JsonResponse</code>, and has a private <code>error()</code> method.</p>
@@ -3266,20 +3294,20 @@
 </code></pre></div>
 <h3 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h3>
 <h4 id="post-apiwechatminiapplogin-mini-program-login-public_access"><code>POST /api/wechat/miniapp/login</code> — Mini Program login (PUBLIC_ACCESS)<a class="headerlink" href="#post-apiwechatminiapplogin-mini-program-login-public_access" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="x">Request:  { &quot;js_code&quot;: &quot;081abc...&quot; }</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="x">Response: { &quot;access_token&quot;: &quot;...&quot;, &quot;expires_in&quot;: 7200, &quot;refresh_token&quot;: &quot;...&quot; }</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="x">Request:  { "js_code": "081abc..." }</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="x">Response: { "access_token": "...", "expires_in": 7200, "refresh_token": "..." }</span>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="x">Errors:</span>
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="x">  400 — js_code missing</span>
 <a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="x">  401 — WeChat API returned error (invalid code)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">#[Route(&#39;/miniapp/login&#39;, methods: [&#39;POST&#39;])]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">#[Route('/miniapp/login', methods: ['POST'])]</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">public function miniappLogin(Request $request): JsonResponse</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="x">{</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="x">    $data = json_decode($request-&gt;getContent(), true);</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="x">    $jsCode = trim((string) ($data[&#39;js_code&#39;] ?? &#39;&#39;));</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="x">    if ($jsCode === &#39;&#39;) {</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="x">        return $this-&gt;error(&#39;js_code is required.&#39;, 400);</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="x">    $jsCode = trim((string) ($data['js_code'] ?? ''));</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="x">    if ($jsCode === '') {</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="x">        return $this-&gt;error('js_code is required.', 400);</span>
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="x">    }</span>
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="x">    try {</span>
 <a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="x">        $user = $this-&gt;wechatAuthService-&gt;authenticateFromMiniApp($jsCode);</span>
@@ -3290,20 +3318,20 @@
 <a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="x">}</span>
 </code></pre></div>
 <h4 id="post-apiwechatminiappphone-bind-phone-number-is_authenticated_fully"><code>POST /api/wechat/miniapp/phone</code> — Bind phone number (IS_AUTHENTICATED_FULLY)<a class="headerlink" href="#post-apiwechatminiappphone-bind-phone-number-is_authenticated_fully" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">Request:  { &quot;code&quot;: &quot;xxx&quot; }</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">Request:  { "code": "xxx" }</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="x">Response: 204 No Content</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="x">Errors:</span>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="x">  400 — code missing</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="x">  401 — WeChat API error</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">#[Route(&#39;/miniapp/phone&#39;, methods: [&#39;POST&#39;])]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">#[Route('/miniapp/phone', methods: ['POST'])]</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="x">public function miniappPhone(Request $request): JsonResponse</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="x">{</span>
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="x">    $data = json_decode($request-&gt;getContent(), true);</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="x">    $code = trim((string) ($data[&#39;code&#39;] ?? &#39;&#39;));</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="x">    if ($code === &#39;&#39;) {</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="x">        return $this-&gt;error(&#39;code is required.&#39;, 400);</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="x">    $code = trim((string) ($data['code'] ?? ''));</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="x">    if ($code === '') {</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="x">        return $this-&gt;error('code is required.', 400);</span>
 <a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="x">    }</span>
 <a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="x">    try {</span>
 <a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="x">        /** @var User $user */</span>
@@ -3317,33 +3345,33 @@
 </code></pre></div>
 <h4 id="get-apiwechatoauthurl-get-official-account-oauth-redirect-url-public_access"><code>GET /api/wechat/oauth/url</code> — Get Official Account OAuth redirect URL (PUBLIC_ACCESS)<a class="headerlink" href="#get-apiwechatoauthurl-get-official-account-oauth-redirect-url-public_access" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="x">Query:    ?redirect_uri=https://example.com/wechat/callback</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">Response: { &quot;url&quot;: &quot;https://open.weixin.qq.com/...&quot; }</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">Response: { "url": "https://open.weixin.qq.com/..." }</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="x">Errors:</span>
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="x">  400 — redirect_uri missing</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">#[Route(&#39;/oauth/url&#39;, methods: [&#39;GET&#39;])]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">#[Route('/oauth/url', methods: ['GET'])]</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="x">public function oauthUrl(Request $request): JsonResponse</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">{</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="x">    $redirectUri = trim((string) $request-&gt;query-&gt;get(&#39;redirect_uri&#39;, &#39;&#39;));</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="x">    if ($redirectUri === &#39;&#39;) {</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="x">        return $this-&gt;error(&#39;redirect_uri is required.&#39;, 400);</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="x">    $redirectUri = trim((string) $request-&gt;query-&gt;get('redirect_uri', ''));</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="x">    if ($redirectUri === '') {</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="x">        return $this-&gt;error('redirect_uri is required.', 400);</span>
 <a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="x">    }</span>
 <a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="x">    $url = $this-&gt;wechatService-&gt;getOAuthRedirectUrl($redirectUri);</span>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="x">    return new JsonResponse([&#39;url&#39; =&gt; $url]);</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="x">    return new JsonResponse(['url' =&gt; $url]);</span>
 <a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="x">}</span>
 </code></pre></div>
 <h4 id="post-apiwechatoauthcallback-official-account-oauth-callback-public_access"><code>POST /api/wechat/oauth/callback</code> — Official Account OAuth callback (PUBLIC_ACCESS)<a class="headerlink" href="#post-apiwechatoauthcallback-official-account-oauth-callback-public_access" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">Request:  { &quot;code&quot;: &quot;081abc...&quot; }</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">Response: { &quot;access_token&quot;: &quot;...&quot;, &quot;expires_in&quot;: 7200, &quot;refresh_token&quot;: &quot;...&quot; }</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">Request:  { "code": "081abc..." }</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">Response: { "access_token": "...", "expires_in": 7200, "refresh_token": "..." }</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">#[Route(&#39;/oauth/callback&#39;, methods: [&#39;POST&#39;])]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">#[Route('/oauth/callback', methods: ['POST'])]</span>
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="x">public function oauthCallback(Request $request): JsonResponse</span>
 <a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="x">{</span>
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="x">    $data = json_decode($request-&gt;getContent(), true);</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="x">    $code = trim((string) ($data[&#39;code&#39;] ?? &#39;&#39;));</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="x">    if ($code === &#39;&#39;) {</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="x">        return $this-&gt;error(&#39;code is required.&#39;, 400);</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="x">    $code = trim((string) ($data['code'] ?? ''));</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="x">    if ($code === '') {</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="x">        return $this-&gt;error('code is required.', 400);</span>
 <a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="x">    }</span>
 <a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="x">    try {</span>
 <a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="x">        $user = $this-&gt;wechatAuthService-&gt;authenticateFromOfficialAccount($code);</span>
@@ -3357,27 +3385,27 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="x">private function tokenResponse(User $user): JsonResponse</span>
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="x">{</span>
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="x">    return new JsonResponse([</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="x">        &#39;access_token&#39;  =&gt; $this-&gt;tokenManager-&gt;createAccessToken($user),</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="x">        &#39;expires_in&#39;    =&gt; $this-&gt;tokenManager-&gt;getAccessTtl(),</span>
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="x">        &#39;refresh_token&#39; =&gt; $this-&gt;tokenManager-&gt;createRefreshToken($user),</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="x">        'access_token'  =&gt; $this-&gt;tokenManager-&gt;createAccessToken($user),</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="x">        'expires_in'    =&gt; $this-&gt;tokenManager-&gt;getAccessTtl(),</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="x">        'refresh_token' =&gt; $this-&gt;tokenManager-&gt;createRefreshToken($user),</span>
 <a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="x">    ]);</span>
 <a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="x">}</span>
 <a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
 <a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="x">private function error(string $message, int $status = 400): JsonResponse</span>
 <a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="x">{</span>
-<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="x">    return new JsonResponse([&#39;code&#39; =&gt; $status, &#39;message&#39; =&gt; $message], $status);</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="x">    return new JsonResponse(['code' =&gt; $status, 'message' =&gt; $message], $status);</span>
 <a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="x">}</span>
 </code></pre></div>
 <hr />
 <h2 id="gateway-wechatpaygateway">Gateway: WechatPayGateway<a class="headerlink" href="#gateway-wechatpaygateway" title="Permanent link">&para;</a></h2>
 <h3 id="contract-implements-paymentgatewayinterface">Contract: implements <code>PaymentGatewayInterface</code><a class="headerlink" href="#contract-implements-paymentgatewayinterface" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="x">getName() → &#39;wechat&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="x">getName() → 'wechat'</span>
 </code></pre></div>
 <p>Consistent with the <code>Invoice::PAYMENT_WECHAT = 'wechat'</code> constant.</p>
 <h3 id="constructor-signature_3">Constructor Signature<a class="headerlink" href="#constructor-signature_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="x">public function __construct(</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="x">    private readonly WechatService $wechatService,</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="x">    #[Autowire(&#39;%wechat.pay.notify_url%&#39;)]</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="x">    #[Autowire('%wechat.pay.notify_url%')]</span>
 <a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="x">    private readonly string $notifyUrl,</span>
 <a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="x">)</span>
 </code></pre></div>
@@ -3421,13 +3449,13 @@
 <a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="x">2. Return PaymentRefundResult(refundId, status)</span>
 </code></pre></div>
 <h4 id="getnotifysuccessresponsepaymentnotifyresult-result-response"><code>getNotifySuccessResponse(PaymentNotifyResult $result): Response</code><a class="headerlink" href="#getnotifysuccessresponsepaymentnotifyresult-result-response" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="x">return new JsonResponse([&#39;code&#39; =&gt; &#39;SUCCESS&#39;, &#39;message&#39; =&gt; &#39;Success&#39;]);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="x">return new JsonResponse(['code' =&gt; 'SUCCESS', 'message' =&gt; 'Success']);</span>
 </code></pre></div>
 <h3 id="automatic-registration">Automatic Registration<a class="headerlink" href="#automatic-registration" title="Permanent link">&para;</a></h3>
 <p>Once <code>WechatPayGateway</code> implements <code>PaymentGatewayInterface</code>, no manual configuration is needed. The existing <code>_instanceof</code> rule in <code>config/services.yaml</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">_instanceof</span><span class="p">:</span>
 <a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="nt">App\Payment\Service\PaymentGatewayInterface</span><span class="p">:</span>
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'payment.gateway'</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p><code>PaymentGatewayRegistry</code> auto-discovers it via <code>#[AutowireIterator('payment.gateway')]</code>.</p>
 <hr />
@@ -3487,7 +3515,7 @@
 </code></pre></div>
 <h3 id="2-configservicesyaml">2. <code>config/services.yaml</code><a class="headerlink" href="#2-configservicesyaml" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nt">imports</span><span class="p">:</span>
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;../src/Wechat/Resources/config/services_wechat.yaml&#39;</span><span class="p p-Indicator">,</span><span class="nt"> ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> resource</span><span class="p">:</span><span class="w"> </span><span class="s">'../src/Wechat/Resources/config/services_wechat.yaml'</span><span class="p p-Indicator">,</span><span class="nt"> ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 <h3 id="3-configroutesyaml">3. <code>config/routes.yaml</code><a class="headerlink" href="#3-configroutesyaml" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nt">wechat</span><span class="p">:</span>
@@ -3505,7 +3533,7 @@
 <a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">^/api/wechat/oauth/callback$</span><span class="p p-Indicator">,</span><span class="nt"> roles</span><span class="p">:</span><span class="w"> </span><span class="nv">PUBLIC_ACCESS</span><span class="w"> </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 <h3 id="5-srcpaymententityinvoicephp">5. <code>src/Payment/Entity/Invoice.php</code><a class="headerlink" href="#5-srcpaymententityinvoicephp" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="x">public const PAYMENT_WECHAT = &#39;wechat&#39;;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="x">public const PAYMENT_WECHAT = 'wechat';</span>
 </code></pre></div>
 <h3 id="6-env">6. <code>.env</code><a class="headerlink" href="#6-env" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1"># WeChat Mini Program</span>
@@ -3535,26 +3563,26 @@
 <a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
 <a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">    </span><span class="nt">App\Wechat\Service\WechatService</span><span class="p">:</span>
 <a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">            </span><span class="nt">$miniappAppId</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_MINIAPP_APP_ID)%&#39;</span>
-<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">            </span><span class="nt">$miniappSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_MINIAPP_SECRET)%&#39;</span>
-<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="w">            </span><span class="nt">$officialAppId</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_OFFICIAL_APP_ID)%&#39;</span>
-<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="w">            </span><span class="nt">$officialSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_OFFICIAL_SECRET)%&#39;</span>
-<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a><span class="w">            </span><span class="nt">$officialToken</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_OFFICIAL_TOKEN)%&#39;</span>
-<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a><span class="w">            </span><span class="nt">$officialAesKey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_OFFICIAL_AES_KEY)%&#39;</span>
-<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="w">            </span><span class="nt">$payMchId</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_MCH_ID)%&#39;</span>
-<a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a><span class="w">            </span><span class="nt">$paySecretKey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_SECRET_KEY)%&#39;</span>
-<a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a><span class="w">            </span><span class="nt">$payPrivateKeyPath</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_PRIVATE_KEY)%&#39;</span>
-<a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a><span class="w">            </span><span class="nt">$payCertificatePath</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_CERTIFICATE)%&#39;</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">            </span><span class="nt">$miniappAppId</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_MINIAPP_APP_ID)%'</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">            </span><span class="nt">$miniappSecret</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_MINIAPP_SECRET)%'</span>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="w">            </span><span class="nt">$officialAppId</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_OFFICIAL_APP_ID)%'</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="w">            </span><span class="nt">$officialSecret</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_OFFICIAL_SECRET)%'</span>
+<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a><span class="w">            </span><span class="nt">$officialToken</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_OFFICIAL_TOKEN)%'</span>
+<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a><span class="w">            </span><span class="nt">$officialAesKey</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_OFFICIAL_AES_KEY)%'</span>
+<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="w">            </span><span class="nt">$payMchId</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_PAY_MCH_ID)%'</span>
+<a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a><span class="w">            </span><span class="nt">$paySecretKey</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_PAY_SECRET_KEY)%'</span>
+<a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a><span class="w">            </span><span class="nt">$payPrivateKeyPath</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_PAY_PRIVATE_KEY)%'</span>
+<a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a><span class="w">            </span><span class="nt">$payCertificatePath</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_PAY_CERTIFICATE)%'</span>
 <a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a>
 <a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a><span class="w">    </span><span class="nt">App\Wechat\Service\Payment\WechatPayGateway</span><span class="p">:</span>
 <a id="__codelineno-32-20" name="__codelineno-32-20" href="#__codelineno-32-20"></a><span class="w">        </span><span class="nt">arguments</span><span class="p">:</span>
-<a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a><span class="w">            </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%env(WECHAT_PAY_NOTIFY_URL)%&#39;</span>
+<a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a><span class="w">            </span><span class="nt">$notifyUrl</span><span class="p">:</span><span class="w"> </span><span class="s">'%env(WECHAT_PAY_NOTIFY_URL)%'</span>
 </code></pre></div>
 <h3 id="gateway-auto-registration-no-extra-configuration">Gateway Auto-Registration (No Extra Configuration)<a class="headerlink" href="#gateway-auto-registration-no-extra-configuration" title="Permanent link">&para;</a></h3>
 <p>Handled automatically by the <code>_instanceof</code> rule in <code>config/services.yaml</code>:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">_instanceof</span><span class="p">:</span>
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="nt">App\Payment\Service\PaymentGatewayInterface</span><span class="p">:</span>
-<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;payment.gateway&#39;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">        </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'payment.gateway'</span><span class="p p-Indicator">]</span>
 </code></pre></div></p>
 <p><code>PaymentGatewayRegistry</code> auto-discovers all implementations via <code>#[AutowireIterator('payment.gateway')]</code>.</p>
 <hr />
@@ -3568,12 +3596,12 @@
 <a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>
 <a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="x">    public function findByOpenid(string $openid): ?WechatUser</span>
 <a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="x">    {</span>
-<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="x">        return $this-&gt;findOneBy([&#39;openid&#39; =&gt; $openid]);</span>
+<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="x">        return $this-&gt;findOneBy(['openid' =&gt; $openid]);</span>
 <a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="x">    }</span>
 <a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a>
 <a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="x">    public function findByUser(User $user): ?WechatUser</span>
 <a id="__codelineno-34-14" name="__codelineno-34-14" href="#__codelineno-34-14"></a><span class="x">    {</span>
-<a id="__codelineno-34-15" name="__codelineno-34-15" href="#__codelineno-34-15"></a><span class="x">        return $this-&gt;findOneBy([&#39;user&#39; =&gt; $user]);</span>
+<a id="__codelineno-34-15" name="__codelineno-34-15" href="#__codelineno-34-15"></a><span class="x">        return $this-&gt;findOneBy(['user' =&gt; $user]);</span>
 <a id="__codelineno-34-16" name="__codelineno-34-16" href="#__codelineno-34-16"></a><span class="x">    }</span>
 <a id="__codelineno-34-17" name="__codelineno-34-17" href="#__codelineno-34-17"></a><span class="x">}</span>
 </code></pre></div>
@@ -3582,10 +3610,10 @@
 <p>Following the AuthController pattern, each <code>LoginController</code> endpoint is annotated with <code>#[OA\*]</code> attributes, using the tag <code>Wechat</code>.</p>
 <h3 id="nelmioapidoc-configuration-update">NelmioApiDoc Configuration Update<a class="headerlink" href="#nelmioapidoc-configuration-update" title="Permanent link">&para;</a></h3>
 <p>Add to <code>config/packages/nelmio_api_doc.yaml</code>:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">Wechat</span><span class="p p-Indicator">,</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;WeChat</span><span class="nv"> </span><span class="s">login,</span><span class="nv"> </span><span class="s">OAuth,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">payment&#39;</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">Wechat</span><span class="p p-Indicator">,</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="s">'WeChat</span><span class="nv"> </span><span class="s">login,</span><span class="nv"> </span><span class="s">OAuth,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">payment'</span><span class="w"> </span><span class="p p-Indicator">}</span>
 </code></pre></div></p>
 <p>Add tag matching to <code>OpenApiEnricherListener</code>:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="x">if (str_starts_with($opId, &#39;wechat-&#39;)) return &#39;Wechat&#39;;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="x">if (str_starts_with($opId, 'wechat-')) return 'Wechat';</span>
 </code></pre></div></p>
 <hr />
 <h2 id="login-flow-diagrams">Login Flow Diagrams<a class="headerlink" href="#login-flow-diagrams" title="Permanent link">&para;</a></h2>

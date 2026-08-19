@@ -854,6 +854,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -2235,14 +2263,14 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">use EasyWeChat\MiniApp\Application;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">$config = [</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">    &#39;app_id&#39; =&gt; &#39;wx3cf0f39249eb0exx&#39;,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">    &#39;secret&#39; =&gt; &#39;f1c242f4f28f735d4687abb469072axx&#39;,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">    &#39;token&#39; =&gt; &#39;easywechat&#39;,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="x">    &#39;aes_key&#39; =&gt; &#39;......&#39;,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="x">    &#39;http&#39; =&gt; [</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="x">        &#39;throw&#39; =&gt; true,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="x">        &#39;timeout&#39; =&gt; 5.0,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">        &#39;retry&#39; =&gt; true,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">    'app_id' =&gt; 'wx3cf0f39249eb0exx',</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">    'secret' =&gt; 'f1c242f4f28f735d4687abb469072axx',</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">    'token' =&gt; 'easywechat',</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="x">    'aes_key' =&gt; '......',</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="x">    'http' =&gt; [</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="x">        'throw' =&gt; true,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="x">        'timeout' =&gt; 5.0,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">        'retry' =&gt; true,</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="x">    ],</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="x">];</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
@@ -2262,22 +2290,22 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 </code></pre></div>
 <h3 id="12-generic-api-calls">1.2 Generic API Calls<a class="headerlink" href="#12-generic-api-calls" title="Permanent link">&para;</a></h3>
 <p>Use <code>getClient()</code> for arbitrary WeChat Mini Program APIs:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson(&#39;/wxa/getwxacodeunlimit&#39;, [</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">    &#39;scene&#39; =&gt; &#39;123&#39;,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    &#39;page&#39; =&gt; &#39;pages/index/index&#39;,</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    &#39;width&#39; =&gt; 430,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    &#39;check_path&#39; =&gt; false,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson('/wxa/getwxacodeunlimit', [</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">    'scene' =&gt; '123',</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    'page' =&gt; 'pages/index/index',</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    'width' =&gt; 430,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    'check_path' =&gt; false,</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">]);</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">$path = $response-&gt;saveAs(&#39;/tmp/wxacode-123.png&#39;);</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">$path = $response-&gt;saveAs('/tmp/wxacode-123.png');</span>
 </code></pre></div>
 <h3 id="13-get-phone-number">1.3 Get Phone Number<a class="headerlink" href="#13-get-phone-number" title="Permanent link">&para;</a></h3>
 <p>Mini Program phone number API uses a frontend <code>code</code> passed to backend:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">$data = [</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    &#39;code&#39; =&gt; (string) request()-&gt;get(&#39;code&#39;),</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    'code' =&gt; (string) request()-&gt;get('code'),</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">];</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson(&#39;wxa/business/getuserphonenumber&#39;, $data);</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson('wxa/business/getuserphonenumber', $data);</span>
 </code></pre></div>
 <h2 id="2-login-and-openid">2. Login And OpenID<a class="headerlink" href="#2-login-and-openid" title="Permanent link">&para;</a></h2>
 <h3 id="21-web-oauth-flow">2.1 Web OAuth Flow<a class="headerlink" href="#21-web-oauth-flow" title="Permanent link">&para;</a></h3>
@@ -2294,16 +2322,16 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 <h3 id="22-start-authorization">2.2 Start Authorization<a class="headerlink" href="#22-start-authorization" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">$oauth = $app-&gt;getOauth();</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">$redirectUrl = $oauth-&gt;scopes([&#39;snsapi_userinfo&#39;])-&gt;redirect();</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">$redirectUrl = $oauth-&gt;scopes(['snsapi_userinfo'])-&gt;redirect();</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">// Or set callback/current URL explicitly:</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="x">$redirectUrl = $oauth-&gt;scopes([&#39;snsapi_userinfo&#39;])-&gt;redirect($request-&gt;fullUrl());</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="x">$redirectUrl = $oauth-&gt;scopes(['snsapi_userinfo'])-&gt;redirect($request-&gt;fullUrl());</span>
 </code></pre></div>
 <p>Then return a framework redirect response:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">return redirect($redirectUrl);</span>
 </code></pre></div>
 <h3 id="23-handle-callback-and-get-openid">2.3 Handle Callback And Get OpenID<a class="headerlink" href="#23-handle-callback-and-get-openid" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">$code = $_GET[&#39;code&#39;];</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">$code = $_GET['code'];</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">$user = $oauth-&gt;userFromCode($code);</span>
 </code></pre></div>
 <p>Useful methods:</p>
@@ -2326,40 +2354,40 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 <h3 id="24-mini-program-login-note">2.4 Mini Program Login Note<a class="headerlink" href="#24-mini-program-login-note" title="Permanent link">&para;</a></h3>
 <p>For Mini Program login, EasyWeChat 6.x primarily exposes the generic API client. In backend code, pass frontend <code>js_code</code> to the WeChat auth endpoint through <code>$app-&gt;getClient()</code>, then persist the returned <code>openid</code>/<code>unionid</code> according to the official Mini Program login contract.</p>
 <p>Example shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;get(&#39;/sns/jscode2session&#39;, [</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="x">    &#39;query&#39; =&gt; [</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="x">        &#39;appid&#39; =&gt; $app-&gt;getAccount()-&gt;getAppId(),</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="x">        &#39;secret&#39; =&gt; $app-&gt;getAccount()-&gt;getSecret(),</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="x">        &#39;js_code&#39; =&gt; $jsCode,</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="x">        &#39;grant_type&#39; =&gt; &#39;authorization_code&#39;,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;get('/sns/jscode2session', [</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="x">    'query' =&gt; [</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="x">        'appid' =&gt; $app-&gt;getAccount()-&gt;getAppId(),</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="x">        'secret' =&gt; $app-&gt;getAccount()-&gt;getSecret(),</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="x">        'js_code' =&gt; $jsCode,</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="x">        'grant_type' =&gt; 'authorization_code',</span>
 <a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="x">    ],</span>
 <a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="x">]);</span>
 <a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="x">$data = $response-&gt;toArray(false);</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="x">$openid = $data[&#39;openid&#39;] ?? null;</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="x">$unionid = $data[&#39;unionid&#39;] ?? null;</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="x">$sessionKey = $data[&#39;session_key&#39;] ?? null;</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="x">$openid = $data['openid'] ?? null;</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="x">$unionid = $data['unionid'] ?? null;</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="x">$sessionKey = $data['session_key'] ?? null;</span>
 </code></pre></div>
 <h2 id="3-wechat-pay">3. WeChat Pay<a class="headerlink" href="#3-wechat-pay" title="Permanent link">&para;</a></h2>
 <h3 id="31-instantiate-pay-application">3.1 Instantiate Pay Application<a class="headerlink" href="#31-instantiate-pay-application" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="x">use EasyWeChat\Pay\Application;</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="x">$config = [</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="x">    &#39;mch_id&#39; =&gt; 1360649000,</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="x">    &#39;private_key&#39; =&gt; __DIR__ . &#39;/certs/apiclient_key.pem&#39;,</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="x">    &#39;certificate&#39; =&gt; __DIR__ . &#39;/certs/apiclient_cert.pem&#39;,</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="x">    &#39;secret_key&#39; =&gt; &#39;APIv3_KEY&#39;,</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="x">    &#39;v2_secret_key&#39; =&gt; &#39;V2_API_KEY&#39;,</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="x">    &#39;platform_certs&#39; =&gt; [</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="x">    'mch_id' =&gt; 1360649000,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="x">    'private_key' =&gt; __DIR__ . '/certs/apiclient_key.pem',</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="x">    'certificate' =&gt; __DIR__ . '/certs/apiclient_cert.pem',</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="x">    'secret_key' =&gt; 'APIv3_KEY',</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="x">    'v2_secret_key' =&gt; 'V2_API_KEY',</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="x">    'platform_certs' =&gt; [</span>
 <a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="x">        // Platform cert mode:</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="x">        // &#39;SERIAL_NO&#39; =&gt; &#39;/path/to/wechatpay/cert.pem&#39;,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="x">        // 'SERIAL_NO' =&gt; '/path/to/wechatpay/cert.pem',</span>
 <a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
 <a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="x">        // WeChat Pay public key mode:</span>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="x">        // &#39;PUB_KEY_ID_...&#39; =&gt; &#39;/path/to/wechatpay/pubkey.pem&#39;,</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="x">        // 'PUB_KEY_ID_...' =&gt; '/path/to/wechatpay/pubkey.pem',</span>
 <a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="x">    ],</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="x">    &#39;http&#39; =&gt; [</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="x">        &#39;throw&#39; =&gt; true,</span>
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="x">        &#39;timeout&#39; =&gt; 5.0,</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="x">    'http' =&gt; [</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="x">        'throw' =&gt; true,</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="x">        'timeout' =&gt; 5.0,</span>
 <a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="x">    ],</span>
 <a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="x">];</span>
 <a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>
@@ -2384,33 +2412,33 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 </code></pre></div>
 <h3 id="32-jsapi-order">3.2 JSAPI Order<a class="headerlink" href="#32-jsapi-order" title="Permanent link">&para;</a></h3>
 <p>JSAPI requires payer <code>openid</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson(&#39;v3/pay/transactions/jsapi&#39;, [</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="x">    &#39;mchid&#39; =&gt; (string) $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="x">    &#39;out_trade_no&#39; =&gt; $outTradeNo,</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="x">    &#39;appid&#39; =&gt; $miniAppIdOrOfficialAccountAppId,</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="x">    &#39;description&#39; =&gt; $description,</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="x">    &#39;notify_url&#39; =&gt; $notifyUrl,</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="x">    &#39;amount&#39; =&gt; [</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="x">        &#39;total&#39; =&gt; $amountInCents,</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="x">        &#39;currency&#39; =&gt; &#39;CNY&#39;,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson('v3/pay/transactions/jsapi', [</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="x">    'mchid' =&gt; (string) $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="x">    'out_trade_no' =&gt; $outTradeNo,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="x">    'appid' =&gt; $miniAppIdOrOfficialAccountAppId,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="x">    'description' =&gt; $description,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="x">    'notify_url' =&gt; $notifyUrl,</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="x">    'amount' =&gt; [</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="x">        'total' =&gt; $amountInCents,</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="x">        'currency' =&gt; 'CNY',</span>
 <a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="x">    ],</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="x">    &#39;payer&#39; =&gt; [</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="x">        &#39;openid&#39; =&gt; $openid,</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="x">    'payer' =&gt; [</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="x">        'openid' =&gt; $openid,</span>
 <a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="x">    ],</span>
 <a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="x">]);</span>
 <a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
 <a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="x">$result = $response-&gt;toArray(false);</span>
 </code></pre></div>
 <h3 id="33-native-order">3.3 Native Order<a class="headerlink" href="#33-native-order" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson(&#39;v3/pay/transactions/native&#39;, [</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">    &#39;mchid&#39; =&gt; (string) $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="x">    &#39;out_trade_no&#39; =&gt; $outTradeNo,</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="x">    &#39;appid&#39; =&gt; $appId,</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="x">    &#39;description&#39; =&gt; $description,</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="x">    &#39;notify_url&#39; =&gt; $notifyUrl,</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="x">    &#39;amount&#39; =&gt; [</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="x">        &#39;total&#39; =&gt; $amountInCents,</span>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="x">        &#39;currency&#39; =&gt; &#39;CNY&#39;,</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson('v3/pay/transactions/native', [</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">    'mchid' =&gt; (string) $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="x">    'out_trade_no' =&gt; $outTradeNo,</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="x">    'appid' =&gt; $appId,</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="x">    'description' =&gt; $description,</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="x">    'notify_url' =&gt; $notifyUrl,</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="x">    'amount' =&gt; [</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="x">        'total' =&gt; $amountInCents,</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="x">        'currency' =&gt; 'CNY',</span>
 <a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="x">    ],</span>
 <a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="x">]);</span>
 <a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>
@@ -2418,23 +2446,23 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 </code></pre></div>
 <h3 id="34-query-order">3.4 Query Order<a class="headerlink" href="#34-query-order" title="Permanent link">&para;</a></h3>
 <p>By merchant order number:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;get(&quot;v3/pay/transactions/out-trade-no/{$outTradeNo}&quot;, [</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="x">    &#39;query&#39; =&gt; [</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">        &#39;mchid&#39; =&gt; $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;get("v3/pay/transactions/out-trade-no/{$outTradeNo}", [</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="x">    'query' =&gt; [</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="x">        'mchid' =&gt; $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="x">    ],</span>
 <a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="x">]);</span>
 <a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
 <a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="x">$order = $response-&gt;toArray();</span>
 </code></pre></div>
 <p>By WeChat transaction id:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;get(&quot;v3/pay/transactions/id/{$transactionId}&quot;, [</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">    &#39;query&#39; =&gt; [</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="x">        &#39;mchid&#39; =&gt; $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;get("v3/pay/transactions/id/{$transactionId}", [</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">    'query' =&gt; [</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="x">        'mchid' =&gt; $app-&gt;getMerchant()-&gt;getMerchantId(),</span>
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="x">    ],</span>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="x">]);</span>
 </code></pre></div>
 <h3 id="35-validate-api-response-signature">3.5 Validate API Response Signature<a class="headerlink" href="#35-validate-api-response-signature" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson(&#39;v3/pay/transactions/jsapi&#39;, [...]);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">$response = $app-&gt;getClient()-&gt;postJson('v3/pay/transactions/jsapi', [...]);</span>
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
 <a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="x">try {</span>
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="x">    $app-&gt;getValidator()-&gt;validate($response-&gt;toPsrResponse());</span>
@@ -2449,7 +2477,7 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="x">$server-&gt;handlePaid(function ($message, \Closure $next) use ($app) {</span>
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="x">    // $message-&gt;out_trade_no: merchant order no</span>
 <a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="x">    // $message-&gt;transaction_id: WeChat transaction id</span>
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="x">    // $message-&gt;payer[&#39;openid&#39;]: payer openid</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="x">    // $message-&gt;payer['openid']: payer openid</span>
 <a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
 <a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="x">    $app-&gt;getValidator()-&gt;validate($app-&gt;getRequest());</span>
 <a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
@@ -2462,7 +2490,7 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 <a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="x">return $server-&gt;serve();</span>
 </code></pre></div>
 <p>Default successful response is similar to:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="x">[&#39;code&#39; =&gt; &#39;SUCCESS&#39;, &#39;message&#39; =&gt; &#39;成功&#39;]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="x">['code' =&gt; 'SUCCESS', 'message' =&gt; '成功']</span>
 </code></pre></div>
 <p>Important notes:</p>
 <ul>
@@ -2496,26 +2524,26 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 <p>EasyWeChat Pay utils can generate frontend payment configs from <code>prepay_id</code>.</p>
 <h3 id="41-weixinjsbridge">4.1 WeixinJSBridge<a class="headerlink" href="#41-weixinjsbridge" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">$utils = $app-&gt;getUtils();</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">$config = $utils-&gt;buildBridgeConfig($prepayId, $appId, &#39;RSA&#39;);</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="x">$config = $utils-&gt;buildBridgeConfig($prepayId, $appId, 'RSA');</span>
 </code></pre></div>
 <p>Frontend:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nx">WeixinJSBridge</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="s1">&#39;getBrandWCPayRequest&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nx">WeixinJSBridge</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="s1">'getBrandWCPayRequest'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nx">timeStamp</span><span class="o">:</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">timeStamp</span><span class="p">,</span>
 <a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nx">nonceStr</span><span class="o">:</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">nonceStr</span><span class="p">,</span>
 <a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="kr">package</span><span class="o">:</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="kr">package</span><span class="p">,</span>
 <a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">  </span><span class="nx">signType</span><span class="o">:</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">signType</span><span class="p">,</span>
 <a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">  </span><span class="nx">paySign</span><span class="o">:</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">paySign</span>
 <a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="p">},</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">err_msg</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;get_brand_wcpay_request:ok&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">err_msg</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'get_brand_wcpay_request:ok'</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">    </span><span class="c1">// User-side success callback; still rely on server notify/query for final state.</span>
 <a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="p">});</span>
 </code></pre></div>
 <h3 id="42-jssdk-wxchoosewxpay">4.2 JSSDK <code>wx.chooseWXPay</code><a class="headerlink" href="#42-jssdk-wxchoosewxpay" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="x">$config = $utils-&gt;buildSdkConfig($prepayId, $appId, &#39;RSA&#39;);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="x">$config = $utils-&gt;buildSdkConfig($prepayId, $appId, 'RSA');</span>
 </code></pre></div>
 <h3 id="43-mini-program-wxrequestpayment">4.3 Mini Program <code>wx.requestPayment</code><a class="headerlink" href="#43-mini-program-wxrequestpayment" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">$config = $utils-&gt;buildMiniAppConfig($prepayId, $miniAppId, &#39;RSA&#39;);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">$config = $utils-&gt;buildMiniAppConfig($prepayId, $miniAppId, 'RSA');</span>
 </code></pre></div>
 <p>Frontend:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nx">wx</span><span class="p">.</span><span class="nx">requestPayment</span><span class="p">({</span>
@@ -2540,11 +2568,11 @@ Focus: Mini Program, login/openid, and WeChat Pay APIs.</p>
 </code></pre></div>
 <p>When sending requests that require serial headers:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="x">$response = $app-&gt;getClient()</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="x">    -&gt;withSerialHeader(&#39;PUB_KEY_ID_123456&#39;)</span>
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="x">    -&gt;postJson(&#39;v3/applyment4sub/applyment/&#39;, [</span>
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="x">        &#39;business_code&#39; =&gt; &#39;12345678&#39;,</span>
-<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="x">        &#39;contact_info&#39; =&gt; [</span>
-<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="x">            &#39;contact_name&#39; =&gt; $utils-&gt;encryptWithRsaPublicKey(&#39;张三&#39;, &#39;PUB_KEY_ID_123456&#39;),</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="x">    -&gt;withSerialHeader('PUB_KEY_ID_123456')</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="x">    -&gt;postJson('v3/applyment4sub/applyment/', [</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="x">        'business_code' =&gt; '12345678',</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="x">        'contact_info' =&gt; [</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="x">            'contact_name' =&gt; $utils-&gt;encryptWithRsaPublicKey('张三', 'PUB_KEY_ID_123456'),</span>
 <a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="x">        ],</span>
 <a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="x">    ]);</span>
 </code></pre></div>

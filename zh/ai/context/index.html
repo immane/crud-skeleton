@@ -854,6 +854,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1240,7 +1268,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1296,7 +1324,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1352,7 +1380,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -3255,7 +3283,7 @@
 - Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (commercial orders), <strong>Store</strong> (multi-store operations), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Inventory</strong> (stock &amp; reservation), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
-- MkDocs Material + GitHub Pages documentation
+- MkDocs Material + GitHub Pages documentation (<strong>mermaid diagram rendering enabled</strong> via CDN + <code>pymdownx.superfences</code> custom fence)
 - <strong>i18n</strong>: Symfony Translation with en, zh, zh_Hant, ja — all user-facing messages, entity/field names, and status values translated
 - <strong>Wallet ledger</strong>: voucher-backed single-sided deposits/withdrawals (<code>wallet_voucher</code> boundary ledger) with provider-owned voucher-type permissions; <strong>Exchange</strong> bundle design (pool-backed points economy) at <code>docs/design/bundles/exchange.md</code></p>
 <h2 id="2-directory-structure">2. Directory Structure<a class="headerlink" href="#2-directory-structure" title="Permanent link">&para;</a></h2>
@@ -3312,9 +3340,9 @@
 <a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator(&#39;payment.adjustment_provider&#39;)] registry
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator('payment.adjustment_provider')] registry
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator(&#39;payment.gateway&#39;)] registry
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator('payment.gateway')] registry
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/App/ + Manage/ + Webhook/
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│       # Current Trade result propagation is synchronous Invoice domain events.
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│       # Planned phase 1: Payment Outbox -&gt; Trade Inbox; Payment Inbox is deferred.
@@ -3910,7 +3938,7 @@
     invoice --&gt; payer["payer (User, nullable)"]</code></pre>
 <h3 id="82-paymentgatewayinterface-gateway-registry-pattern">8.2 PaymentGatewayInterface — Gateway Registry Pattern<a class="headerlink" href="#82-paymentgatewayinterface-gateway-registry-pattern" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">interface PaymentGatewayInterface {</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    static getName(): string;           // e.g. &#39;wallet&#39;, &#39;wechat&#39;, &#39;mock&#39;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">    static getName(): string;           // e.g. 'wallet', 'wechat', 'mock'</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">    pay(Invoice, int $amount, array $options): PaymentResult;</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="x">    notify(Request $request): PaymentNotifyResult;</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="x">    refund(Invoice, int $amount, int $paidAmount, string $reason, array $options): PaymentRefundResult;</span>
@@ -4876,7 +4904,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tr>
 <tr>
 <td><code>mkdocs.yml</code></td>
-<td>MkDocs Material site config</td>
+<td>MkDocs Material site config (mermaid rendering: <code>pymdownx.superfences</code> custom fence + mermaid@11 CDN + <code>javascripts/mermaid-init.js</code>)</td>
 </tr>
 <tr>
 <td><code>scripts/tests/simulate-trade.php</code></td>
@@ -4993,7 +5021,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <h3 id="192-development-zero-config">19.2 Development (zero-config)<a class="headerlink" href="#192-development-zero-config" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">&#39;P@ssw0rd&#39;</span><span class="w"> </span>--admin
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">'P@ssw0rd'</span><span class="w"> </span>--admin
 </code></pre></div>
 <ul>
 <li><code>compose.override.yaml</code> auto-loads — sets <code>APP_ENV=dev</code>, <code>APP_DEBUG=1</code>, source mount</li>

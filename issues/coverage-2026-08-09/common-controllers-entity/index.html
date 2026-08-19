@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1763,8 +1791,8 @@
 <li><strong>Description:</strong> Every other setter in the file (<code>setBody()</code> line 77-83, <code>setCategory()</code> line 90-95) calls <code>$this-&gt;touch()</code> on mutation, and <strong>every</strong> setter in the sibling Common entities — <code>Category</code>, <code>Comment</code>, <code>Page</code>, <code>Setting</code>, <code>Tag</code>, <code>Media</code>, <code>Picture</code> — follows the same "touch on every mutation" convention. <code>Content::setTitle()</code> is the only setter in the module that mutates a field <strong>without</strong> touching, and the tag-collection mutators don't either.</li>
 <li><strong>Impact:</strong> A title-only edit (e.g. <code>PUT /api/v1/manage/contents/{id}</code> with only <code>title</code>, or <code>$content-&gt;setTitle(...)</code> in code) leaves <code>updatedAt</code> unchanged, so API consumers/DBs that rely on <code>updatedAt</code> to detect changes miss the mutation. <code>updatedAt</code> is therefore not a reliable change indicator for <code>Content</code>, unlike every other entity in the module. (The existing <code>ContentTest::testSettersAreFluentAndTouchUpdatesTimestamp</code> masks this by chaining <code>setTitle(...)-&gt;setBody(...)</code>, so the touch is attributed to <code>setBody</code>.)</li>
 <li><strong>Reproduction:</strong>
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">$content = new Content(&#39;before&#39;);</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">$content-&gt;setTitle(&#39;after&#39;);</span>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="x">$content = new Content('before');</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="x">$content-&gt;setTitle('after');</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="x">var_dump($content-&gt;getUpdatedAt()); // null — bug: setBody() would set a DateTimeImmutable</span>
 </code></pre></div></li>
 <li><strong>Correct-behaviour test:</strong> <code>App\Tests\Common\Entity\ContentEntityCoverageTest::testSetTitleTouchesUpdatedAt</code> and <code>::testAddTagTouchesUpdatedAt</code> assert <code>updatedAt</code> is set after <code>setTitle</code>/<code>addTag</code>; they <strong>fail</strong> against the current code and are therefore <strong>skipped</strong>.</li>

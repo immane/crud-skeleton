@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1734,7 +1762,7 @@
 <li><code>InventoryMessagingAndApiTest</code>（全部 11 个）：管理 API 身份验证/验证、请求/发布
   消息幂等性、发件箱发布者成功/不支持/传输失败/映射、格式错误
   信封拒绝、释放关联完整性、收件箱事件 ID 有效负载完整性。</li>
-<li><code>InventoryReservationRequestedHandlerTest</code> 和 <code>InventoryReservationReleaseRequestedHandlerTest</code>
+<li><code>InventoryReservationRequestedHandlerTest</code>和<code>InventoryReservationReleaseRequestedHandlerTest</code>
   （所有验证+幂等跳过测试）：信封合约和至少一次幂等性是
   该模块的核心消息传递保证。</li>
 <li><code>InventoryReservationReleaseRequestedHandlerIntegrationTest::testReleaseMessageIsIdempotentForSameEventId</code>
@@ -1813,7 +1841,7 @@
 <td><code>Integration/InventoryServiceCoverageTest::testReserveRejectsInactiveRecipeMaterial</code></td>
 <td>B2 DUPLICATE — 相同的持久结果（<code>status='rejected'</code>、<code>rejectionCode='MATERIAL_INACTIVE'</code>）</td>
 <td>中</td>
-<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>（通过处理程序进行相同的两个断言）- 保留一层（参见注释）</td>
+<td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code> （通过处理程序进行相同的两个断言）— 保留一层（参见注释）</td>
 </tr>
 <tr>
 <td><code>MessageHandler/InventoryReservationRequestedHandlerIntegrationTest::testRecipeResolutionFailureRejectsReservation</code>、<code>::testMissingSpecificationRejectsReservation</code></td>
@@ -1823,7 +1851,7 @@
 </tr>
 <tr>
 <td><code>MessageHandler/InventoryReservationReleaseRequestedHandlerIntegrationTest::testReleaseForUnknownReservationThrows</code></td>
-<td>B2 DUPLICATE — 未知的预订释放失败</td>
+<td>B2 DUPLICATE — 未知预订释放失败</td>
 <td>中</td>
 <td><code>Integration/InventoryServiceTest::testUnknownReservationAndStockViewsFailExplicitly</code>（释放未知id会抛出<code>InvalidArgumentException</code>）；文件中的其他两个测试已经涵盖了用于发布的处理程序接线</td>
 </tr>

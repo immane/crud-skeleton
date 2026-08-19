@@ -526,7 +526,7 @@
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 列名称
+        2.2 列名
       
     </span>
   </a>
@@ -1295,6 +1295,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../bundles/exchange/" class="md-nav__link">
         
   
@@ -1681,7 +1709,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1737,7 +1765,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1793,7 +1821,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2016,7 +2044,7 @@
   <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 列名称
+        2.2 列名
       
     </span>
   </a>
@@ -2435,7 +2463,7 @@
 </tbody>
 </table>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">#[ORM\Entity(repositoryClass: XxxRepository::class)]</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">#[ORM\Table(name: &#39;module_table_name&#39;)]</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">#[ORM\Table(name: 'module_table_name')]</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">#[ORM\HasLifecycleCallbacks]</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">class Xxx</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="x">{</span>
@@ -2489,7 +2517,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="22">2.2 列名称<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<h3 id="22">2.2 列名<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2826,7 +2854,7 @@
 <p>实体为本地 Doctrine 关系、连接和连接保留整数自动增量 <code>id</code>
 存储效率。 UUID 是一个独立的、稳定的身份，用于离开其实体的实体
 有界上下文。</p>
-<p>当实体属于以下任一情况时，它必须具有 UUID：</p>
+<p>当实体满足以下任一条件时，它必须具有 UUID：</p>
 <ul>
 <li>可通过公共 API、URL、Webhook 或第三方集成进行寻址。</li>
 <li>包含在跨模块或跨服务事件负载中。</li>
@@ -2843,7 +2871,7 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Event aggregateId, sourceId, correlationId: uuid
 </code></pre></div>
 <p>新的跨界实体使用规范的 UUID 字符串和整数 <code>id</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Column(type: &#39;string&#39;, length: 36, unique: true)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[ORM\Column(type: 'string', length: 36, unique: true)]</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">private string $uuid;</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">public function __construct() {</span>
@@ -2855,7 +2883,7 @@
 <h3 id="711-uuid">7.1.1 UUID 版本策略<a class="headerlink" href="#711-uuid" title="Permanent link">&para;</a></h3>
 <ul>
 <li>使用 UUID v4 的现有实体保留其当前标识符；迁移不得
-  仅仅为了版本统一而重写标识符。</li>
+  重写标识符仅仅是为了版本统一。</li>
 <li>一旦共享 UUID 实用程序支持，新的跨服务聚合应该使用 UUID v7
   它，因为时间排序提高了索引局部性。</li>
 <li>在 UUID v7 可用之前，UUID v4 对于新实体和事件是可接受的。</li>
@@ -2870,7 +2898,7 @@
 <p><strong>结果</strong>：所有查询必须过滤 <code>isDeleted = false</code> （通过控制器中的 <code>commonFilter()</code>）。</p>
 <h3 id="73">7.3 价值快照<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
 <p>当一个实体捕获另一个实体状态的时间点副本时：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">#[ORM\Column(type: 'json', nullable: true)]</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">private ?array $snapshot = null;</span>
 </code></pre></div>
 <p><strong>在创建时填充</strong>（在 <code>#[ORM\PrePersist]</code> 或服务方法中），从未更新。</p>
@@ -2883,17 +2911,17 @@
 <h3 id="75">7.5 多态关联<a class="headerlink" href="#75" title="Permanent link">&para;</a></h3>
 <p>对于引用不同实体类型的评论/反应：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[ORM\Column(length: 100)]</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., &#39;App\Common\Entity\Content&#39;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">private string $entityType;  // e.g., 'App\Common\Entity\Content'</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">#[ORM\Column]</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">private int $entityId;</span>
 </code></pre></div>
 <p><strong>无 FK 约束</strong>（在应用层解决）。</p>
 <h3 id="76-json">7.6 JSON 元数据/额外数据<a class="headerlink" href="#76-json" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="x">#[ORM\Column(type: 'json', nullable: true)]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="x">private ?array $metadata = null;</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">#[ORM\Column(type: &#39;json&#39;, nullable: true)]</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="x">#[ORM\Column(type: 'json', nullable: true)]</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="x">private ?array $extraData = null;</span>
 </code></pre></div>
 <p><strong>使用时间</strong>：不需要专用列的可扩展字段。</p>

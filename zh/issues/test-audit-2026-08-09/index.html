@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1595,62 +1623,62 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-must-never-be-deleted" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What must NEVER be deleted
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#coverage-gate-caution" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Coverage-gate caution
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#suggested-execution-order-for-later-deletion-work" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Suggested execution order for later deletion work
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-this-audit-ran" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How this audit ran
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#report-index" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Report index
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        绝对不能删除的内容
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        覆盖范围警告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        后续删除工作的建议执行顺序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这次审计是如何进行的
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        报告索引
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         建议的后续行动（超出本次审核的只读范围）
@@ -1855,39 +1883,39 @@
 </ol>
 <h2 id="_5">跨模块重复集群（被多个代理发现）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>UserApiIntegrationTest</code></strong> (Identity dir) re-tests Wallet (transfer negative/same-wallet/missing-fields) and Trade endpoints that have dedicated module tests — move-or-delete candidates (identity.md).</li>
-<li><strong><code>OrderWorkflowApiTest</code></strong> is the surviving owner of the Trade HTTP workflow contract; <code>TradeApiIntegrationTest</code>, <code>TradePaymentIntegrationTest::testAppOrderTransitionFailures</code>, <code>Manage/OrderControllerTest</code> duplicates all map onto it.</li>
-<li><strong><code>PaymentAdjustmentIntegrationTest</code> (4 of 5 tests)</strong> ≈ <code>PaymentAdjustmentMultiGatewayIntegrationTest</code> (payment.md).</li>
-<li><strong><code>OpenApiIntegrationTest</code></strong> ≈ <code>CoreOpenApiEnricherApiTest</code>; <strong><code>CoreDynamicQueryApiTest</code></strong> has 5 tests duplicated by <code>CoreExceptionInterceptorApiTest</code>/others (integration.md).</li>
-<li><strong><code>QiniuStorageTest</code></strong> missing-SDK/configuration tests ≈ <code>StorageServiceTest</code> same-throw tests (storage.md).</li>
-<li><strong><code>PublishOutboxCommandTest</code> (mock-only, Trade)</strong> ≈ real-DB <code>TradeOutboxMessageRepositoryTest</code> (trade-core.md).</li>
-<li><strong><code>OrderWorkflowStateMachineTest</code> Section-5 timestamp tests</strong> = verbatim duplicates of <code>OrderWorkflowListenerTest</code> (trade-core.md).</li>
+<li><strong><code>UserApiIntegrationTest</code></strong> (Identity dir) 重新测试钱包（转移负数/相同钱包/缺失字段）和具有专用模块测试的交易端点 - 移动或删除候选者 (identity.md)。</li>
+<li><strong><code>OrderWorkflowApiTest</code></strong> 是 Trade HTTP 工作流程合约的幸存所有者； <code>TradeApiIntegrationTest</code>、<code>TradePaymentIntegrationTest::testAppOrderTransitionFailures</code>、<code>Manage/OrderControllerTest</code> 将所有地图复制到其上。</li>
+<li><strong><code>PaymentAdjustmentIntegrationTest</code>（5 项测试中的 4 项）</strong> ≈ <code>PaymentAdjustmentMultiGatewayIntegrationTest</code> ( payment.md)。</li>
+<li><strong><code>OpenApiIntegrationTest</code></strong> ≈ <code>CoreOpenApiEnricherApiTest</code>； <strong><code>CoreDynamicQueryApiTest</code></strong> 有 5 个由 <code>CoreExceptionInterceptorApiTest</code>/others (integration.md) 重复的测试。</li>
+<li><strong><code>QiniuStorageTest</code></strong> 缺少 SDK/配置测试 ≈ <code>StorageServiceTest</code> 相同抛出测试 (storage.md)。</li>
+<li><strong><code>PublishOutboxCommandTest</code>（仅模拟，贸易）</strong> ≈ 真实数据库 <code>TradeOutboxMessageRepositoryTest</code> (trade-core.md)。</li>
+<li><strong><code>OrderWorkflowStateMachineTest</code> 第 5 节时间戳测试</strong> = <code>OrderWorkflowListenerTest</code> 的逐字重复 (trade-core.md)。</li>
 </ul>
-<h2 id="what-must-never-be-deleted">What must NEVER be deleted<a class="headerlink" href="#what-must-never-be-deleted" title="Permanent link">&para;</a></h2>
+<h2 id="_6">绝对不能删除的内容<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
-<li>All <strong>38 skipped tests</strong> — each documents a real <code>src/</code> bug (see coverage-2026-08-09 README); deleting them silently re-enables regressions.</li>
-<li><strong>Money-invariant tests</strong>: integer cents, idempotent deposit/transfer, optimistic locking, rollback, reconciliation (Wallet/Payment).</li>
-<li><strong>Auth/security tests</strong>: token rotation + reuse detection, JWt failure handling, owner/store/admin boundaries (Identity/Core/Store).</li>
-<li><strong>Outbox/inbox, ordering, tombstone, and concurrency tests</strong> (Store/Inventory/Trade) — the async contracts.</li>
-<li><strong>DSL lexer/parser/evaluator behavioral tests and the pricing pipeline integration</strong> (Promotion).</li>
-<li><strong>Unique-branch coverage</strong> where the flagged test is the <em>only</em> coverer of a src line (flagged in each report as "sole coverage" — verify against the coverage gate before deleting).</li>
+<li>所有 <strong>38 个跳过的测试</strong> — 每个测试都记录了一个真正的 <code>src/</code> bug（请参阅coverage-2026-08-09 README）；默默地删除它们会重新启用回归。</li>
+<li><strong>货币不变测试</strong>：整数美分、幂等存款/转账、乐观锁定、回滚、对账（钱包/支付）。</li>
+<li><strong>身份验证/安全测试</strong>：令牌轮换+重用检测、JWt 故障处理、所有者/商店/管理员边界（身份/核心/商店）。</li>
+<li><strong>发件箱/收件箱、排序、逻辑删除和并发测试</strong>（商店/库存/贸易）——异步合约。</li>
+<li><strong>DSL 词法分析器/解析器/评估器行为测试和定价管道集成</strong>（促销）。</li>
+<li><strong>唯一分支覆盖率</strong>，其中标记的测试是 src 行的 <em>唯一</em> 覆盖者（在每个报告中标记为“唯一覆盖率” - 在删除之前根据覆盖率门进行验证）。</li>
 </ul>
-<h2 id="coverage-gate-caution">Coverage-gate caution<a class="headerlink" href="#coverage-gate-caution" title="Permanent link">&para;</a></h2>
-<p>CI enforces <strong>90 % line coverage on <code>src/</code></strong> (currently ~99 %). Many coverage-chasing tests are the only exercisers of <strong>dead/defensive/unreachable branches</strong> (<code>BaseService</code> guards, <code>ExpressionDqlParser</code> unreachable EOL branches, <code>QiniuStorage</code> config throws, trivial entity constructors). Deleting them will not lower coverage <strong>only if</strong> the corresponding <code>src/</code> dead code is also removed — which is a <code>src/</code> change and therefore out of scope for this audit. Each report's Verification section states where this caveat applies (notably core-rest-utils, wechat, inventory, common).</p>
-<h2 id="suggested-execution-order-for-later-deletion-work">Suggested execution order for later deletion work<a class="headerlink" href="#suggested-execution-order-for-later-deletion-work" title="Permanent link">&para;</a></h2>
+<h2 id="_7">覆盖范围警告<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>CI 在 <code>src/</code><strong> 上强制执行 </strong>90% 的行覆盖率（目前约为 99%）。许多覆盖率追踪测试是<strong>死亡/防御性/无法访问的分支</strong>（<code>BaseService</code> 防护、<code>ExpressionDqlParser</code> 无法访问的 EOL 分支、<code>QiniuStorage</code> 配置抛出、琐碎的实体构造函数）的唯一练习者。删除它们不会降低覆盖率<strong>仅当</strong>相应的 <code>src/</code> 死代码也被删除时 - 这是一个 <code>src/</code> 更改，因此超出了本次审核的范围。每个报告的验证部分都会说明此警告适用的情况（特别是 core-rest-utils、wechat、inventory、common）。</p>
+<h2 id="_8">后续删除工作的建议执行顺序<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Round 1 (zero coverage risk):</strong> delete the exact-duplicate HTTP/integration clusters (TradeApiIntegrationTest duplicates, TradeRepositoryIntegrationTest, CommonModulesIntegrationTest, CoreListenerHttpIntegrationTest, Payment controller unit tests, duplicate regression twins). Re-run full suite + <code>--coverage-filter src/Trade</code> etc. → zero delta, suite green, ~10–15 s faster.</li>
-<li><strong>Round 2:</strong> delete trivial entity accessor/fluency/constant tests where a behavioral test still covers the line (per-module HIGH rows). Re-run per-module + full suite.</li>
-<li><strong>Round 3 (requires a <code>src/</code> PR):</strong> remove the documented dead branches in <code>src/</code> first, then delete the coverage-chasing tests that only fed those branches; keep 90 % gate green.</li>
-<li><strong>Round 4:</strong> apply the MERGE suggestions (table-driven refactors) to cut bootstrap count — biggest runtime win is consolidating kernel-bootstrapping integration classes.</li>
+<li><strong>第 1 轮（零覆盖风险）：</strong> 删除完全重复的 HTTP/集成集群（TradeApiIntegrationTest 重复项、TradeRepositoryIntegrationTest、CommonModulesIntegrationTest、CoreListenerHttpIntegrationTest、支付控制器单元测试、重复回归孪生）。重新运行完整套件 + <code>--coverage-filter src/Trade</code> 等 → 零增量，套件绿色，快约 10–15 秒。</li>
+<li><strong>第 2 轮：</strong> 删除琐碎的实体访问器/流畅性/常量测试，其中行为测试仍然覆盖该行（每个模块的高行）。重新运行每个模块+全套。</li>
+<li><strong>第 3 轮（需要 <code>src/</code> PR）：</strong> 首先删除 <code>src/</code> 中记录的死分支，然后删除仅提供这些分支的覆盖率追踪测试；保持 90% 的门绿色。</li>
+<li><strong>第 4 轮：</strong> 应用 MERGE 建议（表驱动的重构）来减少引导程序数量 - 最大的运行时胜利是整合内核引导集成类。</li>
 </ol>
-<h2 id="how-this-audit-ran">How this audit ran<a class="headerlink" href="#how-this-audit-ran" title="Permanent link">&para;</a></h2>
+<h2 id="_9">这次审计是如何进行的<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Baseline: full serial PHPUnit run with <code>--log-junit</code> → 2686 tests / 9264 assertions / 51.3 s; per-test and per-class timing extracted from the JUnit XML.</li>
-<li>14 sub-agents in parallel, one per module cluster, each instructed to (a) read the <code>docs/testing/</code> contract, (b) read every test file in scope, (c) classify every test as KEEP / DELETE-candidate (reason 1–5) / MERGE, (d) cite the exact covering test for every HIGH-confidence duplicate, (e) write exactly one report, and (f) <strong>never modify <code>src/</code> or <code>tests/</code></strong>.</li>
-<li>All 14 reports written under <code>docs/issues/test-audit-2026-08-09/</code>; the suite was NOT re-run after (nothing changed).</li>
+<li>基线：使用 <code>--log-junit</code> 运行完整串行 PHPUnit → 2686 次测试 / 9264 次断言 / 51.3 秒；从 JUnit XML 中提取的每个测试和每个类的计时。</li>
+<li>并行 14 个子代理，每个模块集群一个，每个指示 (a) 读取 <code>docs/testing/</code> 合约，(b) 读取范围内的每个测试文件，(c) 将每个测试分类为保留/删除候选（原因 1-5）/合并，(d) 为每个高置信度重复引用准确的覆盖测试，(e) 编写一份报告，以及 (f) <strong>永远不要修改 <code>src/</code> 或<code>tests/</code></strong>。</li>
+<li>所有 14 份报告均按照 <code>docs/issues/test-audit-2026-08-09/</code> 撰写；该套件之后没有重新运行（没有任何改变）。</li>
 </ul>
-<h2 id="report-index">Report index<a class="headerlink" href="#report-index" title="Permanent link">&para;</a></h2>
+<h2 id="_10">报告索引<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1940,12 +1968,12 @@
 <tr>
 <td><code>payment.md</code></td>
 <td>付款</td>
-<td>约 30 个候选者：HTTP 层的控制器单元测试 dup、MockGateway/Registry dup、调整集成 dup</td>
+<td>约 30 个候选人：HTTP 层的控制器单元测试 dup、MockGateway/Registry dup、调整集成 dup</td>
 </tr>
 <tr>
 <td><code>wechat.md</code></td>
 <td>微信</td>
-<td>18 名候选人（11 名高）：LoginController 空体重复、通过集成的网关重复、琐碎实体/常量</td>
+<td>18 名候选者（11 名高）：LoginController 空体重复、通过集成的网关重复、琐碎实体/常量</td>
 </tr>
 <tr>
 <td><code>store.md</code></td>
@@ -1969,7 +1997,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_6">建议的后续行动（超出本次审核的只读范围）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_11">建议的后续行动（超出本次审核的只读范围）<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <ol>
 <li>在单独的 PR 中执行上述第 1-4 轮，保持 90% 覆盖率门为绿色。</li>
 <li>确认 <code>RedisOtpStorageTest</code> 1.1 s 测试：如果它在 TTL 睡眠下执行真正的 Redis 往返，则替换为注入时钟以缩短套件时间。</li>

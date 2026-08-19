@@ -27,7 +27,7 @@
     
     
       
-        <title>推广模块测试审核(2026-08-09) - CRUD Skeleton</title>
+        <title>Promotion module test audit (2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2026-08-09" class="md-skip">
+        <a href="#promotion-module-test-audit-2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              推广模块测试审核(2026-08-09)
+              Promotion module test audit (2026-08-09)
             
           </span>
         </div>
@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1534,10 +1562,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#summary-file-tests-verdict" class="md-nav__link">
     <span class="md-ellipsis">
       
-        摘要 — 文件 |测试 |判决
+        Summary — File | Tests | Verdict
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP
       
     </span>
   </a>
@@ -1556,7 +1595,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         合并建议
@@ -1567,7 +1606,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -1597,163 +1636,163 @@
   
 
 
-<h1 id="2026-08-09">推广模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
-<p>范围：<code>tests/Promotion/</code>下的每个测试（27个文件，360个测试）。此审核识别出未添加可观察行为保护且适合稍后删除的测试。它是<strong>只读</strong> — 没有修改 <code>src/</code> 或 <code>tests/</code> 文件。</p>
-<p>分类要点：
-1. 覆盖范围追逐——琐碎/同义反复的断言
-2.重复——其他地方涵盖的相同行为（引用的命名测试）
-3. 实现细节——断言内部结构，而不是公共/持久合约
-4. 冗余回归——测试更广泛的测试已经保护的固定回归
-5. 几乎空了</p>
-<p>依赖的上下文：<code>TEST_STRATEGY.md</code>（单位 = 确定性域决策；每个行为一个主要层；没有控制器测试只是为了提高覆盖率）、<code>TEST_MATRIX.md</code>、<code>BUSINESS_INVARIANTS.md</code> 和 <code>docs/issues/coverage-2026-08-09/</code>（添加了 <code>*CoverageTest</code> / <code>ParserBugReproTest</code> 文件的 2026 年 8 月 09 日覆盖率活动）。</p>
-<h2 id="_1">摘要 — 文件 |测试 |判决<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h1 id="promotion-module-test-audit-2026-08-09">Promotion module test audit (2026-08-09)<a class="headerlink" href="#promotion-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
+<p>Scope: every test under <code>tests/Promotion/</code> (27 files, 360 tests). This audit identifies tests that add no observable-behavior protection and are candidates for later deletion. It is <strong>read-only</strong> — no <code>src/</code> or <code>tests/</code> file was modified.</p>
+<p>Classification keys:
+1. COVERAGE-CHASING — trivial / tautological assertions
+2. DUPLICATE — same behavior covered elsewhere (naming test cited)
+3. IMPLEMENTATION-DETAIL — asserts internals, not a public/persisted contract
+4. REDUNDANT-REGRESSION — tests a fixed regression that a broader test already guards
+5. NEAR-EMPTY</p>
+<p>Context relied upon: <code>TEST_STRATEGY.md</code> (unit = deterministic domain decisions; one primary layer per behavior; no controller tests merely to raise coverage), <code>TEST_MATRIX.md</code>, <code>BUSINESS_INVARIANTS.md</code>, and <code>docs/issues/coverage-2026-08-09/</code> (the 2026-08-09 coverage campaign that added the <code>*CoverageTest</code> / <code>ParserBugReproTest</code> files).</p>
+<h2 id="summary-file-tests-verdict">Summary — File | Tests | Verdict<a class="headerlink" href="#summary-file-tests-verdict" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>测试</th>
-<th>判决</th>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>控制器/应用程序/PromotionControllerTest.php</td>
+<td>Controller/App/PromotionControllerTest.php</td>
 <td>8</td>
-<td>混合 — 4 名候选人，2 种真实行为保留</td>
+<td>MIXED — 4 candidates, 2 real behaviors keep</td>
 </tr>
 <tr>
-<td>控制器/管理/PromotionControllerTest.php</td>
+<td>Controller/Manage/PromotionControllerTest.php</td>
 <td>4</td>
-<td>MIXED — 反射/白名单； 2 名候选人</td>
+<td>MIXED — reflection/whitelist; 2 candidates</td>
 </tr>
 <tr>
-<td>控制器/管理/PromotionTemplateControllerTest.php</td>
+<td>Controller/Manage/PromotionTemplateControllerTest.php</td>
 <td>7</td>
-<td>KEEP — 验证/空运行操作测试是该模块唯一的类似 HTTP 的控制器覆盖范围</td>
+<td>KEEP — validate/dry-run action tests are the module's only HTTP-like controller coverage</td>
 </tr>
 <tr>
-<td>实体/PromotionTest.php</td>
+<td>Entity/PromotionTest.php</td>
 <td>14</td>
-<td>14保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
-<td>实体/PromotionTemplateTest.php</td>
+<td>Entity/PromotionTemplateTest.php</td>
 <td>14</td>
-<td>14保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
-<td>集成/促销定价PipelineIntegrationTest.php</td>
+<td>Integration/PromotionPricingPipelineIntegrationTest.php</td>
 <td>8</td>
-<td>KEEP（关键 - 管道 E2E、提升不变）</td>
+<td>KEEP (critical — pipeline E2E, promotion invariant)</td>
 </tr>
 <tr>
-<td>存储库/PromotionRepositoryTest.php</td>
+<td>Repository/PromotionRepositoryTest.php</td>
 <td>6</td>
-<td>KEEP（学说映射）— 1 个简单的候选者</td>
+<td>KEEP (Doctrine mapping) — 1 trivial candidate</td>
 </tr>
 <tr>
-<td>存储库/PromotionTemplateRepositoryTest.php</td>
+<td>Repository/PromotionTemplateRepositoryTest.php</td>
 <td>2</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
-<td>服务/Dsl/EvaluatorCoverageTest.php</td>
+<td>Service/Dsl/EvaluatorCoverageTest.php</td>
 <td>7</td>
-<td>KEEP（user.* 路径解析是真实的，之前缺失的行为）— 2 个低价值候选者</td>
+<td>KEEP (user.* path resolution is real, previously-missing behavior) — 2 low-value candidates</td>
 </tr>
 <tr>
-<td>服务/Dsl/EvaluatorTest.php</td>
+<td>Service/Dsl/EvaluatorTest.php</td>
 <td>47</td>
-<td>47 KEEP（核心评估者行为）</td>
+<td>KEEP (core evaluator behavior)</td>
 </tr>
 <tr>
-<td>服务/Dsl/LexerTest.php</td>
+<td>Service/Dsl/LexerTest.php</td>
 <td>26</td>
-<td>26 KEEP（核心词法分析器行为）</td>
+<td>KEEP (core lexer behavior)</td>
 </tr>
 <tr>
-<td>服务/Dsl/ParserBugReproTest.php</td>
+<td>Service/Dsl/ParserBugReproTest.php</td>
 <td>11</td>
-<td>11保留（错误回归防护，包括跳过 3 个 - 每个活动，跳过的错误测试都保留）</td>
+<td>KEEP (bug regression guards incl. 3 skipped — per campaign, skipped bug tests are KEEP)</td>
 </tr>
 <tr>
-<td>服务/Dsl/ParserCoverageTest.php</td>
+<td>Service/Dsl/ParserCoverageTest.php</td>
 <td>27</td>
-<td>27混合 — 7 个候选者（6 个测试词法分析器无法访问的分支，1 个完全重复）</td>
+<td>MIXED — 7 candidates (6 test lexer-unreachable branches, 1 exact duplicate)</td>
 </tr>
 <tr>
-<td>服务/Dsl/ParserTest.php</td>
+<td>Service/Dsl/ParserTest.php</td>
 <td>52</td>
-<td>52 KEEP（核心解析器行为）</td>
+<td>KEEP (core parser behavior)</td>
 </tr>
 <tr>
-<td>服务/PromotionCalculatorCoverageTest.php</td>
+<td>Service/PromotionCalculatorCoverageTest.php</td>
 <td>3</td>
-<td>KEEP（独家+最佳价格冲突模式不在主测试中）</td>
+<td>KEEP (exclusive + best-price conflict modes not in main test)</td>
 </tr>
 <tr>
-<td>服务/PromotionCalculatorTest.php</td>
+<td>Service/PromotionCalculatorTest.php</td>
 <td>9</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
-<td>服务/PromotionServiceCoverageTest.php</td>
+<td>Service/PromotionServiceCoverageTest.php</td>
 <td>2</td>
-<td>混合 — 1 名候选人</td>
+<td>MIXED — 1 candidate</td>
 </tr>
 <tr>
-<td>服务/PromotionServiceTest.php</td>
+<td>Service/PromotionServiceTest.php</td>
 <td>34</td>
-<td>34混合 — 3 名候选人（1 名完全相同）</td>
+<td>MIXED — 3 candidates (1 exact duplicate)</td>
 </tr>
 <tr>
-<td>服务/PromotionTemplateServiceCoverageTest.php</td>
+<td>Service/PromotionTemplateServiceCoverageTest.php</td>
 <td>4</td>
-<td>KEEP（类型/相位不匹配拒绝 - 真实验证，不在主要测试中）</td>
+<td>KEEP (type/phase mismatch rejection — real validation, absent from main test)</td>
 </tr>
 <tr>
-<td>服务/PromotionTemplateServiceTest.php</td>
+<td>Service/PromotionTemplateServiceTest.php</td>
 <td>23</td>
-<td>23混合 — 1 名候选人 + 合并机会</td>
+<td>MIXED — 1 candidate + merge opportunities</td>
 </tr>
 <tr>
-<td>策略/DiscountStrategyTest.php</td>
+<td>Strategy/DiscountStrategyTest.php</td>
 <td>10</td>
-<td>10保留 — 1 名重复候选人</td>
+<td>KEEP — 1 duplicate candidate</td>
 </tr>
 <tr>
-<td>策略/FreeShippingStrategyTest.php</td>
+<td>Strategy/FreeShippingStrategyTest.php</td>
 <td>3</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
-<td>策略/FullReductionStrategyTest.php</td>
+<td>Strategy/FullReductionStrategyTest.php</td>
 <td>9</td>
-<td>保留 — 2 名重复候选人</td>
+<td>KEEP — 2 duplicate candidates</td>
 </tr>
 <tr>
-<td>策略/GiftStrategyTest.php</td>
+<td>Strategy/GiftStrategyTest.php</td>
 <td>9</td>
-<td>保留 — 2 名重复候选人</td>
+<td>KEEP — 2 duplicate candidates</td>
 </tr>
 <tr>
-<td>策略/MemberDiscountStrategyTest.php</td>
+<td>Strategy/MemberDiscountStrategyTest.php</td>
 <td>8</td>
-<td>保留 — 1 名重复候选人</td>
+<td>KEEP — 1 duplicate candidate</td>
 </tr>
 <tr>
-<td>策略/NthItemDiscountStrategyTest.php</td>
+<td>Strategy/NthItemDiscountStrategyTest.php</td>
 <td>3</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
-<td>策略/TieredStrategyTest.php</td>
+<td>Strategy/TieredStrategyTest.php</td>
 <td>10</td>
-<td>10 KEEP — 2 个重复的候选者（在其他地方由表驱动）</td>
+<td>KEEP — 2 duplicate candidates (elsewhere table-driven)</td>
 </tr>
 </tbody>
 </table>
-<p>＃＃ 保持</p>
+<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>DSL 行为测试</strong> — <code>LexerTest</code>、<code>ParserTest</code>、<code>EvaluatorTest</code>、<code>ParserBugReproTest</code>。词法分析器/解析器/评估器是模块的核心规则引擎；这些测试固定令牌/语法/评估语义。 <code>ParserBugReproTest</code> 固定已知缺陷（分层类型不可解析、OR 块吸收、尾随点错误、未使用的 <code>desc</code>、多个 <code>when:</code>、缺少 <code>when:</code> 模拟不匹配）及其 3 个跳过的测试记录了预期行为 - 根据活动规则明确保留。</li>
 <li><strong>管道集成</strong> — <code>PromotionPricingPipelineIntegrationTest</code>（商店范围、全球营销活动、最优惠价格选择、多 SKU 堆叠、到期）是 BUSINESS_INVARIANTS“促销”行的证据。</li>
@@ -1963,7 +2002,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_2">合并建议<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_1">合并建议<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>TieredStrategyTest</strong> — 根据 TEST_STRATEGY 的“对于具有许多等效输入的规则，首选表驱动测试”，将六个重叠层案例转换为一个表驱动测试（全匹配/不匹配/部分匹配/来自-与-较少优先级/钳位/默认）。这将吸收第 18-19 行的候选者。</li>
 <li><strong>策略回退对</strong> — <code>DiscountStrategyTest::testApplyWithMissingConfigRate</code> + <code>testApplyWithNonNumericRateDefaultsToZeroRate</code> 和 <code>FullReductionStrategyTest::testApplyWithMissingConfigRef</code> + <code>testApplyWithNonNumericString</code> 是同一 <code>resolveValue()</code> 回退到 0 规则的表行；表驱动它们。</li>
@@ -1974,7 +2013,7 @@
 <li><strong>管理控制器白名单测试</strong> - <code>Manage/PromotionControllerTest</code> 和 <code>Manage/PromotionTemplateControllerTest</code> 的基于反射的属性断言在结构上重复。替换为断言白名单强制执行（字段接受/拒绝）的 HTTP 创建/更新集成测试，与 TEST_STRATEGY 的 API 层规则以及已存在的验证/空运行操作测试一致。</li>
 <li><strong>最佳价格覆盖范围</strong> - <code>PromotionCalculatorCoverageTest::testBestPricePromotionSkippedDuringStandardScan</code> / <code>::testBestPriceCandidateScanSkipsNonBestPricePromotions</code> 与 <code>PromotionPricingPipelineIntegrationTest</code> 中的管道级最佳价格场景重叠。今天保留两者（单元隔离与 E2E 证明），但如果认为集成套件足够，则可以将这两个单元测试一起删除。</li>
 </ol>
-<h2 id="_3">验证步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_2">验证步骤<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
 <li>确认模块套件大小并且在进行任何更改之前它是绿色的：
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Promotion</code>（预计 360 次测试）。</li>

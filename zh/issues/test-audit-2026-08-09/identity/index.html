@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1610,7 +1638,7 @@
 
 <h1 id="identity2026-08-09">Identity模块测试审核(2026-08-09)<a class="headerlink" href="#identity2026-08-09" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><code>tests/Identity/</code>的只读审核（33个文件，281个测试方法）
+<p>对<code>tests/Identity/</code>（33个文件，281个测试方法）的只读审计
 不必要/多余的测试。没有修改<code>src/</code>或<code>tests/</code>文件；这个
 报告是唯一的工件。分类方案：<strong>A = KEEP</strong>，
 <strong>B = 删除候选</strong>（1 个覆盖范围追踪、2 个重复、3 个
@@ -2190,7 +2218,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>关于 OtpController 对的注释（高）。</strong> <code>src/Identity/Controller/OtpController.php</code>
+<p><strong>关于 OtpController 对（高）的注意事项。</strong> <code>src/Identity/Controller/OtpController.php</code>
 是 <code>AuthController::requestOtp/verifyOtp</code> 的复制粘贴（相同的主体，
 <code>/api/auth/otp/request</code> + <code>/api/auth/otp/verify</code>）。 <code>debug:router</code> 寄存器
 两个控制器都用于相同的两条路径； <code>sys-auth-*</code> 路由排序在
@@ -2237,9 +2265,9 @@
   确认<code>sys-auth-*</code>路由仍然影子<code>sys-auth-otp-*</code>；如果路线顺序
   一旦发生变化，请在删除之前重新评估。</li>
 <li>对于钱包/交易跨模块候选人，运行
-  <code>--filter 'Wallet|Trade'</code> 确认所属套房通过，无需
+  <code>--filter 'Wallet|Trade'</code> 确认所属套房通行证无需
   身份文件副本。</li>
-<li>切勿删除跳过的 (<code>markTestSkipped</code>) 测试 - 每个测试都记录一个已知的错误
+<li>切勿删除跳过的 (<code>markTestSkipped</code>) 测试 - 每个测试都记录一个已知错误
   （错误 A、B、D、E、RedisOtpStorage 错误 #1）并且是 KEEP 基线的一部分。</li>
 <li>任何删除后，确认身份线覆盖预算
   <code>src/Identity/</code> 不会低于 90% 门限；删除的测试都是

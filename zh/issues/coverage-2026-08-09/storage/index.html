@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1582,7 +1610,7 @@
   <a href="#bug-2-localstoragedelete-e_warning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #2（次要） - LocalStorage::delete() 在取消链接失败时发出未抑制的 E_WARNING
+        Bug #2（次要）- LocalStorage::delete() 在取消链接失败时发出未抑制的 E_WARNING
       
     </span>
   </a>
@@ -1729,20 +1757,20 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="x">    $config = $this-&gt;config();</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="x">    $this-&gt;assertSdkInstalled();</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">    $domain = rtrim($config[&#39;domain&#39;], &#39;/&#39;);</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="x">    if (!str_starts_with($path, $domain . &#39;/&#39;)) {</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="x">    $domain = rtrim($config['domain'], '/');</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="x">    if (!str_starts_with($path, $domain . '/')) {</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="x">        return;</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="x">    }</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">    $key = ltrim(substr($path, strlen($domain)), &#39;/&#39;);</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="x">    if ($key === &#39;&#39;) {</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">    $key = ltrim(substr($path, strlen($domain)), '/');</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="x">    if ($key === '') {</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="x">        return;</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="x">    }</span>
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="x">    // ... existing auth + bucketManager-&gt;delete(...) logic</span>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="x">}</span>
 </code></pre></div></li>
 </ul>
-<h3 id="bug-2-localstoragedelete-e_warning">Bug #2（次要） - <code>LocalStorage::delete()</code> 在取消链接失败时发出未抑制的 E_WARNING<a class="headerlink" href="#bug-2-localstoragedelete-e_warning" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-localstoragedelete-e_warning">Bug #2（次要）- <code>LocalStorage::delete()</code> 在取消链接失败时发出未抑制的 E_WARNING<a class="headerlink" href="#bug-2-localstoragedelete-e_warning" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Storage/Service/LocalStorage.php:64</code> (<code>if (is_file($realPath) &amp;&amp; !unlink($realPath))</code>)。</li>
 <li><strong>描述：</strong> <code>unlink()</code> 在没有 <code>@</code> 或错误处理程序的情况下调用。当删除失败（例如，权限被拒绝）时，PHP 在第 65 行抛出预期的 <code>RuntimeException</code> 之前发出 <code>unlink(...): Permission denied</code>。</li>
@@ -1753,7 +1781,7 @@
 <h2 id="_4">观察结果（不是错误）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li>通过精心设计的 <code>$name</code> （例如 <code>../escape.txt</code>）进行的 <code>LocalStorage::store()</code> 路径遍历尝试被 Symfony 的 <code>File::getName()</code> 基本名称剥离所抵消 - 文件存储在目标目录中。经经验验证；不是一个错误。</li>
-<li><code>LocalStorage.php:39-41</code>仅用于防御：它只能通过<code>mkdir()</code>/<code>is_dir()</code>竞赛到达，这就是它在生产路径中被发现的原因。</li>
+<li><code>LocalStorage.php:39-41</code> 仅用于防御：它只能通过 <code>mkdir()</code>/<code>is_dir()</code> 竞赛到达，这就是它在生产路径中被发现的原因。</li>
 <li><code>MediaStorageRegistry</code>通过<code>getName()</code>键驱动；无提示名称冲突（两个驱动程序返回相同的名称）会无提示地覆盖前一个驱动程序。严重程度较低，可以说是设计使然。</li>
 <li><code>QiniuStorage::delete()</code> 还使用 <code>str_replace(..., $path)</code> ，它从字符串中的任何位置剥离域（不仅仅是前缀）；修复 Bug #1 将其替换为前缀检查并消除该问题。</li>
 </ul>

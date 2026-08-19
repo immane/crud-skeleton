@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1609,7 +1637,7 @@
 
 
 <h1 id="2026-08-09">存储模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
-<p><code>tests/Storage/</code>（<code>Service/</code>、<code>Command/</code>）的只读审计。没有 <code>src/</code> 或
+<p><code>tests/Storage/</code>（<code>Service/</code>、<code>Command/</code>）的只读审核。没有 <code>src/</code> 或
 <code>tests/</code> 文件已修改。跳过记录已知 <code>src/</code> 错误的测试是
 保留（QiniuStorageTest::testDeleteOfPathOutsideConfiguredDomainIsIgnored）。</p>
 <p>参考：<code>docs/issues/coverage-2026-08-09/storage.md</code>（错误#1、#2），
@@ -1796,9 +1824,9 @@
 </table>
 <h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
-<li>基线：<code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Storage</code>→预计 20 个测试，75 个断言，1 个跳过，退出 0。</li>
+<li>基线：<code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Storage</code> → 预计 20 次测试，75 次断言，跳过 1 次，退出 0。</li>
 <li>应用 4 次删除 + 1 次合并后：重新运行 <code>phpunit tests/Storage</code> → 预计 15 个测试（回退、跳过 bug 文档、删除未配置/sdk 测试），仍然退出 0。</li>
-<li>覆盖率健全性：<code>XDEBUG_MODE=coverage .../phpunit tests/Storage --coverage-html var/coverage</code> 并确认 <code>src/Storage/</code> 保持在 ~100% 行（删除的测试与保留的测试共享其覆盖行）。</li>
+<li>覆盖率健全性：<code>XDEBUG_MODE=coverage .../phpunit tests/Storage --coverage-html var/coverage</code> 并确认 <code>src/Storage/</code> 保持在 ~100% 行（删除的测试与保留的测试共享其覆盖的行）。</li>
 <li>确认保留的缺少 SDK/未配置的测试仍在 CI 上执行（未安装 SDK）： <code>StorageServiceTest::testQiniuRequiresSdkWhenConfigured</code> 和 <code>testQiniuRequiresConfiguration</code> 不得因类泄漏而跳过 — 串行运行整个套件，而不仅仅是 <code>tests/Storage</code>。</li>
 <li>脆弱性说明（不是冗余）：<code>LocalStorageCoverageTest::testDeleteThrowsWhenFileCannotBeUnlinked</code>依赖于<code>chmod 0555</code>阻塞<code>unlink()</code>；当 CI 以 root 身份运行时，它会失败。请密切关注它，但它是删除失败分支的唯一覆盖范围。</li>
 </ol>

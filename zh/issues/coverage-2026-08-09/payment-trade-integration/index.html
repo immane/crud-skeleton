@@ -850,6 +850,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/exchange/" class="md-nav__link">
         
   
@@ -1236,7 +1264,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -1292,7 +1320,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -1348,7 +1376,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -1701,7 +1729,7 @@
 <p><strong>日期：</strong> 2026-08-09
 <strong>工程师：</strong> PHP测试工程师（自动化）
 <strong>范围：</strong> 跨模块端到端测试（支付+交易+钱包）+错误发现
-<strong>约束：</strong> <code>src/</code> 下没有变化 - 仅测试 + 报告。</p>
+<strong>约束：</strong> <code>src/</code> 下没有变化 — 仅测试 + 报告。</p>
 <hr />
 <h2 id="1">1. 总结<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <p>添加了新的端到端集成测试文件，涵盖支付↔交易+钱包
@@ -1778,7 +1806,7 @@ bug：网关通知失败后无法重试付款）。</p>
 <td>5</td>
 <td><code>testInvoiceCancellationForPendingInvoiceKeepsOrderConfirmed</code></td>
 <td>4</td>
-<td>待处理发票已取消 → 订单保持 <code>confirmed</code>、<code>paymentStatus=cancelled</code>；取消保护 (<code>onInvoiceCancelled</code>) 已覆盖</td>
+<td>待处理的发票已取消 → 订单保持 <code>confirmed</code>、<code>paymentStatus=cancelled</code>；取消保护 (<code>onInvoiceCancelled</code>) 已覆盖</td>
 </tr>
 <tr>
 <td>6</td>
@@ -1918,7 +1946,7 @@ bug：网关通知失败后无法重试付款）。</p>
   <code>totalAmount</code>/<code>currency</code>（例如，为同一 <code>trade_order</code> 手动创建发票
   源数量错误），<code>onInvoicePaid</code> 记录 <code>critical</code> 行并返回。的
   发票为 <code>paid</code> 但订单从未进展；调用者不会看到任何错误。</li>
-<li><strong>影响：</strong> 无声分歧——资金被捕获，订单未支付，只有日志条目
+<li><strong>影响：</strong> 无声分歧 — 资金被捕获，订单未支付，只有日志条目
   表明问题所在。生产中很难检测到。</li>
 <li><strong>复制：</strong> <code>testInvoicePaidWithMismatchedAmountDoesNotAdvanceOrder</code> — 顺序
   已确认，手动发票（来源 <code>trade_order</code>，金额 999 ≠ 1500）通过模拟支付 →
@@ -1934,7 +1962,7 @@ bug：网关通知失败后无法重试付款）。</p>
   空闲时每约 2-8 秒改变一次；删除/创建运行发生碰撞）。这会产生间歇性
   其他情况下的 <code>no such table: users</code>、<code>database is locked</code> 和 <code>500</code> 响应
   正确的测试运行。项目说明文档重试次数最多3次；新套房
-  另外还包含一个<strong>弹性引导</strong>（<code>bootTestDatabase()</code>覆盖与
+  另外包含一个<strong>弹性引导程序</strong>（<code>bootTestDatabase()</code>覆盖与
   删除/创建重试 + 架构验证）和重新引导的 <strong>自我修复 <code>setUp</code></strong>
   如果模式消失了。环境稳定时套房呈绿色
   （<code>14 tests, 266 assertions</code>）。</li>

@@ -1,0 +1,6159 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/bundles/settlement/">
+      
+      
+        <link rel="prev" href="../wallet/">
+      
+      
+        <link rel="next" href="../exchange/">
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>结算（分配+最终确定） - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              结算（分配+最终确定）
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设计契约
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设计契约
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统架构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    控制器设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统契约
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命名约定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模块设计
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    模块设计
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core 框架
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (电商)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    商店（多商店运营）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment (支付)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet (钱包)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结算（分配+最终确定）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 目标和范围
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 目标和范围">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 明确的非目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 重要术语
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 确认的产品决策
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 所有权和依赖边界
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 所有权和依赖边界">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 所有权矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 核心依赖规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 仅稳定引用
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-settle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 为什么不重用旧版 Settle 模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 封装布局
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 资助合同
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 资助合同">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 资金不是发票
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-settlementfunding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 SettlementFunding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 集成事件架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 支付生产者
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 资金幂等性和冲突
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 源上下文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 源上下文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 目的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 主题和解析者合约
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 事实命名空间
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 上下文解析器规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 规则模型和表达能力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 规则模型和表达能力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 规则结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-rule-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Rule Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-eligibility-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Eligibility Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-formula-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Formula Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-recipient-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Recipient Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-advanced-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Advanced Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 精确资金和溢出安全
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 精确资金和溢出安全">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 硬性规则：无浮动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 所需的库
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 金额表示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 公式评估
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 转换为钱包过账单位
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 守恒不变量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 护栏
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 领域模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 领域模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 实体概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-settlementrule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 SettlementRule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-settlementruleversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 SettlementRuleVersion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-settlementplan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 SettlementPlan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-settlementallocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 SettlementAllocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-settlementreversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 SettlementReversal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-inbox-and-outbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 Inbox And Outbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-state-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. State Machines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. State Machines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-plan-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Plan State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-allocation-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Allocation State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-refund-finality-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Refund Finality State
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-wallet-voucher-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Wallet Voucher Boundary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Wallet Voucher Boundary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-settlement-owned-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Settlement-Owned Port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-wallet-adapter-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Wallet Adapter Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-voucher-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Voucher Semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-t0-tn-and-manual-posting-scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 T+0, T+N, And Manual Posting Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-wallet-is-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Wallet Is Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-reversal-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Reversal Semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#117-wallet-changes-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 Wallet Changes Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-payment-refund-lock-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Payment Refund Lock Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Payment Refund Lock Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-generic-payment-extension-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 Generic Payment Extension Point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-refund-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 Refund Rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-explicit-unlock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 Explicit Unlock
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-reliable-processing-and-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Reliable Processing And Idempotency
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Reliable Processing And Idempotency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-local-transaction-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Local Transaction Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-outbox-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Outbox Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-posting-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 Posting Handler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-failure-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 Failure Classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#135-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5 Concurrency
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-management-api-and-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Management API And Authorization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Management API And Authorization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141-api-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 API Principle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142-proposed-management-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 Proposed Management Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 读取安全性
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 可观察性、审计和对账
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 可观察性、审计和对账">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 所需的审计证据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 和解
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. 数据库迁移要求
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. 实施阶段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. 测试策略和强制不变量
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="18. 测试策略和强制不变量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#181" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.1 单元测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.2 集成测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.3 架构测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#184" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.4 端到端场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-remaining-configuration-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Remaining Configuration Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-implementation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Implementation Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交易所（矿池支持经济）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (鉴权)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    微信（登录+支付）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    调研
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    调研
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x 用法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    汇付支付 API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构回顾 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    生产验证概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    系统演练和测试接缝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    测试矩阵
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    业务不变量
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    失效模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    发布验证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    人工智能开发流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 快照
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 目标和范围
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 目标和范围">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 明确的非目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 重要术语
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 确认的产品决策
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 所有权和依赖边界
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 所有权和依赖边界">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 所有权矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 核心依赖规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 仅稳定引用
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-settle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 为什么不重用旧版 Settle 模块
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 封装布局
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 资助合同
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 资助合同">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 资金不是发票
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-settlementfunding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 SettlementFunding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 集成事件架构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 支付生产者
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 资金幂等性和冲突
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 源上下文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 源上下文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 目的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 主题和解析者合约
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 事实命名空间
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 上下文解析器规则
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 规则模型和表达能力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 规则模型和表达能力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 规则结构
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-rule-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Rule Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-eligibility-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Eligibility Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-formula-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Formula Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-recipient-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Recipient Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-advanced-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Advanced Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 精确资金和溢出安全
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 精确资金和溢出安全">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 硬性规则：无浮动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 所需的库
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 金额表示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 公式评估
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 转换为钱包过账单位
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 守恒不变量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 护栏
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 领域模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 领域模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 实体概述
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-settlementrule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 SettlementRule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-settlementruleversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 SettlementRuleVersion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-settlementplan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 SettlementPlan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-settlementallocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 SettlementAllocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-settlementreversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 SettlementReversal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-inbox-and-outbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 Inbox And Outbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-state-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. State Machines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. State Machines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-plan-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Plan State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-allocation-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Allocation State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-refund-finality-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Refund Finality State
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-wallet-voucher-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Wallet Voucher Boundary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Wallet Voucher Boundary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-settlement-owned-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Settlement-Owned Port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-wallet-adapter-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Wallet Adapter Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-voucher-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Voucher Semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-t0-tn-and-manual-posting-scheduling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 T+0, T+N, And Manual Posting Scheduling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-wallet-is-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Wallet Is Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-reversal-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Reversal Semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#117-wallet-changes-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.7 Wallet Changes Required
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-payment-refund-lock-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Payment Refund Lock Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Payment Refund Lock Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-generic-payment-extension-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 Generic Payment Extension Point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-refund-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 Refund Rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-explicit-unlock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 Explicit Unlock
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-reliable-processing-and-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Reliable Processing And Idempotency
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Reliable Processing And Idempotency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-local-transaction-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Local Transaction Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-outbox-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Outbox Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-posting-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 Posting Handler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-failure-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 Failure Classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#135-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5 Concurrency
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-management-api-and-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Management API And Authorization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Management API And Authorization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141-api-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 API Principle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142-proposed-management-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 Proposed Management Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 读取安全性
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 可观察性、审计和对账
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 可观察性、审计和对账">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 所需的审计证据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 和解
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. 数据库迁移要求
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. 实施阶段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. 测试策略和强制不变量
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="18. 测试策略和强制不变量">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#181" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.1 单元测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.2 集成测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.3 架构测试
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#184" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.4 端到端场景
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-remaining-configuration-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Remaining Configuration Decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-implementation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Implementation Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">结算捆绑设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>状态：仅设计，未实施。</strong></p>
+<p>结算是一个通用的分配和结算规划域。它
+接受已确认的资金事实，根据不可变的规则评估版本化规则
+源上下文，生成可审核的收件人分配，并请求预订
+通过主机提供的凭证端口。它有意独立于贸易
+订单、付款发票和电子钱包实体。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 目标和范围<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h3 id="11">1.1 目标<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<p>和解决定<strong>谁有权获得确认的金额、原因以及金额</strong>。
+它在登记任何余额之前记录持久计划，执行每个分配
+幂等地，并保留撤销该预订所需的确切引用。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>trusted funding source
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  -&gt; SettlementFundingConfirmed
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  -&gt; immutable source context
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  -&gt; versioned rules and recipient resolvers
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  -&gt; SettlementPlan + SettlementAllocation[]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  -&gt; voucher booking adapter
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  -&gt; recipient accounts
+</code></pre></div>
+<p>第一个主机集成将是已付款的付款发票。这只是一项资金
+制片人。结算核心不得需要发票、订单、订单项目、
+或任何存在的 Wallet 类。</p>
+<h3 id="12">1.2 范围<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<ul>
+<li>以稳定的标量引用为代表的通用、可信的资金来源。</li>
+<li>不可变的资金、背景、规则、接收者、计算和发布快照。</li>
+<li>一笔资金可以多次分配给不透明的接受者。</li>
+<li>可组合的资格规则和金额公式。</li>
+<li>通过受控插件可扩展的收件人解析。</li>
+<li>在固定的 18 位小数内部刻度上进行精确、任意精度的计算。</li>
+<li>确定性转换为目标帐户过帐规模，包括最大-
+  舍入灰尘的剩余分配。</li>
+<li><code>T+0</code>（默认）、延迟（<code>T+N</code>）和手动缺席/强制发布策略，所有
+  在资金离开结算边界之前在结算方安排。</li>
+<li>通过钱包实施的结算拥有的端口进行凭证支持的过账。一次
+  应用信用后，资金完全属于接收方，不再进行结算
+  与他们互动，除非冲销原始凭证。</li>
+<li>撤销原始过账凭证，绝不重新计算当前规则。</li>
+<li>SQL 发件箱、收件箱重复数据删除、业务幂等性、重试和审计跟踪。</li>
+<li>当任何预订的结算金额尚未撤销时，付款退款将被阻止。</li>
+<li>管理读取、模拟、批准、重试、发布授权和撤销命令。</li>
+</ul>
+<h3 id="13">1.3 明确的非目标<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<p>初始捆绑包不得：</p>
+<ul>
+<li>直接依赖于<code>App\Trade\Entity\Order</code>、<code>OrderItem</code>、<code>App\Payment\Entity\Invoice</code>、
+  <code>App\Wallet\Entity\Wallet</code>，或者他们的存储库。</li>
+<li>存储跨捆绑 Doctrine 关联或外键。</li>
+<li>将任何任意对象、HTTP 请求或管理员输入视为证明
+  资金存在。</li>
+<li>执行数据库存储的 PHP、Symfony ExpressionLanguage、容器查找或
+  任意对象属性路径作为结算规则。</li>
+<li>使用 <code>float</code>、本机整数算术、隐式舍入或小数
+  数据库类型作为财务计算的真实来源。</li>
+<li>创建第二个钱包分类账、替代支付网关、税务引擎或
+  应收账款/应付账款子系统。</li>
+<li>通过创建一个账户，迫使余额不足的收款人为逆转提供资金
+  钱包余额为负。未来应收账款/应付账款功能拥有回收功能。</li>
+<li>第一阶段进行外汇兑换。一项计划只有一种单位/货币。</li>
+<li>从旧版 <code>night-keeper</code> 实现导入历史数据。</li>
+</ul>
+<h3 id="14">1.4 重要术语<a class="headerlink" href="#14" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>资金</td>
+<td>由值得信赖的外部生产商提供的确认金额。</td>
+</tr>
+<tr>
+<td>来源</td>
+<td>产生融资事实的外部业务聚合。</td>
+</tr>
+<tr>
+<td>背景</td>
+<td>可用于和解规则的不可变的白名单事实。</td>
+</tr>
+<tr>
+<td>规则</td>
+<td>资格、收件人解析和公式的版本化声明性定义。</td>
+</tr>
+<tr>
+<td>计划</td>
+<td>确定资金金额及其计算分配的总额。</td>
+</tr>
+<tr>
+<td>分配</td>
+<td>一位收件人的授权金额及其独立的过帐生命周期。</td>
+</tr>
+<tr>
+<td>发布</td>
+<td>通过主机凭证边界预订分配。成功后</td>
+</tr>
+<tr>
+<td>信用证，该金额属于接收方，结算不会对其进行进一步管理。</td>
+<td></td>
+</tr>
+<tr>
+<td>可用性政策</td>
+<td>结算方安排何时过账。 <code>T+0</code>立即发帖；</td>
+</tr>
+<tr>
+<td><code>T+N</code>/manual 将发布命令推迟到将来的某个时间。它不是钱包 <code>held</code> 状态。</td>
+<td></td>
+</tr>
+<tr>
+<td>逆转</td>
+<td>冲销确切的原始凭证支持信用。这是唯一的互动</td>
+</tr>
+<tr>
+<td>结算按照已过账的金额进行。</td>
+<td></td>
+</tr>
+<tr>
+<td>确定性锁</td>
+<td>在发布任何分配后，对付款退款进行源级阻止。</td>
+</tr>
+<tr>
+<td>后备分配</td>
+<td>显式分配原本未分配的舍入或规则余数。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 确认的产品决策<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>以下决定是此设计的一部分，不得通过以下方式隐式更改：
+实施细节。</p>
+<table>
+<thead>
+<tr>
+<th>关注</th>
+<th>决定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初始触发</td>
+<td>资助方在资金确认后即可制定计划。付款支付的是第一生产者。</td>
+</tr>
+<tr>
+<td>来源范围</td>
+<td>任何受信任的来源类型都可以参与；发票和订单不是特殊的结算实体。</td>
+</tr>
+<tr>
+<td>计划币种</td>
+<td>一项计划有一种货币/单位。外汇延期。</td>
+</tr>
+<tr>
+<td>收件人身份</td>
+<td><code>RecipientReference(type, id)</code> 是不透明且可扩展的。</td>
+</tr>
+<tr>
+<td>收件人关系</td>
+<td>封闭接收者语法解析文字引用、冻结上下文候选或声明的事实。</td>
+</tr>
+<tr>
+<td>钱包丢失</td>
+<td>当策略允许时，钱包适配器会自动配置映射帐户。</td>
+</tr>
+<tr>
+<td>计算精度</td>
+<td>内部算术具有固定的 18 位小数位数。</td>
+</tr>
+<tr>
+<td>发帖精度</td>
+<td>目标科目定义最终过账规模。现有人民币钱包使用美分（规模 2）。</td>
+</tr>
+<tr>
+<td>四舍五入</td>
+<td>分配级别下限，然后是确定性最大余数分布。默认灰尘接收者为平台；规则可能会覆盖它。</td>
+</tr>
+<tr>
+<td>保护</td>
+<td>仅当 <code>unallocatedAmount == 0</code> 时计划才能完成。</td>
+</tr>
+<tr>
+<td>后备范围</td>
+<td>回退仅处理计算余数。失败的收件人过帐仍保留收件人的失败分配并重试。</td>
+</tr>
+<tr>
+<td>默认可用性</td>
+<td><code>T+0</code> 默认：结算立即过帐，并且收件人可以使用积分。</td>
+</tr>
+<tr>
+<td>延迟可用性</td>
+<td><code>T+N</code>/manual 是结算方发布时间表，而不是钱包可用性。一旦发放，资金完全属于收款人；结算不执行保留/释放。</td>
+</tr>
+<tr>
+<td>发布后退款</td>
+<td>首次成功分配过账后，付款退款将被锁定。</td>
+</tr>
+<tr>
+<td>退款解锁</td>
+<td>没有自动解锁。授权运营商必须完成所有已发布分配的撤销，然后明确解锁来源退款。</td>
+</tr>
+<tr>
+<td>逆转资金不足</td>
+<td>撤销仍悬而未决，退款仍被阻止。未来的 A/R-A/P 模块可能会协调恢复。</td>
+</tr>
+<tr>
+<td>规则治理</td>
+<td>发布的规则版本是不可变的；计划存储所使用的确切版本和跟踪。</td>
+</tr>
+<tr>
+<td>执行粒度</td>
+<td>分配独立发布。计划可以是<code>partially_posted</code>。</td>
+</tr>
+<tr>
+<td>遗留数据</td>
+<td>没有从 <code>night-keeper</code> 迁移。它只是产品参考输入。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3">3. 所有权和依赖边界<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="31">3.1 所有权矩阵<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>关注</th>
+<th>业主</th>
+<th>结算责任</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>外部收款/付款证明</td>
+<td>付款、银行、提供商、财务流程</td>
+<td>仅使用可信的资金事实。</td>
+</tr>
+<tr>
+<td>订单、商品、SKU、商店、员工关系</td>
+<td>贸易/商店/主机域</td>
+<td>仅通过端口接收规范化上下文。</td>
+</tr>
+<tr>
+<td>规则选择、计划、分配、状态</td>
+<td>结算</td>
+<td>权威性。</td>
+</tr>
+<tr>
+<td>收件人帐户映射和配置</td>
+<td>钱包适配器/账户主机</td>
+<td>解决不透明的收件人参考并创建帐户（如果允许）。</td>
+</tr>
+<tr>
+<td>钱包余额、优惠券、交易、可用性</td>
+<td>钱包</td>
+<td>权威性。应用积分后，钱包拥有可用性（包括任何不相关的 <code>held</code> 使用）。</td>
+</tr>
+<tr>
+<td>退款过渡</td>
+<td>付款或来源所有者</td>
+<td>询问通用最终性守卫；切勿直接检查结算表。</td>
+</tr>
+<tr>
+<td>未付冲销收款</td>
+<td>未来A/R-A/P模块</td>
+<td>超出结算范围。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32">3.2 核心依赖规则<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<p>Settlement 核心命名空间只能导入 Core 基础设施及其自己的类。
+它不得导入相邻的域名称空间：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>forbidden from src/Settlement core:
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  App\Trade\*
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  App\Payment\*
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  App\Wallet\*
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  App\Store\*
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  App\Identity\Entity\User
+</code></pre></div>
+<p>主机应用程序可以在拥有的相邻模块中提供适配器，例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>src/Payment/Integration/Settlement/PaymentFundingPublisher.php
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>src/Trade/Integration/Settlement/TradeSettlementContextResolver.php
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>src/Wallet/Integration/Settlement/WalletSettlementVoucherPort.php
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>src/Settlement/Integration/Payment/SettlementPaymentRefundGuard.php
+</code></pre></div>
+<p>最后一个适配器是集成外壳，而不是结算核心。它实现了一个
+支付拥有的扩展合约，调用结算拥有的应用接口。
+这可以防止循环实体或存储库依赖。</p>
+<h3 id="33">3.3 仅稳定引用<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<p>每个跨界字段都是标量字符串、UUID、代码或不可变快照。
+本地数字主键只能在一个模块内使用。</p>
+<table>
+<thead>
+<tr>
+<th>价值</th>
+<th>示例</th>
+<th>禁止更换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>资金来源</td>
+<td><code>payment_invoice:7b4...</code></td>
+<td><code>ManyToOne Invoice</code></td>
+</tr>
+<tr>
+<td>主题</td>
+<td><code>trade.order.v1:0ae...</code></td>
+<td><code>ManyToOne Order</code></td>
+</tr>
+<tr>
+<td>收件人</td>
+<td><code>store:3d1...</code></td>
+<td><code>ManyToOne Store</code></td>
+</tr>
+<tr>
+<td>优惠券收据</td>
+<td>不透明 <code>voucherReference</code></td>
+<td><code>ManyToOne Voucher</code></td>
+</tr>
+<tr>
+<td>事件关联</td>
+<td>UUID</td>
+<td>另一个模块的整数 ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-settle">3.4 为什么不重用旧版 Settle 模块<a class="headerlink" href="#34-settle" title="Permanent link">&para;</a></h3>
+<p><code>night-keeper</code> 展示了成熟的业务需求：多接收者计划、
+优先级规则、固定/比例金额、执行前生成和逆转。
+这里采用了这些概念。它的实现故意不被重用：</p>
+<ul>
+<li>它使<code>Settle</code>成为<code>OrderItem</code>的<code>OneToOne</code>扩展。</li>
+<li>它将接收者身份与用户/员工/商店 ORM 关系联系起来。</li>
+<li>它根据服务容器评估存储的表达式。</li>
+<li>它假设固定的<code>admin -&gt; store -&gt; beneficiary</code>钱包路线。</li>
+<li>它使用浮动算术并重新推导逆转交易对手。</li>
+<li>只有布尔结算状态，没有持久消息幂等性。</li>
+</ul>
+<p>解决方案在替换这些实现的同时保留了产品的表现力
+具有显式端口、快照、状态机、任意精度的选择，以及
+凭证参考。</p>
+<hr />
+<h2 id="4">4. 封装布局<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>确切的文件名可能在实现过程中发生变化，但依赖方向是
+契约性的。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>src/Settlement/
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>|-- Entity/
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>|   |-- SettlementPlan.php
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>|   |-- SettlementAllocation.php
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>|   |-- SettlementRule.php
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>|   |-- SettlementRuleVersion.php
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>|   |-- SettlementConsumedEvent.php
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>|   |-- SettlementOutboxMessage.php
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>|   |-- SettlementReversal.php
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>|-- Repository/
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>|   |-- SettlementPlanRepository.php
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>|   |-- SettlementAllocationRepository.php
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>|   |-- SettlementRuleRepository.php
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>|   |-- SettlementConsumedEventRepository.php
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>|   |-- SettlementOutboxMessageRepository.php
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>|-- Contract/
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>|   |-- SettlementFunding.php
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>|   |-- SettlementSubject.php
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>|   |-- SettlementContext.php
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>|   |-- RecipientReference.php
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>|   |-- AllocationProposal.php
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>|   |-- VoucherPostingReceipt.php
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>|-- Service/
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>|   |-- SettlementService.php
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>|   |-- SettlementServiceInterface.php
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>|   |-- SettlementRuleEngine.php
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>|   |-- SettlementRuleEngineInterface.php
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>|   |-- SettlementCalculator.php
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>|   |-- SettlementFinalityService.php
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>|   |-- SettlementOutboxService.php
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>|   |-- Money/
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>|   |   |-- QuantumAmount.php
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>|   |   |-- ExactAmount.php
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>|   |   |-- AllocationRoundingService.php
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>|   |   |-- RoundingPolicy.php
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>|-- Context/
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>|   |-- SettlementContextResolverInterface.php
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>|   |-- SettlementContextResolverRegistry.php
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a>|-- Port/
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a>|   |-- SettlementVoucherPort.php
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>|   |-- SettlementRefundLockPort.php
+<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a>|   |-- ClockInterface.php
+<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a>|-- Message/
+<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a>|   |-- SettlementFundingConfirmedMessage.php
+<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a>|   |-- SettlementAllocationPostingMessage.php
+<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a>|   |-- SettlementAllocationReleaseMessage.php
+<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a>|   |-- SettlementReversalRequestedMessage.php
+<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a>|-- MessageHandler/
+<a id="__codelineno-3-49" name="__codelineno-3-49" href="#__codelineno-3-49"></a>|-- Command/
+<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a>|-- Controller/
+<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a>|   |-- Manage/
+<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a>|-- Exception/
+<a id="__codelineno-3-53" name="__codelineno-3-53" href="#__codelineno-3-53"></a>|-- Resources/config/services_settlement.yaml
+</code></pre></div>
+<p>特定于源的适配器保留在该树之外。 <code>Settlement</code>核心拥有它的
+入站和出站端口接口；适配器由 DI 标签选择。</p>
+<hr />
+<h2 id="5">5. 资助合同<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<h3 id="51">5.1 资金不是发票<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
+<p>计划从<strong>已确认的资金事实</strong>开始。它不是从订单开始，
+订单项、发票、钱包交易或任意对象。</p>
+<p>实施后符合资格的生产者示例：</p>
+<table>
+<thead>
+<tr>
+<th>来源类型</th>
+<th>授权确认示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>payment.invoice.v1</code></td>
+<td>付款标记已付款的发票并写入发件箱事件。</td>
+</tr>
+<tr>
+<td><code>bank.transfer.v1</code></td>
+<td>银行余额调节表确认贷记转账。</td>
+</tr>
+<tr>
+<td><code>provider.payout.v1</code></td>
+<td>市场/提供商确认资金可用。</td>
+</tr>
+<tr>
+<td><code>finance.adjustment.v1</code></td>
+<td>审批控制的财务流程确认调整。</td>
+</tr>
+<tr>
+<td><code>campaign.subsidy.v1</code></td>
+<td>补贴预算流程预留并确认资金。</td>
+</tr>
+</tbody>
+</table>
+<p>不会仅仅因为经过身份验证的用户请求而接受任何来源。制片人
+必须是已注册的受信任适配器，并且必须发布稳定的幂等性密钥以及
+可审计的外部或内部参考。</p>
+<h3 id="52-settlementfunding">5.2 <code>SettlementFunding</code><a class="headerlink" href="#52-settlementfunding" title="Permanent link">&para;</a></h3>
+<p>内部 DTO 是不可变的并且仅包含标量数据：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">final readonly class SettlementFunding</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    /**</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">     * @param array&lt;string, scalar|list&lt;scalar&gt;|null&gt; $snapshot</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">     */</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">        public string $fundingId,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="x">        public string $sourceType,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="x">        public string $sourceId,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="x">        public string $confirmationReference,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="x">        public string $currency,</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">        public string $amountQuantum,</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="x">        public int $calculationScale,</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="x">        public \DateTimeImmutable $confirmedAt,</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="x">        public string $idempotencyKey,</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="x">        public ?string $correlationId,</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="x">        public ?string $causationId,</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="x">        public array $snapshot = [],</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="x">    ) {</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="x">    }</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="x">}</span>
+</code></pre></div>
+<p>规则：</p>
+<ul>
+<li><code>fundingId</code>是由生产者生成的或从稳定的结算中派生的结算UUID
+  生产者密钥。它不是本地数据库整数。</li>
+<li><code>amountQuantum</code> 是 <code>calculationScale</code> 处的规范的以 10 为基数的整数字符串。</li>
+<li><code>amountQuantum</code> 必须严格为正。</li>
+<li><code>calculationScale</code> 与第一阶段的 <code>18</code> 完全相同。</li>
+<li><code>currency</code> 是标准化大写字母，但可能是钱包帐户单位，例如
+  <code>CNY.ESCROW</code>；它不限于 ISO 代码。</li>
+<li><code>confirmationReference</code> 标识可用性证明，例如提供商
+  交易 ID、银行对账单行或批准的财务记录。</li>
+<li><code>snapshot</code> 是经过净化的、有限的，并且不包含原始网关签名、令牌或
+  结算审计不需要个人识别有效负载。</li>
+</ul>
+<h3 id="53">5.3 集成事件架构<a class="headerlink" href="#53" title="Permanent link">&para;</a></h3>
+<p>所有生产者都会发布版本化的可序列化事件。 Messenger 消息可能会包含此内容
+信封，但信封是持久的合同。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">"eventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c93e6077-b913-4a35-bb7c-ef4e3f795df5"</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settlement.funding.confirmed.v1"</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">"occurredAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-19T12:00:00+00:00"</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">"aggregateType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment_invoice"</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">"aggregateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a22d9d80-42b0-4c16-8fc7-d3084f68ad30"</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">"correlationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2a13084a-1f7e-4aac-b383-5484f270e2ec"</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">"causationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"provider-payment-reference"</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nt">"fundingId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0a5b2fb8-9f6a-47a7-8a64-c621a53cd9bb"</span><span class="p">,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment.invoice.v1"</span><span class="p">,</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a22d9d80-42b0-4c16-8fc7-d3084f68ad30"</span><span class="p">},</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="nt">"confirmationReference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wechat-transaction-id"</span><span class="p">,</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span><span class="p">,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nt">"amountQuantum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12800000000000000000000"</span><span class="p">,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="nt">"calculationScale"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nt">"confirmedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-08-19T12:00:00+00:00"</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="p">}</span>
+</code></pre></div>
+<p>该示例表示最终钱包发布之前的 <code>12800.000000000000000000 CNY</code>
+转换。生产者不得发出不同的金额/货币/上下文快照
+相同的企业资金身份。</p>
+<h3 id="54">5.4 支付生产者<a class="headerlink" href="#54" title="Permanent link">&para;</a></h3>
+<p>付款是第一个生产者，并且必须在结算之前获得耐用的发件箱
+在它上面。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Payment transaction:
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  invoice becomes paid
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  + payment outbox inserts payment.invoice.paid.v1
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>Payment publisher:
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  payment.invoice.paid.v1
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  -&gt; Settlement funding adapter
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  -&gt; settlement.funding.confirmed.v1 handling
+</code></pre></div>
+<p>付款事件是生产者特定的事件。一个小的支付适配器将其映射到
+<code>SettlementFunding</code>；结算不读取Invoice表或订阅
+携带 Invoice 实体的进程内 <code>InvoicePaidEvent</code>。</p>
+<p><code>grossAmount</code> 是资助基础，除非生产者明确定义了另一个
+可用金额。网关支付金额和钱包调整金额正在报告
+组件，而不是值 结算可以从 <code>extraData</code> 推断。</p>
+<h3 id="55">5.5 资金幂等性和冲突<a class="headerlink" href="#55" title="Permanent link">&para;</a></h3>
+<p>以下约束是强制性的：</p>
+<table>
+<thead>
+<tr>
+<th>关键</th>
+<th>约束</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>settlement_consumed_event.event_id</code></td>
+<td>独特</td>
+<td>运输重复防御。</td>
+</tr>
+<tr>
+<td><code>settlement_plan.funding_id</code></td>
+<td>独特</td>
+<td>第一阶段的每个资助事实都有一个计划。</td>
+</tr>
+<tr>
+<td><code>(source_type, source_id, funding_kind)</code></td>
+<td>独特</td>
+<td>业务重复防御。</td>
+</tr>
+<tr>
+<td><code>settlement_plan.funding_fingerprint</code></td>
+<td>不可变</td>
+<td>检测更改的重播。</td>
+</tr>
+</tbody>
+</table>
+<p>如果重复事件具有相同的不可变资金指纹，则处理是无操作的。
+如果在金额、货币、确认参考、来源或计算方面存在冲突
+规模，处理程序不得覆盖计划。它记录审核失败和路线
+根据运营政策重试/死信/手动审查的事件。</p>
+<hr />
+<h2 id="6">6. 源上下文<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h3 id="61">6.1 目的<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<p>资金证明金额存在。源上下文提供了做出决定所需的事实
+应该如何分配。和解永远不会遵循以下教义路径：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>orderItem.order.store.owner
+</code></pre></div>
+<p>相反，源模块将必要的事实投射到冻结的白名单中
+<code>SettlementContext</code>。</p>
+<h3 id="62">6.2 主题和解析者合约<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">final readonly class SettlementSubject</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="x">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">        public string $type,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="x">        public string $id,</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="x">        public string $version,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="x">    ) {</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="x">    }</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="x">}</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="x">interface SettlementContextResolverInterface</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="x">{</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="x">    public static function getName(): string;</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="x">    public function supports(SettlementSubject $subject): bool;</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="x">    public function resolve(</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="x">        SettlementFunding $funding,</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="x">        SettlementSubject $subject,</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="x">        \DateTimeImmutable $asOf,</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="x">    ): SettlementContext;</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="x">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="x">final readonly class SettlementContext</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="x">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="x">    /**</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="x">     * @param array&lt;string, scalar|list&lt;scalar&gt;|null&gt; $facts</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="x">     * @param array&lt;string, RecipientReference&gt; $recipientCandidates</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="x">     * @param list&lt;SettlementItemContext&gt; $items</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="x">     */</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="x">        public SettlementSubject $subject,</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="x">        public string $currency,</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="x">        public string $distributableAmountQuantum,</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="x">        public int $calculationScale,</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="x">        public array $facts,</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="x">        public array $recipientCandidates,</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="x">        public string $sourceSnapshotVersion,</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="x">        public \DateTimeImmutable $resolvedAt,</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="x">        public array $items = [],</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="x">    ) {</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="x">    }</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="x">}</span>
+</code></pre></div>
+<p>解析器在计划创建之前运行。其输出被序列化为规范 JSON 并
+使用 SHA-256 哈希值存储在计划中。计划创建后的规则评估仅使用
+存储的快照，从未读取实时源。</p>
+<h3 id="63">6.3 事实命名空间<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
+<p>事实是扁平的、明确命名的，并且由源上下文进行版本控制。他们不是一个
+通用属性访问语言。</p>
+<p>示例 <code>trade.order.v1</code> 事实：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">"order.uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">"order.status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">"order.storeUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">"order.completedAt"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">"order.customerUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">"line.count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="nt">"line.0.uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="nt">"line.0.quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">"line.0.netAmountQuantum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9200000000000000000000"</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="nt">"line.0.productCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-001"</span><span class="p">,</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">  </span><span class="nt">"line.1.uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">  </span><span class="nt">"line.1.quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span><span class="nt">"line.1.netAmountQuantum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3600000000000000000000"</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="p">}</span>
+</code></pre></div>
+<p>一份订单仍然是一项资金和一项计划。源适配器还可以提供
+冻结项目上下文； <code>order_item</code> 规则对每个项目评估一次并创建不同的
+该计划内的分配。必须明确分配依据。一定不能
+假设当前的<code>OrderItem::price</code>是权威的，其中订单级促销
+没有分配给线路。</p>
+<p>每个项目上下文都有一个不可变的项目 ID、平面 <code>item.*</code> 事实、可选的项目级别
+收件人候选者和审核快照。项目事实覆盖订单事实，而
+项目被评估。他们无法检查其他物品或实时源实体。</p>
+<h3 id="64">6.4 上下文解析器规则<a class="headerlink" href="#64" title="Permanent link">&para;</a></h3>
+<ul>
+<li>解析器在查询其自己的模块之前验证其主题类型/版本。</li>
+<li>解析器执行一个标量投影查询或等效的有界读取；它
+  不会将实体或代理泄漏到上下文中。</li>
+<li>缺少来源、不受支持的状态、不一致的货币和不明确的商业
+  基础是明确的领域错误，而不是空洞的事实。</li>
+<li>解析器仅提供具有记录的业务目的的事实。</li>
+<li>解析器可以提供指定的收件人候选者，但它们是快照，并不
+  授予钱包访问权限。</li>
+<li>例如，源上下文演变需要新的源版本
+  <code>trade.order.v2</code>；现有规则/计划保留其历史快照。</li>
+</ul>
+<hr />
+<h2 id="7">7. 规则模型和表达能力<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="71">7.1 规则结构<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<p>A <code>SettlementRuleVersion</code> is an immutable published definition. A draft may be edited;
+publishing creates a new version and never mutates the published version used by a plan.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">"appliesTo"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"trade.order.v1"</span><span class="p">],</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order"</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">"conflictMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stack"</span><span class="p">,</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nt">"eligibility"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="nt">"all"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">      </span><span class="p">{</span><span class="nt">"factEquals"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"order.status"</span><span class="p">,</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">]},</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">      </span><span class="p">{</span><span class="nt">"factIn"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"order.storeUuid"</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="s2">"store-uuid"</span><span class="p">]]}</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="p">]</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">  </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"resolver"</span><span class="p">:</span><span class="w"> </span><span class="s2">"context_candidate"</span><span class="p">,</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store.owner"</span><span class="p">},</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">  </span><span class="nt">"formula"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"rateOf"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"basis"</span><span class="p">:</span><span class="w"> </span><span class="s2">"funding.distributable"</span><span class="p">,</span><span class="w"> </span><span class="nt">"bps"</span><span class="p">:</span><span class="w"> </span><span class="mi">8000</span><span class="p">}},</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">  </span><span class="nt">"reasonCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store_revenue"</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="p">}</span>
+</code></pre></div>
+<p><code>priority</code>, <code>effectiveFrom</code>, and <code>effectiveTo</code> are version metadata rather than
+definition fields. A management client creates a rule draft, creates or updates a
+draft version, then publishes that version. <code>GET /manage/settlement-rules/configuration</code>
+returns the accepted operation names and required fields.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>POST /manage/settlement-rules
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>POST /manage/settlement-rule-versions
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>PUT  /manage/settlement-rule-versions/{versionUuid}
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>POST /manage/settlement-rule-versions/{versionUuid}/publish
+</code></pre></div>
+<p>The definition remains JSON for persistence and API transport, but it is parsed by a
+strict, closed Settlement evaluator. Unknown nodes, unknown facts, malformed amount
+strings, and unsupported currency behavior are rejected before publishing.</p>
+<h3 id="72-rule-selection">7.2 Rule Selection<a class="headerlink" href="#72-rule-selection" title="Permanent link">&para;</a></h3>
+<p>Rule selection is deterministic:</p>
+<ol>
+<li>Resolve context and capture one <code>asOf</code> time from the injected clock.</li>
+<li>Query active rule versions by source type, enabled state, and effective interval.</li>
+<li>Sort by <code>priority ASC</code>, then immutable rule UUID ASC.</li>
+<li>Validate each rule against the context version.</li>
+<li>Evaluate its eligibility predicate.</li>
+<li>Evaluate <code>order</code> rules once, then evaluate each <code>order_item</code> rule once for every
+   frozen item context; apply conflict mode independently within each scope/item.</li>
+<li>Apply plan-level conservation and rounding.</li>
+<li>Create the plan only if every validation succeeds.</li>
+</ol>
+<p>Supported conflict modes in phase one:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stack</code></td>
+<td>Rule may add allocations alongside other matched rules.</td>
+</tr>
+<tr>
+<td><code>exclusive_group</code></td>
+<td>First matched rule in a named group wins; later rules in that group are skipped.</td>
+</tr>
+<tr>
+<td><code>stop</code></td>
+<td>A matched rule ends further rule selection after its proposals are accepted.</td>
+</tr>
+</tbody>
+</table>
+<p>Rule scope defaults to <code>order</code>. <code>order_item</code> requires item contexts from the source
+adapter. Its allocation key is automatically made item-specific, even when multiple
+items resolve to the same recipient, so each item remains independently auditable.</p>
+<p>An agent reward for every qualifying line can be expressed as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">"appliesTo"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"trade.order.v1"</span><span class="p">],</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order_item"</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">"eligibility"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">"all"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">      </span><span class="nt">"children"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">        </span><span class="p">{</span><span class="nt">"factEquals"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"item.specificationId"</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">]},</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">        </span><span class="p">{</span><span class="nt">"amountAtLeast"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"item.unitPrice"</span><span class="p">,</span><span class="w"> </span><span class="s2">"3.01"</span><span class="p">]}</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">      </span><span class="p">]</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">  </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="nt">"resolver"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fact_reference"</span><span class="p">,</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">    </span><span class="nt">"typeFact"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order.agentRecipientType"</span><span class="p">,</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">    </span><span class="nt">"idFact"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order.agentRecipientId"</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">  </span><span class="nt">"formula"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="w">    </span><span class="nt">"multiplyByQuantity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"fixedAmount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.00"</span><span class="p">}},</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="w">      </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"item.quantity"</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="w">  </span><span class="nt">"reasonCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"agent_specification_reward"</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="p">}</span>
+</code></pre></div>
+<p>For CNY, <code>item.unitPrice</code> above is a decimal snapshot amount; <code>3.01</code> expresses strict
+greater-than <code>3.00</code> while the current grammar supplies inclusive amount comparisons.
+Each resulting allocation persists the source item ID and immutable item snapshot.</p>
+<h3 id="73-eligibility-primitives">7.3 Eligibility Primitives<a class="headerlink" href="#73-eligibility-primitives" title="Permanent link">&para;</a></h3>
+<p>Rules stay small and composable. The initial primitives are:</p>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FactEquals</code></td>
+<td>Exact equality of a declared fact and scalar literal.</td>
+</tr>
+<tr>
+<td><code>FactIn</code></td>
+<td>Fact belongs to a declared scalar list.</td>
+</tr>
+<tr>
+<td><code>IntAtLeast</code> / <code>IntAtMost</code></td>
+<td>Integer comparison for a declared fact.</td>
+</tr>
+<tr>
+<td><code>AmountAtLeast</code> / <code>AmountAtMost</code></td>
+<td>Exact quantum amount comparison.</td>
+</tr>
+<tr>
+<td><code>OccurredBefore</code> / <code>OccurredAfter</code></td>
+<td>Instant comparison using ISO-8601 facts.</td>
+</tr>
+<tr>
+<td><code>AllOf</code></td>
+<td>All child predicates must pass.</td>
+</tr>
+<tr>
+<td><code>AnyOf</code></td>
+<td>At least one child predicate must pass.</td>
+</tr>
+<tr>
+<td><code>Not</code></td>
+<td>Negates exactly one child predicate.</td>
+</tr>
+</tbody>
+</table>
+<p>There is deliberately no <code>eval</code>, no generic method call, no access to Symfony services,
+and no expression that may traverse an object graph. More complex matching must be
+projected into a source fact before it reaches Settlement.</p>
+<h3 id="74-formula-primitives">7.4 Formula Primitives<a class="headerlink" href="#74-formula-primitives" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FixedAmount</code></td>
+<td>A literal exact decimal amount.</td>
+</tr>
+<tr>
+<td><code>FactAmount</code></td>
+<td>A declared quantum amount fact.</td>
+</tr>
+<tr>
+<td><code>FundingAmount</code></td>
+<td>The plan's distributable funding amount.</td>
+</tr>
+<tr>
+<td><code>RateOf</code></td>
+<td>Exact fraction of a child formula using basis points.</td>
+</tr>
+<tr>
+<td><code>MultiplyByQuantity</code></td>
+<td>Product of a formula and declared integer quantity.</td>
+</tr>
+<tr>
+<td><code>Add</code> / <code>Subtract</code></td>
+<td>Exact arithmetic over children.</td>
+</tr>
+<tr>
+<td><code>MinOf</code> / <code>MaxOf</code></td>
+<td>Exact min/max of children.</td>
+</tr>
+</tbody>
+</table>
+<p>All formula results are exact non-negative rational values until plan-level rounding.
+<code>Subtract</code> and <code>Remaining</code> MUST reject a negative result. A rule may not silently turn a
+negative amount into zero.</p>
+<h3 id="75-recipient-resolution">7.5 Recipient Resolution<a class="headerlink" href="#75-recipient-resolution" title="Permanent link">&para;</a></h3>
+<p>Recipient relationships use a closed configuration grammar over the frozen context:</p>
+<table>
+<thead>
+<tr>
+<th>Resolver</th>
+<th>Input</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>literal</code></td>
+<td>configured type/id</td>
+<td>Fixed platform or named recipient.</td>
+</tr>
+<tr>
+<td><code>context_candidate</code></td>
+<td>candidate key</td>
+<td>Recipient projected by source adapter.</td>
+</tr>
+<tr>
+<td><code>fact_reference</code></td>
+<td>declared <code>recipient.*</code> fact pair</td>
+<td>A normalized source fact recipient.</td>
+</tr>
+<tr>
+<td>More relationships must be projected by the source adapter into a recipient candidate or</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>declared facts. They may not read live Order/Staff/User entities after plan creation.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="76-advanced-rules">7.6 Advanced Rules<a class="headerlink" href="#76-advanced-rules" title="Permanent link">&para;</a></h3>
+<p>If a stable business concern cannot be expressed as primitives, it may implement:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="x">interface SettlementRuleHandlerInterface</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">{</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="x">    public static function getName(): string;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="x">    public static function getVersion(): int;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="x">    /** @param array&lt;string, mixed&gt; $config */</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="x">    public function propose(SettlementContext $context, array $config): array;</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="x">}</span>
+</code></pre></div>
+<p>该处理程序仅返回 <code>AllocationProposal</code> 值对象。它不得发布优惠券，
+更改计划状态、加载跨模块实体、访问 Symfony 容器或执行
+网络输入/输出。每个处理程序都需要显式的单元测试、版本化的配置模式，以及
+便于审计的解释负载。</p>
+<hr />
+<h2 id="8">8. 精确资金和溢出安全<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<h3 id="81">8.1 硬性规则：无浮动<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
+<p>结算财务代码不得使用 PHP <code>float</code>、<code>round()</code>、<code>(int)</code> 类型转换
+金融价值，或货币字符串的本机算术。 PHP的有符号整数范围是
+对于任意 18 位数值来说是不够的，并且乘法可能会在
+验证看到结果。</p>
+<h3 id="82">8.2 所需的库<a class="headerlink" href="#82" title="Permanent link">&para;</a></h3>
+<p>实现必须添加 <code>brick/math</code> 作为生产依赖项。它提供了不可变的、
+任意精度的数字对象，而不使 <code>ext-bcmath</code> 或 <code>ext-gmp</code> 成为
+未声明的部署先决条件。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>结算使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Brick\Math\BigInteger</code></td>
+<td>规范量子整数、总数、排名和目标发布单位。</td>
+</tr>
+<tr>
+<td><code>Brick\Math\BigRational</code></td>
+<td>精确的百分比、除法和中间公式结果。</td>
+</tr>
+<tr>
+<td><code>Brick\Math\BigDecimal</code></td>
+<td>解析/显示并转换为声明的比例。</td>
+</tr>
+<tr>
+<td><code>Brick\Math\RoundingMode</code></td>
+<td>每次故意丢失精度的转换时都需要。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83">8.3 金额表示<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
+<p><code>ExactAmount</code> 不是 PHP 标量货币整数：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>quantum integer string: "12345678901000000000"
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>scale:                  18
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>display decimal:        12.345678901000000000
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>currency:               CNY
+</code></pre></div>
+<p>数据库将量子整数保存为规范的以 10 为基数的字符串。这样就避免了
+数据库小数精度限制和 PHP 整数溢出。它没有 <code>+</code> 标志，没有
+除了 <code>"0"</code> 之外，前导零，并且没有小数点分隔符。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="x">final readonly class QuantumAmount</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="x">{</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="x">        public string $quantum,</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="x">        public int $scale,</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="x">        public string $currency,</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="x">    ) {</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="x">    }</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="x">}</span>
+</code></pre></div>
+<p>初始比例固定为<code>18</code>。币种目标钱包发币规模独立
+此计算比例：现有人民币钱包的比例为<code>2</code>，积分可能为<code>0</code>，并且
+未来的令牌帐户可能是<code>18</code>。</p>
+<h3 id="84">8.4 公式评估<a class="headerlink" href="#84" title="Permanent link">&para;</a></h3>
+<p>公式计算尽可能长时间地保持分数精确：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">$basis = BigRational::of($context-&gt;distributableAmountQuantum());</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="x">$commission = $basis-&gt;multipliedBy('1500/10000');</span>
+</code></pre></div>
+<p>不会仅仅因为中间运算包含一个公式就将其转换为 18 级
+师。非终止结果仍然是有理数。转换仅发生在
+该计划的明确分配量子边界和最终目标发布规模。</p>
+<p>每个部门必须有以下结果之一：</p>
+<ul>
+<li>精确除法：使用精确结果。</li>
+<li>故意分配舍入：使用记录的舍入算法。</li>
+<li>要求精确但无法表示的规则：拒绝带有
+  域错误。</li>
+</ul>
+<h3 id="85">8.5 转换为钱包过账单位<a class="headerlink" href="#85" title="Permanent link">&para;</a></h3>
+<p>令<code>C = 18</code>为计算规模，<code>P</code>为目标发布规模。对于人民币钱包，
+<code>P = 2</code>。转换系数为<code>10^(C - P)</code>。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>walletMinor = allocationQuantum / 10^(18 - postingScale)
+</code></pre></div>
+<p>这种转换可能不准确。捆绑包在整个计划中处理它，而不是每行：</p>
+<ol>
+<li>准确评估所有匹配的分配。</li>
+<li>验证确切的分配总额是否小于或等于资金。</li>
+<li>将每个分配按楼层转换为其目标过帐单位，直至为零。
+4.保留其精确的小数余数和稳定的分配UUID。</li>
+<li>根据资助金额确定可用目标单位总数。</li>
+<li>通过降序余数分配剩余的整数单位。</li>
+<li>通过不可变分配 UUID 升序打破相等余数。</li>
+<li>如果存在已配置的后备收件人，它将在此之前接收规则剩余部分
+   最终分配；默认后备是平台接收者。</li>
+<li>保留准确金额、公布金额、舍入增量、排名和政策快照。</li>
+<li>在编写计划之前主张目标单位的保护。</li>
+</ol>
+<p>所选策略是<code>largest_remainder</code>。它是确定性的、可解释的，并且
+不铸造也不燃烧一分钱。</p>
+<h3 id="86">8.6 守恒不变量<a class="headerlink" href="#86" title="Permanent link">&para;</a></h3>
+<p>按计算规模：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>fundingAmount = allocationAmountTotal + unallocatedAmount
+</code></pre></div>
+<p>最终过帐规模：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>fundingPostingAmount = sum(allocation.postingAmount) + unallocatedPostingAmount
+</code></pre></div>
+<p>在计划被标记为 <code>posted</code>、<code>reversal_pending</code> 或 <code>reversed</code> 之前，它
+必须满足：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>unallocatedAmount = 0
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>unallocatedPostingAmount = 0
+</code></pre></div>
+<p>后备分配是具有真实接收者、规则跟踪和
+优惠券。这不是未跟踪的会计调整。</p>
+<h3 id="87">8.7 护栏<a class="headerlink" href="#87" title="Permanent link">&para;</a></h3>
+<ul>
+<li>比例必须在有界配置范围<code>0..18</code>内；第一阶段将其修复为 <code>18</code>。</li>
+<li>量子字符串长度在解析为之前具有实现配置的最大值
+  避免基于输入的内存滥用。</li>
+<li>规则金额、比率值、数量事实和公式深度具有有限模式。</li>
+<li>第一阶段的利率值表示为整数基点；任意小数
+  费率需要专门的审查原语。</li>
+<li>所有金额比较都使用 <code>BigInteger</code>/<code>BigRational</code>，而不是词汇字符串。</li>
+<li>钱包适配器验证最终发布的整数是否符合钱包支持的要求
+  数据库/PHP 范围。超出范围的分配将成为不可重试的手动审核
+  失败；它永远不会被截断。</li>
+</ul>
+<hr />
+<h2 id="9">9. 领域模型<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<h3 id="91">9.1 实体概述<a class="headerlink" href="#91" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>实体</th>
+<th>表</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SettlementRule</code></td>
+<td><code>settlement_rule</code></td>
+<td>稳定的规则标识和当前发布指针。</td>
+</tr>
+<tr>
+<td><code>SettlementRuleVersion</code></td>
+<td><code>settlement_rule_version</code></td>
+<td>不可变的、生效日期的规则定义。</td>
+</tr>
+<tr>
+<td><code>SettlementPlan</code></td>
+<td><code>settlement_plan</code></td>
+<td>资金、快照、计划生命周期、总计和最终状态。</td>
+</tr>
+<tr>
+<td><code>SettlementAllocation</code></td>
+<td><code>settlement_allocation</code></td>
+<td>一种收件人权利和发布/撤销生命周期。</td>
+</tr>
+<tr>
+<td><code>SettlementReversal</code></td>
+<td><code>settlement_reversal</code></td>
+<td>一名操作员授权的逆转操作及审核理由。</td>
+</tr>
+<tr>
+<td><code>SettlementConsumedEvent</code></td>
+<td><code>settlement_consumed_event</code></td>
+<td>收件箱重复数据删除和传输审核。</td>
+</tr>
+<tr>
+<td><code>SettlementOutboxMessage</code></td>
+<td><code>settlement_outbox_message</code></td>
+<td>持久的命令/事件传递。</td>
+</tr>
+</tbody>
+</table>
+<p>除了本地标识符之外，所有聚合级别记录都将 UUID 公开为外部标识符
+整数主键。没有表具有另一个业务模块的外键。</p>
+<h3 id="92-settlementrule">9.2 <code>SettlementRule</code><a class="headerlink" href="#92-settlementrule" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>类型</th>
+<th>笔记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>整数</td>
+<td>本地主键。</td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>字符串(36)，唯一</td>
+<td>公共不可变规则身份。</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>字符串（100），唯一</td>
+<td>人类可读的稳定业务密钥。</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>字符串（255）</td>
+<td>显示名称。</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>字符串（20）</td>
+<td><code>draft</code>、<code>published</code>、<code>retired</code>。</td>
+</tr>
+<tr>
+<td><code>current_version</code></td>
+<td>整数可为空</td>
+<td>最新发布的版本号。</td>
+</tr>
+<tr>
+<td><code>created_at</code>、<code>updated_at</code></td>
+<td>日期时间不可变</td>
+<td>审计。</td>
+</tr>
+</tbody>
+</table>
+<p><code>code</code> 发布后永远不会改变。已退休的规则仍然具有可读性，因为计划
+请参阅其不可变版本快照。</p>
+<h3 id="93-settlementruleversion">9.3 <code>SettlementRuleVersion</code><a class="headerlink" href="#93-settlementruleversion" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>类型</th>
+<th>笔记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>整数</td>
+<td>本地主键。</td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>字符串(36)，唯一</td>
+<td>稳定的版本标识。</td>
+</tr>
+<tr>
+<td><code>rule_uuid</code></td>
+<td>字符串(36)</td>
+<td>仅在结算内标量父引用或本地关系。</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>整数</td>
+<td>每条规则单调。</td>
+</tr>
+<tr>
+<td><code>definition</code></td>
+<td>json</td>
+<td>严格、经过验证的 AST/配置。</td>
+</tr>
+<tr>
+<td><code>definition_hash</code></td>
+<td>字符串（64）</td>
+<td>SHA-256 规范 JSON。</td>
+</tr>
+<tr>
+<td><code>effective_from</code></td>
+<td>日期时间不可变</td>
+<td>包容性。</td>
+</tr>
+<tr>
+<td><code>effective_to</code></td>
+<td>日期时间不可变可为空</td>
+<td>独家的; null 是开放式的。</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>整数</td>
+<td>Lower 先执行。</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>字符串（20）</td>
+<td><code>draft</code>、<code>published</code>、<code>retired</code>。</td>
+</tr>
+<tr>
+<td><code>published_at</code>、<code>published_by</code></td>
+<td>标量可为空</td>
+<td>治理审计。</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>日期时间不可变</td>
+<td>审计。</td>
+</tr>
+</tbody>
+</table>
+<p>限制条件：</p>
+<ul>
+<li>独特的<code>(rule_uuid, version)</code>。</li>
+<li>对于同一逻辑规则版本通道，没有重叠的已发布有效间隔。</li>
+<li>已发布的<code>definition</code>，哈希、优先级和有效范围是不可变的。</li>
+<li>计划存储完整的定义快照，即使该表是不可变的；这个
+  使提取和取证导出变得独立。</li>
+</ul>
+<h3 id="94-settlementplan">9.4 <code>SettlementPlan</code><a class="headerlink" href="#94-settlementplan" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>Local primary key.</td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>string(36), unique</td>
+<td>Public plan identity.</td>
+</tr>
+<tr>
+<td><code>funding_id</code></td>
+<td>string(64), unique</td>
+<td>Stable funding identity.</td>
+</tr>
+<tr>
+<td><code>source_type</code>, <code>source_id</code></td>
+<td>string(64)</td>
+<td>Opaque source reference.</td>
+</tr>
+<tr>
+<td><code>funding_kind</code></td>
+<td>string(50)</td>
+<td>Funding lane, initially <code>confirmed</code>; part of business idempotency.</td>
+</tr>
+<tr>
+<td><code>confirmation_reference</code></td>
+<td>string(128)</td>
+<td>Funding proof reference.</td>
+</tr>
+<tr>
+<td><code>funding_fingerprint</code></td>
+<td>string(64)</td>
+<td>Immutable canonical funding fingerprint.</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string(32)</td>
+<td>One plan unit.</td>
+</tr>
+<tr>
+<td><code>calculation_scale</code></td>
+<td>smallint</td>
+<td>Phase one: 18.</td>
+</tr>
+<tr>
+<td><code>funding_amount_quantum</code></td>
+<td>string(128)</td>
+<td>Positive canonical integer string.</td>
+</tr>
+<tr>
+<td><code>allocated_amount_quantum</code></td>
+<td>string(128)</td>
+<td>Sum of exact allocation amounts.</td>
+</tr>
+<tr>
+<td><code>unallocated_amount_quantum</code></td>
+<td>string(128)</td>
+<td>Must reach zero before terminal success.</td>
+</tr>
+<tr>
+<td><code>posting_scale</code></td>
+<td>smallint</td>
+<td>Target unit scale for plan allocations.</td>
+</tr>
+<tr>
+<td><code>funding_posting_amount</code></td>
+<td>string(128)</td>
+<td>Final target-unit integer string.</td>
+</tr>
+<tr>
+<td><code>allocated_posting_amount</code></td>
+<td>string(128)</td>
+<td>Sum of allocation posting amounts.</td>
+</tr>
+<tr>
+<td><code>unallocated_posting_amount</code></td>
+<td>string(128)</td>
+<td>Must reach zero before terminal success.</td>
+</tr>
+<tr>
+<td><code>subject_type</code>, <code>subject_id</code>, <code>subject_version</code></td>
+<td>strings</td>
+<td>Context subject identity.</td>
+</tr>
+<tr>
+<td><code>context_snapshot</code></td>
+<td>json</td>
+<td>Immutable normalized facts/candidates.</td>
+</tr>
+<tr>
+<td><code>context_hash</code></td>
+<td>string(64)</td>
+<td>SHA-256 canonical snapshot.</td>
+</tr>
+<tr>
+<td><code>funding_snapshot</code></td>
+<td>json</td>
+<td>Sanitized immutable producer data.</td>
+</tr>
+<tr>
+<td><code>rule_snapshot</code></td>
+<td>json</td>
+<td>All selected rule definitions/versions.</td>
+</tr>
+<tr>
+<td><code>calculation_trace</code></td>
+<td>json</td>
+<td>Match, formula, exact result, rounding evidence.</td>
+</tr>
+<tr>
+<td><code>fallback_recipient_type</code>, <code>fallback_recipient_id</code></td>
+<td>strings</td>
+<td>Resolved plan fallback recipient.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string(32)</td>
+<td>State machine below.</td>
+</tr>
+<tr>
+<td><code>refund_locked_at</code></td>
+<td>datetime immutable nullable</td>
+<td>First successful posting finality marker.</td>
+</tr>
+<tr>
+<td><code>refund_unlocked_at</code></td>
+<td>datetime immutable nullable</td>
+<td>Only after complete approved reversal.</td>
+</tr>
+<tr>
+<td><code>correlation_id</code>, <code>causation_id</code></td>
+<td>string(64) nullable</td>
+<td>Cross-boundary tracing.</td>
+</tr>
+<tr>
+<td><code>created_at</code>, <code>updated_at</code>, <code>completed_at</code></td>
+<td>datetime immutable</td>
+<td>Audit.</td>
+</tr>
+</tbody>
+</table>
+<p>Business constraints:</p>
+<ul>
+<li><code>funding_amount_quantum &gt; 0</code>.</li>
+<li>Currency and calculation scale never change.</li>
+<li>Snapshots and trace never change after planning.</li>
+<li><code>allocated + unallocated = funding</code> in both precision domains.</li>
+<li><code>unallocated</code> is zero before successful terminal plan states.</li>
+<li>A plan never changes recipient or allocation amount after a posting attempt; correction
+  uses reversal and a new funding/adjustment process.</li>
+</ul>
+<h3 id="95-settlementallocation">9.5 <code>SettlementAllocation</code><a class="headerlink" href="#95-settlementallocation" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>Local primary key.</td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td>string(36), unique</td>
+<td>Stable allocation identity and voucher source key.</td>
+</tr>
+<tr>
+<td><code>plan_uuid</code></td>
+<td>string(36)</td>
+<td>Settlement-local plan reference.</td>
+</tr>
+<tr>
+<td><code>sequence</code></td>
+<td>integer</td>
+<td>Deterministic display/order number.</td>
+</tr>
+<tr>
+<td><code>allocation_key</code></td>
+<td>string(128)</td>
+<td>Stable business key inside plan.</td>
+</tr>
+<tr>
+<td><code>recipient_type</code>, <code>recipient_id</code></td>
+<td>strings</td>
+<td>Opaque resolved recipient.</td>
+</tr>
+<tr>
+<td><code>recipient_snapshot</code></td>
+<td>json</td>
+<td>Resolver name/version/config/candidate evidence.</td>
+</tr>
+<tr>
+<td><code>rule_code</code>, <code>rule_version_uuid</code></td>
+<td>strings nullable</td>
+<td>Source rule; fallback is explicit.</td>
+</tr>
+<tr>
+<td><code>reason_code</code></td>
+<td>string(100)</td>
+<td>Business explanation.</td>
+</tr>
+<tr>
+<td><code>exact_amount_quantum</code></td>
+<td>string(128)</td>
+<td>Exact allocation amount at scale 18.</td>
+</tr>
+<tr>
+<td><code>posting_amount</code></td>
+<td>string(128)</td>
+<td>Final integer amount for Wallet.</td>
+</tr>
+<tr>
+<td><code>posting_scale</code></td>
+<td>smallint</td>
+<td>Target posting scale.</td>
+</tr>
+<tr>
+<td><code>rounding_delta_quantum</code></td>
+<td>string(128)</td>
+<td>Exact minus posted conversion represented at scale 18.</td>
+</tr>
+<tr>
+<td><code>rounding_rank</code></td>
+<td>integer nullable</td>
+<td>Largest-remainder deterministic rank.</td>
+</tr>
+<tr>
+<td><code>release_policy</code></td>
+<td>string(20)</td>
+<td><code>immediate</code>, <code>delayed</code>, <code>manual</code>; when the posting command may run.</td>
+</tr>
+<tr>
+<td><code>posting_available_at</code></td>
+<td>datetime immutable nullable</td>
+<td>Required for <code>delayed</code>; when the posting command may run.</td>
+</tr>
+<tr>
+<td><code>posting_due_at</code></td>
+<td>datetime immutable nullable</td>
+<td>Scheduler cutoff for a <code>manual</code>/<code>delayed</code> posting command.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string(32)</td>
+<td>Allocation state machine below.</td>
+</tr>
+<tr>
+<td><code>posting_reference</code></td>
+<td>string(128) nullable</td>
+<td>Opaque Wallet voucher receipt reference.</td>
+</tr>
+<tr>
+<td><code>posting_idempotency_key</code></td>
+<td>string(128), unique</td>
+<td>Stable command key.</td>
+</tr>
+<tr>
+<td><code>posted_at</code></td>
+<td>datetime immutable nullable</td>
+<td>Posting success time. Funds are the recipient's from this moment.</td>
+</tr>
+<tr>
+<td><code>reversal_reference</code></td>
+<td>string(128) nullable</td>
+<td>Opaque Wallet reversal receipt.</td>
+</tr>
+<tr>
+<td><code>reversal_idempotency_key</code></td>
+<td>string(128), unique nullable</td>
+<td>Stable reversal key.</td>
+</tr>
+<tr>
+<td><code>reversed_at</code></td>
+<td>datetime immutable nullable</td>
+<td>Reversal success time.</td>
+</tr>
+<tr>
+<td><code>failure_code</code>, <code>failure_detail</code></td>
+<td>nullable strings</td>
+<td>Sanitized operational diagnosis.</td>
+</tr>
+<tr>
+<td><code>attempt_count</code>, <code>next_attempt_at</code></td>
+<td>integer/datetime nullable</td>
+<td>Retry state.</td>
+</tr>
+<tr>
+<td><code>created_at</code>, <code>updated_at</code></td>
+<td>datetime immutable</td>
+<td>Audit.</td>
+</tr>
+</tbody>
+</table>
+<p>Constraints:</p>
+<ul>
+<li>Unique <code>(plan_uuid, allocation_key)</code>.</li>
+<li><code>posting_amount &gt; 0</code>; a zero allocation is never persisted.</li>
+<li>Recipient type/id and exact amount are immutable after planning.</li>
+<li>A successful <code>posting_reference</code> cannot be replaced.</li>
+<li>Reversal references the original allocation, not a newly calculated counterparty.</li>
+</ul>
+<h3 id="96-settlementreversal">9.6 <code>SettlementReversal</code><a class="headerlink" href="#96-settlementreversal" title="Permanent link">&para;</a></h3>
+<p>A reversal request is an auditable aggregate rather than a button that directly changes
+allocations.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uuid</code></td>
+<td>string(36), unique</td>
+<td>External reversal request identity.</td>
+</tr>
+<tr>
+<td><code>plan_uuid</code></td>
+<td>string(36)</td>
+<td>Target plan.</td>
+</tr>
+<tr>
+<td><code>reason_code</code>, <code>reason_detail</code></td>
+<td>strings</td>
+<td>Required human and machine reason.</td>
+</tr>
+<tr>
+<td><code>requested_by</code></td>
+<td>opaque scalar</td>
+<td>Authorized operator identity.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string(32)</td>
+<td><code>requested</code>, <code>reversing</code>, <code>partially_reversed</code>, <code>reversed</code>, <code>failed</code>.</td>
+</tr>
+<tr>
+<td><code>idempotency_key</code></td>
+<td>string(128), unique</td>
+<td>Prevent duplicate operator requests.</td>
+</tr>
+<tr>
+<td><code>created_at</code>, <code>completed_at</code></td>
+<td>datetimes</td>
+<td>Audit.</td>
+</tr>
+</tbody>
+</table>
+<p>It creates a reversal outbox command only for allocations already posted. Unposted
+allocations are cancelled and cannot later be posted. A request completes only when all
+posted allocations are reversed.</p>
+<h3 id="97-inbox-and-outbox">9.7 Inbox And Outbox<a class="headerlink" href="#97-inbox-and-outbox" title="Permanent link">&para;</a></h3>
+<p><code>SettlementConsumedEvent</code> fields:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>event_id unique
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>topic
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>source_aggregate_type
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>source_aggregate_id
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>payload_hash
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>processed_at
+</code></pre></div>
+<p><code>SettlementOutboxMessage</code> fields follow the established Trade/Store pattern:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>event_id unique
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>topic
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>aggregate_type
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>aggregate_id
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>correlation_id
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>causation_id
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>payload json
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>available_at
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>claimed_at
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>claim_token
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>published_at
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>attempt_count
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>last_error
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>created_at
+</code></pre></div>
+<p>All local business mutation plus an outbox insertion occur in one database transaction.</p>
+<hr />
+<h2 id="10-state-machines">10. State Machines<a class="headerlink" href="#10-state-machines" title="Permanent link">&para;</a></h2>
+<h3 id="101-plan-state">10.1 Plan State<a class="headerlink" href="#101-plan-state" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; planning
+    planning --&gt; planned: calculation + conservation pass
+    planned --&gt; posting: posting outbox claimed
+    posting --&gt; partially_posted: at least one allocation posted
+    posting --&gt; posted: every allocation posted
+    partially_posted --&gt; posted: remaining allocations posted
+    posting --&gt; failed: no allocation posted and non-retryable failure
+    partially_posted --&gt; reversal_pending: authorized reversal requested
+    posted --&gt; reversal_pending: authorized reversal requested
+    reversal_pending --&gt; reversed: all posted allocations reversed
+    reversal_pending --&gt; reversal_failed: non-retryable reversal failure
+    reversal_failed --&gt; reversal_pending: authorized retry</code></pre>
+<p>The persisted implementation may derive <code>posting</code>, <code>partially_posted</code>, and <code>posted</code>
+from allocation state, but externally visible state must have these semantics.</p>
+<p><code>planned</code> does not lock a source refund. The first <code>posted</code> allocation sets
+<code>refund_locked_at</code>; therefore a <code>partially_posted</code> plan already has finality lock.</p>
+<p>A plan has no Wallet-side hold/release state. Once an allocation is <code>posted</code>, the funds
+belong to the recipient and the plan only tracks the reversal evidence of those vouchers.</p>
+<h3 id="102-allocation-state">10.2 Allocation State<a class="headerlink" href="#102-allocation-state" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; planned
+    planned --&gt; posting_requested: immediate policy, or delayed/manual policy becomes due
+    posting_requested --&gt; posted: credit voucher applied
+    posting_requested --&gt; retryable_failure
+    retryable_failure --&gt; posting_requested
+    planned --&gt; cancelled: reversal requested before posting
+    posted --&gt; reversal_requested
+    reversal_requested --&gt; reversed
+    reversal_requested --&gt; reversal_pending: insufficient recipient balance
+    reversal_pending --&gt; reversal_requested: retry / A-R-A-P recovery</code></pre>
+<p>There is no transition from a posted allocation back to <code>planned</code>, no replacement
+recipient, and no rewritten amount. There is no <code>release</code> transition because Settlement
+never holds funds after posting: <code>post()</code> is the moment ownership transfers to the
+recipient, and reversal of that voucher is the only later operation.</p>
+<h3 id="103-refund-finality-state">10.3 Refund Finality State<a class="headerlink" href="#103-refund-finality-state" title="Permanent link">&para;</a></h3>
+<p>Settlement owns the evidence but the funding source owns its refund state:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>no posted allocation
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>  -&gt; refund eligibility is source-defined
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>first successful allocation posting
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>  -&gt; Settlement records refund_locked_at
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>  -&gt; Payment/producer rejects refund
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>authorized complete Settlement reversal
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>  -&gt; all posted allocation vouchers reversed
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>  -&gt; Settlement records refund_unlocked_at
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>  -&gt; Payment/producer may execute its normal refund process
+</code></pre></div>
+<p>There is intentionally no timer that automatically unlocks a source refund. Settlement-side
+posting scheduling changes when a credit is handed to the recipient, not whether funding
+finality exists once that credit is handed over.</p>
+<hr />
+<h2 id="11-wallet-voucher-boundary">11. Wallet Voucher Boundary<a class="headerlink" href="#11-wallet-voucher-boundary" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>One-way handoff.</strong> Settlement decides <em>when</em> a confirmed allocation becomes the
+recipient's money and posts that allocation through the voucher boundary. From the
+moment the credit voucher is applied, the funds are unconditionally the recipient's;
+Settlement performs no balancing, no <code>held</code> freeze, no release, and no partial management
+of that money. The only later operation is reversing the exact original voucher.</p>
+</blockquote>
+<h3 id="111-settlement-owned-port">11.1 Settlement-Owned Port<a class="headerlink" href="#111-settlement-owned-port" title="Permanent link">&para;</a></h3>
+<p>Settlement owns the contract below and never returns a Wallet entity or Voucher entity:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">interface SettlementVoucherPort</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="x">{</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="x">    /**</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="x">     * Credit the recipient's account. On success the amount is unconditionally theirs.</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="x">     * @throws SettlementVoucherException on rejection or non-retryable mapping failure</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="x">     */</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="x">    public function post(ConfirmedAllocation $allocation): VoucherPostingReceipt;</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="x">    /** Reverse the exact original posting; insufficient funds is a classified result. */</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="x">    public function reverse(PostedAllocation $allocation, ReversalRequest $request): VoucherPostingReceipt;</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="x">}</span>
+</code></pre></div>
+<p><code>VoucherPostingReceipt</code> contains Settlement-safe scalars only:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="x">final readonly class VoucherPostingReceipt</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="x">{</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="x">        public string $externalReference,</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="x">        public string $idempotencyKey,</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="x">        public \DateTimeImmutable $processedAt,</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="x">        public string $status,</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="x">    ) {</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="x">    }</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="x">}</span>
+</code></pre></div>
+<p><code>externalReference</code> is opaque to Settlement. The Wallet implementation may use a Wallet
+voucher UUID; Settlement cannot parse it or query it.</p>
+<h3 id="112-wallet-adapter-responsibilities">11.2 Wallet Adapter Responsibilities<a class="headerlink" href="#112-wallet-adapter-responsibilities" title="Permanent link">&para;</a></h3>
+<p>The Wallet adapter:</p>
+<ol>
+<li>Maps <code>RecipientReference(type, id)</code> and currency to an account provisioning policy.</li>
+<li>Creates the Wallet if it does not exist and the reference type is permitted to own a
+   Wallet for that currency.</li>
+<li>Validates Wallet currency, frozen state, posting range, and recipient mapping.</li>
+<li>Calls Wallet's voucher-backed credit gate with <code>voucherType = settlement</code>.</li>
+<li>Uses allocation UUID as stable voucher source and a deterministic reference id, for
+   example <code>settlement-credit:{allocationUuid}</code>.</li>
+<li>Returns an opaque voucher receipt for a successful credit.</li>
+<li>Uses the original opaque voucher reference to reverse exactly the original booking.</li>
+</ol>
+<p>The adapter may depend on Wallet services because it belongs at the Wallet integration
+edge. Settlement core does not.</p>
+<h3 id="113-voucher-semantics">11.3 Voucher Semantics<a class="headerlink" href="#113-voucher-semantics" title="Permanent link">&para;</a></h3>
+<p>For a successful allocation posting:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Voucher type:       settlement
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>Voucher source ID:  allocation UUID
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>Reference ID:       settlement-credit:{allocation UUID}
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>Direction:           credit
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>Fund source:         external (the confirmed funding entered the Wallet boundary)
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>Created by:          settlement
+</code></pre></div>
+<p>Wallet's existing unique <code>referenceId</code> and <code>(voucherType, voucherId)</code> constraints are
+both required. The adapter MUST verify that a duplicate receipt matches allocation,
+recipient wallet, amount, currency, direction, and applied status before treating it as
+success.</p>
+<h3 id="114-t0-tn-and-manual-posting-scheduling">11.4 T+0, T+N, And Manual Posting Scheduling<a class="headerlink" href="#114-t0-tn-and-manual-posting-scheduling" title="Permanent link">&para;</a></h3>
+<p><code>T+0</code> is the default: excess ownership is immediate. Delayed and manual policies are
+Settlement-side scheduling decisions about <strong>when to post the credit</strong>, not Wallet-side
+availability controls.</p>
+<table>
+<thead>
+<tr>
+<th>Posting policy</th>
+<th>Settlement behavior</th>
+<th>Recipient ownership</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>immediate</code> (<code>T+0</code>, default)</td>
+<td>Posting command runs as soon as the plan is created.</td>
+<td>At credit application.</td>
+</tr>
+<tr>
+<td><code>delayed</code> (<code>T+N</code>)</td>
+<td>Posting command is scheduled for <code>posting_available_at</code>; the scheduler runs it at/after that time.</td>
+<td>At credit application after the scheduled posting.</td>
+</tr>
+<tr>
+<td><code>manual</code></td>
+<td>Posting command is held in Settlement until an authorized operator approves it.</td>
+<td>At credit application after approval.</td>
+</tr>
+</tbody>
+</table>
+<p>For a delayed policy the scheduler must wait until <code>posting_available_at</code> before issuing
+the posting command. <code>posting_available_at</code> is calculated and frozen during planning. The
+rule or funding policy must state its business calendar semantics: next settlement-day
+versus strict duration. The implementation SHOULD use an injected business-calendar
+service rather than silently interpreting <code>T+1</code> as 24 hours.</p>
+<p><code>manual</code> posting requires an authorized operator command. A <code>manual</code> allocation waits in
+<code>planned</code> until approval sets its <code>posting_available_at</code> (past) or emits the posting
+command directly.</p>
+<p>Because posting is the ownership transfer, Scheduling a delayed/manual allocation is
+still governed by the same posting idempotency, retry, and reversal rules as <code>T+0</code>. There
+is no <code>held</code> amount, no <code>release</code> command, and no separate <code>held</code> balance anywhere.</p>
+<h3 id="115-wallet-is-final">11.5 Wallet Is Final<a class="headerlink" href="#115-wallet-is-final" title="Permanent link">&para;</a></h3>
+<p>Once <code>post()</code> has returned a successful receipt for an allocation:</p>
+<ul>
+<li>The credited amount is the recipient's unconditional balance.</li>
+<li>Settlement does not track availability, spend, or partial ownership of that balance.</li>
+<li>Settlement performs no compensating journal entries, holds, or freezes on that money.</li>
+<li>The only Settlement operation is reversing the exact original voucher, which is treated
+  like any host deposit reversal: it debits the recipient's available balance.</li>
+<li>Settlement does not need a <code>held</code> column, a release state, or a release scheduler.</li>
+</ul>
+<p>This keeps the boundary clean: Settlement controls the timing and correctness of
+distribution, and Wallet (which already owns balances, holds for other purposes, frozen
+flags, and reversal semantics) owns everything after the credit.</p>
+<h3 id="116-reversal-semantics">11.6 Reversal Semantics<a class="headerlink" href="#116-reversal-semantics" title="Permanent link">&para;</a></h3>
+<p>Reversal always targets the original settlement voucher:</p>
+<table>
+<thead>
+<tr>
+<th>Original state</th>
+<th>Wallet effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Posted</td>
+<td>Debit the recipient's available balance; write the original credit voucher's reversal.</td>
+</tr>
+<tr>
+<td>Not posted (immediate/delayed/manual due)</td>
+<td>Cancel allocation; no Wallet call.</td>
+</tr>
+</tbody>
+</table>
+<p>If the available balance is insufficient after a posted allocation, Wallet
+returns a classified insufficient-funds result. Settlement records <code>reversal_pending</code>,
+keeps the funding refund lock, and makes no compensating adjustment. A future receivable
+module may settle the debt and then permit a retry, but it must not rewrite this history.
+Settlement does not create a negative balance to force the reversal through.</p>
+<h3 id="117-wallet-changes-required">11.7 Wallet Changes Required<a class="headerlink" href="#117-wallet-changes-required" title="Permanent link">&para;</a></h3>
+<p>Existing Wallet deposit/reverse supports voucher provenance. The only required Wallet-side
+extension for Settlement is a voucher provider/authorization path for the <code>settlement</code>
+voucher type:</p>
+<ul>
+<li>Add a Settlement-owned voucher provider/authorization path inside Wallet.</li>
+<li>Reuse Wallet's existing deposit + voucher + transaction atomicity for the credit.</li>
+<li>Reuse Wallet's existing deposit reversal for the reversal; no <code>held</code> integration is
+  required for Settlement.</li>
+<li>Preserve Wallet's transaction, voucher, lock, currency, idempotency, and reconciliation
+  invariants.</li>
+<li>Do not expose these operations through a generic self-service HTTP endpoint.</li>
+</ul>
+<p>No <code>Wallet.held</code> change is needed for Settlement feature delivery. Wallet may still use
+<code>held</code> for entirely separate business purposes unrelated to Settlement; Settlement must
+not depend on it.</p>
+<hr />
+<h2 id="12-payment-refund-lock-integration">12. Payment Refund Lock Integration<a class="headerlink" href="#12-payment-refund-lock-integration" title="Permanent link">&para;</a></h2>
+<h3 id="121-generic-payment-extension-point">12.1 Generic Payment Extension Point<a class="headerlink" href="#121-generic-payment-extension-point" title="Permanent link">&para;</a></h3>
+<p>Payment should expose a generic, tagged refund-guard contract rather than import
+Settlement:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="x">interface PaymentRefundGuardInterface</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="x">{</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="x">    public function supports(string $sourceType): bool;</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="x">    public function assertRefundAllowed(string $sourceId, int $amount, string $currency): void;</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="x">}</span>
+</code></pre></div>
+<p>The Settlement integration adapter implements this interface for source types it owns.
+Payment invokes all applicable guards before transitioning an invoice into refund work.
+The adapter asks <code>SettlementFinalityService</code> using scalar source identity only.</p>
+<p>This permits future funding consumers to define their own finality guard without making
+Payment know any settlement table or entity.</p>
+<h3 id="122-refund-rule">12.2 Refund Rule<a class="headerlink" href="#122-refund-rule" title="Permanent link">&para;</a></h3>
+<p>For a source with any successfully posted allocation:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>refund requested
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>  -&gt; guard sees refund_locked_at and no refund_unlocked_at
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>  -&gt; reject with a stable business error
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>  -&gt; operator requests full Settlement reversal
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>  -&gt; every posted allocation reverses the original voucher
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>  -&gt; operator explicitly unlocks the plan/source
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>  -&gt; normal Payment refund may proceed
+</code></pre></div>
+<p>Partial Payment refund is not allowed while a plan is finality-locked in phase one.
+Supporting proportional partial refund requires a future design for allocation-level
+partial reversals, rounding remainder ownership, and source-level refund totals.</p>
+<h3 id="123-explicit-unlock">12.3 Explicit Unlock<a class="headerlink" href="#123-explicit-unlock" title="Permanent link">&para;</a></h3>
+<p>Unlock is an authorized, auditable command. It requires:</p>
+<ul>
+<li>Plan state <code>reversed</code>.</li>
+<li>Every allocation either <code>reversed</code> or <code>cancelled</code> before posting.</li>
+<li>Both plan <code>unallocated</code> fields equal zero.</li>
+<li>A recorded reversal request UUID and operator reason.</li>
+<li>No pending outbox command for posting, posting-cancel, or reversal.</li>
+</ul>
+<p>Unlock does not itself refund money. It only permits the source owner's normal refund
+process to begin.</p>
+<hr />
+<h2 id="13-reliable-processing-and-idempotency">13. Reliable Processing And Idempotency<a class="headerlink" href="#13-reliable-processing-and-idempotency" title="Permanent link">&para;</a></h2>
+<h3 id="131-local-transaction-boundary">13.1 Local Transaction Boundary<a class="headerlink" href="#131-local-transaction-boundary" title="Permanent link">&para;</a></h3>
+<p>Plan creation transaction:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>Settlement transaction:
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>  validate inbox event
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>  + persist consumed event
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>  + resolve and snapshot context
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>  + select/evaluate/snapshot rules
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>  + create plan and allocations
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>  + assert conservation
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>  + insert posting outbox commands
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>  + commit
+</code></pre></div>
+<p>No Voucher call is made in this transaction. The recipient posting is an external
+boundary, even in a modular monolith sharing one database, because it belongs to Wallet
+and must tolerate retries independently.</p>
+<h3 id="132-outbox-commands">13.2 Outbox Commands<a class="headerlink" href="#132-outbox-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Aggregate</th>
+<th>Payload purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>settlement.allocation.post.requested.v1</code></td>
+<td>allocation UUID</td>
+<td>Request the voucher credit. Emitted at <code>T+0</code>, or by the scheduler at <code>posting_available_at</code> for <code>delayed</code>, or after manual approval.</td>
+</tr>
+<tr>
+<td><code>settlement.allocation.post.cancel.v1</code></td>
+<td>allocation UUID</td>
+<td>Reverse/withdraw a <code>delayed</code>/<code>manual</code> posting command before it runs (posting cancel).</td>
+</tr>
+<tr>
+<td><code>settlement.allocation.reverse.requested.v1</code></td>
+<td>allocation UUID</td>
+<td>Request original voucher reversal.</td>
+</tr>
+<tr>
+<td><code>settlement.plan.posted.v1</code></td>
+<td>plan UUID</td>
+<td>Optional downstream completion notification.</td>
+</tr>
+<tr>
+<td><code>settlement.plan.reversed.v1</code></td>
+<td>plan UUID</td>
+<td>Optional source finality/unlock notification.</td>
+</tr>
+</tbody>
+</table>
+<p>The outbox relay uses the existing claim-token pattern. A crashed worker may publish a
+message more than once. Consumers rely on business keys and Wallet voucher idempotency.</p>
+<p>There is no <code>release</code> outbox message. Posting is the handoff; there is no second
+Settlement action that makes funds usable.</p>
+<h3 id="133-posting-handler">13.3 Posting Handler<a class="headerlink" href="#133-posting-handler" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>receive allocation-post command
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>  -&gt; lock/load allocation by UUID
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>  -&gt; if already posted: verify receipt and acknowledge
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>  -&gt; if cancelled/reversed: acknowledge as obsolete
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>  -&gt; if posting_policy is delayed and not yet due: re-defer the command
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>  -&gt; call SettlementVoucherPort.post(allocation)
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>  -&gt; transactionally record immutable receipt and posted state
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>  -&gt; set plan refund_locked_at if this is first successful posting
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>  -&gt; recompute plan aggregate state
+</code></pre></div>
+<p>If Wallet posts successfully but the handler crashes before persisting the receipt, retry
+uses the same <code>posting_idempotency_key</code>; Wallet returns the original voucher receipt.</p>
+<h3 id="134-failure-classification">13.4 Failure Classification<a class="headerlink" href="#134-failure-classification" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Examples</th>
+<th>Handler action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retryable</td>
+<td>DB/network transient, temporary Wallet lock, relay failure</td>
+<td>Increment attempt and defer outbox.</td>
+</tr>
+<tr>
+<td>Business-pending</td>
+<td><code>delayed</code> posting not yet due; Wallet temporarily frozen</td>
+<td>Record pending reason; re-defer until due or retry.</td>
+</tr>
+<tr>
+<td>Non-retryable</td>
+<td>Unknown recipient type, invalid currency mapping, out-of-range target amount</td>
+<td>Mark allocation failed, plan remains incomplete/manual review.</td>
+</tr>
+<tr>
+<td>Recovery-required</td>
+<td>Recipient lacks available funds for reversal</td>
+<td>Mark <code>reversal_pending</code>; keep refund lock.</td>
+</tr>
+<tr>
+<td>Integrity conflict</td>
+<td>Duplicate key with changed payload/receipt</td>
+<td>Stop processing, alert, manual review.</td>
+</tr>
+</tbody>
+</table>
+<p>An execution failure never routes its amount to the fallback recipient. Fallback is only
+for a calculated, valid remainder and is itself posted/retried like every allocation.</p>
+<h3 id="135-concurrency">13.5 Concurrency<a class="headerlink" href="#135-concurrency" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Inbox unique keys serialize duplicate transport delivery.</li>
+<li>Plan funding unique keys serialize duplicate funding facts.</li>
+<li>Allocation source UUID and posting idempotency key serialize duplicate posting.</li>
+<li>Wallet performs its own lock and voucher unique-key protection.</li>
+<li>A plan's aggregate state is recomputed under a plan row lock or an atomic versioned
+  update after allocation transitions.</li>
+<li>Outbox claim leases prevent duplicate relay work but are not relied upon for exactly
+  once behavior.</li>
+<li>A reversal command races safely with posting: allocation state is locked; an unposted
+  allocation is cancelled (including a <code>delayed</code>/<code>manual</code> posting command that has not yet
+  run), while a posted allocation reverses its recorded receipt.</li>
+<li>A <code>delayed</code> posting command races safely with a manual approval or posting cancel:
+  posting is idempotent by <code>posting_idempotency_key</code>, so a command that arrives after the
+  allocation was cancelled or reversed is acknowledged as obsolete.</li>
+</ul>
+<hr />
+<h2 id="14-management-api-and-authorization">14. Management API And Authorization<a class="headerlink" href="#14-management-api-and-authorization" title="Permanent link">&para;</a></h2>
+<h3 id="141-api-principle">14.1 API Principle<a class="headerlink" href="#141-api-principle" title="Permanent link">&para;</a></h3>
+<p>Settlement plans, allocations, posted amounts, and state transitions are financial
+records. Generic CRUD endpoints MUST NOT permit direct mutation or deletion of them.
+Controllers issue commands to application services.</p>
+<h3 id="142-proposed-management-commands">14.2 Proposed Management Commands<a class="headerlink" href="#142-proposed-management-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>端点概念</th>
+<th>命令</th>
+<th>所需授权</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建/更新规则草案</td>
+<td>规则草稿命令</td>
+<td>结算规则管理员。</td>
+</tr>
+<tr>
+<td>发布/撤销规则</td>
+<td>规则治理命令</td>
+<td>单独的审批者或特权财务角色。</td>
+</tr>
+<tr>
+<td>模拟</td>
+<td>针对提供的可信/已清理的固定装置上下文进行纯计算</td>
+<td>规则管理员；没有持久性或优惠券调用。</td>
+</tr>
+<tr>
+<td>阅读计划/分配</td>
+<td>查询</td>
+<td>范围内的财务/审计许可。</td>
+</tr>
+<tr>
+<td>重试分配</td>
+<td>重新排队现有分配发布命令</td>
+<td>运营角色。</td>
+</tr>
+<tr>
+<td>批准手动发布</td>
+<td>授权<code>manual</code>分配的发布命令</td>
+<td>结算过帐权限。</td>
+</tr>
+<tr>
+<td>取消待发帖</td>
+<td>在运行之前撤回 <code>delayed</code>/<code>manual</code> 发布命令</td>
+<td>运营角色。</td>
+</tr>
+<tr>
+<td>请求撤销</td>
+<td>创建 <code>SettlementReversal</code></td>
+<td>财务逆转权。</td>
+</tr>
+<tr>
+<td>重试反转</td>
+<td>重新排队现有反转命令</td>
+<td>财务逆转权。</td>
+</tr>
+<tr>
+<td>解锁源码退款</td>
+<td>明确的最终性解锁</td>
+<td>冲销证明后的财务当局。</td>
+</tr>
+</tbody>
+</table>
+<p>所有命令请求都需要客户端幂等性密钥，人们可以在其中重试操作。
+参与者身份、角色/授权原因、请求 ID、时间戳和已清理的信息
+请求元数据包含在审核记录中。</p>
+<h3 id="143">14.3 读取安全性<a class="headerlink" href="#143" title="Permanent link">&para;</a></h3>
+<p>分配接收者、资金和审计参考资料都是敏感的。读取 API 不得
+重用订单/商店连接进行授权。结算查询授权使用
+接收计划/源标量参考和参与者声明的专用策略。安
+集成适配器可以通过接口提供特定于源的范围检查；它
+不得将源实体泄漏到结算域中。</p>
+<hr />
+<h2 id="15">15. 可观察性、审计和对账<a class="headerlink" href="#15" title="Permanent link">&para;</a></h2>
+<h3 id="151">15.1 所需的审计证据<a class="headerlink" href="#151" title="Permanent link">&para;</a></h3>
+<p>完成的分配必须回答所有这些问题，而无需加载另一个
+模块的可变数据：</p>
+<ul>
+<li>分配了哪些确认的资金？</li>
+<li>使用了哪些来源/上下文事实，它们的哈希值是什么？</li>
+<li>应用了哪个规则版本和收件人解析器版本？</li>
+<li>计算出什么精确的理性/公式结果？</li>
+<li>它是如何转换为最终过账单位的？每个剩余单位去了哪里？</li>
+<li>哪个收件人参考收到了它？</li>
+<li>哪个凭证收据预订了它，何时以及使用什么幂等密钥？</li>
+<li>哪个发布策略安排了它，以及在什么时间<code>posting_available_at</code>？</li>
+<li>是否被冲销、由谁冲销、为何冲销以及使用哪张原始凭证冲销收据？</li>
+</ul>
+<h3 id="152">15.2 指标<a class="headerlink" href="#152" title="Permanent link">&para;</a></h3>
+<p>实现应该使用现有的核心指标方法添加模块指标：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>settlement_plans_total{status,currency}
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>settlement_allocations_total{status,recipient_type,currency}
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>settlement_outbox_backlog{topic}
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>settlement_posting_failures_total{class}
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>settlement_reversal_pending_total{currency}
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>settlement_pending_posting_total{policy}           # delayed/manual allocations awaiting their posting command
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>settlement_unallocated_amount_quantum{currency}
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>settlement_refund_locks_total{source_type}
+</code></pre></div>
+<p>金额可以导出为仔细记录的十进制字符串或仅在以下情况下转换：
+指标后端支持任意精度。 Prometheus 浮体样本不得
+用作财务真相。</p>
+<h3 id="153">15.3 和解<a class="headerlink" href="#153" title="Permanent link">&para;</a></h3>
+<p>结算对账将其不可变的分配收据与钱包的进行比较
+边界券：</p>
+<table>
+<thead>
+<tr>
+<th>结算领域</th>
+<th>钱包凭证领域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分配UUID</td>
+<td><code>voucher_id</code> 对于类型 <code>settlement</code></td>
+</tr>
+<tr>
+<td>发布幂等性密钥</td>
+<td><code>reference_id</code></td>
+</tr>
+<tr>
+<td>过账金额/币种</td>
+<td>优惠券金额/货币</td>
+</tr>
+<tr>
+<td>发帖参考</td>
+<td>钱包凭证外部身份</td>
+</tr>
+<tr>
+<td>反转参考</td>
+<td>原始凭证冲销身份</td>
+</tr>
+</tbody>
+</table>
+<p>任何不匹配都是诚信事件。和解报告了这一情况，但没有默默地报告
+通过调整计划或钱包余额来修复资金。</p>
+<hr />
+<h2 id="16">16. 数据库迁移要求<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
+<p>迁移必须可跨 SQLite 测试、PostgreSQL CI 和 MySQL 部署进行移植。
+避免特定于数据库的 JSON 路径逻辑或财务值的数字转换。</p>
+<p>所需索引包括：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>settlement_rule:
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>  UNIQUE(uuid)
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>  UNIQUE(code)
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>settlement_rule_version:
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>  UNIQUE(uuid)
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a>  UNIQUE(rule_uuid, version)
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a>  INDEX(status, effective_from, effective_to)
+<a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a>
+<a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a>settlement_plan:
+<a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a>  UNIQUE(uuid)
+<a id="__codelineno-33-12" name="__codelineno-33-12" href="#__codelineno-33-12"></a>  UNIQUE(funding_id)
+<a id="__codelineno-33-13" name="__codelineno-33-13" href="#__codelineno-33-13"></a>  UNIQUE(source_type, source_id, funding_kind)
+<a id="__codelineno-33-14" name="__codelineno-33-14" href="#__codelineno-33-14"></a>  INDEX(status, created_at)
+<a id="__codelineno-33-15" name="__codelineno-33-15" href="#__codelineno-33-15"></a>  INDEX(source_type, source_id)
+<a id="__codelineno-33-16" name="__codelineno-33-16" href="#__codelineno-33-16"></a>  INDEX(refund_locked_at, refund_unlocked_at)
+<a id="__codelineno-33-17" name="__codelineno-33-17" href="#__codelineno-33-17"></a>
+<a id="__codelineno-33-18" name="__codelineno-33-18" href="#__codelineno-33-18"></a>settlement_allocation:
+<a id="__codelineno-33-19" name="__codelineno-33-19" href="#__codelineno-33-19"></a>  UNIQUE(uuid)
+<a id="__codelineno-33-20" name="__codelineno-33-20" href="#__codelineno-33-20"></a>  UNIQUE(plan_uuid, allocation_key)
+<a id="__codelineno-33-21" name="__codelineno-33-21" href="#__codelineno-33-21"></a>  UNIQUE(posting_idempotency_key)
+<a id="__codelineno-33-22" name="__codelineno-33-22" href="#__codelineno-33-22"></a>  UNIQUE(reversal_idempotency_key)
+<a id="__codelineno-33-23" name="__codelineno-33-23" href="#__codelineno-33-23"></a>  INDEX(plan_uuid, status)
+<a id="__codelineno-33-24" name="__codelineno-33-24" href="#__codelineno-33-24"></a>  INDEX(status, next_attempt_at)
+<a id="__codelineno-33-25" name="__codelineno-33-25" href="#__codelineno-33-25"></a>  INDEX(posting_policy, posting_available_at, status)   # scheduler picks due delayed/manual postings
+<a id="__codelineno-33-26" name="__codelineno-33-26" href="#__codelineno-33-26"></a>  INDEX(posting_due_at, status)                         # scheduler/cancel sweeps
+<a id="__codelineno-33-27" name="__codelineno-33-27" href="#__codelineno-33-27"></a>
+<a id="__codelineno-33-28" name="__codelineno-33-28" href="#__codelineno-33-28"></a>settlement_reversal:
+<a id="__codelineno-33-29" name="__codelineno-33-29" href="#__codelineno-33-29"></a>  UNIQUE(uuid)
+<a id="__codelineno-33-30" name="__codelineno-33-30" href="#__codelineno-33-30"></a>  UNIQUE(idempotency_key)
+<a id="__codelineno-33-31" name="__codelineno-33-31" href="#__codelineno-33-31"></a>  INDEX(plan_uuid, status)
+<a id="__codelineno-33-32" name="__codelineno-33-32" href="#__codelineno-33-32"></a>
+<a id="__codelineno-33-33" name="__codelineno-33-33" href="#__codelineno-33-33"></a>settlement_consumed_event:
+<a id="__codelineno-33-34" name="__codelineno-33-34" href="#__codelineno-33-34"></a>  UNIQUE(event_id)
+<a id="__codelineno-33-35" name="__codelineno-33-35" href="#__codelineno-33-35"></a>
+<a id="__codelineno-33-36" name="__codelineno-33-36" href="#__codelineno-33-36"></a>settlement_outbox_message:
+<a id="__codelineno-33-37" name="__codelineno-33-37" href="#__codelineno-33-37"></a>  UNIQUE(event_id)
+<a id="__codelineno-33-38" name="__codelineno-33-38" href="#__codelineno-33-38"></a>  INDEX(published_at, available_at)
+<a id="__codelineno-33-39" name="__codelineno-33-39" href="#__codelineno-33-39"></a>  INDEX(claimed_at)
+</code></pre></div>
+<p>该架构将金融量子值存储在 <code>VARCHAR</code> 列中，并附有记录
+最大长度，不是 <code>BIGINT</code> 或 <code>DECIMAL</code>。应用程序级规范格式验证
+是强制性的；仅在可移植的情况下才可以添加可选的数据库检查。</p>
+<hr />
+<h2 id="17">17. 实施阶段<a class="headerlink" href="#17" title="Permanent link">&para;</a></h2>
+<p>每个阶段都是可独立审查和测试的。后续阶段不得绕过
+与早期阶段相比不变。</p>
+<table>
+<thead>
+<tr>
+<th>相</th>
+<th>范围</th>
+<th>所需证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>添加<code>brick/math</code>；精确数量/舍入基元；单元测试。</td>
+<td>不使用浮子；溢出和18级测试。</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>结算模式、计划/分配聚合、规则版本、纯模拟。</td>
+<td>规则和守恒集成测试。</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>上下文解析器/接收者解析器注册表和一个通用夹具适配器。</td>
+<td>快照和插件合约测试。</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>结算收件箱/发件箱、发布端口、假适配器、分配状态机。</td>
+<td>重复、崩溃/重试、部分后期集成测试。</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>钱包结算适配器（仅限优惠券提供商路径）、立即 <code>T+0</code> 过账、优惠券收据核对。</td>
+<td>真实钱包凭证交易测试。</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>付款发件箱生产者和通用退款保护/最终性集成。</td>
+<td>付费发布和退款前撤销 E2E 测试。</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>结算端<code>T+N</code>及手动过账调度、过账取消、调度器投递。</td>
+<td>发布时间表、批准和取消比赛测试。</td>
+</tr>
+<tr>
+<td>P7</td>
+<td>管理 API、治理、可观察性、生产运行手册。</td>
+<td>授权、OpenAPI、指标、烟雾验证。</td>
+</tr>
+</tbody>
+</table>
+<p>贸易环境适配器和非支付资金生产者可以独立交付
+P2之后。即使 P5 是第一个生产集成，该核心仍然是通用的。</p>
+<hr />
+<h2 id="18">18. 测试策略和强制不变量<a class="headerlink" href="#18" title="Permanent link">&para;</a></h2>
+<h3 id="181">18.1 单元测试<a class="headerlink" href="#181" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>面积</th>
+<th>所需案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>QuantumAmount</code></td>
+<td>规范解析、符号、零、小数位数、极大字符串、无效格式。</td>
+</tr>
+<tr>
+<td>公式基元</td>
+<td>固定/利率/上限/下限/剩余，嵌套组合，负拒绝，无浮动强制。</td>
+</tr>
+<tr>
+<td>精确的数学</td>
+<td><code>1/3</code>、18 尺度边界、巨大的乘法、除法行为、溢出安全转换。</td>
+</tr>
+<tr>
+<td>四舍五入</td>
+<td>最大余数、等余 UUID 平局决胜、平台回退、精确守恒。</td>
+</tr>
+<tr>
+<td>资格</td>
+<td>全部/任何/非、缺失事实、无效事实类型、有效时间边界。</td>
+</tr>
+<tr>
+<td>收件人解析器</td>
+<td>文字/候选/后备和仅快照行为。</td>
+</tr>
+<tr>
+<td>状态机</td>
+<td>有效/无效计划/分配/冲销转换。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="182">18.2 集成测试<a class="headerlink" href="#182" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>边界</th>
+<th>所需案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>学说</td>
+<td>每个唯一的键、不可变的快照行为、实用的查询索引。</td>
+</tr>
+<tr>
+<td>资金收件箱</td>
+<td>首次交付、同事件重试、新事件同资金、改变重播冲突。</td>
+</tr>
+<tr>
+<td>计划制定</td>
+<td>资金/计划/发件箱原子回滚和未分配的零强制执行。</td>
+</tr>
+<tr>
+<td>发件箱</td>
+<td>声明、发布、失败延迟、重试、过时的租赁行为。</td>
+</tr>
+<tr>
+<td>发布</td>
+<td>钱包成功、处理程序崩溃后重复、不可重试的映射失败、部分计划。</td>
+</tr>
+<tr>
+<td>发布时间表</td>
+<td>计划制定后立即上岗；仅在<code>posting_available_at</code>/之后延迟发布；手册等待批准；在运行之前发布取消。</td>
+</tr>
+<tr>
+<td>逆转</td>
+<td>原始收据使用、未过帐分配取消（在待处理过帐命令之前或之后）、可用余额不足。</td>
+</tr>
+<tr>
+<td>付款</td>
+<td>首次发帖锁定退款；完全逆转和明确解锁许可退款。</td>
+</tr>
+<tr>
+<td>上下文适配器</td>
+<td>标量投影、源缺失、禁止源状态、不受后来突变影响的快照。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="183">18.3 架构测试<a class="headerlink" href="#183" title="Permanent link">&para;</a></h3>
+<p>自动化架构检查应强制执行：</p>
+<ul>
+<li><code>src/Settlement</code>核心不导入贸易、支付、钱包、商店或身份实体
+  命名空间。</li>
+<li>规则实现不使用 Symfony 容器、Doctrine EntityManager 或
+  网络客户端。</li>
+<li>财务结算代码不使用<code>float</code>、<code>round()</code>、<code>bc*</code>、本机货币
+  强制转换或 <code>number_format()</code> 作为计算输入。</li>
+<li>源适配器仅返回标量上下文和<code>RecipientReference</code>值对象。</li>
+<li>凭证端口 DTO 不包含钱包实体类型。</li>
+</ul>
+<h3 id="184">18.4 端到端场景<a class="headerlink" href="#184" title="Permanent link">&para;</a></h3>
+<p>至少，一次性环境烟雾流量必须证明：</p>
+<ol>
+<li>付款确认一笔资金金额。</li>
+<li>和解创建了一个不可变的、保守的计划，其中包含多个接收者以及任何
+   配置后备分配。</li>
+<li>尽管重新交付，钱包每次分配只会收到一张优惠券/交易。</li>
+<li><code>T+0</code> 收款人余额立即可用。</li>
+<li>首次分配过帐后，付款退款将被阻止。</li>
+<li>操作员冲销冲销确切的过帐凭证。</li>
+<li>明确的最终性解锁可实现正常的来源退款。</li>
+<li><code>T+N</code> 分配在预定时间之前不会发布，然后只发布一次；
+   发布前可以取消，发布后只能通过
+   原始凭证（没有持有/释放阶段）。</li>
+</ol>
+<hr />
+<h2 id="19-remaining-configuration-decisions">19. Remaining Configuration Decisions<a class="headerlink" href="#19-remaining-configuration-decisions" title="Permanent link">&para;</a></h2>
+<p>The architectural boundary is fixed. The following are deployment/product configuration
+that must be selected before enabling a producer in production:</p>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Initial default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial trusted funding producer</td>
+<td>Payment paid outbox adapter only.</td>
+</tr>
+<tr>
+<td>Initial source context subject</td>
+<td>A documented Payment/Trade integration subject, not direct entity access.</td>
+</tr>
+<tr>
+<td>Initial recipient types</td>
+<td><code>platform</code>, then explicitly approved host types such as <code>user</code>, <code>store</code>, or <code>merchant</code>.</td>
+</tr>
+<tr>
+<td>Platform fallback reference</td>
+<td>A configured immutable <code>RecipientReference</code>, not magic username/account ID.</td>
+</tr>
+<tr>
+<td>Wallet auto-provision mapping</td>
+<td>Per recipient type + currency policy, with audited creation.</td>
+</tr>
+<tr>
+<td><code>T+1</code> calendar</td>
+<td>Configure business timezone and settlement-day calendar before delayed policy is enabled.</td>
+</tr>
+<tr>
+<td>Rule publication authority</td>
+<td>Finance/operations roles and optional four-eyes approval.</td>
+</tr>
+<tr>
+<td>Non-retryable failure escalation</td>
+<td>Alert channel, manual-review queue, and operational SLA.</td>
+</tr>
+<tr>
+<td>Future A/R-A/P handoff</td>
+<td>Contract for resolving <code>reversal_pending</code> without corrupting Settlement history.</td>
+</tr>
+</tbody>
+</table>
+<p>No item in this section authorizes relaxing conservation, immutable snapshots, voucher
+reversal, or cross-boundary dependency constraints.</p>
+<hr />
+<h2 id="20-implementation-checklist">20. Implementation Checklist<a class="headerlink" href="#20-implementation-checklist" title="Permanent link">&para;</a></h2>
+<p>Before merging any Settlement implementation, verify:</p>
+<ul>
+<li>[ ] <code>brick/math</code> is added and used by all Settlement financial calculations.</li>
+<li>[ ] No Settlement core import reaches a foreign business entity/repository/service.</li>
+<li>[ ] Every funding producer writes its source mutation and outbox event atomically.</li>
+<li>[ ] Every consumed event, plan, allocation posting, posting-cancel, and reversal has a
+      stable database-backed idempotency key.</li>
+<li>[ ] Context, rule, recipient, calculation, rounding, and receipt evidence are frozen.</li>
+<li>[ ] Every plan demonstrates exact and target-unit conservation with <code>unallocated = 0</code>.</li>
+<li>[ ] Fallback remainder is a normal allocation, never an implicit adjustment.</li>
+<li>[ ] Wallet posting uses voucher-backed credit, not a direct balance update.</li>
+<li>[ ] Refund lock activates on first posting and unlocks only after approved complete
+      original-voucher reversal.</li>
+<li>[ ] <code>T+0</code>, delayed, and manual posting scheduling are covered, and the handoff is final:
+      once a credit is posted, Settlement performs no hold, no release, and no management
+      of that money (only original-voucher reversal).</li>
+<li>[ ] Insufficient-funds reversal stays pending and never manufactures negative balance.</li>
+<li>[ ] Rules cannot execute arbitrary service/container/object-graph access.</li>
+<li>[ ] New messages, outbox/inbox handling, migrations, API permissions, metrics, and
+      scheduler commands have tests required by the project test strategy.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>
