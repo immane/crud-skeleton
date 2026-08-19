@@ -27,7 +27,7 @@
     
     
       
-        <title>身份 — 控制器/OTP 服务/创建用户命令覆盖率约 100% 和错误报告 - CRUD Skeleton</title>
+        <title>Identity — controllers / OTP service / create-user command coverage to ~100% & bug report - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#otp-100" class="md-skip">
+        <a href="#identity-controllers-otp-service-create-user-command-coverage-to-100-bug-report" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              身份 — 控制器/OTP 服务/创建用户命令覆盖率约 100% 和错误报告
+              Identity — controllers / OTP service / create-user command coverage to ~100% &amp; bug report
             
           </span>
         </div>
@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -1562,22 +1562,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#coverage-before-after" class="md-nav__link">
     <span class="md-ellipsis">
       
-        之前→之后的覆盖范围
+        Coverage before → after
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="之前→之后的覆盖范围">
+    <nav class="md-nav" aria-label="Coverage before → after">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#measurement-command" class="md-nav__link">
     <span class="md-ellipsis">
       
-        测量命令
+        Measurement command
       
     </span>
   </a>
@@ -1590,10 +1590,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#26-22-4" class="md-nav__link">
+  <a href="#test-files-added-26-tests-22-passing-4-skipped" class="md-nav__link">
     <span class="md-ellipsis">
       
-        添加测试文件（26 个测试：22 个通过 + 4 个跳过）
+        Test files added (26 tests: 22 passing + 4 skipped)
       
     </span>
   </a>
@@ -1601,22 +1601,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#bugs-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        发现错误
+        Bugs found
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="发现错误">
+    <nav class="md-nav" aria-label="Bugs found">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-a-json_decode-json_throw_on_error-http-500" class="md-nav__link">
+  <a href="#bug-a-unguarded-json_decode-json_throw_on_error-http-500-on-emptymalformed-bodies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug A — 不受保护的 json_decode(..., JSON_THROW_ON_ERROR) → 空/格式错误的主体上的 HTTP 500
+        Bug A — unguarded json_decode(..., JSON_THROW_ON_ERROR) → HTTP 500 on empty/malformed bodies
       
     </span>
   </a>
@@ -1624,10 +1624,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-b-verify_phone-phone_verifiedtrue" class="md-nav__link">
+  <a href="#bug-b-verify_phone-reports-phone_verifiedtrue-for-phone-numbers-with-no-user-account" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug B — verify_phone 报告没有用户帐户的电话号码的 phone_verified=true
+        Bug B — verify_phone reports phone_verified=true for phone numbers with no user account
       
     </span>
   </a>
@@ -1684,7 +1684,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         跳过测试（全部保持套件绿色）
@@ -1695,7 +1695,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         结果
@@ -1725,64 +1725,64 @@
   
 
 
-<h1 id="otp-100">身份 — 控制器/OTP 服务/创建用户命令覆盖率约 100% 和错误报告<a class="headerlink" href="#otp-100" title="Permanent link">&para;</a></h1>
+<h1 id="identity-controllers-otp-service-create-user-command-coverage-to-100-bug-report">Identity — controllers / OTP service / create-user command coverage to ~100% &amp; bug report<a class="headerlink" href="#identity-controllers-otp-service-create-user-command-coverage-to-100-bug-report" title="Permanent link">&para;</a></h1>
 <ul>
-<li>日期：2026-08-09</li>
-<li>范围：<code>src/Identity/Controller/AuthController.php</code>、<code>src/Identity/Controller/OtpController.php</code>、<code>src/Identity/Service/OtpService.php</code>、<code>src/Identity/Command/CreateUserCommand.php</code>、<code>src/Identity/Service/ProfileService.php</code></li>
-<li>任务：将线路覆盖率提高到 100% 并寻找错误。</li>
-<li>遵守约束：<strong><code>src/</code> 下没有任何内容被修改</strong> — 仅在 <code>tests/</code> 下添加了新的测试文件以及此报告。</li>
-<li>运行器：<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code>（PHP 8.5.1、PHPUnit 12.5.30）。</li>
+<li>Date: 2026-08-09</li>
+<li>Scope: <code>src/Identity/Controller/AuthController.php</code>, <code>src/Identity/Controller/OtpController.php</code>, <code>src/Identity/Service/OtpService.php</code>, <code>src/Identity/Command/CreateUserCommand.php</code>, <code>src/Identity/Service/ProfileService.php</code></li>
+<li>Task: raise line coverage to ~100% and hunt for bugs.</li>
+<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong> — only new test files added under <code>tests/</code> plus this report.</li>
+<li>Runner: <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;file&gt; --no-coverage</code> (PHP 8.5.1, PHPUnit 12.5.30).</li>
 </ul>
-<h2 id="_1">之前→之后的覆盖范围<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>来自 <code>var/uncovered-map.txt</code> / <code>var/coverage2/</code> HTML 的基线（2026 年 8 月 9 日生成，全套）。
-After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
-（参见下面的“测量命令”）。</p>
+<h2 id="coverage-before-after">Coverage before → after<a class="headerlink" href="#coverage-before-after" title="Permanent link">&para;</a></h2>
+<p>Baseline from <code>var/uncovered-map.txt</code> / <code>var/coverage2/</code> HTML (generated 2026-08-09, full suite).
+After = measured with Xdebug + Clover against the combined existing + new tests for these classes
+(see "Measurement command" below).</p>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>之前</th>
-<th>之后</th>
-<th>剩余未覆盖线路</th>
+<th>File</th>
+<th>Before</th>
+<th>After</th>
+<th>Remaining uncovered lines</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Identity/Controller/OtpController.php</code></td>
-<td>86.05%（第 42、53、65、69、73、79 行）</td>
+<td>86.05% (lines 42, 53, 65, 69, 73, 79)</td>
 <td><strong>100%</strong> (43/43)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Controller/AuthController.php</code></td>
-<td>93.46%（第 280、294、295、296、297、300、387 行）</td>
+<td>93.46% (lines 280, 294, 295, 296, 297, 300, 387)</td>
 <td><strong>100%</strong> (107/107)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Service/OtpService.php</code></td>
-<td>93.75%（第 111、112、115 行）</td>
+<td>93.75% (lines 111, 112, 115)</td>
 <td><strong>100%</strong> (48/48)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Command/CreateUserCommand.php</code></td>
-<td>94.37%（第 83、85、137、143 行）</td>
+<td>94.37% (lines 83, 85, 137, 143)</td>
 <td><strong>100%</strong> (71/71)</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>Identity/Service/ProfileService.php</code></td>
-<td>已 100%（0 未覆盖）</td>
+<td>already 100% (0 uncovered)</td>
 <td><strong>100%</strong> (8/8)</td>
 <td>—</td>
 </tr>
 </tbody>
 </table>
-<p><code>refresh()</code> 成功主体（AuthController 第 341-345 行）由
-全套中现有的<code>AuthIntegrationTest::testFullAuthFlow</code>；单元测试
-无论如何都添加了，所以该类在单元测试下也是 100% 的。</p>
-<h3 id="_2">测量命令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>The <code>refresh()</code> success body (AuthController lines 341–345) is covered by the
+existing <code>AuthIntegrationTest::testFullAuthFlow</code> in the full suite; a unit test
+was added anyway so the class is 100% under unit tests too.</p>
+<h3 id="measurement-command">Measurement command<a class="headerlink" href="#measurement-command" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php -d memory_limit=1G vendor/bin/phpunit \
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  tests/Identity/Controller/AuthControllerTest.php \
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  tests/Identity/Controller/OtpControllerTest.php \
@@ -1800,51 +1800,51 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  --coverage-filter src/Identity/Service/ProfileService.php \
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  --coverage-clover /tmp/cov-run/clover.xml
 </code></pre></div>
-<h2 id="26-22-4">添加测试文件（26 个测试：22 个通过 + 4 个跳过）<a class="headerlink" href="#26-22-4" title="Permanent link">&para;</a></h2>
+<h2 id="test-files-added-26-tests-22-passing-4-skipped">Test files added (26 tests: 22 passing + 4 skipped)<a class="headerlink" href="#test-files-added-26-tests-22-passing-4-skipped" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>测试</th>
-<th>目的</th>
+<th>File</th>
+<th>Tests</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Identity/Controller/OtpControllerCoverageTest.php</code></td>
-<td>8（+1 跳过）</td>
-<td>requestOtp 目的无效 (42)、requestOtp 204 (53)、verifyOtp 缺少电话/otp (65)、verifyOtp 目的无效 (69)、verifyOtp 无效 OTP (73)、verifyOtp 登录未知用户/未验证电话 (79)、verify_phone 未知用户分支；跳过 Bug A 重现。</td>
+<td>8 (+1 skipped)</td>
+<td>requestOtp invalid purpose (42), requestOtp 204 (53), verifyOtp missing phone/otp (65), verifyOtp invalid purpose (69), verifyOtp invalid OTP (73), verifyOtp login unknown user / unverified phone (79), verify_phone unknown-user branch; skipped Bug A repro.</td>
 </tr>
 <tr>
 <td><code>tests/Identity/Controller/AuthControllerCoverageTest.php</code></td>
-<td>8（+2 跳过）</td>
-<td>verifyOtp 登录未验证/未知 (280)、verifyOtp verify_phone flag+flush (294–297, 300)、verifyOtp verify_phone 未知用户 (300)、使用非数组 JSON 正文注销 (387)、使用已验证的手机登录 → 令牌、刷新成功 → 旋转令牌 (341–345)；跳过 Bug A + Bug D 重现。</td>
+<td>8 (+2 skipped)</td>
+<td>verifyOtp login unverified/unknown (280), verifyOtp verify_phone flag+flush (294–297, 300), verifyOtp verify_phone unknown user (300), logout with non-array JSON body (387), login with verified phone → tokens, refresh success → rotated tokens (341–345); skipped Bug A + Bug D repros.</td>
 </tr>
 <tr>
 <td><code>tests/Identity/Service/OtpServiceCoverageTest.php</code></td>
 <td>3</td>
-<td>私有 <code>maskPhone()</code> (111, 112, 115) 通过公共 <code>generateAndSend()</code>/<code>verify()</code> 使用真正的 PSR 记录器执行，捕获日志上下文中的屏蔽 <code>phone</code>（长电话 → <code>+86****5678</code>，4 字符电话 → <code>***</code>，最大尝试日志路径）。</td>
+<td>private <code>maskPhone()</code> (111, 112, 115) exercised through public <code>generateAndSend()</code>/<code>verify()</code> with a real PSR logger, capturing the masked <code>phone</code> in the log context (long phone → <code>+86****5678</code>, 4-char phone → <code>***</code>, max-attempts log path).</td>
 </tr>
 <tr>
 <td><code>tests/Identity/Command/CreateUserCommandCoverageTest.php</code></td>
-<td>4（+1 跳过）</td>
-<td>用户名已存在失败 (83, 85); NormalizeRoles 跳过非字符串/空角色值 (137)；带有空段的逗号分隔角色 (143)；无电话/无角色创建；跳过 Bug E 重现。</td>
+<td>4 (+1 skipped)</td>
+<td>username-already-exists failure (83, 85); normalizeRoles skips non-string/empty role values (137); comma-separated roles with empty segments (143); no-phone/no-role creation; skipped Bug E repro.</td>
 </tr>
 </tbody>
 </table>
-<p>现有的 <code>tests/Identity/**</code> 未受影响；不需要新的数据库/集成测试 -
-所有新的覆盖范围都是与被嘲笑的合作者进行的纯单元测试。</p>
-<h2 id="_3">发现错误<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h3 id="bug-a-json_decode-json_throw_on_error-http-500">Bug A — 不受保护的 <code>json_decode(..., JSON_THROW_ON_ERROR)</code> → 空/格式错误的主体上的 HTTP 500<a class="headerlink" href="#bug-a-json_decode-json_throw_on_error-http-500" title="Permanent link">&para;</a></h3>
+<p>Existing <code>tests/Identity/**</code> untouched; no new DB/integration tests were needed —
+all new coverage is pure unit tests with mocked collaborators.</p>
+<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-a-unguarded-json_decode-json_throw_on_error-http-500-on-emptymalformed-bodies">Bug A — unguarded <code>json_decode(..., JSON_THROW_ON_ERROR)</code> → HTTP 500 on empty/malformed bodies<a class="headerlink" href="#bug-a-unguarded-json_decode-json_throw_on_error-http-500-on-emptymalformed-bodies" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>AuthController.php</code> 73（登录）、134（注册）、331（刷新）、385（注销）； <code>OtpController.php</code> 33 (requestOtp), 59 (verifyOtp)。</li>
-<li><strong>描述：</strong> 每个 JSON 端点都使用 <code>JSON_THROW_ON_ERROR</code> 解码原始正文，并且不保护丢失/空/格式错误的正文。 <code>json_decode('', …)</code> 抛出 <code>JsonException</code> （已验证：<code>JsonException: Syntax error</code>）。只有 <code>logout()</code> 保护<em>空</em>主体（<code>$content === '' ? [] : …</code>，第 385 行），但 <strong>非空的畸形</strong>主体仍然会抛出异常。</li>
-<li><strong>影响：</strong> 不发送正文或格式错误的 JSON 的客户端会收到未捕获的 <code>JsonException</code> （HTTP 500 / 错误页面），而不是受控的 <code>400</code>；可能会泄漏非产品中的异常详细信息。所有六个 OTP/登录/注册/刷新/注销入口点都会受到影响。</li>
-<li><strong>复制：</strong> <code>POST /api/auth/otp/request</code> 带空主体，或 <code>POST /api/auth/logout</code> 带主体 <code>{oops</code> → <code>JsonException</code> 从控制器中冒泡。</li>
-<li><strong>建议的修复：</strong> 将解码包装在 <code>try/catch (\JsonException)</code> 中（或在非抛出解码后验证 <code>json_last_error()</code>）并返回 <code>$this-&gt;error(..., 400)</code>；对于 <code>logout()</code> 也将防护扩展到非空畸形体。</li>
-<li><strong>测试：</strong> <code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code> 和 <code>AuthControllerCoverageTest::testLogoutWithMalformedJsonShouldNotThrow</code> 被 <strong>跳过</strong>（它们断言固定的 400/204 行为；当前的 src 抛出）。保留在套房中以保护未来的修复。</li>
+<li><strong>Files/lines:</strong> <code>AuthController.php</code> 73 (login), 134 (register), 331 (refresh), 385 (logout); <code>OtpController.php</code> 33 (requestOtp), 59 (verifyOtp).</li>
+<li><strong>Description:</strong> every JSON endpoint decodes the raw body with <code>JSON_THROW_ON_ERROR</code> and no guard for a missing/empty/malformed body. <code>json_decode('', …)</code> throws <code>JsonException</code> (verified: <code>JsonException: Syntax error</code>). Only <code>logout()</code> guards the <em>empty</em> body (<code>$content === '' ? [] : …</code>, line 385), but a <strong>non-empty malformed</strong> body still throws.</li>
+<li><strong>Impact:</strong> a client that sends no body or malformed JSON gets an uncaught <code>JsonException</code> (HTTP 500 / error page) instead of a controlled <code>400</code>; potentially leaks exception details in non-prod. All six OTP/login/register/refresh/logout entry points are affected.</li>
+<li><strong>Reproduction:</strong> <code>POST /api/auth/otp/request</code> with empty body, or <code>POST /api/auth/logout</code> with body <code>{oops</code> → <code>JsonException</code> bubbles out of the controller.</li>
+<li><strong>Proposed fix:</strong> wrap the decode in a <code>try/catch (\JsonException)</code> (or validate <code>json_last_error()</code> after a non-throwing decode) and return <code>$this-&gt;error(..., 400)</code>; for <code>logout()</code> extend the guard to non-empty malformed bodies as well.</li>
+<li><strong>Tests:</strong> <code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code> and <code>AuthControllerCoverageTest::testLogoutWithMalformedJsonShouldNotThrow</code> are <strong>skipped</strong> (they assert the fixed 400/204 behavior; the current src throws). Kept in the suite to guard the future fix.</li>
 </ul>
-<h3 id="bug-b-verify_phone-phone_verifiedtrue">Bug B — <code>verify_phone</code> 报告没有用户帐户的电话号码的 <code>phone_verified=true</code><a class="headerlink" href="#bug-b-verify_phone-phone_verifiedtrue" title="Permanent link">&para;</a></h3>
+<h3 id="bug-b-verify_phone-reports-phone_verifiedtrue-for-phone-numbers-with-no-user-account">Bug B — <code>verify_phone</code> reports <code>phone_verified=true</code> for phone numbers with no user account<a class="headerlink" href="#bug-b-verify_phone-reports-phone_verifiedtrue-for-phone-numbers-with-no-user-account" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>AuthController.php</code> 294–300； <code>OtpController.php</code> 93–99。</li>
 <li><strong>描述：</strong>成功进行带有 <code>verify_phone</code> 目的的 OTP 验证后，控制器会查找用户，并且仅在用户存在时保留该标志，<strong>但始终</strong>返回 <code>['phone_verified' =&gt; true]</code> — 即使 <code>findByPhone()</code> 返回 <code>null</code> 时也是如此。 <code>login</code> 的目的不一致：它为缺失/未经验证的用户返回 <code>401</code>。</li>
@@ -1889,7 +1889,7 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 <li><strong>建议的修复：</strong> 防御性正常化，例如<code>$roleInputs = is_array($rolesOption) ? $rolesOption : [$rolesOption];</code> 并过滤非字符串（第 136 行已经跳过它们）。</li>
 <li><strong>测试：</strong> <code>CreateUserCommandCoverageTest::testExecuteSkipsNonStringAndEmptyRoleOptionValues</code> 覆盖跳过；此处记录了差异，没有测试断言固定行为。</li>
 </ul>
-<h2 id="_4">跳过测试（全部保持套件绿色）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_1">跳过测试（全部保持套件绿色）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1922,7 +1922,7 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 </tbody>
 </table>
 <p>单独验证（未跳过）其中每个都针对当前 <code>src/</code> 失败，然后重新跳过。</p>
-<h2 id="_5">结果<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_2">结果<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li>4 个新测试文件，<strong>26 个测试，71 个断言，4 个记录的跳过，退出 0</strong>（无弃用/通知/警告）。</li>
 <li>所有五个目标文件现在都处于 <strong>100% 行覆盖率</strong>（使用 Xdebug + Clover 在现有 + 新测试的组合上进行测量）。</li>

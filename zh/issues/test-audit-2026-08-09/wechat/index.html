@@ -27,7 +27,7 @@
     
     
       
-        <title>Wechat module test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>微信模块测试审核(2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#wechat-module-test-audit-2026-08-09" class="md-skip">
+        <a href="#2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Wechat module test audit (2026-08-09)
+              微信模块测试审核(2026-08-09)
             
           </span>
         </div>
@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1147,7 +1147,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -1348,7 +1348,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -1562,40 +1562,40 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        KEEP
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#delete-candidates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DELETE CANDIDATES
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保留
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        删除候选者
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         合并建议
@@ -1606,7 +1606,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证步骤
@@ -1636,109 +1636,109 @@
   
 
 
-<h1 id="wechat-module-test-audit-2026-08-09">Wechat module test audit (2026-08-09)<a class="headerlink" href="#wechat-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Scope: <code>tests/Wechat/**</code> (14 files, 78 tests, 1 skipped), cross-read against <code>src/Wechat/**</code>,
-<code>tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code>, and
-<code>tests/Core/Service/BaseServiceCoverageTest.php</code>. READ-ONLY — nothing under <code>src/</code> or <code>tests/</code> was modified.</p>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<h1 id="2026-08-09">微信模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
+<p>范围：<code>tests/Wechat/**</code>（14 个文件，78 个测试，跳过 1 个），针对 <code>src/Wechat/**</code> 交叉读取，
+<code>tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code>，以及
+<code>tests/Core/Service/BaseServiceCoverageTest.php</code>。只读 — <code>src/</code> 或 <code>tests/</code> 下的任何内容都没有被修改。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Controller/App/WechatUserControllerTest.php</code></td>
 <td>3</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>Controller/LoginControllerCoverageTest.php</code></td>
 <td>3</td>
-<td>MERGE into <code>LoginControllerTest</code></td>
+<td>合并到 <code>LoginControllerTest</code></td>
 </tr>
 <tr>
 <td><code>Controller/LoginControllerTest.php</code></td>
 <td>10</td>
-<td>9 KEEP, 1 DELETE</td>
+<td>10 9 保留，1 删除</td>
 </tr>
 <tr>
 <td><code>Controller/Manage/WechatUserControllerTest.php</code></td>
 <td>2</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>Entity/WechatUserCoverageTest.php</code></td>
 <td>3</td>
-<td>1 DELETE, 2 MERGE into <code>WechatUserTest</code></td>
+<td>1 删除，2 合并到 <code>WechatUserTest</code></td>
 </tr>
 <tr>
 <td><code>Entity/WechatUserTest.php</code></td>
 <td>6</td>
-<td>3 KEEP, 3 DELETE</td>
+<td>3 保留，3 删除</td>
 </tr>
 <tr>
 <td><code>Repository/WechatUserRepositoryTest.php</code></td>
 <td>3</td>
-<td>3 DELETE</td>
+<td>3 删除</td>
 </tr>
 <tr>
 <td><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></td>
 <td>3</td>
-<td>1 DELETE, 2 MERGE into <code>WechatPayGatewayTest</code></td>
+<td>1 删除，2 合并到 <code>WechatPayGatewayTest</code></td>
 </tr>
 <tr>
 <td><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></td>
-<td>1 (skipped)</td>
-<td>KEEP (documents Bug 1)</td>
+<td>1（跳过）</td>
+<td>保留（文档 Bug 1）</td>
 </tr>
 <tr>
 <td><code>Service/Payment/WechatPayGatewayTest.php</code></td>
 <td>16</td>
-<td>12 KEEP, 2 DELETE, 2 MERGE</td>
+<td>16 12 个保留、2 个删除、2 个合并</td>
 </tr>
 <tr>
 <td><code>Service/WechatAuthServiceTest.php</code></td>
 <td>6</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>Service/WechatServiceCoverageTest.php</code></td>
 <td>6</td>
-<td>4 KEEP, 2 DELETE</td>
+<td>4 保留，2 删除</td>
 </tr>
 <tr>
 <td><code>Service/WechatServiceTest.php</code></td>
 <td>14</td>
-<td>11 KEEP, 3 DELETE</td>
+<td>14 11 保留，3 删除</td>
 </tr>
 <tr>
 <td><code>Service/WechatUserServiceTest.php</code></td>
 <td>2</td>
-<td>2 DELETE</td>
+<td>2 删除</td>
 </tr>
 </tbody>
 </table>
-<p>Totals: <strong>60 KEEP / MERGE (content retained), 18 DELETE CANDIDATES</strong> (11 HIGH, 7 MEDIUM confidence). No test documents an unfixed bug except <code>WechatPayGatewayNotifyBugTest</code>, which is KEPT.</p>
-<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
-<p>Behavioral tests with genuine branch or contract value:</p>
+<p>总计：<strong>60 个保留/合并（保留内容），18 个删除候选</strong>（11 个高置信度，7 个中置信度）。除了 KEPT 之外，没有测试记录未修复的错误。</p>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>具有真正分支或合同价值的行为测试：</p>
 <ul>
-<li><strong><code>Controller/LoginControllerTest.php</code></strong> — success, missing-input (400) and WeChat-error (401) paths for miniapp login, oauth url, oauth callback, and miniapp phone. Each hits a distinct branch.</li>
-<li><strong><code>Controller/App/WechatUserControllerTest.php</code></strong> — <code>commonFilter()</code> owner-scoping is the only Wechat-specific logic in the App controller (lines 35-39): both user and anonymous branches plus filter delegation.</li>
-<li><strong><code>Controller/Manage/WechatUserControllerTest.php</code></strong> — asserts the admin controller does <strong>not</strong> add owner scoping (inherited empty <code>commonFilter</code>); the only test asserting the admin vs app boundary.</li>
-<li><strong><code>Entity/WechatUserTest.php</code></strong> — <code>testConstructorSetsRequiredFields</code> (constructor + <code>__toString</code> contract), <code>testOpenidCanBeUpdated</code> (setter <code>touch()</code> side effect), <code>testMetadata</code> (field composition).</li>
-<li><strong><code>Service/WechatAuthServiceTest.php</code></strong> — existing/new-user paths for both providers and both <code>bindPhone</code> outcomes; fully covers <code>WechatAuthService</code> and was already 100% pre-campaign (no coverage churn here).</li>
-<li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>, <code>getPhoneNumber</code>, <code>getOAuthUser</code> success/error/null-profile branches, <code>getOAuthRedirectUrl</code> (appid + scope), lazy-cache of miniapp/official apps.</li>
-<li><strong><code>Service/WechatServiceCoverageTest.php</code></strong> — the four <code>getPayApp()</code> config-branch tests (platform cert / pub-key / both / neither; <code>WechatService.php:84-89</code>) are the <strong>only</strong> coverage of those config branches and assert real EasyWeChat config keys.</li>
-<li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — native/jsapi success, description/<code>'Payment'</code> fallbacks, refund status computation (SUCCESS full/partial vs pending), all three <code>notify()</code> error/success paths, and <code>getNotifySuccessResponse</code> fallback body.</li>
-<li><strong><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></strong> — <code>testPayNativeClientWithoutPostJsonSupportThrows</code> and <code>testPayNativeClientReturningInvalidResponseThrows</code> are the only coverage of the <code>postJson()</code> defensive branches (<code>WechatPayGateway.php:199,204</code>).</li>
-<li><strong><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></strong> — KEEP. Skipped regression documenting Bug 1 (notify never propagates the request to EasyWeChat; <code>serve()</code> reads an empty request). Per instructions, skipped tests documenting bugs are KEEP.</li>
-<li><strong><code>Controller/LoginControllerCoverageTest.php</code></strong> — all 3 tests are the only coverage of <code>miniappPhone</code> success (204), <code>bindPhone</code> error → 400, and <code>oauthCallback</code> RuntimeException → 401. Content retained (see MERGE).</li>
+<li><strong><code>Controller/LoginControllerTest.php</code></strong> — 小应用程序登录、oauth url、oauth 回调和小应用程序电话的成功、缺失输入 (400) 和微信错误 (401) 路径。每个都击中一个不同的分支。</li>
+<li><strong><code>Controller/App/WechatUserControllerTest.php</code></strong> — <code>commonFilter()</code> 所有者作用域是应用程序控制器中唯一特定于微信的逻辑（第 35-39 行）：用户分支和匿名分支以及过滤器委托。</li>
+<li><strong><code>Controller/Manage/WechatUserControllerTest.php</code></strong> — 断言管理控制器<strong>不</strong>添加所有者范围（继承空<code>commonFilter</code>）；断言管理与应用程序边界的唯一测试。</li>
+<li><strong><code>Entity/WechatUserTest.php</code></strong> — <code>testConstructorSetsRequiredFields</code>（构造函数 + <code>__toString</code> 合约）、<code>testOpenidCanBeUpdated</code>（setter <code>touch()</code> 副作用）、<code>testMetadata</code>（字段组合）。</li>
+<li><strong><code>Service/WechatAuthServiceTest.php</code></strong> — 两个提供商和两个 <code>bindPhone</code> 结果的现有/新用户路径；完全覆盖 <code>WechatAuthService</code>，并且在活动前已经 100%（这里没有覆盖范围流失）。</li>
+<li><strong><code>Service/WechatServiceTest.php</code></strong> — <code>code2Session</code>、<code>getPhoneNumber</code>、<code>getOAuthUser</code>成功/错误/空配置文件分支、<code>getOAuthRedirectUrl</code>（appid +范围）、小型应用程序/官方应用程序的延迟缓存。</li>
+<li><strong><code>Service/WechatServiceCoverageTest.php</code></strong> — 四个 <code>getPayApp()</code> 配置分支测试（平台证书/pub-key/两者/两者都不是；<code>WechatService.php:84-89</code>）是这些配置分支的<strong>唯一</strong>覆盖范围并断言真正的 EasyWeChat 配置密钥。</li>
+<li><strong><code>Service/Payment/WechatPayGatewayTest.php</code></strong> — 本机/jsapi 成功、描述/<code>'Payment'</code> 后备、退款状态计算（成功全部/部分与待定）、所有三个 <code>notify()</code> 错误/成功路径以及 <code>getNotifySuccessResponse</code> 后备主体。</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code></strong> — <code>testPayNativeClientWithoutPostJsonSupportThrows</code> 和 <code>testPayNativeClientReturningInvalidResponseThrows</code> 是 <code>postJson()</code> 防御分支 (<code>WechatPayGateway.php:199,204</code>) 的唯一覆盖范围。</li>
+<li><strong><code>Service/Gateway/WechatPayGatewayNotifyBugTest.php</code></strong> — 保留。跳过记录 Bug 1 的回归（notify 永远不会将请求传播到 EasyWeChat；<code>serve()</code> 读取空请求）。根据说明，跳过记录错误的测试将被保留。</li>
+<li><strong><code>Controller/LoginControllerCoverageTest.php</code></strong> — 所有 3 个测试都是 <code>miniappPhone</code> 成功 (204)、<code>bindPhone</code> 错误 → 400 和 <code>oauthCallback</code> RuntimeException → 401 的唯一覆盖范围。保留内容（请参阅合并）。</li>
 </ul>
-<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1864,7 +1864,7 @@
 - <code>WechatUserServiceTest</code> 是 <code>WechatUserService.php</code> 的唯一覆盖范围（活动中为 0% → 100%）。删除它会将文件降至 0%；它应该是 <code>@codeCoverageIgnore</code>d （<code>src/</code> 更改）或与之配对的删除。
 - 删除<code>WechatUserRepositoryTest</code>会删除<code>WechatUserRepository.php</code>的唯一覆盖范围； <code>findOneBy</code> 委托最好由拥有的集成层来证明（请参阅验证）。
 - <code>WechatUserCoverageTest::testGetIdReturnsNullBeforePersist</code>是<code>getId()</code>的唯一调用者；它的返回线不会被覆盖，除非后续也忽略了平凡的吸气剂。</p>
-<h2 id="_1">合并建议<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>将 2026 年 8 月 9 日活动创建的同类覆盖文件拆分合并回其主文件（内容保留；仅文件位置更改）：</p>
 <ol>
 <li><code>Controller/LoginControllerCoverageTest.php</code> → 将其 3 个测试折叠到 <code>Controller/LoginControllerTest.php</code> 中（相同的 <code>setUp</code>，助手已经存在）。每类一个文件。</li>
@@ -1873,7 +1873,7 @@
 <li><code>Service/Gateway/WechatPayGatewayCoverageTest.php</code> → 将两个<code>postJson()</code>防御分支测试折叠到<code>Service/Payment/WechatPayGatewayTest.php</code>中；删除<code>testPayJsapiWithPayerButNoWechatUserThrows</code>。</li>
 <li><code>Service/Payment/WechatPayGatewayTest.php</code> — 将 <code>testGetNotifySuccessResponse</code> 和 <code>testNotifySuccessResponseIsJson</code> 合并到一个测试中（两者都涵盖成功响应；将 <code>Content-Type</code> 断言折叠到主断言中）。</li>
 </ol>
-<h2 id="_2">验证步骤<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ol>
 <li>基线：<code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Wechat</code> → 78 个测试，1 个跳过，全绿色。</li>
 <li>对于每个高置信度重复候选，确认覆盖测试存在并断言相同的分支：重新运行指定的覆盖文件，例如
