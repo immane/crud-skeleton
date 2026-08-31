@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -632,7 +632,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -688,7 +688,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -716,7 +716,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1277,10 +1277,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61-exception-response-mapping" class="md-nav__link">
+  <a href="#61" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 Exception Response Mapping
+        6.1 异常响应映射
       
     </span>
   </a>
@@ -1293,10 +1293,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-configuration-contract" class="md-nav__link">
+  <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Configuration Contract
+        7. 配置合约
       
     </span>
   </a>
@@ -1304,10 +1304,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-module-checklist-new-module-creation" class="md-nav__link">
+  <a href="#8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Module Checklist (New Module Creation)
+        8. 模块清单（新模块创建）
       
     </span>
   </a>
@@ -1594,7 +1594,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1818,7 +1818,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2449,7 +2449,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2566,7 +2566,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2594,7 +2594,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2650,7 +2650,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2678,7 +2678,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -3115,10 +3115,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61-exception-response-mapping" class="md-nav__link">
+  <a href="#61" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 Exception Response Mapping
+        6.1 异常响应映射
       
     </span>
   </a>
@@ -3131,10 +3131,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-configuration-contract" class="md-nav__link">
+  <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Configuration Contract
+        7. 配置合约
       
     </span>
   </a>
@@ -3142,10 +3142,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-module-checklist-new-module-creation" class="md-nav__link">
+  <a href="#8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Module Checklist (New Module Creation)
+        8. 模块清单（新模块创建）
       
     </span>
   </a>
@@ -3231,7 +3231,7 @@
 <li><strong>位置</strong>：<code>src/{Module}/Service/{Name}Service.php</code></li>
 <li><strong>命名空间</strong>：<code>App\{Module}\Service</code></li>
 <li><strong>必须</strong>：扩展 <code>App\Core\Service\BaseService</code></li>
-<li><strong>必须</strong>：实施 <code>{Name}ServiceInterface</code></li>
+<li><strong>必须</strong>：实施<code>{Name}ServiceInterface</code></li>
 <li><strong>必须</strong>：接受 <code>ContainerInterface</code>、实体类 FQCN、可选定位器/表达式服务</li>
 <li><strong>应该</strong>：包含所有业务逻辑、验证和事务管理</li>
 <li><strong>不得</strong>：直接访问请求（使用 <code>getCurrentRequest()</code>）</li>
@@ -3417,14 +3417,14 @@
 <h2 id="6">6. 例外合同<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <p>特定于模块的异常必须：</p>
 <ul>
-<li><strong>Extend</strong>: <code>\RuntimeException</code> or <code>\Exception</code></li>
-<li><strong>Be named</strong>: Descriptively (<code>InsufficientFundsException</code>, <code>OrderInvalidTransitionException</code>)</li>
-<li><strong>Be thrown</strong>: In the Service layer (never in Controller or Entity)</li>
-<li><strong>Be caught</strong>: In the Controller layer (via mixin try/catch blocks)</li>
-<li><strong>Be logged</strong>: Via <code>ExceptionInterceptor</code> for unhandled exceptions on <code>/api/*</code> routes</li>
+<li><strong>扩展</strong>：<code>\RuntimeException</code> 或 <code>\Exception</code></li>
+<li><strong>命名</strong>：描述性（<code>InsufficientFundsException</code>、<code>OrderInvalidTransitionException</code>）</li>
+<li><strong>被抛出</strong>：在服务层（绝不在控制器或实体中）</li>
+<li><strong>被捕获</strong>：在控制器层（通过 mixin try/catch 块）</li>
+<li><strong>记录</strong>：通过 <code>ExceptionInterceptor</code> 获取 <code>/api/*</code> 路由上未处理的异常</li>
 </ul>
-<h3 id="61-exception-response-mapping">6.1 Exception Response Mapping<a class="headerlink" href="#61-exception-response-mapping" title="Permanent link">&para;</a></h3>
-<p>Unhandled exceptions caught by <code>ExceptionInterceptor</code> return:</p>
+<h3 id="61">6.1 异常响应映射<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<p><code>ExceptionInterceptor</code> 捕获的未处理异常返回：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{status_code}"</span><span class="p">,</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{exception_message}"</span><span class="p">,</span>
@@ -3434,30 +3434,28 @@
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h2 id="7-configuration-contract">7. Configuration Contract<a class="headerlink" href="#7-configuration-contract" title="Permanent link">&para;</a></h2>
-<p>Module-specific configuration (if needed beyond environment variables):</p>
+<h2 id="7">7. 配置合约<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p>特定于模块的配置（如果需要超出环境变量）：</p>
 <ul>
-<li><strong>Location</strong>: <code>config/packages/{module}.yaml</code> OR <code>src/{Module}/Resources/config/</code></li>
-<li><strong>Environment overrides</strong>: Via <code>%env(...)%</code> in YAML, NOT hardcoded</li>
-<li><strong>Sensitive values</strong>: ALWAYS via environment variables, never in committed files</li>
+<li><strong>位置</strong>：<code>config/packages/{module}.yaml</code> 或 <code>src/{Module}/Resources/config/</code></li>
+<li><strong>环境覆盖</strong>：通过 YAML 中的 <code>%env(...)%</code>，而不是硬编码</li>
+<li><strong>敏感值</strong>：始终通过环境变量，从不在提交的文件中</li>
 </ul>
 <hr />
-<h2 id="8-module-checklist-new-module-creation">8. Module Checklist (New Module Creation)<a class="headerlink" href="#8-module-checklist-new-module-creation" title="Permanent link">&para;</a></h2>
-<p>When adding a new business domain, complete these steps in order:</p>
-<ol>
-<li>Design entities (YAML or sketch first, then PHP classes)</li>
-<li>Create Doctrine migration</li>
-<li>Implement repositories</li>
-<li>Implement service interface + service class</li>
-<li>Implement App controllers (read-only)</li>
-<li>Implement Manage controllers (CRUD)</li>
-<li>Register routes in <code>config/routes.yaml</code></li>
-<li>Add OpenAPI <code>#[OA\*]</code> attributes to all endpoints</li>
-<li>Write entity unit tests</li>
-<li>Write service unit tests</li>
-<li>Write API integration tests</li>
-<li>Verify CI passes (90% coverage minimum)</li>
-</ol>
+<h2 id="8">8. 模块清单（新模块创建）<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<p>添加新业务域时，请按顺序完成以下步骤：</p>
+<p>1.设计实体（首先是YAML或草图，然后是PHP类）
+2.创建Doctrine迁移
+3. 实施存储库
+4. 实现服务接口+服务类
+5. 实现应用程序控制器（只读）
+6. 实施管理控制器（CRUD）
+7、在<code>config/routes.yaml</code>中注册路由
+8. 为所有端点添加 OpenAPI <code>#[OA\*]</code> 属性
+9. 编写实体单元测试
+10. 编写服务单元测试
+11.编写API集成测试
+12. 验证 CI 通过（最低覆盖率 90%）</p>
 
 
 

@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1254,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1478,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2109,7 +2109,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2254,7 +2254,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2310,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -2546,10 +2546,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delete-candidates" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DELETE CANDIDATES
+        删除候选者
       
     </span>
   </a>
@@ -2790,55 +2790,55 @@ duplication. Nothing under <code>src/</code> or <code>tests/</code> was modified
 has an exact covering test listed below.</p>
 <h2 id="keep-behavioral-tests-worth-preserving">KEEP — behavioral tests worth preserving<a class="headerlink" href="#keep-behavioral-tests-worth-preserving" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>BaseServiceInfrastructureTraitTest</code> — <code>listResultToCollection</code>, <code>externalExpressionValues</code>,
-  lazy EM/logger/serializer/validator/QBF/ExpressionService/LegacyEvaluator accessors, current-request
-  resolution. Primary unit coverage of the trait.</li>
-<li><code>BaseServiceMutationTraitTest</code> — <code>new()</code> (no-ctor/required-ctor), scalar/refetch update, to-one/to-many
-  relation resolution + sync, date mapping conversion, flush-skip, validation rejection, remove() success/failure.</li>
-<li><code>BaseServiceReadListTraitTest</code> — <code>get()</code> by id/uuid/object/array/QB (incl. NoResult), <code>list()</code> with
-  <code>@dql/@filter/@order/@sort/@select/@groupBy/@hints/@showDQL</code>, admin-gating of privileged params, identity-select
-  and non-string-select rejections, legacy in-memory filter fallback. This is the only place the
-  admin-gated <code>@dql/@sort/@hints</code> branches can be exercised (HTTP path is broken — BUG-1 in
-  <code>core-integration-extra.md</code>, asserted by <code>tests/Integration/CoreDynamicQueryApiTest</code>).</li>
-<li><code>BaseServiceInfrastructureTraitCoverageTest</code> — the <code>wrapInTransaction()</code> commit/rollback/inactive-skip/fallback
-  paths and container re-fetch branches the base test does not reach; genuine branch coverage.</li>
-<li><code>BaseServiceMutationTraitCoverageTest</code> — relation not-found → <code>NotFoundHttpException</code>, unknown-key <code>continue</code>,
-  <code>UniqueConstraintViolationException</code> → <code>ValidatorException('Duplication entries')</code>, generic flush rethrow,
-  direct <code>DateTimeInterface</code> assignment, <code>ReflectionException</code> → <code>false</code>. Distinct branches.</li>
-<li><code>BaseServiceReadListTraitCoverageTest</code> — empty root-alias <code>ValidatorException</code>, multi-segment <code>@select</code> join
-  generation, sorter-failure <code>return 0</code> (locks in the comparator contract bug 2).</li>
-<li><code>DefaultServiceLocatorTest</code> — entity-manager/logger/token-storage/serializer/validator lookup and fallbacks.</li>
-<li><code>ExpressionServiceTest</code> + <code>ExpressionServiceCoverageTest</code> — <code>buildFilter()</code> cache-hit rebuild, garbage-cache
-  fallthrough, cache-store, <code>ArrayCollection</code>→array parameter conversion.</li>
-<li><code>LegacyEvaluatorTest</code> — globals/context evaluation, invalid-expression → <code>false</code>.</li>
-<li><code>QueryBuilderFactoryTest</code> — <code>create()</code> = <code>select()+from()</code>.</li>
-<li><code>ApiViewMessagesTest</code> — string constants + the two message helpers (protects the response envelope text).</li>
-<li><code>ApiViewTest</code> — <code>mixToCommonFilter</code>/<code>mixIdToCommonFilter</code> numeric-vs-uuid merging.</li>
-<li><code>CreateApiViewMixinTest</code> — partial-create skips transaction, empty transformer, invalid-JSON scalar rejection,
-  error envelope for create failures.</li>
-<li><code>DeleteApiViewMixinTest</code> / <code>DetailApiViewMixinTest</code> — 404/success/warning envelopes for the public read/write mixins.</li>
-<li><code>ScopedApiViewMixinTest</code> — scoped list/detail filter composition.</li>
-<li><code>SingleCreateAndUpdateApiViewMixinTest</code> (+Coverage) — required/accepted property filtering for create and update,
-  combined rules, empty-accepted pass-through, falsy result → warning, <code>NotFoundHttpException</code> → 404.</li>
-<li><code>TransformContentTest</code> — Service/entity gateway allow-listing (blocks <code>eraseEverything</code>, <code>getSecret</code>, mutators,
-  relation getters), criteria validation, non-iterable/non-object list results, missing-service fallback.</li>
-<li><code>UpdateApiViewMixinTest</code> — required-update-property 400, transformer application, batch non-partial (transaction)
-  and partial (skip-failed) paths, non-array content rejection, generic-exception 500 envelope.</li>
+<li><code>BaseServiceInfrastructureTraitTest</code> - <code>listResultToCollection</code>，<code>externalExpressionValues</code>，
+  惰性 EM/logger/serializer/validator/QBF/ExpressionService/LegacyEvaluator 访问器，当前请求
+  分辨率。性状的主要单位覆盖率。</li>
+<li><code>BaseServiceMutationTraitTest</code> — <code>new()</code>（无向量/必需向量），标量/重新获取更新，一对一/一对多
+  关系解析 + 同步、日期映射转换、刷新跳过、验证拒绝、remove() 成功/失败。</li>
+<li><code>BaseServiceReadListTraitTest</code> — <code>get()</code> 通过 id/uuid/object/array/QB（包括 NoResult），<code>list()</code> 与
+  <code>@dql/@filter/@order/@sort/@select/@groupBy/@hints/@showDQL</code>，特权参数的管理门控，身份选择
+  和非字符串选择拒绝，遗留内存过滤器回退。这是唯一的地方
+  可以执行管理控制的 <code>@dql/@sort/@hints</code> 分支（HTTP 路径已损坏 - BUG-1
+  <code>core-integration-extra.md</code>，由 <code>tests/Integration/CoreDynamicQueryApiTest</code> 断言）。</li>
+<li><code>BaseServiceInfrastructureTraitCoverageTest</code> — <code>wrapInTransaction()</code> 提交/回滚/非活动跳过/回退
+  基本测试未到达的路径和容器重新获取分支；真正的分支机构覆盖。</li>
+<li><code>BaseServiceMutationTraitCoverageTest</code> — 未找到关系 → <code>NotFoundHttpException</code>，未知键 <code>continue</code>，
+  <code>UniqueConstraintViolationException</code> → <code>ValidatorException('Duplication entries')</code>，通用刷新重新抛出，
+  直接<code>DateTimeInterface</code>赋值，<code>ReflectionException</code>→<code>false</code>。各具特色的分支。</li>
+<li><code>BaseServiceReadListTraitCoverageTest</code> — 空根别名<code>ValidatorException</code>，多段<code>@select</code>加入
+  Generation, sorter-failure <code>return 0</code> （锁定比较器合约 bug 2）。</li>
+<li><code>DefaultServiceLocatorTest</code> — 实体管理器/记录器/令牌存储/序列化器/验证器查找和回退。</li>
+<li><code>ExpressionServiceTest</code> + <code>ExpressionServiceCoverageTest</code> — <code>buildFilter()</code> 缓存命中重建，垃圾缓存
+  Fallthrough、缓存存储、<code>ArrayCollection</code>→数组参数转换。</li>
+<li><code>LegacyEvaluatorTest</code> — 全局/上下文评估，无效表达式 → <code>false</code>。</li>
+<li><code>QueryBuilderFactoryTest</code> — <code>create()</code> = <code>select()+from()</code>。</li>
+<li><code>ApiViewMessagesTest</code> — 字符串常量+两个消息助手（保护响应信封文本）。</li>
+<li><code>ApiViewTest</code> — <code>mixToCommonFilter</code>/<code>mixIdToCommonFilter</code> 数字与 uuid 合并。</li>
+<li><code>CreateApiViewMixinTest</code> — 部分创建跳过事务、空转换器、无效 JSON 标量拒绝、
+  创建失败的错误信封。</li>
+<li><code>DeleteApiViewMixinTest</code> / <code>DetailApiViewMixinTest</code> — 404/成功/警告信封，用于公共读/写混合。</li>
+<li><code>ScopedApiViewMixinTest</code> — 范围列表/详细过滤器组合。</li>
+<li><code>SingleCreateAndUpdateApiViewMixinTest</code> (+Coverage) — 创建和更新所需/接受的属性过滤，
+  组合规则、空接受传递、虚假结果 → 警告、<code>NotFoundHttpException</code> → 404。</li>
+<li><code>TransformContentTest</code> — 服务/实体网关允许列表（块 <code>eraseEverything</code>、<code>getSecret</code>、变异器、
+  关系获取器）、标准验证、不可迭代/非对象列表结果、缺失服务回退。</li>
+<li><code>UpdateApiViewMixinTest</code> — required-update-property 400，变压器应用程序，批量非部分（事务）
+  和部分（跳过失败）路径、非数组内容拒绝、通用异常 500 信封。</li>
 <li><code>WorkflowApiViewMixinTest</code> — <code>todoAction</code>/<code>availableTransitionsAction</code>/<code>doTransitionAction</code>/<code>resetMarkingAction</code>
-  behavior; skipped tests document the <code>resetMarkingAction</code> route bug (Bug 1) and missing not-found guards (Bug 2).</li>
-<li><code>ExpressionDqlParserTest</code> — compile basics, cache hit/write/failure, syntax/empty-expression errors, negation,
-  <code>&amp;&amp;</code>/<code>||</code> on attributes, <code>getSource</code> QB/manual, <code>reset</code>, setters return <code>$this</code>.</li>
-<li><code>ExpressionDqlParserFullTest</code> — operator matrix (<code>!=</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>+</code>, booleans, <code>!</code>), nested relations,
-  dynamic-attribute values, <code>validateFragments</code> accept/reject matrix.</li>
-<li><code>ExpressionDqlParserMatchesTest</code> — the <code>matches</code> operator: plain-text LIKE+ESCAPE escaping table, regex-flag
-  normalization table, invalid-flag rejection, non-string operand, field-to-field rejection, composition,
-  join retention, SQL-injection parameterization. The definitive matches spec.</li>
-<li><code>ExpressionQueryBuilderAssemblerFullTest</code> — parameter-collision rename, add-<code>from</code>-when-no-root, wrapper
-  exception messages, plus happy-path assembly.</li>
-<li><code>ExpressionQueryBuilderAssemblerCoverageTest::testDuplicateJoinAliasIsSkipped</code> — the only behavioral (non-defensive)
-  test in that file.</li>
+  行为；跳过的测试记录了 <code>resetMarkingAction</code> 路由错误（错误 1）和缺少未找到的守卫（错误 2）。</li>
+<li><code>ExpressionDqlParserTest</code> — 编译基础知识、缓存命中/写入/失败、语法/空表达式错误、否定、
+  属性上的 <code>&amp;&amp;</code>/<code>||</code>、<code>getSource</code> QB/手册、<code>reset</code>、设置器返回 <code>$this</code>。</li>
+<li><code>ExpressionDqlParserFullTest</code> — 运算符矩阵（<code>!=</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>+</code>、布尔值、<code>!</code>）、嵌套关系、
+  动态属性值，<code>validateFragments</code>接受/拒绝矩阵。</li>
+<li><code>ExpressionDqlParserMatchesTest</code> — <code>matches</code> 运算符：纯文本 LIKE+ESCAPE 转义表、正则表达式标志
+  标准化表、无效标志拒绝、非字符串操作数、字段到字段拒绝、组合、
+  连接保留、SQL 注入参数化。最终符合规格。</li>
+<li><code>ExpressionQueryBuilderAssemblerFullTest</code> — 参数碰撞重命名，添加-<code>from</code>-when-no-root，包装器
+  异常消息，加上快乐路径组装。</li>
+<li><code>ExpressionQueryBuilderAssemblerCoverageTest::testDuplicateJoinAliasIsSkipped</code> — 唯一的行为（非防御）
+  在该文件中进行测试。</li>
 </ul>
-<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<h2 id="_1">删除候选者<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>

@@ -4192,7 +4192,7 @@
 
 <h1 id="authorization-bundle-design">Authorization Bundle Design<a class="headerlink" href="#authorization-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: approved design, not implemented.</strong> The Authorization bundle (<code>src/Authorization/</code>) is
+<p><strong>Status: Phase 1 implemented — foundation + Content pilot.</strong> The Authorization bundle (<code>src/Authorization/</code>) is
 the authorization boundary for the modular monolith. Identity remains responsible
 for authentication and user identity. This document is the implementation contract
 for RBAC, scoped data access, and a deliberately limited field-level extension.</p>
@@ -4305,9 +4305,9 @@ controller changes. It cannot be enabled merely by adding Authorization records.
 <h3 id="31-dependency-direction">3.1 Dependency Direction<a class="headerlink" href="#31-dependency-direction" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart LR
     identity["Identity&lt;br/&gt;User UUID, JWT, authentication"] --&gt; authorization["Authorization&lt;br/&gt;role and permission decisions"]
-    store["Store&lt;br/&gt;membership and store lifecycle"] --&gt; access
-    common["Common&lt;br/&gt;Content scope enforcement"] --&gt; access
-    trade["Trade / Wallet / Payment&lt;br/&gt;future consumers"] --&gt; access</code></pre>
+    store["Store&lt;br/&gt;membership and store lifecycle"] --&gt; authorization
+    common["Common&lt;br/&gt;Content scope enforcement"] --&gt; authorization
+    trade["Trade / Wallet / Payment&lt;br/&gt;future consumers"] --&gt; authorization</code></pre>
 <p>The arrows denote service-interface dependencies only. Authorization stores Identity and
 Store references as UUID strings. It MUST NOT import Store entities, repositories, or
 services. Business modules consume <code>AuthorizationServiceInterface</code>; they MUST NOT import
