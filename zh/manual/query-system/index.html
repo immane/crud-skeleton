@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#dynamic-query-system-complete-reference" class="md-skip">
           跳转至
         </a>
       
@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -601,10 +601,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-parameter-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 参数参考
+        1. Parameter Reference
       
     </span>
   </a>
@@ -612,15 +612,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#2-core-query-parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 核心查询参数
+        2. Core Query Parameters
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. 核心查询参数">
+    <nav class="md-nav" aria-label="2. Core Query Parameters">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -855,7 +855,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -911,7 +911,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -939,7 +939,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -1051,7 +1051,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1364,7 +1364,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1649,7 +1649,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1677,7 +1677,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2481,7 +2481,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2565,7 +2565,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2621,7 +2621,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2649,7 +2649,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2677,7 +2677,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2705,7 +2705,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2807,10 +2807,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-parameter-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 参数参考
+        1. Parameter Reference
       
     </span>
   </a>
@@ -2818,15 +2818,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#2-core-query-parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 核心查询参数
+        2. Core Query Parameters
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. 核心查询参数">
+    <nav class="md-nav" aria-label="2. Core Query Parameters">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3058,221 +3058,221 @@
   
 
 
-<h1 id="_1">动态查询系统 — 完整参考<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>动态查询系统由<code>BaseServiceReadListTrait::list()</code>驱动
-(<code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code>) 和表达式
-<code>src/Core/Parser/</code> 加上 <code>src/Core/Service/ExpressionService.php</code> 中的引擎。
-任何基于 <code>ListApiViewMixin</code> 构建的列表端点（或使用以下命令调用的任何服务）
-<code>list(..., false)</code> — 即 <code>$disableRequest = false</code>) 接受这些查询
-<code>GET</code> 请求上的参数。</p>
-<p>该系统有两层：</p>
+<h1 id="dynamic-query-system-complete-reference">Dynamic Query System — Complete Reference<a class="headerlink" href="#dynamic-query-system-complete-reference" title="Permanent link">&para;</a></h1>
+<p>The dynamic query system is driven by <code>BaseServiceReadListTrait::list()</code>
+(<code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code>) and the expression
+engine in <code>src/Core/Parser/</code> plus <code>src/Core/Service/ExpressionService.php</code>.
+Any list endpoint built on <code>ListApiViewMixin</code> (or any service called with
+<code>list(..., false)</code> — i.e. <code>$disableRequest = false</code>) accepts these query
+parameters on a <code>GET</code> request.</p>
+<p>The system has two tiers:</p>
 <ol>
-<li><strong>SQL/DQL 层</strong> — <code>@filter</code>、<code>@dql</code>、<code>@order</code>、<code>@select</code>、<code>@groupBy</code>、
-   <code>@hints</code> 被编译到 Doctrine <code>QueryBuilder</code> 中。</li>
-<li><strong>内存层</strong> — <code>@sort</code> （当 DQL 编译失败时，还有 <code>@filter</code>
-   非管理员）在 PHP 中根据已获取的结果集进行评估。</li>
+<li><strong>SQL/DQL tier</strong> — <code>@filter</code>, <code>@dql</code>, <code>@order</code>, <code>@select</code>, <code>@groupBy</code>,
+   <code>@hints</code> are compiled into the Doctrine <code>QueryBuilder</code>.</li>
+<li><strong>In-memory tier</strong> — <code>@sort</code> (and <code>@filter</code> when DQL compilation fails for a
+   non-admin) are evaluated in PHP over the already-fetched result set.</li>
 </ol>
 <hr />
-<h2 id="1">1. 参数参考<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h2 id="1-parameter-reference">1. Parameter Reference<a class="headerlink" href="#1-parameter-reference" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>参数</th>
-<th>类型</th>
-<th>等级</th>
-<th>描述</th>
-<th>示例</th>
+<th>Parameter</th>
+<th>Type</th>
+<th>Tier</th>
+<th>Description</th>
+<th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>page</code></td>
-<td>整数</td>
+<td>int</td>
 <td>SQL</td>
-<td>页码（从 1 开始）</td>
+<td>Page number (1‑based)</td>
 <td><code>2</code></td>
 </tr>
 <tr>
 <td><code>limit</code></td>
-<td>整数</td>
+<td>int</td>
 <td>SQL</td>
-<td>每页项目数（通过控制器默认 <code>100</code>；分页器遵循 <code>page</code>/<code>limit</code>）</td>
+<td>Items per page (default <code>100</code> via controller; the paginator honors <code>page</code>/<code>limit</code>)</td>
 <td><code>20</code></td>
 </tr>
 <tr>
 <td><code>@filter</code></td>
-<td>表达</td>
-<td>DQL + 后备</td>
-<td>表达式 WHERE 子句</td>
+<td>expression</td>
+<td>DQL + fallback</td>
+<td>Expression WHERE clause</td>
 <td><code>entity.status == "active"</code></td>
 </tr>
 <tr>
 <td><code>@dql</code></td>
-<td>数据查询</td>
+<td>DQL</td>
 <td>SQL</td>
-<td>用作 <code>id IN (...)</code></td>
-<td>的原始 DQL 子查询<code>entity.price &gt; 100</code></td>
+<td>Raw DQL sub-query used as <code>id IN (...)</code></td>
+<td><code>entity.price &gt; 100</code></td>
 </tr>
 <tr>
 <td><code>@order</code></td>
-<td>列表</td>
+<td>list</td>
 <td>SQL</td>
-<td>排序依据字段</td>
+<td>ORDER BY fields</td>
 <td><code>createdAt\|DESC</code></td>
 </tr>
 <tr>
 <td><code>@select</code></td>
-<td>列表</td>
+<td>list</td>
 <td>SQL</td>
-<td>SELECT 覆盖（投影）</td>
+<td>SELECT override (projection)</td>
 <td><code>entity.id, entity.name</code></td>
 </tr>
 <tr>
 <td><code>@groupBy</code></td>
-<td>表达</td>
+<td>expression</td>
 <td>SQL</td>
-<td>GROUP BY 子句</td>
+<td>GROUP BY clause</td>
 <td><code>entity.category</code></td>
 </tr>
 <tr>
 <td><code>@hints</code></td>
 <td>JSON</td>
 <td>SQL</td>
-<td>Doctrine 查询上设置的查询提示</td>
+<td>Query hints set on the Doctrine query</td>
 <td><code>{"hint.name": "value"}</code></td>
 </tr>
 <tr>
 <td><code>@sort</code></td>
-<td>表达</td>
-<td>内存中</td>
-<td>内存比较器（仅限管理员）</td>
+<td>expression</td>
+<td>In-memory</td>
+<td>In-memory comparator (admin-only)</td>
 <td><code>x.getPrice() &lt;=&gt; y.getPrice()</code></td>
 </tr>
 <tr>
 <td><code>@showDQL</code></td>
-<td>布尔</td>
-<td>信息</td>
-<td>转储生成的 DQL（仅限开发）</td>
+<td>boolean</td>
+<td>Info</td>
+<td>Dump the generated DQL (dev-only)</td>
 <td><code>true</code></td>
 </tr>
 <tr>
 <td><code>@expands</code></td>
 <td>JSON</td>
-<td>查看</td>
-<td>嵌套关系扩展 (<code>__metadata</code>)</td>
+<td>View</td>
+<td>Nested relation expansion (<code>__metadata</code>)</td>
 <td><code>category,tags</code></td>
 </tr>
 <tr>
 <td><code>@display</code></td>
-<td>字符串</td>
-<td>查看</td>
-<td>响应投影：<code>complex</code>、<code>reduce</code>、JSON 投影</td>
+<td>string</td>
+<td>View</td>
+<td>Response projection: <code>complex</code>, <code>reduce</code>, JSON projection</td>
 <td><code>reduce</code></td>
 </tr>
 <tr>
 <td><code>@transform</code></td>
 <td>JSON</td>
-<td>查看</td>
-<td>基于表达式的内容转换（创建/更新操作）</td>
+<td>View</td>
+<td>Expression-based content transform (create/update actions)</td>
 <td><code>{"category": "Service.get(...)"}</code></td>
 </tr>
 <tr>
 <td><code>@partial</code></td>
-<td>布尔</td>
-<td>查看</td>
-<td>禁用周围事务（创建/批量更新）</td>
+<td>boolean</td>
+<td>View</td>
+<td>Disable the surrounding transaction (create/batch-update)</td>
 <td><code>true</code></td>
 </tr>
 <tr>
 <td><code>@mode</code></td>
-<td>字符串</td>
-<td>查看</td>
-<td>批量更新模式：<code>update</code> / <code>mixed</code> (upsert)</td>
+<td>string</td>
+<td>View</td>
+<td>Batch update mode: <code>update</code> / <code>mixed</code> (upsert)</td>
 <td><code>mixed</code></td>
 </tr>
 <tr>
 <td><code>@basis</code></td>
-<td>列表</td>
-<td>查看</td>
-<td>批量更新/更新插入的匹配字段</td>
+<td>list</td>
+<td>View</td>
+<td>Match fields for batch update/upsert</td>
 <td><code>id,sku</code></td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>视图级参数（<code>@expands</code>、<code>@display</code>、<code>@transform</code>、<code>@partial</code>、
-<code>@mode</code>、<code>@basis</code>) 由 <code>RestController::success()/requestProcess()</code> 应用
-和创建/更新混合 - 它们不是 <code>list()</code> 本身的一部分，但是
-在 CRUD 端点上对其进行补充。为了完整起见，本参考文献涵盖了它们。</p>
+<p>The view-level parameters (<code>@expands</code>, <code>@display</code>, <code>@transform</code>, <code>@partial</code>,
+<code>@mode</code>, <code>@basis</code>) are applied by <code>RestController::success()/requestProcess()</code>
+and the create/update mixins — they are not part of <code>list()</code> itself but
+complement it on CRUD endpoints. This reference covers them for completeness.</p>
 </blockquote>
 <hr />
-<h2 id="2">2. 核心查询参数<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h2 id="2-core-query-parameters">2. Core Query Parameters<a class="headerlink" href="#2-core-query-parameters" title="Permanent link">&para;</a></h2>
 <h3 id="page-limit"><code>page</code> / <code>limit</code><a class="headerlink" href="#page-limit" title="Permanent link">&para;</a></h3>
-<p>对结果集进行分页。 <code>RestController::pagination()</code> 应用它们
-服务器端（通过 Doctrine <code>Paginator</code> 通过 <code>QueryBuilder</code> 获得准确的
-总计，或在数组/<code>ArrayCollection</code> 和 <code>array_slice</code> 上）。生成的
-<code>paginator</code> 元数据如下所示：</p>
+<p>Paginate the result set. <code>RestController::pagination()</code> applies them
+server-side (over a <code>QueryBuilder</code> via Doctrine <code>Paginator</code> for an accurate
+total, or over an array/<code>ArrayCollection</code> with <code>array_slice</code>). The generated
+<code>paginator</code> metadata looks like:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">"page"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nt">"pages"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">"has_previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"has_next"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="filter"><code>@filter</code><a class="headerlink" href="#filter" title="Permanent link">&para;</a></h3>
-<p>根据根别名 <code>entity</code> 计算的表达式。相同的语法是
-可用作原始 <code>QueryBuilder</code> 片段（DQL 层）和内存中的片段
-谓词（后备）。</p>
-<p>支持的运算符（客户端 <code>@filter</code> 和服务器 <code>DqlExpression</code> 共享）：</p>
+<p>An expression evaluated against a root alias of <code>entity</code>. The same syntax is
+usable as a raw <code>QueryBuilder</code> fragment (the DQL tier) and as an in-memory
+predicate (the fallback).</p>
+<p>Supported operators (shared by client <code>@filter</code> and server <code>DqlExpression</code>):</p>
 <table>
 <thead>
 <tr>
-<th>操作员</th>
-<th>意义</th>
-<th>DQL 映射</th>
+<th>Operator</th>
+<th>Meaning</th>
+<th>DQL mapping</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>==</code> / <code>!=</code></td>
-<td>等于/不等于</td>
+<td>equal / not equal</td>
 <td><code>=</code> / <code>!=</code></td>
 </tr>
 <tr>
 <td><code>&gt;</code> <code>&gt;=</code> <code>&lt;</code> <code>&lt;=</code></td>
-<td>比较</td>
-<td>相同</td>
+<td>comparison</td>
+<td>same</td>
 </tr>
 <tr>
 <td><code>&amp;&amp;</code> / <code>||</code></td>
-<td>逻辑与/或</td>
+<td>logical AND / OR</td>
 <td><code>AND</code> / <code>OR</code></td>
 </tr>
 <tr>
 <td><code>!</code></td>
-<td>逻辑非（属性检查）</td>
-<td><code>prop IS NULL</code> 对孩子</td>
+<td>logical NOT (attr check)</td>
+<td><code>prop IS NULL</code> on the child</td>
 </tr>
 <tr>
 <td><code>in</code> / <code>not in</code></td>
-<td>收藏会员</td>
-<td><code>IN (:param)</code> / <code>NOT IN (:param)</code> — 绑定为数组参数；空 <code>in []</code> 变为 <code>1 = 0</code>，空 <code>not in []</code> 变为 <code>1 = 1</code></td>
+<td>collection membership</td>
+<td><code>IN (:param)</code> / <code>NOT IN (:param)</code> — bound as array parameters; empty <code>in []</code> becomes <code>1 = 0</code>, empty <code>not in []</code> becomes <code>1 = 1</code></td>
 </tr>
 <tr>
 <td><code>matches</code></td>
-<td>正则表达式 / LIKE</td>
-<td><code>REGEXP(...) = TRUE</code> 或 <code>LIKE '%...%'</code></td>
+<td>regex / LIKE</td>
+<td><code>REGEXP(...) = TRUE</code> or <code>LIKE '%...%'</code></td>
 </tr>
 <tr>
 <td><code>+ - * /</code></td>
-<td>算术</td>
-<td>相同</td>
+<td>arithmetic</td>
+<td>same</td>
 </tr>
 </tbody>
 </table>
-<p><strong>字段引用</strong>是根别名加上点的吸气剂，例如
-<code>entity.status</code>、<code>entity.getCategory().getName()</code>（链式属性访问
-生成必要的连接）。裸属性（无运算符）编译为
-<code>prop IS NOT NULL</code>。</p>
-<p>示例：</p>
+<p><strong>Field references</strong> are the root alias plus dotted getters, e.g.
+<code>entity.status</code>, <code>entity.getCategory().getName()</code> (chained attribute access
+generates the necessary joins). A bare attribute (no operator) compiles to
+<code>prop IS NOT NULL</code>.</p>
+<p>Examples:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># Equality
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>@filter=entity.status == "active"
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -3291,25 +3291,25 @@
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a># NOT — attr is null
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>@filter=!entity.deletedAt
 </code></pre></div>
-<p><strong>访问和回退</strong>：需要内存中评估的<code>@filter</code>（例如
-当 DQL 编译失败或过滤器触及非持久数据时）
-仅限管理员。对于非管理员，会引发 DQL 编译错误
-<code>AccessDeniedHttpException</code>；管理员回退到
-每个实体上的<code>LegacyEvaluator::evaluateBool()</code>。</p>
-<p><strong>服务器拥有的 <code>DqlExpression</code> 与客户端 <code>@filter</code></strong>：<code>DqlExpression</code> 重用
-相同的表达式编译器，但变量绑定在 PHP 代码中（例如
+<p><strong>Access and fallback</strong>: An <code>@filter</code> that requires in-memory evaluation (e.g.
+when DQL compilation fails or the filter touches non-persistent data) is
+restricted to admins. For non-admins a DQL compilation error raises
+<code>AccessDeniedHttpException</code>; admins fall back to
+<code>LegacyEvaluator::evaluateBool()</code> over each entity.</p>
+<p><strong>Server-owned <code>DqlExpression</code> vs client <code>@filter</code></strong>: <code>DqlExpression</code> reuses the
+same expression compiler, but variables are bound in PHP code (e.g.
 <code>new DqlExpression('entity.getUser() == user', ['user' =&gt; $this-&gt;getUser()])</code>
-或<code>new DqlExpression('entity.getStoreUuid() in this.getAllowedStoreUuids()')</code>
-— 后者是显式绑定的简写，仅在内部可用
-<code>commonFilter()</code> 通过 <code>ApiView::resolvedCommonFilter()</code>）。它从不使用
-<code>LegacyEvaluator</code>，永远不会退回到内存过滤和编译
-或元数据验证失败是一个 500 配置错误，拒绝
-请求。与 <code>commonFilter()</code> 数组一样，它会自动使用 <code>AND</code> 编辑
-<code>id</code>/<code>uuid</code>由<code>mixIdToCommonFilter</code>添加，因此无法进行详细/更新/删除
-绕过了。带有空集合的 <code>in</code>/<code>not in</code> 被编译为常量
-谓词 <code>1 = 0</code> / <code>1 = 1</code> 而不是无效的 <code>IN ()</code>。</p>
+or <code>new DqlExpression('entity.getStoreUuid() in this.getAllowedStoreUuids()')</code>
+— the latter is shorthand for explicit binding and is only available inside
+<code>commonFilter()</code> via <code>ApiView::resolvedCommonFilter()</code>). It never uses the
+<code>LegacyEvaluator</code>, never falls back to in-memory filtering, and a compilation
+or metadata-validation failure is a 500 configuration error that rejects the
+request. Like <code>commonFilter()</code> arrays, it is automatically <code>AND</code>ed with the
+<code>id</code>/<code>uuid</code> added by <code>mixIdToCommonFilter</code>, so detail/update/delete cannot be
+bypassed. <code>in</code>/<code>not in</code> with an empty collection is compiled to the constant
+predicates <code>1 = 0</code> / <code>1 = 1</code> rather than an invalid <code>IN ()</code>.</p>
 <h3 id="dql"><code>@dql</code><a class="headerlink" href="#dql" title="Permanent link">&para;</a></h3>
-<p>原始 DQL 子查询，其匹配 id 用作 <code>id IN (subquery)</code>：</p>
+<p>A raw DQL sub-query whose matching ids are used as <code>id IN (subquery)</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>@dql=SELECT e.id FROM App\Trade\Entity\Product e WHERE e.price &gt; 100
 </code></pre></div>
 <p>Restricted to <code>ROLE_ADMIN</code>.</p>

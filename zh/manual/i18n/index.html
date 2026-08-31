@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -632,7 +632,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -772,7 +772,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -998,10 +998,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#43" class="md-nav__link">
+  <a href="#43-translated-readmes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.3 翻译自述文件
+        4.3 Translated READMEs
       
     </span>
   </a>
@@ -1014,10 +1014,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        总结
+        Summary
       
     </span>
   </a>
@@ -1304,7 +1304,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1589,7 +1589,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1617,7 +1617,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2421,7 +2421,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2505,7 +2505,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2561,7 +2561,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2589,7 +2589,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2617,7 +2617,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2645,7 +2645,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2892,10 +2892,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#43" class="md-nav__link">
+  <a href="#43-translated-readmes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.3 翻译自述文件
+        4.3 Translated READMEs
       
     </span>
   </a>
@@ -2908,10 +2908,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        总结
+        Summary
       
     </span>
   </a>
@@ -3123,97 +3123,97 @@ script, and both are built into a bilingual static site with mkdocs.</p>
 <p>Mirrors <code>docs/</code> → <code>docs-zh/</code> using the free <code>deep-translator</code> Google endpoint
 (no API key).</p>
 <ul>
-<li><strong>先决条件：</strong> <code>pip install deep-translator</code></li>
-<li><strong>用途：</strong>
+<li><strong>Prerequisite:</strong> <code>pip install deep-translator</code></li>
+<li><strong>Usage:</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>scripts/translate-docs.py<span class="w">                          </span><span class="c1"># full mirror</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>scripts/translate-docs.py<span class="w"> </span>design/bundles/payment.md<span class="w"> </span><span class="c1"># single file</span>
 </code></pre></div></li>
-<li>跳过<code>research/</code>和<code>ai/</code>目录。</li>
-<li>保留：YAML frontmatter、围栏代码块、内联代码、HTML 注释、
-  图像和链接 - 每个都在翻译之前“隐藏”并在翻译之后恢复，
-  所以代码和 URL 永远不会被破坏。</li>
-<li>将正文拆分为段落并按块进行翻译（&lt; 4500 个字符到
-  遵守免费 API 限制）。失败的块保留为原始英语
-  带有 <code>WARN</code> 行。</li>
+<li>Skips the <code>research/</code> and <code>ai/</code> directories.</li>
+<li>Preserves: YAML frontmatter, fenced code blocks, inline code, HTML comments,
+  images, and links — each is "stashed" before translation and restored after,
+  so code and URLs are never mangled.</li>
+<li>Splits the body into paragraphs and translates in chunks (&lt; 4500 chars to
+  respect the free API limit). A failed chunk is kept as the original English
+  with a <code>WARN</code> line.</li>
 </ul>
 <h3 id="42-scriptsbuild-docssh">4.2 <code>scripts/build-docs.sh</code><a class="headerlink" href="#42-scriptsbuild-docssh" title="Permanent link">&para;</a></h3>
-<p>完整的双语版本（<code>bash scripts/build-docs.sh</code>）。它：</p>
+<p>Full bilingual build (<code>bash scripts/build-docs.sh</code>). It:</p>
 <ol>
-<li>运行 <code>translate-docs.py</code>（文档 → 文档-zh）。</li>
-<li>复制不应翻译的二进制/文本资源（<code>assets/</code>、
-   <code>research/</code>、<code>openapi/</code>、<code>ai/</code>、<code>javascripts/</code>)从<code>docs/</code>到<code>docs-zh/</code>。</li>
-<li>从单个 <code>mkdocs.yml</code> 生成<strong>两个</strong> mkdocs 配置：</li>
-<li><code>mkdocs-en.yml</code> — 英语，<code>site_dir: site</code>，添加语言 <code>alternate</code>
-     链接 (<code>/crud-skeleton/</code> ↔ <code>/crud-skeleton/zh/</code>)。</li>
-<li><code>mkdocs-zh.yml</code> — <code>docs_dir: docs-zh</code>、<code>site_dir: site/zh</code>、
-     主题 <code>language: zh</code>，通过静态 <code>MAP</code> 翻译的导航标签
-     (<code>Home</code> → <code>首页</code>, <code>Wallet</code> → <code>Wallet (钱包)</code>, ...)
-     未知短标签的谷歌翻译后备。</li>
-<li>构建两者，<code>mkdocs build -f ... --clean</code>。</li>
+<li>Runs <code>translate-docs.py</code> (docs → docs-zh).</li>
+<li>Copies the binary/text assets that should not be translated (<code>assets/</code>,
+   <code>research/</code>, <code>openapi/</code>, <code>ai/</code>, <code>javascripts/</code>) from <code>docs/</code> to <code>docs-zh/</code>.</li>
+<li>Generates <strong>two</strong> mkdocs configs from the single <code>mkdocs.yml</code>:</li>
+<li><code>mkdocs-en.yml</code> — English, <code>site_dir: site</code>, adds language <code>alternate</code>
+     links (<code>/crud-skeleton/</code> ↔ <code>/crud-skeleton/zh/</code>).</li>
+<li><code>mkdocs-zh.yml</code> — <code>docs_dir: docs-zh</code>, <code>site_dir: site/zh</code>,
+     theme <code>language: zh</code>, nav labels translated via a static <code>MAP</code>
+     (<code>Home</code> → <code>首页</code>, <code>Wallet</code> → <code>Wallet (钱包)</code>, ...) with a
+     Google-translator fallback for unknown short labels.</li>
+<li>Builds both, <code>mkdocs build -f ... --clean</code>.</li>
 </ol>
-<p>输出：</p>
+<p>Output:</p>
 <table>
 <thead>
 <tr>
-<th>网站</th>
-<th>配置</th>
-<th>URL（本地预览）</th>
+<th>Site</th>
+<th>Config</th>
+<th>URL (local preview)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>英语</td>
+<td>English</td>
 <td><code>mkdocs-en.yml</code></td>
 <td><code>site/index.html</code></td>
 </tr>
 <tr>
-<td>中文</td>
+<td>Chinese</td>
 <td><code>mkdocs-zh.yml</code></td>
 <td><code>site/zh/index.html</code></td>
 </tr>
 </tbody>
 </table>
-<p>topic/nav 的真实来源是 <code>mkdocs.yml</code>
-（<code>site_name: CRUD Skeleton</code>，Material 主题，美人鱼支持来自
-<code>extra_javascript</code>）。生成的<code>mkdocs-en.yml</code> / <code>mkdocs-zh.yml</code>是
-构建工件 - 编辑 <code>mkdocs.yml</code> （以及 <code>build-docs.sh</code> 中的 <code>MAP</code>）并
-重新运行脚本。</p>
-<h3 id="43">4.3 翻译自述文件<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
-<p>该存储库还提供手动维护的翻译自述文件变体（请参阅自述文件）
-§“国际化”）：</p>
+<p>The source of truth for topics/nav is <code>mkdocs.yml</code>
+(<code>site_name: CRUD Skeleton</code>, Material theme, Mermaid support via
+<code>extra_javascript</code>). The generated <code>mkdocs-en.yml</code> / <code>mkdocs-zh.yml</code> are
+build artifacts — edit <code>mkdocs.yml</code> (and the <code>MAP</code> in <code>build-docs.sh</code>) and
+re-run the script.</p>
+<h3 id="43-translated-readmes">4.3 Translated READMEs<a class="headerlink" href="#43-translated-readmes" title="Permanent link">&para;</a></h3>
+<p>The repo also ships hand-maintained translated README variants (see README
+§"Internationalization"):</p>
 <table>
 <thead>
 <tr>
-<th>语言</th>
-<th>文件</th>
+<th>Language</th>
+<th>File</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>中文（简体）</td>
+<td>Chinese (Simplified)</td>
 <td><code>README.zh-cn.md</code></td>
 </tr>
 <tr>
-<td>中文（繁体）</td>
+<td>Chinese (Traditional)</td>
 <td><code>README.zh-hant.md</code></td>
 </tr>
 <tr>
-<td>日语</td>
+<td>Japanese</td>
 <td><code>README.ja.md</code></td>
 </tr>
 </tbody>
 </table>
-<p>这些独立于 <code>docs-zh/</code> 机器翻译并得到维护
-手动。</p>
+<p>These are independent of the <code>docs-zh/</code> machine translation and are maintained
+manually.</p>
 <hr />
-<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <ul>
-<li>API字符串：key为<code>translations/messages.*.yaml</code>中的英文消息字符串；
-  四个区域设置（<code>en</code>、<code>zh</code>、<code>zh_Hant</code>、<code>ja</code>），默认 <code>zh</code>。</li>
-<li>检测：<code>?_locale=</code> → <code>Accept-Language</code>（q 加权，通过映射
-  <code>LOCALE_MAP</code>) → 框架<code>default_locale</code>。</li>
-<li>文档：<code>docs/</code>→<code>docs-zh/</code>通过<code>translate-docs.py</code>；双语网站建立者
-  <code>build-docs.sh</code> 分为 <code>site/</code> 和 <code>site/zh/</code>。</li>
+<li>API strings: keys are English message strings in <code>translations/messages.*.yaml</code>;
+  four locales (<code>en</code>, <code>zh</code>, <code>zh_Hant</code>, <code>ja</code>), default <code>zh</code>.</li>
+<li>Detection: <code>?_locale=</code> → <code>Accept-Language</code> (q-weighted, mapped via
+  <code>LOCALE_MAP</code>) → framework <code>default_locale</code>.</li>
+<li>Docs: <code>docs/</code> → <code>docs-zh/</code> via <code>translate-docs.py</code>; bilingual site built by
+  <code>build-docs.sh</code> into <code>site/</code> and <code>site/zh/</code>.</li>
 </ul>
 
 

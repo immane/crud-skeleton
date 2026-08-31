@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1366,7 +1366,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1394,7 +1394,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2198,7 +2198,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2422,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2780,22 +2780,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-testing" class="md-nav__link">
+  <a href="#9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Testing
+        9. 测试
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="9. Testing">
+    <nav class="md-nav" aria-label="9. 测试">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#91-unit-tests" class="md-nav__link">
+  <a href="#91" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9.1 Unit Tests
+        9.1 单元测试
       
     </span>
   </a>
@@ -2803,10 +2803,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#92-integration-tests" class="md-nav__link">
+  <a href="#92" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9.2 Integration Tests
+        9.2 集成测试
       
     </span>
   </a>
@@ -2819,10 +2819,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-error-handling" class="md-nav__link">
+  <a href="#10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Error Handling
+        10. 错误处理
       
     </span>
   </a>
@@ -2830,10 +2830,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-file-validation-contract" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. File Validation Contract
+        11. 文件验证合约
       
     </span>
   </a>
@@ -2841,10 +2841,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-future-drivers" class="md-nav__link">
+  <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. Future Drivers
+        12. 未来的驱动力
       
     </span>
   </a>
@@ -2852,10 +2852,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-open-questions" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Open Questions
+        13. 开放性问题
       
     </span>
   </a>
@@ -3262,136 +3262,136 @@ talks to <code>MediaStorageInterface</code> through the registry.</p>
 <a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="x">    }</span>
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="x">}</span>
 </code></pre></div>
-<p>Adding a new driver (e.g., <code>S3Storage</code>) requires only:
-1. Create <code>src/Storage/Service/S3Storage.php</code> implementing <code>MediaStorageInterface</code>
-2. If it needs env vars, add a service definition in <code>services_storage.yaml</code></p>
-<p>No changes to <code>MediaStorageRegistry</code>, <code>MediaService</code>, or any controller.</p>
+<p>添加新驱动程序（例如 <code>S3Storage</code>）仅需要：
+1. 创建 <code>src/Storage/Service/S3Storage.php</code> 实现 <code>MediaStorageInterface</code>
+2. 如果需要环境变量，请在 <code>services_storage.yaml</code> 中添加服务定义</p>
+<p><code>MediaStorageRegistry</code>、<code>MediaService</code> 或任何控制器没有变化。</p>
 <hr />
-<h2 id="9-testing">9. Testing<a class="headerlink" href="#9-testing" title="Permanent link">&para;</a></h2>
-<h3 id="91-unit-tests">9.1 Unit Tests<a class="headerlink" href="#91-unit-tests" title="Permanent link">&para;</a></h3>
+<h2 id="9">9. 测试<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<h3 id="91">9.1 单元测试<a class="headerlink" href="#91" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Test</th>
-<th>Coverage</th>
+<th>测试</th>
+<th>覆盖范围</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>LocalStorageTest</code></td>
-<td>store / delete / URL generation</td>
+<td>存储/删除/URL生成</td>
 </tr>
 <tr>
 <td><code>MediaStorageRegistryTest</code></td>
-<td>resolve by name / unknown driver exception / names list</td>
+<td>按名称/未知驱动程序异常/名称列表解析</td>
 </tr>
 </tbody>
 </table>
-<h3 id="92-integration-tests">9.2 Integration Tests<a class="headerlink" href="#92-integration-tests" title="Permanent link">&para;</a></h3>
+<h3 id="92">9.2 集成测试<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Test</th>
-<th>Coverage</th>
+<th>测试</th>
+<th>覆盖范围</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>MediaUploadIntegrationTest</code></td>
-<td>Full upload → Media entity → delete (local driver)</td>
+<td>完整上传→媒体实体→删除（本地驱动）</td>
 </tr>
 <tr>
 <td><code>MediaStorageSwitchingTest</code></td>
-<td>Upload with <code>storage=local</code> and <code>storage=qiniu</code> in same test</td>
+<td>在同一测试中使用 <code>storage=local</code> 和 <code>storage=qiniu</code> 上传</td>
 </tr>
 </tbody>
 </table>
-<p>Qiniu integration tests should be skipped when <code>QINIU_ACCESS_KEY</code> is empty
-(marked <code>@group qiniu</code> or guarded by an env-var check in <code>setUp()</code>).</p>
+<p>当 <code>QINIU_ACCESS_KEY</code> 为空时应跳过七牛集成测试
+（标记为 <code>@group qiniu</code> 或由 <code>setUp()</code> 中的环境变量检查保护）。</p>
 <hr />
-<h2 id="10-error-handling">10. Error Handling<a class="headerlink" href="#10-error-handling" title="Permanent link">&para;</a></h2>
+<h2 id="10">10. 错误处理<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Scenario</th>
-<th>Behaviour</th>
+<th>场景</th>
+<th>行为</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Unknown driver name</td>
-<td><code>\RuntimeException</code> from registry, caught by controller → <code>warning()</code></td>
+<td>司机姓名未知</td>
+<td><code>\RuntimeException</code> 来自注册表，由控制器捕获 → <code>warning()</code></td>
 </tr>
 <tr>
-<td>Upload exceeds PHP <code>upload_max_filesize</code></td>
-<td>Symfony <code>UploadedFile</code> validation before driver call</td>
+<td>上传超出 PHP <code>upload_max_filesize</code></td>
+<td>Symfony <code>UploadedFile</code> 在驱动程序调用之前进行验证</td>
 </tr>
 <tr>
-<td>Driver store fails</td>
-<td>Exception propagates; Media entity is NOT persisted (no orphan records)</td>
+<td>驱动程序存储失败</td>
+<td>异常传播；媒体实体未持久化（无孤立记录）</td>
 </tr>
 <tr>
-<td>Driver delete fails</td>
-<td>Logged but entity is still removed (best-effort cleanup)</td>
+<td>驱动程序删除失败</td>
+<td>已记录但实体仍被删除（尽最大努力清理）</td>
 </tr>
 </tbody>
 </table>
-<p>Controller MUST validate the uploaded file before calling the driver:</p>
+<p>控制器必须在调用驱动程序之前验证上传的文件：</p>
 <table>
 <thead>
 <tr>
-<th>Check</th>
-<th>Rule</th>
+<th>检查</th>
+<th>规则</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>File present</td>
+<td>文件存在</td>
 <td><code>$request-&gt;files-&gt;get('file') !== null</code></td>
 </tr>
 <tr>
-<td>Size limit</td>
-<td>Configurable via <code>media.upload.max_size</code> (default 10M)</td>
+<td>尺寸限制</td>
+<td>可通过<code>media.upload.max_size</code>配置（默认10M）</td>
 </tr>
 <tr>
-<td>MIME allowlist</td>
-<td>Configurable via <code>media.upload.allowed_mime_types</code></td>
+<td>MIME 许可名单</td>
+<td>可通过 <code>media.upload.allowed_mime_types</code></td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="11-file-validation-contract">11. File Validation Contract<a class="headerlink" href="#11-file-validation-contract" title="Permanent link">&para;</a></h2>
+<h2 id="11">11. 文件验证合约<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Constraint</th>
-<th>Default</th>
-<th>Configurable</th>
+<th>约束</th>
+<th>默认</th>
+<th>可配置</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Max file size</td>
+<td>最大文件大小</td>
 <td>10 MB</td>
 <td><code>media.upload.max_size</code></td>
 </tr>
 <tr>
-<td>Allowed MIME types</td>
-<td><code>image/jpeg</code>, <code>image/png</code>, <code>image/gif</code>, <code>image/webp</code>, <code>application/pdf</code></td>
+<td>允许的 MIME 类型</td>
+<td><code>image/jpeg</code>、<code>image/png</code>、<code>image/gif</code>、<code>image/webp</code>、<code>application/pdf</code></td>
 <td><code>media.upload.allowed_mime_types</code></td>
 </tr>
 <tr>
-<td>Empty file</td>
-<td>Rejected</td>
+<td>空文件</td>
+<td>被拒绝</td>
 <td>—</td>
 </tr>
 </tbody>
 </table>
-<p>Validation happens in the controller or in <code>MediaService::createFromUpload()</code> before
-the driver is called, so invalid files never reach the storage backend.</p>
+<p>验证发生在控制器中或之前的 <code>MediaService::createFromUpload()</code> 中
+调用驱动程序，因此无效文件永远不会到达存储后端。</p>
 <hr />
-<h2 id="12-future-drivers">12. Future Drivers<a class="headerlink" href="#12-future-drivers" title="Permanent link">&para;</a></h2>
-<p>The same interface supports any storage backend:</p>
+<h2 id="12">12. 未来的驱动力<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<p>相同的接口支持任何存储后端：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>src/Storage/Service/
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>|-- LocalStorage.php            # First phase (always enabled)
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>|-- QiniuStorage.php            # First phase (optional)
@@ -3399,37 +3399,37 @@ the driver is called, so invalid files never reach the storage backend.</p>
 <a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>|-- OssStorage.php              # Future — Alibaba Cloud OSS
 <a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>|-- CosStorage.php              # Future — Tencent Cloud COS
 </code></pre></div>
-<p>Each is a single class implementing <code>MediaStorageInterface</code>. No registry or
-caller code changes required.</p>
+<p>每个都是一个实现 <code>MediaStorageInterface</code> 的类。没有注册表或
+需要更改调用者代码。</p>
 <hr />
-<h2 id="13-open-questions">13. Open Questions<a class="headerlink" href="#13-open-questions" title="Permanent link">&para;</a></h2>
+<h2 id="13">13. 开放性问题<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Question</th>
-<th>Default Decision</th>
+<th>问题</th>
+<th>默认决定</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Should Storage own the Media entity?</td>
-<td>No, Media stays in Common/CMS</td>
+<td>存储应该拥有媒体实体吗？</td>
+<td>不，媒体保留在 Common/CMS</td>
 </tr>
 <tr>
-<td>Should <code>public/uploads/</code> be gitignored?</td>
-<td>Yes</td>
+<td><code>public/uploads/</code> 应该被忽略吗？</td>
+<td>是的</td>
 </tr>
 <tr>
-<td>Should QiniuStorage be in a separate Qiniu bundle?</td>
-<td>Not in first phase; keep in Storage until Qiniu-specific complexity (account mgmt, callback handling) justifies a split</td>
+<td>QiniuStorage 应该位于单独的 Qiniu 捆绑包中吗？</td>
+<td>不在第一阶段；保留在存储中，直到七牛特定的复杂性（帐户管理、回调处理）证明拆分是合理的</td>
 </tr>
 <tr>
-<td>Should delete be synchronous or queued?</td>
-<td>Synchronous for first phase</td>
+<td>删除应该是同步的还是排队的？</td>
+<td>第一阶段同步</td>
 </tr>
 <tr>
-<td>Should there be a <code>serve</code> endpoint for private files?</td>
-<td>Out of scope; <code>public/uploads/</code> is directly served by nginx</td>
+<td>私有文件是否应该有一个 <code>serve</code> 端点？</td>
+<td>超出范围； <code>public/uploads/</code>由nginx直接服务</td>
 </tr>
 </tbody>
 </table>
