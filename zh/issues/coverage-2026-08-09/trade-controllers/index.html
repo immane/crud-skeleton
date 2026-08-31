@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    项目结构
+    Project Structure
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    提取服务
+    Extracting a Service
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1254,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1366,7 +1366,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1394,7 +1394,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1478,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2109,7 +2109,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2198,7 +2198,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2226,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2254,7 +2254,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -2310,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2422,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2663,10 +2663,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#final-test-run" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Final test run
+        最终测试运行
       
     </span>
   </a>
@@ -2824,13 +2824,13 @@
 </ul>
 <h2 id="verified-non-bugs-investigated-and-cleared">Verified NON-bugs (investigated and cleared)<a class="headerlink" href="#verified-non-bugs-investigated-and-cleared" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Manage <code>refundAction</code> invoice branch (259-260)</strong> — it returns after <code>refundPayment()</code> without applying the <code>refund</code> workflow transition in the controller. This is <strong>not</strong> a bug: <code>InvoiceService::refund()</code> dispatches <code>InvoiceRefundedEvent</code>, and <code>Trade\EventListener\OrderInvoiceListener::onInvoiceRefunded()</code> applies the <code>refund</code> transition and sets <code>refundedAt</code>. Confirmed by the existing integration test <code>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</code> (order ends in <code>STATUS_REFUNDED</code>).</li>
-<li><strong>App <code>createAction</code> store-context 202 path</strong> — order status is not left as a plain draft: <code>OrderService::createOrder()</code> applies the <code>store_submit</code> transition and records the <code>trade.order.created.v1</code> outbox message in the same transaction (<code>src/Trade/Service/OrderService.php:111-140</code>).</li>
-<li><strong>Invalid payment methods on <code>paymentAction</code></strong> — the controller forwards any string, but validation happens service-side: <code>InvoiceService::pay()</code> resolves the method through the gateway registry and throws on unknown methods (caught → 400). Covered by the App unit tests asserting <code>mock</code>/<code>wallet</code>/<code>wechat</code> are forwarded.</li>
-<li><strong><code>doTransitionAction</code> "can() fails" path returning HTTP 200</strong> — this is asserted by the existing integration tests (<code>testOrderCannotCancelAfterPaid</code> expects 200 + non-zero code), so it is intentional.</li>
-<li><strong><code>wrapInTransaction</code> availability on <code>OrderServiceInterface</code></strong> — it is a <code>@method</code>-only declaration, so <code>createMock()</code> cannot generate it under PHPUnit 12; the fake service was introduced for this reason (this is a test-infrastructure note, not a product bug).</li>
+<li><strong>管理 <code>refundAction</code> 发票分支 (259-260)</strong> — 它在 <code>refundPayment()</code> 之后返回，而不在控制器中应用 <code>refund</code> 工作流转换。这不是一个错误：<code>InvoiceService::refund()</code> 调度 <code>InvoiceRefundedEvent</code>，<code>Trade\EventListener\OrderInvoiceListener::onInvoiceRefunded()</code> 应用 <code>refund</code> 转换并设置 <code>refundedAt</code>。由现有集成测试<code>TradePaymentIntegrationTest::testOrderPaymentAndRefundThroughInvoiceEvents</code>确认（订单以<code>STATUS_REFUNDED</code>结尾）。</li>
+<li><strong>应用 <code>createAction</code> store-context 202 路径</strong> — 订单状态不会保留为普通草稿：<code>OrderService::createOrder()</code> 应用 <code>store_submit</code> 转换并在同一事务 (<code>src/Trade/Service/OrderService.php:111-140</code>) 中记录 <code>trade.order.created.v1</code> 发件箱消息。</li>
+<li><strong><code>paymentAction</code> 上的无效支付方法</strong> — 控制器转发任何字符串，但验证发生在服务端：<code>InvoiceService::pay()</code> 通过网关注册表解析该方法并抛出未知方法（捕获 → 400）。应用程序单元测试涵盖断言 <code>mock</code>/<code>wallet</code>/<code>wechat</code> 被转发。</li>
+<li><strong><code>doTransitionAction</code> “can() 失败”路径返回 HTTP 200</strong> — 这是由现有集成测试断言的（<code>testOrderCannotCancelAfterPaid</code> 期望 200 + 非零代码），因此这是有意为之。</li>
+<li><strong><code>wrapInTransaction</code> 在 <code>OrderServiceInterface</code> 上的可用性</strong> — 它是一个仅 <code>@method</code> 的声明，因此 <code>createMock()</code> 无法在 PHPUnit 12 下生成它；由于这个原因引入了虚假服务（这是测试基础设施说明，而不是产品错误）。</li>
 </ul>
-<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
+<h2 id="_1">最终测试运行<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>XDEBUG_MODE=off php vendor/bin/phpunit \
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    tests/Trade/Controller/App/OrderControllerTest.php \
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    tests/Trade/Controller/Manage/OrderControllerTest.php --no-coverage
@@ -2838,7 +2838,7 @@
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>OK, but some tests were skipped!
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>Tests: 44, Assertions: 165, Skipped: 2.
 </code></pre></div>
-<p>44 test cases (18 App cases incl. 3 payment-method data-provider cases, 26 Manage cases incl. the 15 pre-existing ones), 0 failures/errors/notices/warnings/deprecations, 2 skipped (Bug 1 and Bug 2 documentation).</p>
+<p>44 个测试用例（18 个应用程序用例，包括 3 个支付方法数据提供商用例，26 个管理用例，包括 15 个预先存在的用例），0 个失败/错误/通知/警告/弃用，2 个跳过（Bug 1 和 Bug 2 文档）。</p>
 
 
 
