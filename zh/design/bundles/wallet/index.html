@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    项目结构
+    Project Structure
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -632,7 +632,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -688,7 +688,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -716,7 +716,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -772,7 +772,7 @@
   <span class="md-ellipsis">
     
   
-    提取服务
+    Extracting a Service
   
 
     
@@ -1085,7 +1085,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1258,7 +1258,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1805,7 +1805,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1833,7 +1833,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1882,6 +1882,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wechat/" class="md-nav__link">
         
   
@@ -1889,7 +1917,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2520,7 +2548,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2609,7 +2637,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2637,7 +2665,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2665,7 +2693,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2693,7 +2721,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -2721,7 +2749,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2749,7 +2777,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2777,7 +2805,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2805,7 +2833,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2833,7 +2861,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -3486,7 +3514,7 @@
 <p><strong>⚠️ 没有 <code>setBalance()</code> / 没有公共 <code>held</code> setter</strong> - 钱包余额和持有只能通过 <code>TransferService</code> 更改（转账、存款、持有、释放、对账）。这可以防止直接突变绕过审计跟踪。</p>
 <p><strong>可用与持有</strong>：<code>balance</code> 是总数； <code>held</code> 资金被冻结（托管、待提款）。 <code>available = balance - held</code>。 <code>TransferService::transfer()</code> 和 <code>hold()</code> 仅根据可用余额进行操作。持有不会更改总余额，也不会写入分类帐行 - 持有会在内部可用和持有的存储桶之间移动资金，因此对账 (<code>SUM(balance) == deposits - withdrawals</code>) 不受影响。持有的审计记录属于拥有的生命周期实体（例如<code>WalletWithdrawal</code>），而不是分类账。</p>
 <p><strong>唯一约束</strong>：<code>(user_id, currency)</code>——每个账户每个用户一个钱包。</p>
-<p><strong>帐户代码单位</strong>：<code>currency</code> 是帐户鉴别符，而不是严格的 ISO 4217 代码。简单的 ISO 代码（例如 <code>CNY</code>、<code>USD</code>）标识默认余额钱包；扩展代码（例如<code>CNY.ESCROW</code>、<code>CNY.COMMISSION</code>、<code>POINTS</code>）标识托管、佣金或积分等类别帐户。默认余额钱包必须使用纯 ISO 代码 - 发票付款解析 (<code>findByUserAndCurrency(payerId, invoice.currency)</code>) 依赖于此，并且绝不能与类别帐户匹配。如果稍后需要外汇或每种货币报告，请引入显式的基础货币列，而不是解析这些代码。</p>
+<p><strong>帐户代码单位</strong>：<code>currency</code> 是帐户鉴别符，而不是严格的 ISO 4217 代码。简单的 ISO 代码（例如 <code>CNY</code>、<code>USD</code>）标识默认余额钱包；扩展代码（例如 <code>CNY.ESCROW</code>、<code>CNY.COMMISSION</code>、<code>POINTS</code>）标识托管帐户、佣金或积分等类别帐户。默认余额钱包必须使用纯 ISO 代码 - 发票付款解析 (<code>findByUserAndCurrency(payerId, invoice.currency)</code>) 依赖于此，并且绝不能与类别帐户匹配。如果稍后需要外汇或每种货币报告，请引入显式的基础货币列，而不是解析这些代码。</p>
 <p><strong>方法</strong>：<code>isActive(): bool</code>、<code>isFrozen(): bool</code></p>
 <h3 id="32">3.2 交易<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
 <table>
@@ -3563,7 +3591,7 @@
 <tbody>
 <tr>
 <td><code>fromWallet = wallet</code>、<code>toWallet = wallet</code></td>
-<td>内部转移（零和，双方都在场）</td>
+<td>内部转账（零和，双方都在场）</td>
 </tr>
 <tr>
 <td><code>fromWallet = null</code>、<code>toWallet = wallet</code></td>
@@ -3571,7 +3599,7 @@
 </tr>
 <tr>
 <td><code>fromWallet = wallet</code>、<code>toWallet = null</code></td>
-<td><strong>单面借记</strong> — 资金离开钱包系统（提取，或存款的<code>credit_reversal</code>）</td>
+<td><strong>单边借记</strong> — 资金离开钱包系统（提取，或存款的<code>credit_reversal</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -3605,7 +3633,7 @@
 <h3 id="33">3.3 付款扣除<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
 <p>支付发票的钱包余额扣减归Wallet所有，因为该操作是通过钱包余额转账和冲销实现的。</p>
 <p><strong>表</strong>：<code>wallet_payment_deduction</code></p>
-<p><strong>用途</strong>：在所选网关处理剩余金额之前，记录应用于付款发票的钱包余额金额。</p>
+<p><strong>用途</strong>：在所选网关处理剩余金额之前记录应用于付款发票的钱包余额金额。</p>
 <table>
 <thead>
 <tr>
@@ -3727,7 +3755,7 @@
 </tr>
 <tr>
 <td><code>invoiceId</code></td>
-<td>每张发票第一阶段一钱包扣除的独特性</td>
+<td>每张发票第一阶段一钱包扣减的独特性</td>
 </tr>
 </tbody>
 </table>
@@ -3736,7 +3764,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pending -&gt; failed
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>applied -&gt; refunded
 </code></pre></div>
-<p><code>released</code>表示发票未支付，扣除的钱包余额已退回。 <code>refunded</code> 表示发票已付款，随后全额退款。</p>
+<p><code>released</code>表示发票未支付，扣除的钱包余额已退回。 <code>refunded</code> 表示发票已支付，随后全额退款。</p>
 <hr />
 <h2 id="4-transferservice">4. TransferService — 原子转账+存款<a class="headerlink" href="#4-transferservice" title="Permanent link">&para;</a></h2>
 <h3 id="41">4.1 合同<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
@@ -4241,7 +4269,7 @@
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/TransferServiceTest.php</code></td>
-<td><strong>20个单元测试</strong>：存款（happy/wallet-not-found/frozen/idempot/rollback/em-close），转账（happy/same-wallet/source-not-found/target-not-found/frozen/currency/insufficient/idempot/deadlock/rollback/em-close）</td>
+<td><strong>20个单元测试</strong>：存款（happy/wallet-not-found/frozen/idempot/rollback/em-close）、转账（happy/same-wallet/source-not-found/target-not-found/frozen/currency/insufficient/idempot/deadlock/rollback/em-close）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/Payment/WalletBalanceAdjustmentProviderTest.php</code></td>

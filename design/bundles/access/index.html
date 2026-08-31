@@ -1,0 +1,5593 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Symfony 8.1 API backend skeleton with modular architecture">
+      
+      
+      
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/bundles/access/">
+      
+      
+        <link rel="prev" href="../identity/">
+      
+      
+        <link rel="next" href="../wechat/">
+      
+      
+        
+          <link rel="alternate" href="/crud-skeleton/" hreflang="en">
+        
+          <link rel="alternate" href="/crud-skeleton/zh/" hreflang="zh">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Access (Authorization) - CRUD Skeleton</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#access-bundle-design" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CRUD Skeleton
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Access (Authorization)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/crud-skeleton/zh/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CRUD Skeleton
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Manual
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development Manual
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/core-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/core-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/query-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/development-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/development-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/integration-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/database-and-migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Database & Migrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/extracting-a-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracting a Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/i18n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internationalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../system-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../module-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../controller-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../system-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../naming-convention/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naming Convention
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bundles
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bundles
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common (CMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade (E-Commerce)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-decision-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Decision Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Decision Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Goals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Non-Goals
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-audit-of-the-current-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Audit Of The Current State
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Audit Of The Current State">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-authentication-is-mature-authorization-is-coarse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Authentication Is Mature; Authorization Is Coarse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-existing-row-scoping-hooks-are-valuable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Existing Row-Scoping Hooks Are Valuable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-store-has-a-separate-correct-domain-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Store Has A Separate, Correct Domain Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-content-is-a-proposed-pilot-not-an-existing-store-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Content Is A Proposed Pilot, Not An Existing Store Resource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-constraints-discovered-during-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Constraints Discovered During Audit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-architectural-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Architectural Boundary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Architectural Boundary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-dependency-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Dependency Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-responsibility-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Responsibility Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Terminology
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-permission-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Permission Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Permission Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-permission-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Permission Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-rbac-decision-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 RBAC Decision Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-role-scope-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Role Scope Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-field-level-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Field-Level Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-persistence-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Persistence Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Persistence Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-permission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Permission
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-role-and-permission-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Role And Permission Join
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-role-field-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Role Field Grant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-audit-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Audit Log
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-module-structure-and-public-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Module Structure And Public Contracts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-request-authorization-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Request Authorization Flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Request Authorization Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-authentication-and-voter-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Authentication And Voter Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-data-scope-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Data Scope Enforcement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-safe-create-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Safe Create Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-field-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Field Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-content-pilot-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Content Pilot Contract
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Content Pilot Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-required-common-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Required Common Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-api-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 API Shape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-example-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Example Decisions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-my-access-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 My Access Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-management-apis-and-seed-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Management APIs And Seed Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Management APIs And Seed Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-management-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Management Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-seed-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Seed Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-jwt-caching-and-revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. JWT, Caching, And Revocation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. JWT, Caching, And Revocation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-first-release-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 First Release Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-cache-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Cache Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-high-risk-revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 High-Risk Revocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-failure-handling-and-security-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Failure Handling And Security Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-implementation-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Implementation Phases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Implementation Phases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-access-foundation-and-content-pilot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Access Foundation And Content Pilot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-incremental-action-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Incremental Action Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-optional-abac-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Optional ABAC Policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-testing-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Testing Contract
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Testing Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Unit Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Integration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-regression-and-static-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 Regression And Static Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-acceptance-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Acceptance Criteria
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-dqlexpression-row-scope-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. DqlExpression Row-Scope Foundation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. DqlExpression Row-Scope Foundation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151-purpose-and-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 Purpose And Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-non-negotiable-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Non-Negotiable Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-minimal-runtime-change-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 Minimal Runtime Change Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-value-object-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 Value Object Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#155-controller-this-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 Controller this Binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#156-parser-change-bind-variables-safely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 Parser Change: Bind Variables Safely
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#157-baseservice-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.7 BaseService Enforcement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#158-apiview-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.8 ApiView Composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#159-why-expressionservice-is-not-changed-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.9 Why ExpressionService Is Not Changed Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1510-required-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.10 Required Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1511-adoption-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.11 Adoption Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Runbooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WeChat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/easywechat-6.x-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyWeChat 6.x Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/huifu-payment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huifu Payment API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Issues
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../issues/architecture-review-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Review 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Validation Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/SYSTEM_WALKTHROUGH/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Walkthrough And Test Seams
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/TEST_MATRIX/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/BUSINESS_INVARIANTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Business Invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/ARCHITECTURE_TEST_MAPPING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Test Mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/FAILURE_MODES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/PRODUCTION_VALIDATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../testing/crud-skeleton-production/AI_DEVELOPMENT_PROCESS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai/context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-decision-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Decision Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Decision Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Goals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Non-Goals
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-audit-of-the-current-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Audit Of The Current State
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Audit Of The Current State">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-authentication-is-mature-authorization-is-coarse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Authentication Is Mature; Authorization Is Coarse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-existing-row-scoping-hooks-are-valuable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Existing Row-Scoping Hooks Are Valuable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-store-has-a-separate-correct-domain-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Store Has A Separate, Correct Domain Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-content-is-a-proposed-pilot-not-an-existing-store-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Content Is A Proposed Pilot, Not An Existing Store Resource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-constraints-discovered-during-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Constraints Discovered During Audit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-architectural-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Architectural Boundary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Architectural Boundary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-dependency-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Dependency Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-responsibility-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Responsibility Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Terminology
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-permission-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Permission Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Permission Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-permission-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Permission Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-rbac-decision-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 RBAC Decision Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-role-scope-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Role Scope Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-field-level-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Field-Level Authorization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-persistence-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Persistence Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Persistence Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-permission" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Permission
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-role-and-permission-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Role And Permission Join
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Assignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-role-field-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Role Field Grant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-audit-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Audit Log
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-module-structure-and-public-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Module Structure And Public Contracts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-request-authorization-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Request Authorization Flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Request Authorization Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-authentication-and-voter-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Authentication And Voter Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-data-scope-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Data Scope Enforcement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-safe-create-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Safe Create Scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-field-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Field Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-content-pilot-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Content Pilot Contract
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Content Pilot Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-required-common-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Required Common Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-api-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 API Shape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-example-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Example Decisions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-my-access-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 My Access Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-management-apis-and-seed-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Management APIs And Seed Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Management APIs And Seed Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-management-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Management Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-seed-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Seed Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-jwt-caching-and-revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. JWT, Caching, And Revocation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. JWT, Caching, And Revocation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-first-release-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 First Release Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-cache-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Cache Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-high-risk-revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 High-Risk Revocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-failure-handling-and-security-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Failure Handling And Security Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-implementation-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Implementation Phases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Implementation Phases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-access-foundation-and-content-pilot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Access Foundation And Content Pilot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-incremental-action-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Incremental Action Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-optional-abac-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Optional ABAC Policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-testing-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Testing Contract
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Testing Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Unit Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Integration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-regression-and-static-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 Regression And Static Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-acceptance-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Acceptance Criteria
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-dqlexpression-row-scope-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. DqlExpression Row-Scope Foundation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. DqlExpression Row-Scope Foundation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151-purpose-and-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 Purpose And Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-non-negotiable-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Non-Negotiable Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-minimal-runtime-change-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 Minimal Runtime Change Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-value-object-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 Value Object Contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#155-controller-this-binding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 Controller this Binding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#156-parser-change-bind-variables-safely" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 Parser Change: Bind Variables Safely
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#157-baseservice-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.7 BaseService Enforcement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#158-apiview-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.8 ApiView Composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#159-why-expressionservice-is-not-changed-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.9 Why ExpressionService Is Not Changed Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1510-required-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.10 Required Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1511-adoption-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.11 Adoption Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="access-bundle-design">Access Bundle Design<a class="headerlink" href="#access-bundle-design" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Status: approved design, not implemented.</strong> The Access bundle (<code>src/Access/</code>) is
+the authorization boundary for the modular monolith. Identity remains responsible
+for authentication and user identity. This document is the implementation contract
+for RBAC, scoped data access, and a deliberately limited field-level extension.</p>
+</blockquote>
+<hr />
+<h2 id="1-decision-summary">1. Decision Summary<a class="headerlink" href="#1-decision-summary" title="Permanent link">&para;</a></h2>
+<h3 id="11-decision">1.1 Decision<a class="headerlink" href="#11-decision" title="Permanent link">&para;</a></h3>
+<p>Create an independent <code>Access</code> module rather than adding authorization tables and
+logic to <code>Identity</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Identity: authenticate a principal
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Access:   decide what an authenticated principal may do
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Store:    own store membership and operational facts
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Business: own resources and enforce their data scope through Access
+</code></pre></div>
+<p>This preserves Identity as an authentication module (User, password, JWT, refresh
+tokens, OTP, WeChat login) and prevents it from depending on every business module's
+resources and actions.</p>
+<h3 id="12-goals">1.2 Goals<a class="headerlink" href="#12-goals" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Replace the global <code>ROLE_ADMIN</code>-only authorization model incrementally with
+  permission codes in the form <code>module:resource:action</code>.</li>
+<li>Assign roles globally or in a Store scope without cross-module foreign keys.</li>
+<li>Centralize permission decisions in a Symfony Voter and <code>AccessServiceInterface</code>.</li>
+<li>Provide reusable scope and field filtering hooks so controllers do not duplicate
+  authorization business logic.</li>
+<li>Keep <code>Store\Entity\Membership</code> as the authoritative Store membership record; Store
+  combines that membership check with Access authorization.</li>
+<li>Preserve existing <code>User.roles</code> and <code>ROLE_ADMIN</code> behavior during migration.</li>
+<li>Record authorization administration changes in an append-only audit log.</li>
+</ul>
+<h3 id="13-non-goals">1.3 Non-Goals<a class="headerlink" href="#13-non-goals" title="Permanent link">&para;</a></h3>
+<p>The first implementation MUST NOT:</p>
+<ul>
+<li>Replace authentication, JWT signing, refresh token rotation, or the Identity user
+  UUID contract.</li>
+<li>Move Store membership rows into Access or make Access the owner of Store roles.</li>
+<li>Introduce a generic policy language, Casbin, OPA, or user-authored expressions.</li>
+<li>Turn every field into a permission code such as <code>common:content:metadata:update</code>.</li>
+<li>Add foreign keys to <code>users</code>, <code>store</code>, Trade, Payment, Wallet, or other module
+  tables.</li>
+<li>Require a distributed transaction or make broker delivery a precondition for
+  authorization.</li>
+</ul>
+<p>ABAC-style conditions are an explicit future extension. The first release is scoped
+RBAC plus role-defined field allow-lists.</p>
+<hr />
+<h2 id="2-audit-of-the-current-state">2. Audit Of The Current State<a class="headerlink" href="#2-audit-of-the-current-state" title="Permanent link">&para;</a></h2>
+<h3 id="21-authentication-is-mature-authorization-is-coarse">2.1 Authentication Is Mature; Authorization Is Coarse<a class="headerlink" href="#21-authentication-is-mature-authorization-is-coarse" title="Permanent link">&para;</a></h3>
+<p><code>Identity\Entity\User</code> persists a JSON <code>roles</code> array and always exposes
+<code>ROLE_USER</code>. <code>config/packages/security.yaml</code> defines only this hierarchy:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">ROLE_ADMIN</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ROLE_USER</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>The API firewall authenticates <code>/api</code> through <code>JwtAuthenticator</code>. <code>TokenManager</code>
+signs a JWT containing the current roles, but the authenticator reloads the User by
+the JWT subject and does not make resource-level authorization decisions.</p>
+<p><code>security.yaml</code> currently protects every <code>/api/v1/manage</code> route with <code>ROLE_ADMIN</code>.
+Most Manage controllers duplicate this with a class-level
+<code>#[IsGranted('ROLE_ADMIN')]</code>. This is safe as a coarse platform-administrator gate,
+but cannot express module, action, Store, row, or field scope.</p>
+<h3 id="22-existing-row-scoping-hooks-are-valuable">2.2 Existing Row-Scoping Hooks Are Valuable<a class="headerlink" href="#22-existing-row-scoping-hooks-are-valuable" title="Permanent link">&para;</a></h3>
+<p>The Core view mixins already pass every list, detail, update, and delete lookup
+through controller filters:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>commonFilter() -&gt; mixIdToCommonFilter() -&gt; service.get()/list()
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>deletionFilter() -&gt; service.get() -&gt; service.remove()
+</code></pre></div>
+<p>Controllers use these hooks for ownership filters such as <code>['user' =&gt; $user]</code> and
+the deny-all sentinel <code>['id' =&gt; -1]</code>. QueryBuilder filters are available for more
+complex predicates. Access MUST use these existing enforcement points; it MUST NOT
+bypass <code>BaseService</code> or query a repository directly from a controller.</p>
+<h3 id="23-store-has-a-separate-correct-domain-boundary">2.3 Store Has A Separate, Correct Domain Boundary<a class="headerlink" href="#23-store-has-a-separate-correct-domain-boundary" title="Permanent link">&para;</a></h3>
+<p><code>Store\Entity\Membership</code> stores an active/suspended/revoked membership for a local
+Store plus a scalar <code>userUuid</code>. It has roles <code>owner</code>, <code>manager</code>, <code>clerk</code>, and
+<code>fulfillment</code>. <code>MembershipService::isAuthorized()</code> is currently called directly by
+the Store Staff controller for each action.</p>
+<p>This is a valid Store-domain authorization implementation, but it has two limits:</p>
+<ul>
+<li>The authorization code and allowed Store roles are repeated in controller methods.</li>
+<li>Other modules cannot consistently reuse a Store-scoped capability without knowing
+  Store membership details.</li>
+</ul>
+<p>Store keeps membership checks in <code>MembershipServiceInterface</code>. Store Staff controllers
+will compose that check with <code>AccessServiceInterface</code> through a Store-owned helper.
+Access therefore has no dependency on Store and cannot form a Store &lt;-&gt; Access module
+cycle. It neither modifies the membership schema nor duplicates the membership
+lifecycle.</p>
+<h3 id="24-content-is-a-proposed-pilot-not-an-existing-store-resource">2.4 Content Is A Proposed Pilot, Not An Existing Store Resource<a class="headerlink" href="#24-content-is-a-proposed-pilot-not-an-existing-store-resource" title="Permanent link">&para;</a></h3>
+<p><code>Common\Entity\Content</code> currently has <code>id</code>, <code>title</code>, <code>body</code>, Category, Tags, and
+timestamps. It does <strong>not</strong> have <code>storeUuid</code> or <code>metadata</code>. The existing App Content
+endpoint is readable by ordinary authenticated API users through the default firewall;
+the Manage Content controller is <code>ROLE_ADMIN</code> CRUD.</p>
+<p>Therefore, Store-scoped Content requires a separate Common migration and explicit
+controller changes. It cannot be enabled merely by adding Access records.</p>
+<h3 id="25-constraints-discovered-during-audit">2.5 Constraints Discovered During Audit<a class="headerlink" href="#25-constraints-discovered-during-audit" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>BaseService</code> captures the current security token's User in its constructor. New
+  authorization code MUST obtain the current user at request time where a long-lived
+  service could otherwise retain stale request state.</li>
+<li>Dynamic query privileges (<code>@dql</code>, <code>@sort</code>, <code>@hints</code>) currently check literal
+  <code>ROLE_ADMIN</code>. They are outside the first Access migration and remain platform-admin
+  only until a dedicated Core contract replaces this check.</li>
+<li>The generic Create/Update mixins run static accepted-property filtering before
+  <code>processCreateContent()</code> and <code>processUpdateContent()</code>. Dynamic field permissions
+  belong in those hooks after the static schema allow-list has removed unknown fields.</li>
+<li><code>@filter</code>, <code>@select</code>, and <code>@display</code> are user query features, not authorization
+  policies. They MUST NOT be used to store or evaluate administrator-defined Access
+  rules.</li>
+</ul>
+<hr />
+<h2 id="3-architectural-boundary">3. Architectural Boundary<a class="headerlink" href="#3-architectural-boundary" title="Permanent link">&para;</a></h2>
+<h3 id="31-dependency-direction">3.1 Dependency Direction<a class="headerlink" href="#31-dependency-direction" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    identity["Identity&lt;br/&gt;User UUID, JWT, authentication"] --&gt; access["Access&lt;br/&gt;role and permission decisions"]
+    store["Store&lt;br/&gt;membership and store lifecycle"] --&gt; access
+    common["Common&lt;br/&gt;Content scope enforcement"] --&gt; access
+    trade["Trade / Wallet / Payment&lt;br/&gt;future consumers"] --&gt; access</code></pre>
+<p>The arrows denote service-interface dependencies only. Access stores Identity and
+Store references as UUID strings. It MUST NOT import Store entities, repositories, or
+services. Business modules consume <code>AccessServiceInterface</code>; they MUST NOT import
+Access repositories or entities.</p>
+<h3 id="32-responsibility-matrix">3.2 Responsibility Matrix<a class="headerlink" href="#32-responsibility-matrix" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Owner</th>
+<th>Access responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User identity, credentials, roles JSON, JWT</td>
+<td>Identity</td>
+<td>Read User UUID and invalidate authorization sessions when needed</td>
+</tr>
+<tr>
+<td>Platform-break-glass administrator</td>
+<td>Identity <code>ROLE_ADMIN</code></td>
+<td>Recognize as an unconditional compatibility override</td>
+</tr>
+<tr>
+<td>Store membership lifecycle</td>
+<td>Store</td>
+<td>Require active membership before its Store-scoped Access decision</td>
+</tr>
+<tr>
+<td>Permission catalogue and role grants</td>
+<td>Access</td>
+<td>Authoritative</td>
+</tr>
+<tr>
+<td>Global/store role assignment</td>
+<td>Access</td>
+<td>Authoritative</td>
+</tr>
+<tr>
+<td>Resource ownership and lifecycle</td>
+<td>Business module</td>
+<td>Supply scope attribute and enforce returned filter</td>
+</tr>
+<tr>
+<td>HTTP authorization decision</td>
+<td>Access Voter</td>
+<td>Authoritative for declared Access permissions</td>
+</tr>
+<tr>
+<td>Field mutation allow-list</td>
+<td>Access role grant + business controller schema limit</td>
+<td>Return effective permitted fields</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-terminology">3.3 Terminology<a class="headerlink" href="#33-terminology" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Permission</td>
+<td>A stable capability code, e.g. <code>common:content:update</code></td>
+</tr>
+<tr>
+<td>Role</td>
+<td>Named set of permissions and optional field grants</td>
+</tr>
+<tr>
+<td>Assignment</td>
+<td>A role granted to one Identity user UUID, globally or for one scope</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Boundary where a grant applies: <code>global</code> or <code>store</code> in the first release</td>
+</tr>
+<tr>
+<td>Resource scope</td>
+<td>Scope owned by the target record, e.g. <code>Content.storeUuid</code></td>
+</tr>
+<tr>
+<td>Field grant</td>
+<td>Role-defined allowed fields for one resource action; it narrows an action permission</td>
+</tr>
+<tr>
+<td>Platform override</td>
+<td>Existing <code>ROLE_ADMIN</code>; unrestricted during migration</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-permission-model">4. Permission Model<a class="headerlink" href="#4-permission-model" title="Permanent link">&para;</a></h2>
+<h3 id="41-permission-codes">4.1 Permission Codes<a class="headerlink" href="#41-permission-codes" title="Permanent link">&para;</a></h3>
+<p>All codes use lowercase ASCII segments:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>{module}:{resource}:{action}
+</code></pre></div>
+<p>Examples:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>access:role:manage
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>access:assignment:manage
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>common:content:read
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>common:content:create
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>common:content:update
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>common:content:delete
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>store:order:read
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>store:order:accept
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>store:order:reject
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>store:order:fulfill
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>wallet:voucher:manual
+</code></pre></div>
+<p><code>*:*</code> and wildcard matching are NOT persisted permission codes. The compatibility
+override for <code>ROLE_ADMIN</code> is implemented in the Access decision service, not as a
+database record. System roles may contain every seeded concrete permission.</p>
+<h3 id="42-rbac-decision-rules">4.2 RBAC Decision Rules<a class="headerlink" href="#42-rbac-decision-rules" title="Permanent link">&para;</a></h3>
+<p>For a requested permission <code>P</code>, authenticated user <code>U</code>, and optional Store UUID <code>S</code>:</p>
+<ol>
+<li>An anonymous principal is denied.</li>
+<li>A User with <code>ROLE_ADMIN</code> is allowed. This is temporary compatibility behavior and
+   is also the break-glass operational path.</li>
+<li>A global active Assignment to a Role containing <code>P</code> is allowed.</li>
+<li>If <code>S</code> is present, an active Assignment scoped to <code>S</code> whose Role contains <code>P</code> is
+   allowed.</li>
+<li>Otherwise the request is denied.</li>
+</ol>
+<p>For a Store operation, Store's <code>StoreAccessService</code> first requires active membership
+using <code>MembershipServiceInterface</code>, then calls Access for the scoped permission. An
+Access assignment alone must never create Store membership.</p>
+<p>An allow in one Store MUST NOT grant access in another Store. A global content editor
+may be introduced later as an explicit global role; it is not inferred from a
+Store-scoped editor assignment.</p>
+<h3 id="43-role-scope-compatibility">4.3 Role Scope Compatibility<a class="headerlink" href="#43-role-scope-compatibility" title="Permanent link">&para;</a></h3>
+<p>Roles declare their maximum scope:</p>
+<table>
+<thead>
+<tr>
+<th>Role scope</th>
+<th>Permitted assignment scopes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>global</code></td>
+<td><code>global</code> only</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>store</code> only</td>
+</tr>
+</tbody>
+</table>
+<p>The service rejects a mismatched role/assignment scope. A role is not silently
+promoted from Store to global scope.</p>
+<h3 id="44-field-level-authorization">4.4 Field-Level Authorization<a class="headerlink" href="#44-field-level-authorization" title="Permanent link">&para;</a></h3>
+<p>Field access is an extension of a successful action decision, not a replacement for
+it. For example, both roles below need <code>common:content:update</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Scope</th>
+<th>Effective Content update fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>store_content_editor</code></td>
+<td>Store</td>
+<td><code>title</code>, <code>body</code>, <code>category</code>, <code>tags</code></td>
+</tr>
+<tr>
+<td><code>store_content_metadata_editor</code></td>
+<td>Store</td>
+<td><code>title</code>, <code>body</code>, <code>category</code>, <code>tags</code>, <code>metadata</code></td>
+</tr>
+</tbody>
+</table>
+<p>The effective fields are the union of matching active role grants for the request's
+scope, then intersected with the controller's static schema allow-list. Unknown or
+server-owned fields such as <code>id</code>, <code>storeUuid</code>, ownership, status, and timestamps are
+never made writable by an Access grant.</p>
+<p>The first release uses <strong>strict denial</strong>: if a request includes any accepted schema
+field that is outside its effective field grant, the API returns <code>403</code> and performs
+no mutation. Silently stripping input is forbidden because it creates a successful
+response with an unexpected partial write.</p>
+<p>Roles with an action permission but no <code>RoleFieldGrant</code> receive no client-writable
+fields for that action. This fail-closed rule prevents a newly added entity field from
+becoming writable accidentally.</p>
+<hr />
+<h2 id="5-persistence-model">5. Persistence Model<a class="headerlink" href="#5-persistence-model" title="Permanent link">&para;</a></h2>
+<h3 id="51-tables">5.1 Tables<a class="headerlink" href="#51-tables" title="Permanent link">&para;</a></h3>
+<p>Access owns six tables. All timestamps are UTC <code>datetime_immutable</code> values.</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_permission</code></td>
+<td>Stable permission catalogue</td>
+</tr>
+<tr>
+<td><code>access_role</code></td>
+<td>Named global or Store-scoped role</td>
+</tr>
+<tr>
+<td><code>access_role_permission</code></td>
+<td>Role to permission join</td>
+</tr>
+<tr>
+<td><code>access_assignment</code></td>
+<td>User UUID to role grant in a scope</td>
+</tr>
+<tr>
+<td><code>access_role_field_grant</code></td>
+<td>Field allow-list for a role/resource/action</td>
+</tr>
+<tr>
+<td><code>access_audit_log</code></td>
+<td>Append-only authorization administration audit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-permission">5.2 Permission<a class="headerlink" href="#52-permission" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>access_permission
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  id              int PK
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  code            varchar(120) UNIQUE NOT NULL
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  module          varchar(60) NOT NULL
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  resource        varchar(60) NOT NULL
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  action          varchar(60) NOT NULL
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>  name            varchar(120) NOT NULL
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>  description     text NULL
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>  isSystem        boolean NOT NULL DEFAULT false
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>  createdAt       datetime_immutable NOT NULL
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>  updatedAt       datetime_immutable NULL
+</code></pre></div>
+<p>The unique code is immutable once used in an assignment graph. Permission removal is
+not a normal CRUD delete: system permissions may be disabled only after no role grants
+them, and code changes require a migration plus a new code.</p>
+<h3 id="53-role-and-permission-join">5.3 Role And Permission Join<a class="headerlink" href="#53-role-and-permission-join" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>access_role
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  id              int PK
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  uuid            varchar(36) UNIQUE NOT NULL
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  code            varchar(80) UNIQUE NOT NULL
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  name            varchar(120) NOT NULL
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  scopeType       varchar(20) NOT NULL  # global | store
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  isSystem        boolean NOT NULL DEFAULT false
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  createdAt       datetime_immutable NOT NULL
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  updatedAt       datetime_immutable NULL
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>access_role_permission
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  role_id         int NOT NULL FK access_role(id) ON DELETE CASCADE
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>  permission_id   int NOT NULL FK access_permission(id) ON DELETE RESTRICT
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>  PRIMARY KEY (role_id, permission_id)
+</code></pre></div>
+<p><code>access_role_permission</code> is Access-local and may use foreign keys. System roles and
+permissions cannot be modified or deleted through normal Manage CRUD; only a versioned
+seed command may reconcile them.</p>
+<h3 id="54-assignment">5.4 Assignment<a class="headerlink" href="#54-assignment" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>access_assignment
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  id              int PK
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  uuid            varchar(36) UNIQUE NOT NULL
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  user_uuid       varchar(36) NOT NULL
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  role_id         int NOT NULL FK access_role(id) ON DELETE RESTRICT
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  scope_type      varchar(20) NOT NULL  # global | store
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  scope_uuid      varchar(36) NULL
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  granted_by_uuid varchar(36) NULL
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  createdAt       datetime_immutable NOT NULL
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  revokedAt       datetime_immutable NULL
+</code></pre></div>
+<p>Indexes and constraints:</p>
+<ul>
+<li>Unique active grant is enforced by service logic plus a database uniqueness strategy
+  appropriate to MySQL, PostgreSQL, and SQLite. A portable first implementation uses
+  <code>UNIQUE(user_uuid, role_id, scope_type, scope_uuid)</code> and reactivates a revoked row
+  rather than inserting a duplicate.</li>
+<li>Index <code>(user_uuid, revoked_at)</code> supports effective-permission lookup.</li>
+<li>Index <code>(scope_type, scope_uuid, revoked_at)</code> supports Store scope lookups.</li>
+<li><code>scope_type=global</code> requires <code>scope_uuid IS NULL</code>; <code>scope_type=store</code> requires a
+  canonical Store UUID. Doctrine validation enforces this in all database engines;
+  the migration adds a CHECK constraint where supported.</li>
+<li>There is intentionally no FK to <code>users</code> or <code>store</code>. User and Store UUIDs are stable
+  cross-module scalar references.</li>
+</ul>
+<p>Assignments are revoked, never hard-deleted, to retain the authorization history.</p>
+<h3 id="55-role-field-grant">5.5 Role Field Grant<a class="headerlink" href="#55-role-field-grant" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>access_role_field_grant
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  id              int PK
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  role_id         int NOT NULL FK access_role(id) ON DELETE CASCADE
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  resource        varchar(80) NOT NULL       # common:content
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>  action          varchar(60) NOT NULL       # create | update
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>  fields          json NOT NULL               # ordered unique field names
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>  createdAt       datetime_immutable NOT NULL
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>  updatedAt       datetime_immutable NULL
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>  UNIQUE(role_id, resource, action)
+</code></pre></div>
+<p>JSON is intentional here: a grant is one auditable policy object and fields are always
+read as a complete set. A separate row per field would complicate writes without
+improving query behavior. The service validates field names against the registered
+resource schema before persistence; it does not accept arbitrary strings.</p>
+<h3 id="56-audit-log">5.6 Audit Log<a class="headerlink" href="#56-audit-log" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>access_audit_log
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  id              bigint PK
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  actor_uuid      varchar(36) NULL
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  action          varchar(120) NOT NULL
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  target_type     varchar(80) NOT NULL
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  target_uuid     varchar(36) NULL
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>  before_data     json NULL
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>  after_data      json NULL
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>  request_id      varchar(64) NULL
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>  createdAt       datetime_immutable NOT NULL
+</code></pre></div>
+<p><code>action</code> includes <code>role.created</code>, <code>role.permissions.replaced</code>,
+<code>assignment.granted</code>, <code>assignment.revoked</code>, and <code>field_grant.replaced</code>. Audit records
+MUST be written in the same local transaction as the management mutation. They contain
+UUIDs and permission codes only, never secrets, JWTs, passwords, addresses, or full
+request bodies.</p>
+<hr />
+<h2 id="6-module-structure-and-public-contracts">6. Module Structure And Public Contracts<a class="headerlink" href="#6-module-structure-and-public-contracts" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>src/Access/
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>|-- Controller/
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>|   |-- App/MyAccessController.php
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>|   `-- Manage/{Permission,Role,Assignment,AuditLog}Controller.php
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>|-- Entity/{Permission,Role,Assignment,RoleFieldGrant,AuditLog}.php
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>|-- Repository/{Permission,Role,Assignment,RoleFieldGrant,AuditLog}Repository.php
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>|-- Security/AccessVoter.php
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>|-- Service/
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>|   |-- AccessService.php / AccessServiceInterface.php
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>|   |-- FieldAccessService.php / FieldAccessServiceInterface.php
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>|   |-- AccessResourceRegistry.php
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>|   `-- AccessAuditService.php
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>|-- Command/SeedPermissionsCommand.php
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>`-- Resources/config/services_access.yaml
+</code></pre></div>
+<p><code>AccessServiceInterface</code> is the only authorization contract exported to other
+business modules. It evaluates Access-owned assignment data only. It provides methods
+equivalent to:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">can(User $user, string $permission, ?AccessScope $scope = null): bool;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">require(User $user, string $permission, ?AccessScope $scope = null): void;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="x">allowedStoreUuids(User $user, string $permission): list&lt;string&gt;;</span>
+</code></pre></div>
+<p><code>FieldAccessServiceInterface</code> provides:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">filterWritableFields(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="x">    User $user,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="x">    string $resource,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="x">    string $action,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="x">    array $input,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="x">    array $schemaFields,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="x">    ?AccessScope $scope,</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="x">): array;</span>
+</code></pre></div>
+<p>It throws an Access exception when the input contains an unauthorized accepted field.
+Controllers translate this to the project's existing 403 response envelope.</p>
+<p><code>AccessResourceRegistry</code> is code-owned configuration, not administrator-editable
+metadata. It maps an Access resource to valid writable schema fields:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">'common:content' =&gt; [</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="x">    'create' =&gt; ['title', 'body', 'category', 'tags', 'metadata'],</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="x">    'update' =&gt; ['title', 'body', 'category', 'tags', 'metadata'],</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="x">]</span>
+</code></pre></div>
+<p>It prevents a role administrator from granting a non-existent, sensitive, or
+server-owned property merely by editing a JSON field grant.</p>
+<hr />
+<h2 id="7-request-authorization-flow">7. Request Authorization Flow<a class="headerlink" href="#7-request-authorization-flow" title="Permanent link">&para;</a></h2>
+<h3 id="71-authentication-and-voter-decision">7.1 Authentication And Voter Decision<a class="headerlink" href="#71-authentication-and-voter-decision" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant C as Client
+    participant J as JwtAuthenticator
+    participant V as AccessVoter
+    participant A as AccessService
+    participant B as Business Controller
+
+    C-&gt;&gt;J: Bearer JWT + request
+    J-&gt;&gt;J: Verify RS256, expiry, revocation; load User
+    J-&gt;&gt;V: #[IsGranted('common:content:update', subject)]
+    V-&gt;&gt;A: can(user, permission, scope)
+    A--&gt;&gt;V: allow or deny
+    V--&gt;&gt;B: permitted request only
+    B-&gt;&gt;A: obtain allowed Store UUIDs / field filter</code></pre>
+<p>The Voter performs the Access-owned action-level gate. It must receive an explicit
+<code>AccessScope</code> or a subject that implements a small <code>ScopedResourceInterface</code>; it MUST
+NOT infer a Store from client body data. After this gate, Store endpoints call a
+Store-owned <code>StoreAccessService</code> that checks active membership and obtains the
+Access-derived data filter. The request cannot read or mutate a Store row without both
+checks, while module dependency remains one-way: <code>Store -&gt; Access</code>.</p>
+<h3 id="72-data-scope-enforcement">7.2 Data Scope Enforcement<a class="headerlink" href="#72-data-scope-enforcement" title="Permanent link">&para;</a></h3>
+<p>Action authorization alone does not make a row writable. A controller serving a
+Store-owned resource must constrain every lookup to permitted Store UUIDs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>ROLE_ADMIN                    -&gt; no Store predicate
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>0 permitted Store UUIDs       -&gt; ['id' =&gt; -1]
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>1 permitted Store UUID        -&gt; ['storeUuid' =&gt; uuid]
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>multiple permitted Store UUID -&gt; QueryBuilder WHERE entity.storeUuid IN (:storeUuids)
+</code></pre></div>
+<p>The QueryBuilder must be created from the resource's service so it composes with the
+existing mixin filter pipeline. The same scope filter applies to list, detail, update,
+delete, and batch-update lookup bases. A mutation is allowed only when the row is
+visible through that filter. Where disclosure is undesirable, an out-of-scope record
+returns 404 rather than 403.</p>
+<h3 id="73-safe-create-scope">7.3 Safe Create Scope<a class="headerlink" href="#73-safe-create-scope" title="Permanent link">&para;</a></h3>
+<p>Create routes include Store scope in the route, not in the request body:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>POST /api/v1/store/stores/{storeUuid}/contents
+</code></pre></div>
+<p>The controller requires <code>common:content:create</code> for <code>{storeUuid}</code> and sets
+<code>Content.storeUuid</code> from the route only. <code>storeUuid</code> is absent from accepted client
+properties. This prevents a client from selecting another Store by sending a different
+JSON field.</p>
+<h3 id="74-field-filtering">7.4 Field Filtering<a class="headerlink" href="#74-field-filtering" title="Permanent link">&para;</a></h3>
+<p>For create and update, the order is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>static controller schema allow-list
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  -&gt; server-owned scope defaults
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  -&gt; FieldAccessService strict field validation
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  -&gt; processCreateContent/processUpdateContent
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  -&gt; service.update()
+</code></pre></div>
+<p>The Access field grant narrows the static controller schema; it never expands it.
+Resource-specific validation stays in the business service/controller hook.</p>
+<hr />
+<h2 id="8-content-pilot-contract">8. Content Pilot Contract<a class="headerlink" href="#8-content-pilot-contract" title="Permanent link">&para;</a></h2>
+<h3 id="81-required-common-migration">8.1 Required Common Migration<a class="headerlink" href="#81-required-common-migration" title="Permanent link">&para;</a></h3>
+<p>The pilot requires a Common-owned migration and entity change:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>common_content.store_uuid  varchar(36) NULL, indexed
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>common_content.metadata    json NULL
+</code></pre></div>
+<p><code>store_uuid</code> is a scalar Store UUID and has no Store foreign key. <code>NULL</code> denotes a
+platform/global Content record. Existing rows remain <code>NULL</code>; no historical Store
+assignment is fabricated.</p>
+<p>Content's static allowed fields become:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>create/update: title, body, category, tags, metadata
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>server only:    storeUuid, id, createdAt, updatedAt
+</code></pre></div>
+<h3 id="82-api-shape">8.2 API Shape<a class="headerlink" href="#82-api-shape" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Permission</th>
+<th>Scope</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/contents</code></td>
+<td><code>ROLE_USER</code></td>
+<td>none</td>
+<td>Existing ordinary-user list; returns global and Store Content visible to all authenticated users</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/contents/{id}</code></td>
+<td><code>ROLE_USER</code></td>
+<td>none</td>
+<td>Existing ordinary-user detail</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/store/stores/{storeUuid}/contents</code></td>
+<td><code>common:content:read</code></td>
+<td>Store</td>
+<td>Staff work list, scope-filtered</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/store/stores/{storeUuid}/contents</code></td>
+<td><code>common:content:create</code></td>
+<td>Store</td>
+<td>Server writes <code>storeUuid</code> from route</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/store/stores/{storeUuid}/contents/{id}</code></td>
+<td><code>common:content:update</code></td>
+<td>Store + row</td>
+<td>Scope filter prevents cross-Store write</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/store/stores/{storeUuid}/contents/{id}</code></td>
+<td><code>common:content:delete</code></td>
+<td>Store + row</td>
+<td>Same scope behavior</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/access/me</code></td>
+<td>authenticated</td>
+<td>own user</td>
+<td>Returns UI capability summary only</td>
+</tr>
+</tbody>
+</table>
+<p>The existing <code>/api/v1/manage/contents</code> endpoints remain platform administration and
+remain protected by <code>ROLE_ADMIN</code> in Phase 1. A later migration may replace their
+coarse role annotation with Access permissions after all administration routes have
+an explicit capability mapping.</p>
+<h3 id="83-example-decisions">8.3 Example Decisions<a class="headerlink" href="#83-example-decisions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>User A: store_content_editor at Store X
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>  PUT Store X Content -&gt; title/body/category/tags allowed
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>  PUT Store X Content -&gt; metadata denied (403)
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>  PUT Store Y Content -&gt; 404 (out of scope)
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>User B: store_content_metadata_editor at Store X
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>  PUT Store X Content -&gt; title/body/category/tags/metadata allowed
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>User C: no assignment
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>  GET ordinary-user Content -&gt; allowed
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>  POST Store X Content -&gt; 403
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>Platform administrator (ROLE_ADMIN)
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>  Manage Content and Store Content -&gt; allowed during compatibility period
+</code></pre></div>
+<h3 id="84-my-access-response">8.4 My Access Response<a class="headerlink" href="#84-my-access-response" title="Permanent link">&para;</a></h3>
+<p>The self-service endpoint is informational only. The server remains authoritative.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="nt">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"common:content:create"</span><span class="p">,</span><span class="w"> </span><span class="s2">"common:content:update"</span><span class="p">],</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="nt">"storeScopes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">      </span><span class="nt">"common:content:update"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"a5dc7f1a-52f4-4f6c-b10f-5bfe667b5e55"</span><span class="p">]</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">    </span><span class="nt">"fieldGrants"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">      </span><span class="nt">"common:content:update"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"title"</span><span class="p">,</span><span class="w"> </span><span class="s2">"body"</span><span class="p">,</span><span class="w"> </span><span class="s2">"category"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tags"</span><span class="p">]</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="p">}</span>
+</code></pre></div>
+<p>This response is for UI navigation and form rendering. Clients must not treat it as a
+security token or rely on it to authorize a request.</p>
+<hr />
+<h2 id="9-management-apis-and-seed-data">9. Management APIs And Seed Data<a class="headerlink" href="#9-management-apis-and-seed-data" title="Permanent link">&para;</a></h2>
+<h3 id="91-management-endpoints">9.1 Management Endpoints<a class="headerlink" href="#91-management-endpoints" title="Permanent link">&para;</a></h3>
+<p>All Access management endpoints remain <code>ROLE_ADMIN</code> during Phase 1. They are
+break-glass administration APIs and must not be delegated through the roles they
+manage.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/access/permissions</code></td>
+<td>List catalogue</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/access/roles</code></td>
+<td>List roles</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/access/roles</code></td>
+<td>Create non-system role</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/manage/access/roles/{uuid}</code></td>
+<td>Rename/update non-system role</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/access/roles/{uuid}/permissions</code></td>
+<td>Replace concrete role permissions</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/manage/access/roles/{uuid}/field-grants/{resource}/{action}</code></td>
+<td>Replace a role field grant</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/access/assignments</code></td>
+<td>Search current/revoked grants</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/manage/access/assignments</code></td>
+<td>Grant or reactivate a role</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/manage/access/assignments/{uuid}</code></td>
+<td>Revoke assignment; no hard delete</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/access/audit</code></td>
+<td>Paginated immutable audit history</td>
+</tr>
+</tbody>
+</table>
+<p>Permission catalogue rows are seeded, not created by normal HTTP CRUD. This prevents
+an administrator from creating names that are not implemented by any endpoint.</p>
+<h3 id="92-seed-command">9.2 Seed Command<a class="headerlink" href="#92-seed-command" title="Permanent link">&para;</a></h3>
+<p><code>app:access:seed</code> is idempotent and source-controlled. It creates missing system
+permissions, system roles, their joins, and the Content pilot roles. It never removes
+or widens existing grants automatically. It reports changed records and exits nonzero
+on an incompatible system-role definition.</p>
+<p>Initial system roles:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>store_content_editor</code></td>
+<td>Store</td>
+<td>Content read/create/update/delete without metadata mutation</td>
+</tr>
+<tr>
+<td><code>store_content_metadata_editor</code></td>
+<td>Store</td>
+<td>Store Content editor with metadata field grant</td>
+</tr>
+<tr>
+<td><code>access_administrator</code></td>
+<td>Global</td>
+<td>Reserved future Access administration role; not used to replace Phase 1 <code>ROLE_ADMIN</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-jwt-caching-and-revocation">10. JWT, Caching, And Revocation<a class="headerlink" href="#10-jwt-caching-and-revocation" title="Permanent link">&para;</a></h2>
+<h3 id="101-first-release-decision">10.1 First Release Decision<a class="headerlink" href="#101-first-release-decision" title="Permanent link">&para;</a></h3>
+<p>Authorization is resolved server-side from Access tables and cache. JWTs continue to
+contain Identity claims (<code>sub</code>, username, email, roles, time claims, JTI, issuer) only.
+Permissions and Store scopes are <strong>not</strong> added to JWT in Phase 1.</p>
+<p>This makes assignment revocation effective after Access-cache invalidation without
+waiting for a 7200-second access-token expiry, and avoids large tokens for users with
+many Store assignments.</p>
+<h3 id="102-cache-contract">10.2 Cache Contract<a class="headerlink" href="#102-cache-contract" title="Permanent link">&para;</a></h3>
+<p>Cache key:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>access:effective:{userUuid}
+</code></pre></div>
+<p>Cached value contains only effective permission codes, Store scope UUIDs, field grants,
+and a version/timestamp. The cache TTL is short (five minutes by default) as a fallback;
+every mutation to Role permissions, field grants, or Assignments evicts the affected
+users' keys in the same request after transaction commit.</p>
+<p>Changing a role's grants must invalidate every active Assignment for that role. The
+repository queries affected user UUIDs before commit and the invalidator clears keys
+after successful commit. Failed transactions must not evict a cache entry for a change
+that did not persist.</p>
+<h3 id="103-high-risk-revocation">10.3 High-Risk Revocation<a class="headerlink" href="#103-high-risk-revocation" title="Permanent link">&para;</a></h3>
+<p>Revoking an Assignment removes permissions on the next request after cache eviction.
+It does not require revoking Identity refresh tokens because the JWT carries no Access
+permissions. Store membership revocation is independently effective because Store
+checks it on every Store operation. If a future version embeds permissions in JWT
+claims, it MUST additionally revoke active access and refresh tokens or introduce an
+authorization version claim.</p>
+<hr />
+<h2 id="11-failure-handling-and-security-rules">11. Failure Handling And Security Rules<a class="headerlink" href="#11-failure-handling-and-security-rules" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Missing/invalid JWT</td>
+<td>Existing 401 authentication response</td>
+</tr>
+<tr>
+<td>Authenticated but no action permission</td>
+<td>403</td>
+</tr>
+<tr>
+<td>Store route has no active membership or assignment</td>
+<td>403 for create; 404 for existing out-of-scope records</td>
+</tr>
+<tr>
+<td>Scope UUID is malformed or role/scope mismatch</td>
+<td>400 on management write</td>
+</tr>
+<tr>
+<td>Requested field outside effective grant</td>
+<td>403; no partial write</td>
+</tr>
+<tr>
+<td>Assignment already active</td>
+<td>Idempotent return of existing assignment or 409; endpoint contract chooses one and tests it</td>
+</tr>
+<tr>
+<td>Grant refers to unknown resource/field</td>
+<td>400; registry rejects it</td>
+</tr>
+<tr>
+<td>Audit write fails</td>
+<td>Entire authorization administration transaction rolls back</td>
+</tr>
+<tr>
+<td>Cache failure</td>
+<td>Fail closed for mutation-capable routes; read-only decisions may fall back to database only when explicitly tested</td>
+</tr>
+</tbody>
+</table>
+<p>Additional mandatory rules:</p>
+<ul>
+<li>Permission codes, role codes, Store UUIDs, and field names are validated as bounded
+  ASCII strings; no user expression is evaluated.</li>
+<li><code>ROLE_ADMIN</code> bypass is logged for sensitive Store/Access mutations.</li>
+<li>Access audit lists are admin-only and must not expose unnecessary user profile data.</li>
+<li>Store scope comes from a route parameter or a persisted target entity, never a client
+  body field or <code>X-Store-Code</code> without trusted Store context resolution.</li>
+<li>Field grants cannot grant serialization visibility. Serializer groups/<code>#[Ignore]</code>
+  remain responsible for sensitive read fields.</li>
+</ul>
+<hr />
+<h2 id="12-implementation-phases">12. Implementation Phases<a class="headerlink" href="#12-implementation-phases" title="Permanent link">&para;</a></h2>
+<h3 id="phase-1-access-foundation-and-content-pilot">Phase 1: Access Foundation And Content Pilot<a class="headerlink" href="#phase-1-access-foundation-and-content-pilot" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Create Access migration, entities, repositories, services, Voter, cache invalidator,
+   management APIs, self-service endpoint, and seed command.</li>
+<li>Add the Access service configuration, route import, OpenAPI entries, translations,
+   and MkDocs links.</li>
+<li>Add the Core <code>DqlExpression</code> row-scope foundation defined in section 15 before
+   introducing Store-scoped Content routes.</li>
+<li>Add Common migration for nullable <code>Content.storeUuid</code> and nullable <code>metadata</code>.</li>
+<li>Add Store-scoped Content staff routes using the existing View mixins plus a reusable
+   Access scope trait/service adapter.</li>
+<li>Add static Content schema fields and strict <code>FieldAccessService</code> enforcement.</li>
+<li>Preserve all existing Manage controller <code>ROLE_ADMIN</code> guards and existing User roles.</li>
+</ol>
+<h3 id="phase-2-incremental-action-migration">Phase 2: Incremental Action Migration<a class="headerlink" href="#phase-2-incremental-action-migration" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Define each module's explicit permission catalogue in source code.</li>
+<li>Replace class-wide <code>ROLE_ADMIN</code> annotations only where every route has a tested
+   permission mapping.</li>
+<li>Migrate direct Store Staff <code>MembershipService</code> action checks behind the Access Voter
+   while retaining Membership as the Store fact source.</li>
+<li>Add data-scope adapters for Store-owned resources one module at a time.</li>
+<li>Replace wallet manual provider <code>ROLE_ADMIN</code> checks only after a dedicated
+   <code>wallet:voucher:manual</code> migration and finance authorization review.</li>
+</ol>
+<h3 id="phase-3-optional-abac-policies">Phase 3: Optional ABAC Policies<a class="headerlink" href="#phase-3-optional-abac-policies" title="Permanent link">&para;</a></h3>
+<p>Only after scoped RBAC is stable, introduce a separate <code>access_policy</code> design if
+business requirements need conditions such as time windows, order amounts, or content
+status. It must use a restricted, code-reviewed expression context containing subject,
+resource, scope, and environment attributes. It MUST NOT reuse client-provided
+<code>@filter</code> expressions as policy records.</p>
+<hr />
+<h2 id="13-testing-contract">13. Testing Contract<a class="headerlink" href="#13-testing-contract" title="Permanent link">&para;</a></h2>
+<h3 id="131-unit-tests">13.1 Unit Tests<a class="headerlink" href="#131-unit-tests" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Required cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AccessVoter</code></td>
+<td>anonymous deny; ROLE_ADMIN override; global allow; Store allow; wrong Store deny; missing Membership deny</td>
+</tr>
+<tr>
+<td><code>AccessService</code></td>
+<td>active/revoked grants; role scope mismatch; union across roles; no cross-Store leakage</td>
+</tr>
+<tr>
+<td><code>FieldAccessService</code></td>
+<td>static schema intersection; basic vs metadata role; forbidden field causes 403; unknown grant field rejected</td>
+</tr>
+<tr>
+<td><code>AccessResourceRegistry</code></td>
+<td>only code-owned resources/fields are accepted</td>
+</tr>
+<tr>
+<td>Seed command</td>
+<td>idempotent create; no automatic privilege widening/removal</td>
+</tr>
+<tr>
+<td>Cache invalidator</td>
+<td>assignment/role mutation evicts every affected user only after commit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="132-integration-tests">13.2 Integration Tests<a class="headerlink" href="#132-integration-tests" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Expected outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create role, bind permission, grant Store scope</td>
+<td>Effective decision succeeds only for that Store</td>
+</tr>
+<tr>
+<td>Revoke assignment</td>
+<td>Next request is denied after cache invalidation</td>
+</tr>
+<tr>
+<td>Store membership revoked while assignment remains</td>
+<td>Store action is denied</td>
+</tr>
+<tr>
+<td>Content list/detail/update/delete at another Store</td>
+<td>No record disclosure or mutation</td>
+</tr>
+<tr>
+<td>Basic editor submits <code>metadata</code></td>
+<td>403 and unchanged database row</td>
+</tr>
+<tr>
+<td>Metadata editor submits <code>metadata</code></td>
+<td>200 and field persists</td>
+</tr>
+<tr>
+<td>Ordinary-user Content read</td>
+<td>Unchanged legacy behavior</td>
+</tr>
+<tr>
+<td>Access management mutation</td>
+<td>Corresponding immutable audit record is written</td>
+</tr>
+</tbody>
+</table>
+<h3 id="133-regression-and-static-analysis">13.3 Regression And Static Analysis<a class="headerlink" href="#133-regression-and-static-analysis" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Run the default UnitTest + Integration suite and keep the 90% coverage gate.</li>
+<li>Add the Access migration to MySQL migration-chain validation.</li>
+<li>Exercise SQLite and PostgreSQL semantics for assignment uniqueness and nullable scope
+  fields; do not rely on partial unique indexes unsupported by one target database.</li>
+<li>Run PHPStan Level 8 and Rector type-rule dry-run.</li>
+<li>Do not unskip documented tests unrelated to Access.</li>
+</ul>
+<hr />
+<h2 id="14-acceptance-criteria">14. Acceptance Criteria<a class="headerlink" href="#14-acceptance-criteria" title="Permanent link">&para;</a></h2>
+<p>The Access foundation is complete when:</p>
+<ul>
+<li>[ ] Access is a standalone module and no Access entity has a foreign key to another
+  business module.</li>
+<li>[ ] Permission, role, assignment, field grant, and audit records have the stated
+  integrity constraints and lifecycle rules.</li>
+<li>[ ] Store-scoped decisions require both an Access grant and active Store membership.</li>
+<li>[ ] A controller can declare an action permission without duplicating permission
+  lookup logic.</li>
+<li>[ ] Every Store-scoped lookup uses an Access-derived scope filter for list, detail,
+  update, delete, and batch mutation paths.</li>
+<li>[ ] Store scope is server-derived from route/record, never accepted from JSON input.</li>
+<li>[ ] Field grants are strict, registry-validated, and cannot widen controller schema.</li>
+<li>[ ] Assignment and role changes invalidate effective-access cache and append audit
+  records in their successful transaction.</li>
+<li>[ ] Existing <code>ROLE_ADMIN</code>, Identity authentication, and ordinary-user Content read behavior
+  remain compatible throughout Phase 1.</li>
+<li>[ ] The Content pilot tests prove User A cannot update <code>metadata</code>, User B can, and
+  neither can mutate another Store's Content.</li>
+</ul>
+<hr />
+<h2 id="15-dqlexpression-row-scope-foundation">15. DqlExpression Row-Scope Foundation<a class="headerlink" href="#15-dqlexpression-row-scope-foundation" title="Permanent link">&para;</a></h2>
+<h3 id="151-purpose-and-boundary">15.1 Purpose And Boundary<a class="headerlink" href="#151-purpose-and-boundary" title="Permanent link">&para;</a></h3>
+<p><code>commonFilter()</code> already accepts array criteria and Doctrine <code>QueryBuilder</code> instances.
+Those mechanisms are sufficient to enforce row-level authorization, but policy intent
+is often obscured by aliases, joins, and parameter plumbing. <code>DqlExpression</code> is a
+small Core value object that lets a controller declare a server-owned row policy using
+the existing Expression-to-DQL syntax:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="x">use App\Core\Query\DqlExpression;</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="x">protected function commonFilter(): DqlExpression</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="x">{</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="x">    return new DqlExpression(</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="x">        'entity.getUser() == this.getUser()',</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="x">    );</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="x">}</span>
+</code></pre></div>
+<p>It is a declarative representation of a SQL-enforced row scope. It is not a generic
+ABAC policy engine, a user-provided query feature, or a replacement for QueryBuilder.</p>
+<table>
+<thead>
+<tr>
+<th>Filter type</th>
+<th>Appropriate use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Array criteria</td>
+<td>Simple equality such as <code>['user' =&gt; $user]</code></td>
+</tr>
+<tr>
+<td><code>DqlExpression</code></td>
+<td>Readable server-owned ownership, Store, status, tenant or multi-value <code>in</code>/<code>not in</code> rules using current expression syntax</td>
+</tr>
+<tr>
+<td>QueryBuilder</td>
+<td>Aggregation, subqueries, database functions, or performance-sensitive custom SQL shape</td>
+</tr>
+</tbody>
+</table>
+<p><code>DqlExpression</code> supports <code>in</code> and <code>not in</code> for collection membership, for example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="x">new DqlExpression('entity.getStoreUuid() in storeUuids', ['storeUuids' =&gt; $allowedStoreUuids]);</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="x">new DqlExpression('entity.getStoreUuid() in this.getAllowedStoreUuids()');</span>
+</code></pre></div>
+<p>An empty <code>in</code> collection compiles to <code>1 = 0</code> (no rows, fail-closed); an empty <code>not in</code> collection compiles to <code>1 = 1</code>. Collections are always bound as array parameters and may be supplied via <code>this.getAllowed...()</code>.</p>
+<h3 id="152-non-negotiable-rules">15.2 Non-Negotiable Rules<a class="headerlink" href="#152-non-negotiable-rules" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Only PHP code may construct a <code>DqlExpression</code>. HTTP parameters, database records,
+  and administrator-managed Access data MUST NOT provide the expression source.</li>
+<li>Variables are supplied only through the constructor values array and always bind as
+  Doctrine query parameters. They are never interpolated into DQL.</li>
+<li>In an <code>ApiView::commonFilter()</code> only, <code>this</code> is an internal, read-only context
+  variable bound to the current controller. <code>this.getUser()</code> is therefore shorthand
+  for explicitly passing <code>['user' =&gt; $this-&gt;getUser()]</code> and referring to <code>user</code>.
+  It is never available to request <code>@filter</code> expressions or direct service calls.</li>
+<li>Compilation, Doctrine metadata validation, parameter binding, or criteria validation
+  failure is a server configuration error. It returns HTTP 500 and rejects the request.</li>
+<li><code>DqlExpression</code> NEVER uses <code>LegacyEvaluator</code>, in-memory filtering, or an unfiltered
+  fallback. A security scope must fail closed.</li>
+<li>The expression is combined with mixin-generated <code>id</code>/<code>uuid</code> lookup criteria using
+  <code>AND</code>, so detail, update, delete, and batch-update paths cannot bypass the scope.</li>
+<li>It does not change authorization of creation. A create operation has no existing row
+  to filter; the controller/service must set user/store ownership from trusted context.</li>
+</ul>
+<h3 id="153-minimal-runtime-change-set">15.3 Minimal Runtime Change Set<a class="headerlink" href="#153-minimal-runtime-change-set" title="Permanent link">&para;</a></h3>
+<p>The implementation intentionally avoids changing <code>BaseServiceInterface</code>,
+<code>ExpressionServiceInterface</code>, <code>ExpressionService</code>, <code>QueryBuilderFactory</code>, or the
+existing public <code>@filter</code> behavior. It has ten required Core source changes plus
+tests.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Core/Query/DqlExpression.php</code></td>
+<td>New immutable value object</td>
+<td>Carries expression, bound variables, internal controller context, and mixin-added criteria</td>
+</tr>
+<tr>
+<td><code>src/Core/Parser/ExpressionDqlParser.php</code></td>
+<td>Add variable/<code>in</code>/<code>not in</code>/array compilation</td>
+<td>The previous parser compiled <code>entity.getUser() == user</code> with an empty right operand and had no collection handling</td>
+</tr>
+<tr>
+<td><code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code></td>
+<td>Recognize and compile <code>DqlExpression</code> in <code>get()</code> and <code>list()</code></td>
+<td>Single service-layer enforcement point</td>
+</tr>
+<tr>
+<td><code>src/Core/View/ApiView.php</code></td>
+<td>Bind controller <code>this</code>; merge ID/UUID criteria into a <code>DqlExpression</code></td>
+<td>Preserves controller context and scope for detail/update/delete/batch lookup</td>
+</tr>
+<tr>
+<td><code>src/Core/View/ListApiViewMixin.php</code></td>
+<td>Widen hook type only</td>
+<td>Allows list filter to receive the value object</td>
+</tr>
+<tr>
+<td><code>src/Core/View/DetailApiViewMixin.php</code></td>
+<td>Widen hook type only</td>
+<td>Allows detail filter to receive the value object</td>
+</tr>
+<tr>
+<td><code>src/Core/View/DeleteApiViewMixin.php</code></td>
+<td>Widen hook type only</td>
+<td>Allows deletion filter to receive the value object</td>
+</tr>
+<tr>
+<td><code>src/Core/View/SingleDetailApiViewMixin.php</code></td>
+<td>Resolve the common filter through <code>ApiView</code></td>
+<td>Binds <code>this</code> for singleton detail</td>
+</tr>
+<tr>
+<td><code>src/Core/View/SingleCreateAndUpdateApiViewMixin.php</code></td>
+<td>Resolve the common filter through <code>ApiView</code></td>
+<td>Binds <code>this</code> for singleton lookup/update</td>
+</tr>
+</tbody>
+</table>
+<p><code>ScopedListApiViewMixin</code> and <code>ScopedDetailApiViewMixin</code> remain unchanged in the first
+release. They already require each scope controller to build an explicit filter and
+can adopt <code>DqlExpression</code> only when an actual scoped resource needs it.</p>
+<h3 id="154-value-object-contract">15.4 Value Object Contract<a class="headerlink" href="#154-value-object-contract" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="x">final readonly class DqlExpression</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="x">{</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="x">    /**</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="x">     * @param array&lt;string, mixed&gt; $values</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="x">     * @param array&lt;string, mixed&gt; $criteria</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="x">     */</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="x">    public function __construct(</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="x">        public string $expression,</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="x">        public array $values = [],</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="x">        private array $criteria = [],</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="x">        private ?object $context = null,</span>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="x">    ) {}</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="x">    public function withContext(object $context): self;</span>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="x">    /** @param array&lt;string, mixed&gt; $criteria */</span>
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="x">    public function withCriteria(array $criteria): self;</span>
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a><span class="x">    /** @return array&lt;string, mixed&gt; */</span>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="x">    public function criteria(): array;</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a><span class="x">}</span>
+</code></pre></div>
+<p>Constructor validation:</p>
+<ul>
+<li><code>expression</code> must be non-empty.</li>
+<li>Every variable name in <code>values</code> must match <code>[A-Za-z_][A-Za-z0-9_]*</code>.</li>
+<li><code>entity</code> and <code>this</code> are reserved. They cannot be supplied in <code>values</code>.</li>
+<li><code>withCriteria()</code> never overwrites an existing criterion; duplicate keys are rejected
+  as a configuration error rather than weakening the original expression.</li>
+<li><code>withContext()</code> is idempotent for the same object and rejects a different object. It
+  adds an internal <code>this</code> binding only during <code>ApiView</code> filter resolution.</li>
+</ul>
+<p><code>criteria</code> is not a public controller input feature. <code>ApiView::mixToCommonFilter()</code>
+uses it internally for keys such as <code>id</code> and <code>uuid</code>.</p>
+<h3 id="155-controller-this-binding">15.5 Controller <code>this</code> Binding<a class="headerlink" href="#155-controller-this-binding" title="Permanent link">&para;</a></h3>
+<p>There is no ambient controller <code>this</code> in Symfony ExpressionLanguage. The existing
+expression compiler receives only <code>entity</code> and explicitly supplied values. In
+particular, BaseService's <code>$this</code> is the service instance, not the controller, so it
+must never be used for this feature.</p>
+<p><code>ApiView</code> introduces one private resolver:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="x">protected function resolvedCommonFilter(): array|QueryBuilder|DqlExpression</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="x">{</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="x">    $filter = $this-&gt;commonFilter();</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="x">    return $filter instanceof DqlExpression</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="x">        ? $filter-&gt;withContext($this)</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="x">        : $filter;</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="x">}</span>
+</code></pre></div>
+<p>All existing Core mixins that obtain <code>commonFilter()</code> directly use this resolver:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>ListApiViewMixin
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>SingleDetailApiViewMixin
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>SingleCreateAndUpdateApiViewMixin
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>ApiView::mixToCommonFilter() for detail/update/delete/batch paths
+</code></pre></div>
+<p>This preserves the desired concise controller code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="x">return new DqlExpression('entity.getUser() == this.getUser()');</span>
+</code></pre></div>
+<p>and makes it equivalent to:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="x">return new DqlExpression(</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="x">    'entity.getUser() == user',</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="x">    ['user' =&gt; $this-&gt;getUser()],</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="x">);</span>
+</code></pre></div>
+<p>The first form is available only as a <code>commonFilter()</code> return value. A direct
+<code>BaseService::list(new DqlExpression(...))</code> call has no controller context and must
+use explicit values instead.</p>
+<h3 id="156-parser-change-bind-variables-safely">15.6 Parser Change: Bind Variables Safely<a class="headerlink" href="#156-parser-change-bind-variables-safely" title="Permanent link">&para;</a></h3>
+<p><code>ExpressionDqlParser</code> currently handles constants and getter chains but falls through
+for Symfony ExpressionLanguage variable nodes. For this expression:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>entity.getUser() == user
+</code></pre></div>
+<p>the current compiler produces an invalid fragment equivalent to:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">filter_entity</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="o">=</span>
+</code></pre></div>
+<p>The narrow change adds explicit handling for <code>NameNode</code>:</p>
+<ol>
+<li>Read its name.</li>
+<li>Reject <code>entity</code>, undeclared values, and any reserved/internal name.</li>
+<li>Allocate the next existing <code>filter_parameter_N</code> name.</li>
+<li>Add <code>new Parameter($name, $this-&gt;values[$variableName])</code>.</li>
+<li>Return <code>:$name</code> to the DQL fragment.</li>
+</ol>
+<p>This retains the parser's existing getter-chain compilation, Doctrine metadata
+validation, and parameter namespace. Objects such as an Identity User bind as Doctrine
+association parameters; scalar Store UUIDs and statuses bind as scalar parameters.</p>
+<p>When it sees a <code>this.getX()</code> getter chain, the parser accepts it only when <code>this</code> was
+bound internally by <code>ApiView</code>, evaluates the no-argument getter once during server-side
+compilation, and binds the returned value as the same generated Doctrine parameter.
+It does not expose an arbitrary expression <code>this</code> variable to HTTP input.</p>
+<p>No new operators, functions, dynamic property access, or expression evaluation are
+introduced.</p>
+<h3 id="157-baseservice-enforcement">15.7 BaseService Enforcement<a class="headerlink" href="#157-baseservice-enforcement" title="Permanent link">&para;</a></h3>
+<p><code>BaseServiceReadListTrait</code> is the only runtime compiler integration point. It creates
+the normal root QueryBuilder (<code>entity</code>), compiles the expression against the service's
+managed entity class, validates fragments through Doctrine metadata, and applies the
+fragments directly using the existing:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="x">ExpressionQueryBuilderAssembler::applyToQueryBuilder($qb, $parser)</span>
+</code></pre></div>
+<p>This direct application is preferable to the current public <code>@filter</code> implementation,
+which wraps a second filter query in <code>entity.id IN (subquery)</code>. A row scope is a
+mandatory part of the main query and should retain normal joins and pagination.</p>
+<p>After expression fragments are applied, the trait adds <code>criteria</code> predicates with a
+private helper:</p>
+<ol>
+<li>Get the root alias.</li>
+<li>Confirm each criterion key is a mapped field or association on the managed entity.</li>
+<li>Generate an internal unique parameter name such as
+   <code>_common_filter_criterion_1</code>.</li>
+<li>Append <code>rootAlias.field = :parameter</code> using the validated mapping name.</li>
+<li>Bind the value.</li>
+</ol>
+<p>Field names are never concatenated before metadata validation. This matters because
+the batch-update <code>@basis</code> path can ultimately pass a client-selected basis key into
+<code>mixToCommonFilter()</code>.</p>
+<p><code>get(DqlExpression)</code> reuses the same QueryBuilder construction and retains the
+existing <code>NoResultException</code> / <code>NonUniqueResultException</code> behavior. <code>list()</code> accepts
+the same object and otherwise preserves all array and QueryBuilder branches exactly.</p>
+<p>Any exception from this server-owned compilation path is rethrown as a descriptive
+<code>LogicException</code> (for example, <code>Invalid server DQL common filter: ...</code>). Existing API
+exception handling turns it into HTTP 500. Unlike request <code>@filter</code>, there is no catch
+that can enable in-memory evaluation.</p>
+<h3 id="158-apiview-composition">15.8 ApiView Composition<a class="headerlink" href="#158-apiview-composition" title="Permanent link">&para;</a></h3>
+<p><code>ApiView::mixToCommonFilter()</code> resolves and binds its common filter before it merges
+scalar criteria for detail/update/delete lookups. Its new branch is deliberately small:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="x">if ($base instanceof DqlExpression) {</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="x">    return $base-&gt;withCriteria($data);</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="x">}</span>
+</code></pre></div>
+<p>For example, Detail obtains:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>commonFilter(): entity.getUser() == user
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>route:          {id}=42
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>effective SQL:  entity.user = :user AND entity.id = :id
+</code></pre></div>
+<p>This means the row scope remains enforced without changing every controller or adding
+separate authorization calls to CRUD actions.</p>
+<p>The existing array behavior remains unchanged, including its deny-all convention:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="x">return ['id' =&gt; -1];</span>
+</code></pre></div>
+<p>Existing controllers that return a QueryBuilder remain unchanged.</p>
+<h3 id="159-why-expressionservice-is-not-changed-now">15.9 Why ExpressionService Is Not Changed Now<a class="headerlink" href="#159-why-expressionservice-is-not-changed-now" title="Permanent link">&para;</a></h3>
+<p><code>ExpressionService::buildFilter()</code> has a cache path that stores parameter values under
+a key made only from entity class and expression source. A user-dependent expression
+could therefore reuse a previously cached parameter value for a different user.</p>
+<p><code>DqlExpression</code> must not use that path in this narrow implementation. It constructs
+<code>ExpressionDqlParser</code> directly with no cache and applies it through the existing
+assembler. This makes user/store parameter binding request-local and correct while
+avoiding an unrelated refactor of public <code>@filter</code> behavior.</p>
+<p>The existing <code>@filter</code> cache issue remains separate technical debt and must be fixed
+before <code>ExpressionService</code> is reused for server-owned authorization filters.</p>
+<h3 id="1510-required-tests">15.10 Required Tests<a class="headerlink" href="#1510-required-tests" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parser unit</td>
+<td><code>entity.getUser() == user</code> compiles to a bound parameter; missing variable is rejected; reserved <code>entity</code>/<code>this</code> values are rejected</td>
+</tr>
+<tr>
+<td>Value object unit</td>
+<td>Empty source, invalid variable names, immutable criteria composition, context binding idempotency, duplicate criterion rejection</td>
+</tr>
+<tr>
+<td>Base service unit</td>
+<td><code>list()</code> and <code>get()</code> recognize the value object and propagate a compilation error rather than falling back</td>
+</tr>
+<tr>
+<td>Core integration</td>
+<td>Persist two Users and two User-owned entities; list/detail/update/delete for User A never return or mutate User B's entity</td>
+</tr>
+<tr>
+<td>Core integration</td>
+<td><code>this.getUser()</code> and explicit <code>user</code> syntax produce identical scoped results through list and singleton mixins</td>
+</tr>
+<tr>
+<td>Core integration</td>
+<td>Getter chain plus scalar variable, e.g. Store UUID/status, validates and applies on the root QueryBuilder</td>
+</tr>
+<tr>
+<td>Regression</td>
+<td>Existing array criteria and direct QueryBuilder common filters retain their current output</td>
+</tr>
+</tbody>
+</table>
+<p>The integration test must exercise the normal View mixins, not only <code>BaseService</code>, so
+it proves <code>mixIdToCommonFilter()</code> adds the ID criterion on detail, update, and delete.</p>
+<h3 id="1511-adoption-examples">15.11 Adoption Examples<a class="headerlink" href="#1511-adoption-examples" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="x">// Existing, preferred for a simple equality scope.</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="x">protected function commonFilter(): array</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="x">{</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="x">    return ['user' =&gt; $this-&gt;getUser()];</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="x">}</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="x">// DqlExpression, preferred when the policy itself benefits from a readable rule.</span>
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="x">protected function commonFilter(): DqlExpression</span>
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="x">{</span>
+<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="x">return new DqlExpression(</span>
+<a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a><span class="x">        'entity.getUser() == this.getUser() &amp;&amp; entity.getStatus() != archived',</span>
+<a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a><span class="x">        ['archived' =&gt; 'archived'],</span>
+<a id="__codelineno-35-13" name="__codelineno-35-13" href="#__codelineno-35-13"></a><span class="x">    );</span>
+<a id="__codelineno-35-14" name="__codelineno-35-14" href="#__codelineno-35-14"></a><span class="x">}</span>
+<a id="__codelineno-35-15" name="__codelineno-35-15" href="#__codelineno-35-15"></a>
+<a id="__codelineno-35-16" name="__codelineno-35-16" href="#__codelineno-35-16"></a><span class="x">// Continue to use QueryBuilder for a variable-size Store set.</span>
+<a id="__codelineno-35-17" name="__codelineno-35-17" href="#__codelineno-35-17"></a><span class="x">protected function commonFilter(): QueryBuilder</span>
+<a id="__codelineno-35-18" name="__codelineno-35-18" href="#__codelineno-35-18"></a><span class="x">{</span>
+<a id="__codelineno-35-19" name="__codelineno-35-19" href="#__codelineno-35-19"></a><span class="x">    return $this-&gt;storeScopeQueryBuilder($allowedStoreUuids);</span>
+<a id="__codelineno-35-20" name="__codelineno-35-20" href="#__codelineno-35-20"></a><span class="x">}</span>
+</code></pre></div>
+<p>No existing controller is migrated as part of the Core feature. The first migration
+must be a small user-owned resource with list/detail/update/delete integration tests.
+Only then may Access use <code>DqlExpression</code> as its readable single-Store/ownership scope
+primitive.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>

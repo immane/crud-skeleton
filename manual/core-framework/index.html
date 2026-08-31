@@ -873,6 +873,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#srccorequerydqlexpressionphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Query/DqlExpression.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#srccoreparserexpressionquerybuilderassemblerphp" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2050,6 +2061,34 @@
     
   
     Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
   
 
     
@@ -3451,6 +3490,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#srccorequerydqlexpressionphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/Core/Query/DqlExpression.php
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#srccoreparserexpressionquerybuilderassemblerphp" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3863,15 +3913,19 @@ merging used by the read mixins.</p>
 </tr>
 <tr>
 <td><code>commonFilter()</code></td>
-<td>Extension point: return an array or <code>QueryBuilder</code> restricting all queries on the controller (e.g. <code>['enabled' =&gt; true]</code> or <code>['user' =&gt; $this-&gt;getUser()]</code>).</td>
+<td>Extension point: return an array, <code>QueryBuilder</code>, or <code>DqlExpression</code> restricting all queries on the controller (e.g. <code>['enabled' =&gt; true]</code>, <code>['user' =&gt; $this-&gt;getUser()]</code>, or <code>new DqlExpression('entity.getUser() == this.getUser()')</code>).</td>
+</tr>
+<tr>
+<td><code>resolvedCommonFilter()</code></td>
+<td>Internal resolver used by the mixins: returns <code>commonFilter()</code> with <code>this</code> bound for <code>DqlExpression</code>. Do not override.</td>
 </tr>
 <tr>
 <td><code>mixIdToCommonFilter(int\|string $id)</code></td>
-<td>Merges an id into the common filter; uses <code>uuid</code> as the key when the id is a valid UUID, otherwise <code>id</code>.</td>
+<td>Merges an id into the common filter; uses <code>uuid</code> as the key when the id is a valid UUID, otherwise <code>id</code>. For <code>DqlExpression</code> it appends the id as an additional <code>AND</code> criterion.</td>
 </tr>
 <tr>
 <td><code>mixToCommonFilter(array $data)</code></td>
-<td>Merges <code>$data</code> into the common filter. For a <code>QueryBuilder</code> it appends <code>AND alias.key = :key</code> conditions.</td>
+<td>Merges <code>$data</code> into the common filter. For a <code>QueryBuilder</code> it appends <code>AND alias.key = :key</code> conditions; for <code>DqlExpression</code> it appends criteria via <code>withCriteria()</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -4109,12 +4163,12 @@ expression. Throws <code>INVALID_CONTENT_FIELD</code> when a field is not a real
 <tr>
 <td><code>get</code></td>
 <td><code>($object, bool $directly = false)</code></td>
-<td>Resolve an entity from an id, criteria array, <code>QueryBuilder</code>, or an object with <code>getId()</code>.</td>
+<td>Resolve an entity from an id, criteria array, <code>QueryBuilder</code>, <code>DqlExpression</code>, or an object with <code>getId()</code>.</td>
 </tr>
 <tr>
 <td><code>list</code></td>
 <td><code>($object = null, $order = null, bool $disableRequest = true)</code></td>
-<td>List entities or return a configured <code>QueryBuilder</code>. When <code>$disableRequest</code> is <code>false</code>, consult the current request for <code>@filter</code>/<code>@order</code>/<code>@select</code>/<code>@groupBy</code>/<code>@hints</code>/<code>@sort</code>.</td>
+<td>List entities or return a configured <code>QueryBuilder</code>. Accepts an array, <code>QueryBuilder</code>, or <code>DqlExpression</code> as the base filter. When <code>$disableRequest</code> is <code>false</code>, consult the current request for <code>@filter</code>/<code>@order</code>/<code>@select</code>/<code>@groupBy</code>/<code>@hints</code>/<code>@sort</code>.</td>
 </tr>
 <tr>
 <td><code>new</code></td>
@@ -4198,14 +4252,14 @@ implements it by pulling those services from the container, returning <code>null
 <p>Implements <code>get()</code> and <code>list()</code> (see <a href="../query-system/">query-system.md</a> for the
 full <code>list()</code> behavior).</p>
 <ul>
-<li><code>get()</code> handles: <code>null</code> (→ null), <code>QueryBuilder</code> (single result), an object
+<li><code>get()</code> handles: <code>null</code> (→ null), <code>DqlExpression</code> (compiled to a filtered <code>QueryBuilder</code>), <code>QueryBuilder</code> (single result), an object
   with <code>getId()</code>, an associative criteria array (<code>findOneBy</code>), a valid UUID
   string (matched against a <code>uuid</code> field when present), or a plain id
   (<code>rep-&gt;find</code>).</li>
 <li><code>list()</code> builds a <code>QueryBuilder</code> from the entity class, applies an
-  associative array as equality conditions, and — when <code>$disableRequest</code> is
+  associative array as equality conditions or a <code>DqlExpression</code> via <code>ExpressionDqlParser</code> + <code>ExpressionQueryBuilderAssembler</code>, and — when <code>$disableRequest</code> is
   <code>false</code> — processes <code>@dql</code>, <code>@filter</code>, <code>@select</code>, <code>@groupBy</code>, <code>@order</code>,
-  <code>@hints</code>, <code>@showDQL</code>, and the in-memory <code>@sort</code>/<code>@filter</code> fallback.</li>
+  <code>@hints</code>, <code>@showDQL</code>, and the in-memory <code>@sort</code>/<code>@filter</code> fallback. A server-owned <code>DqlExpression</code> failure is fail-closed (500) and never falls back to in-memory.</li>
 <li>Privileged parameters <code>@dql</code>, <code>@sort</code>, <code>@hints</code> are restricted to
   <code>ROLE_ADMIN</code>; <code>@showDQL</code> is restricted to the <code>dev</code> environment. <code>@select</code> is
   guarded against accessing identity data.</li>
@@ -4259,6 +4313,10 @@ AST (<code>recursiveCompile</code>) supporting a strict, safe node set.</p>
 <td>same</td>
 </tr>
 <tr>
+<td><code>in</code> / <code>not in</code></td>
+<td><code>IN (:param)</code> / <code>NOT IN (:param)</code> — bound as array parameters; empty <code>in []</code> becomes <code>1 = 0</code> (no rows), empty <code>not in []</code> becomes <code>1 = 1</code></td>
+</tr>
+<tr>
 <td><code>matches</code></td>
 <td><code>REGEXP(...) = TRUE</code> for <code>/pattern/flags</code>, else <code>LIKE '%...%'</code></td>
 </tr>
@@ -4302,6 +4360,59 @@ AST (<code>recursiveCompile</code>) supporting a strict, safe node set.</p>
 <p>Attribute chains like <code>entity.getCategory().getName()</code> produce joins
 (<code>filter_entity_category</code> etc.) and a final <code>filter_entity_category.name</code>
 reference. A top-level bare attribute compiles to <code>prop IS NOT NULL</code>.</p>
+<h3 id="srccorequerydqlexpressionphp"><code>src/Core/Query/DqlExpression.php</code><a class="headerlink" href="#srccorequerydqlexpressionphp" title="Permanent link">&para;</a></h3>
+<p>Immutable value object for <strong>server-owned</strong> row-level scopes (ABAC). Unlike
+client <code>@filter</code>, it never falls back to in-memory evaluation and always
+fail-closes.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">use App\Core\Query\DqlExpression;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">// Explicit variable binding</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">new DqlExpression('entity.getUser() == user', ['user' =&gt; $this-&gt;getUser()]);</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">// Controller `this` shorthand — only inside commonFilter()</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">new DqlExpression('entity.getUser() == this.getUser()');</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="x">new DqlExpression('entity.getStoreUuid() in this.getAllowedStoreUuids()');</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="x">// Combined predicates and collection membership</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="x">new DqlExpression(</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="x">    'entity.getUser() == user &amp;&amp; entity.getCurrency() in currencies',</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="x">    ['user' =&gt; $user, 'currencies' =&gt; ['CNY','USD']]</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="x">);</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__construct(string $expression, array $values = [], array $criteria = [], ?object $context = null)</code></td>
+<td>Create an immutable scope. <code>expression</code> is non-empty; <code>values</code> keys are <code>[A-Za-z_][A-Za-z0-9_]*</code> and may not be <code>entity</code>/<code>this</code>.</td>
+</tr>
+<tr>
+<td><code>withCriteria(array $criteria): self</code></td>
+<td>Return a new instance with additional <code>field =&gt; value</code> equality predicates (used internally by <code>ApiView</code> to append <code>id</code>/<code>uuid</code>). Duplicate keys throw.</td>
+</tr>
+<tr>
+<td><code>withContext(object $context): self</code></td>
+<td>Bind the controller <code>this</code> (idempotent for the same object, rejects a different one).</td>
+</tr>
+<tr>
+<td><code>usesThis(): bool</code></td>
+<td>Whether the expression contains <code>this.</code></td>
+</tr>
+<tr>
+<td><code>criteria(): array</code> / <code>context(): ?object</code></td>
+<td>Accessors.</td>
+</tr>
+</tbody>
+</table>
+<p>Server-owned compilation in <code>BaseServiceReadListTrait</code> validates the expression
+against Doctrine metadata, binds variables as parameters, and appends criteria as
+additional <code>AND</code> predicates. Empty <code>in</code> collections are compiled to <code>1 = 0</code> so that
+a missing permission yields no rows rather than an invalid <code>IN ()</code>.</p>
 <h3 id="srccoreparserexpressionquerybuilderassemblerphp"><code>src/Core/Parser/ExpressionQueryBuilderAssembler.php</code><a class="headerlink" href="#srccoreparserexpressionquerybuilderassemblerphp" title="Permanent link">&para;</a></h3>
 <p>Applies <code>ExpressionDqlParser</code> fragments onto a Doctrine <code>QueryBuilder</code>.</p>
 <table>

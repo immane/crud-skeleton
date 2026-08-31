@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    项目结构
+    Project Structure
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    提取服务
+    Extracting a Service
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1254,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1366,7 +1366,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1394,7 +1394,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1443,6 +1443,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/wechat/" class="md-nav__link">
         
   
@@ -1450,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2081,7 +2109,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2198,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2198,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2226,7 +2254,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2254,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -2282,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2310,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2338,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2366,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2394,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2957,7 +2985,7 @@
 <li><code>promotion-dsl</code> 小发现：尾随点路径错误、未使用的 <code>priority: desc</code> 标志、<code>simulate()</code> 与管道不匹配、多个 <code>when:</code> 不一致、无法访问的 EOL 分支。 （促销-DSL，错误 3-7）</li>
 <li><code>BaseServiceMutationTrait</code> 将可变的 <code>new \DateTime</code> 传递给 <code>\DateTimeImmutable</code> setter → <code>TypeError</code>。 （核心服务，错误 1）</li>
 <li><code>BaseServiceReadListTrait</code> 排序器比较器永远不会返回 <code>0</code> — 违反了 <code>usort</code> 合同。 （核心服务，错误 2）</li>
-<li>死代码/无法访问的防御分支记录在：BaseServiceReadListTrait（捕获异常，<code>!is_string</code> joinerguard），BaseServiceMutationTrait（<code>!is_object</code>检查），ExpressionDqlParser（317,394,488,541），Inventory Quantity line 75，Inflect line 135，<code>availableTransitions</code>/<code>doTransition</code>未找到实体的守卫。 （核心服务、核心解析器监听器、库存控制器服务、核心实用程序-di、核心视图）</li>
+<li>死代码/无法访问的防御分支记录在：BaseServiceReadListTrait（捕获异常，<code>!is_string</code> joiner Guard），BaseServiceMutationTrait（<code>!is_object</code>检查），ExpressionDqlParser（317,394,488,541），Inventory Quantity line 75，Inflect line 135，<code>availableTransitions</code>/<code>doTransition</code>未找到实体的守卫。 （核心服务、核心解析器监听器、库存控制器服务、核心实用程序-di、核心视图）</li>
 <li><code>ParseAmount</code> 错误解析科学记数法字符串。 （支付控制器，BUG-4）</li>
 <li>Webhook 将暂时未找到发票掩盖为永久 <code>FAIL</code> 400 → 提供商停止重试。 （支付控制器，BUG-5）</li>
 <li><code>markPaid</code> 覆盖结果中的发票 <code>payment</code> 字段。 （支付控制器，BUG-2）</li>
@@ -2975,13 +3003,13 @@
 <ol>
 <li><strong>已弃用的 PHP 构造</strong>，如果执行，则会引发弃用（将破坏 <code>failOnDeprecation</code>）：<code>RsaClient</code> openssl_free_key 分支、<code>Math::lcg_value()</code>。</li>
 <li><strong>损坏的代码路径</strong>，如果没有致命错误就无法执行：<code>Location::getAddress()</code>（设计损坏）、<code>Math::mt_rand()/rand()</code> 单参数调用（在 PHP 8.5 上崩溃）。</li>
-<li><strong>可证明无法访问的防御/死代码</strong>（在给定调用图的情况下永远无法触发的守卫）：<code>BaseServiceReadListTrait</code>死<code>catch</code>，<code>BaseServiceMutationTrait``!is_object</code>检查，<code>ExpressionDqlParser</code>无法到达的错误分支，<code>Inflect</code>失败，<code>Quantity</code>填充分支，<code>TokenManager</code>冗余黑名单检查，<code>RedisOtpStorage</code>错误路径，RsaClient子模尺寸防护装置。</li>
-<li><strong>配置/DI 管道</strong> 仅在容器编译时运行（<code>CoreExtension::load</code>、<code>Configuration</code>），该套件执行这些操作，但 Xdebug 的 HTML 报告部分归因于编译时。</li>
+<li><strong>可证明无法访问的防御/死代码</strong>（在给定调用图的情况下永远无法触发的守卫）：<code>BaseServiceReadListTrait</code>死<code>catch</code>，<code>BaseServiceMutationTrait</code> <code>!is_object</code>检查，<code>ExpressionDqlParser</code>无法到达的错误分支，<code>Inflect</code>失败，<code>Quantity</code>填充分支，<code>TokenManager</code>冗余黑名单检查，<code>RedisOtpStorage</code>错误路径，RsaClient子模尺寸防护装置。</li>
+<li><strong>配置/DI 管道</strong> 仅在容器编译时运行（<code>CoreExtension::load</code>、<code>Configuration</code>），该套件执行该套件，但 Xdebug 的 HTML 报告部分归因于编译时。</li>
 </ol>
 <p>完全消除剩余的行需要删除死代码或重构损坏的路径 - 两者都是 <code>src/</code> 更改，并且超出了设计范围。</p>
 <h2 id="_9">活动如何进行<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>基线</strong>：完整套件（1749 次测试，90.18% 行）通过 <code>var/coverage2</code>。</li>
+<li><strong>基线</strong>：通过 <code>var/coverage2</code> 的全套（1749 次测试，90.18% 行）。</li>
 <li><strong>24 个子代理</strong> 分 3 波，每个代理一份报告，每个代理被指示 (a) 永远不要触摸 <code>src/</code>，(b) 瞄准 <code>var/uncovered-map.txt</code> 中列出的未覆盖行，(c) 遵循项目测试约定，以及 (d) 使用 file:line + 建议的修复记录错误并保持套件绿色（在真实 src bug 上失败的正确行为测试标记为 <code>markTestSkipped</code> 并引用报告）。</li>
 <li><strong>整合</strong>：完整串行运行 → 2686 次测试绿色；修复了一个交叉测试环境泄漏（在 <code>StoreTradeInventoryEnabledFlowTest</code> 的 <code>tearDownAfterClass</code> 中恢复了 <code>INVENTORY_ENABLED</code>）；将 <code>#[AllowMockObjectsWithoutExpectations]</code> 添加到新的模拟重测试类中。</li>
 <li><strong>最终覆盖率</strong>：<code>var/coverage-final/</code>（99.46% 行）。</li>

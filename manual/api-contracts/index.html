@@ -1727,6 +1727,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/wechat/" class="md-nav__link">
         
   
@@ -3450,8 +3478,12 @@ controller paginates the result.</p>
 field transform), <code>@mode</code> (<code>mixed</code> upsert / <code>strict</code> update), <code>@basis</code> (upsert match
 fields).</p>
 <p>Filter expression operators: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>,
-<code>matches</code> (literal substring or <code>/regex/flags/</code>), and chained attribute access
-(<code>entity.getCategory().getName()</code>).</p>
+<code>in</code> / <code>not in</code> (collection membership, e.g. <code>entity.getStoreUuid() in storeUuids</code>;
+empty <code>in []</code> → <code>1 = 0</code>, empty <code>not in []</code> → <code>1 = 1</code>), <code>matches</code> (literal substring or
+<code>/regex/flags/</code>), and chained attribute access (<code>entity.getCategory().getName()</code>).
+The same operator set powers server-owned <code>DqlExpression</code> row scopes in
+<code>commonFilter()</code> (e.g. <code>new DqlExpression('entity.getUser() == this.getUser()')</code>),
+which are fail-closed rather than falling back to in-memory evaluation.</p>
 <hr />
 <h2 id="5-error-handling">5. Error Handling<a class="headerlink" href="#5-error-handling" title="Permanent link">&para;</a></h2>
 <table>

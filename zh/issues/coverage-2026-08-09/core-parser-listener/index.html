@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    项目结构
+    Project Structure
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    提取服务
+    Extracting a Service
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1254,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1366,7 +1366,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1394,7 +1394,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1443,6 +1443,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/wechat/" class="md-nav__link">
         
   
@@ -1450,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2081,7 +2109,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2198,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2198,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2226,7 +2254,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2254,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -2282,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2310,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2338,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2366,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2394,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2737,7 +2765,7 @@
 </tr>
 </tbody>
 </table>
-<p>使用的值得注意的技术（没有 <code>setAccessible()</code>，没有反射弃用）：</p>
+<p>使用的值得注意的技术（无 <code>setAccessible()</code>，无反射弃用）：</p>
 <ul>
 <li><code>ExpressionDqlParser</code> 针对模拟的 <code>Symfony\Component\ExpressionLanguage\ExpressionLanguage</code> 进行单元测试，以执行真实解析器无法生成的 <code>parse()</code> / <code>getNodes()</code> 异常包装（第 146–147 行、154–155 行）。</li>
 <li><code>validateFragments()</code> 的 Unreachable-by-public-API 分支通过 <code>ReflectionProperty::setValue()</code> 写入私有状态来执行（自 PHP 8.1 起允许，不再有 <code>setAccessible()</code>），例如精心制作的 <code>where</code> 字符串，具有未知别名（第 501 行）和空连接路径（第 529 行）。</li>
@@ -2759,14 +2787,14 @@
 <ul>
 <li><strong>地点：</strong> <code>src/Core/Serializer/Normalizer/FlatNormalizer.php:124-130</code></li>
 <li><strong>描述：</strong> 通过属性访问器读取的每个非数字字符串属性都通过 <code>json_decode()</code> 传递。如果字符串恰好是有效的 JSON，则属性值将自动替换为解码后的 PHP 值 — 无论属性是 JSON 列还是普通文本字段。</li>
-<li><strong>影响：</strong> 规范化 API 输出中的类型损坏：纯文本注释 <code>"true"</code> 变为布尔值 <code>true</code>，<code>"null"</code> 变为 <code>null</code>，<code>"{}"</code> / <code>"[]"</code> 变为空数组，<code>"123.0"</code>...（数字字符串被排除，但 <code>"1e2"</code> → <code>100</code> 不是）。 API 的使用者接收到错误的类型并失去数据保真度。无法选择退出某个列。</li>
+<li><strong>影响：</strong> 规范化 API 输出中的类型损坏：纯文本注释 <code>"true"</code> 变为布尔值 <code>true</code>，<code>"null"</code> 变为 <code>null</code>，<code>"{}"</code> / <code>"[]"</code> 变为空数组，<code>"123.0"</code>…（​​排除数字字符串，但 <code>"1e2"</code> → <code>100</code> 除外）。 API 的使用者接收到错误的类型并失去数据保真度。无法选择退出某个列。</li>
 <li><strong>复制：</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">$obj = new class { public string $note = 'true'; public string $empty = '{}'; };</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">(new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor()))</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    -&gt;normalize($obj, 'json');</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">// ['note' =&gt; true, 'empty' =&gt; []]   ← strings replaced by non-strings</span>
 </code></pre></div></li>
-<li><strong>建议的修复：</strong> 仅在已知属性是 JSON 列时进行 JSON 解码（例如，由配置的列允许列表或通过上下文传递的 <code>json</code> 学说映射提示驱动），或者在解码值不是数组/对象时保留字符串；不要对每个字符串字段进行全面解码。</li>
+<li><strong>建议的修复：</strong> 当已知属性是 JSON 列时（例如，由配置的列允许列表或通过上下文传递的 <code>json</code> 学说映射提示驱动），仅进行 JSON 解码，或者在解码值不是数组/对象时保留字符串；不要对每个字符串字段进行全面解码。</li>
 </ul>
 <h3 id="32-flatnormalizer-id__tostring__metadata-medium">3.2 FlatNormalizer 丢弃除 id/__toString/__metadata 之外的所有关系字段 — MEDIUM<a class="headerlink" href="#32-flatnormalizer-id__tostring__metadata-medium" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2786,7 +2814,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === 'en'  (expected 'zh')</span>
 </code></pre></div></li>
-<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空格/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
+<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空白/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
 </ul>
 <h3 id="34-expressiondqlparser">3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低<a class="headerlink" href="#34-expressiondqlparser" title="Permanent link">&para;</a></h3>
 <p>无法提高到 100% 的四条线是任何公众意见都无法达到的。每个都是一个防御分支，其守卫永远不会失败：</p>
@@ -2833,7 +2861,7 @@
 <ul>
 <li><code>src/Core/EventListener/OpenApiEnricherListener.php:110-112</code> — <code>$content === false</code> 无法访问（仅当使用 <code>getContent(true)</code> 时才可访问，但事实并非如此）；空字符串守卫是真正的路径。</li>
 <li><code>:115</code> — 正文以 <code>{</code>（前导模板文本）开头的 HTML <code>/api/doc</code> 响应将被错误分类为原始 JSON 和 <code>json_decode</code>d；今天无害但脆弱。</li>
-<li><code>:196</code> — <code>$t['name']</code> 在不检查键是否存在的情况下取消引用； <code>tags</code> 条目缺少 <code>name</code> 的规范（例如自定义工具）将引发未定义键警告/通知。</li>
+<li><code>:196</code> — <code>$t['name']</code> 在不检查键是否存在的情况下被取消引用； <code>tags</code> 条目缺少 <code>name</code> 的规范（例如自定义工具）将引发未定义键警告/通知。</li>
 <li><code>:134-138</code> — <code>if (is_string($newJson))</code> 块缩进错误（功能上正确，但令人困惑）。</li>
 </ul>
 <p>没有测试被标记为跳过：我编写的所有“正确行为”测试都通过了当前源。 §3.4 中的 4 个枯枝是故意不被覆盖的（它们是无法到达的）；尝试强制它们需要反射注入的假 AST 节点，而这在实践中是不可能发生的。</p>

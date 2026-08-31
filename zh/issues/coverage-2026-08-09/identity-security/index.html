@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    项目结构
+    Project Structure
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -628,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    提取服务
+    Extracting a Service
   
 
     
@@ -1081,7 +1081,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1254,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1366,7 +1366,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1394,7 +1394,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1443,6 +1443,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/wechat/" class="md-nav__link">
         
   
@@ -1450,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2081,7 +2109,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2170,7 +2198,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2198,7 +2226,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2226,7 +2254,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2254,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -2282,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2310,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2338,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2366,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2394,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2733,14 +2761,14 @@
 <ul>
 <li><strong>文件/行：</strong> <code>src/Identity/Service/RedisOtpStorage.php:23</code> — <code>return (bool) $this-&gt;redis-&gt;exists($key);</code>。</li>
 <li><strong>描述：</strong> 对于 <code>exceptions=false</code>（由 <code>RedisAdapter::createConnection</code> 设置），RESP 错误回复将显示为 <code>Predis\Response\Error</code> 对象，而不是抛出。该对象的 <code>(bool)</code> 是 <code>true</code>，因此存储故障使 <code>exists()</code> 声明密钥<strong>存在</strong>。所有其他方法都会将错误强制转换为安全的“不存在”默认值（<code>get()</code> → <code>false</code>、<code>del()</code>/<code>ttl()</code> → <code>0</code>），因此 <code>exists()</code> 是奇怪的。</li>
-<li><strong>影响：</strong> 如果 OTP 存储在流程中失败，<code>exists()</code> 看起来就像代码存在 — OTP 可以被视为存在/已使用，并且有效登录被阻止，从而掩盖存储中断。严重性低（要求商店本身失败），但不一致且具有误导性。</li>
+<li><strong>影响：</strong> 如果 OTP 存储在流程中失败，<code>exists()</code> 看起来就像代码存在 — OTP 可以被视为存在/已使用，并且有效登录被阻止，从而掩盖存储中断。严重性较低（要求商店本身失败），但不一致且具有误导性。</li>
 <li><strong>复制（已验证）：</strong>将存储指向假RESP服务器并调用<code>exists('err_exists')</code>（服务器回复<code>-ERR fake failure for EXISTS</code>）→返回<code>true</code>。</li>
 <li><strong>建议的修复：</strong> 将错误强制为安全默认值，例如
   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="x">$result = $this-&gt;redis-&gt;exists($key);</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="x">return $result === 1 || $result === true;</span>
 </code></pre></div>
   （并且，为了对称，将 <code>Predis\Response\Error</code> 视为“不存在”）。</li>
-<li><strong>跳过测试：</strong> <code>RedisOtpStorageTest::testExistsReturnsFalseWhenServerErrors</code> 断言正确的行为，并且 <code>markTestSkipped</code> 使套件保持绿色直至修复。</li>
+<li><strong>跳过测试：</strong> <code>RedisOtpStorageTest::testExistsReturnsFalseWhenServerErrors</code> 断言正确的行为，并且 <code>markTestSkipped</code> 使套件保持绿色直到修复。</li>
 </ul>
 <h3 id="bug-2-tokenmanagerdecodeaccesstoken">Bug #2（死代码）- <code>TokenManager::decodeAccessToken()</code> 重复已经执行的黑名单检查<a class="headerlink" href="#bug-2-tokenmanagerdecodeaccesstoken" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2759,21 +2787,21 @@
 <h3 id="bug-4devfallback">Bug #4（死代码）——私钥“devfallback”密码分支永远不会触发<a class="headerlink" href="#bug-4devfallback" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:48-51</code>。</li>
-<li><strong>描述：</strong> 对于 <strong>未加密</strong> 密钥，PHP 8.5 的 <code>openssl_pkey_get_private($pem, $passphrase)</code> 会忽略密码短语并返回密钥（根据经验验证），因此 <code>$privateKey === false</code> 为 false，并且会跳过第 50 行的回退。对于密码错误的真正<strong>加密</strong>密钥，密码尝试和后备（无密码）都会失败，到达第 54 行。不存在第一次调用失败但无密码重试成功的密钥状态。</li>
+<li><strong>描述：</strong> 对于 <strong>未加密</strong> 密钥，PHP 8.5 的 <code>openssl_pkey_get_private($pem, $passphrase)</code> 会忽略密码并返回密钥（根据经验验证），因此 <code>$privateKey === false</code> 为 false，并且会跳过第 50 行的回退。对于密码错误的真正<strong>加密</strong>密钥，密码尝试和后备（无密码）都会失败，到达第 54 行。不存在第一次调用失败但无密码重试成功的密钥状态。</li>
 <li><strong>影响：</strong>无 - 预期的“即使配置了密码短语也允许未加密的密钥”行为已经起作用（密码短语被简单地忽略），但后备分支本身无法访问/具有误导性。</li>
 <li><strong>建议的修复：</strong>删除第 48-51 行，或记录密码短语仅对真正加密的密钥有意义。</li>
 </ul>
 <h3 id="openssl_sign">无法访问的防御分支 — <code>openssl_sign()</code> 失败路径<a class="headerlink" href="#openssl_sign" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:100-101</code>。</li>
-<li><strong>说明：</strong>构造函数保证私钥有效； <code>openssl_sign()</code> 在此环境中，使用 SHA-256 成功实现 RSA、EC 和 DSA 密钥。在不使构造函数合约无效的情况下，无法触发 <code>$signed !== true</code> 分支。</li>
+<li><strong>说明：</strong> 构造函数保证私钥有效； <code>openssl_sign()</code> 在此环境中，使用 SHA-256 成功实现 RSA、EC 和 DSA 密钥。在不使构造函数合约无效的情况下，无法触发 <code>$signed !== true</code> 分支。</li>
 <li><strong>建议：</strong> 保留纵深防御；无法在单元测试中进行测试。记录下来而不是经过强制测试。</li>
 </ul>
 <h2 id="_4">观察结果（不是错误）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>User::setProfile()</code>（第153-160行）不会分离先前分配的配置文件。在<code>setProfile($a)</code>和<code>setProfile($b)</code>之后，<code>$a-&gt;getUser()</code>仍然指向<code>$user</code>。如果两个配置文件都被刷新，则可能会违反 OneToOne <code>user_id</code> 唯一约束。正常流程仅设置一次配置文件，因此严重性较低； <code>setProfile(null)</code>/detach 步骤将使更换更加安全。 （失败的测试未涵盖 - 为修复程序记录。）</li>
+<li><code>User::setProfile()</code>（第153-160行）不会分离先前分配的配置文件。在<code>setProfile($a)</code>和<code>setProfile($b)</code>之后，<code>$a-&gt;getUser()</code>仍然指向<code>$user</code>。如果刷新两个配置文件，则可能会违反 OneToOne <code>user_id</code> 唯一约束。正常流程仅设置一次配置文件，因此严重性较低； <code>setProfile(null)</code>/detach 步骤将使更换更加安全。 （失败的测试未涵盖 - 为修复程序记录。）</li>
 <li><code>JwtAuthenticator::supports()</code>（第33行）区分大小写（<code>'Bearer '</code>）； <code>Authorization: bearer xyz</code> 未被识别。许多 JWT 堆栈接受不区分大小写的方案名称；次要的。</li>
-<li><code>TokenManager::rotateRefreshToken()</code> 重用检测（第 249-253 行）有意仅将<em>旋转替换</em>令牌视为盗窃；根据设计，手动撤销（例如注销）且没有替换的令牌会产生“无效或过期”，而不是“检测到重用”。</li>
+<li><code>TokenManager::rotateRefreshToken()</code>重用检测（第249-253行）有意仅将<em>旋转替换</em>令牌视为盗窃；根据设计，手动撤销（例如注销）且没有替换的令牌会产生“无效或过期”，而不是“检测到重用”。</li>
 <li><code>RedisOtpStorage</code>构造函数不执行I/O（Predis惰性客户端）；配置错误的 DSN 仅在第一个命令时失败，而不是在构建时失败。</li>
 </ul>
 <h2 id="_5">跳过测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>

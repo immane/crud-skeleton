@@ -1726,6 +1726,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/wechat/" class="md-nav__link">
         
   
@@ -3193,7 +3221,7 @@ total, or over an array/<code>ArrayCollection</code> with <code>array_slice</cod
 <p>An expression evaluated against a root alias of <code>entity</code>. The same syntax is
 usable as a raw <code>QueryBuilder</code> fragment (the DQL tier) and as an in-memory
 predicate (the fallback).</p>
-<p>Supported operators:</p>
+<p>Supported operators (shared by client <code>@filter</code> and server <code>DqlExpression</code>):</p>
 <table>
 <thead>
 <tr>
@@ -3222,6 +3250,11 @@ predicate (the fallback).</p>
 <td><code>!</code></td>
 <td>logical NOT (attr check)</td>
 <td><code>prop IS NULL</code> on the child</td>
+</tr>
+<tr>
+<td><code>in</code> / <code>not in</code></td>
+<td>collection membership</td>
+<td><code>IN (:param)</code> / <code>NOT IN (:param)</code> — bound as array parameters; empty <code>in []</code> becomes <code>1 = 0</code>, empty <code>not in []</code> becomes <code>1 = 1</code></td>
 </tr>
 <tr>
 <td><code>matches</code></td>
@@ -3263,6 +3296,18 @@ when DQL compilation fails or the filter touches non-persistent data) is
 restricted to admins. For non-admins a DQL compilation error raises
 <code>AccessDeniedHttpException</code>; admins fall back to
 <code>LegacyEvaluator::evaluateBool()</code> over each entity.</p>
+<p><strong>Server-owned <code>DqlExpression</code> vs client <code>@filter</code></strong>: <code>DqlExpression</code> reuses the
+same expression compiler, but variables are bound in PHP code (e.g.
+<code>new DqlExpression('entity.getUser() == user', ['user' =&gt; $this-&gt;getUser()])</code>
+or <code>new DqlExpression('entity.getStoreUuid() in this.getAllowedStoreUuids()')</code>
+— the latter is shorthand for explicit binding and is only available inside
+<code>commonFilter()</code> via <code>ApiView::resolvedCommonFilter()</code>). It never uses the
+<code>LegacyEvaluator</code>, never falls back to in-memory filtering, and a compilation
+or metadata-validation failure is a 500 configuration error that rejects the
+request. Like <code>commonFilter()</code> arrays, it is automatically <code>AND</code>ed with the
+<code>id</code>/<code>uuid</code> added by <code>mixIdToCommonFilter</code>, so detail/update/delete cannot be
+bypassed. <code>in</code>/<code>not in</code> with an empty collection is compiled to the constant
+predicates <code>1 = 0</code> / <code>1 = 1</code> rather than an invalid <code>IN ()</code>.</p>
 <h3 id="dql"><code>@dql</code><a class="headerlink" href="#dql" title="Permanent link">&para;</a></h3>
 <p>A raw DQL sub-query whose matching ids are used as <code>id IN (subquery)</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>@dql=SELECT e.id FROM App\Trade\Entity\Product e WHERE e.price &gt; 100
@@ -3426,8 +3471,19 @@ per-item exceptions).</p>
 <td>guarded, not gated</td>
 <td><code>assertSafeSelect()</code> blocks identity data</td>
 </tr>
+<tr>
+<td><code>DqlExpression</code> (<code>commonFilter</code> server scope)</td>
+<td>N/A — code-owned</td>
+<td>Fail-closed, never <code>PUBLIC_ACCESS</code>; compilation/validation failure → 500, never in-memory fallback</td>
+</tr>
 </tbody>
 </table>
+<blockquote>
+<p><code>DqlExpression</code> is the server-owned counterpart to <code>@filter</code> for row-level
+authorization: <code>commonFilter()</code> may return <code>new DqlExpression(...)</code>; it shares the
+operator set (including <code>in</code>/<code>not in</code>) but is constructed in PHP, bound via
+<code>withCriteria()</code>/<code>withContext()</code> and validated before any query executes.</p>
+</blockquote>
 <hr />
 <h2 id="6-operators-people-notes">6. Operators &amp; People Notes<a class="headerlink" href="#6-operators-people-notes" title="Permanent link">&para;</a></h2>
 <ul>

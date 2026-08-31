@@ -579,10 +579,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#expression-dynamic-query-engine" class="md-nav__link">
+  <a href="#expression-dynamic-query-engine-dqlexpression" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Expression Dynamic Query Engine
+        Expression Dynamic Query Engine &amp; DqlExpression
       
     </span>
   </a>
@@ -1652,6 +1652,34 @@
     
   
     Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access (Authorization)
   
 
     
@@ -2815,10 +2843,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#expression-dynamic-query-engine" class="md-nav__link">
+  <a href="#expression-dynamic-query-engine-dqlexpression" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Expression Dynamic Query Engine
+        Expression Dynamic Query Engine &amp; DqlExpression
       
     </span>
   </a>
@@ -3006,6 +3034,10 @@ one Messenger bus, but they must behave as if they were independent services.</p
 <td><code>Wechat</code></td>
 <td>WeChat login (Mini Program / Official Account) and WeChat Pay V3 gateway</td>
 </tr>
+<tr>
+<td><code>Access</code> <em>(design — not yet runtime)</em></td>
+<td>Row-level and scoped RBAC design: <code>DqlExpression</code>, Store-scoped grants, field grants, audit log (see <code>docs/design/bundles/access.md</code>)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="layer-architecture">Layer Architecture<a class="headerlink" href="#layer-architecture" title="Permanent link">&para;</a></h2>
@@ -3126,7 +3158,7 @@ JSON envelopes, pagination, and <code>@display</code>/<code>@expands</code> resp
 <p>The result is a generic CRUD service per entity that concrete services override
 where domain rules require it. Every module service also declares an interface
 (e.g. <code>OrderServiceInterface extends BaseServiceInterface</code>).</p>
-<h3 id="expression-dynamic-query-engine">Expression Dynamic Query Engine<a class="headerlink" href="#expression-dynamic-query-engine" title="Permanent link">&para;</a></h3>
+<h3 id="expression-dynamic-query-engine-dqlexpression">Expression Dynamic Query Engine &amp; <code>DqlExpression</code><a class="headerlink" href="#expression-dynamic-query-engine-dqlexpression" title="Permanent link">&para;</a></h3>
 <p>List endpoints accept expression query parameters that are parsed to DQL:</p>
 <table>
 <thead>
@@ -3138,7 +3170,7 @@ where domain rules require it. Every module service also declares an interface
 <tbody>
 <tr>
 <td><code>@filter</code></td>
-<td>Declarative filter conditions</td>
+<td>Declarative filter conditions (client-supplied, <code>GET</code> only)</td>
 </tr>
 <tr>
 <td><code>@sort</code> / <code>@order</code></td>
@@ -3154,9 +3186,17 @@ where domain rules require it. Every module service also declares an interface
 </tr>
 </tbody>
 </table>
-<p>Implementation lives in <code>src/Core/Parser/</code> (<code>ExpressionDqlParser</code>,
-<code>ExpressionQueryBuilderAssembler</code>) and is executed through
-<code>App\Core\Service\ExpressionService</code> with <code>QueryBuilderFactory</code>.</p>
+<p>Shared syntax is implemented in <code>src/Core/Parser/</code> (<code>ExpressionDqlParser</code>,
+<code>ExpressionQueryBuilderAssembler</code>) and executed through
+<code>App\Core\Service\ExpressionService</code> with <code>QueryBuilderFactory</code>. The same syntax
+powers server-owned <code>DqlExpression</code> (<code>src/Core/Query/DqlExpression.php</code>) for
+row-level authorization: <code>commonFilter()</code> may return
+<code>new DqlExpression('entity.getUser() == this.getUser()')</code> or
+<code>new DqlExpression('entity.getStoreUuid() in storeUuids', ['storeUuids' =&gt; $allowed])</code>,
+compiled via <code>ExpressionDqlParser</code> + <code>ExpressionQueryBuilderAssembler</code> and
+automatically <code>AND</code>ed with <code>id</code>/<code>uuid</code> criteria. Unlike <code>@filter</code>, it is
+fail-closed (500 on error) and supports <code>in</code>/<code>not in</code> with empty-collection
+safety.</p>
 <h3 id="pricing-pipeline">Pricing Pipeline<a class="headerlink" href="#pricing-pipeline" title="Permanent link">&para;</a></h3>
 <p>Order pricing is a priority-ordered chain of calculators, all tagged
 <code>trade.price_calculator</code> and sorted ascending by <code>getPriority()</code>:</p>
