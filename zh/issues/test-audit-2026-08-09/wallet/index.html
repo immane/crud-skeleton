@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    手册索引
+    Manual Index
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    项目结构
+    Project Structure
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    核心用法
+    Core Usage
   
 
     
@@ -544,7 +544,35 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../manual/authorization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authorization Setup
   
 
     
@@ -572,7 +600,7 @@
   <span class="md-ellipsis">
     
   
-    开发流程
+    Development Workflow
   
 
     
@@ -628,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    API合约
+    API Contracts
   
 
     
@@ -656,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -684,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -768,7 +796,7 @@
   <span class="md-ellipsis">
     
   
-    提取服务
+    Extracting a Service
   
 
     
@@ -1081,7 +1109,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1394,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1552,6 +1580,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runbooks/authorization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authorization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2109,7 +2165,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2226,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2254,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2282,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    测试矩阵
+    Test Matrix
   
 
     
@@ -2310,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2338,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2366,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2394,7 +2450,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2557,10 +2613,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#merge-suggestions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议
+        MERGE SUGGESTIONS
       
     </span>
   </a>
@@ -2568,10 +2624,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -3008,39 +3064,39 @@ Assertions: 524, Skipped: 3, Notices: 16</code> (the 16 notices are pre-existing
 </tr>
 </tbody>
 </table>
-<p>关于控制器行的注释：HTTP 测试断言状态代码（以及部分响应主体）；单位
-控制器测试还断言响应包络。仅当 HTTP 层允许时，删除它们才是安全的
-是 API 合约的主要所有者（根据 TEST_STRATEGY）。请参阅合并建议 7。</p>
-<p>较低优先级（留待稍后处理，不建议立即删除）：
-<code>WalletTransactionRepositoryTest::testFindPendingEmpty</code>（与<code>testFindPendingExcludesCompleted</code>重叠），
-<code>WalletRepositoryTest::testFindByUserEmpty</code> / <code>testFindByUserAndCurrencyNotFound</code>（简单的空结果），
-<code>WalletApiRegressionTest::testTransferApiMissingFields</code> （与 <code>blindTransferProvider</code> 缺失字段的情况重叠）。</p>
-<h2 id="_1">合并建议<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Note on the controller rows: the HTTP tests assert status codes (and partly response bodies); the unit
+controller tests additionally assert the response envelope. Deleting them is safe only if the HTTP layer
+is the primary owner of the API contract (per TEST_STRATEGY). See merge suggestion 7.</p>
+<p>Lower-priority (leave for a later pass, not recommended for immediate deletion):
+<code>WalletTransactionRepositoryTest::testFindPendingEmpty</code> (overlaps <code>testFindPendingExcludesCompleted</code>),
+<code>WalletRepositoryTest::testFindByUserEmpty</code> / <code>testFindByUserAndCurrencyNotFound</code> (trivial empty results),
+<code>WalletApiRegressionTest::testTransferApiMissingFields</code> (overlaps <code>blindTransferProvider</code> missing-field cases).</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong><code>WalletServiceCoverageTest</code></strong> — 折叠为单个测试（或删除整个文件；它仅存在于 <code>WalletService.php</code> 的第 148 行）。</li>
-<li><strong><code>WalletServiceTest::testVerifyBalanceMatches</code> / <code>testVerifyBalanceMismatch</code> / <code>testVerifyBalanceZero</code></strong> — 表驱动到一个测试（匹配/不匹配/零行）。</li>
-<li><strong><code>WalletServiceTest::testReconcileEmptyWallets</code> + <code>testReconcileBalancedWallet</code></strong> 和 <strong><code>testReconcileSkipsNonWalletEntities</code> + <code>testReconcileSkipsWalletWithoutId</code></strong> — 将每一对合并到一个表驱动测试中。</li>
-<li><strong><code>WalletTest::testPrePersistWhenCreatedFromReflection</code> + <code>testPrePersistKeepsExistingCreatedAt</code></strong> 和 <strong><code>WalletTransactionTest::testPrePersist</code> + <code>testPrePersistKeepsExisting</code></strong> — 各自合并为一个参数化生命周期测试。</li>
-<li><strong><code>WalletTest::testConstructorCurrencyUppercase</code> + <code>testSetCurrency</code></strong> — 合并（单个大写矩阵）。</li>
-<li><strong><code>Entity</code> 边界测试</strong> — 每个实体保留 1 美分/浮动边界测试（一美分边界）并删除大值变体；两者都使用相同的 <code>amount/100</code> 行。</li>
-<li><strong><code>TransferControllerTest</code></strong> — 如果 HTTP 套件保留为主要所有者，则将响应信封断言（<code>code</code>/<code>message</code>/<code>data</code> 形状）折叠为 <code>WalletApiRegressionTest</code>/<code>UserApiIntegrationTest</code> 并删除相应的单元测试；仅保留 3 个跳过的错误文档测试。</li>
+<li><strong><code>WalletServiceCoverageTest</code></strong> — collapse to a single test (or delete the whole file; it exists only for line 148 of <code>WalletService.php</code>).</li>
+<li><strong><code>WalletServiceTest::testVerifyBalanceMatches</code> / <code>testVerifyBalanceMismatch</code> / <code>testVerifyBalanceZero</code></strong> — table-drive into one test (matches/mismatch/zero rows).</li>
+<li><strong><code>WalletServiceTest::testReconcileEmptyWallets</code> + <code>testReconcileBalancedWallet</code></strong> and <strong><code>testReconcileSkipsNonWalletEntities</code> + <code>testReconcileSkipsWalletWithoutId</code></strong> — merge each pair into one table-driven test.</li>
+<li><strong><code>WalletTest::testPrePersistWhenCreatedFromReflection</code> + <code>testPrePersistKeepsExistingCreatedAt</code></strong> and <strong><code>WalletTransactionTest::testPrePersist</code> + <code>testPrePersistKeepsExisting</code></strong> — merge into one parameterized lifecycle test each.</li>
+<li><strong><code>WalletTest::testConstructorCurrencyUppercase</code> + <code>testSetCurrency</code></strong> — merge (single uppercasing case matrix).</li>
+<li><strong><code>Entity</code> boundary tests</strong> — keep one cents/float boundary test per entity (one-cent boundary) and drop the large-value variants; both exercise the same <code>amount/100</code> line.</li>
+<li><strong><code>TransferControllerTest</code></strong> — if the HTTP suite is kept as primary owner, fold the response-envelope assertions (<code>code</code>/<code>message</code>/<code>data</code> shape) into <code>WalletApiRegressionTest</code>/<code>UserApiIntegrationTest</code> and delete the corresponding unit tests; retain only the 3 skipped bug-documentation tests.</li>
 </ol>
-<h2 id="_2">验证步骤<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
 <ol>
-<li>在删除任何内容之前确认当前基线：
+<li>Confirm the current baseline before deleting anything:
    <code>cd /Volumes/Nayuki/Development/PHP/crud-skeleton &amp;&amp; /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit tests/Wallet</code>
-   预期：<code>Tests: 183, Assertions: 524, Skipped: 3</code>（16 个预先存在的 PHPUnit 通知不相关）。</li>
-<li>执行任何删除操作后，重新运行相同的命令并确认计数下降的数量恰好等于删除的数量
-   不可跳过的测试，并且 <code>Skipped: 3</code> 保持不变（必须保留 3 个错误文档跳过）。</li>
-<li>由于重复是跨层的，因此也运行全套以确保更高层的所有者仍然
-   通过并且在 90% 门以下没有 <code>src/Wallet</code> 线被覆盖：
+   Expected: <code>Tests: 183, Assertions: 524, Skipped: 3</code> (16 pre-existing PHPUnit notices are unrelated).</li>
+<li>After any deletion, re-run the same command and confirm the count drops exactly by the number of removed
+   non-skipped tests and that <code>Skipped: 3</code> is unchanged (the 3 bug-documentation skips must remain).</li>
+<li>Because the duplicates are cross-layer, also run the full suite to ensure the higher-layer owners still
+   pass and that no <code>src/Wallet</code> line becomes uncovered below the 90% gate:
    <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code></li>
-<li>对于覆盖范围追踪实体（访问器、<code>prePersist</code>、<code>WalletServiceCoverageTest</code>），验证删除
-   不会将 <code>src/Wallet</code> 线路覆盖范围降至门以下：
-   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-html var/coverage</code>。
-   该活动在整个项目范围内达到了 99.46%，具有很大的空间，因此标记的琐碎测试应该是安全的
-   下降；任何意外的下降都应该在做出承诺之前进行审查。
-5、本次审核未发生<code>src/</code>或<code>tests/</code>项下的变更；删除是一项单独的后续任务。</li>
+<li>For the coverage-chasing entities (accessors, <code>prePersist</code>, <code>WalletServiceCoverageTest</code>), verify removal
+   does not drop <code>src/Wallet</code> line coverage below the gate:
+   <code>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit --coverage-html var/coverage</code>.
+   The campaign reached 99.46% project-wide with large headroom, so the flagged trivial tests should be safe
+   to drop; any surprising dip should be reviewed before committing.</li>
+<li>No changes under <code>src/</code> or <code>tests/</code> were made by this audit; deletion is a separate follow-up task.</li>
 </ol>
 
 

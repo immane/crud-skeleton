@@ -732,6 +732,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../authorization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authorization Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../development-workflow/" class="md-nav__link">
         
   
@@ -1719,6 +1747,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/authorization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authorization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2940,8 +2996,9 @@ Two paths are supported: <strong>Docker Compose</strong> (recommended, everythin
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># 3. Create an administrator account (email, screen name, password)</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">'P@ssw0rd'</span><span class="w"> </span>--admin
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:authorization:seed
 </code></pre></div>
-<p>That is enough to log in and exercise the API. The JWT key pair is generated
+<p>That is enough to log in and exercise the API. The last line seeds Authorization permissions/roles/field-grants (idempotent; see <a href="../authorization/">Authorization Setup</a>). The JWT key pair is generated
 automatically on first container start by <code>docker/app/entrypoint.sh</code> into
 <code>var/jwt/</code>. No environment file is required for a first run — <code>compose.yaml</code>
 provides safe development defaults.</p>
