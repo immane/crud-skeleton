@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="zh" class="no-js">
   <head>
     
       <meta charset="utf-8">
@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/bundles/access/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/design/bundles/authorization/">
       
       
         <link rel="prev" href="../identity/">
@@ -31,7 +31,7 @@
     
     
       
-        <title>Access (Authorization) - CRUD Skeleton</title>
+        <title>Authorization - CRUD Skeleton</title>
       
     
     
@@ -82,8 +82,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#access-bundle-design" class="md-skip">
-          Skip to content
+        <a href="#_1" class="md-skip">
+          跳转至
         </a>
       
     </div>
@@ -97,7 +97,7 @@
   
 
 <header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
     <a href="../../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
   
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Access (Authorization)
+              Authorization
             
           </span>
         </div>
@@ -158,7 +158,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -192,16 +192,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="查找">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -214,7 +214,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            正在初始化搜索引擎
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -226,7 +226,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -260,7 +260,7 @@
 
 
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
@@ -272,7 +272,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -299,7 +299,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    首页
   
 
     
@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -492,7 +492,7 @@
   <span class="md-ellipsis">
     
   
-    Core Framework
+    Core 框架
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -632,7 +632,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -688,7 +688,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -716,7 +716,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -772,7 +772,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -853,7 +853,7 @@
   <span class="md-ellipsis">
     
   
-    Design Contracts
+    设计契约
   
 
     
@@ -869,7 +869,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Design Contracts
+    设计契约
   
 
           </label>
@@ -889,7 +889,7 @@
   <span class="md-ellipsis">
     
   
-    System Architecture
+    系统架构
   
 
     
@@ -917,7 +917,7 @@
   <span class="md-ellipsis">
     
   
-    API Design
+    API 设计
   
 
     
@@ -945,7 +945,7 @@
   <span class="md-ellipsis">
     
   
-    Data Model
+    数据模型
   
 
     
@@ -973,7 +973,7 @@
   <span class="md-ellipsis">
     
   
-    Module Design
+    模块设计
   
 
     
@@ -1001,7 +1001,7 @@
   <span class="md-ellipsis">
     
   
-    Controller Design
+    控制器设计
   
 
     
@@ -1029,7 +1029,7 @@
   <span class="md-ellipsis">
     
   
-    API Documentation
+    API 文档
   
 
     
@@ -1057,7 +1057,7 @@
   <span class="md-ellipsis">
     
   
-    System Contracts
+    系统契约
   
 
     
@@ -1085,7 +1085,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1138,7 +1138,7 @@
   <span class="md-ellipsis">
     
   
-    Bundles
+    模块设计
   
 
     
@@ -1154,7 +1154,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Bundles
+    模块设计
   
 
           </label>
@@ -1174,7 +1174,7 @@
   <span class="md-ellipsis">
     
   
-    Core Framework
+    Core 框架
   
 
     
@@ -1230,7 +1230,7 @@
   <span class="md-ellipsis">
     
   
-    Trade (E-Commerce)
+    Trade (电商)
   
 
     
@@ -1258,7 +1258,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1314,7 +1314,7 @@
   <span class="md-ellipsis">
     
   
-    Payment
+    Payment (支付)
   
 
     
@@ -1342,7 +1342,7 @@
   <span class="md-ellipsis">
     
   
-    Wallet
+    Wallet (钱包)
   
 
     
@@ -1370,7 +1370,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1398,7 +1398,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1426,7 +1426,7 @@
   <span class="md-ellipsis">
     
   
-    Identity (Auth)
+    Identity (鉴权)
   
 
     
@@ -1463,7 +1463,7 @@
   <span class="md-ellipsis">
     
   
-    Access (Authorization)
+    Authorization
   
 
     
@@ -1481,7 +1481,7 @@
   <span class="md-ellipsis">
     
   
-    Access (Authorization)
+    Authorization
   
 
     
@@ -1493,7 +1493,7 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="目录">
   
   
   
@@ -1502,27 +1502,27 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      目录
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-decision-summary" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Decision Summary
+        1. 决策摘要
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Decision Summary">
+    <nav class="md-nav" aria-label="1. 决策摘要">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-decision" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Decision
+        1.1 决定
       
     </span>
   </a>
@@ -1530,10 +1530,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-goals" class="md-nav__link">
+  <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 Goals
+        1.2 目标
       
     </span>
   </a>
@@ -1541,10 +1541,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-non-goals" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 Non-Goals
+        1.3 非目标
       
     </span>
   </a>
@@ -1557,22 +1557,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-audit-of-the-current-state" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Audit Of The Current State
+        2.现状审计
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Audit Of The Current State">
+    <nav class="md-nav" aria-label="2.现状审计">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-authentication-is-mature-authorization-is-coarse" class="md-nav__link">
+  <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Authentication Is Mature; Authorization Is Coarse
+        2.1 认证成熟；授权比较粗略
       
     </span>
   </a>
@@ -1580,10 +1580,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-existing-row-scoping-hooks-are-valuable" class="md-nav__link">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 Existing Row-Scoping Hooks Are Valuable
+        2.2 现有的行范围挂钩很有价值
       
     </span>
   </a>
@@ -1591,10 +1591,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#23-store-has-a-separate-correct-domain-boundary" class="md-nav__link">
+  <a href="#23" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3 Store Has A Separate, Correct Domain Boundary
+        2.3 商店有一个独立的、正确的域边界
       
     </span>
   </a>
@@ -1602,10 +1602,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#24-content-is-a-proposed-pilot-not-an-existing-store-resource" class="md-nav__link">
+  <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.4 Content Is A Proposed Pilot, Not An Existing Store Resource
+        2.4 内容是拟议的试点，而不是现有的商店资源
       
     </span>
   </a>
@@ -1940,10 +1940,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#84-my-access-response" class="md-nav__link">
+  <a href="#84-my-authorization-response" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.4 My Access Response
+        8.4 My Authorization Response
       
     </span>
   </a>
@@ -2068,10 +2068,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#phase-1-access-foundation-and-content-pilot" class="md-nav__link">
+  <a href="#phase-1-authorization-foundation-and-content-pilot" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 1: Access Foundation And Content Pilot
+        Phase 1: Authorization Foundation And Content Pilot
       
     </span>
   </a>
@@ -2327,7 +2327,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2556,7 +2556,7 @@
   <span class="md-ellipsis">
     
   
-    Payment
+    Payment (支付)
   
 
     
@@ -2724,7 +2724,7 @@
   <span class="md-ellipsis">
     
   
-    Wallet
+    Wallet (钱包)
   
 
     
@@ -2805,7 +2805,7 @@
   <span class="md-ellipsis">
     
   
-    Research
+    调研
   
 
     
@@ -2821,7 +2821,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Research
+    调研
   
 
           </label>
@@ -2841,7 +2841,7 @@
   <span class="md-ellipsis">
     
   
-    EasyWeChat 6.x Usage
+    EasyWeChat 6.x 用法
   
 
     
@@ -2869,7 +2869,7 @@
   <span class="md-ellipsis">
     
   
-    Huifu Payment API
+    汇付支付 API
   
 
     
@@ -2958,7 +2958,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -3047,7 +3047,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -3075,7 +3075,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -3103,7 +3103,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -3131,7 +3131,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -3159,7 +3159,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -3187,7 +3187,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -3215,7 +3215,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -3243,7 +3243,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -3271,7 +3271,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -3306,7 +3306,7 @@
   <span class="md-ellipsis">
     
   
-    AI Context
+    AI 快照
   
 
     
@@ -3333,7 +3333,7 @@
   <span class="md-ellipsis">
     
   
-    API Reference
+    API 参考
   
 
     
@@ -3359,7 +3359,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="目录">
   
   
   
@@ -3368,27 +3368,27 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      目录
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-decision-summary" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Decision Summary
+        1. 决策摘要
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Decision Summary">
+    <nav class="md-nav" aria-label="1. 决策摘要">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-decision" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Decision
+        1.1 决定
       
     </span>
   </a>
@@ -3396,10 +3396,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-goals" class="md-nav__link">
+  <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 Goals
+        1.2 目标
       
     </span>
   </a>
@@ -3407,10 +3407,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-non-goals" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 Non-Goals
+        1.3 非目标
       
     </span>
   </a>
@@ -3423,22 +3423,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-audit-of-the-current-state" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Audit Of The Current State
+        2.现状审计
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Audit Of The Current State">
+    <nav class="md-nav" aria-label="2.现状审计">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-authentication-is-mature-authorization-is-coarse" class="md-nav__link">
+  <a href="#21" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 Authentication Is Mature; Authorization Is Coarse
+        2.1 认证成熟；授权比较粗略
       
     </span>
   </a>
@@ -3446,10 +3446,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-existing-row-scoping-hooks-are-valuable" class="md-nav__link">
+  <a href="#22" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 Existing Row-Scoping Hooks Are Valuable
+        2.2 现有的行范围挂钩很有价值
       
     </span>
   </a>
@@ -3457,10 +3457,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#23-store-has-a-separate-correct-domain-boundary" class="md-nav__link">
+  <a href="#23" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3 Store Has A Separate, Correct Domain Boundary
+        2.3 商店有一个独立的、正确的域边界
       
     </span>
   </a>
@@ -3468,10 +3468,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#24-content-is-a-proposed-pilot-not-an-existing-store-resource" class="md-nav__link">
+  <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.4 Content Is A Proposed Pilot, Not An Existing Store Resource
+        2.4 内容是拟议的试点，而不是现有的商店资源
       
     </span>
   </a>
@@ -3806,10 +3806,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#84-my-access-response" class="md-nav__link">
+  <a href="#84-my-authorization-response" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.4 My Access Response
+        8.4 My Authorization Response
       
     </span>
   </a>
@@ -3934,10 +3934,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#phase-1-access-foundation-and-content-pilot" class="md-nav__link">
+  <a href="#phase-1-authorization-foundation-and-content-pilot" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Phase 1: Access Foundation And Content Pilot
+        Phase 1: Authorization Foundation And Content Pilot
       
     </span>
   </a>
@@ -4190,135 +4190,135 @@
   
 
 
-<h1 id="access-bundle-design">Access Bundle Design<a class="headerlink" href="#access-bundle-design" title="Permanent link">&para;</a></h1>
+<h1 id="_1">授权包设计<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: approved design, not implemented.</strong> The Access bundle (<code>src/Access/</code>) is
-the authorization boundary for the modular monolith. Identity remains responsible
-for authentication and user identity. This document is the implementation contract
-for RBAC, scoped data access, and a deliberately limited field-level extension.</p>
+<p><strong>状态：已批准设计，未实施。</strong> 授权包 (<code>src/Authorization/</code>) 为
+模块化整体的授权边界。身份仍然负有责任
+用于身份验证和用户身份。本文件为实施合同
+对于 RBAC、范围数据访问和故意限制的字段级扩展。</p>
 </blockquote>
 <hr />
-<h2 id="1-decision-summary">1. Decision Summary<a class="headerlink" href="#1-decision-summary" title="Permanent link">&para;</a></h2>
-<h3 id="11-decision">1.1 Decision<a class="headerlink" href="#11-decision" title="Permanent link">&para;</a></h3>
-<p>Create an independent <code>Access</code> module rather than adding authorization tables and
-logic to <code>Identity</code>.</p>
+<h2 id="1">1. 决策摘要<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h3 id="11">1.1 决定<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<p>创建一个独立的<code>Authorization</code>模块而不是添加授权表和
+逻辑为<code>Identity</code>。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Identity: authenticate a principal
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Access:   decide what an authenticated principal may do
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Authorization:   decide what an authenticated principal may do
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Store:    own store membership and operational facts
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Business: own resources and enforce their data scope through Access
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Business: own resources and enforce their data scope through Authorization
 </code></pre></div>
-<p>This preserves Identity as an authentication module (User, password, JWT, refresh
-tokens, OTP, WeChat login) and prevents it from depending on every business module's
-resources and actions.</p>
-<h3 id="12-goals">1.2 Goals<a class="headerlink" href="#12-goals" title="Permanent link">&para;</a></h3>
+<p>这将身份保留为身份验证模块（用户、密码、JWT、刷新
+令牌、OTP、微信登录）并防止其依赖于每个业务模块
+资源和行动。</p>
+<h3 id="12">1.2 目标<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Replace the global <code>ROLE_ADMIN</code>-only authorization model incrementally with
-  permission codes in the form <code>module:resource:action</code>.</li>
-<li>Assign roles globally or in a Store scope without cross-module foreign keys.</li>
-<li>Centralize permission decisions in a Symfony Voter and <code>AccessServiceInterface</code>.</li>
-<li>Provide reusable scope and field filtering hooks so controllers do not duplicate
-  authorization business logic.</li>
-<li>Keep <code>Store\Entity\Membership</code> as the authoritative Store membership record; Store
-  combines that membership check with Access authorization.</li>
-<li>Preserve existing <code>User.roles</code> and <code>ROLE_ADMIN</code> behavior during migration.</li>
-<li>Record authorization administration changes in an append-only audit log.</li>
+<li>逐步替换全局 <code>ROLE_ADMIN</code>-only 授权模型
+  格式为 <code>module:resource:action</code> 的权限代码。</li>
+<li>全局或在存储范围内分配角色，无需跨模块外键。</li>
+<li>将权限决策集中在 Symfony Voter 和 <code>AuthorizationServiceInterface</code> 中。</li>
+<li>提供可重用的范围和字段过滤挂钩，以便控制器不会重复
+  授权业务逻辑。</li>
+<li>保留<code>Store\Entity\Membership</code>作为权威的商店会员记录；商店
+  将成员资格检查与授权授权相结合。</li>
+<li>在迁移期间保留现有的 <code>User.roles</code> 和 <code>ROLE_ADMIN</code> 行为。</li>
+<li>在仅附加审核日志中记录授权管理更改。</li>
 </ul>
-<h3 id="13-non-goals">1.3 Non-Goals<a class="headerlink" href="#13-non-goals" title="Permanent link">&para;</a></h3>
-<p>The first implementation MUST NOT:</p>
+<h3 id="13">1.3 非目标<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<p>第一个实现不得：</p>
 <ul>
-<li>Replace authentication, JWT signing, refresh token rotation, or the Identity user
-  UUID contract.</li>
-<li>Move Store membership rows into Access or make Access the owner of Store roles.</li>
-<li>Introduce a generic policy language, Casbin, OPA, or user-authored expressions.</li>
-<li>Turn every field into a permission code such as <code>common:content:metadata:update</code>.</li>
-<li>Add foreign keys to <code>users</code>, <code>store</code>, Trade, Payment, Wallet, or other module
-  tables.</li>
-<li>Require a distributed transaction or make broker delivery a precondition for
-  authorization.</li>
+<li>替换身份验证、JWT 签名、刷新令牌轮换或身份用户
+  UUID 合约。</li>
+<li>将商店成员资格行移至授权或使授权成为商店角色的所有者。</li>
+<li>引入通用策略语言、Casbin、OPA 或用户编写的表达式。</li>
+<li>将每个字段转换为权限代码，例如<code>common:content:metadata:update</code>。</li>
+<li>将外键添加到<code>users</code>、<code>store</code>、交易、支付、钱包或其他模块
+  表。</li>
+<li>需要分布式交易或将经纪人交付作为先决条件
+  授权。</li>
 </ul>
-<p>ABAC-style conditions are an explicit future extension. The first release is scoped
-RBAC plus role-defined field allow-lists.</p>
+<p>ABAC 式的条件是未来的明确扩展。第一个版本的范围
+RBAC 加上角色定义的字段允许列表。</p>
 <hr />
-<h2 id="2-audit-of-the-current-state">2. Audit Of The Current State<a class="headerlink" href="#2-audit-of-the-current-state" title="Permanent link">&para;</a></h2>
-<h3 id="21-authentication-is-mature-authorization-is-coarse">2.1 Authentication Is Mature; Authorization Is Coarse<a class="headerlink" href="#21-authentication-is-mature-authorization-is-coarse" title="Permanent link">&para;</a></h3>
-<p><code>Identity\Entity\User</code> persists a JSON <code>roles</code> array and always exposes
-<code>ROLE_USER</code>. <code>config/packages/security.yaml</code> defines only this hierarchy:</p>
+<h2 id="2">2.现状审计<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 认证成熟；授权比较粗略<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p><code>Identity\Entity\User</code> 保留 JSON <code>roles</code> 数组并始终公开
+<code>ROLE_USER</code>。 <code>config/packages/security.yaml</code> 仅定义此层次结构：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">ROLE_ADMIN</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ROLE_USER</span><span class="p p-Indicator">]</span>
 </code></pre></div>
-<p>The API firewall authenticates <code>/api</code> through <code>JwtAuthenticator</code>. <code>TokenManager</code>
-signs a JWT containing the current roles, but the authenticator reloads the User by
-the JWT subject and does not make resource-level authorization decisions.</p>
-<p><code>security.yaml</code> currently protects every <code>/api/v1/manage</code> route with <code>ROLE_ADMIN</code>.
-Most Manage controllers duplicate this with a class-level
-<code>#[IsGranted('ROLE_ADMIN')]</code>. This is safe as a coarse platform-administrator gate,
-but cannot express module, action, Store, row, or field scope.</p>
-<h3 id="22-existing-row-scoping-hooks-are-valuable">2.2 Existing Row-Scoping Hooks Are Valuable<a class="headerlink" href="#22-existing-row-scoping-hooks-are-valuable" title="Permanent link">&para;</a></h3>
-<p>The Core view mixins already pass every list, detail, update, and delete lookup
-through controller filters:</p>
+<p>API防火墙通过<code>JwtAuthenticator</code>验证<code>/api</code>。 <code>TokenManager</code>
+签署包含当前角色的 JWT，但身份验证器通过以下方式重新加载用户
+JWT 主题，并且不做出资源级授权决策。</p>
+<p><code>security.yaml</code> 目前使用 <code>ROLE_ADMIN</code> 保护每个 <code>/api/v1/manage</code> 路由。
+大多数管理控制器都会使用类级别来重复此操作
+<code>#[IsGranted('ROLE_ADMIN')]</code>。这作为粗略的平台管理员门是安全的，
+但不能表达模块、操作、存储、行或字段范围。</p>
+<h3 id="22">2.2 现有的行范围挂钩很有价值<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<p>核心视图 mixin 已经传递了每个列表、详细信息、更新和删除查找
+通过控制器过滤器：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>commonFilter() -&gt; mixIdToCommonFilter() -&gt; service.get()/list()
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>deletionFilter() -&gt; service.get() -&gt; service.remove()
 </code></pre></div>
-<p>Controllers use these hooks for ownership filters such as <code>['user' =&gt; $user]</code> and
-the deny-all sentinel <code>['id' =&gt; -1]</code>. QueryBuilder filters are available for more
-complex predicates. Access MUST use these existing enforcement points; it MUST NOT
-bypass <code>BaseService</code> or query a repository directly from a controller.</p>
-<h3 id="23-store-has-a-separate-correct-domain-boundary">2.3 Store Has A Separate, Correct Domain Boundary<a class="headerlink" href="#23-store-has-a-separate-correct-domain-boundary" title="Permanent link">&para;</a></h3>
-<p><code>Store\Entity\Membership</code> stores an active/suspended/revoked membership for a local
-Store plus a scalar <code>userUuid</code>. It has roles <code>owner</code>, <code>manager</code>, <code>clerk</code>, and
-<code>fulfillment</code>. <code>MembershipService::isAuthorized()</code> is currently called directly by
-the Store Staff controller for each action.</p>
-<p>This is a valid Store-domain authorization implementation, but it has two limits:</p>
+<p>控制器将这些钩子用于所有权过滤器，例如 <code>['user' =&gt; $user]</code> 和
+拒绝所有哨兵 <code>['id' =&gt; -1]</code>。 QueryBuilder 过滤器可用于更多用途
+复杂的谓词。授权必须使用这些现有的执行点；它一定不能
+绕过 <code>BaseService</code> 或直接从控制器查询存储库。</p>
+<h3 id="23">2.3 商店有一个独立的、正确的域边界<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<p><code>Store\Entity\Membership</code> 存储本地的有效/暂停/撤销的会员资格
+存储加上标量 <code>userUuid</code>。它具有角色 <code>owner</code>、<code>manager</code>、<code>clerk</code> 和
+<code>fulfillment</code>。 <code>MembershipService::isAuthorized()</code> 目前被直接调用
+每个操作的 Store Staff 控制器。</p>
+<p>这是一个有效的存储域授权实现，但它有两个限制：</p>
 <ul>
-<li>The authorization code and allowed Store roles are repeated in controller methods.</li>
-<li>Other modules cannot consistently reuse a Store-scoped capability without knowing
-  Store membership details.</li>
+<li>授权代码和允许的 Store 角色在控制器方法中重复。</li>
+<li>其他模块无法在不知情的情况下一致地重用 Store 范围的功能
+  存储会员详细信息。</li>
 </ul>
-<p>Store keeps membership checks in <code>MembershipServiceInterface</code>. Store Staff controllers
-will compose that check with <code>AccessServiceInterface</code> through a Store-owned helper.
-Access therefore has no dependency on Store and cannot form a Store &lt;-&gt; Access module
-cycle. It neither modifies the membership schema nor duplicates the membership
-lifecycle.</p>
-<h3 id="24-content-is-a-proposed-pilot-not-an-existing-store-resource">2.4 Content Is A Proposed Pilot, Not An Existing Store Resource<a class="headerlink" href="#24-content-is-a-proposed-pilot-not-an-existing-store-resource" title="Permanent link">&para;</a></h3>
-<p><code>Common\Entity\Content</code> currently has <code>id</code>, <code>title</code>, <code>body</code>, Category, Tags, and
-timestamps. It does <strong>not</strong> have <code>storeUuid</code> or <code>metadata</code>. The existing App Content
-endpoint is readable by ordinary authenticated API users through the default firewall;
-the Manage Content controller is <code>ROLE_ADMIN</code> CRUD.</p>
+<p>商店将会员资格支票保存在 <code>MembershipServiceInterface</code> 中。商店员工控制器
+将通过 Store 拥有的助手与 <code>AuthorizationServiceInterface</code> 组成该检查。
+因此Authorization不依赖于Store，无法形成Store &lt;-&gt; Authorization模块
+循环。它既不修改成员资格模式也不重复成员资格
+生命周期。</p>
+<h3 id="24">2.4 内容是拟议的试点，而不是现有的商店资源<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<p><code>Common\Entity\Content</code> 目前有 <code>id</code>、<code>title</code>、<code>body</code>、类别、标签和
+时间戳。它<strong>没有</strong>具有 <code>storeUuid</code> 或 <code>metadata</code>。现有应用内容
+普通经过身份验证的 API 用户可以通过默认防火墙读取端点；
+管理内容控制器是<code>ROLE_ADMIN</code> CRUD。</p>
 <p>Therefore, Store-scoped Content requires a separate Common migration and explicit
-controller changes. It cannot be enabled merely by adding Access records.</p>
+controller changes. It cannot be enabled merely by adding Authorization records.</p>
 <h3 id="25-constraints-discovered-during-audit">2.5 Constraints Discovered During Audit<a class="headerlink" href="#25-constraints-discovered-during-audit" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>BaseService</code> captures the current security token's User in its constructor. New
   authorization code MUST obtain the current user at request time where a long-lived
   service could otherwise retain stale request state.</li>
 <li>Dynamic query privileges (<code>@dql</code>, <code>@sort</code>, <code>@hints</code>) currently check literal
-  <code>ROLE_ADMIN</code>. They are outside the first Access migration and remain platform-admin
+  <code>ROLE_ADMIN</code>. They are outside the first Authorization migration and remain platform-admin
   only until a dedicated Core contract replaces this check.</li>
 <li>The generic Create/Update mixins run static accepted-property filtering before
   <code>processCreateContent()</code> and <code>processUpdateContent()</code>. Dynamic field permissions
   belong in those hooks after the static schema allow-list has removed unknown fields.</li>
 <li><code>@filter</code>, <code>@select</code>, and <code>@display</code> are user query features, not authorization
-  policies. They MUST NOT be used to store or evaluate administrator-defined Access
+  policies. They MUST NOT be used to store or evaluate administrator-defined Authorization
   rules.</li>
 </ul>
 <hr />
 <h2 id="3-architectural-boundary">3. Architectural Boundary<a class="headerlink" href="#3-architectural-boundary" title="Permanent link">&para;</a></h2>
 <h3 id="31-dependency-direction">3.1 Dependency Direction<a class="headerlink" href="#31-dependency-direction" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart LR
-    identity["Identity&lt;br/&gt;User UUID, JWT, authentication"] --&gt; access["Access&lt;br/&gt;role and permission decisions"]
+    identity["Identity&lt;br/&gt;User UUID, JWT, authentication"] --&gt; authorization["Authorization&lt;br/&gt;role and permission decisions"]
     store["Store&lt;br/&gt;membership and store lifecycle"] --&gt; access
     common["Common&lt;br/&gt;Content scope enforcement"] --&gt; access
     trade["Trade / Wallet / Payment&lt;br/&gt;future consumers"] --&gt; access</code></pre>
-<p>The arrows denote service-interface dependencies only. Access stores Identity and
+<p>The arrows denote service-interface dependencies only. Authorization stores Identity and
 Store references as UUID strings. It MUST NOT import Store entities, repositories, or
-services. Business modules consume <code>AccessServiceInterface</code>; they MUST NOT import
-Access repositories or entities.</p>
+services. Business modules consume <code>AuthorizationServiceInterface</code>; they MUST NOT import
+Authorization repositories or entities.</p>
 <h3 id="32-responsibility-matrix">3.2 Responsibility Matrix<a class="headerlink" href="#32-responsibility-matrix" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Concern</th>
 <th>Owner</th>
-<th>Access responsibility</th>
+<th>Authorization responsibility</th>
 </tr>
 </thead>
 <tbody>
@@ -4335,16 +4335,16 @@ Access repositories or entities.</p>
 <tr>
 <td>Store membership lifecycle</td>
 <td>Store</td>
-<td>Require active membership before its Store-scoped Access decision</td>
+<td>Require active membership before its Store-scoped Authorization decision</td>
 </tr>
 <tr>
 <td>Permission catalogue and role grants</td>
-<td>Access</td>
+<td>Authorization</td>
 <td>Authoritative</td>
 </tr>
 <tr>
 <td>Global/store role assignment</td>
-<td>Access</td>
+<td>Authorization</td>
 <td>Authoritative</td>
 </tr>
 <tr>
@@ -4354,12 +4354,12 @@ Access repositories or entities.</p>
 </tr>
 <tr>
 <td>HTTP authorization decision</td>
-<td>Access Voter</td>
-<td>Authoritative for declared Access permissions</td>
+<td>Authorization Voter</td>
+<td>Authoritative for declared Authorization permissions</td>
 </tr>
 <tr>
 <td>Field mutation allow-list</td>
-<td>Access role grant + business controller schema limit</td>
+<td>Authorization role grant + business controller schema limit</td>
 <td>Return effective permitted fields</td>
 </tr>
 </tbody>
@@ -4410,8 +4410,8 @@ Access repositories or entities.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>{module}:{resource}:{action}
 </code></pre></div>
 <p>Examples:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>access:role:manage
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>access:assignment:manage
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>authorization:role:manage
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>authorization:assignment:manage
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>common:content:read
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>common:content:create
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>common:content:update
@@ -4423,7 +4423,7 @@ Access repositories or entities.</p>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>wallet:voucher:manual
 </code></pre></div>
 <p><code>*:*</code> and wildcard matching are NOT persisted permission codes. The compatibility
-override for <code>ROLE_ADMIN</code> is implemented in the Access decision service, not as a
+override for <code>ROLE_ADMIN</code> is implemented in the Authorization decision service, not as a
 database record. System roles may contain every seeded concrete permission.</p>
 <h3 id="42-rbac-decision-rules">4.2 RBAC Decision Rules<a class="headerlink" href="#42-rbac-decision-rules" title="Permanent link">&para;</a></h3>
 <p>For a requested permission <code>P</code>, authenticated user <code>U</code>, and optional Store UUID <code>S</code>:</p>
@@ -4436,9 +4436,9 @@ database record. System roles may contain every seeded concrete permission.</p>
    allowed.</li>
 <li>Otherwise the request is denied.</li>
 </ol>
-<p>For a Store operation, Store's <code>StoreAccessService</code> first requires active membership
-using <code>MembershipServiceInterface</code>, then calls Access for the scoped permission. An
-Access assignment alone must never create Store membership.</p>
+<p>For a Store operation, Store's <code>StoreAuthorizationService</code> first requires active membership
+using <code>MembershipServiceInterface</code>, then calls Authorization for the scoped permission. An
+Authorization assignment alone must never create Store membership.</p>
 <p>An allow in one Store MUST NOT grant access in another Store. A global content editor
 may be introduced later as an explicit global role; it is not inferred from a
 Store-scoped editor assignment.</p>
@@ -4491,7 +4491,7 @@ it. For example, both roles below need <code>common:content:update</code>:</p>
 <p>The effective fields are the union of matching active role grants for the request's
 scope, then intersected with the controller's static schema allow-list. Unknown or
 server-owned fields such as <code>id</code>, <code>storeUuid</code>, ownership, status, and timestamps are
-never made writable by an Access grant.</p>
+never made writable by an Authorization grant.</p>
 <p>The first release uses <strong>strict denial</strong>: if a request includes any accepted schema
 field that is outside its effective field grant, the API returns <code>403</code> and performs
 no mutation. Silently stripping input is forbidden because it creates a successful
@@ -4502,7 +4502,7 @@ becoming writable accidentally.</p>
 <hr />
 <h2 id="5-persistence-model">5. Persistence Model<a class="headerlink" href="#5-persistence-model" title="Permanent link">&para;</a></h2>
 <h3 id="51-tables">5.1 Tables<a class="headerlink" href="#51-tables" title="Permanent link">&para;</a></h3>
-<p>Access owns six tables. All timestamps are UTC <code>datetime_immutable</code> values.</p>
+<p>Authorization owns six tables. All timestamps are UTC <code>datetime_immutable</code> values.</p>
 <table>
 <thead>
 <tr>
@@ -4512,33 +4512,33 @@ becoming writable accidentally.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>access_permission</code></td>
+<td><code>authorization_permission</code></td>
 <td>Stable permission catalogue</td>
 </tr>
 <tr>
-<td><code>access_role</code></td>
+<td><code>authorization_role</code></td>
 <td>Named global or Store-scoped role</td>
 </tr>
 <tr>
-<td><code>access_role_permission</code></td>
+<td><code>authorization_role_permission</code></td>
 <td>Role to permission join</td>
 </tr>
 <tr>
-<td><code>access_assignment</code></td>
+<td><code>authorization_assignment</code></td>
 <td>User UUID to role grant in a scope</td>
 </tr>
 <tr>
-<td><code>access_role_field_grant</code></td>
+<td><code>authorization_role_field_grant</code></td>
 <td>Field allow-list for a role/resource/action</td>
 </tr>
 <tr>
-<td><code>access_audit_log</code></td>
+<td><code>authorization_audit_log</code></td>
 <td>Append-only authorization administration audit</td>
 </tr>
 </tbody>
 </table>
 <h3 id="52-permission">5.2 Permission<a class="headerlink" href="#52-permission" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>access_permission
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>authorization_permission
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  id              int PK
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  code            varchar(120) UNIQUE NOT NULL
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  module          varchar(60) NOT NULL
@@ -4554,7 +4554,7 @@ becoming writable accidentally.</p>
 not a normal CRUD delete: system permissions may be disabled only after no role grants
 them, and code changes require a migration plus a new code.</p>
 <h3 id="53-role-and-permission-join">5.3 Role And Permission Join<a class="headerlink" href="#53-role-and-permission-join" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>access_role
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>authorization_role
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  id              int PK
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  uuid            varchar(36) UNIQUE NOT NULL
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  code            varchar(80) UNIQUE NOT NULL
@@ -4564,20 +4564,20 @@ them, and code changes require a migration plus a new code.</p>
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  createdAt       datetime_immutable NOT NULL
 <a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  updatedAt       datetime_immutable NULL
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>access_role_permission
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  role_id         int NOT NULL FK access_role(id) ON DELETE CASCADE
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>  permission_id   int NOT NULL FK access_permission(id) ON DELETE RESTRICT
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>authorization_role_permission
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  role_id         int NOT NULL FK authorization_role(id) ON DELETE CASCADE
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>  permission_id   int NOT NULL FK authorization_permission(id) ON DELETE RESTRICT
 <a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>  PRIMARY KEY (role_id, permission_id)
 </code></pre></div>
-<p><code>access_role_permission</code> is Access-local and may use foreign keys. System roles and
+<p><code>authorization_role_permission</code> is Authorization-local and may use foreign keys. System roles and
 permissions cannot be modified or deleted through normal Manage CRUD; only a versioned
 seed command may reconcile them.</p>
 <h3 id="54-assignment">5.4 Assignment<a class="headerlink" href="#54-assignment" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>access_assignment
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>authorization_assignment
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  id              int PK
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  uuid            varchar(36) UNIQUE NOT NULL
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  user_uuid       varchar(36) NOT NULL
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  role_id         int NOT NULL FK access_role(id) ON DELETE RESTRICT
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  role_id         int NOT NULL FK authorization_role(id) ON DELETE RESTRICT
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  scope_type      varchar(20) NOT NULL  # global | store
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  scope_uuid      varchar(36) NULL
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  granted_by_uuid varchar(36) NULL
@@ -4600,9 +4600,9 @@ seed command may reconcile them.</p>
 </ul>
 <p>Assignments are revoked, never hard-deleted, to retain the authorization history.</p>
 <h3 id="55-role-field-grant">5.5 Role Field Grant<a class="headerlink" href="#55-role-field-grant" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>access_role_field_grant
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>authorization_role_field_grant
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  id              int PK
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  role_id         int NOT NULL FK access_role(id) ON DELETE CASCADE
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  role_id         int NOT NULL FK authorization_role(id) ON DELETE CASCADE
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  resource        varchar(80) NOT NULL       # common:content
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>  action          varchar(60) NOT NULL       # create | update
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>  fields          json NOT NULL               # ordered unique field names
@@ -4615,7 +4615,7 @@ read as a complete set. A separate row per field would complicate writes without
 improving query behavior. The service validates field names against the registered
 resource schema before persistence; it does not accept arbitrary strings.</p>
 <h3 id="56-audit-log">5.6 Audit Log<a class="headerlink" href="#56-audit-log" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>access_audit_log
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>authorization_audit_log
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  id              bigint PK
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  actor_uuid      varchar(36) NULL
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  action          varchar(120) NOT NULL
@@ -4633,42 +4633,42 @@ UUIDs and permission codes only, never secrets, JWTs, passwords, addresses, or f
 request bodies.</p>
 <hr />
 <h2 id="6-module-structure-and-public-contracts">6. Module Structure And Public Contracts<a class="headerlink" href="#6-module-structure-and-public-contracts" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>src/Access/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>src/Authorization/
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>|-- Controller/
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>|   |-- App/MyAccessController.php
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>|   |-- App/MyAuthorizationController.php
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>|   `-- Manage/{Permission,Role,Assignment,AuditLog}Controller.php
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>|-- Entity/{Permission,Role,Assignment,RoleFieldGrant,AuditLog}.php
 <a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>|-- Repository/{Permission,Role,Assignment,RoleFieldGrant,AuditLog}Repository.php
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>|-- Security/AccessVoter.php
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>|-- Security/AuthorizationVoter.php
 <a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>|-- Service/
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>|   |-- AccessService.php / AccessServiceInterface.php
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>|   |-- FieldAccessService.php / FieldAccessServiceInterface.php
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>|   |-- AccessResourceRegistry.php
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>|   `-- AccessAuditService.php
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>|   |-- AuthorizationService.php / AuthorizationServiceInterface.php
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>|   |-- FieldAuthorizationService.php / FieldAuthorizationServiceInterface.php
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>|   |-- AuthorizationResourceRegistry.php
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>|   `-- AuthorizationAuditService.php
 <a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>|-- Command/SeedPermissionsCommand.php
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>`-- Resources/config/services_access.yaml
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>`-- Resources/config/services_authorization.yaml
 </code></pre></div>
-<p><code>AccessServiceInterface</code> is the only authorization contract exported to other
-business modules. It evaluates Access-owned assignment data only. It provides methods
+<p><code>AuthorizationServiceInterface</code> is the only authorization contract exported to other
+business modules. It evaluates Authorization-owned assignment data only. It provides methods
 equivalent to:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">can(User $user, string $permission, ?AccessScope $scope = null): bool;</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">require(User $user, string $permission, ?AccessScope $scope = null): void;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="x">can(User $user, string $permission, ?AuthorizationScope $scope = null): bool;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="x">require(User $user, string $permission, ?AuthorizationScope $scope = null): void;</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="x">allowedStoreUuids(User $user, string $permission): list&lt;string&gt;;</span>
 </code></pre></div>
-<p><code>FieldAccessServiceInterface</code> provides:</p>
+<p><code>FieldAuthorizationServiceInterface</code> provides:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="x">filterWritableFields(</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="x">    User $user,</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="x">    string $resource,</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="x">    string $action,</span>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="x">    array $input,</span>
 <a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="x">    array $schemaFields,</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="x">    ?AccessScope $scope,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="x">    ?AuthorizationScope $scope,</span>
 <a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="x">): array;</span>
 </code></pre></div>
-<p>It throws an Access exception when the input contains an unauthorized accepted field.
+<p>It throws an Authorization exception when the input contains an unauthorized accepted field.
 Controllers translate this to the project's existing 403 response envelope.</p>
-<p><code>AccessResourceRegistry</code> is code-owned configuration, not administrator-editable
-metadata. It maps an Access resource to valid writable schema fields:</p>
+<p><code>AuthorizationResourceRegistry</code> is code-owned configuration, not administrator-editable
+metadata. It maps an Authorization resource to valid writable schema fields:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="x">'common:content' =&gt; [</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="x">    'create' =&gt; ['title', 'body', 'category', 'tags', 'metadata'],</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="x">    'update' =&gt; ['title', 'body', 'category', 'tags', 'metadata'],</span>
@@ -4682,8 +4682,8 @@ server-owned property merely by editing a JSON field grant.</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant C as Client
     participant J as JwtAuthenticator
-    participant V as AccessVoter
-    participant A as AccessService
+    participant V as AuthorizationVoter
+    participant A as AuthorizationService
     participant B as Business Controller
 
     C-&gt;&gt;J: Bearer JWT + request
@@ -4693,12 +4693,12 @@ server-owned property merely by editing a JSON field grant.</p>
     A--&gt;&gt;V: allow or deny
     V--&gt;&gt;B: permitted request only
     B-&gt;&gt;A: obtain allowed Store UUIDs / field filter</code></pre>
-<p>The Voter performs the Access-owned action-level gate. It must receive an explicit
-<code>AccessScope</code> or a subject that implements a small <code>ScopedResourceInterface</code>; it MUST
+<p>The Voter performs the Authorization-owned action-level gate. It must receive an explicit
+<code>AuthorizationScope</code> or a subject that implements a small <code>ScopedResourceInterface</code>; it MUST
 NOT infer a Store from client body data. After this gate, Store endpoints call a
-Store-owned <code>StoreAccessService</code> that checks active membership and obtains the
-Access-derived data filter. The request cannot read or mutate a Store row without both
-checks, while module dependency remains one-way: <code>Store -&gt; Access</code>.</p>
+Store-owned <code>StoreAuthorizationService</code> that checks active membership and obtains the
+Authorization-derived data filter. The request cannot read or mutate a Store row without both
+checks, while module dependency remains one-way: <code>Store -&gt; Authorization</code>.</p>
 <h3 id="72-data-scope-enforcement">7.2 Data Scope Enforcement<a class="headerlink" href="#72-data-scope-enforcement" title="Permanent link">&para;</a></h3>
 <p>Action authorization alone does not make a row writable. A controller serving a
 Store-owned resource must constrain every lookup to permitted Store UUIDs:</p>
@@ -4724,11 +4724,11 @@ JSON field.</p>
 <p>For create and update, the order is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>static controller schema allow-list
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  -&gt; server-owned scope defaults
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  -&gt; FieldAccessService strict field validation
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  -&gt; FieldAuthorizationService strict field validation
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  -&gt; processCreateContent/processUpdateContent
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  -&gt; service.update()
 </code></pre></div>
-<p>The Access field grant narrows the static controller schema; it never expands it.
+<p>The Authorization field grant narrows the static controller schema; it never expands it.
 Resource-specific validation stays in the business service/controller hook.</p>
 <hr />
 <h2 id="8-content-pilot-contract">8. Content Pilot Contract<a class="headerlink" href="#8-content-pilot-contract" title="Permanent link">&para;</a></h2>
@@ -4800,7 +4800,7 @@ assignment is fabricated.</p>
 </tr>
 <tr>
 <td>GET</td>
-<td><code>/api/v1/app/access/me</code></td>
+<td><code>/api/v1/app/authorization/me</code></td>
 <td>authenticated</td>
 <td>own user</td>
 <td>Returns UI capability summary only</td>
@@ -4809,7 +4809,7 @@ assignment is fabricated.</p>
 </table>
 <p>The existing <code>/api/v1/manage/contents</code> endpoints remain platform administration and
 remain protected by <code>ROLE_ADMIN</code> in Phase 1. A later migration may replace their
-coarse role annotation with Access permissions after all administration routes have
+coarse role annotation with Authorization permissions after all administration routes have
 an explicit capability mapping.</p>
 <h3 id="83-example-decisions">8.3 Example Decisions<a class="headerlink" href="#83-example-decisions" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>User A: store_content_editor at Store X
@@ -4827,7 +4827,7 @@ an explicit capability mapping.</p>
 <a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>Platform administrator (ROLE_ADMIN)
 <a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>  Manage Content and Store Content -&gt; allowed during compatibility period
 </code></pre></div>
-<h3 id="84-my-access-response">8.4 My Access Response<a class="headerlink" href="#84-my-access-response" title="Permanent link">&para;</a></h3>
+<h3 id="84-my-authorization-response">8.4 My Authorization Response<a class="headerlink" href="#84-my-authorization-response" title="Permanent link">&para;</a></h3>
 <p>The self-service endpoint is informational only. The server remains authoritative.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -4848,7 +4848,7 @@ security token or rely on it to authorize a request.</p>
 <hr />
 <h2 id="9-management-apis-and-seed-data">9. Management APIs And Seed Data<a class="headerlink" href="#9-management-apis-and-seed-data" title="Permanent link">&para;</a></h2>
 <h3 id="91-management-endpoints">9.1 Management Endpoints<a class="headerlink" href="#91-management-endpoints" title="Permanent link">&para;</a></h3>
-<p>All Access management endpoints remain <code>ROLE_ADMIN</code> during Phase 1. They are
+<p>All Authorization management endpoints remain <code>ROLE_ADMIN</code> during Phase 1. They are
 break-glass administration APIs and must not be delegated through the roles they
 manage.</p>
 <table>
@@ -4862,52 +4862,52 @@ manage.</p>
 <tbody>
 <tr>
 <td>GET</td>
-<td><code>/api/v1/manage/access/permissions</code></td>
+<td><code>/api/v1/manage/authorization/permissions</code></td>
 <td>List catalogue</td>
 </tr>
 <tr>
 <td>GET</td>
-<td><code>/api/v1/manage/access/roles</code></td>
+<td><code>/api/v1/manage/authorization/roles</code></td>
 <td>List roles</td>
 </tr>
 <tr>
 <td>POST</td>
-<td><code>/api/v1/manage/access/roles</code></td>
+<td><code>/api/v1/manage/authorization/roles</code></td>
 <td>Create non-system role</td>
 </tr>
 <tr>
 <td>PUT</td>
-<td><code>/api/v1/manage/access/roles/{uuid}</code></td>
+<td><code>/api/v1/manage/authorization/roles/{uuid}</code></td>
 <td>Rename/update non-system role</td>
 </tr>
 <tr>
 <td>POST</td>
-<td><code>/api/v1/manage/access/roles/{uuid}/permissions</code></td>
+<td><code>/api/v1/manage/authorization/roles/{uuid}/permissions</code></td>
 <td>Replace concrete role permissions</td>
 </tr>
 <tr>
 <td>PUT</td>
-<td><code>/api/v1/manage/access/roles/{uuid}/field-grants/{resource}/{action}</code></td>
+<td><code>/api/v1/manage/authorization/roles/{uuid}/field-grants/{resource}/{action}</code></td>
 <td>Replace a role field grant</td>
 </tr>
 <tr>
 <td>GET</td>
-<td><code>/api/v1/manage/access/assignments</code></td>
+<td><code>/api/v1/manage/authorization/assignments</code></td>
 <td>Search current/revoked grants</td>
 </tr>
 <tr>
 <td>POST</td>
-<td><code>/api/v1/manage/access/assignments</code></td>
+<td><code>/api/v1/manage/authorization/assignments</code></td>
 <td>Grant or reactivate a role</td>
 </tr>
 <tr>
 <td>DELETE</td>
-<td><code>/api/v1/manage/access/assignments/{uuid}</code></td>
+<td><code>/api/v1/manage/authorization/assignments/{uuid}</code></td>
 <td>Revoke assignment; no hard delete</td>
 </tr>
 <tr>
 <td>GET</td>
-<td><code>/api/v1/manage/access/audit</code></td>
+<td><code>/api/v1/manage/authorization/audit</code></td>
 <td>Paginated immutable audit history</td>
 </tr>
 </tbody>
@@ -4915,7 +4915,7 @@ manage.</p>
 <p>Permission catalogue rows are seeded, not created by normal HTTP CRUD. This prevents
 an administrator from creating names that are not implemented by any endpoint.</p>
 <h3 id="92-seed-command">9.2 Seed Command<a class="headerlink" href="#92-seed-command" title="Permanent link">&para;</a></h3>
-<p><code>app:access:seed</code> is idempotent and source-controlled. It creates missing system
+<p><code>app:authorization:seed</code> is idempotent and source-controlled. It creates missing system
 permissions, system roles, their joins, and the Content pilot roles. It never removes
 or widens existing grants automatically. It reports changed records and exits nonzero
 on an incompatible system-role definition.</p>
@@ -4940,24 +4940,24 @@ on an incompatible system-role definition.</p>
 <td>Store Content editor with metadata field grant</td>
 </tr>
 <tr>
-<td><code>access_administrator</code></td>
+<td><code>authorization_administrator</code></td>
 <td>Global</td>
-<td>Reserved future Access administration role; not used to replace Phase 1 <code>ROLE_ADMIN</code></td>
+<td>Reserved future Authorization administration role; not used to replace Phase 1 <code>ROLE_ADMIN</code></td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="10-jwt-caching-and-revocation">10. JWT, Caching, And Revocation<a class="headerlink" href="#10-jwt-caching-and-revocation" title="Permanent link">&para;</a></h2>
 <h3 id="101-first-release-decision">10.1 First Release Decision<a class="headerlink" href="#101-first-release-decision" title="Permanent link">&para;</a></h3>
-<p>Authorization is resolved server-side from Access tables and cache. JWTs continue to
+<p>Authorization is resolved server-side from Authorization tables and cache. JWTs continue to
 contain Identity claims (<code>sub</code>, username, email, roles, time claims, JTI, issuer) only.
 Permissions and Store scopes are <strong>not</strong> added to JWT in Phase 1.</p>
-<p>This makes assignment revocation effective after Access-cache invalidation without
+<p>This makes assignment revocation effective after Authorization-cache invalidation without
 waiting for a 7200-second access-token expiry, and avoids large tokens for users with
 many Store assignments.</p>
 <h3 id="102-cache-contract">10.2 Cache Contract<a class="headerlink" href="#102-cache-contract" title="Permanent link">&para;</a></h3>
 <p>Cache key:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>access:effective:{userUuid}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>authorization:effective:{userUuid}
 </code></pre></div>
 <p>Cached value contains only effective permission codes, Store scope UUIDs, field grants,
 and a version/timestamp. The cache TTL is short (five minutes by default) as a fallback;
@@ -4969,7 +4969,7 @@ after successful commit. Failed transactions must not evict a cache entry for a 
 that did not persist.</p>
 <h3 id="103-high-risk-revocation">10.3 High-Risk Revocation<a class="headerlink" href="#103-high-risk-revocation" title="Permanent link">&para;</a></h3>
 <p>Revoking an Assignment removes permissions on the next request after cache eviction.
-It does not require revoking Identity refresh tokens because the JWT carries no Access
+It does not require revoking Identity refresh tokens because the JWT carries no Authorization
 permissions. Store membership revocation is independently effective because Store
 checks it on every Store operation. If a future version embeds permissions in JWT
 claims, it MUST additionally revoke active access and refresh tokens or introduce an
@@ -5026,8 +5026,8 @@ authorization version claim.</p>
 <ul>
 <li>Permission codes, role codes, Store UUIDs, and field names are validated as bounded
   ASCII strings; no user expression is evaluated.</li>
-<li><code>ROLE_ADMIN</code> bypass is logged for sensitive Store/Access mutations.</li>
-<li>Access audit lists are admin-only and must not expose unnecessary user profile data.</li>
+<li><code>ROLE_ADMIN</code> bypass is logged for sensitive Store/Authorization mutations.</li>
+<li>Authorization audit lists are admin-only and must not expose unnecessary user profile data.</li>
 <li>Store scope comes from a route parameter or a persisted target entity, never a client
   body field or <code>X-Store-Code</code> without trusted Store context resolution.</li>
 <li>Field grants cannot grant serialization visibility. Serializer groups/<code>#[Ignore]</code>
@@ -5035,18 +5035,18 @@ authorization version claim.</p>
 </ul>
 <hr />
 <h2 id="12-implementation-phases">12. Implementation Phases<a class="headerlink" href="#12-implementation-phases" title="Permanent link">&para;</a></h2>
-<h3 id="phase-1-access-foundation-and-content-pilot">Phase 1: Access Foundation And Content Pilot<a class="headerlink" href="#phase-1-access-foundation-and-content-pilot" title="Permanent link">&para;</a></h3>
+<h3 id="phase-1-authorization-foundation-and-content-pilot">Phase 1: Authorization Foundation And Content Pilot<a class="headerlink" href="#phase-1-authorization-foundation-and-content-pilot" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Create Access migration, entities, repositories, services, Voter, cache invalidator,
+<li>Create Authorization migration, entities, repositories, services, Voter, cache invalidator,
    management APIs, self-service endpoint, and seed command.</li>
-<li>Add the Access service configuration, route import, OpenAPI entries, translations,
+<li>Add the Authorization service configuration, route import, OpenAPI entries, translations,
    and MkDocs links.</li>
 <li>Add the Core <code>DqlExpression</code> row-scope foundation defined in section 15 before
    introducing Store-scoped Content routes.</li>
 <li>Add Common migration for nullable <code>Content.storeUuid</code> and nullable <code>metadata</code>.</li>
 <li>Add Store-scoped Content staff routes using the existing View mixins plus a reusable
-   Access scope trait/service adapter.</li>
-<li>Add static Content schema fields and strict <code>FieldAccessService</code> enforcement.</li>
+   Authorization scope trait/service adapter.</li>
+<li>Add static Content schema fields and strict <code>FieldAuthorizationService</code> enforcement.</li>
 <li>Preserve all existing Manage controller <code>ROLE_ADMIN</code> guards and existing User roles.</li>
 </ol>
 <h3 id="phase-2-incremental-action-migration">Phase 2: Incremental Action Migration<a class="headerlink" href="#phase-2-incremental-action-migration" title="Permanent link">&para;</a></h3>
@@ -5054,7 +5054,7 @@ authorization version claim.</p>
 <li>Define each module's explicit permission catalogue in source code.</li>
 <li>Replace class-wide <code>ROLE_ADMIN</code> annotations only where every route has a tested
    permission mapping.</li>
-<li>Migrate direct Store Staff <code>MembershipService</code> action checks behind the Access Voter
+<li>Migrate direct Store Staff <code>MembershipService</code> action checks behind the Authorization Voter
    while retaining Membership as the Store fact source.</li>
 <li>Add data-scope adapters for Store-owned resources one module at a time.</li>
 <li>Replace wallet manual provider <code>ROLE_ADMIN</code> checks only after a dedicated
@@ -5078,19 +5078,19 @@ resource, scope, and environment attributes. It MUST NOT reuse client-provided
 </thead>
 <tbody>
 <tr>
-<td><code>AccessVoter</code></td>
+<td><code>AuthorizationVoter</code></td>
 <td>anonymous deny; ROLE_ADMIN override; global allow; Store allow; wrong Store deny; missing Membership deny</td>
 </tr>
 <tr>
-<td><code>AccessService</code></td>
+<td><code>AuthorizationService</code></td>
 <td>active/revoked grants; role scope mismatch; union across roles; no cross-Store leakage</td>
 </tr>
 <tr>
-<td><code>FieldAccessService</code></td>
+<td><code>FieldAuthorizationService</code></td>
 <td>static schema intersection; basic vs metadata role; forbidden field causes 403; unknown grant field rejected</td>
 </tr>
 <tr>
-<td><code>AccessResourceRegistry</code></td>
+<td><code>AuthorizationResourceRegistry</code></td>
 <td>only code-owned resources/fields are accepted</td>
 </tr>
 <tr>
@@ -5141,7 +5141,7 @@ resource, scope, and environment attributes. It MUST NOT reuse client-provided
 <td>Unchanged legacy behavior</td>
 </tr>
 <tr>
-<td>Access management mutation</td>
+<td>Authorization management mutation</td>
 <td>Corresponding immutable audit record is written</td>
 </tr>
 </tbody>
@@ -5149,24 +5149,24 @@ resource, scope, and environment attributes. It MUST NOT reuse client-provided
 <h3 id="133-regression-and-static-analysis">13.3 Regression And Static Analysis<a class="headerlink" href="#133-regression-and-static-analysis" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Run the default UnitTest + Integration suite and keep the 90% coverage gate.</li>
-<li>Add the Access migration to MySQL migration-chain validation.</li>
+<li>Add the Authorization migration to MySQL migration-chain validation.</li>
 <li>Exercise SQLite and PostgreSQL semantics for assignment uniqueness and nullable scope
   fields; do not rely on partial unique indexes unsupported by one target database.</li>
 <li>Run PHPStan Level 8 and Rector type-rule dry-run.</li>
-<li>Do not unskip documented tests unrelated to Access.</li>
+<li>Do not unskip documented tests unrelated to Authorization.</li>
 </ul>
 <hr />
 <h2 id="14-acceptance-criteria">14. Acceptance Criteria<a class="headerlink" href="#14-acceptance-criteria" title="Permanent link">&para;</a></h2>
-<p>The Access foundation is complete when:</p>
+<p>The Authorization foundation is complete when:</p>
 <ul>
-<li>[ ] Access is a standalone module and no Access entity has a foreign key to another
+<li>[ ] Authorization is a standalone module and no Authorization entity has a foreign key to another
   business module.</li>
 <li>[ ] Permission, role, assignment, field grant, and audit records have the stated
   integrity constraints and lifecycle rules.</li>
-<li>[ ] Store-scoped decisions require both an Access grant and active Store membership.</li>
+<li>[ ] Store-scoped decisions require both an Authorization grant and active Store membership.</li>
 <li>[ ] A controller can declare an action permission without duplicating permission
   lookup logic.</li>
-<li>[ ] Every Store-scoped lookup uses an Access-derived scope filter for list, detail,
+<li>[ ] Every Store-scoped lookup uses an Authorization-derived scope filter for list, detail,
   update, delete, and batch mutation paths.</li>
 <li>[ ] Store scope is server-derived from route/record, never accepted from JSON input.</li>
 <li>[ ] Field grants are strict, registry-validated, and cannot widen controller schema.</li>
@@ -5226,7 +5226,7 @@ ABAC policy engine, a user-provided query feature, or a replacement for QueryBui
 <h3 id="152-non-negotiable-rules">15.2 Non-Negotiable Rules<a class="headerlink" href="#152-non-negotiable-rules" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Only PHP code may construct a <code>DqlExpression</code>. HTTP parameters, database records,
-  and administrator-managed Access data MUST NOT provide the expression source.</li>
+  and administrator-managed Authorization data MUST NOT provide the expression source.</li>
 <li>Variables are supplied only through the constructor values array and always bind as
   Doctrine query parameters. They are never interpolated into DQL.</li>
 <li>In an <code>ApiView::commonFilter()</code> only, <code>this</code> is an internal, read-only context
@@ -5522,7 +5522,7 @@ it proves <code>mixIdToCommonFilter()</code> adds the ID criterion on detail, up
 </code></pre></div>
 <p>No existing controller is migrated as part of the Core feature. The first migration
 must be a small user-owned resource with list/detail/update/delete integration tests.
-Only then may Access use <code>DqlExpression</code> as its readable single-Store/ownership scope
+Only then may Authorization use <code>DqlExpression</code> as its readable single-Store/ownership scope
 primitive.</p>
 
 
@@ -5547,7 +5547,7 @@ primitive.</p>
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Back to top
+  回到页面顶部
 </button>
         
       </main>
@@ -5579,7 +5579,7 @@ primitive.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
