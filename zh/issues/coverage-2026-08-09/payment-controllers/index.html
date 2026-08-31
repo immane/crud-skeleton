@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1506,7 +1506,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2647,10 +2647,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-parseamount-misparses-non-decimal-string-amounts-low" class="md-nav__link">
+  <a href="#bug-4-parseamount" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-4 — parseAmount misparses non-decimal string amounts (Low)
+        BUG-4 — parseAmount 错误解析非十进制字符串数量（低）
       
     </span>
   </a>
@@ -2658,10 +2658,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-5-webhook-masks-transient-failures-as-permanent-fail-400-low" class="md-nav__link">
+  <a href="#bug-5-webhook-fail-400" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-5 — Webhook masks transient failures as permanent FAIL 400 (Low)
+        BUG-5 — Webhook 将暂时性故障掩盖为永久性 FAIL 400（低）
       
     </span>
   </a>
@@ -2674,10 +2674,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-notes" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Notes
+        4. 注释
       
     </span>
   </a>
@@ -2813,33 +2813,33 @@
 </ul>
 <h3 id="bug-3-options">BUG-3 — 退款将原始请求正文作为网关 <code>$options</code> 转发（中/低）<a class="headerlink" href="#bug-3-options" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Location: <code>src/Payment/Controller/Manage/InvoiceController.php:118</code> (<code>... $content</code> as options) → <code>src/Payment/Service/InvoiceService.php:264</code> (<code>$gateway-&gt;refund(..., $options)</code>).</li>
-<li>Description: the full request body is passed through as <code>$options</code> to the gateway refund call. A client can include provider options such as <code>refundId</code> in the body; <code>MockGateway</code> uses <code>$options['refundId']</code> directly as the idempotency key, so a caller can override the provider refund reference.</li>
-<li>Impact: untrusted input reaches gateway options; refund idempotency keys are attacker-controlled (low impact with <code>MockGateway</code>, latent with real gateways that honor option keys).</li>
-<li>Reproduction: <code>POST /api/v1/manage/invoices/{id}/refund</code> with <code>{"amount": 100, "reason": "x", "refundId": "spoofed-id"}</code> — the stored <code>extraData</code> and returned <code>refundId</code> become <code>spoofed-id</code>.</li>
-<li>Proposed fix: whitelist the options forwarded to the gateway in <code>InvoiceService::refund()</code> (and <code>pay()</code>), or strip body-only keys (<code>amount</code>, <code>reason</code>) before forwarding.</li>
+<li>位置：<code>src/Payment/Controller/Manage/InvoiceController.php:118</code>（<code>... $content</code> 作为选项）→ <code>src/Payment/Service/InvoiceService.php:264</code> (<code>$gateway-&gt;refund(..., $options)</code>)。</li>
+<li>描述：完整的请求正文作为 <code>$options</code> 传递到网关退款调用。客户端可以在正文中包含提供者选项，例如 <code>refundId</code>； <code>MockGateway</code> 直接使用 <code>$options['refundId']</code> 作为幂等键，因此调用者可以覆盖提供者退款引用。</li>
+<li>影响：不受信任的输入到达网关选项；退款幂等性密钥由攻击者控制（对 <code>MockGateway</code> 的影响较小，对于尊重选项密钥的真实网关来说是潜在的）。</li>
+<li>复制：<code>POST /api/v1/manage/invoices/{id}/refund</code> 和 <code>{"amount": 100, "reason": "x", "refundId": "spoofed-id"}</code> — 存储的 <code>extraData</code> 和返回的 <code>refundId</code> 变成 <code>spoofed-id</code>。</li>
+<li>建议的修复：将转发到<code>InvoiceService::refund()</code>（和<code>pay()</code>）中网关的选项列入白名单，或在转发之前剥离仅正文键（<code>amount</code>、<code>reason</code>）。</li>
 </ul>
-<h3 id="bug-4-parseamount-misparses-non-decimal-string-amounts-low">BUG-4 — <code>parseAmount</code> misparses non-decimal string amounts (Low)<a class="headerlink" href="#bug-4-parseamount-misparses-non-decimal-string-amounts-low" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4-parseamount">BUG-4 — <code>parseAmount</code> 错误解析非十进制字符串数量（低）<a class="headerlink" href="#bug-4-parseamount" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Location: <code>src/Payment/Controller/Manage/InvoiceController.php:137-142</code></li>
-<li>Description: <code>parseAmount</code> decides decimal vs integer by <code>str_contains($amount, '.')</code>. Scientific-notation strings such as <code>"1e3"</code> contain no <code>'.'</code> and are cast directly: <code>(int) "1e3"</code> → <code>1</code> (silently truncating 1000 to 1 cent). Strings like <code>"1E2"</code>, <code>"0.5e2"</code>, or localized separators behave unexpectedly.</li>
-<li>Impact: a client sending a valid JSON string <code>"1e3"</code> as <code>amount</code> creates an invoice for 1 cent instead of 1000; amounts are silently wrong.</li>
-<li>Reproduction: <code>POST /api/v1/manage/invoices</code> with <code>"amount": "1e3"</code> → invoice <code>amount = 1</code>.</li>
-<li>Proposed fix: only treat strings as decimals when the value is not already an integer string (<code>(string)(int)$v === $v</code>), or delegate parsing to a strict decimal parser (e.g. <code>MoneyParser</code> / <code>decimal</code> comparison via <code>is_numeric</code> + regex).</li>
+<li>地点：<code>src/Payment/Controller/Manage/InvoiceController.php:137-142</code></li>
+<li>描述：<code>parseAmount</code>通过<code>str_contains($amount, '.')</code>决定小数还是整数。诸如 <code>"1e3"</code> 之类的科学记数法字符串不包含 <code>'.'</code>，而是直接转换：<code>(int) "1e3"</code> → <code>1</code>（默默地将 1000 截断为 1 分）。 <code>"1E2"</code>、<code>"0.5e2"</code> 等字​​符串或本地化分隔符的行为异常。</li>
+<li>影响：客户端发送有效的 JSON 字符串 <code>"1e3"</code> 作为 <code>amount</code> 创建 1 美分而不是 1000 美分的发票；金额是默默地错误的。</li>
+<li>复制：<code>POST /api/v1/manage/invoices</code> 与<code>"amount": "1e3"</code> → 发票<code>amount = 1</code>。</li>
+<li>建议的修复：仅当值还不是整数字符串 (<code>(string)(int)$v === $v</code>) 时才将字符串视为小数，或将解析委托给严格的十进制解析器（例如，通过 <code>is_numeric</code> + 正则表达式进行 <code>MoneyParser</code> / <code>decimal</code> 比较）。</li>
 </ul>
-<h3 id="bug-5-webhook-masks-transient-failures-as-permanent-fail-400-low">BUG-5 — Webhook masks transient failures as permanent <code>FAIL</code> 400 (Low)<a class="headerlink" href="#bug-5-webhook-masks-transient-failures-as-permanent-fail-400-low" title="Permanent link">&para;</a></h3>
+<h3 id="bug-5-webhook-fail-400">BUG-5 — Webhook 将暂时性故障掩盖为永久性 <code>FAIL</code> 400（低）<a class="headerlink" href="#bug-5-webhook-fail-400" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Location: <code>src/Payment/Controller/Webhook/PaymentNotifyController.php:33-34</code></li>
-<li>Description: the generic <code>\Throwable</code> catch returns HTTP 400 with body <code>FAIL</code>. This covers both transient conditions (invoice-not-found because the webhook arrived before the invoice was persisted — a retryable condition) and permanent ones (unknown gateway name).</li>
-<li>Impact: payment providers commonly stop retrying after a 4xx. A gateway webhook arriving out-of-order (before the create/pay transaction commits) would be dropped permanently, leaving the invoice <code>paying</code> forever.</li>
-<li>Reproduction: <code>POST /api/payment/notify/mock</code> with a valid secret and an <code>outTradeNo</code> that does not exist yet → 400 <code>FAIL</code> (invoice-not-found), indistinguishable from a permanent configuration error.</li>
-<li>Proposed fix: return a retry-friendly code (e.g. HTTP 200 with a <code>FAIL</code> body, or 5xx) for transient conditions such as invoice-not-found, and reserve 4xx for verification/permanent failures. Distinguish via exception type.</li>
+<li>地点：<code>src/Payment/Controller/Webhook/PaymentNotifyController.php:33-34</code></li>
+<li>描述：通用 <code>\Throwable</code> catch 返回带有正文 <code>FAIL</code> 的 HTTP 400。这涵盖了瞬时条件（未找到发票，因为 Webhook 在发票持久化之前到达 - 可重试的条件）和永久条件（未知网关名称）。</li>
+<li>影响：支付提供商通常会在 4xx 后停止重试。无序到达的网关 Webhook（在创建/支付事务提交之前）将被永久删除，从而永远留下发票 <code>paying</code>。</li>
+<li>复制：具有有效秘密的 <code>POST /api/payment/notify/mock</code> 和尚不存在的 <code>outTradeNo</code> → 400 <code>FAIL</code>（未找到发票），与永久配置错误无法区分。</li>
+<li>建议的修复：针对未找到发票等暂时情况返回重试友好的代码（例如带有 <code>FAIL</code> 正文的 HTTP 200，或 5xx），并为验证/永久失败保留 4xx。通过异常类型来区分。</li>
 </ul>
-<h2 id="4-notes">4. Notes<a class="headerlink" href="#4-notes" title="Permanent link">&para;</a></h2>
+<h2 id="4">4. 注释<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <ul>
-<li>The <code>database is locked</code> errors encountered during coverage runs are the documented shared <code>var/test.db</code> issue; retries after a 10-15 s wait produced a clean <code>OK (76 tests, 341 assertions)</code> run.</li>
-<li>The webhook/App/Manage controller tests are pure unit tests (no DB); the pre-existing <code>tests/Payment/Integration/*</code> DB tests were left untouched and continue to pass.</li>
-<li>No <code>src/</code> files were changed; no tests were skipped.</li>
+<li>覆盖运行期间遇到的 <code>database is locked</code> 错误是已记录的共享 <code>var/test.db</code> 问题；等待 10-15 秒后重试会产生干净的 <code>OK (76 tests, 341 assertions)</code> 运行。</li>
+<li>webhook/App/Manage 控制器测试是纯单元测试（无数据库）；预先存在的 <code>tests/Payment/Integration/*</code> DB 测试保持不变并继续通过。</li>
+<li>没有更改<code>src/</code>文件；没有跳过任何测试。</li>
 </ul>
 
 

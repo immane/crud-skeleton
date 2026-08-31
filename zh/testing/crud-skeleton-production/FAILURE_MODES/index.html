@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#failure-modes-and-regression-controls" class="md-skip">
           跳转至
         </a>
       
@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -688,7 +688,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -716,7 +716,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -744,7 +744,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -1286,7 +1286,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1510,7 +1510,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2286,7 +2286,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2492,7 +2492,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2605,88 +2605,88 @@
   
 
 
-<h1 id="_1">故障模式和回归控制<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h1 id="failure-modes-and-regression-controls">Failure Modes And Regression Controls<a class="headerlink" href="#failure-modes-and-regression-controls" title="Permanent link">&para;</a></h1>
 <table>
 <thead>
 <tr>
-<th>失效模式</th>
-<th>客户或系统影响</th>
-<th>所需的预防测试</th>
-<th>检测/恢复</th>
+<th>Failure mode</th>
+<th>Customer or system impact</th>
+<th>Required prevention test</th>
+<th>Detection / recovery</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>省略或扩大授权范围</td>
-<td>跨用户或跨商店数据暴露</td>
-<td>所有者、非所有者、匿名和管理路径的 HTTP 测试</td>
-<td>访问日志；通过回归测试撤销暴露和补丁</td>
+<td>Authorization scope omitted or widened</td>
+<td>cross-user or cross-store data exposure</td>
+<td>HTTP tests for owner, non-owner, anonymous, and admin paths</td>
+<td>access logs; revoke exposure and patch with regression test</td>
 </tr>
 <tr>
-<td>接受无效的工作流程转换</td>
-<td>秩序达到不可能的状态</td>
-<td>有效/无效转换测试和持久副作用断言</td>
-<td>工作流程错误和订单状态审核；仅通过定义的转换进行补偿</td>
+<td>Invalid workflow transition accepted</td>
+<td>order reaches an impossible state</td>
+<td>valid/invalid transition tests and persisted side-effect assertions</td>
+<td>workflow errors and order-state audit; compensate only via defined transition</td>
 </tr>
 <tr>
-<td>服务错误后部分写入</td>
-<td>资金、库存或订单状态出现分歧</td>
-<td>涵盖每个变异聚合的事务回滚集成测试一致性审核；使用经过审核的补偿操作进行协调</td>
-<td></td>
+<td>Partial write after a service error</td>
+<td>money, stock, or order state diverges</td>
+<td>transaction rollback integration test covering every mutated aggregate</td>
+<td>consistency audit; reconcile using audited compensating operation</td>
 </tr>
 <tr>
-<td>重复的命令或消息</td>
-<td>双重借记、预订或通知</td>
-<td>重复的 HTTP/消息传递测试断言一种持久的副作用</td>
-<td>收件箱/发件箱指标和独特约束；仅幂等重播</td>
+<td>Duplicate command or message</td>
+<td>double debit, reservation, or notification</td>
+<td>duplicate HTTP/message delivery test asserting one durable side effect</td>
+<td>inbox/outbox metrics and unique constraints; replay only idempotently</td>
 </tr>
 <tr>
-<td>无序异步事件</td>
-<td>取消的订单稍后被接受或库存仍保留</td>
-<td>两个到货订单的订购/墓碑测试</td>
-<td>死信/处理程序日志；使用持久事件标识重试</td>
+<td>Out-of-order async event</td>
+<td>cancelled order is later accepted or stock remains held</td>
+<td>ordering/tombstone test for both arrival orders</td>
+<td>dead-letter/handler logs; retry using durable event identity</td>
 </tr>
 <tr>
-<td>发件箱出版物丢失</td>
-<td>下游模块永远不会观察到已提交的更改</td>
-<td>交易加上发布者索赔/重试测试</td>
-<td>积压时间和未发布行监控；安全地重新发布</td>
+<td>Lost outbox publication</td>
+<td>downstream module never observes a committed change</td>
+<td>transaction plus publisher claim/retry test</td>
+<td>backlog age and unpublished-row monitoring; safely republish</td>
 </tr>
 <tr>
-<td>数据库方言/模式回归</td>
-<td>CI 通过但部署的查询或迁移失败</td>
-<td>fresh-schema CI 测试和 MySQL 兼容的分段迁移/查询验证</td>
-<td>迁移/部署健康检查；停止推出并回滚架构兼容版本</td>
+<td>Database dialect/schema regression</td>
+<td>CI passes but deployed query or migration fails</td>
+<td>fresh-schema CI test and MySQL-compatible staging migration/query validation</td>
+<td>migration/deployment health check; stop rollout and roll back schema-compatible release</td>
 </tr>
 <tr>
-<td>付款回调重播或金额错误</td>
-<td>欺诈或重复结算</td>
-<td>签名/提供商合约测试、显式金额测试和重放测试</td>
-<td>网关日志和发票审核；根据提供商规则退款/对账</td>
+<td>Payment callback replay or wrong amount</td>
+<td>fraudulent or duplicate settlement</td>
+<td>signature/provider contract test, explicit amount test, and replay test</td>
+<td>gateway logs and invoice audit; refund/reconcile under provider rules</td>
 </tr>
 <tr>
-<td>库存竞赛或超卖</td>
-<td>无法接受货物或预订泄露</td>
-<td>在启用库存之前对类似生产的数据库进行序列化/并发测试库存/预订审核；通过账本支持的命令释放或补偿</td>
-<td></td>
+<td>Inventory race or oversell</td>
+<td>unavailable goods accepted or reservation leaked</td>
+<td>serialized/concurrency test on a production-like database before enabling inventory</td>
+<td>stock/reservation audit; release or compensate through ledger-backed command</td>
 </tr>
 <tr>
-<td>外部提供商中断</td>
-<td>登录、上传或支付路径意外失败</td>
-<td>确定性适配器故障/超时测试和分级认证</td>
-<td>提供者错误指标；仅重试幂等操作并暴露可操作的故障</td>
+<td>External provider outage</td>
+<td>login, upload, or payment path fails unpredictably</td>
+<td>deterministic adapter failure/timeout test and staging certification</td>
+<td>provider error metrics; retry only idempotent operations and expose actionable failure</td>
 </tr>
 <tr>
-<td>无回滚计划的迁移</td>
-<td>部署无法安全恢复</td>
-<td>具有备份/恢复和前向修复计划的迁移演练</td>
-<td>部署警卫；在破坏性变化之前停止推出</td>
+<td>Migration with no rollback plan</td>
+<td>deploy cannot safely recover</td>
+<td>migration rehearsal with backup/restore and forward-fix plan</td>
+<td>deployment guard; halt rollout before destructive change</td>
 </tr>
 </tbody>
 </table>
-<p>上面一行未涵盖的事件仍遵循相同的规则：
-编写重现逃逸行为的最小回归测试，然后
-如果故障暴露出新的风险类别，则添加或细化行和不变量。</p>
+<p>An incident that is not covered by a row above still follows the same rule:
+write the smallest regression test that reproduces the escaped behaviour, then
+add or refine the row and invariant if the failure exposed a new class of risk.</p>
 
 
 

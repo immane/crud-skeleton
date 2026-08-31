@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1506,7 +1506,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2691,10 +2691,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6" class="md-nav__link">
+  <a href="#6-adding-a-new-provider" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. 添加新的提供商
+        6. Adding a New Provider
       
     </span>
   </a>
@@ -2702,10 +2702,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7" class="md-nav__link">
+  <a href="#7-related-docs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. 相关文档
+        7. Related Docs
       
     </span>
   </a>
@@ -2904,43 +2904,43 @@
 <p>并非每个跨模块规则都需要注册表。拦截现有规则的规则
 服务入口点可以分层为<strong>服务装饰器</strong>：</p>
 <ul>
-<li><code>App\Wallet\Service\Payment\InvoiceDepositRefundGuard</code> 装饰
-  <code>App\Payment\Service\InvoiceService</code> 并在 APPLIED 时阻止 <code>refund()</code>
-  <code>invoice</code>存款凭证已存在。派生的“已存”状态（已付发票
-  +已使用的优惠券）当优惠券被撤销时自动解锁。</li>
-<li><code>config/services.yaml</code>中的接线：
+<li><code>App\Wallet\Service\Payment\InvoiceDepositRefundGuard</code> decorates
+  <code>App\Payment\Service\InvoiceService</code> and blocks <code>refund()</code> while an APPLIED
+  <code>invoice</code> deposit voucher exists. The derived "deposited" state (paid invoice</li>
+<li>applied voucher) unlocks automatically when the voucher is reversed.</li>
+<li>Wiring in <code>config/services.yaml</code>:
   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">App\Wallet\Service\Payment\InvoiceDepositRefundGuard</span><span class="p">:</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">decorates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">App\Payment\Service\InvoiceService</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'@.inner'</span><span class="p p-Indicator">]</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">App\Payment\Service\InvoiceServiceInterface</span><span class="p">:</span><span class="w"> </span><span class="s">'@App\Wallet\Service\Payment\InvoiceDepositRefundGuard'</span>
 </code></pre></div></li>
-<li>一旦装饰创建两个候选者，就需要显式接口别名
-  对于接口。</li>
+<li>The explicit interface alias is required once decoration creates two candidates
+  for the interface.</li>
 </ul>
-<p>装饰适用于接口的每个消费者（控制器、贸易），所以没有
-需要更改调用站点。</p>
-<h2 id="6">6. 添加新的提供商<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>Decoration applies to every consumer of the interface (controllers, Trade), so no
+call-site changes are needed.</p>
+<h2 id="6-adding-a-new-provider">6. Adding a New Provider<a class="headerlink" href="#6-adding-a-new-provider" title="Permanent link">&para;</a></h2>
 <ol>
-<li>决定副作用的所有者 → 该模块托管实现。
-   将合约保留在其所属模块中，除非添加的行为是
-   合同本身。</li>
-<li>实现接口（第 3 节中的合同）。依赖全局<code>_instanceof</code>
-   标签 — <strong>不要</strong>手动注册服务。</li>
-<li>如果注册表不需要更改（它通过标签收集），则到此为止。如果新的
-   提供者拥有新的权限规则或源检查，将其放入
-   <code>assertPermitted()</code>/<code>authorize()</code> 根据合同。</li>
-<li>为提供商可以抛出的每条面向用户的消息添加翻译键。</li>
-<li>为提供者添加单元测试（成功 + 每个拒绝路径）和
-   驱动真实注册表的集成测试，以及生命周期测试
-   任何域派生的防护。</li>
-<li>验证 PHPStan Level 8 和 90% 覆盖率门。</li>
+<li>Decide the owner of the side-effect → that module hosts the implementation.
+   Keep the contract in its owning module unless the behavior being added is the
+   contract itself.</li>
+<li>Implement the interface (contract from §3). Rely on the global <code>_instanceof</code>
+   tag — do <strong>not</strong> register the service manually.</li>
+<li>If a registry needs no change (it collects by tag), stop there. If the new
+   provider owns a new permission rule or source check, put it in
+   <code>assertPermitted()</code>/<code>authorize()</code> per the contract.</li>
+<li>Add translation keys for every user-facing message the provider can throw.</li>
+<li>Add unit tests for the provider (success + every rejection path) and an
+   integration test that drives the real registry, plus a lifecycle test for
+   any domain-derived guard.</li>
+<li>Verify PHPStan Level 8 and the 90% coverage gate.</li>
 </ol>
-<h2 id="7">7. 相关文档<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h2 id="7-related-docs">7. Related Docs<a class="headerlink" href="#7-related-docs" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>docs/design/module-design.md</code> — 模块骨架+依赖规则</li>
-<li><code>docs/design/bundles/payment.md</code> — 网关/调整框架</li>
-<li><code>docs/design/bundles/wallet.md</code> — 凭单支持的存款/取款</li>
-<li><code>config/services.yaml</code> — 自动标签的单一事实来源</li>
+<li><code>docs/design/module-design.md</code> — module skeleton + dependency rules</li>
+<li><code>docs/design/bundles/payment.md</code> — gateway/adjustment framework</li>
+<li><code>docs/design/bundles/wallet.md</code> — voucher-backed deposit/withdraw</li>
+<li><code>config/services.yaml</code> — the single source of truth for auto-tags</li>
 </ul>
 
 

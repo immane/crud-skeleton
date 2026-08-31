@@ -27,7 +27,7 @@
     
     
       
-        <title>Inventory Controllers & Services — Coverage & Bug Report - CRUD Skeleton</title>
+        <title>库存控制器和服务 — 覆盖范围和错误报告 - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#inventory-controllers-services-coverage-bug-report" class="md-skip">
+        <a href="#_1" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Inventory Controllers &amp; Services — Coverage &amp; Bug Report
+              库存控制器和服务 — 覆盖范围和错误报告
             
           </span>
         </div>
@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    数据库和迁移
+    Database & Migrations
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    商店（多商店运营）
+    Store (Multi-Store Operations)
   
 
     
@@ -1506,7 +1506,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2580,10 +2580,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#test-files-added" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test files added
+        添加测试文件
       
     </span>
   </a>
@@ -2591,22 +2591,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage-results" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Coverage results
+        覆盖结果
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Coverage results">
+    <nav class="md-nav" aria-label="覆盖结果">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#what-each-group-of-tests-covers" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What each group of tests covers
+        每组测试涵盖的内容
       
     </span>
   </a>
@@ -2619,7 +2619,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         发现错误
@@ -2680,7 +2680,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         跳过测试
@@ -2691,10 +2691,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes
+        注释
       
     </span>
   </a>
@@ -2721,152 +2721,152 @@
   
 
 
-<h1 id="inventory-controllers-services-coverage-bug-report">Inventory Controllers &amp; Services — Coverage &amp; Bug Report<a class="headerlink" href="#inventory-controllers-services-coverage-bug-report" title="Permanent link">&para;</a></h1>
+<h1 id="_1">库存控制器和服务 — 覆盖范围和错误报告<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <ul>
-<li>Date: 2026-08-09</li>
-<li>Scope: Inventory management controllers, Inventory service layer, Inventory entities, outbox command</li>
+<li>日期：2026-08-09</li>
+<li>范围：库存管理控制器、库存服务层、库存实体、发件箱命令</li>
 <li><code>src/Inventory/Controller/Manage/RecipeController.php</code></li>
 <li><code>src/Inventory/Controller/Manage/StockController.php</code></li>
 <li><code>src/Inventory/Service/InventoryService.php</code></li>
 <li><code>src/Inventory/Service/Quantity.php</code></li>
 <li><code>src/Inventory/Service/SpecificationRecipeService.php</code></li>
-<li><code>src/Inventory/Entity/InventoryReservation.php</code>, <code>InventoryStock.php</code>, <code>Material.php</code></li>
+<li><code>src/Inventory/Entity/InventoryReservation.php</code>、<code>InventoryStock.php</code>、<code>Material.php</code></li>
 <li><code>src/Inventory/Command/PublishOutboxCommand.php</code></li>
-<li>Task: raise line coverage of these files to ~100% and find bugs.</li>
-<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+<li>任务：将这些文件的行覆盖率提高到 100% 并查找错误。</li>
+<li>遵守约束：<strong><code>src/</code> 下的任何内容均未修改</strong>。仅添加了 <code>tests/</code> 下的新测试文件和此报告。</li>
 </ul>
-<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
-<p>All new files use <code>declare(strict_types=1);</code> and only ADD coverage — nothing in <code>tests/Inventory/*</code> was modified.</p>
+<h2 id="_2">添加测试文件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>所有新文件都使用 <code>declare(strict_types=1);</code> 并且仅 ADD 覆盖范围 - <code>tests/Inventory/*</code> 中没有任何内容被修改。</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Namespace</th>
-<th>Covers</th>
+<th>文件</th>
+<th>命名空间</th>
+<th>封面</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Inventory/Controller/Manage/RecipeControllerTest.php</code></td>
 <td><code>App\Tests\Inventory\Controller\Manage</code></td>
-<td><code>RecipeController</code> (unit, mocked service)</td>
+<td><code>RecipeController</code>（单位，嘲笑的服务）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Controller/Manage/StockControllerTest.php</code></td>
 <td><code>App\Tests\Inventory\Controller\Manage</code></td>
-<td><code>StockController</code> (unit, mocked services)</td>
+<td><code>StockController</code>（单位，嘲笑的服务）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Service/QuantityCoverageTest.php</code></td>
 <td><code>App\Tests\Inventory\Service</code></td>
-<td><code>Quantity</code> normalize/multiply edge cases</td>
+<td><code>Quantity</code> 归一化/乘以边缘情况</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Service/SpecificationRecipeServiceTest.php</code></td>
 <td><code>App\Tests\Inventory\Service</code></td>
-<td><code>SpecificationRecipeService</code> (integration, real DB)</td>
+<td><code>SpecificationRecipeService</code>（集成，真实数据库）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Entity/InventoryEntityCoverageTest.php</code></td>
 <td><code>App\Tests\Inventory\Entity</code></td>
-<td>entity branch gaps (unit)</td>
+<td>实体分支间隙（单位）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Command/PublishOutboxCommandTest.php</code></td>
 <td><code>App\Tests\Inventory\Command</code></td>
-<td><code>PublishOutboxCommand</code> (unit, mocked repo/bus)</td>
+<td><code>PublishOutboxCommand</code>（单位，模拟回购/总线）</td>
 </tr>
 <tr>
 <td><code>tests/Inventory/Integration/InventoryServiceCoverageTest.php</code></td>
 <td><code>App\Tests\Inventory\Integration</code></td>
-<td><code>InventoryService</code> failure/idempotency paths (integration, <code>DatabaseBootstrapTrait</code> + <code>WebTestCase</code>)</td>
+<td><code>InventoryService</code> 失败/幂等路径（集成、<code>DatabaseBootstrapTrait</code> + <code>WebTestCase</code>）</td>
 </tr>
 </tbody>
 </table>
-<p>Controller unit tests follow the existing <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> pattern: mocked collaborators, <code>#[AllowMockObjectsWithoutExpectations]</code>, and <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> injection. DB tests reuse <code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>. No <code>ReflectionProperty::setAccessible()</code> is used anywhere.</p>
-<p>For the three one-line create hooks on <code>RecipeController</code> (<code>defaultCreateValues</code>, <code>processCreateContent</code>, <code>afterCreated</code> at lines 35/44/49) the tests invoke them via <code>ReflectionMethod::invoke()</code> (no <code>setAccessible()</code>, which is deprecated in PHP 8.5). These hooks are only reachable through <code>UpdateApiViewMixin</code>'s create-mode (<code>@mode=mixed</code>) path, which is not wired up by this controller's own <code>createAction</code>; direct invocation is the only way to exercise them without modifying <code>src/</code>.</p>
-<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
-<p>Baseline from <code>var/uncovered-map.txt</code> (generated 2026-08-09). After-values verified by running the combined Inventory suite with <code>XDEBUG_MODE=coverage</code> and diffing the <code>count="0"</code> statement lines from the Clover report:</p>
+<p>控制器单元测试遵循现有的 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 模式：模拟协作者、<code>#[AllowMockObjectsWithoutExpectations]</code> 和 <code>setRequestStack</code>/<code>setSerializer</code>/<code>setTranslator</code> 注入。数据库测试重用<code>DatabaseBootstrapTrait</code> + <code>IntegrationWebTestCase</code>。任何地方都没有使用 <code>ReflectionProperty::setAccessible()</code>。</p>
+<p>对于 <code>RecipeController</code> 上的三个单行创建挂钩（第 35/44/49 行的 <code>defaultCreateValues</code>、<code>processCreateContent</code>、<code>afterCreated</code>），测试通过 <code>ReflectionMethod::invoke()</code> 调用它们（没有 <code>setAccessible()</code>，它在 PHP 8.5 中已弃用）。这些挂钩只能通过 <code>UpdateApiViewMixin</code> 的创建模式 (<code>@mode=mixed</code>) 路径访问，该路径不是由该控制器自己的 <code>createAction</code> 连接的；直接调用是在不修改 <code>src/</code> 的情况下执行它们的唯一方法。</p>
+<h2 id="_3">覆盖结果<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>来自 <code>var/uncovered-map.txt</code> 的基线（2026-08-09 生成）。通过使用 <code>XDEBUG_MODE=coverage</code> 运行组合的 Inventory 套件并从 Clover 报告中区分 <code>count="0"</code> 语句行来验证后值：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=coverage php vendor/bin/phpunit tests/Inventory/** --coverage-clover /tmp/inv-final.xml
 </code></pre></div>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Baseline</th>
-<th>After new tests</th>
+<th>文件</th>
+<th>基线</th>
+<th>经过新的测试</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>RecipeController</code> (was 79.31%)</td>
+<td><code>RecipeController</code>（79.31%）</td>
 <td>35,44,49,73,76,83</td>
-<td><strong>100% — all covered</strong></td>
+<td><strong>100% — 全部覆盖</strong></td>
 </tr>
 <tr>
-<td><code>StockController</code> (was 93.1%)</td>
+<td><code>StockController</code>（为 93.1%）</td>
 <td>58,59</td>
-<td><strong>100% — all covered</strong></td>
+<td>58,59 <strong>100% — 全部覆盖</strong></td>
 </tr>
 <tr>
-<td><code>SpecificationRecipeService</code> (was 93.33%)</td>
+<td><code>SpecificationRecipeService</code>（为 93.33%）</td>
 <td>35</td>
-<td><strong>100% — all covered</strong></td>
+<td>35 <strong>100% — 全部覆盖</strong></td>
 </tr>
 <tr>
-<td><code>InventoryService</code> (was 94.16%)</td>
+<td><code>InventoryService</code>（为 94.16%）</td>
 <td>78,101,102,105,112,117,143,159,167,212,284,289,331,341,379</td>
-<td><strong>100% — all covered</strong></td>
+<td><strong>100% — 全部覆盖</strong></td>
 </tr>
 <tr>
-<td><code>Quantity</code> (was 96.15%)</td>
+<td><code>Quantity</code>（为 96.15%）</td>
 <td>14,26,75</td>
-<td><strong>98.72% — 14,26 covered; line 75 is dead code (see Bug 1)</strong></td>
+<td><strong>98.72% — 覆盖 14,26；第 75 行是死代码（参见 Bug 1）</strong></td>
 </tr>
 <tr>
-<td><code>InventoryReservation</code> (was 97.14%)</td>
+<td><code>InventoryReservation</code>（为 97.14%）</td>
 <td>91</td>
-<td><strong>100% — covered</strong></td>
+<td>91 <strong>100% — 覆盖</strong></td>
 </tr>
 <tr>
-<td><code>InventoryStock</code> (was 96.3%)</td>
+<td><code>InventoryStock</code>（为 96.3%）</td>
 <td>91</td>
-<td><strong>100% — covered</strong></td>
+<td>91 <strong>100% — 覆盖</strong></td>
 </tr>
 <tr>
-<td><code>Material</code> (was 97.56%)</td>
+<td><code>Material</code>（为 97.56%）</td>
 <td>190</td>
-<td><strong>100% — covered</strong></td>
+<td>190 <strong>100% — 覆盖</strong></td>
 </tr>
 <tr>
-<td><code>PublishOutboxCommand</code> (was 97.22%)</td>
+<td><code>PublishOutboxCommand</code>（为 97.22%）</td>
 <td>32</td>
-<td><strong>100% — covered</strong></td>
+<td>32 <strong>100% — 覆盖</strong></td>
 </tr>
 </tbody>
 </table>
-<h3 id="what-each-group-of-tests-covers">What each group of tests covers<a class="headerlink" href="#what-each-group-of-tests-covers" title="Permanent link">&para;</a></h3>
-<p><strong><code>InventoryServiceCoverageTest</code></strong> (the biggest win — all 15 baseline-uncovered lines):</p>
+<h3 id="_4">每组测试涵盖的内容<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p><strong><code>InventoryServiceCoverageTest</code></strong> （最大的胜利 — 所有 15 条基线未覆盖的行）：</p>
 <ul>
-<li><strong>78</strong> — <code>adjustStock</code> rejects <code>0.000000</code> delta and blank reason.</li>
-<li><strong>105</strong> — repeated <code>adjustStock</code> with the same <code>referenceId</code> is idempotent: the existing stock is returned and the on-hand balance is not re-applied.</li>
-<li><strong>101/102</strong> — a ledger entry whose stock row has been removed (orphan ledger) makes the idempotent <code>adjustStock</code> fail loudly with <code>Adjustment ledger does not have a stock balance.</code>.</li>
-<li><strong>112</strong> — <code>allowNegativeStock</code> parameter applied to an <em>existing</em> stock inside <code>adjustStock</code>.</li>
-<li><strong>117</strong> — adjusting on-hand below the confirmed-reserved quantity is rejected.</li>
-<li><strong>143 / 159</strong> — <code>setStockAllowNegative</code> with a missing material in both the pre-check branch (<code>false</code>) and the transaction branch (<code>true</code>).</li>
-<li><strong>167</strong> — <code>setStockAllowNegative</code> updates an existing stock row.</li>
-<li><strong>212</strong> — a second <code>reserve</code> for a <code>storeOrderUuid</code> that already has a reservation raises <code>InventoryReservationConflictException</code>.</li>
-<li><strong>284 / 289</strong> — <code>release</code> fails explicitly when a reservation line's material, or its stock row, is missing.</li>
-<li><strong>331 / 341</strong> — <code>reserve</code> rejects an empty item list and duplicate/malformed line IDs.</li>
-<li><strong>379</strong> — a recipe whose line material is inactive yields a <code>MATERIAL_INACTIVE</code> rejection.</li>
+<li><strong>78</strong> — <code>adjustStock</code> 拒绝 <code>0.000000</code> 增量和空白原因。</li>
+<li><strong>105</strong> — 使用相同的 <code>referenceId</code> 重复 <code>adjustStock</code> 是幂等的：返回现有库存，并且不会重新应用现有库存。</li>
+<li><strong>101/102</strong> — 其库存行已被删除的分类帐条目（孤立分类帐）使幂等 <code>adjustStock</code> 因 <code>Adjustment ledger does not have a stock balance.</code> 而严重失败。</li>
+<li><strong>112</strong> — <code>allowNegativeStock</code> 参数应用于 <code>adjustStock</code> 内的<em>现有</em>股票。</li>
+<li><strong>117</strong> — 将现有量调整到低于确认的预留数量将被拒绝。</li>
+<li><strong>143 / 159</strong> — <code>setStockAllowNegative</code> 在预检查分支 (<code>false</code>) 和交易分支 (<code>true</code>) 中均缺少材料。</li>
+<li><strong>167</strong> — <code>setStockAllowNegative</code> 更新现有库存行。</li>
+<li><strong>212</strong> — 已经有预留的 <code>storeOrderUuid</code> 的第二个 <code>reserve</code> 引发 <code>InventoryReservationConflictException</code>。</li>
+<li><strong>284 / 289</strong> — 当预留行的材料或其库存行丢失时，<code>release</code> 会显式失败。</li>
+<li><strong>331 / 341</strong> — <code>reserve</code> 拒绝空项目列表和重复/格式错误的行 ID。</li>
+<li><strong>379</strong> — 线路材料处于非活动状态的配方会产生 <code>MATERIAL_INACTIVE</code> 拒绝。</li>
 </ul>
-<p><strong><code>SpecificationRecipeServiceTest</code></strong> — <strong>35</strong> (duplicate <code>specificationUuid</code>) plus the missing/inactive-material branch, against the real DB.</p>
-<p><strong><code>RecipeControllerTest</code></strong> — every <code>createAction</code> branch: 201 with and without an integer <code>sort</code> (83), missing specification / empty lines (62), line missing <code>materialUuid</code>/<code>quantityPerUnit</code> (73), non-integer <code>sort</code> (76), and the service-throws → 400 path (92); the three create hooks (35/44/49) via reflection.</p>
-<p><strong><code>StockControllerTest</code></strong> — <code>detailAction</code> success + 404, <code>adjustAction</code> payload validation (44), success (57) and the <code>catch</code> (58/59), <code>policyAction</code> validation (68), success and <code>catch</code> (77).</p>
-<p><strong><code>QuantityCoverageTest</code></strong> — <strong>14</strong> (malformed decimal strings incl. 7-fraction-digit inputs, exponents, empty) and <strong>26</strong> (<code>positive=true</code> with zero/negative). The small-product <code>multiply</code> cases (<code>0.000000</code>, <code>0.000001 × n</code>) document the padding area.</p>
-<p><strong><code>InventoryEntityCoverageTest</code></strong> — <code>InventoryReservation::getId()</code> (91), <code>InventoryStock::setAllowNegativeStock(false)</code> with a negative available balance (91), <code>Material</code> setters rejecting blank code/name/unit (190).</p>
+<p><strong><code>SpecificationRecipeServiceTest</code></strong> — <strong>35</strong>（重复<code>specificationUuid</code>）加上缺失/非活动材料分支，与真实数据库相对应。</p>
+<p><strong><code>RecipeControllerTest</code></strong> — 每个 <code>createAction</code> 分支：带或不带整数 <code>sort</code> 的 201 (83)、缺少规范/空行 (62)、缺少行 <code>materialUuid</code>/<code>quantityPerUnit</code> (73)、非整数 <code>sort</code> (76) 以及服务抛出 → 400 路径 (92)；这三个通过反射创建钩子（35/44/49）。</p>
+<p><strong><code>StockControllerTest</code></strong> — <code>detailAction</code> 成功 + 404、<code>adjustAction</code> 有效负载验证 (44)、成功 (57) 和 <code>catch</code> (58/59)、<code>policyAction</code> 验证 (68)、成功和 <code>catch</code> (77)。</p>
+<p><strong><code>QuantityCoverageTest</code></strong> — <strong>14</strong>（格式错误的十进制字符串，包括 7 位小数输入、指数、空）和 <strong>26</strong>（带有零/负数的 <code>positive=true</code>）。小产品 <code>multiply</code> 案例（<code>0.000000</code>、<code>0.000001 × n</code>）记录了填充区域。</p>
+<p><strong><code>InventoryEntityCoverageTest</code></strong> — <code>InventoryReservation::getId()</code> (91)、<code>InventoryStock::setAllowNegativeStock(false)</code> 可用余额为负 (91)、<code>Material</code> 设置器拒绝空白代码/名称/单位 (190)。</p>
 <p><strong><code>PublishOutboxCommandTest</code></strong> — <strong>32</strong>（声明返回 false → <code>continue</code>），加上确认/拒绝/释放的调度成功、不支持的主题延迟和传输失败重试路径。</p>
-<h2 id="_1">发现错误<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_5">发现错误<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <h3 id="bug-1-quantitymultiply">Bug 1 — <code>Quantity::multiply()</code> 包含无法访问的填充代码（低/死代码）<a class="headerlink" href="#bug-1-quantitymultiply" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Inventory/Service/Quantity.php:74-75</code></li>
@@ -2898,12 +2898,12 @@
 <li><strong>复制：</strong> 保留一个已确认的预订，其行引用了不存在的材料，然后调用 <code>release()</code> — 它在第 284 行抛出 <em>after</em> <code>$reservation-&gt;release()</code> 已经返回 <code>true</code>； <code>$reservation-&gt;getStatus()</code> 报告 <code>released</code>，尽管没有任何内容被保留。</li>
 <li><strong>建议的修复：</strong> 在调用 <code>$reservation-&gt;release()</code> 之前预先验证所有行（材料 + 库存查找），或将失败包装在 <code>$this-&gt;entityManager-&gt;refresh($reservation)</code> / 重新获取中，以便实体无法保留半应用状态。</li>
 </ul>
-<h2 id="_2">跳过测试<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>None. Every new test passes against the current <code>src/</code> (43 tests, 142 assertions, green). No correct-behavior test had to be skipped due to a <code>src/</code> bug — the InventoryService/controller code behaves as documented for all covered paths. The bugs above are found by inspection/analysis and, for Bug 1 and Bug 2, verified empirically, but none of them cause a failure of a correct-behavior test that needed to be recorded as skipped.</p>
-<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<h2 id="_6">跳过测试<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>没有任何。每个新测试都会通过当前的 <code>src/</code>（43 个测试，142 个断言，绿色）。由于 <code>src/</code> 错误，不必跳过正确行为测试 - InventoryService/控制器代码的行为与所有覆盖路径的记录相同。上述错误是通过检查/分析发现的，对于错误 1 ​​和错误 2，通过经验验证，但它们都不会导致需要记录为跳过的正确行为测试失败。</p>
+<h2 id="_7">注释<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Transient SQLite <code>database is locked</code> errors were observed when integration classes that drop/recreate <code>var/test.db</code> run back-to-back; per the project convention, waiting 10–15 s and re-running resolved them (all runs ended green).</li>
-<li>The full <code>tests/Inventory</code> directory shows pre-existing flakiness in <code>InventoryReservationRequestedHandlerIntegrationTest</code> when all Inventory tests run together (unrelated to these changes); the new files are green both individually and together.</li>
+<li>当删除/重新创建 <code>var/test.db</code> 的集成类连续运行时，观察到瞬态 SQLite <code>database is locked</code> 错误；根据项目惯例，等待 10-15 秒并重新运行即可解决这些问题（所有运行均以绿色结束）。</li>
+<li>当所有 Inventory 测试一起运行时，完整的 <code>tests/Inventory</code> 目录显示 <code>InventoryReservationRequestedHandlerIntegrationTest</code> 中预先存在的不稳定情况（与这些更改无关）；新文件单独和一起都是绿色的。</li>
 </ul>
 
 
