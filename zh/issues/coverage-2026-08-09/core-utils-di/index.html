@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -2684,10 +2684,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#testability-finding-location-blocker-for-full-coverage" class="md-nav__link">
+  <a href="#location-blocker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Testability finding — Location (BLOCKER for full coverage)
+        可测试性发现 — Location （用于完全覆盖的 BLOCKER）
       
     </span>
   </a>
@@ -2695,10 +2695,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#uncovered-lines-still-remaining-all-intentional" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Uncovered lines still remaining (all intentional)
+        仍然存在未覆盖的线（都是故意的）
       
     </span>
   </a>
@@ -2706,10 +2706,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#skipped-items" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Skipped items
+        跳过的项目
       
     </span>
   </a>
@@ -2717,10 +2717,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#command-reference" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Command reference
+        命令参考
       
     </span>
   </a>
@@ -2959,32 +2959,32 @@
 <li><strong>Reproduction:</strong> <code>Inflect::pluralize('apple')</code> → <code>'apples'</code> (never falls through).</li>
 <li><strong>Proposed fix:</strong> remove the unreachable <code>return $string;</code> (or remove the catch-all rule if unintended).</li>
 </ul>
-<h2 id="testability-finding-location-blocker-for-full-coverage">Testability finding — <code>Location</code> (BLOCKER for full coverage)<a class="headerlink" href="#testability-finding-location-blocker-for-full-coverage" title="Permanent link">&para;</a></h2>
-<p><code>Location</code> is a static class that hard-codes <code>new Curl()</code> (lines 18, 33, 50) and the Tencent URLs in <code>const</code> values. It is <strong>not dependency-injectable</strong>, so the real class cannot be exercised without either the network or the <code>Curl\Curl</code> class existing. Additionally, the package is <strong>not installed</strong>, so the real methods cannot run at all.</p>
-<p>To keep the suite green and still prove the decode/JSON paths, <code>LocationTest</code> defines a <strong>test-only double of <code>Curl\Curl</code></strong> in the test file (the class name is otherwise unresolvable) whose <code>get()</code> returns a configurable response body string — faithfully matching php-curl-class’s <code>exec()</code> contract. This yields coverage of <code>getLocation</code>/<code>getDistance</code> success + error paths. <code>getAddress</code> is intentionally <strong>not</strong> covered: a faithful stub makes it throw the <code>\Error</code> described in Bug L-2, and per task rules no test may assert broken behaviour.</p>
-<p>Proposed refactor for full testability:
-1. Inject the HTTP client (<code>Curl</code> or Symfony <code>HttpClientInterface</code>) via constructor/static setter instead of <code>new Curl()</code>.
-2. Make the API base URL + key configurable (constructor or constants → parameters), so tests can point at a fake endpoint.
-3. Return typed DTOs/<code>null</code> instead of raw JSON objects.</p>
-<h2 id="uncovered-lines-still-remaining-all-intentional">Uncovered lines still remaining (all intentional)<a class="headerlink" href="#uncovered-lines-still-remaining-all-intentional" title="Permanent link">&para;</a></h2>
+<h2 id="location-blocker">可测试性发现 — <code>Location</code> （用于完全覆盖的 BLOCKER）<a class="headerlink" href="#location-blocker" title="Permanent link">&para;</a></h2>
+<p><code>Location</code> 是一个静态类，它对 <code>new Curl()</code>（第 18、33、50 行）和 <code>const</code> 值中的腾讯 URL 进行硬编码。它<strong>不可依赖注入</strong>，因此在没有网络或 <code>Curl\Curl</code> 类存在的情况下无法执行真实的类。此外，该软件包<strong>未安装</strong>，因此真正的方法根本无法运行。</p>
+<p>为了保持套件绿色并仍然证明解码/JSON路径，<code>LocationTest</code>在测试文件中定义了一个<strong>仅测试的<code>Curl\Curl</code></strong>双精度（否则类名无法解析），其<code>get()</code>返回可配置的响应正文字符串 - 忠实匹配php-curl-class的<code>exec()</code>合同。这会产生 <code>getLocation</code>/<code>getDistance</code> 成功 + 错误路径的覆盖范围。 <code>getAddress</code> 故意<strong>不</strong>覆盖：忠实的存根使其抛出 Bug L-2 中描述的 <code>\Error</code>，并且根据任务规则，没有测试可以断言损坏的行为。</p>
+<p>建议重构以实现完整的可测试性：
+1. 通过构造函数/静态 setter 而不是 <code>new Curl()</code> 注入 HTTP 客户端（<code>Curl</code> 或 Symfony <code>HttpClientInterface</code>）。
+2. 使 API 基本 URL + 键可配置（构造函数或常量 → 参数），以便测试可以指向虚假端点。
+3. 返回类型化的 DTO/<code>null</code> 而不是原始 JSON 对象。</p>
+<h2 id="_1">仍然存在未覆盖的线（都是故意的）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>RsaClient.php</code> 54, 55, 103, 104 — <code>openssl_free_key()</code> deprecated since PHP 8.0; covering emits a deprecation (Bug R-4).</li>
-<li><code>RsaClient.php</code> 230, 272, 313, 355 — <code>$partLen &lt; 1</code> guard: requires an RSA key &lt; 88 bits (encrypt) / &lt; 8 bits (decrypt); <code>openssl_pkey_new()</code> minimum is 512 bits → unreachable.</li>
-<li><code>RsaClient.php</code> 237, 279, 320, 362 — <code>$key === false</code> guards after <code>get*KenLen()</code> already validated the same key → logically unreachable defensive code.</li>
-<li><code>RsaClient.php</code> 247, 289, 330 — <code>openssl_*_encrypt/decrypt</code> failure branches; unreachable with a valid key of the computed size (chunks always fit the modulus).</li>
-<li><code>Math.php</code> 78 — <code>lcg_value()</code> deprecated since 8.4 (Bug M-2).</li>
-<li><code>Math.php</code> 85, 91 — <code>mt_rand()</code>/<code>rand()</code> single-argument calls always throw on PHP 8.5 (Bug M-1).</li>
-<li><code>Inflect.php</code> 135 — dead code (Bug I-1).</li>
-<li><code>Location.php</code> 30, 33, 34, 35, 37, 38, 39 — all inside the broken <code>getAddress()</code> (Bug L-2).</li>
+<li><code>RsaClient.php</code> 54, 55, 103, 104 — <code>openssl_free_key()</code> 自 PHP 8.0 起已弃用；覆盖会发出弃用信息（Bug R-4）。</li>
+<li><code>RsaClient.php</code> 230, 272, 313, 355 — <code>$partLen &lt; 1</code> 防护：需要 &lt; 88 位（加密）/ &lt; 8 位（解密）的 RSA 密钥； <code>openssl_pkey_new()</code> 最小值为 512 位 → 无法访问。</li>
+<li><code>RsaClient.php</code> 237, 279, 320, 362 — <code>$key === false</code> 在 <code>get*KenLen()</code> 已经验证了相同的密钥之后进行防护 → 逻辑上无法访问的防御代码。</li>
+<li><code>RsaClient.php</code> 247, 289, 330 — <code>openssl_*_encrypt/decrypt</code> 失败分支；使用计算大小的有效密钥无法访问（块始终适合模数）。</li>
+<li><code>Math.php</code> 78 — <code>lcg_value()</code> 自 8.4 起已弃用（Bug M-2）。</li>
+<li><code>Math.php</code> 85, 91 — <code>mt_rand()</code>/<code>rand()</code> 单参数调用总是在 PHP 8.5 上抛出（Bug M-1）。</li>
+<li><code>Inflect.php</code> 135 — 死代码（Bug I-1）。</li>
+<li><code>Location.php</code> 30, 33, 34, 35, 37, 38, 39 — 全部位于损坏的 <code>getAddress()</code> 内（Bug L-2）。</li>
 </ul>
-<h2 id="skipped-items">Skipped items<a class="headerlink" href="#skipped-items" title="Permanent link">&para;</a></h2>
+<h2 id="_2">跳过的项目<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>MathCoverageTest::testMtRand</code> — <strong>skipped</strong> (<code>See report — bug M-1</code>): asserts the correct behaviour (an int in <code>[0, max]</code>), which cannot hold because <code>Math::mt_rand()</code> always throws <code>ArgumentCountError</code>.</li>
-<li><code>MathCoverageTest::testRand</code> — <strong>skipped</strong> (<code>See report — bug M-1</code>): same for <code>Math::rand()</code>.</li>
-<li><code>MathCoverageTest::testLcgValue</code> — <strong>skipped</strong> (<code>See report — bug M-2</code>): covering it emits a deprecation.</li>
-<li><code>LocationTest::testGetAddressIsBrokenByStringMethodCall</code> — <strong>skipped</strong> (<code>See report — bug L-2</code>): getAddress is broken; no test asserts the wrong behaviour.</li>
+<li><code>MathCoverageTest::testMtRand</code> — <strong>跳过</strong> (<code>See report — bug M-1</code>)：断言正确的行为（<code>[0, max]</code> 中的 int），该行为不能成立，因为 <code>Math::mt_rand()</code> 总是抛出 <code>ArgumentCountError</code>。</li>
+<li><code>MathCoverageTest::testRand</code> — <strong>跳过</strong> (<code>See report — bug M-1</code>)：与 <code>Math::rand()</code> 相同。</li>
+<li><code>MathCoverageTest::testLcgValue</code> — <strong>跳过</strong> (<code>See report — bug M-2</code>)：覆盖它会发出弃用信息。</li>
+<li><code>LocationTest::testGetAddressIsBrokenByStringMethodCall</code> — <strong>跳过</strong> (<code>See report — bug L-2</code>)：getAddress 已损坏；没有测试断言错误的行为。</li>
 </ul>
-<h2 id="command-reference">Command reference<a class="headerlink" href="#command-reference" title="Permanent link">&para;</a></h2>
+<h2 id="_3">命令参考<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># run all new tests for this scope</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>off<span class="w"> </span>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>tests/Core/Utils/RsaClientTest.php<span class="w"> </span><span class="se">\</span>

@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -2602,6 +2602,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#45-authorization-manage-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Authorization (Manage + App)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3051,10 +3062,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-24-migrations" class="md-nav__link">
+  <a href="#15-database-tables-26-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (24 Migrations)
+        15. Database Tables (26 Migrations)
       
     </span>
   </a>
@@ -3326,6 +3337,17 @@
     <span class="md-ellipsis">
       
         24. Platform Operations Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-authorization-module-phase-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. Authorization Module (Phase 1)
       
     </span>
   </a>
@@ -3482,6 +3504,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#45-authorization-manage-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Authorization (Manage + App)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3931,10 +3964,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-24-migrations" class="md-nav__link">
+  <a href="#15-database-tables-26-migrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (24 Migrations)
+        15. Database Tables (26 Migrations)
       
     </span>
   </a>
@@ -4212,6 +4245,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#25-authorization-module-phase-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. Authorization Module (Phase 1)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4234,15 +4278,15 @@
 
 <h1 id="crud-skeleton-full-codebase-context">CRUD Skeleton - Full Codebase Context<a class="headerlink" href="#crud-skeleton-full-codebase-context" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Context snapshot. Last updated: 2026-08-15</p>
+<p>Context snapshot. Last updated: 2026-09-01</p>
 </blockquote>
 <hr />
 <h2 id="1-project-overview">1. Project Overview<a class="headerlink" href="#1-project-overview" title="Permanent link">&para;</a></h2>
 <p><strong>CRUD Skeleton</strong> is a Symfony 8.1 API backend skeleton with:
 - <strong>PHP 8.4+</strong>, Doctrine ORM 3.6, MySQL 8 (Docker), SQLite (tests)
 - JWT authentication (RS256), OTP/SMS login, WeChat Mini Program / Official Account login
-- Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>)
-- Modular architecture: <strong>Core</strong> (framework), <strong>Common</strong> (CMS), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (commercial orders), <strong>Store</strong> (multi-store operations), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Inventory</strong> (stock &amp; reservation), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
+- Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>) + server-owned row-scope <code>DqlExpression</code> (<code>entity.getUser() == this.getUser()</code>, <code>in</code>/<code>not in</code> with empty-collection safety)
+- Modular architecture: <strong>Core</strong> (framework + DqlExpression), <strong>Common</strong> (CMS + store-scoped Content pilot), <strong>Authorization</strong> (independent RBAC — scoped Store grants, strict field grants, audit, <code>AuthorizationVoter</code>), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (commercial orders), <strong>Store</strong> (multi-store operations), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Inventory</strong> (stock &amp; reservation), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
 - MkDocs Material + GitHub Pages documentation (<strong>mermaid diagram rendering enabled</strong> via CDN + <code>pymdownx.superfences</code> custom fence)
@@ -4257,154 +4301,165 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── src/Core/                     # Framework core
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── Controller/RestController.php    # Base API controller (success/warning/pagination)
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── Controller/System/               # System introspection (EntityController, RouterController)
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── View/                     # PHP traits: List, Detail, Create, Update, Delete, Workflow, Single, Transform
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── View/                     # PHP traits: List, Detail, Create, Update, Delete, Workflow, Single, Transform + ApiView (commonFilter/DqlExpression binding)
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── View/ApiViewMessages.php         # Extracted message constants for View traits (ENTITY_NOT_FOUND, SUCCESS, INVALID_JSON, propertyRequired(), etc.)
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── Service/BaseService.php          # Abstract CRUD service (@template TEntity generics)
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── Service/Concern/                 # Traits: Infrastructure, ReadList, Mutation (@template TEntity)
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── Parser/ExpressionDqlParser.php   # Expression → DQL compiler
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── Serializer/FlatNormalizer.php    # Custom object normalizer (Doctrine internal objects → class names)
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── EventListener/                   # ExceptionInterceptor, ControllerListener, OpenApiEnricherListener, LocaleListener, AccessLogListener
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   └── Utils/                           # UUID, Math, RSA, Location, Inflect, etc.
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>├── src/Common/                   # CMS module: Category, Tag, Content, Comment, Page, Media, Setting, Picture
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── Entity/                   # 8 entities
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── Repository/
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   ├── Service/
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   └── Controller/App/ + Manage/ + Public/
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├── src/Identity/                 # Authentication &amp; Identity
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│   ├── Entity/User.php, RefreshToken.php, Profile.php     # User has __toString(): username fallback to email; User::$profile (OneToOne→Profile)
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   ├── Command/CreateUserCommand.php
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│   └── Controller/AuthController.php, App/UserController.php, App/ProfileController.php, Manage/UserController.php, Manage/ProfileController.php
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>├── src/Trade/                    # E-commerce module
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem, TradeOutboxMessage
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   ├── Service/OrderService.php        # StoreContext-aware creation + price pipeline
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│   ├── Command/PublishOutboxCommand.php # app:trade:outbox:publish
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│   ├── MessageHandler/           # Store acceptance/rejection consumers
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│   ├── Service/Pricing/                # PriceCalculatorInterface (Base, Quantity, Total)
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│   ├── EventListener/OrderWorkflowListener.php
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel + spec browse/v2
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>├── src/Store/                    # Multi-store operational boundary
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│   ├── Entity/                   # Store, membership, StoreOrder, Outbox, Inbox
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Service/                  # Context, membership, StoreOrder, Outbox services
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── MessageHandler/           # Inbox-idempotent Trade order consumer; Inventory outcome consumers
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Command/PublishOutboxCommand.php # app:store:outbox:publish
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   └── Controller/App/ + Manage/ + Staff/
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>├── src/Payment/                  # Payment module
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult, PaymentAdjustmentContext, PaymentAdjustmentResult
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator('payment.adjustment_provider')] registry
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator('payment.gateway')] registry
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/App/ + Manage/ + Webhook/
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│       # Current Trade result propagation is synchronous Invoice domain events.
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│       # Planned phase 1: Payment Outbox -&gt; Trade Inbox; Payment Inbox is deferred.
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>├── src/Wallet/                   # Wallet module
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Entity/                   # Wallet, Transaction, Voucher, VoucherComment, PaymentDeduction
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Repository/               # Wallet, Transaction, Voucher, VoucherComment, PaymentDeduction
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/Transfer/TransferService.php     # Atomic transfers (+ hold/release via `held`)
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/Deposit/                 # DepositService + provider registry (voucher-backed credit)
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/Withdraw/                # WithdrawService + provider registry (voucher-backed debit)
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   ├── Service/VoucherService.php, VoucherCommentService.php   # list/detail + append-only annotations
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│   ├── Service/Payment/PaymentDeductionService.php    # Wallet-owned deduction lifecycle
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>│   ├── DTO/PaymentDeductionRequest.php
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance + self deposit/withdraw; Manage CRUD/audit/reconcile/deposit/withdraw/reverse
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>├── src/Wechat/                   # WeChat module
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Repository/WechatUserRepository.php
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   ├── Service/WechatUserService.php   # CRUD service
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   └── Controller/
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   └── Resources/config/services_storage.yaml
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│   ├── Repository/
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│   ├── Controller/App/           # Read-only endpoints
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   └── Exception/
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>├── src/Inventory/                # Inventory module (material, stock, recipe, reservation)
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>│   ├── Entity/                   # Material, Stock, SpecificationRecipe, RecipeLine, Reservation, ReservationLine, LedgerEntry, Inbox, Outbox
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│   ├── Repository/
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   ├── Service/                  # InventoryService (reserve/release/adjust), MaterialService
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   ├── MessageHandler/           # Reservation request/release consumers with inbox idempotency
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>│   ├── Command/                  # PublishOutboxCommand, ReleaseExpiredReservationsCommand
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│   └── Controller/Manage/        # Material, Stock, Recipe, Reservation, Ledger admin APIs
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>├── config/
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config + exclusions
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│   ├── routes.yaml               # Route imports (wechat, wechat_app, wechat_manage added)
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>│   └── packages/
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat tags
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│       ├── workflow.yaml         # Order state machine, including Store acceptance
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│       ├── messenger.yaml        # Trade/Store integration messages to async transport
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>│       └── ...
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>├── migrations/                   # 24 migrations (latest: wallet_voucher_comment, 2026-08-15)
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>├── docs/
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│   ├── ai/context.md             # This file
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   ├── design/                   # Design contracts (incl. security-hardening.md)
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion, store, inventory, exchange)
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>│   ├── testing/                  # Test-quality contract: TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION, SYSTEM_WALKTHROUGH, AI_DEVELOPMENT_PROCESS (+ reusable framework-template/)
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>│   ├── issues/                   # Audit &amp; coverage reports (coverage-2026-08-09/, test-audit-2026-08-09/)
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>├── tests/                        # 312 PHPUnit test files, organized by layer:
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>│   ├── UnitTest/                 #   197 files — pure unit tests (no kernel/DB), App\Tests\UnitTest\...
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>│   ├── Integration/              #   72 files — kernel/DB/HTTP tests + helpers (DatabaseBootstrapTrait, IntegrationWebTestCase), App\Tests\Integration\...
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>│   └── LowValue/                 #   43 files — deprecated/low-value tests, excluded from default run, App\Tests\LowValue\...
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>│                                 主套件 = UnitTest + Integration（2311 tests）；低价值可 --group low-value 显式运行
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>├── README.md                     # English README
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>├── README.zh-cn.md               # Chinese (Simplified) README
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>├── README.zh-hant.md             # Chinese (Traditional) README
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>├── README.ja.md                  # Japanese README
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>├── mkdocs.yml                    # MkDocs Material config
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>├── docker/
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>└── .github/workflows/
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run; tests job runs on PostgreSQL 16
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    └── docs.yml                  # GitHub Pages deploy
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── Service/Concern/                 # Traits: Infrastructure, ReadList (DqlExpression fail-closed, @filter/@dql), Mutation (@template TEntity)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── Parser/ExpressionDqlParser.php   # Expression → DQL compiler (NameNode variable binding, in/not in array handling)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── Query/DqlExpression.php          # Immutable server-owned row-scope value object (expression/values/criteria/this)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── Serializer/FlatNormalizer.php    # Custom object normalizer (Doctrine internal objects → class names)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   ├── EventListener/                   # ExceptionInterceptor, ControllerListener, OpenApiEnricherListener, LocaleListener, AccessLogListener
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   └── Utils/                           # UUID, Math, RSA, Location, Inflect, etc.
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>├── src/Common/                   # CMS module: Category, Tag, Content (storeUuid/metadata pilot), Comment, Page, Media, Setting, Picture
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── Entity/                   # 8 entities (Content has nullable storeUuid indexed + metadata json)
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   ├── Repository/
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   ├── Service/
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   └── Controller/App/ + Manage/ + Public/ + Store/  # Store/ContentController at /store/stores/{storeUuid}/contents (membership + Authorization + field-grant)
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>├── src/Authorization/            # Independent authorization boundary (replaces coarse ROLE_ADMIN)
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│   ├── Entity/                   # Permission, Role (global/store), Assignment (userUuid/role/scope), RoleFieldGrant (json), AuditLog (append-only)
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── Repository/               # PermissionRepository, RoleRepository, AssignmentRepository (active+scope indexes), RoleFieldGrantRepository, AuditLogRepository
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   ├── Service/                  # AuthorizationService (can/require/allowedStoreUuids/effective, cache.app fallback), FieldAuthorizationService (strict field grant), AuthorizationResourceRegistry (common:content), AuthorizationAuditService, AuthorizationCacheInvalidator, AuthorizationScope, ScopedResourceInterface
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│   ├── Security/AuthorizationVoter.php  # Voter for permission strings + AuthorizationScope subjects, admin bypass
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│   ├── Command/SeedAuthorizationCommand.php # app:authorization:seed (11 permissions, 3 roles, 4 field grants, idempotent)
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│   ├── Controller/Manage/        # PermissionController (/manage/permissions), RoleController (/manage/roles + /{uuid}/permissions + /{uuid}/field-grants/{resource}/{action}), AssignmentController (/manage/assignments), AuditLogController (/manage/audit-logs) — all ROLE_ADMIN, ApiView + List/Detail/Create/Update/Delete mixins
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│   ├── Controller/App/MyAuthorizationController.php # GET /app/authorization/me (permissions/storeScopes/fieldGrants)
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│   └── Resources/config/services_authorization.yaml
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>├── src/Identity/                 # Authentication &amp; Identity
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│   ├── Entity/User.php, RefreshToken.php, Profile.php     # User has __toString(): username fallback to email; User::$profile (OneToOne→Profile)
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│   ├── Security/JwtAuthenticator.php, TokenManager.php
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│   ├── Service/OtpService.php, UserService.php, SMS providers
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│   ├── Command/CreateUserCommand.php
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│   └── Controller/AuthController.php, App/UserController.php, App/ProfileController.php, Manage/UserController.php, Manage/ProfileController.php
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>├── src/Trade/                    # E-commerce module
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│   ├── Entity/                   # Product, Specification, Order, OrderItem, TradeOutboxMessage
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│   ├── Service/OrderService.php        # StoreContext-aware creation + price pipeline
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│   ├── Command/PublishOutboxCommand.php # app:trade:outbox:publish
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│   ├── MessageHandler/           # Store acceptance/rejection consumers
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│   ├── Service/Pricing/                # PriceCalculatorInterface (Base, Quantity, Total)
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│   ├── EventListener/OrderWorkflowListener.php
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>│   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel + spec browse/v2
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>│
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>├── src/Store/                    # Multi-store operational boundary
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│   ├── Entity/                   # Store, membership, StoreOrder, Outbox, Inbox
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│   ├── Service/                  # Context, membership, StoreOrder, Outbox services
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│   ├── MessageHandler/           # Inbox-idempotent Trade order consumer; Inventory outcome consumers
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│   ├── Command/PublishOutboxCommand.php # app:store:outbox:publish
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│   └── Controller/App/ + Manage/ + Staff/ # Staff controllers enforce membership (isActive) before Authorization checks
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>├── src/Payment/                  # Payment module
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│   ├── Entity/Invoice.php              # Payment invoice (pending→paying→paid→refunded)
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>│   ├── DTO/                            # PaymentResult, PaymentNotifyResult, PaymentRefundResult, PaymentAdjustmentContext, PaymentAdjustmentResult
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>│   ├── Event/                          # InvoicePaidEvent, InvoiceRefundedEvent, etc.
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>│   ├── Service/PaymentGatewayInterface.php  # Gateway contract (pay(explicit amount), notify, refund(explicit amount))
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>│   ├── Service/Adjustment/PaymentAdjustmentProviderInterface.php  # Adjustments before gateway payment (implemented by Wallet)
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>│   ├── Service/Adjustment/PaymentAdjustmentRegistry.php  # #[AutowireIterator('payment.adjustment_provider')] registry
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>│   ├── Service/Gateway/MockGateway.php       # Deterministic test gateway (only gateway remaining in Payment)
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>│   ├── Service/PaymentGatewayRegistry.php    # #[AutowireIterator('payment.gateway')] registry
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>│   └── Controller/App/ + Manage/ + Webhook/
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>│       # Current Trade result propagation is synchronous Invoice domain events.
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>│       # Planned phase 1: Payment Outbox -&gt; Trade Inbox; Payment Inbox is deferred.
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>│
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>├── src/Wallet/                   # Wallet module
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>│   ├── Entity/                   # Wallet, Transaction, Voucher, VoucherComment, PaymentDeduction
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>│   ├── Repository/               # Wallet, Transaction, Voucher, VoucherComment, PaymentDeduction
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>│   ├── Service/Transfer/TransferService.php     # Atomic transfers (+ hold/release via `held`)
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>│   ├── Service/Deposit/                 # DepositService + provider registry (voucher-backed credit)
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>│   ├── Service/Withdraw/                # WithdrawService + provider registry (voucher-backed debit)
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>│   ├── Service/WalletService.php       # verifyBalance() + reconcile()
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>│   ├── Service/VoucherService.php, VoucherCommentService.php   # list/detail + append-only annotations
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>│   ├── Service/Payment/WalletGateway.php              # Implements PaymentGatewayInterface
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>│   ├── Service/Payment/WalletBalanceAdjustmentProvider.php  # Wallet deduction as Payment adjustment provider
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>│   ├── Service/Payment/PaymentDeductionService.php    # Wallet-owned deduction lifecycle
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>│   ├── DTO/PaymentDeductionRequest.php
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>│   └── Controller/App/ + Manage/       # App list/detail/balance + self deposit/withdraw; Manage CRUD/audit/reconcile/deposit/withdraw/reverse
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>│
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>├── src/Wechat/                   # WeChat module
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>│   ├── Entity/WechatUser.php           # OneToOne→User
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>│   ├── Repository/WechatUserRepository.php
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>│   ├── Service/WechatService.php       # EasyWeChat factory
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>│   ├── Service/WechatAuthService.php   # Login orchestration
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>│   ├── Service/WechatUserService.php   # CRUD service
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>│   ├── Service/Payment/WechatPayGateway.php  # implements PaymentGatewayInterface
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>│   └── Controller/
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>│
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>├── src/Storage/                  # Storage module (pluggable file upload drivers)
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>│   ├── Service/MediaStorageInterface.php       # Driver contract (store/delete)
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>│   ├── Service/MediaStorageRegistry.php        # Tagged iterator collection
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>│   ├── Service/LocalStorage.php                # Local filesystem (public/uploads/)
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>│   ├── Service/QiniuStorage.php                # Qiniu Kodo cloud storage (optional SDK)
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>│   └── Resources/config/services_storage.yaml
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>│
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>├── src/Promotion/                # Promotion module (DSL-driven promotion engine)
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>│   ├── Entity/                   # PromotionTemplate, Promotion
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>│   ├── Repository/
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>│   ├── Service/                  # PromotionService, PromotionTemplateService, PromotionCalculator
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>│   │   └── Dsl/                  # DSL lexer/parser/evaluator
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>│   ├── Strategy/                 # 7 strategies: FullReduction, Discount, Gift, NthItemDiscount, Tiered, FreeShipping, MemberDiscount
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>│   ├── Controller/App/           # Read-only endpoints
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>│   ├── Controller/Manage/        # Admin CRUD endpoints
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>│   └── Exception/
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>│
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>├── src/Inventory/                # Inventory module (material, stock, recipe, reservation)
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>│   ├── Entity/                   # Material, Stock, SpecificationRecipe, RecipeLine, Reservation, ReservationLine, LedgerEntry, Inbox, Outbox
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>│   ├── Repository/
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>│   ├── Service/                  # InventoryService (reserve/release/adjust), MaterialService
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>│   ├── MessageHandler/           # Reservation request/release consumers with inbox idempotency
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>│   ├── Command/                  # PublishOutboxCommand, ReleaseExpiredReservationsCommand
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>│   └── Controller/Manage/        # Material, Stock, Recipe, Reservation, Ledger admin APIs
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>│
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>├── config/
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>│   ├── services.yaml             # Service wiring + imports src/*/Resources/config (incl. Authorization) + exclusions
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>│   ├── routes.yaml               # Route imports: /api/v1 for Common/Trade/Store/Wallet/Payment/Promotion/Wechat/Inventory/Settlement/Authorization (/api/v1/manage/permissions etc.), /api/auth (Identity), /api/wechat (Wechat login), /system (introspection), /api/payment/notify (webhook)
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>│   └── packages/
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>│       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat + Authorization tags
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>│       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*; /api/v1/manage → ROLE_ADMIN
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>│       ├── translation.yaml      # Translator config: default_locale en, translations/ path
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>│       ├── workflow.yaml         # Order state machine, including Store acceptance
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>│       ├── messenger.yaml        # Trade/Store integration messages to async transport
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>│       └── ...
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>├── migrations/                   # 26 migrations (latest: 20260901000000 authorization tables + 20260901000001 common_content store_uuid/metadata, 2026-08-15 wallet_voucher_comment)
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>├── docs/
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>│   ├── ai/context.md             # This file
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>│   ├── design/                   # Design contracts (incl. security-hardening.md)
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>│   │   └── bundles/              # Per-module design docs (core, common, trade, wallet, identity, wechat, payment, storage, promotion, store, inventory, authorization, exchange)
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>│   ├── testing/                  # Test-quality contract: TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION, SYSTEM_WALKTHROUGH, AI_DEVELOPMENT_PROCESS (+ reusable framework-template/)
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>│   ├── issues/                   # Audit &amp; coverage reports (coverage-2026-08-09/, test-audit-2026-08-09/)
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>│   └── openapi/                       # endpoints.yaml + order/payment frontend flow docs
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>├── scripts/tests/                # API smoke, Store orchestration smoke, trade workflow scripts
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>├── tests/                        # 320+ PHPUnit test files, organized by layer:
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>│   ├── UnitTest/                 #   197 files — pure unit tests (no kernel/DB), App\Tests\UnitTest\...
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>│   ├── Integration/              #   73 files — kernel/DB/HTTP tests + helpers (DatabaseBootstrapTrait, IntegrationWebTestCase) incl. AuthorizationContentPilotTest (store_content_editor vs metadata_editor, cross-store 404, /app/authorization/me)
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>│   └── LowValue/                 #   43 files — deprecated/low-value tests, excluded from default run, App\Tests\LowValue\...
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>│                                 主套件 = UnitTest + Integration（2394 tests, 159 notices）；低价值可 --group low-value 显式运行
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>├── README.md                     # English README (vertical chain Clients→Api→Core→Identity/Authorization/Common/Storage/Promotion→Trade→Store&amp;Inventory/Payment&amp;Wallet→Settlement/Exchange→Messaging→Persistence)
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>├── README.zh-cn.md               # Chinese (Simplified) README
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>├── README.zh-hant.md             # Chinese (Traditional) README
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>├── README.ja.md                  # Japanese README
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>├── mkdocs.yml                    # MkDocs Material config (Bundles: Authorization, Exchange, etc.)
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>├── compose.yaml                  # Production deployment: app (PHP-FPM), nginx, MySQL, Redis, Mailpit
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>├── compose.override.yaml         # Dev overrides (source mount, debug, exposed ports)
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>├── Dockerfile                    # PHP 8.4-FPM Alpine with openssl + JWT key entrypoint
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>├── .dockerignore                 # Build context exclusions (tests, docs, dev files)
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>├── docker/
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>│   ├── app/entrypoint.sh         # Dev key generation + prod key validation
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>│   └── nginx/default.conf        # nginx config (reverse proxy to PHP-FPM)
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>└── .github/workflows/
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    ├── ci.yml                    # CI: PHP 8.4, PHPStan Level 8, 90% coverage, Rector type-rule dry-run; tests job runs on PostgreSQL 16
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>public/index.php</code> → <code>App\Kernel</code> (MicroKernelTrait)</li>
-<li><code>config/routes.yaml</code> imports: <code>/api/v1</code> (Common/Trade/Store/Wallet/Payment/Promotion/Wechat App+Manage), <code>/api/auth</code> (Identity), <code>/api/wechat</code> (Wechat login), <code>/system</code> (introspection), <code>/api/payment/notify</code> (webhook)</li>
-<li><code>JwtAuthenticator</code> intercepts all <code>/api</code> routes (except public paths listed in security.yaml)</li>
-<li>Controller action (trait mixin or custom method) → <code>BaseService</code> methods → Doctrine EntityManager → DB</li>
+<li><code>config/routes.yaml</code> imports: <code>/api/v1</code> (Authorization/Common/Trade/Store/Wallet/Payment/Promotion/Wechat/Inventory/Settlement App+Manage), <code>/api/auth</code> (Identity), <code>/api/wechat</code> (Wechat login), <code>/system</code> (introspection), <code>/api/payment/notify</code> (webhook)</li>
+<li><code>JwtAuthenticator</code> intercepts all <code>/api</code> routes (except public paths listed in security.yaml); <code>AuthorizationVoter</code> enforces <code>common:content:*</code>/<code>authorization:*</code>/<code>store:order:*</code> after authentication</li>
+<li>Controller action (ApiView mixin lifecycle: <code>commonFilter</code> → <code>listFilter</code>/<code>processCreateContent</code> → <code>BaseService</code> → Doctrine → DB) — Manage controllers use <code>#[IsGranted('ROLE_ADMIN')]</code> + <code>List/Detail/Create/Update/Delete</code> mixins, Store-scoped controllers enforce <code>Membership</code> + <code>AuthorizationService</code> + <code>FieldAuthorizationService</code></li>
 <li><code>RestController::success()</code> / <code>warning()</code> → JSON <code>{data, code, message, paginator}</code></li>
 </ol>
 <h2 id="4-authentication-flow">4. Authentication Flow<a class="headerlink" href="#4-authentication-flow" title="Permanent link">&para;</a></h2>
@@ -4584,6 +4639,56 @@
 <p><strong>UserService</strong> (<code>App\Identity\Service\UserService</code>): encapsulates register, verifyPassword, changePassword, adminChangePassword, updateProfile. Auto-hashes passwords in <code>update()</code>.</p>
 <p><strong>Token management</strong>: RS256 JWT (7200s TTL), HMAC-SHA256 refresh tokens with rotation + reuse detection.</p>
 <p><strong>Translation</strong>: AuthController, OtpController, LoginController inject <code>TranslatorInterface</code> and pass error messages through <code>trans()</code>. JwtAuthenticator also translates <code>onAuthenticationFailure()</code> messages.</p>
+<h3 id="45-authorization-manage-app">4.5 Authorization (Manage + App)<a class="headerlink" href="#45-authorization-manage-app" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Auth</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/permissions</code></td>
+<td>ROLE_ADMIN</td>
+<td>List permission catalogue (seeded)</td>
+</tr>
+<tr>
+<td>GET/POST/PUT/DELETE</td>
+<td><code>/api/v1/manage/roles/*</code></td>
+<td>ROLE_ADMIN</td>
+<td>Roles (List/Detail/Create/Update/Delete) + <code>POST /{uuid}/permissions</code> replace, <code>PUT /{uuid}/field-grants/{resource}/{action}</code> replace</td>
+</tr>
+<tr>
+<td>GET/POST/DELETE</td>
+<td><code>/api/v1/manage/assignments</code> <code>/manage/assignments/{uuid}</code></td>
+<td>ROLE_ADMIN</td>
+<td>List (filter userUuid/scope), grant (idempotent, scope-compat, audit+cache), revoke (soft <code>revokedAt</code>)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/manage/audit-logs</code></td>
+<td>ROLE_ADMIN</td>
+<td>Paginated audit history (<code>targetType</code>, <code>actorUuid</code>)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/app/authorization/me</code></td>
+<td>ROLE_USER</td>
+<td>Current user effective permissions/storeScopes/fieldGrants (UI only)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/store/stores/{storeUuid}/contents</code> etc.</td>
+<td>ROLE_USER + membership + <code>common:content:*</code></td>
+<td>Store-scoped Content pilot (list/create/detail/update/delete, <code>storeUuid</code> from route, field-grant enforced via <code>FieldAuthorizationService</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Seed: <code>app:authorization:seed</code> (11 permissions, 3 roles, 4 field grants). <code>AuthorizationService</code> uses <code>cache.app</code> (<code>authorization_effective_*</code>, 300s, DB fallback, admin bypass).</p>
 <h2 id="5-dynamic-query-system">5. Dynamic Query System<a class="headerlink" href="#5-dynamic-query-system" title="Permanent link">&para;</a></h2>
 <p><code>BaseServiceReadListTrait::list()</code> supports:</p>
 <table>
@@ -4647,21 +4752,23 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Expression syntax</strong>: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>matches</code>, chained attributes, <code>Math</code>, <code>ArrayCommon</code>, <code>FilterDateTime</code> functions. Falls back to in-memory <code>LegacyEvaluator</code> when DQL compilation fails.</p>
+<p><strong>Expression syntax</strong>: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>matches</code>, <code>in</code>/<code>not in</code> (array-bound, empty <code>in []</code> → <code>1=0</code>, empty <code>not in</code> → <code>1=1</code>), chained attributes, <code>Math</code>, <code>ArrayCommon</code>, <code>FilterDateTime</code> functions. Falls back to in-memory <code>LegacyEvaluator</code> when DQL compilation fails.</p>
+<p><strong>Server-owned row-scope</strong>: <code>DqlExpression</code> (<code>src/Core/Query/DqlExpression.php</code>) — immutable <code>expression/values/criteria/this</code>, compiled via <code>ExpressionDqlParser</code> + <code>ExpressionQueryBuilderAssembler</code> in <code>BaseServiceReadListTrait</code>, <code>ApiView::resolvedCommonFilter()</code> binds <code>this</code>, <code>BaseService</code> validates criteria against Doctrine metadata, fail-closed <code>500</code> on error (no <code>LegacyEvaluator</code>).</p>
 <h2 id="6-baseservice-architecture">6. BaseService Architecture<a class="headerlink" href="#6-baseservice-architecture" title="Permanent link">&para;</a></h2>
 <p><code>BaseServiceInterface</code> and <code>BaseService</code> use <code>@template TEntity of object</code> to propagate entity types through the service layer. Concrete services declare <code>@extends BaseService&lt;Entity&gt;</code> and interfaces declare <code>@extends BaseServiceInterface&lt;Entity&gt;</code>. This enables PHPStan to infer return types from <code>get()</code>, <code>new()</code>, and <code>update()</code> at call sites.</p>
 <pre class="mermaid"><code>flowchart TD
     base["BaseService&lt;Order&gt; (abstract, @template TEntity, @implements BaseServiceInterface&lt;TEntity&gt;)"]
     base --&gt; infra["BaseServiceInfrastructureTrait # EM, Logger, Serializer, Validator, Transactions"]
-    base --&gt; readList["BaseServiceReadListTrait&lt;TEntity&gt; # get(mixed): TEntity|null, list(): mixed"]
+    base --&gt; readList["BaseServiceReadListTrait&lt;TEntity&gt; # get(mixed): TEntity|null, list(): mixed (QueryBuilder/DqlExpression/array)"]
     base --&gt; mutation["BaseServiceMutationTrait&lt;TEntity&gt; # new(): object, update(mixed): object|false, remove(): bool"]</code></pre>
 <p>Key PHPDoc contracts:
-- <strong><code>get(mixed $criteria)</code></strong>: Accepts <code>TEntity|int|string|array&lt;string, mixed&gt;|QueryBuilder</code> → returns <code>TEntity|null</code>
-- <strong><code>list(array $params)</code></strong>: Returns <code>mixed</code> (QueryBuilder, Entity[], or scalar arrays depending on @select/@groupBy)
+- <strong><code>get(mixed $criteria)</code></strong>: Accepts <code>TEntity|int|string|array&lt;string, mixed&gt;|QueryBuilder|DqlExpression</code> → returns <code>TEntity|null</code>
+- <strong><code>list(array|QueryBuilder|DqlExpression $filter)</code></strong>: Returns <code>mixed</code> (QueryBuilder, Entity[], or scalar arrays depending on @select/@groupBy); <code>disableRequest=false</code> enables <code>@filter/@dql</code> from Request
 - <strong><code>new()</code></strong>: Returns <code>object</code> (native), <code>@return TEntity</code> (PHPDoc)
 - <strong><code>update(mixed $object, ?array $data)</code></strong>: Returns <code>object|false</code> — native <code>mixed</code> param with PHPDoc <code>@param mixed</code> for trait compatibility
 - <strong><code>remove($object)</code></strong>: Accepts <code>TEntity|int|string|array&lt;string, mixed&gt;</code>
-- <strong><code>wrapInTransaction(callable $fn)</code></strong>: Transaction with commit/rollback</p>
+- <strong><code>wrapInTransaction(callable $fn)</code></strong>: Transaction with commit/rollback
+- <strong><code>commonFilter</code></strong>: May return <code>array|QueryBuilder|DqlExpression</code>; <code>DqlExpression</code> supports <code>this</code> shorthand and <code>in</code>/<code>not in</code></p>
 <h2 id="7-trade-module-order-lifecycle">7. Trade Module — Order Lifecycle<a class="headerlink" href="#7-trade-module-order-lifecycle" title="Permanent link">&para;</a></h2>
 <h3 id="71-state-machine-workflowyaml">7.1 State Machine (workflow.yaml)<a class="headerlink" href="#71-state-machine-workflowyaml" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TD
@@ -5362,7 +5469,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Trait mixins</strong></td>
 <td>View layer</td>
-<td>9 PHP traits composed into controllers</td>
+<td>9 PHP traits composed into controllers; Manage Authorization controllers use <code>ApiView</code> + <code>List/Detail/Create/Update/Delete</code> mixins</td>
 </tr>
 <tr>
 <td><strong>View message constants</strong></td>
@@ -5377,7 +5484,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>Field whitelisting</strong></td>
 <td>Controllers</td>
-<td><code>$requiredCreateProperties</code>, <code>$acceptedCreateProperties</code>, <code>$acceptedUpdateProperties</code></td>
+<td><code>$requiredCreateProperties</code>, <code>$acceptedCreateProperties</code>, <code>$acceptedUpdateProperties</code> (Role: <code>code/name/scopeType</code>; Assignment: <code>userUuid/roleUuid/scopeType/scopeUuid</code>; Content Store: <code>title/body/category/tags/metadata</code>)</td>
 </tr>
 <tr>
 <td><strong>Money in cents</strong></td>
@@ -5386,7 +5493,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tr>
 <tr>
 <td><strong>UUID v4</strong></td>
-<td>Trade + Wallet</td>
+<td>Trade + Wallet + Authorization + Store</td>
 <td><code>UUID::v4()</code> for external identity</td>
 </tr>
 <tr>
@@ -5416,8 +5523,8 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tr>
 <tr>
 <td><strong>Idempotency</strong></td>
-<td>Wallet</td>
-<td><code>referenceId</code> unique constraint on Transaction</td>
+<td>Wallet + Authorization Assignment</td>
+<td><code>referenceId</code> unique constraint on Transaction; <code>UNIQUE(user_uuid, role_id, scope_type, scope_uuid)</code> on Assignment with reactivation of revoked rows</td>
 </tr>
 <tr>
 <td><strong>Pipeline</strong></td>
@@ -5442,7 +5549,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td><strong>commonFilter</strong></td>
 <td>Controllers</td>
-<td>Array criteria or QueryBuilder injected into all queries. <code>[]</code> = no filter (admin), <code>['user' =&gt; $user]</code> = user-scoped, <code>['id' =&gt; -1]</code> = block all, QueryBuilder required for <code>IS NULL</code> filters</td>
+<td>Array criteria or <code>QueryBuilder</code> or <code>DqlExpression</code> injected into all queries. <code>[]</code> = no filter (admin), <code>['user' =&gt; $user]</code> = user-scoped, <code>['id' =&gt; -1]</code> = block all, <code>DqlExpression('entity.getStoreUuid() == storeUuid')</code> for readable Store scope, QueryBuilder required for <code>IS NULL</code> filters</td>
 </tr>
 <tr>
 <td><strong>Payment via wallet</strong></td>
@@ -5579,6 +5686,16 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td>Inventory + Store + Trade</td>
 <td>Outbox publishers atomically claim rows via UPDATE WHERE, preventing concurrent delivery</td>
 </tr>
+<tr>
+<td><strong>Authorization RBAC</strong></td>
+<td>Authorization</td>
+<td>Scoped RBAC (<code>global</code>/<code>store</code>), <code>AuthorizationService::can/require/allowedStoreUuids</code> (cache <code>authorization_effective_*</code> 300s, DB fallback, admin bypass), <code>FieldAuthorizationService</code> (union of <code>RoleFieldGrant</code> intersected with controller <code>accepted*Properties</code>, strict 403), <code>AuthorizationVoter</code>, <code>Store</code> membership (<code>Membership.isActive</code>) composed with Authorization in <code>Common/Controller/Store/ContentController</code> via <code>DqlExpression</code> + criteria</td>
+</tr>
+<tr>
+<td><strong>Store Content pilot</strong></td>
+<td>Common + Authorization</td>
+<td><code>common_content.store_uuid</code> nullable indexed + <code>metadata</code> json; <code>GET/POST/PUT/DELETE /store/stores/{storeUuid}/contents</code> enforce membership + <code>common:content:*</code> + field grants (editor vs metadata_editor)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="14-api-documentation-system">14. API Documentation System<a class="headerlink" href="#14-api-documentation-system" title="Permanent link">&para;</a></h2>
@@ -5661,14 +5778,22 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td>Wallet</td>
 </tr>
 <tr>
+<td><code>manage-roles-*</code>, <code>manage-permissions-*</code>, <code>manage-assignments-*</code>, <code>manage-audit-logs-*</code>, <code>app-authorization-*</code></td>
+<td>Authorization</td>
+</tr>
+<tr>
+<td><code>manage-stores-*</code>, <code>app-stores-*</code>, <code>store-contents-*</code></td>
+<td>Store (+ Store Content pilot)</td>
+</tr>
+<tr>
 <td>Any other <code>manage-{X}-*</code></td>
 <td>{X} (auto-title-cased)</td>
 </tr>
 </tbody>
 </table>
 <h3 id="144-schema-configuration-configpackagesnelmio_api_docyaml">14.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#144-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
-<p>44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="15-database-tables-24-migrations">15. Database Tables (24 Migrations)<a class="headerlink" href="#15-database-tables-24-migrations" title="Permanent link">&para;</a></h2>
+<p>44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat, Authorization, Store). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
+<h2 id="15-database-tables-26-migrations">15. Database Tables (26 Migrations)<a class="headerlink" href="#15-database-tables-26-migrations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -5753,6 +5878,14 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td>20260815030000</td>
 <td><code>wallet_voucher_comment</code> (append-only annotations on vouchers, FK cascade)</td>
 </tr>
+<tr>
+<td>20260901000000</td>
+<td>Authorization foundation: <code>authorization_permission</code>, <code>authorization_role</code>, <code>authorization_role_permission</code>, <code>authorization_assignment</code> (with <code>UNIQUE(user_uuid, role_id, scope_type, scope_uuid)</code> + indexes), <code>authorization_role_field_grant</code>, <code>authorization_audit_log</code></td>
+</tr>
+<tr>
+<td>20260901000001</td>
+<td>Content pilot: <code>common_content.store_uuid</code> nullable indexed + <code>common_content.metadata</code> json</td>
+</tr>
 </tbody>
 </table>
 <h2 id="16-documentation-assets">16. Documentation Assets<a class="headerlink" href="#16-documentation-assets" title="Permanent link">&para;</a></h2>
@@ -5833,6 +5966,10 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td>Inventory module design (materials, stock, recipes, reservations, inbox/outbox)</td>
 </tr>
 <tr>
+<td><code>docs/design/bundles/authorization.md</code></td>
+<td>Authorization bundle design (independent RBAC, scoped Store grants, field grants, audit, DqlExpression row-scope + Phase 1 Content pilot)</td>
+</tr>
+<tr>
 <td><code>docs/design/bundles/exchange.md</code></td>
 <td>Exchange bundle design (pool-backed points economy: effective-dated rates, bcmath conversion, pledge/mint/exchange/redemption)</td>
 </tr>
@@ -5866,7 +6003,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tr>
 <tr>
 <td><code>mkdocs.yml</code></td>
-<td>MkDocs Material site config (mermaid rendering: <code>pymdownx.superfences</code> custom fence + mermaid@11 CDN + <code>javascripts/mermaid-init.js</code>)</td>
+<td>MkDocs Material site config (mermaid rendering: <code>pymdownx.superfences</code> custom fence + mermaid@11 CDN + <code>javascripts/mermaid-init.js</code>; Bundles nav includes Authorization)</td>
 </tr>
 <tr>
 <td><code>scripts/tests/simulate-trade.php</code></td>
@@ -5884,8 +6021,8 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <li><strong>Layout</strong>: tests are organized by layer, not by module — <code>tests/UnitTest/</code> (pure unit tests, no kernel/DB), <code>tests/Integration/</code> (kernel + DB + HTTP tests, plus helpers <code>DatabaseBootstrapTrait</code>/<code>IntegrationWebTestCase</code>/<code>IntegrationKernelTestCase</code>/<code>StoreTradeFlowTestCase</code>), <code>tests/LowValue/</code> (deprecated/low-value tests excluded from the default run). Namespace <code>App\Tests\</code> mirrors the layout: <code>App\Tests\UnitTest\...</code>, <code>App\Tests\Integration\...</code>, <code>App\Tests\LowValue\...</code>. Test-support resources: <code>tests/bootstrap.php</code> and JWT test keys under <code>tests/Identity/Security/</code> (referenced by <code>.env.test</code> and CI).</li>
 <li><strong>Low-value exclusion mechanism</strong>: <code>phpunit.dist.xml</code> defines the "Project Test Suite" (UnitTest + Integration dirs) and a separate "Low Value" suite; a global <code>&lt;exclude&gt;&lt;group&gt;low-value&lt;/group&gt;&lt;/exclude&gt;</code> removes every test carrying <code>#[Group('low-value')]</code> (class- or method-level) from the default run — covering both whole LowValue files and individual flagged methods inside kept files (from the 2026-08-09 test audit). Run them explicitly with <code>php bin/phpunit --group low-value</code> (~480 tests).</li>
 <li><strong>DB</strong>: local tests default to SQLite <code>var/test.db</code> (paratest uses per-worker SQLite files); CI tests job runs on <strong>PostgreSQL 16</strong>; <code>migrations.yml</code> validates the migration chain on <strong>MySQL 8.4</strong></li>
-<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>99.46% lines (8511/8557)</strong> from latest local Xdebug run (2026-08-09)</li>
-<li><strong>Test count</strong>: <strong>2311 tests / 8374 assertions</strong> in the default suite (UnitTest + Integration), plus ~480 low-value tests excluded by default; 31 skipped tests document real <code>src/</code> bugs (see §23 and <code>docs/issues/coverage-2026-08-09/</code>); <strong>never delete or un-skip them</strong> without fixing the underlying bug</li>
+<li><strong>Coverage</strong>: 90% minimum (enforced in CI), currently <strong>99.46% lines (8511/8557)</strong> from latest local Xdebug run (2026-08-09); Authorization pilot adds 1 integration test (27 assertions) with <code>DqlExpression</code> + <code>in</code> coverage</li>
+<li><strong>Test count</strong>: <strong>2394 tests / 8658 assertions</strong> in the default suite (UnitTest + Integration), plus ~480 low-value tests excluded by default; 31 skipped tests document real <code>src/</code> bugs (see §23 and <code>docs/issues/coverage-2026-08-09/</code>); <strong>never delete or un-skip them</strong> without fixing the underlying bug</li>
 <li><strong>Suite runtime</strong>: serial ≈ 59 s (kernel-bootstrapping integration tests dominate). Run parallel with paratest for ~2.3× speedup: <code>PARATEST=1 php vendor/bin/paratest --processes 8 --runner WrapperRunner</code> (≈26 s; per-worker SQLite isolation is handled by <code>tests/bootstrap.php</code>)</li>
 <li><strong>PHPUnit Notices</strong>: 159 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more</li>
 <li><strong>Memory</strong>: <code>phpunit.dist.xml</code> sets test-process <code>memory_limit=512M</code> (OpenAPI integration builds the full spec in-process)</li>
@@ -5895,7 +6032,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <li><strong>HTML coverage report</strong>: <code>XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html var/coverage</code></li>
 <li><strong>Key test groups</strong> (after the 2026-08-09 layer re-organization; module folders now live under each layer):</li>
 <li><code>tests/UnitTest/</code>: 197 files — pure unit tests (entities, utils, DSL, strategies, mock-based services/controllers, workflow state machine, listeners)</li>
-<li><code>tests/Integration/</code>: 72 files — kernel+DB+HTTP (module integration flows, API regressions, outbox/inbox, concurrency, cross-module flows, health/metrics/rate-limit endpoints) plus the 4 shared helpers; Trade integration remains the slowest area (see test-audit)</li>
+<li><code>tests/Integration/</code>: 73 files — kernel+DB+HTTP (module integration flows, API regressions, outbox/inbox, concurrency, cross-module flows, health/metrics/rate-limit endpoints, AuthorizationContentPilotTest) plus the 4 shared helpers; Trade integration remains the slowest area (see test-audit)</li>
 <li><code>tests/LowValue/</code>: 43 files — flagged by the 2026-08-09 audit as duplicates/coverage-chasing; excluded from default runs (<code>--group low-value</code> to execute)</li>
 <li><code>scripts/tests/api-smoke.sh</code>: real HTTP auth/catalog/wallet/order/payment smoke; strict 401/403/404 checks</li>
 <li><code>scripts/tests/store-smoke.sh</code>: real HTTP Store-scoped order, Trade Outbox, Messenger consumer, Store Outbox, and <code>store_accepted</code> assertion</li>
@@ -5984,6 +6121,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>doctrine:migrations:migrate<span class="w"> </span>--no-interaction
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:identity:user:create<span class="w"> </span>admin@example.com<span class="w"> </span>admin<span class="w"> </span><span class="s1">'P@ssw0rd'</span><span class="w"> </span>--admin
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>php<span class="w"> </span>bin/console<span class="w"> </span>app:authorization:seed
 </code></pre></div>
 <ul>
 <li><code>compose.override.yaml</code> auto-loads — sets <code>APP_ENV=dev</code>, <code>APP_DEBUG=1</code>, source mount</li>
@@ -6008,6 +6146,11 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <td><code>app:identity:user:create</code></td>
 <td>Identity</td>
 <td>Create user: email, username, password, --phone, --role, --admin, --phone-verified</td>
+</tr>
+<tr>
+<td><code>app:authorization:seed</code></td>
+<td>Authorization</td>
+<td>Seed permissions/roles/field-grants (11/3/4, idempotent, registry-validated)</td>
 </tr>
 <tr>
 <td><code>app:storage:qiniu:settings:init</code></td>
@@ -6054,6 +6197,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <li><code>WechatService</code> explicitly defined in <code>services_wechat.yaml</code> with <code>%env()</code> parameter bindings</li>
 <li><code>WechatPayGateway</code> explicitly defined in <code>services_wechat.yaml</code> (excluded from global autowiring scan)</li>
 <li><code>WalletGateway</code> autowired in Wallet via <code>PaymentGatewayInterface</code> tag (no explicit exclusion needed)</li>
+<li><code>AuthorizationVoter</code> auto-tagged <code>security.voter</code>; <code>AuthorizationResourceRegistry</code> hardened with default <code>common:content</code> registry</li>
 </ul>
 <h2 id="22-inventory-module-stock-reservation-system">22. Inventory Module — Stock &amp; Reservation System<a class="headerlink" href="#22-inventory-module-stock-reservation-system" title="Permanent link">&para;</a></h2>
 <h3 id="221-overview">22.1 Overview<a class="headerlink" href="#221-overview" title="Permanent link">&para;</a></h3>
@@ -6264,6 +6408,16 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 <li>Both endpoints are added to NelmioApiDoc <code>path_patterns</code> (tag <code>System</code>).</li>
 <li>Tests: <code>tests/Integration/Core/Controller/HealthControllerTest.php</code>, <code>tests/Integration/Core/Controller/MetricsControllerTest.php</code>, <code>tests/Integration/Core/EventListener/RateLimitListenerTest.php</code> (real <code>RateLimiterFactory</code> + <code>InMemoryStorage</code>, so global test limits are untouched).</li>
 </ul>
+<h2 id="25-authorization-module-phase-1">25. Authorization Module (Phase 1)<a class="headerlink" href="#25-authorization-module-phase-1" title="Permanent link">&para;</a></h2>
+<p><strong>Bundle</strong>: <code>src/Authorization/</code> — independent <code>Authorization</code> boundary (see <code>docs/design/bundles/authorization.md</code>).
+- <strong>Entities</strong>: <code>Permission</code> (code/module/resource/action), <code>Role</code> (global/store, <code>isSystem</code>), <code>Assignment</code> (userUuid/role/scope, soft revoke), <code>RoleFieldGrant</code> (resource/action→fields json), <code>AuditLog</code> (append-only)
+- <strong>Services</strong>: <code>AuthorizationService</code> (admin bypass, global vs store <code>can</code>, <code>allowedStoreUuids</code>, <code>effectivePermissions</code> via <code>cache.app</code> <code>authorization_effective_*</code> 300s + DB fallback), <code>FieldAuthorizationService</code> (union of grants ∩ controller <code>accepted*Properties</code>, strict 403), <code>AuthorizationResourceRegistry</code> (<code>common:content</code> create/update), <code>AuthorizationAuditService</code>, <code>AuthorizationCacheInvalidator</code>
+- <strong>Security</strong>: <code>AuthorizationScope</code> (<code>global</code>/<code>store</code>), <code>ScopedResourceInterface</code>, <code>AuthorizationVoter</code> (permission string + scope subject)
+- <strong>Seed</strong>: <code>app:authorization:seed</code> — 11 permissions, 3 roles (<code>store_content_editor</code>, <code>store_content_metadata_editor</code>, <code>authorization_administrator</code>), 4 field grants
+- <strong>Manage APIs</strong> (<code>ROLE_ADMIN</code>, <code>ApiView</code> mixins): <code>GET /manage/permissions</code> (list), <code>GET/POST/PUT/DELETE /manage/roles</code> + <code>POST /{uuid}/permissions</code> + <code>PUT /{uuid}/field-grants/{resource}/{action}</code>, <code>GET/POST/DELETE /manage/assignments</code> (idempotent grant, scope-compat, soft revoke), <code>GET /manage/audit-logs</code> (paginated)
+- <strong>App</strong>: <code>GET /app/authorization/me</code> — effective permissions/storeScopes/fieldGrants for current user
+- <strong>Content pilot</strong>: <code>common_content.store_uuid</code> nullable indexed + <code>metadata</code> json; <code>Common/Controller/Store/ContentController</code> at <code>POST/GET/PUT/DELETE /store/stores/{storeUuid}/contents</code> enforces <code>Membership.isActive</code> + <code>common:content:*</code> via <code>AuthorizationScope::store</code> + <code>FieldAuthorizationService</code> (metadata_editor vs editor); <code>Common/Controller/Manage/ContentController</code> now allows <code>metadata</code> in <code>accepted*Properties</code>
+- <strong>DqlExpression</strong>: <code>src/Core/Query/DqlExpression</code> + <code>ExpressionDqlParser</code> <code>in</code>/<code>not in</code> (array-bound, <code>1=0</code>/<code>1=1</code> for empty) used as readable row-scope primitive for future Authorization scopes</p>
 
 
 

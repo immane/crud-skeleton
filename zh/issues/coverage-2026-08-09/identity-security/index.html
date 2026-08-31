@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -2602,10 +2602,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-dead-code-private-key-dev-fallback-passphrase-branch-can-never-fire" class="md-nav__link">
+  <a href="#bug-4devfallback" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug #4 (dead code) — private-key "dev fallback" passphrase branch can never fire
+        Bug #4（死代码）——私钥“devfallback”密码分支永远不会触发
       
     </span>
   </a>
@@ -2613,10 +2613,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#unreachable-defensive-branch-openssl_sign-failure-path" class="md-nav__link">
+  <a href="#openssl_sign" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unreachable defensive branch — openssl_sign() failure path
+        无法访问的防御分支 — openssl_sign() 失败路径
       
     </span>
   </a>
@@ -2629,10 +2629,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#observations-not-bugs" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Observations (not bugs)
+        观察结果（不是错误）
       
     </span>
   </a>
@@ -2640,10 +2640,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#skipped-tests" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Skipped tests
+        跳过测试
       
     </span>
   </a>
@@ -2779,34 +2779,34 @@ Goal: raise line coverage to ~100% and document bugs. <strong>No code under <cod
 </ul>
 <h3 id="bug-3-dead-code-revokeaccesstoken-unreachable-jti-null-guard">Bug #3 (dead code) — <code>revokeAccessToken()</code> unreachable <code>$jti === null</code> guard<a class="headerlink" href="#bug-3-dead-code-revokeaccesstoken-unreachable-jti-null-guard" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Identity/Security/TokenManager.php:330-333</code>.</li>
-<li><strong>Description:</strong> <code>decodeAccessTokenWithoutBlacklist()</code> requires <code>jti</code> to be a string (line 169) or it returns <code>null</code> (handled at line 325-328). Therefore <code>$payload['jti']</code> can never be <code>null</code> here and line 332 is unreachable.</li>
-<li><strong>Impact:</strong> none (defensive-only); dead branch.</li>
-<li><strong>Proposed fix:</strong> remove the guard.</li>
+<li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:330-333</code>。</li>
+<li><strong>描述：</strong> <code>decodeAccessTokenWithoutBlacklist()</code> 要求 <code>jti</code> 是一个字符串（第 169 行），否则返回 <code>null</code> （在第 325-328 行处理）。因此<code>$payload['jti']</code>在这里永远不能是<code>null</code>并且第332行是无法到达的。</li>
+<li><strong>影响：</strong>无（仅防御）；死枝。</li>
+<li><strong>建议的修复：</strong> 拆除防护罩。</li>
 </ul>
-<h3 id="bug-4-dead-code-private-key-dev-fallback-passphrase-branch-can-never-fire">Bug #4 (dead code) — private-key "dev fallback" passphrase branch can never fire<a class="headerlink" href="#bug-4-dead-code-private-key-dev-fallback-passphrase-branch-can-never-fire" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4devfallback">Bug #4（死代码）——私钥“devfallback”密码分支永远不会触发<a class="headerlink" href="#bug-4devfallback" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Identity/Security/TokenManager.php:48-51</code>.</li>
-<li><strong>Description:</strong> For an <strong>unencrypted</strong> key, PHP 8.5's <code>openssl_pkey_get_private($pem, $passphrase)</code> ignores the passphrase and returns the key (verified empirically), so <code>$privateKey === false</code> is false and the fallback at line 50 is skipped. For a genuinely <strong>encrypted</strong> key with a wrong passphrase, both the passphrase attempt and the fallback (no passphrase) fail, reaching line 54. There is no key state for which the first call fails but the no-passphrase retry succeeds.</li>
-<li><strong>Impact:</strong> none — the intended "allow unencrypted key even when passphrase is configured" behaviour already works (the passphrase is simply ignored), but the fallback branch itself is unreachable/misleading.</li>
-<li><strong>Proposed fix:</strong> remove lines 48-51, or document that the passphrase is only meaningful for genuinely encrypted keys.</li>
+<li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:48-51</code>。</li>
+<li><strong>描述：</strong> 对于 <strong>未加密</strong> 密钥，PHP 8.5 的 <code>openssl_pkey_get_private($pem, $passphrase)</code> 会忽略密码并返回密钥（根据经验验证），因此 <code>$privateKey === false</code> 为 false，并且会跳过第 50 行的回退。对于密码错误的真正<strong>加密</strong>密钥，密码尝试和后备（无密码）都会失败，到达第 54 行。不存在第一次调用失败但无密码重试成功的密钥状态。</li>
+<li><strong>影响：</strong>无 - 预期的“即使配置了密码短语也允许未加密的密钥”行为已经起作用（密码短语被简单地忽略），但后备分支本身无法访问/具有误导性。</li>
+<li><strong>建议的修复：</strong>删除第 48-51 行，或记录密码短语仅对真正加密的密钥有意义。</li>
 </ul>
-<h3 id="unreachable-defensive-branch-openssl_sign-failure-path">Unreachable defensive branch — <code>openssl_sign()</code> failure path<a class="headerlink" href="#unreachable-defensive-branch-openssl_sign-failure-path" title="Permanent link">&para;</a></h3>
+<h3 id="openssl_sign">无法访问的防御分支 — <code>openssl_sign()</code> 失败路径<a class="headerlink" href="#openssl_sign" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File/line:</strong> <code>src/Identity/Security/TokenManager.php:100-101</code>.</li>
-<li><strong>Description:</strong> The constructor guarantees a valid private key; <code>openssl_sign()</code> with SHA-256 succeeded for RSA, EC and DSA keys in this environment. The <code>$signed !== true</code> branch could not be triggered without invalidating the constructor contract.</li>
-<li><strong>Recommendation:</strong> leave as defence-in-depth; not testable in a unit test. Documented rather than force-tested.</li>
+<li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:100-101</code>。</li>
+<li><strong>说明：</strong> 构造函数保证私钥有效； <code>openssl_sign()</code> 在此环境中，使用 SHA-256 成功实现 RSA、EC 和 DSA 密钥。在不使构造函数合约无效的情况下，无法触发 <code>$signed !== true</code> 分支。</li>
+<li><strong>建议：</strong> 保留纵深防御；无法在单元测试中进行测试。记录下来而不是经过强制测试。</li>
 </ul>
-<h2 id="observations-not-bugs">Observations (not bugs)<a class="headerlink" href="#observations-not-bugs" title="Permanent link">&para;</a></h2>
+<h2 id="_1">观察结果（不是错误）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>User::setProfile()</code> (line 153-160) does not detach the previously assigned profile. After <code>setProfile($a)</code> then <code>setProfile($b)</code>, <code>$a-&gt;getUser()</code> still points at <code>$user</code>. If both profiles were flushed, the OneToOne <code>user_id</code> unique constraint could be violated. Normal flows only set a profile once, so severity is low; a <code>setProfile(null)</code>/detach step would make replacement safe. (Not covered by a failing test — documented for the fixer.)</li>
-<li><code>JwtAuthenticator::supports()</code> (line 33) is case-sensitive (<code>'Bearer '</code>); <code>Authorization: bearer xyz</code> is not recognised. Many JWT stacks accept case-insensitive scheme names; minor.</li>
-<li><code>TokenManager::rotateRefreshToken()</code> reuse detection (lines 249-253) intentionally only treats <em>rotation-replaced</em> tokens as theft; a token revoked manually (e.g. logout) with no replacement yields "invalid or expired" rather than "reuse detected" — by design.</li>
-<li><code>RedisOtpStorage</code> constructor performs no I/O (Predis lazy client); a misconfigured DSN fails only on the first command, not at construction time.</li>
+<li><code>User::setProfile()</code>（第153-160行）不会分离先前分配的配置文件。在<code>setProfile($a)</code>和<code>setProfile($b)</code>之后，<code>$a-&gt;getUser()</code>仍然指向<code>$user</code>。如果刷新两个配置文件，则可能会违反 OneToOne <code>user_id</code> 唯一约束。正常流程仅设置一次配置文件，因此严重性较低； <code>setProfile(null)</code>/detach 步骤将使更换更加安全。 （失败的测试未涵盖 - 为修复程序记录。）</li>
+<li><code>JwtAuthenticator::supports()</code>（第33行）区分大小写（<code>'Bearer '</code>）； <code>Authorization: bearer xyz</code> 未被识别。许多 JWT 堆栈接受不区分大小写的方案名称；次要的。</li>
+<li><code>TokenManager::rotateRefreshToken()</code>重用检测（第249-253行）有意仅将<em>旋转替换</em>令牌视为盗窃；根据设计，手动撤销（例如注销）且没有替换的令牌会产生“无效或过期”，而不是“检测到重用”。</li>
+<li><code>RedisOtpStorage</code>构造函数不执行I/O（Predis惰性客户端）；配置错误的 DSN 仅在第一个命令时失败，而不是在构建时失败。</li>
 </ul>
-<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
+<h2 id="_2">跳过测试<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>RedisOtpStorageTest::testExistsReturnsFalseWhenServerErrors</code> — correct-behavior test for <strong>Bug #1</strong> (error replies must not make <code>exists()</code> return <code>true</code>). Fails against the current implementation, so it is skipped and documents the expected behaviour + fix.</li>
+<li><code>RedisOtpStorageTest::testExistsReturnsFalseWhenServerErrors</code> — <strong>Bug #1</strong> 的正确行为测试（错误回复不得使 <code>exists()</code> 返回 <code>true</code>）。当前的实现失败，因此它被跳过并记录预期的行为+修复。</li>
 </ul>
 
 

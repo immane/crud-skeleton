@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -3455,7 +3455,7 @@ JSON 由 <code>ExceptionInterceptor</code> 提供。</p>
 </tbody>
 </table>
 <p><code>DqlExpression</code> 与 <code>@filter</code> 具有相同的表达式语法，但有两个关键
-区别：(1) 它是用 PHP 代码构造的，而不是从查询字符串构造的，(2) 它
+区别：(1) 它是用 PHP 代码构造的，而不是根据查询字符串构造的，(2) 它
 从不使用 <code>LegacyEvaluator</code>。空的 <code>in []</code> 变为 <code>1 = 0</code> （无行）而不是
 <code>IN ()</code> 这样缺失的范围就不会产生任何数据。</p>
 <h2 id="7-isgranted">7. 访问控制 (<code>IsGranted</code>)<a class="headerlink" href="#7-isgranted" title="Permanent link">&para;</a></h2>
@@ -3470,7 +3470,7 @@ JSON 由 <code>ExceptionInterceptor</code> 提供。</p>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="x">class CategoryController extends RestController { /* ... */ }</span>
 </code></pre></div>
-<p>仅限经过身份验证的用户（类别级别）：</p>
+<p>仅限经过身份验证的用户（班级级别）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="x">#[Route('/app/orders', name: 'app-orders-')]</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="x">#[IsGranted('ROLE_USER')]</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="x">class OrderController extends RestController { /* ... */ }</span>
@@ -3513,7 +3513,7 @@ JSON 由 <code>ExceptionInterceptor</code> 提供。</p>
 模式和示例），并且 <code>default</code> 区域仅限于 <code>/api</code>、<code>/system</code>、
 <code>/health</code>、<code>/metrics</code>。</p>
 <h3 id="_9">使用属性记录<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<p>视图 mixin 提供 <code>#[OA\*]</code> 属性（参数、标签、响应），因此 mixin
+<p>视图 mixin 包含 <code>#[OA\*]</code> 属性（参数、标签、响应），因此 mixin
 路线会自动记录。对于自定义控制器添加 <code>#[OA\...]</code>
 属性，如 <code>HealthController</code> 中：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="x">#[OA\Get(</span>
