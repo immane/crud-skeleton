@@ -27,7 +27,7 @@
     
     
       
-        <title>Identity模块测试审核(2026-08-09) - CRUD Skeleton</title>
+        <title>Identity module test audit (2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#identity2026-08-09" class="md-skip">
+        <a href="#identity-module-test-audit-2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Identity模块测试审核(2026-08-09)
+              Identity module test audit (2026-08-09)
             
           </span>
         </div>
@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -1303,6 +1303,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/inventory/" class="md-nav__link">
         
   
@@ -1394,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -2254,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2282,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2580,10 +2608,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        总结
+        Summary
       
     </span>
   </a>
@@ -2591,10 +2619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#keep" class="md-nav__link">
     <span class="md-ellipsis">
       
-        保留
+        KEEP
       
     </span>
   </a>
@@ -2602,10 +2630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#delete-candidates" class="md-nav__link">
     <span class="md-ellipsis">
       
-        删除候选者
+        DELETE CANDIDATES
       
     </span>
   </a>
@@ -2613,10 +2641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#merge-suggestions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        合并建议
+        MERGE SUGGESTIONS
       
     </span>
   </a>
@@ -2624,10 +2652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#verification-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        验证步骤
+        Verification steps
       
     </span>
   </a>
@@ -2654,234 +2682,234 @@
   
 
 
-<h1 id="identity2026-08-09">Identity模块测试审核(2026-08-09)<a class="headerlink" href="#identity2026-08-09" title="Permanent link">&para;</a></h1>
+<h1 id="identity-module-test-audit-2026-08-09">Identity module test audit (2026-08-09)<a class="headerlink" href="#identity-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>对<code>tests/Identity/</code>（33个文件，281个测试方法）的只读审计
-不必要/多余的测试。没有修改<code>src/</code>或<code>tests/</code>文件；这个
-报告是唯一的工件。分类方案：<strong>A = KEEP</strong>，
-<strong>B = 删除候选</strong>（1 个覆盖范围追踪、2 个重复、3 个
-实现细节，4 个冗余回归，5 个近空），<strong>C = MERGE</strong>。
-跳过记录已知错误的测试将被保留（根据
-<code>docs/issues/coverage-2026-08-09/README.md</code>）。</p>
+<p>Read-only audit of <code>tests/Identity/</code> (33 files, 281 test methods) for
+unnecessary / redundant tests. No <code>src/</code> or <code>tests/</code> file was modified; this
+report is the only artifact. Classification scheme: <strong>A = KEEP</strong>,
+<strong>B = DELETE CANDIDATE</strong> (1 coverage-chasing, 2 duplicate, 3
+implementation-detail, 4 redundant-regression, 5 near-empty), <strong>C = MERGE</strong>.
+Skipped tests that document known bugs are KEEP (per
+<code>docs/issues/coverage-2026-08-09/README.md</code>).</p>
 </blockquote>
-<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>测试</th>
-<th>判决</th>
+<th>File</th>
+<th>Tests</th>
+<th>Verdict</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Command/CreateUserCommandTest.php</code></td>
 <td>4</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Command/CreateUserCommandCoverageTest.php</code></td>
 <td>5</td>
-<td>保留（1 个跳过错误测试）</td>
+<td>KEEP (1 skipped bug test)</td>
 </tr>
 <tr>
 <td><code>Controller/App/ProfileControllerTest.php</code></td>
 <td>8</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Controller/App/UserControllerTest.php</code></td>
 <td>3</td>
-<td>保留（3 名候选人，医学博士）</td>
+<td>KEEP (3 candidates, MED)</td>
 </tr>
 <tr>
 <td><code>Controller/AuthControllerTest.php</code></td>
 <td>20</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Controller/AuthControllerCoverageTest.php</code></td>
 <td>9</td>
-<td>保留（2 个跳过的错误测试）</td>
+<td>KEEP (2 skipped bug tests)</td>
 </tr>
 <tr>
 <td><code>Controller/Manage/ProfileControllerTest.php</code></td>
 <td>2</td>
-<td>删除候选人 (2)</td>
+<td>DELETE CANDIDATE (2)</td>
 </tr>
 <tr>
 <td><code>Controller/OtpControllerTest.php</code></td>
 <td>4</td>
-<td>删除候选人 (4)</td>
+<td>DELETE CANDIDATE (4)</td>
 </tr>
 <tr>
 <td><code>Controller/OtpControllerCoverageTest.php</code></td>
 <td>9</td>
-<td>删除候选者（8；1 跳过错误测试保留）</td>
+<td>DELETE CANDIDATE (8; 1 skipped bug test KEEP)</td>
 </tr>
 <tr>
 <td><code>Entity/ProfileTest.php</code></td>
 <td>21</td>
-<td>21保留（8 名候选人）</td>
+<td>KEEP (8 candidates)</td>
 </tr>
 <tr>
 <td><code>Entity/RefreshTokenTest.php</code></td>
 <td>3</td>
-<td>保留（2 名候选人，医学博士）</td>
+<td>KEEP (2 candidates, MED)</td>
 </tr>
 <tr>
 <td><code>Entity/UserAdditionalTest.php</code></td>
 <td>5</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Entity/UserTest.php</code></td>
 <td>12</td>
-<td>12保留（3 名候选人，医学博士）</td>
+<td>KEEP (3 candidates, MED)</td>
 </tr>
 <tr>
 <td><code>EventListener/UserProfileListenerTest.php</code></td>
 <td>4</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Integration/AuthBlackBoxIntegrationTest.php</code></td>
 <td>4</td>
-<td>保留（合并）</td>
+<td>KEEP (merge)</td>
 </tr>
 <tr>
 <td><code>Integration/AuthIntegrationTest.php</code></td>
 <td>7</td>
-<td>KEEP（3 名候选人，MED；合并）</td>
+<td>KEEP (3 candidates, MED; merge)</td>
 </tr>
 <tr>
 <td><code>Integration/UserApiIntegrationTest.php</code></td>
 <td>39</td>
-<td>39保持核心； 15 名候选人（14 名跨模块 + 1 名重复）</td>
+<td>KEEP core; 15 candidates (14 cross-module + 1 dup)</td>
 </tr>
 <tr>
 <td><code>Repository/ProfileRepositoryTest.php</code></td>
 <td>7</td>
-<td>保留（1 位候选人，低）</td>
+<td>KEEP (1 candidate, LOW)</td>
 </tr>
 <tr>
 <td><code>Repository/RefreshTokenRepositoryTest.php</code></td>
 <td>3</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Repository/UserRepositoryTest.php</code></td>
 <td>3</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Security/JwtAuthenticatorAdditionalTest.php</code></td>
 <td>3</td>
-<td>保持（1 位候选人，高）</td>
+<td>KEEP (1 candidate, HIGH)</td>
 </tr>
 <tr>
 <td><code>Security/JwtAuthenticatorTest.php</code></td>
 <td>7</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Security/TokenManagerAdditionalTest.php</code></td>
 <td>14</td>
-<td>14保留（2 名候选人，医学博士）</td>
+<td>KEEP (2 candidates, MED)</td>
 </tr>
 <tr>
 <td><code>Security/TokenManagerTest.php</code></td>
 <td>16</td>
-<td>16保持（1 位候选人为 HIGH，2 位为 MED）</td>
+<td>KEEP (1 candidate HIGH, 2 MED)</td>
 </tr>
 <tr>
 <td><code>Service/LocalCacheOtpStorageTest.php</code></td>
 <td>4</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Service/NullOtpStorageTest.php</code></td>
 <td>3</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Service/OtpServiceCoverageTest.php</code></td>
 <td>3</td>
-<td>KEEP（PII 屏蔽合约）</td>
+<td>KEEP (PII masking contract)</td>
 </tr>
 <tr>
 <td><code>Service/OtpServiceTest.php</code></td>
 <td>9</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Service/ProfileServiceTest.php</code></td>
 <td>11</td>
-<td>11保留（8 名候选人，医学博士）</td>
+<td>KEEP (8 candidates, MED)</td>
 </tr>
 <tr>
 <td><code>Service/RedisOtpStorageTest.php</code></td>
 <td>6</td>
-<td>保留（1 个跳过错误测试）</td>
+<td>KEEP (1 skipped bug test)</td>
 </tr>
 <tr>
 <td><code>Service/UserServiceTest.php</code></td>
 <td>28</td>
-<td>28保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Sms/AliyunSmsProviderLiveBranchTest.php</code></td>
 <td>3</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 <tr>
 <td><code>Sms/AliyunSmsProviderTest.php</code></td>
 <td>2</td>
-<td>保持</td>
+<td>KEEP</td>
 </tr>
 </tbody>
 </table>
-<p>计数是 <code>public function test*</code> 方法。 <code>UserApiIntegrationTest</code> (39) 是一个
-汇总：注册 (6)、应用程序配置文件/密码 (8)、管理用户 CRUD (9)、
-交易规范 (4)、钱包存款/转账/对账 (10)、
-管理/用户 404 (2)。 39 项测试中有 14 项是跨模块（钱包/交易）。</p>
-<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>以下行为至关重要，不得删除：</p>
+<p>Counts are <code>public function test*</code> methods. <code>UserApiIntegrationTest</code> (39) is a
+roll-up: register (6), app profile/password (8), manage user CRUD (9),
+Trade specifications (4), Wallet deposit/transfer/reconcile (10),
+manage/user 404s (2). 14 of its 39 tests are cross-module (Wallet/Trade).</p>
+<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>The following behavior is critical and must not be deleted:</p>
 <ul>
-<li><strong>令牌生命周期/轮换/重用（关键路径#1，身份不变）：</strong>
-  <code>TokenManagerTest</code>（轮换撤销旧的+发布新的，重用检测撤销
-  全部、篡改/过期/格式错误的令牌拒绝、TTL、base64url)、
-  <code>TokenManagerAdditionalTest</code>（构造函数密钥失败路径，签名令牌
-  验证分支，刷新失败时轮换回滚/不回滚），
+<li><strong>Token lifecycle / rotation / reuse (critical path #1, identity invariant):</strong>
+  <code>TokenManagerTest</code> (rotation revokes old + issues new, reuse detection revokes
+  all, tampered/expired/malformed token rejection, TTL, base64url),
+  <code>TokenManagerAdditionalTest</code> (constructor key failure paths, signed-token
+  validation branches, rotate rollback/no-rollback on flush failure),
   <code>RefreshTokenRepositoryTest</code> (findValidByHash, revokeAllForUser,
-  removeExpired), <code>RefreshTokenTest</code> （isExpired/撤销语义）。</li>
-<li><strong>身份验证器：</strong> <code>JwtAuthenticatorTest</code> （支持、丢失/无效令牌、
-  用户分辨率，用户未找到），<code>JwtAuthenticatorAdditionalTest</code>（已翻译
-  失败消息，非数字<code>sub</code>边缘）。</li>
-<li><strong>身份验证端点：</strong> <code>AuthControllerTest</code> + <code>AuthControllerCoverageTest</code>
-  （通过电子邮件/电话/用户名登录，未验证电话 403，刷新 400/401，
-  注销撤销变体、注册、OTP 验证路径）。包括两个
-  跳过 Bug A / Bug D 回归测试。</li>
-<li><strong>OTP服务+存储合约：</strong> <code>OtpServiceTest</code>、<code>OtpServiceCoverageTest</code>
-  （PII 屏蔽）、<code>LocalCacheOtpStorageTest</code>、<code>NullOtpStorageTest</code>、
-  <code>RedisOtpStorageTest</code> （包括跳过 Bug #1 回归）。</li>
-<li><strong>用户/配置文件服务：</strong> <code>UserServiceTest</code>（注册验证，
-  更改密码、更新配置文件）、<code>ProfileServiceTest::testJoinAsMember*</code>。</li>
-<li><strong>存储库：</strong> <code>UserRepositoryTest</code>、<code>ProfileRepositoryTest</code>（真正的 DQL
-  针对 DB），<code>RefreshTokenRepositoryTest</code>。</li>
-<li><strong>命令：</strong> <code>CreateUserCommandTest</code> + <code>CreateUserCommandCoverageTest</code>
-  （规范化、角色解析、重复守卫、跳过 Bug E 测试）。</li>
-<li><strong>听众：</strong> <code>UserProfileListenerTest</code>。</li>
-<li><strong>应用程序/管理控制器：</strong> <code>App/ProfileControllerTest</code>，加上核心
-  <code>UserApiIntegrationTest</code>（管理用户CRUD，登录后更改密码E2E
-  重新检查、配置文件更新、管理边界 403、404s）。</li>
-<li><strong>短信：</strong> <code>AliyunSmsProviderTest</code>、<code>AliyunSmsProviderLiveBranchTest</code>。</li>
-<li><strong>所有 5 个跳过的错误重现测试</strong>（Bug A × 2、Bug D、Bug E、RedisOtpStorage
-  Bug #1）按照覆盖活动政策保留。</li>
+  removeExpired), <code>RefreshTokenTest</code> (isExpired/revoke semantics).</li>
+<li><strong>Authenticator:</strong> <code>JwtAuthenticatorTest</code> (supports, missing/invalid token,
+  user resolution, user-not-found), <code>JwtAuthenticatorAdditionalTest</code> (translated
+  failure message, non-numeric <code>sub</code> edge).</li>
+<li><strong>Auth endpoints:</strong> <code>AuthControllerTest</code> + <code>AuthControllerCoverageTest</code>
+  (login by email/phone/username, unverified-phone 403, refresh 400/401,
+  logout revocation variants, register, OTP verify paths). Includes the two
+  skipped Bug A / Bug D regression tests.</li>
+<li><strong>OTP service + storage contracts:</strong> <code>OtpServiceTest</code>, <code>OtpServiceCoverageTest</code>
+  (PII masking), <code>LocalCacheOtpStorageTest</code>, <code>NullOtpStorageTest</code>,
+  <code>RedisOtpStorageTest</code> (incl. skipped Bug #1 regression).</li>
+<li><strong>User/Profile services:</strong> <code>UserServiceTest</code> (register validation,
+  changePassword, updateProfile), <code>ProfileServiceTest::testJoinAsMember*</code>.</li>
+<li><strong>Repositories:</strong> <code>UserRepositoryTest</code>, <code>ProfileRepositoryTest</code> (real DQL
+  against DB), <code>RefreshTokenRepositoryTest</code>.</li>
+<li><strong>Commands:</strong> <code>CreateUserCommandTest</code> + <code>CreateUserCommandCoverageTest</code>
+  (normalization, role parsing, duplicate guards, skipped Bug E test).</li>
+<li><strong>Listeners:</strong> <code>UserProfileListenerTest</code>.</li>
+<li><strong>App/Manage controllers:</strong> <code>App/ProfileControllerTest</code>, plus the core of
+  <code>UserApiIntegrationTest</code> (manage user CRUD, change-password E2E with login
+  re-check, profile update, admin-boundary 403, 404s).</li>
+<li><strong>SMS:</strong> <code>AliyunSmsProviderTest</code>, <code>AliyunSmsProviderLiveBranchTest</code>.</li>
+<li><strong>All 5 skipped bug-repro tests</strong> (Bug A × 2, Bug D, Bug E, RedisOtpStorage
+  Bug #1) are KEEP per the coverage campaign policy.</li>
 </ul>
-<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p><code>File::method</code> 使用短测试类名称。信心是关于
-删除建议，而不是测试是否通过。</p>
+<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<p><code>File::method</code> uses the short test-class name. Confidence is about the
+deletion recommendation, not about whether the test passes.</p>
 <table>
 <thead>
 <tr>
@@ -3236,60 +3264,60 @@
 </tr>
 </tbody>
 </table>
-<p><strong>关于 OtpController 对（高）的注意事项。</strong> <code>src/Identity/Controller/OtpController.php</code>
-是 <code>AuthController::requestOtp/verifyOtp</code> 的复制粘贴（相同的主体，
-<code>/api/auth/otp/request</code> + <code>/api/auth/otp/verify</code>）。 <code>debug:router</code> 寄存器
-两个控制器都用于相同的两条路径； <code>sys-auth-*</code> 路由排序在
-<code>sys-auth-otp-*</code> 路由，因此 <strong>OtpController 是隐藏/无法访问的死代码</strong>
-它的测试仅执行实时 AuthController 逻辑的离线副本。
-因此，整个 OtpController 测试表面是多余的，而重复的
-控制器仍然存在。唯一的例外是
+<p><strong>Note on the OtpController pair (HIGH).</strong> <code>src/Identity/Controller/OtpController.php</code>
+is a copy-paste of <code>AuthController::requestOtp/verifyOtp</code> (identical bodies,
+<code>/api/auth/otp/request</code> + <code>/api/auth/otp/verify</code>). <code>debug:router</code> registers
+both controllers for the same two paths; the <code>sys-auth-*</code> routes sort before the
+<code>sys-auth-otp-*</code> routes, so <strong>OtpController is shadowed/unreachable dead code</strong>
+and its tests only exercise an offline copy of the live AuthController logic.
+The whole OtpController test surface is therefore redundant while the duplicate
+controller still exists. The one exception is
 <code>OtpControllerCoverageTest::testRequestOtpWithMalformedBodyShouldReturnBadRequest</code>
-（已跳过，Bug A）——必须保留该文档（将其描述移至
-<code>AuthControllerCoverageTest</code>，因为 AuthController 带有相同的不受保护的
-<code>json_decode</code>)，因此跳过的测试本身是 KEEP。</p>
-<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+(skipped, Bug A) — that documentation must be preserved (move its description to
+<code>AuthControllerCoverageTest</code>, since AuthController carries the same unguarded
+<code>json_decode</code>), so the skipped test itself is KEEP.</p>
+<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>OtpControllerTest</code> + <code>OtpControllerCoverageTest</code> → 折叠到 AuthController 中
-  从 <code>src/</code> 中删除阴影 <code>OtpController</code> 后进行 OTP 测试</strong>（a
-  <code>src/</code> 更改，超出此处的范围）。所有 13 个可运行的 OTP 测试均已完成
-  由 AuthController 对覆盖。</li>
-<li><strong><code>Integration/AuthIntegrationTest</code> + <code>Integration/AuthBlackBoxIntegrationTest</code> → 一
-  auth 黑盒文件。</strong> 它们在刷新旋转/重用检测和上重叠
-  400/401 拒绝登录案例；合并删除了~3个重复的测试并且
-  保留端到端注销+重用撤销所有断言。</li>
-<li><strong><code>Integration/UserApiIntegrationTest</code> → 重新定位 10 个钱包测试和 4 个
-  交易规范测试 <code>tests/Wallet/</code> 和 <code>tests/Trade/</code></strong> 其中
-  拥有实时模块套件。该文件保留其身份范围（注册，
-  配置文件、密码、管理用户 CRUD、所有权/404 边缘）。</li>
-<li><strong><code>Entity/ProfileTest</code> 访问器测试 → 折叠成单个表驱动
-  设置/获取+触摸测试</strong>（昵称/头像/元数据/joinedAt），删除
-  重复的 <code>testUuidMatchesV4Format</code> 和 <code>testDefaultProfileFieldsAreNull</code>。</li>
-<li><strong><code>ProfileServiceTest</code> 通用 CRUD (<code>new/get/update/remove</code>) → 删除
-  仅委托测试</strong>并保留 <code>testJoinAsMember*</code> （唯一特定于配置文件的
-  逻辑）；通用机械归<code>tests/Core/Service/BaseService*</code>所有。</li>
-<li><strong><code>Controller/App/UserControllerTest</code> → 共享的一个守卫测试</strong>
-  “未经验证 → 401”路径而不是三个相同的副本。</li>
+<li><strong><code>OtpControllerTest</code> + <code>OtpControllerCoverageTest</code> → fold into the AuthController
+  OTP tests</strong> after the shadowed <code>OtpController</code> is removed from <code>src/</code> (a
+  <code>src/</code> change, out of scope here). All 13 runnable OTP tests are already
+  covered by the AuthController pair.</li>
+<li><strong><code>Integration/AuthIntegrationTest</code> + <code>Integration/AuthBlackBoxIntegrationTest</code> → one
+  auth black-box file.</strong> They overlap on refresh-rotation/reuse-detection and on
+  the 400/401 login-denial cases; consolidating removes ~3 duplicated tests and
+  keeps the end-to-end logout + reuse-revokes-all assertions.</li>
+<li><strong><code>Integration/UserApiIntegrationTest</code> → relocate the 10 Wallet tests and 4
+  Trade specification tests to <code>tests/Wallet/</code> and <code>tests/Trade/</code></strong> where the
+  owning module suites live. The file keeps its Identity scope (register,
+  profile, password, manage-user CRUD, ownership/404 edges).</li>
+<li><strong><code>Entity/ProfileTest</code> accessor tests → collapse into a single table-driven
+  set/get + touch test</strong> (nickname/avatar/metadata/joinedAt), dropping the
+  duplicated <code>testUuidMatchesV4Format</code> and <code>testDefaultProfileFieldsAreNull</code>.</li>
+<li><strong><code>ProfileServiceTest</code> generic CRUD (<code>new/get/update/remove</code>) → drop the
+  delegation-only tests</strong> and keep <code>testJoinAsMember*</code> (the only Profile-specific
+  logic); the generic machinery is owned by <code>tests/Core/Service/BaseService*</code>.</li>
+<li><strong><code>Controller/App/UserControllerTest</code> → one guard test</strong> for the shared
+  "unauthenticated → 401" path instead of three identical copies.</li>
 </ul>
-<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>在根据任何建议采取行动之前，请在本地验证（项目 PHP 8.4+ 运行时）：</p>
+<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
+<p>Before acting on any recommendation, verify locally (project PHP 8.4+ runtime):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php<span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--filter<span class="w"> </span>Identity
 </code></pre></div>
 <ul>
-<li>要确认高置信度重复项可以安全删除，请运行覆盖测试
-  排除候选人（例如暂时使用 <code>--filter</code> 仅运行
-  覆盖测试），然后删除候选并重新运行身份过滤器绿色。</li>
-<li>对于 OtpController 声明，重新运行 <code>bin/console debug:router | grep otp</code> 以
-  确认<code>sys-auth-*</code>路由仍然影子<code>sys-auth-otp-*</code>；如果路线顺序
-  一旦发生变化，请在删除之前重新评估。</li>
-<li>对于钱包/交易跨模块候选人，运行
-  <code>--filter 'Wallet|Trade'</code> 确认所属套房通过，无需
-  身份文件副本。</li>
-<li>切勿删除跳过的 (<code>markTestSkipped</code>) 测试 - 每个测试都记录一个已知的错误
-  （错误 A、B、D、E、RedisOtpStorage 错误 #1）并且是 KEEP 基线的一部分。</li>
-<li>任何删除后，确认身份线覆盖预算
-  <code>src/Identity/</code> 不会低于 90% 门限；删除的测试都是
-  幸存的测试或核心/钱包/贸易套件涵盖了，所以这应该成立。</li>
+<li>To confirm a HIGH-confidence DUPLICATE is safe to remove, run the covering test
+  with the candidate excluded (e.g. temporarily use <code>--filter</code> to run only the
+  covering test), then delete the candidate and re-run the Identity filter green.</li>
+<li>For the OtpController claim, re-run <code>bin/console debug:router | grep otp</code> to
+  confirm the <code>sys-auth-*</code> routes still shadow <code>sys-auth-otp-*</code>; if route order
+  ever changes, re-evaluate before deleting.</li>
+<li>For the Wallet/Trade cross-module candidates, run
+  <code>--filter 'Wallet|Trade'</code> to confirm the owning suites pass without the
+  Identity-file copies.</li>
+<li>Never delete a skipped (<code>markTestSkipped</code>) test — each documents a known bug
+  (Bug A, B, D, E, RedisOtpStorage Bug #1) and is part of the KEEP baseline.</li>
+<li>After any deletion, confirm the Identity line-coverage budget for
+  <code>src/Identity/</code> does not drop below the 90% gate; the removed tests are all
+  covered by surviving tests or the Core/Wallet/Trade suites, so this should hold.</li>
 </ul>
 
 

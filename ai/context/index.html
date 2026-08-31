@@ -1307,6 +1307,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/inventory/" class="md-nav__link">
         
   
@@ -2589,6 +2617,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Directory Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#approved-catalog-target-not-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approved Catalog Target (Not Implemented)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3491,6 +3536,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Directory Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#approved-catalog-target-not-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approved Catalog Target (Not Implemented)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -4342,7 +4404,7 @@
 - <strong>PHP 8.4+</strong>, Doctrine ORM 3.6, MySQL 8 (Docker), SQLite (tests)
 - JWT authentication (RS256), OTP/SMS login, WeChat Mini Program / Official Account login
 - Expression-based dynamic query engine (<code>@filter</code>, <code>@sort</code>, <code>@dql</code>) + server-owned row-scope <code>DqlExpression</code> (<code>entity.getUser() == this.getUser()</code>, <code>in</code>/<code>not in</code> with empty-collection safety)
-- Modular architecture: <strong>Core</strong> (framework + DqlExpression), <strong>Common</strong> (CMS + Content <code>metadata</code> field-grant pilot), <strong>Authorization</strong> (independent RBAC — scoped Store grants, strict field grants, audit, <code>AuthorizationVoter</code>), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (commercial orders), <strong>Store</strong> (multi-store operations), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Inventory</strong> (stock &amp; reservation), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
+- Modular architecture: <strong>Core</strong> (framework + DqlExpression), <strong>Common</strong> (CMS + Content <code>metadata</code> field-grant pilot), <strong>Authorization</strong> (independent RBAC — scoped Store grants, strict field grants, audit, <code>AuthorizationVoter</code>), <strong>Promotion</strong> (DSL-driven promotions), <strong>Identity</strong> (auth), <strong>Trade</strong> (commercial orders), <strong>Store</strong> (multi-store operations and approved shared/private catalog target), <strong>Payment</strong> (invoices), <strong>Wallet</strong> (balances), <strong>Inventory</strong> (stock &amp; reservation), <strong>Wechat</strong> (login + pay), <strong>Storage</strong> (file upload drivers)
 - EasyWeChat 6.x integration (Mini Program, Official Account OAuth, WeChat Pay V3)
 - NelmioApiDoc (Swagger at <code>/api/doc</code>), PHPUnit 12.5, Docker Compose (7 services: app, worker, scheduler, nginx, MySQL, Redis, Mailpit)
 - MkDocs Material + GitHub Pages documentation (<strong>mermaid diagram rendering enabled</strong> via CDN + <code>pymdownx.superfences</code> custom fence)
@@ -4511,6 +4573,15 @@
 <a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    ├── migrations.yml            # CI: MySQL 8.4 migration chain validation
 <a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    └── docs.yml                  # GitHub Pages deploy
 </code></pre></div>
+<h3 id="approved-catalog-target-not-implemented">Approved Catalog Target (Not Implemented)<a class="headerlink" href="#approved-catalog-target-not-implemented" title="Permanent link">&para;</a></h3>
+<p><code>docs/design/store-catalog.md</code> defines the approved catalog ownership transition:
+Product and Specification move from Trade to Store; <code>Product.store = null</code> means a
+shared/global catalog record, while a non-null Store relation means a Store-private
+record. A resolved active Store remains mandatory for every quote and order. Pricing
+must allow only shared Products or Products owned by that Store; Inventory remains
+keyed by Store UUID and Specification UUID, and Payment remains independent of catalog
+entities. Do not describe this target as the current implementation until the migration,
+Store-scoped catalog APIs, and pricing checks are merged.</p>
 <h2 id="3-request-lifecycle">3. Request Lifecycle<a class="headerlink" href="#3-request-lifecycle" title="Permanent link">&para;</a></h2>
 <ol>
 <li><code>public/index.php</code> → <code>App\Kernel</code> (MicroKernelTrait)</li>
@@ -6283,7 +6354,7 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 </tr>
 <tr>
 <td><code>SpecificationRecipe</code></td>
-<td>One active recipe per Trade Specification UUID; stores material BOM lines</td>
+<td>One active recipe per catalog Specification UUID; stores material BOM lines</td>
 </tr>
 <tr>
 <td><code>RecipeLine</code></td>

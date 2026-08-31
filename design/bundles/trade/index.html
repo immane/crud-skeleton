@@ -1323,10 +1323,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-entities" class="md-nav__link">
+  <a href="#11-catalog-ownership-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Entities
+        1.1 Catalog Ownership Target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-entities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Entities
       
     </span>
   </a>
@@ -1805,6 +1816,34 @@
     
   
     Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
   
 
     
@@ -3114,10 +3153,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-entities" class="md-nav__link">
+  <a href="#11-catalog-ownership-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Entities
+        1.1 Catalog Ownership Target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-entities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Entities
       
     </span>
   </a>
@@ -3594,15 +3644,17 @@
 
 <h1 id="trade-bundle-design">Trade Bundle Design<a class="headerlink" href="#trade-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>The Trade bundle (<code>src/Trade/</code>) is the e-commerce module. It implements products, specifications,
-orders, order items with a pluggable price calculation pipeline and Symfony Workflow-based
-order state machine.</p>
+<p>The Trade bundle (<code>src/Trade/</code>) owns orders, order items, price calculation, and the
+Symfony Workflow-based order state machine. Product and Specification currently live in
+Trade, but their approved target owner is Store; see <a href="../../store-catalog/">Store Catalog Model</a>.
+This document describes the current implementation unless a section explicitly says
+"target".</p>
 </blockquote>
 <hr />
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
 <p>Trade provides a complete order management system:</p>
 <ul>
-<li><strong>Products</strong> with multiple <strong>Specifications</strong> (SKU-like variants with pricing)</li>
+<li>Current catalog integration with <strong>Products</strong> and multiple <strong>Specifications</strong> (SKU-like variants with pricing)</li>
 <li><strong>Orders</strong> with a state machine lifecycle (draft -&gt; completed)</li>
 <li><strong>Order Items</strong> with price snapshots for historical accuracy</li>
 <li><strong>Price Calculation Pipeline</strong>: pluggable calculators with priority ordering</li>
@@ -3610,7 +3662,17 @@ order state machine.</p>
 <li><strong>UUID v4</strong>: external identifiers for orders and items</li>
 <li><strong>Store integration</strong>: Store-scoped orders write a local Outbox event and await Store acceptance</li>
 </ul>
-<h3 id="11-entities">1.1 Entities<a class="headerlink" href="#11-entities" title="Permanent link">&para;</a></h3>
+<h3 id="11-catalog-ownership-target">1.1 Catalog Ownership Target<a class="headerlink" href="#11-catalog-ownership-target" title="Permanent link">&para;</a></h3>
+<p>The approved target keeps Trade as the commercial-order owner while moving the catalog
+to Store. <code>Product.store = NULL</code> denotes a shared/global catalog product;
+<code>Product.store = Store</code> denotes a Store-private product. A resolved Store is mandatory
+for quotes and orders, and pricing must accept only a Specification whose Product is
+shared or belongs to that Store. See <a href="../../store-catalog/">Store Catalog Model</a> for the
+complete invariant and migration plan. Before the entity move is complete, Trade must
+replace <code>OrderItem</code>'s Specification Doctrine relation with a scalar catalog
+Specification UUID and immutable snapshots; a permanent Trade-to-Store entity relation
+would violate the system cross-module contract.</p>
+<h3 id="12-entities">1.2 Entities<a class="headerlink" href="#12-entities" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>

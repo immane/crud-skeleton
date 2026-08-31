@@ -1532,6 +1532,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/bundles/inventory/" class="md-nav__link">
         
   
@@ -3056,11 +3084,11 @@ one Messenger bus, but they must behave as if they were independent services.</p
 </tr>
 <tr>
 <td><code>Trade</code></td>
-<td>E-commerce core: Product, Specification, Order, OrderItem, pricing pipeline</td>
+<td>E-commerce transactions: Order, OrderItem, pricing pipeline, payment orchestration</td>
 </tr>
 <tr>
 <td><code>Store</code></td>
-<td>Multi-store operations: Store, Membership, StoreOrder distribution</td>
+<td>Multi-store operations: Store, Membership, StoreOrder distribution; approved target owner of shared/private Product and Specification catalog (<a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
 </tr>
 <tr>
 <td><code>Inventory</code></td>
@@ -3327,7 +3355,7 @@ webhooks (<code>PaymentNotifyController</code>) with provider-agnostic invoice e
 </tr>
 <tr>
 <td>Soft delete</td>
-<td><code>Product</code> / <code>Specification</code> use an <code>isDeleted</code> flag (<code>Trade\Entity</code>) so pricing and history can still reference removed records</td>
+<td><code>Product</code> / <code>Specification</code> use an <code>isDeleted</code> flag; the approved target moves catalog ownership to Store while retaining immutable order snapshots</td>
 </tr>
 <tr>
 <td>Token rotation</td>

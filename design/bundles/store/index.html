@@ -16,7 +16,7 @@
         <link rel="prev" href="../trade/">
       
       
-        <link rel="next" href="../inventory/">
+        <link rel="next" href="../../store-catalog/">
       
       
         
@@ -2214,6 +2214,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../inventory/" class="md-nav__link">
         
   
@@ -4377,7 +4405,10 @@ StoreOrder, Trade/Store Outbox-Inbox, Messenger consumers, and Store acceptance 
 implemented. Inventory reservation remains an intentionally deferred boundary.
 The Store bundle (<code>src/Store/</code>) owns multi-store context, store operations, and the
 store-side order projection. Trade remains the single commercial order entry point
-and the source of truth for order amount, payment, refund, and customer order status.</p>
+and the source of truth for order amount, payment, refund, and customer order status.
+The approved next catalog model makes Store the owner of both shared and Store-private
+Products/Specifications; it is documented in <a href="../../store-catalog/">Store Catalog Model</a>
+and is not implemented yet.</p>
 </blockquote>
 <hr />
 <h2 id="1-goals-and-scope">1. Goals And Scope<a class="headerlink" href="#1-goals-and-scope" title="Permanent link">&para;</a></h2>
@@ -4403,13 +4434,15 @@ extracted as a service without changing the ownership of commercial orders.</p>
 <li>The <code>StoreOrder</code> projection/aggregate for store acceptance and fulfillment data.</li>
 <li>Idempotent consumption and publication of Store integration events.</li>
 <li>The contract by which a store accepts or rejects a Trade order.</li>
+<li>Target: shared/global and Store-private Product/Specification catalog ownership.</li>
 </ul>
 <p>The bundle does not own:</p>
 <ul>
 <li>Customer order creation API.</li>
 <li>Commercial order amount, discounts, payment, refund, or customer cancellation.</li>
 <li>The canonical payment invoice.</li>
-<li>Global product/SKU master data.</li>
+<li>Trade-owned product/SKU master data. The approved target instead makes catalog data
+  Store-owned, with <code>Product.store = NULL</code> for shared records.</li>
 <li>Inventory implementation. Inventory reservation is an integration boundary defined
   here and designed in a later Inventory bundle.</li>
 </ul>

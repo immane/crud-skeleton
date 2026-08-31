@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/bundles/inventory/">
       
       
-        <link rel="prev" href="../store/">
+        <link rel="prev" href="../../store-catalog/">
       
       
         <link rel="next" href="../payment/">
@@ -1287,6 +1287,34 @@
     
   
     Store (Multi-Store Operations)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
   
 
     
@@ -3675,8 +3703,10 @@
 <p><strong>Status: preview, implemented but not production-ready.</strong> The Inventory bundle
 (<code>src/Inventory/</code>) owns materials, per-store stock, Specification recipes,
 reservations, and the stock ledger. It is the deferred reservation boundary defined
-by the Store bundle. Trade remains the catalog and commercial-order authority; Store
-remains the authority for store acceptance and operational orders.</p>
+by the Store bundle. Trade remains the commercial-order authority; Store remains the
+authority for store acceptance and operational orders. The approved catalog target
+moves Product/Specification ownership to Store; Inventory continues to use scalar
+Specification UUIDs and does not need a cross-module entity relation.</p>
 <p><code>INVENTORY_ENABLED</code> MUST remain <code>false</code> outside isolated development and testing.
 Confirmed reservations currently expire without a fulfillment-driven consume flow,
 and cross-message cancellation races are not fully serialized. The schema and disabled
@@ -3713,7 +3743,7 @@ projection, or future extracted services through shared database relations.</p>
 <li>The material master, including both raw materials and finished goods.</li>
 <li>Per-store on-hand and reserved quantities.</li>
 <li>The per-stock negative-inventory policy.</li>
-<li>The current, unique recipe for a Trade Specification.</li>
+<li>The current, unique recipe for a Specification UUID.</li>
 <li>Reservation, release, consumption, adjustment, and audit-ledger records.</li>
 <li>Idempotent consumption and publication of Inventory integration events.</li>
 <li>Inventory availability checks when inventory is globally enabled.</li>
@@ -3728,7 +3758,7 @@ projection, or future extracted services through shared database relations.</p>
 <h3 id="12-non-goals">1.2 Non-Goals<a class="headerlink" href="#12-non-goals" title="Permanent link">&para;</a></h3>
 <p>The initial Inventory phase MUST NOT:</p>
 <ul>
-<li>Create a second SKU catalog or duplicate Trade Specification fields.</li>
+<li>Create a second SKU catalog or duplicate catalog Specification fields.</li>
 <li>Create stock rows as a side effect of a read request.</li>
 <li>Treat a broker as exactly-once, ordered globally, or transactionally coupled to SQL.</li>
 <li>Use distributed transactions between Store and Inventory.</li>
@@ -3750,7 +3780,7 @@ projection, or future extracted services through shared database relations.</p>
 <tbody>
 <tr>
 <td>Product and Specification catalog</td>
-<td>Trade</td>
+<td>Store (target)</td>
 <td>Reference Specification UUID only</td>
 </tr>
 <tr>
@@ -3830,8 +3860,8 @@ projection, or future extracted services through shared database relations.</p>
 </tr>
 </tbody>
 </table>
-<p>The Store-provided <code>catalogReference</code> is the Trade Specification UUID. Inventory never
-loads Trade tables while reserving inventory. This preserves a future extraction path.</p>
+<p>The Store-provided <code>catalogReference</code> is the Specification UUID. Inventory never loads
+catalog tables while reserving inventory. This preserves a future extraction path.</p>
 <h3 id="22-globally-optional-locally-enforced">2.2 Globally Optional, Locally Enforced<a class="headerlink" href="#22-globally-optional-locally-enforced" title="Permanent link">&para;</a></h3>
 <p>The modular monolith supports deployments that do not operate inventory. A single
 runtime configuration controls whether Store invokes the Inventory boundary:</p>
@@ -3952,7 +3982,7 @@ in a global order.</p>
 <tr>
 <td><code>SpecificationRecipe</code></td>
 <td><code>inventory_specification_recipe</code></td>
-<td>One current recipe per Trade Specification UUID</td>
+<td>One current recipe per catalog Specification UUID</td>
 </tr>
 <tr>
 <td><code>RecipeLine</code></td>
@@ -4114,7 +4144,7 @@ reservations and historical ledger rows remain readable.</p>
 <p>There is deliberately no public <code>setOnHandQuantity()</code> or <code>setReservedQuantity()</code>.
 <code>InventoryService</code> changes quantities only with a corresponding ledger entry.</p>
 <h3 id="34-specificationrecipe-and-recipeline">3.4 SpecificationRecipe And RecipeLine<a class="headerlink" href="#34-specificationrecipe-and-recipeline" title="Permanent link">&para;</a></h3>
-<p><code>SpecificationRecipe</code> owns the current bill of materials for one Trade Specification.
+<p><code>SpecificationRecipe</code> owns the current bill of materials for one catalog Specification.
 It stores no Trade entity relation.</p>
 <table>
 <thead>
@@ -4133,7 +4163,7 @@ It stores no Trade entity relation.</p>
 <tr>
 <td><code>specificationUuid</code></td>
 <td>string(36)</td>
-<td>Unique current Trade Specification reference</td>
+<td>Unique current catalog Specification reference</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -4312,7 +4342,7 @@ the same reservation operation from being applied twice to the same material.</p
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">{</span>
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="nt">"lineId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-item-uuid"</span><span class="p">,</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="nt">"catalogReference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-specification-uuid"</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="nt">"catalogReference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"specification-uuid"</span><span class="p">,</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">      </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.000000"</span>
 <a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span><span class="p">],</span>

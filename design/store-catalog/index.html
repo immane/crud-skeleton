@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="zh" class="no-js">
+<html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://immane.github.io/crud-skeleton/zh/runbooks/wechat/">
+        <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/store-catalog/">
       
       
-        <link rel="prev" href="../wallet/">
+        <link rel="prev" href="../bundles/store/">
       
       
-        <link rel="next" href="../../research/easywechat-6.x-usage/">
+        <link rel="next" href="../bundles/inventory/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>WeChat - CRUD Skeleton</title>
+        <title>Store Catalog (Target) - CRUD Skeleton</title>
       
     
     
@@ -82,8 +82,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#wechat-runbook" class="md-skip">
-          跳转至
+        <a href="#store-catalog-model" class="md-skip">
+          Skip to content
         </a>
       
     </div>
@@ -97,7 +97,7 @@
   
 
 <header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="页眉">
+  <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="CRUD Skeleton" class="md-header__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
   
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              WeChat
+              Store Catalog (Target)
             
           </span>
         </div>
@@ -158,7 +158,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="选择当前语言">
+    <button class="md-header__button md-icon" aria-label="Select language">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -192,16 +192,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="查找">
+      <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -214,7 +214,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            正在初始化搜索引擎
+            Initializing search
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -226,7 +226,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+        <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -260,7 +260,7 @@
 
 
 
-<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="CRUD Skeleton" class="md-nav__button md-logo" aria-label="CRUD Skeleton" data-md-component="logo">
       
@@ -272,7 +272,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/immane/crud-skeleton" title="前往仓库" class="md-source" data-md-component="source">
+      <a href="https://github.com/immane/crud-skeleton" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -299,7 +299,7 @@
   <span class="md-ellipsis">
     
   
-    首页
+    Home
   
 
     
@@ -492,7 +492,7 @@
   <span class="md-ellipsis">
     
   
-    Core 框架
+    Core Framework
   
 
     
@@ -881,7 +881,7 @@
   <span class="md-ellipsis">
     
   
-    设计契约
+    Design Contracts
   
 
     
@@ -897,7 +897,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    设计契约
+    Design Contracts
   
 
           </label>
@@ -910,14 +910,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/system-architecture/" class="md-nav__link">
+      <a href="../system-architecture/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    系统架构
+    System Architecture
   
 
     
@@ -938,14 +938,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/api-design/" class="md-nav__link">
+      <a href="../api-design/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    API 设计
+    API Design
   
 
     
@@ -966,14 +966,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/data-model/" class="md-nav__link">
+      <a href="../data-model/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    数据模型
+    Data Model
   
 
     
@@ -994,14 +994,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/module-design/" class="md-nav__link">
+      <a href="../module-design/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    模块设计
+    Module Design
   
 
     
@@ -1022,14 +1022,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/controller-design/" class="md-nav__link">
+      <a href="../controller-design/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    控制器设计
+    Controller Design
   
 
     
@@ -1050,14 +1050,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/api-documentation/" class="md-nav__link">
+      <a href="../api-documentation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    API 文档
+    API Documentation
   
 
     
@@ -1078,14 +1078,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/system-contracts/" class="md-nav__link">
+      <a href="../system-contracts/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    系统契约
+    System Contracts
   
 
     
@@ -1106,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/naming-convention/" class="md-nav__link">
+      <a href="../naming-convention/" class="md-nav__link">
         
   
   
@@ -1114,431 +1114,6 @@
     
   
     Naming Convention
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    模块设计
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    模块设计
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/core/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Core 框架
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/common/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Common (CMS)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/trade/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Trade (电商)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/store/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Store (Multi-Store Operations)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/store-catalog/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Store Catalog (Target)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/inventory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Inventory
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/payment/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Payment (支付)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/wallet/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Wallet (钱包)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/settlement/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settlement (Allocation + Finality)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/exchange/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Exchange (Pool-backed Economy)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/identity/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Identity (鉴权)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/authorization/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Authorization
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../design/bundles/wechat/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Wechat (Login + Pay)
   
 
     
@@ -1581,17 +1156,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Runbooks
+    Bundles
   
 
     
@@ -1602,12 +1177,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Runbooks
+    Bundles
   
 
           </label>
@@ -1620,14 +1195,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../authorization/" class="md-nav__link">
+      <a href="../bundles/core/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Authorization
+    Core Framework
   
 
     
@@ -1648,14 +1223,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../common/" class="md-nav__link">
+      <a href="../bundles/common/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Common
+    Common (CMS)
   
 
     
@@ -1676,14 +1251,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../core/" class="md-nav__link">
+      <a href="../bundles/trade/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Core
+    Trade (E-Commerce)
   
 
     
@@ -1704,266 +1279,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../exchange/" class="md-nav__link">
+      <a href="../bundles/store/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Exchange
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../identity/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Identity
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../inventory/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Inventory
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../payment/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Payment (支付)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../promotion/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Promotion
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../settlement/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Settlement
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../storage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Storage
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../store/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Store
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../trade/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Trade
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../wallet/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Wallet (钱包)
+    Store (Multi-Store Operations)
   
 
     
@@ -2000,7 +1323,7 @@
   <span class="md-ellipsis">
     
   
-    WeChat
+    Store Catalog (Target)
   
 
     
@@ -2018,7 +1341,7 @@
   <span class="md-ellipsis">
     
   
-    WeChat
+    Store Catalog (Target)
   
 
     
@@ -2030,7 +1353,7 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="目录">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -2039,15 +1362,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      目录
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-concepts-in-one-minute" class="md-nav__link">
+  <a href="#1-purpose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Concepts In One Minute
+        1. Purpose
       
     </span>
   </a>
@@ -2055,10 +1378,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-environment-variables" class="md-nav__link">
+  <a href="#2-ownership-and-visibility" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Environment Variables
+        2. Ownership And Visibility
       
     </span>
   </a>
@@ -2066,10 +1389,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-configure-login" class="md-nav__link">
+  <a href="#3-checkout-and-order-invariants" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Configure Login
+        3. Checkout And Order Invariants
       
     </span>
   </a>
@@ -2077,10 +1400,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-configure-wechat-pay-v3" class="md-nav__link">
+  <a href="#4-administration-and-authorization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Configure WeChat Pay V3
+        4. Administration And Authorization
       
     </span>
   </a>
@@ -2088,10 +1411,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-endpoints" class="md-nav__link">
+  <a href="#5-deliberate-limitation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Endpoints
+        5. Deliberate Limitation
       
     </span>
   </a>
@@ -2099,21 +1422,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-troubleshooting" class="md-nav__link">
+  <a href="#6-implementation-migration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Troubleshooting
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-checklist-before-going-live" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Checklist Before Going Live
+        6. Implementation Migration
       
     </span>
   </a>
@@ -2124,6 +1436,683 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement (Allocation + Finality)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange (Pool-backed Economy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity (Auth)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/authorization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authorization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wechat (Login + Pay)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbooks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Runbooks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/authorization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authorization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/exchange/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exchange
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/payment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Payment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/settlement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settlement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/trade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/wechat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WeChat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2168,7 +2157,7 @@
   <span class="md-ellipsis">
     
   
-    调研
+    Research
   
 
     
@@ -2184,7 +2173,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    调研
+    Research
   
 
           </label>
@@ -2204,7 +2193,7 @@
   <span class="md-ellipsis">
     
   
-    EasyWeChat 6.x 用法
+    EasyWeChat 6.x Usage
   
 
     
@@ -2232,7 +2221,7 @@
   <span class="md-ellipsis">
     
   
-    汇付支付 API
+    Huifu Payment API
   
 
     
@@ -2669,7 +2658,7 @@
   <span class="md-ellipsis">
     
   
-    AI 快照
+    AI Context
   
 
     
@@ -2696,7 +2685,7 @@
   <span class="md-ellipsis">
     
   
-    API 参考
+    API Reference
   
 
     
@@ -2722,7 +2711,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="目录">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -2731,15 +2720,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      目录
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-concepts-in-one-minute" class="md-nav__link">
+  <a href="#1-purpose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Concepts In One Minute
+        1. Purpose
       
     </span>
   </a>
@@ -2747,10 +2736,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-environment-variables" class="md-nav__link">
+  <a href="#2-ownership-and-visibility" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Environment Variables
+        2. Ownership And Visibility
       
     </span>
   </a>
@@ -2758,10 +2747,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-configure-login" class="md-nav__link">
+  <a href="#3-checkout-and-order-invariants" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Configure Login
+        3. Checkout And Order Invariants
       
     </span>
   </a>
@@ -2769,10 +2758,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-configure-wechat-pay-v3" class="md-nav__link">
+  <a href="#4-administration-and-authorization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Configure WeChat Pay V3
+        4. Administration And Authorization
       
     </span>
   </a>
@@ -2780,10 +2769,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-endpoints" class="md-nav__link">
+  <a href="#5-deliberate-limitation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Endpoints
+        5. Deliberate Limitation
       
     </span>
   </a>
@@ -2791,21 +2780,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-troubleshooting" class="md-nav__link">
+  <a href="#6-implementation-migration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Troubleshooting
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-checklist-before-going-live" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Checklist Before Going Live
+        6. Implementation Migration
       
     </span>
   </a>
@@ -2832,161 +2810,127 @@
   
 
 
-<h1 id="wechat-runbook">WeChat Runbook<a class="headerlink" href="#wechat-runbook" title="Permanent link">&para;</a></h1>
-<p>This runbook is the operational guide for configuring and operating the WeChat
-module (Mini Program / Official Account login, WeChat Pay V3). It complements
-<a href="../../design/bundles/wechat/"><t0/></a>.</p>
-<h2 id="1-concepts-in-one-minute">1. Concepts In One Minute<a class="headerlink" href="#1-concepts-in-one-minute" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Mini Program login</strong>: <code>js_code</code> → JWT.</li>
-<li><strong>Official Account login</strong>: OAuth redirect + callback → JWT.</li>
-<li><strong>WeChat Pay V3</strong>: a <code>PaymentGatewayInterface</code> implementation, auto-registered.</li>
-<li><strong>WechatUser</strong>: OneToOne → User binding.</li>
-</ul>
-<h2 id="2-environment-variables">2. Environment Variables<a class="headerlink" href="#2-environment-variables" title="Permanent link">&para;</a></h2>
+<h1 id="store-catalog-model">Store Catalog Model<a class="headerlink" href="#store-catalog-model" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Status: approved target architecture; not implemented yet.</strong> The current Product and
+Specification entities remain in <code>Trade</code>. This document defines their planned ownership
+transfer and the invariants that must be implemented before the transfer is considered
+complete.</p>
+</blockquote>
+<h2 id="1-purpose">1. Purpose<a class="headerlink" href="#1-purpose" title="Permanent link">&para;</a></h2>
+<p>The catalog supports both independent stores and a lightweight shared catalog without
+introducing a <code>StoreProduct</code> mapping table prematurely:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Store (optional owner) -&gt; Product -&gt; Specification
+</code></pre></div>
+<p><code>Store</code> is always the place of sale. A Product's nullable Store relation determines
+whether the catalog record is shared or private; it never makes the Store optional on
+an order.</p>
+<h2 id="2-ownership-and-visibility">2. Ownership And Visibility<a class="headerlink" href="#2-ownership-and-visibility" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Variable</th>
-<th>Purpose</th>
+<th>Product owner</th>
+<th>Meaning</th>
+<th>Stores allowed to sell it</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>WECHAT_MINIAPP_APP_ID</code></td>
-<td>Mini Program app ID</td>
+<td><code>Product.store = NULL</code></td>
+<td>Shared/global catalog product</td>
+<td>Any active Store</td>
 </tr>
 <tr>
-<td><code>WECHAT_MINIAPP_SECRET</code></td>
-<td>Mini Program secret</td>
-</tr>
-<tr>
-<td><code>WECHAT_OFFICIAL_APP_ID</code></td>
-<td>Official Account app ID</td>
-</tr>
-<tr>
-<td><code>WECHAT_OFFICIAL_SECRET</code></td>
-<td>Official Account secret</td>
-</tr>
-<tr>
-<td><code>WECHAT_OFFICIAL_TOKEN</code></td>
-<td>Official Account token</td>
-</tr>
-<tr>
-<td><code>WECHAT_OFFICIAL_AES_KEY</code></td>
-<td>Official Account AES key</td>
-</tr>
-<tr>
-<td><code>WECHAT_PAY_MCH_ID</code></td>
-<td>WeChat Pay merchant ID</td>
-</tr>
-<tr>
-<td><code>WECHAT_PAY_SECRET_KEY</code></td>
-<td>WeChat Pay API v3 key</td>
-</tr>
-<tr>
-<td><code>WECHAT_PAY_PRIVATE_KEY</code></td>
-<td>Merchant private key path</td>
-</tr>
-<tr>
-<td><code>WECHAT_PAY_CERTIFICATE</code></td>
-<td>Merchant certificate path</td>
-</tr>
-<tr>
-<td><code>WECHAT_PAY_NOTIFY_URL</code></td>
-<td>Payment notify URL</td>
+<td><code>Product.store = Store A</code></td>
+<td>Store-private product</td>
+<td>Store A only</td>
 </tr>
 </tbody>
 </table>
-<h2 id="3-configure-login">3. Configure Login<a class="headerlink" href="#3-configure-login" title="Permanent link">&para;</a></h2>
+<p><code>Specification</code> belongs to <code>Product</code> and inherits its visibility. It does not duplicate
+<code>store_id</code>.</p>
+<p>At every catalog read, quote, and order creation, the server must resolve a Store context
+and apply this rule:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>product.store IS NULL OR product.store = currentStore
+</code></pre></div>
+<p>A Specification owned by another Store must be rejected even if its UUID is known. List
+filters alone are insufficient; the same check is mandatory in pricing/order resolution.</p>
+<h2 id="3-checkout-and-order-invariants">3. Checkout And Order Invariants<a class="headerlink" href="#3-checkout-and-order-invariants" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Set <code>WECHAT_MINIAPP_APP_ID</code> and <code>WECHAT_MINIAPP_SECRET</code> for Mini Program login.</li>
-<li>Set <code>WECHAT_OFFICIAL_APP_ID</code>, <code>WECHAT_OFFICIAL_SECRET</code>, <code>WECHAT_OFFICIAL_TOKEN</code>,
-   and <code>WECHAT_OFFICIAL_AES_KEY</code> for Official Account login.</li>
+<li>Every new order and quote has a server-resolved, active Store context. A shared product
+   does not permit a Store-less order.</li>
+<li>The selected Specification must be active, not deleted, and visible to the resolved
+   Store.</li>
+<li>The order records the Store snapshot, Product/Specification snapshots, and the scalar
+   catalog Specification UUID. Historical payment, fulfillment, refund, and inventory
+   flows never re-price or re-scope an order from current catalog state.</li>
+<li>Inventory remains keyed by <code>storeUuid + specificationUuid</code>; a shared Specification can
+   therefore have independent stock in each Store.</li>
+<li>A Product with existing order history must not be moved between global and private
+   ownership, or from one Store to another. Create a replacement Product instead.</li>
 </ol>
-<h2 id="4-configure-wechat-pay-v3">4. Configure WeChat Pay V3<a class="headerlink" href="#4-configure-wechat-pay-v3" title="Permanent link">&para;</a></h2>
+<p>Payment continues to reference the Trade order and its frozen amount only. It has no
+catalog dependency.</p>
+<h2 id="4-administration-and-authorization">4. Administration And Authorization<a class="headerlink" href="#4-administration-and-authorization" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Global Product</th>
+<th>Store-private Product</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create/update/delete</td>
+<td>Platform administrator</td>
+<td>Platform administrator or authorized Store manager</td>
+</tr>
+<tr>
+<td>Manage Store relation</td>
+<td>Platform administrator only</td>
+<td>Platform administrator only</td>
+</tr>
+<tr>
+<td>Read from storefront</td>
+<td>Resolved active Store</td>
+<td>Owning Store only</td>
+</tr>
+<tr>
+<td>Quote/order</td>
+<td>Any resolved active Store</td>
+<td>Owning Store only</td>
+</tr>
+</tbody>
+</table>
+<p>Store-scoped authorization must derive scope from the Product's owning Store. A global
+Product is platform-owned; a Store-scoped role must not be able to mutate it.</p>
+<h2 id="5-deliberate-limitation">5. Deliberate Limitation<a class="headerlink" href="#5-deliberate-limitation" title="Permanent link">&para;</a></h2>
+<p>For a shared Product, Specification price, status, title, and attributes are shared too.
+Inventory is already Store-specific, but Store-specific price, publication, merchandising,
+or text overrides are out of scope for this model.</p>
+<p>When a real requirement needs different Store-level price or availability for one shared
+catalog record, introduce a separate override/listing aggregate such as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Catalog Product -&gt; Store Listing -&gt; Store-specific price and availability
+</code></pre></div>
+<p>Do not add that layer until those differing Store-level semantics are required.</p>
+<h2 id="6-implementation-migration">6. Implementation Migration<a class="headerlink" href="#6-implementation-migration" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Set <code>WECHAT_PAY_MCH_ID</code>, <code>WECHAT_PAY_SECRET_KEY</code>, <code>WECHAT_PAY_PRIVATE_KEY</code>,
-   <code>WECHAT_PAY_CERTIFICATE</code>.</li>
-<li>Set <code>WECHAT_PAY_NOTIFY_URL</code> to <code>https://&lt;host&gt;/api/payment/notify/wechat</code>.</li>
-<li>The gateway is auto-registered via the <code>payment.gateway</code> tag — no manual wiring.</li>
+<li>Add nullable <code>Product.store_id</code> with a local Store FK and index; backfill no value so
+   existing products remain shared/global.</li>
+<li>Resolve and require Store context for catalog reads, quotes, and new orders; enforce
+   the visibility predicate in the pricing path.</li>
+<li>Replace <code>Trade\OrderItem</code>'s Doctrine Specification relation with a scalar catalog
+   Specification UUID plus the existing immutable snapshots. This is required before the
+   entity moves because Trade must not retain a cross-module Doctrine association to Store.</li>
+<li>Move Product and Specification ownership from <code>Trade</code> to <code>Store</code> in a follow-up
+   mechanical refactor. Keep the existing table names and UUIDs initially to avoid a
+   data-table rename.</li>
+<li>Update Store-scoped authorization, tests, OpenAPI descriptions, and event consumers.</li>
 </ol>
-<h2 id="5-endpoints">5. Endpoints<a class="headerlink" href="#5-endpoints" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>POST</td>
-<td><code>/api/wechat/miniapp/login</code></td>
-<td>Mini Program login</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/api/wechat/miniapp/phone</code></td>
-<td>Bind WeChat phone</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/api/wechat/oauth/url</code></td>
-<td>Official Account OAuth redirect URL</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><code>/api/wechat/oauth/callback</code></td>
-<td>OAuth callback</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/api/v1/app/wechat-users</code></td>
-<td>User-scoped WechatUser CRUD</td>
-</tr>
-<tr>
-<td>GET</td>
-<td><code>/api/v1/manage/wechat-users</code></td>
-<td>Admin WechatUser CRUD</td>
-</tr>
-</tbody>
-</table>
-<h2 id="6-troubleshooting">6. Troubleshooting<a class="headerlink" href="#6-troubleshooting" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Symptom</th>
-<th>Likely cause</th>
-<th>Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Login fails</td>
-<td>Wrong app ID/secret</td>
-<td>Verify WeChat credentials</td>
-</tr>
-<tr>
-<td>Pay fails</td>
-<td>Missing merchant cert/key</td>
-<td>Check <code>WECHAT_PAY_*</code> vars</td>
-</tr>
-<tr>
-<td>Notify ignored</td>
-<td>Wrong notify URL or signature</td>
-<td>Verify <code>WECHAT_PAY_NOTIFY_URL</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="7-checklist-before-going-live">7. Checklist Before Going Live<a class="headerlink" href="#7-checklist-before-going-live" title="Permanent link">&para;</a></h2>
-<ul>
-<li>[ ] Mini Program / Official Account credentials set.</li>
-<li>[ ] WeChat Pay merchant credentials set.</li>
-<li>[ ] Notify URL reachable.</li>
-<li>[ ] Sensitive values in env, not committed.</li>
-</ul>
+<p>The namespace move is not a database migration by itself. The <code>store_id</code> relation,
+checkout visibility enforcement, and Trade's replacement of the Specification FK are the
+behavior-changing parts.</p>
 
 
 
@@ -3010,7 +2954,7 @@ module (Mini Program / Official Account login, WeChat Pay V3). It complements
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  回到页面顶部
+  Back to top
 </button>
         
       </main>
@@ -3042,7 +2986,7 @@ module (Mini Program / Official Account login, WeChat Pay V3). It complements
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

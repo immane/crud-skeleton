@@ -27,7 +27,7 @@
     
     
       
-        <title>核心集成（HTTP 内核）——覆盖范围和错误报告 - CRUD Skeleton</title>
+        <title>Core Integration (HTTP Kernel) — Coverage & Bug Report - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#http" class="md-skip">
+        <a href="#core-integration-http-kernel-coverage-bug-report" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              核心集成（HTTP 内核）——覆盖范围和错误报告
+              Core Integration (HTTP Kernel) — Coverage &amp; Bug Report
             
           </span>
         </div>
@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    开发手册
+    Development Manual
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    开发手册
+    Development Manual
   
 
           </label>
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    入门
+    Getting Started
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    查询系统
+    Query System
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    开发合同
+    Development Contracts
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    整合活动
+    Integration Events
   
 
     
@@ -1303,6 +1303,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../design/store-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Catalog (Target)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../design/bundles/inventory/" class="md-nav__link">
         
   
@@ -1394,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -2254,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2282,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2580,10 +2608,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 总结
+        1. Summary
       
     </span>
   </a>
@@ -2591,10 +2619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-coverage-filter" class="md-nav__link">
+  <a href="#2-coverage-hit-integration-tests-only-measured-with-the-listed-coverage-filters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 覆盖率命中（仅集成测试，使用列出的 --coverage-filter 进行测量）
+        2. Coverage hit (integration tests only, measured with the listed --coverage-filters)
       
     </span>
   </a>
@@ -2602,10 +2630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#3-verified-correct-behaviors-positive-tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 验证正确的行为（积极测试）
+        3. Verified correct behaviors (positive tests)
       
     </span>
   </a>
@@ -2613,22 +2641,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
+  <a href="#4-bugs-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 发现错误
+        4. Bugs found
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. 发现错误">
+    <nav class="md-nav" aria-label="4. Bugs found">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bug-1-jwt-http-baseserviceuser-null-403" class="md-nav__link">
+  <a href="#bug-1-baseserviceuser-is-always-null-for-jwt-authenticated-http-requests-all-admin-gated-query-params-403-high" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-1 — 对于 JWT 验证的 HTTP 请求，BaseService::$user 始终为 null → 所有管理员控制的查询参数 403 — 高
+        BUG-1 — BaseService::$user is always null for JWT-authenticated HTTP requests → all admin-gated query params 403 — HIGH
       
     </span>
   </a>
@@ -2636,10 +2664,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-expands-__metadata-php-85-failondeprecation" class="md-nav__link">
+  <a href="#bug-2-expands-creates-a-dynamic-__metadata-property-php-85-deprecation-breaks-failondeprecation-high" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-2 — @expands 创建动态 __metadata 属性 → PHP 8.5 弃用 → 破坏 failOnDeprecation — 高
+        BUG-2 — @expands creates a dynamic __metadata property → PHP 8.5 deprecation → breaks failOnDeprecation — HIGH
       
     </span>
   </a>
@@ -2647,10 +2675,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-select-http-500-400" class="md-nav__link">
+  <a href="#bug-3-malformed-select-array-returns-http-500-instead-of-400-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-3 — 格式错误的 @select（数组）返回 HTTP 500 而不是 400 — 中
+        BUG-3 — malformed @select (array) returns HTTP 500 instead of 400 — MEDIUM
       
     </span>
   </a>
@@ -2658,10 +2686,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-matches-sqlite-regexp" class="md-nav__link">
+  <a href="#bug-4-matches-with-a-regex-literal-crashes-on-sqlite-no-regexp-function-medium-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-4 — matches 带有正则表达式文字在 SQLite 上崩溃（无 REGEXP 函数） — 中等（环境）
+        BUG-4 — matches with a regex literal crashes on SQLite (no REGEXP function) — MEDIUM (environment)
       
     </span>
   </a>
@@ -2669,10 +2697,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-5-500-html-404-json" class="md-nav__link">
+  <a href="#bug-5-system-endpoints-return-500-html-not-404-json-for-unknown-entities-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-5 — 系统端点为未知实体返回 500 HTML（不是 404 JSON） — 中
+        BUG-5 — System endpoints return 500 HTML (not 404 JSON) for unknown entities — MEDIUM
       
     </span>
   </a>
@@ -2680,10 +2708,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-6-default_locale-zh" class="md-nav__link">
+  <a href="#bug-6-default_locale-zh-does-not-become-the-active-locale-effective-default-is-english-low" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-6 — default_locale: zh 不会成为活动区域设置 — 有效默认值为英语 — 低
+        BUG-6 — default_locale: zh does not become the active locale — effective default is English — LOW
       
     </span>
   </a>
@@ -2691,10 +2719,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-7-openapienricherlistenerdetecttag-ids" class="md-nav__link">
+  <a href="#bug-7-openapienricherlistenerdetecttag-prefix-checks-never-match-method-prefixed-operationids-store-endpoints-left-untagged-medium" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-7 — OpenApiEnricherListener::detectTag() 前缀检查永远不会匹配方法前缀的操作Ids — 存储未标记的端点 — 中
+        BUG-7 — OpenApiEnricherListener::detectTag() prefix checks never match method-prefixed operationIds — Store endpoints left untagged — MEDIUM
       
     </span>
   </a>
@@ -2702,10 +2730,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#additional-observations-not-blocking" class="md-nav__link">
     <span class="md-ellipsis">
       
-        附加观察结果（不阻塞）
+        Additional observations (not blocking)
       
     </span>
   </a>
@@ -2718,10 +2746,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5" class="md-nav__link">
+  <a href="#5-skipped-tests-all-reference-the-bugs-above-suite-stays-green" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 跳过测试（所有参考上述错误；套件保持绿色）
+        5. Skipped tests (all reference the bugs above; suite stays green)
       
     </span>
   </a>
@@ -2729,10 +2757,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6" class="md-nav__link">
+  <a href="#6-suggested-follow-ups" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. 建议的后续行动
+        6. Suggested follow-ups
       
     </span>
   </a>
@@ -2759,70 +2787,70 @@
   
 
 
-<h1 id="http">核心集成（HTTP 内核）——覆盖范围和错误报告<a class="headerlink" href="#http" title="Permanent link">&para;</a></h1>
+<h1 id="core-integration-http-kernel-coverage-bug-report">Core Integration (HTTP Kernel) — Coverage &amp; Bug Report<a class="headerlink" href="#core-integration-http-kernel-coverage-bug-report" title="Permanent link">&para;</a></h1>
 <ul>
-<li><strong>日期：</strong> 2026-08-09</li>
-<li><strong>范围：</strong> 通过 HTTP 内核端到端执行的核心框架行为：动态查询系统、系统自省端点、区域设置检测、ExceptionInterceptor、OpenApiEnricherListener、AccessLogListener、RestController 分页。</li>
-<li><strong>约束：</strong> <code>src/</code>下没有变化；仅在 <code>tests/</code> + 此报告下添加的测试文件。</li>
-<li><strong>跑步者：</strong> <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;files&gt; --no-coverage</code></li>
+<li><strong>Date:</strong> 2026-08-09</li>
+<li><strong>Scope:</strong> Core framework behaviors exercised end-to-end through the HTTP kernel: dynamic query system, System introspection endpoints, locale detection, ExceptionInterceptor, OpenApiEnricherListener, AccessLogListener, RestController pagination.</li>
+<li><strong>Constraint:</strong> no changes under <code>src/</code>; only test files added under <code>tests/</code> + this report.</li>
+<li><strong>Runner:</strong> <code>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit &lt;files&gt; --no-coverage</code></li>
 </ul>
-<h2 id="1">1. 总结<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>在 <code>tests/Integration/</code> 下添加了六个新的 WebTestCase 集成测试文件（命名空间 <code>App\Tests\Integration</code>、<code>declare(strict_types=1)</code>，使用 <code>DatabaseBootstrapTrait</code>）：</p>
+<h2 id="1-summary">1. Summary<a class="headerlink" href="#1-summary" title="Permanent link">&para;</a></h2>
+<p>Six new WebTestCase integration test files were added under <code>tests/Integration/</code> (namespace <code>App\Tests\Integration</code>, <code>declare(strict_types=1)</code>, using <code>DatabaseBootstrapTrait</code>):</p>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>测试</th>
-<th>通行证</th>
-<th>已跳过</th>
-<th>封面</th>
+<th>File</th>
+<th>Tests</th>
+<th>Pass</th>
+<th>Skipped</th>
+<th>Covers</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Integration/CoreDynamicQueryApiTest.php</code></td>
 <td>23</td>
-<td>23 18</td>
+<td>18</td>
 <td>5</td>
-<td>任务 1：<code>@filter/@dql/@order/@sort/@select/@groupBy/@expands/@display/@transform</code> + 格式错误的参数</td>
+<td>Task 1: <code>@filter/@dql/@order/@sort/@select/@groupBy/@expands/@display/@transform</code> + malformed params</td>
 </tr>
 <tr>
 <td><code>tests/Integration/CoreSystemEndpointsApiTest.php</code></td>
 <td>10</td>
-<td>10 9</td>
+<td>9</td>
 <td>1</td>
-<td>任务 2：<code>/system/entities</code>、<code>/system/entities/{name}</code>、<code>/system/router</code>、翻译的字段名称、未找到实体</td>
+<td>Task 2: <code>/system/entities</code>, <code>/system/entities/{name}</code>, <code>/system/router</code>, translated field names, not-found entity</td>
 </tr>
 <tr>
 <td><code>tests/Integration/CoreLocaleDetectionApiTest.php</code></td>
 <td>9</td>
 <td>9</td>
 <td>0</td>
-<td>任务 3：<code>?_locale</code>，接受语言映射，每个语言环境的消息翻译</td>
+<td>Task 3: <code>?_locale</code>, Accept-Language mapping, message translation per locale</td>
 </tr>
 <tr>
 <td><code>tests/Integration/CoreExceptionInterceptorApiTest.php</code></td>
 <td>7</td>
 <td>7</td>
 <td>0</td>
-<td>任务4：未捕获的异常/404路由/403 JSON信封；成功和警告信封形状</td>
+<td>Task 4: uncaught exception / 404 route / 403 JSON envelopes; success &amp; warning envelope shapes</td>
 </tr>
 <tr>
 <td><code>tests/Integration/CoreOpenApiEnricherApiTest.php</code></td>
 <td>9</td>
 <td>8</td>
 <td>1</td>
-<td>任务5：<code>/api/doc.json</code>模块标签，没有剩余操作类型标签</td>
+<td>Task 5: <code>/api/doc.json</code> module tags, no operation-type tags left</td>
 </tr>
 <tr>
 <td><code>tests/Integration/CoreAccessLogAndPaginationApiTest.php</code></td>
 <td>7</td>
 <td>7</td>
 <td>0</td>
-<td>任务 6 + 7：真实访问日志行；分页边缘情况</td>
+<td>Tasks 6 + 7: real access-log lines; pagination edge cases</td>
 </tr>
 <tr>
-<td><strong>总计</strong></td>
+<td><strong>Total</strong></td>
 <td><strong>65</strong></td>
 <td><strong>58</strong></td>
 <td><strong>7</strong></td>
@@ -2830,7 +2858,7 @@
 </tr>
 </tbody>
 </table>
-<p>运行（单次调用，一个共享模式引导程序）：</p>
+<p>Run (single invocation, one shared schema bootstrap):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  tests/Integration/CoreDynamicQueryApiTest.php \
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  tests/Integration/CoreSystemEndpointsApiTest.php \
@@ -2839,19 +2867,19 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  tests/Integration/CoreOpenApiEnricherApiTest.php \
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  tests/Integration/CoreAccessLogAndPaginationApiTest.php --no-coverage
 </code></pre></div>
-<p>结果：<strong>65 项测试、478 项断言、0 项失败、0 项错误、0 项弃用、7 项被跳过</strong>。</p>
-<h2 id="2-coverage-filter">2. 覆盖率命中（仅集成测试，使用列出的 <code>--coverage-filter</code> 进行测量）<a class="headerlink" href="#2-coverage-filter" title="Permanent link">&para;</a></h2>
+<p>Result: <strong>65 tests, 478 assertions, 0 failures, 0 errors, 0 deprecations, 7 skipped</strong>.</p>
+<h2 id="2-coverage-hit-integration-tests-only-measured-with-the-listed-coverage-filters">2. Coverage hit (integration tests only, measured with the listed <code>--coverage-filter</code>s)<a class="headerlink" href="#2-coverage-hit-integration-tests-only-measured-with-the-listed-coverage-filters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>文件</th>
-<th>通过 HTTP 内核测试命中的线路</th>
+<th>File</th>
+<th>Lines hit via HTTP-kernel tests</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>src/Core/Controller/System/EntityController.php</code></td>
-<td><strong>100%</strong> (44/44) — 完整的真实元数据路径，包括操作、翻译</td>
+<td><strong>100%</strong> (44/44) — full real-metadata path, both actions, translation</td>
 </tr>
 <tr>
 <td><code>src/Core/Controller/System/RouterController.php</code></td>
@@ -2859,141 +2887,141 @@
 </tr>
 <tr>
 <td><code>src/Core/Controller/RestController.php</code></td>
-<td>70.66% (118/167) — <code>success()/warning()/pagination()/requestProcess()</code> 包括。 <code>@display</code>、<code>@expands</code>、<code>@transform</code> 路径</td>
+<td>70.66% (118/167) — <code>success()/warning()/pagination()/requestProcess()</code> incl. <code>@display</code>, <code>@expands</code>, <code>@transform</code> paths</td>
 </tr>
 <tr>
 <td><code>src/Core/EventListener/AccessLogListener.php</code></td>
-<td>83.33% (35/42) — 真实的 <code>monolog.logger.access</code> 流，真实的代币存储</td>
+<td>83.33% (35/42) — real <code>monolog.logger.access</code> stream, real token storage</td>
 </tr>
 <tr>
 <td><code>src/Core/EventListener/ExceptionInterceptor.php</code></td>
-<td>95.65% (22/23) — 500/404/403 API 路由的真实 <code>kernel.exception</code></td>
+<td>95.65% (22/23) — real <code>kernel.exception</code> for 500/404/403 API routes</td>
 </tr>
 <tr>
 <td><code>src/Core/EventListener/LocaleListener.php</code></td>
-<td>91.18% (31/34) — 真实的 <code>kernel.request</code>，<code>?_locale</code> 和 Accept-Language</td>
+<td>91.18% (31/34) — real <code>kernel.request</code>, both <code>?_locale</code> and Accept-Language</td>
 </tr>
 <tr>
 <td><code>src/Core/EventListener/OpenApiEnricherListener.php</code></td>
-<td>91.41% (117/128) — 真正的 <code>/api/doc.json</code> 丰富</td>
+<td>91.41% (117/128) — real <code>/api/doc.json</code> enrichment</td>
 </tr>
 <tr>
 <td><code>src/Core/EventListener/ControllerListener.php</code></td>
-<td>94.44% (17/18) — 写入方法日志记录</td>
+<td>94.44% (17/18) — write-method logging</td>
 </tr>
 <tr>
 <td><code>src/Core/Parser/ExpressionDqlParser.php</code></td>
-<td>52.02% (116/223) — 真正的 <code>@filter</code> → DQL 管道（编译器 + 验证）</td>
+<td>52.02% (116/223) — real <code>@filter</code> → DQL pipeline (compiler + validation)</td>
 </tr>
 <tr>
 <td><code>src/Core/Parser/ExpressionQueryBuilderAssembler.php</code></td>
-<td>46.15% (30/65) — 真实片段组装</td>
+<td>46.15% (30/65) — real fragment assembly</td>
 </tr>
 <tr>
 <td><code>src/Core/Serializer/Normalizer/FlatNormalizer.php</code></td>
-<td>54.55% (36/66) — 真实响应标准化</td>
+<td>54.55% (36/66) — real response normalization</td>
 </tr>
 <tr>
 <td><code>src/Core/View/{ListApiViewMixin,DetailApiViewMixin,CreateApiViewMixin,TransformContent}.php</code></td>
-<td>100% / 93.33% / 74.60% / 44.78% — 真实控制器特征流</td>
+<td>100% / 93.33% / 74.60% / 44.78% — real controller-trait flows</td>
 </tr>
 </tbody>
 </table>
-<p>系统控制器（<code>EntityController</code>、<code>RouterController</code>）之前仅进行了单元测试； HTTP 内核测试现在使用真正的 EntityManager/路由器（100%）来进行测试。</p>
-<h2 id="3">3. 验证正确的行为（积极测试）<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>The System controllers (<code>EntityController</code>, <code>RouterController</code>) were only unit-tested before; the HTTP-kernel tests now exercise them with a real EntityManager/router (100%).</p>
+<h2 id="3-verified-correct-behaviors-positive-tests">3. Verified correct behaviors (positive tests)<a class="headerlink" href="#3-verified-correct-behaviors-positive-tests" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>@filter</code> 编译为 DQL 并正确过滤（<code>entity.getSortOrder() &gt; 0</code> → 子集；<code>==</code>；<code>matches "slug-1"</code> → LIKE；单属性 true<code>entity.getName()</code> → IS NOT NULL）。 200 + 正确<code>paginator.total</code>。</li>
-<li><code>@order=entity.sortOrder|DESC</code> → 正确的排序。</li>
-<li><code>@select=entity.id,entity.name</code> → 仅投影（无<code>slug</code>/<code>description</code>）。</li>
-<li><code>@groupBy</code> + <code>@select</code> → 分组行。</li>
-<li><code>@display=reduce</code> 和 <code>@display=["entity.name"]</code> 场投影。</li>
-<li>创建时的 <code>@transform</code> (<code>Math.ceil(3.7)</code> → <code>"4"</code>)。</li>
-<li><code>limit=abc</code> / <code>page=abc</code> → <strong>400</strong>（<code>BadRequestHttpException</code>，异常拦截器 JSON 信封）——正确 4xxs 的一种格式错误的参数情况。</li>
-<li><code>/system/entities</code> 列表、<code>/system/entities/{name}</code> 元数据（types/columnName/nullable + ManyToOne targetEntity）、<code>/system/router</code> 路由转储 — 所有 200 个都带有 <code>{data,code:0,message:"SUCCESS"}</code>。</li>
-<li>通过<code>?_locale=zh|zh_Hant|ja</code>和<code>Accept-Language: en-US</code>进行字段名称翻译。</li>
-<li>每个语言环境的消息翻译：<code>Entity is not found</code> → zh <code>实体未找到。</code>、zh_Hant <code>實體未找到。</code>、ja <code>エンティティが見つかりません。</code>、en <code>Entity is not found</code>。</li>
-<li><code>/api/doc.json</code>：存在模块标签（<code>Auth,System,Wechat,Products,Orders,Categories,…,Payment,Wallet</code>），<code>tags</code>中或任何操作中都没有留下<code>List/Detail/Create/Update/Delete/Workflow</code>；关键端点映射到正确的模块。</li>
-<li>AccessLogListener 写入真实行 (<code>@testauth#1 POST /api/v1/manage/categories | 201 | REQ: … | RES: …</code>) 并且不记录 GET。</li>
-<li>分页：页面超出范围→空项+正确的<code>has_next=false</code>；负页→强制为1； <code>limit=0</code> → 强制为 1；完整的<code>{total,page,limit,pages,has_previous,has_next}</code>形状。</li>
-<li>信封形状：成功列表<code>{data,code,message,paginator}</code>；成功详细信息<code>{data,code,message}</code>（无分页器）；警告<code>{code,message,raw_data}</code>（无<code>data</code>）；异常<code>{code,message,class}</code>。</li>
+<li><code>@filter</code> compiles to DQL and filters correctly (<code>entity.getSortOrder() &gt; 0</code> → subset; <code>==</code>; <code>matches "slug-1"</code> → LIKE; single-attribute truthy <code>entity.getName()</code> → IS NOT NULL). 200 + correct <code>paginator.total</code>.</li>
+<li><code>@order=entity.sortOrder|DESC</code> → correct ordering.</li>
+<li><code>@select=entity.id,entity.name</code> → projection only (no <code>slug</code>/<code>description</code>).</li>
+<li><code>@groupBy</code> + <code>@select</code> → grouped rows.</li>
+<li><code>@display=reduce</code> and <code>@display=["entity.name"]</code> field projection.</li>
+<li><code>@transform</code> on create (<code>Math.ceil(3.7)</code> → <code>"4"</code>).</li>
+<li><code>limit=abc</code> / <code>page=abc</code> → <strong>400</strong> (<code>BadRequestHttpException</code>, an exception-interceptor JSON envelope) — the one malformed-param case that correctly 4xxs.</li>
+<li><code>/system/entities</code> list, <code>/system/entities/{name}</code> metadata (types/columnName/nullable + ManyToOne targetEntity), <code>/system/router</code> route dump — all 200 with <code>{data,code:0,message:"SUCCESS"}</code>.</li>
+<li>Field-name translation via <code>?_locale=zh|zh_Hant|ja</code> and <code>Accept-Language: en-US</code>.</li>
+<li>Message translation per locale: <code>Entity is not found</code> → zh <code>实体未找到。</code>, zh_Hant <code>實體未找到。</code>, ja <code>エンティティが見つかりません。</code>, en <code>Entity is not found</code>.</li>
+<li><code>/api/doc.json</code>: module tags present (<code>Auth,System,Wechat,Products,Orders,Categories,…,Payment,Wallet</code>), no <code>List/Detail/Create/Update/Delete/Workflow</code> left in <code>tags</code> or on any operation; key endpoints map to the correct module.</li>
+<li>AccessLogListener writes real lines (<code>@testauth#1 POST /api/v1/manage/categories | 201 | REQ: … | RES: …</code>) and does not log GETs.</li>
+<li>Pagination: page beyond range → empty items + correct <code>has_next=false</code>; negative page → coerced to 1; <code>limit=0</code> → coerced to 1; full <code>{total,page,limit,pages,has_previous,has_next}</code> shape.</li>
+<li>Envelope shapes: success list <code>{data,code,message,paginator}</code>; success detail <code>{data,code,message}</code> (no paginator); warning <code>{code,message,raw_data}</code> (no <code>data</code>); exception <code>{code,message,class}</code>.</li>
 </ul>
-<h2 id="4">4. 发现错误<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<h3 id="bug-1-jwt-http-baseserviceuser-null-403">BUG-1 — 对于 JWT 验证的 HTTP 请求，BaseService::$user 始终为 null → 所有管理员控制的查询参数 403 — <strong>高</strong><a class="headerlink" href="#bug-1-jwt-http-baseserviceuser-null-403" title="Permanent link">&para;</a></h3>
+<h2 id="4-bugs-found">4. Bugs found<a class="headerlink" href="#4-bugs-found" title="Permanent link">&para;</a></h2>
+<h3 id="bug-1-baseserviceuser-is-always-null-for-jwt-authenticated-http-requests-all-admin-gated-query-params-403-high">BUG-1 — BaseService::$user is always null for JWT-authenticated HTTP requests → all admin-gated query params 403 — <strong>HIGH</strong><a class="headerlink" href="#bug-1-baseserviceuser-is-always-null-for-jwt-authenticated-http-requests-all-admin-gated-query-params-403-high" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Service/BaseService.php:77</code> (<code>$this-&gt;user = $token ? $token-&gt;getUser() : null;</code>)，由 <code>src/Core/Service/Concern/BaseServiceReadListTrait.php:119-120</code>（过滤器后备管理门）、<code>:270-271</code> (<code>assertPrivilegedQueryParameters</code>)、<code>:291-295</code> (<code>hasAdminRole</code>) 使用。</li>
-<li><strong>描述：</strong> <code>BaseService::$user</code> 在构建时<em><em>从 <code>security.token_storage</code> 得到解决。服务类是容器单例，并且在每个请求令牌上下文之外实例化，因此对于 HTTP 请求，<code>$user</code> 永久为 <code>null</code>。经验证明的根本原因：在请求期间，令牌存储</em>确实</em>包含经过身份验证的用户（角色<code>ROLE_ADMIN,ROLE_USER</code>），但容器缓存的服务实例具有<code>user=null</code>，而同时构建的<code>new CategoryService($container)</code>具有<code>user=ROLE_ADMIN,ROLE_USER</code>。</li>
-<li><strong>影响：</strong> <code>@dql</code>、<code>@sort</code>、<code>@hints</code> 始终抛出 <code>AccessDeniedHttpException</code> (403)，即使对于 ROLE_ADMIN 用户也是如此；无法编译为 DQL 的 <code>@filter</code> 表达式（需要内存中 <code>LegacyEvaluator</code> 回退）也始终为 403，而不是回退。记录的动态查询权限系统无法通过 HTTP 使用。次要影响：对于价格管道上下文，<code>src/Trade/Service/OrderService.php:55</code> 读取相同的 <code>$this-&gt;user</code>。</li>
-<li><strong>复制：</strong> 使用 ROLE_ADMIN JWT，<code>GET /api/v1/manage/categories?@dql=SELECT c.id FROM App\Common\Entity\Category c</code> → <code>403 {code:403, message:"@dql is restricted to administrators.", class:"…AccessDeniedHttpException"}</code>。</li>
-<li><strong>建议的修复：</strong> 在请求时从令牌存储中解析用户（例如注入 <code>TokenStorageInterface</code> 并读取 <code>list()</code>/<code>hasAdminRole()</code> 内的用户），或标记 BaseService 子类请求范围；不要将主体缓存在长期存在的单例中。</li>
-<li><strong>测试：</strong> <code>testDqlRestrictedForEveryoneCurrently</code>、<code>testSortRestrictedForEveryoneCurrently</code>、<code>testHintsRestrictedForEveryoneCurrently</code>、<code>testInvalidFilterFallsToAdminGateCurrently</code>（回归、通过）； <code>testDqlAllowedForAdminReturnsFilteredResults</code>、<code>testSortAllowedForAdminSortsInMemory</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/Service/BaseService.php:77</code> (<code>$this-&gt;user = $token ? $token-&gt;getUser() : null;</code>), consumed by <code>src/Core/Service/Concern/BaseServiceReadListTrait.php:119-120</code> (filter fallback admin gate), <code>:270-271</code> (<code>assertPrivilegedQueryParameters</code>), <code>:291-295</code> (<code>hasAdminRole</code>).</li>
+<li><strong>Description:</strong> <code>BaseService::$user</code> is resolved <strong>once at construction</strong> from <code>security.token_storage</code>. The service classes are container singletons and are instantiated outside the per-request token context, so <code>$user</code> is permanently <code>null</code> for HTTP requests. Root cause proven empirically: during the request the token storage <em>does</em> contain the authenticated user (roles <code>ROLE_ADMIN,ROLE_USER</code>), but the container-cached service instance has <code>user=null</code>, while <code>new CategoryService($container)</code> built at the same moment has <code>user=ROLE_ADMIN,ROLE_USER</code>.</li>
+<li><strong>Impact:</strong> <code>@dql</code>, <code>@sort</code>, <code>@hints</code> always throw <code>AccessDeniedHttpException</code> (403) even for ROLE_ADMIN users; <code>@filter</code> expressions that cannot compile to DQL (needing the in-memory <code>LegacyEvaluator</code> fallback) also always 403 instead of falling back. The documented dynamic-query privilege system is unusable over HTTP. Secondary impact: <code>src/Trade/Service/OrderService.php:55</code> reads the same <code>$this-&gt;user</code> for the price-pipeline context.</li>
+<li><strong>Reproduction:</strong> with a ROLE_ADMIN JWT, <code>GET /api/v1/manage/categories?@dql=SELECT c.id FROM App\Common\Entity\Category c</code> → <code>403 {code:403, message:"@dql is restricted to administrators.", class:"…AccessDeniedHttpException"}</code>.</li>
+<li><strong>Proposed fix:</strong> resolve the user from the token storage at request time (e.g. inject <code>TokenStorageInterface</code> and read the user inside <code>list()</code>/<code>hasAdminRole()</code>), or mark BaseService subclasses request-scoped; do not cache the principal in a long-lived singleton.</li>
+<li><strong>Tests:</strong> <code>testDqlRestrictedForEveryoneCurrently</code>, <code>testSortRestrictedForEveryoneCurrently</code>, <code>testHintsRestrictedForEveryoneCurrently</code>, <code>testInvalidFilterFallsToAdminGateCurrently</code> (regression, pass); <code>testDqlAllowedForAdminReturnsFilteredResults</code>, <code>testSortAllowedForAdminSortsInMemory</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-2-expands-__metadata-php-85-failondeprecation">BUG-2 — <code>@expands</code> 创建动态 <code>__metadata</code> 属性 → PHP 8.5 弃用 → 破坏 <code>failOnDeprecation</code> — <strong>高</strong><a class="headerlink" href="#bug-2-expands-__metadata-php-85-failondeprecation" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-expands-creates-a-dynamic-__metadata-property-php-85-deprecation-breaks-failondeprecation-high">BUG-2 — <code>@expands</code> creates a dynamic <code>__metadata</code> property → PHP 8.5 deprecation → breaks <code>failOnDeprecation</code> — <strong>HIGH</strong><a class="headerlink" href="#bug-2-expands-creates-a-dynamic-__metadata-property-php-85-deprecation-breaks-failondeprecation-high" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Controller/RestController.php:198</code> (<code>$node-&gt;__metadata = $node;</code>)。</li>
-<li><strong>描述：</strong> 扩展将动态属性附加到实体。在 PHP 8.2+ 上，这已被弃用 (<code>Creation of dynamic property …::__metadata is deprecated</code>)。存储库的 <code>phpunit.dist.xml</code> 设置 <code>failOnDeprecation="true"</code>，因此使用 <code>@expands</code> 的<strong>任何</strong>请求都会将套件变为红色。</li>
-<li><strong>影响：</strong> <code>@expands</code> 在 CI 中实际上是不可测试/不安全的，应被视为已损坏。 （另外观察到：在此设置中，序列化的扩展关系返回了 <code>null</code>，因此扩展没有可见的有效负载效果。）</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories?@expands=["parent"]</code> → 从 <code>RestController.php:198</code> 弃用。</li>
-<li><strong>建议的修复：</strong> 在可以扩展的实体上声明类型化 <code>public mixed $__metadata = null;</code> （或使用 <code>#[AllowDynamicProperties]</code>/外部映射），并使 <code>expandObjects</code>/<code>expandObjectToMetadata</code> 仅附加序列化器所需的元数据。</li>
-<li><strong>测试：</strong> <code>testExpandsReturnsMetadataWithoutDeprecation</code> （<strong>跳过</strong>，引用此错误）。</li>
+<li><strong>Location:</strong> <code>src/Core/Controller/RestController.php:198</code> (<code>$node-&gt;__metadata = $node;</code>).</li>
+<li><strong>Description:</strong> Expansion attaches a dynamic property to entities. On PHP 8.2+ this is deprecated (<code>Creation of dynamic property …::__metadata is deprecated</code>). The repo’s <code>phpunit.dist.xml</code> sets <code>failOnDeprecation="true"</code>, so <strong>any</strong> request using <code>@expands</code> turns the suite red.</li>
+<li><strong>Impact:</strong> <code>@expands</code> is effectively untestable/unsafe in CI and should be considered broken. (Observed additionally: the serialized expanded relation came back <code>null</code> in this setup, so expansion had no visible payload effect.)</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories?@expands=["parent"]</code> → deprecation from <code>RestController.php:198</code>.</li>
+<li><strong>Proposed fix:</strong> declare a typed <code>public mixed $__metadata = null;</code> on the entities that may be expanded (or use a <code>#[AllowDynamicProperties]</code>/external map), and make <code>expandObjects</code>/<code>expandObjectToMetadata</code> only attach the metadata the serializer needs.</li>
+<li><strong>Tests:</strong> <code>testExpandsReturnsMetadataWithoutDeprecation</code> (<strong>skipped</strong>, references this bug).</li>
 </ul>
-<h3 id="bug-3-select-http-500-400">BUG-3 — 格式错误的 <code>@select</code>（数组）返回 HTTP 500 而不是 400 — <strong>中</strong><a class="headerlink" href="#bug-3-select-http-500-400" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-malformed-select-array-returns-http-500-instead-of-400-medium">BUG-3 — malformed <code>@select</code> (array) returns HTTP 500 instead of 400 — <strong>MEDIUM</strong><a class="headerlink" href="#bug-3-malformed-select-array-returns-http-500-instead-of-400-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code> (<code>if (!is_string($select)) throw new ValidatorException('@select must be a string.');</code>)，通过 <code>src/Core/View/ListApiViewMixin.php:listAction()</code> 未捕获（无 try/catch）进入 <code>ExceptionInterceptor</code>。</li>
-<li><strong>描述：</strong> <code>@select[]=a&amp;@select[]=b</code> 使 <code>$select</code> 成为一个数组； <code>ValidatorException</code> 不是 <code>HttpException</code>，代码为 0，因此 <code>ExceptionInterceptor</code> 将其映射到 <strong>500</strong>，而不是 400。</li>
-<li><strong>影响：</strong> 对于格式错误的请求，客户端会收到 500（服务器错误）。</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories?@select[]=entity.id&amp;@select[]=entity.name</code> → <code>500 {"message":"@select must be a string.","class":"…ValidatorException"}</code>。</li>
-<li><strong>建议的修复：</strong> 在 <code>ListApiViewMixin::listAction()</code> 中捕获 <code>ValidatorException</code> 并返回 <code>warning(…, 400, …, 400)</code>，或者使读取列表特征抛出 <code>BadRequestHttpException</code>。</li>
-<li><strong>测试：</strong> <code>testArraySelectReturns500Currently</code>（回归，通过）； <code>testArraySelectReturns400</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/Service/Concern/BaseServiceReadListTrait.php</code> (<code>if (!is_string($select)) throw new ValidatorException('@select must be a string.');</code>), surfaced uncaught through <code>src/Core/View/ListApiViewMixin.php:listAction()</code> (no try/catch) into the <code>ExceptionInterceptor</code>.</li>
+<li><strong>Description:</strong> <code>@select[]=a&amp;@select[]=b</code> makes <code>$select</code> an array; the <code>ValidatorException</code> is not an <code>HttpException</code>, has code 0, so <code>ExceptionInterceptor</code> maps it to <strong>500</strong>, not 400.</li>
+<li><strong>Impact:</strong> clients get a 500 (server error) for a request that is simply malformed.</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories?@select[]=entity.id&amp;@select[]=entity.name</code> → <code>500 {"message":"@select must be a string.","class":"…ValidatorException"}</code>.</li>
+<li><strong>Proposed fix:</strong> catch <code>ValidatorException</code> in <code>ListApiViewMixin::listAction()</code> and return <code>warning(…, 400, …, 400)</code>, or make the read-list trait throw a <code>BadRequestHttpException</code>.</li>
+<li><strong>Tests:</strong> <code>testArraySelectReturns500Currently</code> (regression, pass); <code>testArraySelectReturns400</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-4-matches-sqlite-regexp">BUG-4 — <code>matches</code> 带有正则表达式文字在 SQLite 上崩溃（无 REGEXP 函数） — <strong>中等（环境）</strong><a class="headerlink" href="#bug-4-matches-sqlite-regexp" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4-matches-with-a-regex-literal-crashes-on-sqlite-no-regexp-function-medium-environment">BUG-4 — <code>matches</code> with a regex literal crashes on SQLite (no REGEXP function) — <strong>MEDIUM (environment)</strong><a class="headerlink" href="#bug-4-matches-with-a-regex-literal-crashes-on-sqlite-no-regexp-function-medium-environment" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/Parser/ExpressionDqlParser.php</code> (<code>matches</code> → <code>REGEXP(%s, %s) = TRUE</code>)。</li>
-<li><strong>描述：</strong> <code>/pattern/flags</code> 编译为 <code>REGEXP()</code> 调用； SQLite 没有 <code>REGEXP</code> 函数，因此查询在执行时失败并带有 <code>no such function: REGEXP</code>。普通的 LIKE 风格 <code>matches "slug-1"</code> 效果很好。</li>
-<li><strong>影响：</strong> 正则表达式过滤适用于 MySQL，但在 SQLite 测试环境（以及任何 SQLite 部署）中需要 500 秒。</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories?@filter=entity.getSlug() matches "/^slug-1$/i"</code> → <code>500 {"message":"…no such function: REGEXP","class":"…DriverException"}</code>。</li>
-<li><strong>建议的修复：</strong> 通过数据库平台保护 REGEXP（例如，在测试中注册 SQLite REGEXP 用户函数/使用 <code>LIKE</code> 后备），或记录正则表达式匹配仅限 MySQL。</li>
-<li><strong>测试：</strong> <code>testRegexMatchesWorksOnCurrentDb</code>（<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/Parser/ExpressionDqlParser.php</code> (<code>matches</code> → <code>REGEXP(%s, %s) = TRUE</code>).</li>
+<li><strong>Description:</strong> <code>/pattern/flags</code> compiles to a <code>REGEXP()</code> call; SQLite has no <code>REGEXP</code> function, so the query fails at execution with <code>no such function: REGEXP</code>. Plain LIKE-style <code>matches "slug-1"</code> works fine.</li>
+<li><strong>Impact:</strong> regex filtering works on MySQL but 500s in the SQLite test environment (and on any SQLite deployment).</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories?@filter=entity.getSlug() matches "/^slug-1$/i"</code> → <code>500 {"message":"…no such function: REGEXP","class":"…DriverException"}</code>.</li>
+<li><strong>Proposed fix:</strong> guard REGEXP by DB platform (e.g. register an SQLite REGEXP user-function in tests / use <code>LIKE</code> fallback), or document that regex matching is MySQL-only.</li>
+<li><strong>Tests:</strong> <code>testRegexMatchesWorksOnCurrentDb</code> (<strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-5-500-html-404-json">BUG-5 — 系统端点为未知实体返回 500 HTML（不是 404 JSON） — <strong>中</strong><a class="headerlink" href="#bug-5-500-html-404-json" title="Permanent link">&para;</a></h3>
+<h3 id="bug-5-system-endpoints-return-500-html-not-404-json-for-unknown-entities-medium">BUG-5 — System endpoints return 500 HTML (not 404 JSON) for unknown entities — <strong>MEDIUM</strong><a class="headerlink" href="#bug-5-system-endpoints-return-500-html-not-404-json-for-unknown-entities-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/EventListener/ExceptionInterceptor.php:21</code> (<code>EFFECTIVE_PATTERN = '/^\/(api)\/.*$/'</code>); <code>src/Core/Controller/System/EntityController.php:66-67</code>（<code>getClassMetadata</code> 对于未知的 FQCN 抛出异常）。</li>
-<li><strong>描述：</strong>拦截器仅处理 <code>/api/*</code> 路径，因此 <code>/system/entities/{name}</code> 上的 <code>MappingException</code> （未知实体）会绕过 JSON 错误信封并呈现 Symfony 的 HTML 错误页面 (500)。 <code>docs/ai/context.md</code> §12 中的文档暗示这些是 API-ish 系统端点；消费者获得 HTML。</li>
-<li><strong>影响：</strong> 系统端点没有 JSON 错误契约；错误的实体名称是 500（服务器错误）而不是 404。</li>
-<li><strong>复制：</strong> <code>GET /system/entities/App/Does/Not/Exist</code> → <code>500 text/html</code> 与 <code>Doctrine\Persistence\Mapping\MappingException: Class 'App\Does\Not\Exist' does not exist</code>。</li>
-<li><strong>建议的修复：</strong> 将拦截器模式扩展到 <code>/system</code> （或在 <code>EntityController::retrieveAction()</code> 和 <code>warning(…, 404, …, 404)</code> 中捕获 <code>MappingException</code>）。</li>
-<li><strong>测试：</strong> <code>testMissingEntityReturns500HtmlCurrently</code>（回归，通过）； <code>testMissingEntityShouldReturn404Json</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/EventListener/ExceptionInterceptor.php:21</code> (<code>EFFECTIVE_PATTERN = '/^\/(api)\/.*$/'</code>); <code>src/Core/Controller/System/EntityController.php:66-67</code> (<code>getClassMetadata</code> throws for unknown FQCN).</li>
+<li><strong>Description:</strong> the interceptor only handles <code>/api/*</code> paths, so a <code>MappingException</code> (unknown entity) on <code>/system/entities/{name}</code> bypasses the JSON error envelope and renders Symfony’s HTML error page (500). The docs in <code>docs/ai/context.md</code> §12 imply these are API-ish system endpoints; consumers get HTML.</li>
+<li><strong>Impact:</strong> no JSON error contract for the System endpoints; a bad entity name is a 500 (server error) rather than a 404.</li>
+<li><strong>Reproduction:</strong> <code>GET /system/entities/App/Does/Not/Exist</code> → <code>500 text/html</code> with <code>Doctrine\Persistence\Mapping\MappingException: Class 'App\Does\Not\Exist' does not exist</code>.</li>
+<li><strong>Proposed fix:</strong> extend the interceptor pattern to <code>/system</code> (or catch <code>MappingException</code> in <code>EntityController::retrieveAction()</code> and <code>warning(…, 404, …, 404)</code>).</li>
+<li><strong>Tests:</strong> <code>testMissingEntityReturns500HtmlCurrently</code> (regression, pass); <code>testMissingEntityShouldReturn404Json</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="bug-6-default_locale-zh">BUG-6 — <code>default_locale: zh</code> 不会成为活动区域设置 — 有效默认值为英语 — <strong>低</strong><a class="headerlink" href="#bug-6-default_locale-zh" title="Permanent link">&para;</a></h3>
+<h3 id="bug-6-default_locale-zh-does-not-become-the-active-locale-effective-default-is-english-low">BUG-6 — <code>default_locale: zh</code> does not become the active locale — effective default is English — <strong>LOW</strong><a class="headerlink" href="#bug-6-default_locale-zh-does-not-become-the-active-locale-effective-default-is-english-low" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>config/packages/translation.yaml:2</code> (<code>default_locale: zh</code>);框架 <code>Symfony\Component\HttpKernel\EventListener\LocaleListener</code> 仅将<em>默认</em>区域设置设置为优先级 100，并且在没有显式 <code>_locale</code> 的情况下绝不会激活它；应用程序的自定义 <code>App\Core\EventListener\LocaleListener</code> （优先级 20）仅覆盖匹配的 <code>?_locale</code>/Accept-Language。</li>
-<li><strong>描述：</strong> 没有区域设置提示时，活动请求区域设置保持 <code>en</code> （PHP <code>Request</code> 默认值） - 在 <code>reqDefaultLocale=zh</code> 时验证 <code>reqLocale=en</code>/<code>translatorLocale=en</code>。因此，<code>default_locale: zh</code> 只为翻译器提供缺失键的后备（这可能会产生奇怪的 en-with-zh-fallback 混合）。 LocaleListener 文档块和 <code>docs/ai/context.md</code> 都声明回退 <code>en</code>，它与<em>有效</em>行为匹配，但与配置相矛盾。</li>
-<li><strong>影响：</strong>配置错误 - 即使 <code>default_locale</code> 说中文，应用程序默认为英文响应；文档/配置不匹配。</li>
-<li><strong>复制：</strong> <code>GET /api/v1/manage/categories/999999</code>（无提示）→ <code>message: "Entity is not found"</code>（en）； <code>fr-FR</code> 标头 → 也 en。</li>
-<li><strong>建议的修复：</strong> 设置 <code>default_locale: en</code> 以匹配实际情况，或者使自定义 LocaleListener 在没有提示匹配时应用配置的默认值。</li>
-<li><strong>测试：</strong> <code>testNoLocaleHintUsesEffectiveEnglishDefault</code>、<code>testUnsupportedLocaleLeavesEffectiveEnglishFallback</code>（断言实际行为，通过）。</li>
+<li><strong>Location:</strong> <code>config/packages/translation.yaml:2</code> (<code>default_locale: zh</code>); framework <code>Symfony\Component\HttpKernel\EventListener\LocaleListener</code> sets only the <em>default</em> locale at priority 100 and never activates it without an explicit <code>_locale</code>; the app’s custom <code>App\Core\EventListener\LocaleListener</code> (priority 20) only overrides on a matched <code>?_locale</code>/Accept-Language.</li>
+<li><strong>Description:</strong> with no locale hint the active request locale stays <code>en</code> (PHP <code>Request</code> default) — verified <code>reqLocale=en</code>/<code>translatorLocale=en</code> while <code>reqDefaultLocale=zh</code>. <code>default_locale: zh</code> therefore only feeds the translator fallback for missing keys (which can produce a weird en-with-zh-fallback mix). The LocaleListener docblock and <code>docs/ai/context.md</code> both claim fallback <code>en</code>, which matches the <em>effective</em> behavior but contradicts the config.</li>
+<li><strong>Impact:</strong> misconfiguration — the app defaults to English responses even though <code>default_locale</code> says Chinese; docs/config mismatch.</li>
+<li><strong>Reproduction:</strong> <code>GET /api/v1/manage/categories/999999</code> (no hints) → <code>message: "Entity is not found"</code> (en); <code>fr-FR</code> header → also en.</li>
+<li><strong>Proposed fix:</strong> either set <code>default_locale: en</code> to match reality, or make the custom LocaleListener apply the configured default when no hint matches.</li>
+<li><strong>Tests:</strong> <code>testNoLocaleHintUsesEffectiveEnglishDefault</code>, <code>testUnsupportedLocaleLeavesEffectiveEnglishFallback</code> (assert actual behavior, pass).</li>
 </ul>
-<h3 id="bug-7-openapienricherlistenerdetecttag-ids">BUG-7 — OpenApiEnricherListener::detectTag() 前缀检查永远不会匹配方法前缀的操作Ids — 存储未标记的端点 — <strong>中</strong><a class="headerlink" href="#bug-7-openapienricherlistenerdetecttag-ids" title="Permanent link">&para;</a></h3>
+<h3 id="bug-7-openapienricherlistenerdetecttag-prefix-checks-never-match-method-prefixed-operationids-store-endpoints-left-untagged-medium">BUG-7 — OpenApiEnricherListener::detectTag() prefix checks never match method-prefixed operationIds — Store endpoints left untagged — <strong>MEDIUM</strong><a class="headerlink" href="#bug-7-openapienricherlistenerdetecttag-prefix-checks-never-match-method-prefixed-operationids-store-endpoints-left-untagged-medium" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>位置：</strong> <code>src/Core/EventListener/OpenApiEnricherListener.php:259-262</code>（<code>str_starts_with($opId, 'system-')</code>、<code>'wechat-'</code>、<code>'store-'</code>）。</li>
-<li><strong>描述：</strong> Nelmio 使用 HTTP 方法（<code>get_store-orders-list</code>、<code>post_store-orders-accept</code>）为操作 ID 添加前缀，因此锚定的 <code>str_starts_with</code> 检查永远不会触发。未锚定的 <code>manage|app|public</code> 正则表达式和 <code>str_contains(…, 'sys-auth')</code> 检查仍然有效，这就是具有显式 OA <code>tags</code> 的 <code>system-*</code>/<code>wechat-*</code> 端点能够生存的原因。存储端点（没有显式的 OA 标签，没有 META 条目）最终<strong>根本没有标签</strong>。</li>
-<li><strong>影响：</strong> <code>/api/v1/store/stores/{scopeId}/orders…</code> (list/detail/accept/reject/fulfill) 在丰富的规范中具有空的 <code>tags</code> → 文档 UI 中缺少模块标记。</li>
-<li><strong>复制：</strong> <code>GET /api/doc.json</code> → <code>paths['/api/v1/store/stores/{scopeId}/orders/{orderUuid}/accept']['post']['tags'] === []</code>。</li>
-<li><strong>建议的修复：</strong> 在检测之前去除方法前缀（例如 <code>preg_replace('/^(get|post|put|delete|patch)_/', '', $opId)</code>），或使用 <code>str_contains</code> 进行前缀检查。</li>
-<li><strong>测试：</strong> <code>testStoreOrderEndpointsAreLeftUntaggedCurrently</code>（回归，通过）； <code>testStoreOrderEndpointsShouldBeTaggedStore</code>（正确行为，<strong>跳过</strong>）。</li>
+<li><strong>Location:</strong> <code>src/Core/EventListener/OpenApiEnricherListener.php:259-262</code> (<code>str_starts_with($opId, 'system-')</code>, <code>'wechat-'</code>, <code>'store-'</code>).</li>
+<li><strong>Description:</strong> Nelmio prefixes operationIds with the HTTP method (<code>get_store-orders-list</code>, <code>post_store-orders-accept</code>), so the anchored <code>str_starts_with</code> checks never fire. The unanchored <code>manage|app|public</code> regex and the <code>str_contains(…, 'sys-auth')</code> check still work, which is why <code>system-*</code>/<code>wechat-*</code> endpoints with explicit OA <code>tags</code> survive. Store endpoints (no explicit OA tags, no META entry) end up with <strong>no tag at all</strong>.</li>
+<li><strong>Impact:</strong> <code>/api/v1/store/stores/{scopeId}/orders…</code> (list/detail/accept/reject/fulfill) have empty <code>tags</code> in the enriched spec → missing module tag in the docs UI.</li>
+<li><strong>Reproduction:</strong> <code>GET /api/doc.json</code> → <code>paths['/api/v1/store/stores/{scopeId}/orders/{orderUuid}/accept']['post']['tags'] === []</code>.</li>
+<li><strong>Proposed fix:</strong> strip the method prefix before detection (e.g. <code>preg_replace('/^(get|post|put|delete|patch)_/', '', $opId)</code>), or use <code>str_contains</code> for the prefix checks.</li>
+<li><strong>Tests:</strong> <code>testStoreOrderEndpointsAreLeftUntaggedCurrently</code> (regression, pass); <code>testStoreOrderEndpointsShouldBeTaggedStore</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>
-<h3 id="_1">附加观察结果（不阻塞）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<h3 id="additional-observations-not-blocking">Additional observations (not blocking)<a class="headerlink" href="#additional-observations-not-blocking" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>@order=entity.sortOrder|UP</code>（无效方向）和<code>@order=entity.nope|ASC</code>（未知字段）表面为 <strong>500</strong> <code>QueryException</code> 而不是 400 — 不验证 <code>@order</code> 标记。</li>
-<li><code>TransformContent</code> (<code>src/Core/View/TransformContent.php:156-157</code>) 默默地吞下 <code>@transform</code> 计算失败 — 格式错误的转换表达式无操作而不是出错。</li>
-<li>文档（<code>docs/ai/context.md</code> §5）显示<code>Math.mul(value, 100)</code>，但<code>src/Core/Utils/Math.php</code>没有<code>mul</code>方法。</li>
-<li><code>translations/messages.ja.yaml:293</code> 将 <code>"SUCCESS"</code> 映射到中文字符串 <code>操作成功。</code> （应该是日语字符串）。</li>
+<li><code>@order=entity.sortOrder|UP</code> (invalid direction) and <code>@order=entity.nope|ASC</code> (unknown field) surface as <strong>500</strong> <code>QueryException</code> instead of 400 — no validation of <code>@order</code> tokens.</li>
+<li><code>TransformContent</code> (<code>src/Core/View/TransformContent.php:156-157</code>) silently swallows <code>@transform</code> evaluation failures — a malformed transform expression no-ops instead of erroring.</li>
+<li>Docs (<code>docs/ai/context.md</code> §5) show <code>Math.mul(value, 100)</code>, but <code>src/Core/Utils/Math.php</code> has no <code>mul</code> method.</li>
+<li><code>translations/messages.ja.yaml:293</code> maps <code>"SUCCESS"</code> to the Chinese string <code>操作成功。</code> (should likely be a Japanese equivalent).</li>
 </ul>
-<h2 id="5">5. 跳过测试（所有参考上述错误；套件保持绿色）<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<h2 id="5-skipped-tests-all-reference-the-bugs-above-suite-stays-green">5. Skipped tests (all reference the bugs above; suite stays green)<a class="headerlink" href="#5-skipped-tests-all-reference-the-bugs-above-suite-stays-green" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>测试</th>
-<th>原因</th>
+<th>Test</th>
+<th>Reason</th>
 </tr>
 </thead>
 <tbody>
@@ -3007,33 +3035,33 @@
 </tr>
 <tr>
 <td><code>testExpandsReturnsMetadataWithoutDeprecation</code></td>
-<td>错误2</td>
+<td>BUG-2</td>
 </tr>
 <tr>
 <td><code>testArraySelectReturns400</code></td>
-<td>错误3</td>
+<td>BUG-3</td>
 </tr>
 <tr>
 <td><code>testRegexMatchesWorksOnCurrentDb</code></td>
-<td>错误4</td>
+<td>BUG-4</td>
 </tr>
 <tr>
 <td><code>testMissingEntityShouldReturn404Json</code></td>
-<td>错误5</td>
+<td>BUG-5</td>
 </tr>
 <tr>
 <td><code>testStoreOrderEndpointsShouldBeTaggedStore</code></td>
-<td>错误7</td>
+<td>BUG-7</td>
 </tr>
 </tbody>
 </table>
-<h2 id="6">6. 建议的后续行动<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h2 id="6-suggested-follow-ups">6. Suggested follow-ups<a class="headerlink" href="#6-suggested-follow-ups" title="Permanent link">&para;</a></h2>
 <ol>
-<li>修复 BUG-1（请求时用户解析）——解锁 <code>@dql/@sort/@hints</code> + <code>@filter</code> 内存回退，这是价值最高的动态查询功能。</li>
-<li>修复 BUG-2（键入 <code>__metadata</code>/无动态属性），使 <code>@expands</code> 不再失败 <code>failOnDeprecation</code>。</li>
-<li>使<code>ListApiViewMixin</code>映射<code>ValidatorException</code>→400（BUG-3）并验证<code>@order</code>。</li>
-<li>将 <code>/system</code> 前缀添加到 ExceptionInterceptor (BUG-5) 并捕获 404 JSON 的 <code>MappingException</code>。</li>
-<li>在标签检测之前标准化操作Id (BUG-7) 并将 <code>default_locale</code> 配置与实际行为对齐 (BUG-6)。</li>
+<li>Fix BUG-1 (request-time user resolution) — unlocks <code>@dql/@sort/@hints</code> + the <code>@filter</code> in-memory fallback, which are the highest-value dynamic-query features.</li>
+<li>Fix BUG-2 (typed <code>__metadata</code> / no dynamic property) so <code>@expands</code> stops failing <code>failOnDeprecation</code>.</li>
+<li>Make <code>ListApiViewMixin</code> map <code>ValidatorException</code> → 400 (BUG-3) and validate <code>@order</code>.</li>
+<li>Add the <code>/system</code> prefix to the ExceptionInterceptor (BUG-5) and catch <code>MappingException</code> for 404 JSON.</li>
+<li>Normalize operationIds before tag detection (BUG-7) and align <code>default_locale</code> config with actual behavior (BUG-6).</li>
 </ol>
 
 
