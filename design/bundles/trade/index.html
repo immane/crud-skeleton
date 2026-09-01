@@ -1323,10 +1323,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-catalog-ownership-target" class="md-nav__link">
+  <a href="#11-catalog-ownership" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Catalog Ownership Target
+        1.1 Catalog Ownership
       
     </span>
   </a>
@@ -3153,10 +3153,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-catalog-ownership-target" class="md-nav__link">
+  <a href="#11-catalog-ownership" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Catalog Ownership Target
+        1.1 Catalog Ownership
       
     </span>
   </a>
@@ -3645,33 +3645,27 @@
 <h1 id="trade-bundle-design">Trade Bundle Design<a class="headerlink" href="#trade-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>The Trade bundle (<code>src/Trade/</code>) owns orders, order items, price calculation, and the
-Symfony Workflow-based order state machine. Product and Specification currently live in
-Trade, but their approved target owner is Store; see <a href="../../store-catalog/">Store Catalog Model</a>.
-This document describes the current implementation unless a section explicitly says
-"target".</p>
+Symfony Workflow-based order state machine. Product and Specification are owned by
+<code>Store</code> (<code>src/Store/Entity/Product.php</code>, <code>src/Store/Entity/Specification.php</code>,
+tables <code>trade_product</code>/<code>trade_specification</code> retained) with nullable <code>store</code> (<code>NULL</code> =
+shared/global); see <a href="../../store-catalog/">Store Catalog Model</a>. <code>Trade</code> remains the
+commercial-order authority and references the Store catalog via scalar snapshots and
+<code>StoreContext</code>.</p>
 </blockquote>
 <hr />
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
 <p>Trade provides a complete order management system:</p>
 <ul>
-<li>Current catalog integration with <strong>Products</strong> and multiple <strong>Specifications</strong> (SKU-like variants with pricing)</li>
+<li><strong>Store-catalog integration</strong> with <code>Store</code> Products and Specifications (SKU-like variants, <code>Product.store</code> nullable for shared/global)</li>
 <li><strong>Orders</strong> with a state machine lifecycle (draft -&gt; completed)</li>
 <li><strong>Order Items</strong> with price snapshots for historical accuracy</li>
-<li><strong>Price Calculation Pipeline</strong>: pluggable calculators with priority ordering</li>
-<li><strong>Soft Deletes</strong>: products and specifications use <code>isDeleted</code> flag</li>
+<li><strong>Price Calculation Pipeline</strong>: pluggable calculators with priority ordering (Store visibility enforced in <code>BasePriceCalculator</code>)</li>
+<li><strong>Soft Deletes</strong>: products and specifications use <code>isDeleted</code> flag (Store entities)</li>
 <li><strong>UUID v4</strong>: external identifiers for orders and items</li>
 <li><strong>Store integration</strong>: Store-scoped orders write a local Outbox event and await Store acceptance</li>
 </ul>
-<h3 id="11-catalog-ownership-target">1.1 Catalog Ownership Target<a class="headerlink" href="#11-catalog-ownership-target" title="Permanent link">&para;</a></h3>
-<p>The approved target keeps Trade as the commercial-order owner while moving the catalog
-to Store. <code>Product.store = NULL</code> denotes a shared/global catalog product;
-<code>Product.store = Store</code> denotes a Store-private product. A resolved Store is mandatory
-for quotes and orders, and pricing must accept only a Specification whose Product is
-shared or belongs to that Store. See <a href="../../store-catalog/">Store Catalog Model</a> for the
-complete invariant and migration plan. Before the entity move is complete, Trade must
-replace <code>OrderItem</code>'s Specification Doctrine relation with a scalar catalog
-Specification UUID and immutable snapshots; a permanent Trade-to-Store entity relation
-would violate the system cross-module contract.</p>
+<h3 id="11-catalog-ownership">1.1 Catalog Ownership<a class="headerlink" href="#11-catalog-ownership" title="Permanent link">&para;</a></h3>
+<p>Product and Specification are <code>Store</code> entities (<code>Product.store</code> nullable). <code>StoreContext</code> (<code>X-Store-Code</code> → <code>Store</code>) is required for catalog reads, quotes, and orders; <code>BasePriceCalculator</code> accepts only shared (<code>store IS NULL</code>) or Store-owned specs for the resolved Store. See <a href="../../store-catalog/">Store Catalog Model</a>.</p>
 <h3 id="12-entities">1.2 Entities<a class="headerlink" href="#12-entities" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3683,12 +3677,12 @@ would violate the system cross-module contract.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>Product</code></td>
+<td><code>Store\Product</code></td>
 <td><code>trade_product</code></td>
-<td>Sellable product with name, description, status</td>
+<td>Sellable product with name, description, status, nullable <code>store</code></td>
 </tr>
 <tr>
-<td><code>Specification</code></td>
+<td><code>Store\Specification</code></td>
 <td><code>trade_specification</code></td>
 <td>Product variant (name, price in cents, status)</td>
 </tr>
@@ -3700,7 +3694,7 @@ would violate the system cross-module contract.</p>
 <tr>
 <td><code>OrderItem</code></td>
 <td><code>trade_order_item</code></td>
-<td>Line item with snapshot, quantity, unit price</td>
+<td>Line item with <code>specificationUuid</code> (scalar), <code>specificationTitle</code>, snapshots, quantity, unit price</td>
 </tr>
 <tr>
 <td><code>TradeOutboxMessage</code></td>
@@ -3724,64 +3718,63 @@ idempotently, writes its StoreOrder and result Outbox event, and Trade consumers
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/Trade/
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>|-- Controller/
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   |   |-- OrderController.php           # Public: list/create/cancel own orders
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>|   |   |-- ProductController.php          # Public read: list products
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|   |   |-- SpecificationController.php    # Public read: browse specs by product
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|   |-- Manage/
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|       |-- OrderController.php            # CRUD + workflow + price calculation
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>|       |-- ProductController.php          # CRUD
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|       |-- SpecificationController.php    # CRUD
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|-- Entity/
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|   |-- Order.php
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>|   |-- OrderItem.php
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>|   |-- Product.php
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>|   |-- Specification.php
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|   `-- TradeOutboxMessage.php
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>|-- Command/PublishOutboxCommand.php
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>|-- DTO/StoreContext.php
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>|-- Message/ + MessageHandler/             # Store integration contracts/consumers
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|-- EventListener/
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>|   |-- OrderWorkflowListener.php          # Post-transition timestamp setters
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>|-- Exception/
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>|   |-- OrderInvalidTransitionException.php
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>|   |-- SpecificationNotFoundException.php
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>|-- Repository/
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>|   |-- OrderItemRepository.php
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>|   |-- OrderRepository.php
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>|   |-- ProductRepository.php
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>|   |-- SpecificationRepository.php
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>|-- Service/
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>|   |-- OrderItemService.php
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>|   |-- OrderService.php                   # Order creation + price pipeline
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>|   |-- ProductService.php
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>|   |-- SpecificationService.php
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>|   |-- Pricing/
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>|       |-- PriceCalculatorInterface.php   # Plugin contract
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>|       |-- PriceCalculationContext.php    # Input/output DTO
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>|       |-- PriceCalculationResult.php     # Result DTO
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>|       |-- BasePriceCalculator.php        # Resolves specs, extracts unit price
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>|       |-- QuantityCalculator.php         # Computes price = unitPrice * quantity
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>|       |-- TotalAggregator.php            # Establishes subtotal (priority 55)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   |   `-- OrderController.php           # Public: list/create/cancel own orders
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>|   |-- Manage/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|       |-- OrderController.php            # CRUD + workflow + price calculation
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|-- Entity/
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|   |-- Order.php
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>|   |-- OrderItem.php  # scalar specificationUuid + snapshots (FK removed, irreversible)
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|   `-- TradeOutboxMessage.php
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|-- Command/PublishOutboxCommand.php
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|-- DTO/StoreContext.php
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>|-- Message/ + MessageHandler/             # Store integration contracts/consumers
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>|-- EventListener/
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>|   |-- OrderWorkflowListener.php          # Post-transition timestamp setters
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|-- Exception/
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>|   |-- OrderInvalidTransitionException.php
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>|   |-- SpecificationNotFoundException.php
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>|-- Repository/
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|   |-- OrderItemRepository.php
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>|   |-- OrderRepository.php
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>|-- Service/
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>|   |-- Catalog/CatalogResolverInterface.php + CatalogItem.php # Trade-owned port/DTO
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>|   |-- OrderService.php                   # Order creation + price pipeline (no Store import)
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>|   |-- Pricing/
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>|       |-- PriceCalculatorInterface.php   # Plugin contract
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>|       |-- PriceCalculationContext.php    # Input/output DTO (storeCode)
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>|       |-- PriceCalculationResult.php     # Result DTO
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>|       |-- BasePriceCalculator.php        # Resolves via CatalogResolver (Store visibility enforced in Store)
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>|       |-- QuantityCalculator.php         # Computes price = unitPrice * quantity
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>|       |-- TotalAggregator.php            # Establishes subtotal (priority 55)
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a> src/Store/
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a> |-- Entity/Product.php  # trade_product, nullable store ManyToOne Store
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a> |-- Entity/Specification.php # trade_specification, ManyToOne Store\Product
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a> |-- Repository/ProductRepository.php, SpecificationRepository.php
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a> |-- Service/ProductService.php, SpecificationService.php
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a> |-- Service/Catalog/StoreCatalogResolver.php # Trade CatalogResolverInterface impl (Store visibility)
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a> |-- Controller/App/ProductController.php, SpecificationController.php # DqlExpression row-scope
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a> |-- Controller/Manage/ProductController.php, SpecificationController.php, SpecificationAllController.php
 </code></pre></div>
 <hr />
 <h2 id="3-entity-relationships">3. Entity Relationships<a class="headerlink" href="#3-entity-relationships" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Product (status: active/inactive, isDeleted: bool, metadata: JSON)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Store\Product (status: active/inactive, isDeleted: bool, metadata: JSON, store: ?Store)
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  |
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  +-- 1:N -&gt; Specification (cascade: persist)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  +-- 1:N -&gt; Store\Specification (cascade: persist)
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Specification (name, price: int cents, status, sort, isDeleted)
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  |
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  +-- 1:N -&gt; OrderItem
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Store\Specification (name, price: int cents, status, sort, isDeleted)
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  |  inherits Product.store visibility
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  +-- (no FK) -&gt; Trade\OrderItem via scalar specificationUuid + snapshots
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Order (uuid, totalAmount: int cents, currency: CNY, status: state machine, notes, metadata)
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Order (uuid, totalAmount: int cents, currency: CNY, status: state machine, notes, metadata _store)
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  |
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  +-- M:1 -&gt; User
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  +-- 1:N -&gt; OrderItem (cascade: persist)
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>OrderItem (uuid, quantity, unitPrice: cents, price: cents, cost, profit, snapshots: JSON)
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>OrderItem (uuid, quantity, unitPrice: cents, price: cents, cost, profit, specificationUuid, specificationTitle, specSnapshot/productSnapshot: JSON)
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  |
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  +-- M:1 -&gt; Order
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  +-- M:1 -&gt; Specification
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  +-- (scalar) specificationUuid (indexed, no FK)
 </code></pre></div>
 <hr />
 <h2 id="4-entity-design-details">4. Entity Design Details<a class="headerlink" href="#4-entity-design-details" title="Permanent link">&para;</a></h2>

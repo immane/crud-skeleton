@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Authorization Setup
+    授权设置
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -796,7 +796,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1422,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1450,7 +1450,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2193,7 +2193,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2310,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2422,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -2450,7 +2450,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2680,10 +2680,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes
+        注释
       
     </span>
   </a>
@@ -2802,17 +2802,17 @@ Rule: <strong>no changes under <code>src/</code></strong> — only tests added u
 </ul>
 <h3 id="bug-3-medium-auto-generated-wechat-user-identity-can-collide">Bug 3 (MEDIUM) — auto-generated WeChat user identity can collide<a class="headerlink" href="#bug-3-medium-auto-generated-wechat-user-identity-can-collide" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>File / line:</strong> <code>src/Wechat/Service/WechatAuthService.php</code> — <code>findOrCreateUser()</code> lines 116–119.</li>
-<li><strong>Description:</strong> new users are created with <code>username</code>/<code>email</code> derived from the <strong>last 8 characters</strong> of the openid: <code>wx_&lt;suffix&gt;</code> / <code>wx_&lt;suffix&gt;@wechat.local</code> (both lowercased by <code>User::setUsername</code>/<code>setEmail</code>). Distinct openids sharing the same 8-char tail produce identical usernames/emails. The <code>User</code> entity has unique constraints on both (<code>uniq_users_username</code>, <code>uniq_users_email</code>).</li>
-<li><strong>Impact:</strong> at scale (birthday-paradox on 8 chars, ~60k users), a second new-user login with a colliding suffix throws a <code>UniqueConstraintViolationException</code> during <code>flush()</code> → HTTP 500, user cannot log in. The <code>WechatUser</code>/<code>User</code> records are also created before the constraint is enforced, so a partial write is left behind.</li>
-<li><strong>Reproduction:</strong> unit-level — two calls to <code>findOrCreateUser()</code> with openids differing only outside the last 8 chars (e.g. <code>aaa...o12345678</code> vs <code>bbb...o12345678</code>) both derive <code>wx_o12345678</code>. Needs a real DB flush to surface; not added as a test to keep the suite green.</li>
-<li><strong>Proposed fix:</strong> use the full openid (or a hash of it) as the suffix, e.g. <code>mb_substr($openid, 0, 40)</code> + sanitize, or <code>substr(hash('sha256', $openid), 0, 12)</code>, and/or catch <code>UniqueConstraintViolationException</code> and fall back to the existing user.</li>
+<li><strong>文件/行：</strong> <code>src/Wechat/Service/WechatAuthService.php</code> — <code>findOrCreateUser()</code> 第 116-119 行。</li>
+<li><strong>描述：</strong>使用从 openid 的 <strong>最后 8 个字符</strong>派生的 <code>username</code>/<code>email</code> 创建新用户：<code>wx_&lt;suffix&gt;</code> / <code>wx_&lt;suffix&gt;@wechat.local</code>（均由 <code>User::setUsername</code>/<code>setEmail</code> 小写）。共享相同 8 字符尾部的不同 openids 会生成相同的用户名/电子邮件。 <code>User</code> 实体对两者（<code>uniq_users_username</code>、<code>uniq_users_email</code>）都有唯一的约束。</li>
+<li><strong>影响：</strong>大规模（8 个字符的生日悖论，约 6 万用户），使用冲突后缀的第二个新用户登录在 <code>flush()</code> → HTTP 500 期间抛出 <code>UniqueConstraintViolationException</code>，用户无法登录。 <code>WechatUser</code>/<code>User</code> 记录也在强制执行约束之前创建，因此留下了部分写入。</li>
+<li><strong>复制：</strong> 单元级 — 对 <code>findOrCreateUser()</code> 的两次调用，其 openid 仅在最后 8 个字符之外有所不同（例如 <code>aaa...o12345678</code> 与 <code>bbb...o12345678</code>），均派生 <code>wx_o12345678</code>。需要真正的数据库与表面齐平；未添加作为保持套件绿色的测试。</li>
+<li><strong>建议的修复：</strong> 使用完整的 openid （或其哈希值）作为后缀，例如<code>mb_substr($openid, 0, 40)</code> + 清理，或 <code>substr(hash('sha256', $openid), 0, 12)</code>，和/或捕获 <code>UniqueConstraintViolationException</code> 并回退到现有用户。</li>
 </ul>
-<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<h2 id="_1">注释<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>WechatAuthService</code> and <code>WechatUserRepository</code> were already at 100% — no new tests were added for them.</li>
-<li>Bug 1 is the one "correct-behavior test fails" case; it is marked skipped and documented above so the suite remains green.</li>
-<li>Bugs are reported only — <strong>no source files were modified</strong>.</li>
+<li><code>WechatAuthService</code> 和 <code>WechatUserRepository</code> 已经达到 100% — 没有为它们添加新的测试。</li>
+<li>Bug 1 是一种“正确行为测试失败”的案例；它被标记为已跳过并在上面记录，因此套件保持绿色。</li>
+<li>仅报告错误 - <strong>未修改源文件</strong>。</li>
 </ul>
 
 

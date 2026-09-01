@@ -1422,10 +1422,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-implementation-migration" class="md-nav__link">
+  <a href="#6-implementation-notes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Implementation Migration
+        6. Implementation Notes
       
     </span>
   </a>
@@ -2780,10 +2780,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-implementation-migration" class="md-nav__link">
+  <a href="#6-implementation-notes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Implementation Migration
+        6. Implementation Notes
       
     </span>
   </a>
@@ -2812,10 +2812,7 @@
 
 <h1 id="store-catalog-model">Store Catalog Model<a class="headerlink" href="#store-catalog-model" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Status: approved target architecture; not implemented yet.</strong> The current Product and
-Specification entities remain in <code>Trade</code>. This document defines their planned ownership
-transfer and the invariants that must be implemented before the transfer is considered
-complete.</p>
+<p><strong>Status: implemented.</strong> Product and Specification are owned by <code>Store</code> (<code>src/Store/Entity/Product.php</code>, <code>src/Store/Entity/Specification.php</code>, tables <code>trade_product</code>/<code>trade_specification</code> retained). <code>Product.store</code> is nullable: <code>NULL</code> = shared/global, <code>Store</code> = store-private. The invariants below are enforced.</p>
 </blockquote>
 <h2 id="1-purpose">1. Purpose<a class="headerlink" href="#1-purpose" title="Permanent link">&para;</a></h2>
 <p>The catalog supports both independent stores and a lightweight shared catalog without
@@ -2914,23 +2911,14 @@ catalog record, introduce a separate override/listing aggregate such as:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Catalog Product -&gt; Store Listing -&gt; Store-specific price and availability
 </code></pre></div>
 <p>Do not add that layer until those differing Store-level semantics are required.</p>
-<h2 id="6-implementation-migration">6. Implementation Migration<a class="headerlink" href="#6-implementation-migration" title="Permanent link">&para;</a></h2>
+<h2 id="6-implementation-notes">6. Implementation Notes<a class="headerlink" href="#6-implementation-notes" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Add nullable <code>Product.store_id</code> with a local Store FK and index; backfill no value so
-   existing products remain shared/global.</li>
-<li>Resolve and require Store context for catalog reads, quotes, and new orders; enforce
-   the visibility predicate in the pricing path.</li>
-<li>Replace <code>Trade\OrderItem</code>'s Doctrine Specification relation with a scalar catalog
-   Specification UUID plus the existing immutable snapshots. This is required before the
-   entity moves because Trade must not retain a cross-module Doctrine association to Store.</li>
-<li>Move Product and Specification ownership from <code>Trade</code> to <code>Store</code> in a follow-up
-   mechanical refactor. Keep the existing table names and UUIDs initially to avoid a
-   data-table rename.</li>
-<li>Update Store-scoped authorization, tests, OpenAPI descriptions, and event consumers.</li>
+<li><code>Product.store_id</code> (<code>store</code> ManyToOne, nullable, <code>ON DELETE SET NULL</code>, index <code>idx_trade_product_store</code>) was added via <code>Version20260902000000</code>. Existing rows remain <code>NULL</code> (shared/global).</li>
+<li>Catalog reads (<code>App\Store\Controller\App\ProductController</code> / <code>SpecificationController</code>) enforce row-scope via <code>DqlExpression</code> validated by <code>ExpressionDqlParser</code>: <code>entity.getStatus() == status &amp;&amp; entity.getIsDeleted() == isDeleted &amp;&amp; !entity.getStore()</code> (global) and <code>(!entity.getStore() || entity.getStore() == store)</code> (global or owned), and for specs <code>!entity.getProduct().getStore()</code> chains; pricing (<code>Trade\Service\Pricing\BasePriceCalculator</code>) resolves via <code>Trade\Service\Catalog\CatalogResolverInterface</code> implemented by <code>Store\Service\Catalog\StoreCatalogResolver</code> (<code>X-Store-Code</code> → <code>Store</code>), rejecting private specs without a matching Store context.</li>
+<li>Manage API (<code>App\Store\Controller\Manage\ProductController</code>) accepts <code>store</code> (UUID or null) and resolves via <code>StoreRepository</code>.</li>
+<li>Tables <code>trade_product</code>/<code>trade_specification</code> are retained; PHP namespaces moved to <code>App\Store\Entity</code>. <code>Trade\Entity\Product/Specification</code> and their repositories/services have been removed; <code>Trade</code> no longer owns catalog code and never imports <code>App\Store</code> – the port is <code>CatalogResolverInterface</code> / <code>CatalogItem</code>.</li>
+<li><code>Trade\Entity\OrderItem</code> now stores <code>specificationUuid</code> (scalar, indexed) plus <code>specificationTitle</code>/<code>specSnapshot</code>/<code>productSnapshot</code>; the legacy <code>getSpecification()</code>/<code>setSpecification()</code> aliases were removed. The <code>ManyToOne</code> FK <code>specification_id</code> was removed via two-step <code>Version20260903000000</code> (add column) / <code>Version20260903000001</code> (backfill <code>uuid</code> then drop FK/column, irreversible). <code>Trade</code> still owns orders and pricing orchestration, PHPStan Level 8 passes without <code>Authorization</code> <code>ignoreErrors</code> suppressions.</li>
 </ol>
-<p>The namespace move is not a database migration by itself. The <code>store_id</code> relation,
-checkout visibility enforcement, and Trade's replacement of the Specification FK are the
-behavior-changing parts.</p>
 
 
 

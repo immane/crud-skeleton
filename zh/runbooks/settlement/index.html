@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    Authorization Setup
+    授权设置
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -800,7 +800,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1426,7 +1426,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1454,7 +1454,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2109,10 +2109,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-audit-and-reconciliation" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. Audit And Reconciliation
+        11. 审计与对账
       
     </span>
   </a>
@@ -2120,10 +2120,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-troubleshooting" class="md-nav__link">
+  <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. Troubleshooting
+        12. 故障排除
       
     </span>
   </a>
@@ -2131,10 +2131,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-checklist-before-going-live" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Checklist Before Going Live
+        13. 上线前的检查清单
       
     </span>
   </a>
@@ -2482,7 +2482,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2599,7 +2599,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2627,7 +2627,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2655,7 +2655,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2711,7 +2711,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -2739,7 +2739,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -3102,10 +3102,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-audit-and-reconciliation" class="md-nav__link">
+  <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. Audit And Reconciliation
+        11. 审计与对账
       
     </span>
   </a>
@@ -3113,10 +3113,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-troubleshooting" class="md-nav__link">
+  <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. Troubleshooting
+        12. 故障排除
       
     </span>
   </a>
@@ -3124,10 +3124,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-checklist-before-going-live" class="md-nav__link">
+  <a href="#13" class="md-nav__link">
     <span class="md-ellipsis">
       
-        13. Checklist Before Going Live
+        13. 上线前的检查清单
       
     </span>
   </a>
@@ -3497,124 +3497,124 @@ pay the order's agent <code>3.00 × quantity</code>.</p>
 <table>
 <thead>
 <tr>
-<th>Command</th>
-<th>Purpose</th>
+<th>命令</th>
+<th>目的</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>app:settlement:outbox:publish</code></td>
-<td>Relay posting commands to Wallet</td>
+<td>将发布命令中继到钱包</td>
 </tr>
 <tr>
 <td><code>app:settlement:allocations:requeue-due</code></td>
-<td>Requeue retryable posting failures</td>
+<td>重新排队可重试的发帖失败</td>
 </tr>
 </tbody>
 </table>
-<p>These are scheduled in <code>compose.yaml</code>. To post a single allocation manually:</p>
+<p>这些都安排在<code>compose.yaml</code>中。要手动过帐单个分配：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>POST /api/v1/manage/settlement-plans/{planUuid}/allocations/{allocationUuid}/post
 </code></pre></div>
-<p>To reverse a posted allocation:</p>
+<p>要撤消已发布的分配：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>POST /api/v1/manage/settlement-plans/{planUuid}/allocations/{allocationUuid}/reverse
 </code></pre></div>
-<h2 id="11-audit-and-reconciliation">11. Audit And Reconciliation<a class="headerlink" href="#11-audit-and-reconciliation" title="Permanent link">&para;</a></h2>
+<h2 id="11">11. 审计与对账<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Endpoint</th>
-<th>Purpose</th>
+<th>端点</th>
+<th>目的</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>GET /api/v1/manage/settlement-plans</code></td>
-<td>List plans</td>
+<td>列出计划</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-plans/{id}</code></td>
-<td>Plan detail with allocations</td>
+<td>计划细节与分配</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-allocations</code></td>
-<td>List allocations</td>
+<td>分配清单</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-rules</code></td>
-<td>List rules</td>
+<td>列表规则</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-rule-versions</code></td>
-<td>List rule versions</td>
+<td>列出规则版本</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-outbox-messages</code></td>
-<td>List outbox messages</td>
+<td>列出发件箱消息</td>
 </tr>
 <tr>
 <td><code>GET /api/v1/manage/settlement-consumed-events</code></td>
-<td>List consumed funding events</td>
+<td>列出消耗的资金事件</td>
 </tr>
 </tbody>
 </table>
-<p>Conservation invariants (must hold before a plan is <code>posted</code>):</p>
+<p>守恒不变量（必须在计划为 <code>posted</code> 之前保持）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>fundingAmount = allocationAmountTotal + unallocatedAmount
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>fundingPostingAmount = sum(allocation.postingAmount) + unallocatedPostingAmount
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>unallocatedAmount = 0
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>unallocatedPostingAmount = 0
 </code></pre></div>
-<h2 id="12-troubleshooting">12. Troubleshooting<a class="headerlink" href="#12-troubleshooting" title="Permanent link">&para;</a></h2>
+<h2 id="12">12. 故障排除<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Symptom</th>
-<th>Likely cause</th>
-<th>Fix</th>
+<th>症状</th>
+<th>可能的原因</th>
+<th>修复</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Plan creation rejected</td>
-<td>Unknown fact, negative amount, or allocation total exceeds funding</td>
-<td>Review eligibility/formula and snapshot facts</td>
+<td>计划创建被拒绝</td>
+<td>未知事实、负金额或分配总额超过资金</td>
+<td>查看资格/公式和快照事实</td>
 </tr>
 <tr>
-<td>Rule not applied</td>
-<td><code>appliesTo</code> mismatch, not yet effective, or not published</td>
-<td>Check source type, <code>effectiveFrom</code>, publish status</td>
+<td>规则不适用</td>
+<td><code>appliesTo</code> 不匹配、尚未生效或未发布</td>
+<td>检查源类型、<code>effectiveFrom</code>、发布状态</td>
 </tr>
 <tr>
-<td>Allocation stuck in <code>posting_requested</code></td>
-<td>Outbox relay not running</td>
-<td>Run <code>app:settlement:outbox:publish</code></td>
+<td>分配卡在 <code>posting_requested</code></td>
+<td>发件箱继电器未运行</td>
+<td>运行 <code>app:settlement:outbox:publish</code></td>
 </tr>
 <tr>
-<td>Allocation in <code>retryable_failure</code></td>
-<td>Transient Wallet error</td>
-<td>Run <code>app:settlement:allocations:requeue-due</code></td>
+<td><code>retryable_failure</code></td>
+<td>中的分配暂时性钱包错误</td>
+<td>运行 <code>app:settlement:allocations:requeue-due</code></td>
 </tr>
 <tr>
-<td>Recipient rejected</td>
-<td>Not a <code>wallet</code> type/id</td>
-<td>Configure <code>{"type":"wallet","id":"&lt;wallet-id&gt;"}</code></td>
+<td>收件人被拒绝</td>
+<td>不是 <code>wallet</code> 类型/id</td>
+<td>配置 <code>{"type":"wallet","id":"&lt;wallet-id&gt;"}</code></td>
 </tr>
 <tr>
-<td>Conservation fails</td>
-<td>Rounding or rule remainder not absorbed</td>
-<td>Ensure a fallback recipient exists (default platform)</td>
+<td>保护失败</td>
+<td>四舍五入或规则余数未吸收</td>
+<td>确保存在后备收件人（默认平台）</td>
 </tr>
 </tbody>
 </table>
-<h2 id="13-checklist-before-going-live">13. Checklist Before Going Live<a class="headerlink" href="#13-checklist-before-going-live" title="Permanent link">&para;</a></h2>
+<h2 id="13">13. 上线前的检查清单<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
 <ul>
-<li>[ ] Rule version parses and validates via the configuration schema.</li>
-<li>[ ] <code>appliesTo</code> matches the funding source type.</li>
-<li>[ ] <code>effectiveFrom</code> is set and <code>effectiveTo</code> does not overlap a published version.</li>
-<li>[ ] Recipient resolves to a real Wallet ID.</li>
-<li>[ ] Every <code>config</code>/fact referenced by eligibility and formula is projected by the source adapter.</li>
-<li>[ ] Outbox relay and requeue commands are scheduled.</li>
-<li>[ ] A fallback recipient exists so rounding remainder is conserved.</li>
-<li>[ ] Audit endpoints return the expected plans, allocations, and traces.</li>
+<li>[ ] 规则版本通过配置模式进行解析和验证。</li>
+<li>[ ] <code>appliesTo</code> 匹配资金来源类型。</li>
+<li>[ ] <code>effectiveFrom</code>已设置，并且<code>effectiveTo</code>不与已发布的版本重叠。</li>
+<li>[ ] 收件人解析为真实的钱包 ID。</li>
+<li>[ ] 资格和公式引用的每个 <code>config</code>/fact 均由源适配器预测。</li>
+<li>[ ] 已安排发件箱中继和重新排队命令。</li>
+<li>[ ] 存在后备接收者，因此保留舍入余数。</li>
+<li>[ ] 审核端点返回预期的计划、分配和跟踪。</li>
 </ul>
 
 

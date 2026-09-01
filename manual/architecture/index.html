@@ -3084,11 +3084,11 @@ one Messenger bus, but they must behave as if they were independent services.</p
 </tr>
 <tr>
 <td><code>Trade</code></td>
-<td>E-commerce transactions: Order, OrderItem, pricing pipeline, payment orchestration</td>
+<td>E-commerce transactions: Order, OrderItem, pricing pipeline, payment orchestration; references Store catalog</td>
 </tr>
 <tr>
 <td><code>Store</code></td>
-<td>Multi-store operations: Store, Membership, StoreOrder distribution; approved target owner of shared/private Product and Specification catalog (<a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
+<td>Multi-store operations: Store, Membership, StoreOrder distribution; owns Product and Specification catalog (shared <code>NULL</code> / store-private, <a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
 </tr>
 <tr>
 <td><code>Inventory</code></td>
@@ -3355,7 +3355,7 @@ webhooks (<code>PaymentNotifyController</code>) with provider-agnostic invoice e
 </tr>
 <tr>
 <td>Soft delete</td>
-<td><code>Product</code> / <code>Specification</code> use an <code>isDeleted</code> flag; the approved target moves catalog ownership to Store while retaining immutable order snapshots</td>
+<td><code>Product</code> / <code>Specification</code> (<code>Store</code> entities, tables <code>trade_product</code>/<code>trade_specification</code>) use an <code>isDeleted</code> flag while retaining immutable order snapshots</td>
 </tr>
 <tr>
 <td>Token rotation</td>

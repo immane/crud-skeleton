@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -689,7 +689,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -745,7 +745,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -773,7 +773,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -801,7 +801,7 @@
   <span class="md-ellipsis">
     
   
-    Authorization Setup
+    授权设置
   
 
     
@@ -885,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -1025,7 +1025,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1651,7 +1651,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1679,7 +1679,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2422,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2539,7 +2539,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2567,7 +2567,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2595,7 +2595,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2651,7 +2651,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -2679,7 +2679,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -3084,11 +3084,11 @@ one Messenger bus, but they must behave as if they were independent services.</p
 </tr>
 <tr>
 <td><code>Trade</code></td>
-<td>E-commerce transactions: Order, OrderItem, pricing pipeline, payment orchestration</td>
+<td>E-commerce transactions: Order, OrderItem, pricing pipeline, payment orchestration; references Store catalog</td>
 </tr>
 <tr>
 <td><code>Store</code></td>
-<td>Multi-store operations: Store, Membership, StoreOrder distribution; approved target owner of shared/private Product and Specification catalog (<a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
+<td>Multi-store operations: Store, Membership, StoreOrder distribution; owns Product and Specification catalog (shared <code>NULL</code> / store-private, <a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
 </tr>
 <tr>
 <td><code>Inventory</code></td>
@@ -3355,7 +3355,7 @@ webhooks (<code>PaymentNotifyController</code>) with provider-agnostic invoice e
 </tr>
 <tr>
 <td>Soft delete</td>
-<td><code>Product</code> / <code>Specification</code> use an <code>isDeleted</code> flag; the approved target moves catalog ownership to Store while retaining immutable order snapshots</td>
+<td><code>Product</code> / <code>Specification</code> (<code>Store</code> entities, tables <code>trade_product</code>/<code>trade_specification</code>) use an <code>isDeleted</code> flag while retaining immutable order snapshots</td>
 </tr>
 <tr>
 <td>Token rotation</td>

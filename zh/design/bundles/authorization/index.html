@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    Authorization Setup
+    授权设置
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -800,7 +800,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1426,7 +1426,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1454,7 +1454,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -1661,7 +1661,7 @@
   <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.4 内容是现场层面的试点
+        2.4 内容是现场级试点
       
     </span>
   </a>
@@ -3042,7 +3042,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -3159,7 +3159,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -3187,7 +3187,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -3215,7 +3215,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -3271,7 +3271,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -3299,7 +3299,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -3555,7 +3555,7 @@
   <a href="#24" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.4 内容是现场层面的试点
+        2.4 内容是现场级试点
       
     </span>
   </a>
@@ -4362,7 +4362,7 @@ JWT 主题，并且不做出资源级授权决策。</p>
 因此Authorization不依赖于Store，无法形成Store &lt;-&gt; Authorization模块
 循环。它既不修改成员资格模式也不重复成员资格
 生命周期。</p>
-<h3 id="24">2.4 内容是现场层面的试点<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
+<h3 id="24">2.4 内容是现场级试点<a class="headerlink" href="#24" title="Permanent link">&para;</a></h3>
 <p><code>Common\Entity\Content</code> 具有 <code>id</code>、<code>title</code>、<code>body</code>、类别、标签、<code>metadata</code>（可为 null 的 JSON）和
 时间戳。它<strong>没有</strong>有 <code>storeUuid</code> — 商店关联不是内容模型的一部分。现有应用内容
 普通经过身份验证的 API 用户可以读取端点；管理内容控制器是 <code>ROLE_ADMIN</code> CRUD，现在
@@ -4576,7 +4576,7 @@ JWT 主题，并且不做出资源级授权决策。</p>
 服务器拥有的字段，例如 <code>id</code>、所有权、状态和时间戳
 从未通过授权授予而变得可写。</p>
 <p>第一个版本使用<strong>严格拒绝</strong>：如果请求包含任何接受的模式
-超出其有效字段授权的字段，API 返回 <code>403</code> 并执行
+超出其有效字段授予范围的字段，API 返回 <code>403</code> 并执行
 没有突变。禁止静默剥离输入，因为它会创建一个成功的
 响应意外的部分写入。</p>
 <p>具有操作权限但没有 <code>RoleFieldGrant</code> 的角色不会收到客户端可写的权限
@@ -4862,7 +4862,7 @@ JSON 字段。在此阶段，内容<strong>不是</strong>商店范围（仅限 
 <td><code>/api/v1/manage/contents</code></td>
 <td><code>ROLE_ADMIN</code></td>
 <td>无</td>
-<td>相同的; <code>metadata</code> 已列入白名单</td>
+<td>相同的; <code>metadata</code> 列入白名单</td>
 </tr>
 <tr>
 <td>放置</td>
@@ -4917,7 +4917,7 @@ JSON 字段。在此阶段，内容<strong>不是</strong>商店范围（仅限 
 <hr />
 <h2 id="9-api">9. 管理 API 和种子数据<a class="headerlink" href="#9-api" title="Permanent link">&para;</a></h2>
 <h3 id="91">9.1 管理端点<a class="headerlink" href="#91" title="Permanent link">&para;</a></h3>
-<p>所有授权管理端点在阶段 1 期间均保持 <code>ROLE_ADMIN</code>。它们是
+<p>所有授权管理端点在阶段 1 期间保持 <code>ROLE_ADMIN</code>。它们是
 打破玻璃管理 API，不得通过它们的角色进行委托
 管理。</p>
 <table>

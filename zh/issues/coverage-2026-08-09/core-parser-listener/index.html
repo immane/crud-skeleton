@@ -340,7 +340,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -356,7 +356,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -376,7 +376,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -404,7 +404,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -460,7 +460,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Authorization Setup
+    授权设置
   
 
     
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -796,7 +796,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1422,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1450,7 +1450,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2193,7 +2193,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2310,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2338,7 +2338,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2366,7 +2366,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2422,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -2450,7 +2450,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -2675,10 +2675,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-expressiondqlparser-unreachable-defensive-branches-dead-code-low" class="md-nav__link">
+  <a href="#34-expressiondqlparser" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 ExpressionDqlParser — unreachable defensive branches (dead code) — LOW
+        3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低
       
     </span>
   </a>
@@ -2686,10 +2686,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35-expressionquerybuilderassembler-swallows-join-failures-silently-lowmedium" class="md-nav__link">
+  <a href="#35-expressionquerybuilderassembler" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 ExpressionQueryBuilderAssembler swallows join failures silently — LOW/MEDIUM
+        3.5 ExpressionQueryBuilderAssembler 默默地吞下连接失败 — 低/中
       
     </span>
   </a>
@@ -2697,10 +2697,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#36-openapienricherlistener-minor-robustness-issues-low" class="md-nav__link">
+  <a href="#36-openapienricherlistener" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.6 OpenApiEnricherListener — minor robustness issues — LOW
+        3.6 OpenApiEnricherListener — 轻微的稳健性问题 — 低
       
     </span>
   </a>
@@ -2713,10 +2713,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-suite-status" class="md-nav__link">
+  <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Suite status
+        4. 套件状态
       
     </span>
   </a>
@@ -2724,10 +2724,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-suggested-follow-ups" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Suggested follow-ups
+        5. 建议的后续行动
       
     </span>
   </a>
@@ -2849,7 +2849,7 @@
 </tr>
 </tbody>
 </table>
-<p>使用的值得注意的技术（没有 <code>setAccessible()</code>，没有反射弃用）：</p>
+<p>使用的值得注意的技术（无 <code>setAccessible()</code>，无反射弃用）：</p>
 <ul>
 <li><code>ExpressionDqlParser</code> 针对模拟的 <code>Symfony\Component\ExpressionLanguage\ExpressionLanguage</code> 进行单元测试，以执行真实解析器无法生成的 <code>parse()</code> / <code>getNodes()</code> 异常包装（第 146–147 行、154–155 行）。</li>
 <li><code>validateFragments()</code> 的 Unreachable-by-public-API 分支通过 <code>ReflectionProperty::setValue()</code> 写入私有状态来执行（自 PHP 8.1 起允许，不再有 <code>setAccessible()</code>），例如精心制作的 <code>where</code> 字符串，具有未知别名（第 501 行）和空连接路径（第 529 行）。</li>
@@ -2890,77 +2890,77 @@
 </ul>
 <h3 id="33-localelistener-accept-language-q-low">3.3 LocaleListener 无法解析带有可选空格/大小写的有效 Accept-Language q 值形式 — LOW<a class="headerlink" href="#33-localelistener-accept-language-q-low" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Location:</strong> <code>src/Core/EventListener/LocaleListener.php:78-82</code></li>
-<li><strong>Description:</strong> <code>parseAcceptLanguage()</code> splits on the exact token <code>;q=</code>. RFC 7230/7231 permits optional whitespace around the <code>;</code>/<code>=</code> separators and case-insensitive parameter names. A header like <code>zh-CN; q=1.0, en; q=0.5</code> (space after <code>;</code>, emitted by some clients) is not split, so <code>lang</code> becomes <code>"zh-CN; q=1.0"</code>, fails <code>resolveLocale()</code>, and the request silently falls back to the default locale <code>en</code>. Same for <code>fr;Q=1.0</code>.</li>
-<li><strong>Impact:</strong> Well-formed browsers/proxies can be served the wrong language. (Confirmed: <code>zh-CN; q=1.0, en; q=0.5</code> yields locale <code>en</code> instead of <code>zh</code>.)</li>
-<li><strong>Reproduction:</strong>
+<li><strong>地点：</strong> <code>src/Core/EventListener/LocaleListener.php:78-82</code></li>
+<li><strong>描述：</strong> <code>parseAcceptLanguage()</code> 在确切的标记 <code>;q=</code> 上进行拆分。 RFC 7230/7231 允许在 <code>;</code>/<code>=</code> 分隔符和不区分大小写的参数名称周围使用可选空格。像 <code>zh-CN; q=1.0, en; q=0.5</code> 这样的标头（<code>;</code> 之后的空格，由某些客户端发出）不会被分割，因此 <code>lang</code> 变成 <code>"zh-CN; q=1.0"</code>，失败 <code>resolveLocale()</code>，并且请求会默默地回退到默认区域设置 <code>en</code>。 <code>fr;Q=1.0</code> 相同。</li>
+<li><strong>影响：</strong> 格式良好的浏览器/代理可能会提供错误的语言。 （已确认：<code>zh-CN; q=1.0, en; q=0.5</code> 产生区域设置 <code>en</code> 而不是 <code>zh</code>。）</li>
+<li><strong>复制：</strong>
   <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">$request-&gt;headers-&gt;set('Accept-Language', 'zh-CN; q=1.0, en; q=0.5');</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">$listener-&gt;onKernelRequest(new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST));</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">// $request-&gt;getLocale() === 'en'  (expected 'zh')</span>
 </code></pre></div></li>
-<li><strong>Proposed fix:</strong> Normalize each item first (collapse whitespace / lowercase <code>q</code>), e.g. <code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> instead of a literal <code>explode(';q=', ...)</code>, and also trim the language tag.</li>
+<li><strong>建议的修复：</strong> 首先规范化每个项目（折叠空白/小写 <code>q</code>），例如<code>preg_split('/\s*;\s*q\s*=\s*/i', $item)</code> 而不是文字 <code>explode(';q=', ...)</code>，并修剪语言标签。</li>
 </ul>
-<h3 id="34-expressiondqlparser-unreachable-defensive-branches-dead-code-low">3.4 ExpressionDqlParser — unreachable defensive branches (dead code) — LOW<a class="headerlink" href="#34-expressiondqlparser-unreachable-defensive-branches-dead-code-low" title="Permanent link">&para;</a></h3>
-<p>The four lines that cannot be raised to 100% are unreachable by any public input. Each is a defensive branch whose guard can never fail:</p>
+<h3 id="34-expressiondqlparser">3.4 ExpressionDqlParser — 无法访问的防御分支（死代码） — 低<a class="headerlink" href="#34-expressiondqlparser" title="Permanent link">&para;</a></h3>
+<p>无法提高到 100% 的四条线是任何公众意见都无法达到的。每个都是一个防御分支，其守卫永远不会失败：</p>
 <table>
 <thead>
 <tr>
-<th>Line</th>
-<th>Guard</th>
-<th>Why unreachable</th>
+<th>线路</th>
+<th>守卫</th>
+<th>为什么无法访问</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>317</td>
-<td><code>if (empty($matches[1])) throw 'Invalid attribute access'</code></td>
-<td>The guard regex at 312 (<code>/^entity(\.get[A-Z]\w+\(\))+$/</code>) already guarantees ≥1 capture, so <code>$matches[1]</code> is never empty.</td>
+<td>317 <code>if (empty($matches[1])) throw 'Invalid attribute access'</code></td>
+<td>312 处的守卫正则表达式 (<code>/^entity(\.get[A-Z]\w+\(\))+$/</code>) 已经保证 ≥1 次捕获，因此 <code>$matches[1]</code> 永远不会为空。</td>
 </tr>
 <tr>
 <td>394</td>
-<td><code>throw 'matches pattern parameter was not compiled'</code></td>
-<td><code>compileMatchOperand()</code> calls <code>recursiveCompile()</code> on the right operand first, which always inserts the parameter into <code>$this-&gt;parameters</code> before the lookup loop runs; the loop always finds it.</td>
+<td>394 <code>throw 'matches pattern parameter was not compiled'</code></td>
+<td><code>compileMatchOperand()</code> 首先在右操作数上调用 <code>recursiveCompile()</code>，它总是在查找循环运行之前将参数插入到 <code>$this-&gt;parameters</code> 中；循环总是能找到它。</td>
 </tr>
 <tr>
 <td>488</td>
-<td><code>if (count($segments) === 0) throw 'Empty path'</code></td>
-<td><code>explode('.', $path)</code> returns at least one element for every possible string.</td>
+<td>488 <code>if (count($segments) === 0) throw 'Empty path'</code></td>
+<td><code>explode('.', $path)</code> 为每个可能的字符串至少返回一个元素。</td>
 </tr>
 <tr>
 <td>541</td>
-<td><code>if (strpos($token, ':') === 0) continue</code></td>
-<td>The where-token regex at 537 (<code>[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*)+</code>) can never produce a match starting with <code>:</code>, so the colon-prefix skip never triggers.</td>
+<td>541 <code>if (strpos($token, ':') === 0) continue</code></td>
+<td>537 处的 where-token 正则表达式 (<code>[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*)+</code>) 永远无法生成以 <code>:</code> 开头的匹配项，因此冒号前缀跳过永远不会触发。</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Note on 541:</strong> this is also a latent correctness smell — because the regex starts at a letter, <code>:filter_parameter_1</code> is <em>not</em> excluded by this guard, it simply never matches (no dot). More importantly the regex <strong>does</strong> match dotted paths inside string literals (e.g. a JSON-ish where clause), which would make <code>validateFragments()</code> throw on unrelated text. Worth a follow-up regex hardening (e.g. negative lookbehind for <code>:</code> / quote handling).</p>
-<h3 id="35-expressionquerybuilderassembler-swallows-join-failures-silently-lowmedium">3.5 ExpressionQueryBuilderAssembler swallows join failures silently — LOW/MEDIUM<a class="headerlink" href="#35-expressionquerybuilderassembler-swallows-join-failures-silently-lowmedium" title="Permanent link">&para;</a></h3>
+<p><strong>关于 541 的注释：</strong> 这也是一个潜在的正确性气味 - 因为正则表达式以字母开头，<code>:filter_parameter_1</code> 不会被此防护排除，它根本不会匹配（没有点）。更重要的是，正则表达式 <strong>确实</strong> 匹配字符串文字内的点路径（例如 JSON-ish where 子句），这将使 <code>validateFragments()</code> 抛出不相关的文本。值得后续正则表达式强化（例如 <code>:</code> / 引用处理的负向后查找）。</p>
+<h3 id="35-expressionquerybuilderassembler">3.5 ExpressionQueryBuilderAssembler 默默地吞下连接失败 — 低/中<a class="headerlink" href="#35-expressionquerybuilderassembler" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Location:</strong> <code>src/Core/Parser/ExpressionQueryBuilderAssembler.php:116-126</code></li>
-<li><strong>Description:</strong> <code>leftJoin()</code> failures are caught and ignored (<code>catch (\Exception $e) { /* ignore join errors */ }</code>), and duplicate join aliases are silently skipped (117-119). If a join path is invalid, assembly "succeeds" while the WHERE clause still references the missing join alias.</li>
-<li><strong>Impact:</strong> Errors surface later, as an obscure DQL "alias is not joined" failure at query execution, or the query silently returns different results than intended when an alias is reused for a different path.</li>
-<li><strong>Proposed fix:</strong> At minimum log the swallowed exception; consider rethrowing a <code>ValidatorException</code> for invalid join paths (consistent with the class's other validation), and error (or rename) on alias collision instead of skipping.</li>
+<li><strong>地点：</strong> <code>src/Core/Parser/ExpressionQueryBuilderAssembler.php:116-126</code></li>
+<li><strong>描述：</strong> <code>leftJoin()</code> 失败被捕获并忽略 (<code>catch (\Exception $e) { /* ignore join errors */ }</code>)，并且重复的连接别名会被静默跳过 (117-119)。如果联接路径无效，则程序集“成功”，而 WHERE 子句仍引用缺少的联接别名。</li>
+<li><strong>影响：</strong> 错误稍后会出现，如查询执行时出现模糊的 DQL“别名未连接”失败，或者当别名被重复用于不同的路径时，查询会默默地返回与预期不同的结果。</li>
+<li><strong>建议的修复：</strong> 至少记录吞没的异常；考虑对无效的连接路径重新抛出 <code>ValidatorException</code> （与类的其他验证一致），并在别名冲突时出错（或重命名），而不是跳过。</li>
 </ul>
-<h3 id="36-openapienricherlistener-minor-robustness-issues-low">3.6 OpenApiEnricherListener — minor robustness issues — LOW<a class="headerlink" href="#36-openapienricherlistener-minor-robustness-issues-low" title="Permanent link">&para;</a></h3>
+<h3 id="36-openapienricherlistener">3.6 OpenApiEnricherListener — 轻微的稳健性问题 — 低<a class="headerlink" href="#36-openapienricherlistener" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>src/Core/EventListener/OpenApiEnricherListener.php:110-112</code> — <code>$content === false</code> is unreachable (only reachable when <code>getContent(true)</code> is used, which it never is); empty-string guard is the real path.</li>
-<li><code>:115</code> — an HTML <code>/api/doc</code> response whose body starts with <code>{</code> (leading template text) would be misclassified as raw JSON and <code>json_decode</code>d; harmless today but fragile.</li>
-<li><code>:196</code> — <code>$t['name']</code> is dereferenced without checking the key exists; a spec whose <code>tags</code> entries lack <code>name</code> (e.g. custom tooling) would raise an undefined-key warning/notice.</li>
-<li><code>:134-138</code> — the <code>if (is_string($newJson))</code> block is mis-indented (functionally correct, but confusing).</li>
+<li><code>src/Core/EventListener/OpenApiEnricherListener.php:110-112</code> — <code>$content === false</code> 无法访问（仅当使用 <code>getContent(true)</code> 时才可访问，但事实并非如此）；空字符串守卫是真正的路径。</li>
+<li><code>:115</code> — 正文以 <code>{</code>（前导模板文本）开头的 HTML <code>/api/doc</code> 响应将被错误分类为原始 JSON 和 <code>json_decode</code>d；今天无害但脆弱。</li>
+<li><code>:196</code> — <code>$t['name']</code> 在不检查键是否存在的情况下取消引用； <code>tags</code> 条目缺少 <code>name</code> 的规范（例如自定义工具）将引发未定义键警告/通知。</li>
+<li><code>:134-138</code> — <code>if (is_string($newJson))</code> 块缩进错误（功能上正确，但令人困惑）。</li>
 </ul>
-<p>No test was marked skipped: all "correct behavior" tests I wrote pass against the current source. The 4 dead branches in §3.4 were intentionally left uncovered (they are unreachable); attempting to force them would require reflection-injected fake AST nodes that cannot occur in practice.</p>
-<h2 id="4-suite-status">4. Suite status<a class="headerlink" href="#4-suite-status" title="Permanent link">&para;</a></h2>
+<p>没有测试被标记为跳过：我编写的所有“正确行为”测试都通过了当前源。 §3.4 中的 4 个枯枝是故意不被覆盖的（它们是无法到达的）；尝试强制它们需要反射注入的假 AST 节点，而这在实践中是不可能发生的。</p>
+<h2 id="4">4. 套件状态<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <ul>
-<li>The 5 new test files: <strong>green</strong> (29 tests / 49 assertions, no failures/errors/deprecations).</li>
-<li>Full suite with the new tests and coverage: <strong>2019 tests, 0 failures, 7 skipped</strong> (pre-existing skips, none in these files). Coverage measurements above come from this run.</li>
-<li>A <em>separate</em> full run without coverage in this sandbox additionally shows pre-existing DB integration failures (<code>Doctrine\DBAL\Exception\TableNotFoundException</code> — the SQLite schema is not loaded in this environment, e.g. <code>common_content</code>, <code>users</code>). These are environment/setup errors unrelated to this task; they occur in <code>tests/**/Integration/*</code> and <code>tests/**/Controller/*Repository*</code> tests and predate these changes. The targeted unit tests do not touch the DB.</li>
+<li>5 个新测试文件：<strong>绿色</strong>（29 个测试/49 个断言，无失败/错误/弃用）。</li>
+<li>包含新测试和覆盖范围的全套套件：<strong>2019 年测试，0 次失败，7 次跳过</strong>（预先存在的跳过，这些文件中没有）。上述覆盖率测量结果来自本次运行。</li>
+<li>在此沙箱中没有覆盖的“单独”完整运行还显示了预先存在的数据库集成失败（<code>Doctrine\DBAL\Exception\TableNotFoundException</code> - SQLite 架构未在此环境中加载，例如 <code>common_content</code>、<code>users</code>）。这些是与此任务无关的环境/设置错误；它们出现在 <code>tests/**/Integration/*</code> 和 <code>tests/**/Controller/*Repository*</code> 测试中并早于这些更改。目标单元测试不涉及数据库。</li>
 </ul>
-<h2 id="5-suggested-follow-ups">5. Suggested follow-ups<a class="headerlink" href="#5-suggested-follow-ups" title="Permanent link">&para;</a></h2>
+<h2 id="5">5. 建议的后续行动<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Fix §3.1 (JSON string corruption) and §3.2 (relation field loss) in <code>FlatNormalizer</code> — both change API response payloads.</li>
-<li>Harden §3.3 (<code>Accept-Language</code> parsing) with a proper tokenizer.</li>
-<li>Clean up the §3.4 dead branches or add a <code>@codeCoverageIgnore</code>/comment so coverage audits stop flagging them.</li>
-<li>Make <code>ExpressionQueryBuilderAssembler</code> join failures visible (§3.5).</li>
+<li>修复 <code>FlatNormalizer</code> 中的 §3.1（JSON 字符串损坏）和 §3.2（关系字段丢失）——两者都会更改 API 响应负载。</li>
+<li>使用适当的分词器强化 §3.3（<code>Accept-Language</code> 解析）。</li>
+<li>清理 §3.4 死分支或添加 <code>@codeCoverageIgnore</code>/ 注释，以便覆盖率审计停止标记它们。</li>
+<li>使 <code>ExpressionQueryBuilderAssembler</code> 连接失败可见（第 3.5 节）。</li>
 </ol>
 
 

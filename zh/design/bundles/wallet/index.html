@@ -344,7 +344,7 @@
   <span class="md-ellipsis">
     
   
-    Development Manual
+    开发手册
   
 
     
@@ -360,7 +360,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Development Manual
+    开发手册
   
 
           </label>
@@ -380,7 +380,7 @@
   <span class="md-ellipsis">
     
   
-    Manual Index
+    手册索引
   
 
     
@@ -408,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    入门
   
 
     
@@ -464,7 +464,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    项目结构
   
 
     
@@ -520,7 +520,7 @@
   <span class="md-ellipsis">
     
   
-    Core Usage
+    核心用法
   
 
     
@@ -548,7 +548,7 @@
   <span class="md-ellipsis">
     
   
-    Query System
+    查询系统
   
 
     
@@ -576,7 +576,7 @@
   <span class="md-ellipsis">
     
   
-    Authorization Setup
+    授权设置
   
 
     
@@ -660,7 +660,7 @@
   <span class="md-ellipsis">
     
   
-    API Contracts
+    API合约
   
 
     
@@ -800,7 +800,7 @@
   <span class="md-ellipsis">
     
   
-    Extracting a Service
+    提取服务
   
 
     
@@ -1861,7 +1861,7 @@
   <span class="md-ellipsis">
     
   
-    Settlement (Allocation + Finality)
+    结算（分配+最终确定）
   
 
     
@@ -1889,7 +1889,7 @@
   <span class="md-ellipsis">
     
   
-    Exchange (Pool-backed Economy)
+    交易所（矿池支持经济）
   
 
     
@@ -2632,7 +2632,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Review 2026-06-26
+    架构回顾 2026-06-26
   
 
     
@@ -2749,7 +2749,7 @@
   <span class="md-ellipsis">
     
   
-    Test Strategy
+    测试策略
   
 
     
@@ -2777,7 +2777,7 @@
   <span class="md-ellipsis">
     
   
-    System Walkthrough And Test Seams
+    系统演练和测试接缝
   
 
     
@@ -2805,7 +2805,7 @@
   <span class="md-ellipsis">
     
   
-    Test Matrix
+    测试矩阵
   
 
     
@@ -2861,7 +2861,7 @@
   <span class="md-ellipsis">
     
   
-    Architecture Test Mapping
+    架构测试映射
   
 
     
@@ -2889,7 +2889,7 @@
   <span class="md-ellipsis">
     
   
-    Failure Modes
+    失效模式
   
 
     
@@ -3839,7 +3839,7 @@
 </tr>
 <tr>
 <td><code>invoiceId</code></td>
-<td>每张发票第一阶段一钱包扣减的独特性</td>
+<td>每张发票第一阶段一钱包扣除的独特性</td>
 </tr>
 </tbody>
 </table>
@@ -3848,7 +3848,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pending -&gt; failed
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>applied -&gt; refunded
 </code></pre></div>
-<p><code>released</code>表示发票未支付，扣除的钱包余额已退回。 <code>refunded</code> 表示发票已支付，随后全额退款。</p>
+<p><code>released</code>表示发票未支付，扣除的钱包余额已退回。 <code>refunded</code> 表示发票已付款，随后全额退款。</p>
 <hr />
 <h2 id="4-transferservice">4. TransferService — 原子转账+存款<a class="headerlink" href="#4-transferservice" title="Permanent link">&para;</a></h2>
 <h3 id="41">4.1 合同<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
@@ -4190,7 +4190,7 @@
 </code></pre></div>
 <p>第一阶段钱包扣款仅支持发票全额退款。外部网关金额和钱包扣除之间的部分退款分配超出了范围。</p>
 <h3 id="76-id">7.6 参考 ID<a class="headerlink" href="#76-id" title="Permanent link">&para;</a></h3>
-<p>钱包扣款转账必须使用稳定的幂等引用：</p>
+<p>钱包扣款转账必须使用稳定的幂等性引用：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>invoice-adjustment-wallet-balance-{invoice.uuid}
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>invoice-adjustment-wallet-balance-release-{invoice.uuid}
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>invoice-adjustment-wallet-balance-refund-{invoice.uuid}
@@ -4278,7 +4278,7 @@
 <tr>
 <td><strong>发布</strong></td>
 <td><strong><code>/api/v1/app/vouchers/deposit</code></strong></td>
-<td><strong>自助存入自己的钱包。 <code>voucherType</code> 必需 — 由提供商的 <code>assertPermitted()</code> 强制执行的权限（例如，<code>manual</code> 需要 <code>ROLE_ADMIN</code>，对用户而言被拒绝）</strong></td>
+<td><strong>自助存入自己的钱包。 <code>voucherType</code> 必需 — 由提供商的 <code>assertPermitted()</code> 强制执行的权限（例如，<code>manual</code> 需要 <code>ROLE_ADMIN</code>，但用户拒绝）</strong></td>
 </tr>
 <tr>
 <td><strong>发布</strong></td>
@@ -4302,7 +4302,7 @@
 </ul>
 <hr />
 <h2 id="10">10. 资金处理合同<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
-<p>与贸易模块相同的合约：</p>
+<p>与贸易模块相同的合同：</p>
 <table>
 <thead>
 <tr>
@@ -4353,7 +4353,7 @@
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/TransferServiceTest.php</code></td>
-<td><strong>20个单元测试</strong>：存款（happy/wallet-not-found/frozen/idempot/rollback/em-close），转账（happy/same-wallet/source-not-found/target-not-found/frozen/currency/insufficient/idempot/deadlock/rollback/em-close）</td>
+<td><strong>20个单元测试</strong>：存款（happy/wallet-not-found/frozen/idempot/rollback/em-close）、转账（happy/same-wallet/source-not-found/target-not-found/frozen/currency/insufficient/idempot/deadlock/rollback/em-close）</td>
 </tr>
 <tr>
 <td><code>tests/Wallet/Service/Payment/WalletBalanceAdjustmentProviderTest.php</code></td>
