@@ -4367,7 +4367,7 @@ lifecycle.</p>
 timestamps. It does <strong>not</strong> have <code>storeUuid</code> — Store association is not part of the Content model. The existing App Content
 endpoint is readable by ordinary authenticated API users; the Manage Content controller is <code>ROLE_ADMIN</code> CRUD and now
 accepts <code>metadata</code> as a whitelisted field to demonstrate strict field-grant enforcement.</p>
-<p>Field-level Authorization for Content is provided by <code>common:content</code> <code>create</code>/<code>update</code> field grants (<code>metadata</code> vs non-<code>metadata</code> roles). Store-scoped Content routes (<code>/store/stores/{storeUuid}/contents</code>) do <strong>not</strong> exist in this phase; Store scope is still used for other resources (e.g. <code>store:order:*</code>) but Content is scoped only by the field grant, not by Store row scope.</p>
+<p>Field-level Authorization for Content is provided by <code>common:content</code> <code>create</code>/<code>update</code> field grants (<code>metadata</code> vs non-<code>metadata</code> roles). Store-scoped Content routes (<code>/store/{storeUuid}/contents</code>) do <strong>not</strong> exist in this phase; Store scope is still used for other resources (e.g. <code>store:order:*</code>) but Content is scoped only by the field grant, not by Store row scope.</p>
 <h3 id="25-constraints-discovered-during-audit">2.5 Constraints Discovered During Audit<a class="headerlink" href="#25-constraints-discovered-during-audit" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>BaseService</code> captures the current security token's User in its constructor. New
@@ -4797,7 +4797,7 @@ visible through that filter. Where disclosure is undesirable, an out-of-scope re
 returns 404 rather than 403.</p>
 <h3 id="73-safe-create-scope-when-store-scoped">7.3 Safe Create Scope (When Store-Scoped)<a class="headerlink" href="#73-safe-create-scope-when-store-scoped" title="Permanent link">&para;</a></h3>
 <p>When a resource is Store-scoped, create routes include Store scope in the route, not in the request body:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>POST /api/v1/store/stores/{storeUuid}/orders
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>POST /api/v1/store/{storeUuid}/orders
 </code></pre></div>
 <p>The controller requires the relevant permission (e.g. <code>store:order:create</code>) for <code>{storeUuid}</code> and sets
 the Store association from the route only. The Store identifier is absent from accepted client
@@ -4880,7 +4880,7 @@ Resource-specific validation stays in the business service/controller hook.</p>
 </tr>
 </tbody>
 </table>
-<p>Field-level enforcement for <code>common:content</code> is validated via <code>FieldAuthorizationService</code> (union of <code>RoleFieldGrant</code> intersected with controller <code>accepted*Properties</code>, strict 403). The <code>store:order:*</code> permissions remain the example of Store-scoped decisions; Store Content routes (<code>/store/stores/{storeUuid}/contents</code>) are <strong>not</strong> implemented in this phase.</p>
+<p>Field-level enforcement for <code>common:content</code> is validated via <code>FieldAuthorizationService</code> (union of <code>RoleFieldGrant</code> intersected with controller <code>accepted*Properties</code>, strict 403). The <code>store:order:*</code> permissions remain the example of Store-scoped decisions; Store Content routes (<code>/store/{storeUuid}/contents</code>) are <strong>not</strong> implemented in this phase.</p>
 <h3 id="83-example-decisions-field-level">8.3 Example Decisions (Field-Level)<a class="headerlink" href="#83-example-decisions-field-level" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>User A: store_content_editor at Store X (has common:content:update, fields title/body/category/tags)
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>  PUT Content with title/body -&gt; allowed

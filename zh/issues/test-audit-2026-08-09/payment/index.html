@@ -27,7 +27,7 @@
     
     
       
-        <title>Payment module test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>支付模块测试审核(2026-08-09) - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#payment-module-test-audit-2026-08-09" class="md-skip">
+        <a href="#2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Payment module test audit (2026-08-09)
+              支付模块测试审核(2026-08-09)
             
           </span>
         </div>
@@ -600,7 +600,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1109,7 +1109,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1310,7 +1310,7 @@
   <span class="md-ellipsis">
     
   
-    Store Catalog (Target)
+    商店目录（目标）
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2506,7 +2506,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2608,10 +2608,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Summary
+        总结
       
     </span>
   </a>
@@ -2619,10 +2619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#keep" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        KEEP
+        保留
       
     </span>
   </a>
@@ -2630,10 +2630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delete-candidates" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DELETE CANDIDATES
+        删除候选者
       
     </span>
   </a>
@@ -2682,138 +2682,138 @@
   
 
 
-<h1 id="payment-module-test-audit-2026-08-09">Payment module test audit (2026-08-09)<a class="headerlink" href="#payment-module-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Read-only audit of <code>tests/Payment/</code> (14 files, 76 tests) to identify unnecessary /
-redundant tests as candidates for later deletion. Reference documents:
-<code>TEST_STRATEGY.md</code> ("One behaviour should normally have one primary layer",
-"Do not add controller tests merely to raise line coverage"),
-<code>TEST_MATRIX.md</code>, <code>BUSINESS_INVARIANTS.md</code> (Payments invariant), and the
-<code>coverage-2026-08-09</code> campaign summary (99.46% line coverage was chased across
-the suite).</p>
-<p>Bias note: payment gateway / adjustment / invoice-lifecycle behavior is
-money-critical (BUSINESS_INVARIANTS "Payments" row) and is KEEP unless an exact
-duplicate exists at the same or higher layer. No skipped tests exist in this
-module, so there are no bug-documenting tests to protect.</p>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<h1 id="2026-08-09">支付模块测试审核(2026-08-09)<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
+<p>对<code>tests/Payment/</code>（14个文件，76个测试）进行只读审核，以识别不必要的/
+多余的测试作为稍后删除的候选。参考文件：
+<code>TEST_STRATEGY.md</code>（“一个行为通常应该有一个主要层”，
+“不要仅仅为了提高线路覆盖率而添加控制器测试”），
+<code>TEST_MATRIX.md</code>、<code>BUSINESS_INVARIANTS.md</code>（付款不变）以及
+<code>coverage-2026-08-09</code> 活动总结（99.46% 线路覆盖率
+套房）。</p>
+<p>偏见注释：支付网关/调整/发票生命周期行为是
+资金关键（BUSINESS_INVARIANTS“付款”行）并且保留，除非有确切的
+重复存在于同一层或更高层。此中不存在跳过的测试
+模块，因此没有需要保护的错误记录测试。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Payment/Entity/InvoiceTest.php</code></td>
 <td>1</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Entity/InvoiceCoverageTest.php</code></td>
 <td>1</td>
-<td>DELETE CANDIDATE</td>
+<td>删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Event/InvoiceEventTest.php</code></td>
 <td>1</td>
-<td>DELETE CANDIDATE</td>
+<td>删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Service/InvoiceServiceTest.php</code></td>
 <td>9</td>
-<td>PARTIAL (4 keep / 5 candidates)</td>
+<td>部分（4 名保留/5 名候选人）</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Service/MockGatewayTest.php</code></td>
 <td>2</td>
-<td>DELETE CANDIDATE</td>
+<td>删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Service/PaymentAdjustmentRegistryTest.php</code></td>
 <td>1</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Service/PaymentGatewayRegistryTest.php</code></td>
 <td>2</td>
-<td>DELETE CANDIDATE</td>
+<td>删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Controller/App/InvoiceControllerTest.php</code></td>
 <td>3</td>
-<td>DELETE CANDIDATE</td>
+<td>删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Controller/Manage/InvoiceControllerTest.php</code></td>
 <td>14</td>
-<td>DELETE CANDIDATE</td>
+<td>14删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Controller/Webhook/PaymentNotifyControllerTest.php</code></td>
 <td>4</td>
-<td>DELETE CANDIDATE</td>
+<td>删除候选人</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Integration/InvoiceServiceIntegrationTest.php</code></td>
 <td>10</td>
-<td>KEEP</td>
+<td>10保持</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Integration/PaymentAdjustmentIntegrationTest.php</code></td>
 <td>5</td>
-<td>PARTIAL (1 keep / 4 candidates)</td>
+<td>部分（1 名保留/4 名候选人）</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code></td>
 <td>19</td>
-<td>KEEP (2 internal dup notes)</td>
+<td>19 KEEP（2 个内部重复音符）</td>
 </tr>
 <tr>
 <td><code>tests/Payment/Integration/PaymentApiIntegrationTest.php</code></td>
 <td>4</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 </tbody>
 </table>
-<p>Trend: every DELETE CANDIDATE below was added by the coverage campaign
-(<code>4c62b5f test: add 900+ tests ... push line coverage to 99.46%</code>) or duplicates
-behavior that the integration/HTTP layer already owns. The pre-campaign
-integration files (<code>InvoiceServiceIntegrationTest.php</code>,
-<code>PaymentAdjustmentIntegrationTest.php</code>, <code>PaymentApiIntegrationTest.php</code>) remain
-the authoritative layer.</p>
-<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<p>趋势：下面的每个 DELETE CANDIDATE 都是由覆盖活动添加的
+(<code>4c62b5f test: add 900+ tests ... push line coverage to 99.46%</code>) 或重复项
+集成/HTTP 层已经拥有的行为。前期活动
+集成文件（<code>InvoiceServiceIntegrationTest.php</code>，
+<code>PaymentAdjustmentIntegrationTest.php</code>、<code>PaymentApiIntegrationTest.php</code>) 保留
+权威层。</p>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>tests/Payment/Integration/InvoiceServiceIntegrationTest.php</code> (10) — the
-  primary invoice-lifecycle test: create→pay→notify→refund, findBySource,
-  repository lookups, redaction, idempotent duplicate notify, cancel/fail,
-  refund validation branches. Money-critical, authoritative.</li>
-<li><code>tests/Payment/Integration/PaymentApiIntegrationTest.php</code> (4) — the
-  Payment-module-owned HTTP layer for manage/app invoice routes + notify
-  webhook. This is the layer that the controller unit tests duplicate; keep
-  these, delete those.</li>
-<li><code>tests/Payment/Entity/InvoiceTest.php</code> (1) — entity defaults/accessors +
-  <code>__toString</code> + <code>prePersist</code>. Core entity behavior.</li>
-<li><code>tests/Payment/Service/PaymentAdjustmentRegistryTest.php</code> (1) — the only test
-  exercising the registry (applicable/apply/sumApplied/hasApplied/release/refund)
-  with a controlled fake provider in isolation. Reasonable primary layer for the
-  registry class itself.</li>
+<li><code>tests/Payment/Integration/InvoiceServiceIntegrationTest.php</code> (10) — 的
+  主要发票生命周期测试：创建→付款→通知→退款，findBySource，
+  存储库查找、编辑、幂等重复通知、取消/失败、
+  退款验证分支机构。金钱至上，权威。</li>
+<li><code>tests/Payment/Integration/PaymentApiIntegrationTest.php</code> (4) — 的
+  支付模块拥有的 HTTP 层，用于管理/应用程序发票路由 + 通知
+  网络钩子。这是控制器单元测试复制的层；保留
+  这些，删除那些。</li>
+<li><code>tests/Payment/Entity/InvoiceTest.php</code> (1) — 实体默认值/访问器 +
+  <code>__toString</code> + <code>prePersist</code>。核心实体行为。</li>
+<li><code>tests/Payment/Service/PaymentAdjustmentRegistryTest.php</code> (1) — 唯一的测试
+  行使登记权（适用/申请/sumApplied/hasApplied/release/refund）
+  与受控的假冒提供商隔离。合理的基层
+  注册表类本身。</li>
 <li><code>tests/Payment/Integration/PaymentAdjustmentMultiGatewayIntegrationTest.php</code>
-  (17 of 19) — the comprehensive deduction+gateway matrix (mock/wallet/wechat,
-  autoPaid, notify, partial/full refund, release on fail/cancel, sequential
-  multi-invoice). Money-critical; keep except the two internal dups noted below.</li>
+  (17 of 19) — 综合推演+网关矩阵（模拟/钱包/微信，
+  自动付费、通知、部分/全额退款、失败/取消释放、顺序
+  多张发票）。对金钱至关重要；保留，但下面提到的两个内部重复项除外。</li>
 <li><code>tests/Payment/Integration/PaymentAdjustmentIntegrationTest.php</code> →
-  <code>testDeductedInvoiceRejectsPartialRefund</code> — the only test of the
-  "adjusted invoices only support full refund" guard
-  (<code>InvoiceService.php:241-243</code>). Unique.</li>
+  <code>testDeductedInvoiceRejectsPartialRefund</code> — 唯一的测试
+  “调整后的发票仅支持全额退款”守卫
+  (<code>InvoiceService.php:241-243</code>)。独特的。</li>
 <li><code>tests/Payment/Service/InvoiceServiceTest.php</code> →
-  <code>testCreateInvoiceRejectsNegativeAmount</code>, <code>testPayThrowsWhenDeductionExceedsInvoiceAmount</code>,
-  <code>testPayAppliesGatewayAndTradeTypeOptions</code>, <code>testMarkFailedThrowsWhenWorkflowCannotFail</code>
-  — these branches (negative amount, deduction &gt; invoice, gateway/tradeType
-  option application, fail-not-allowed guard) are not asserted by any
-  integration/HTTP test. Unique coverage.</li>
+  <code>testCreateInvoiceRejectsNegativeAmount</code>、<code>testPayThrowsWhenDeductionExceedsInvoiceAmount</code>、
+  <code>testPayAppliesGatewayAndTradeTypeOptions</code>，<code>testMarkFailedThrowsWhenWorkflowCannotFail</code>
+  — 这些分支（负金额、扣除 &gt; 发票、网关/tradeType
+  选项应用程序、不允许失败的防护）不被任何断言
+  集成/HTTP 测试。独特的覆盖范围。</li>
 </ul>
-<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
+<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>

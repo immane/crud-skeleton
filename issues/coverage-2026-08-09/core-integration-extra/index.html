@@ -3004,8 +3004,8 @@
 <ul>
 <li><strong>Location:</strong> <code>src/Core/EventListener/OpenApiEnricherListener.php:259-262</code> (<code>str_starts_with($opId, 'system-')</code>, <code>'wechat-'</code>, <code>'store-'</code>).</li>
 <li><strong>Description:</strong> Nelmio prefixes operationIds with the HTTP method (<code>get_store-orders-list</code>, <code>post_store-orders-accept</code>), so the anchored <code>str_starts_with</code> checks never fire. The unanchored <code>manage|app|public</code> regex and the <code>str_contains(…, 'sys-auth')</code> check still work, which is why <code>system-*</code>/<code>wechat-*</code> endpoints with explicit OA <code>tags</code> survive. Store endpoints (no explicit OA tags, no META entry) end up with <strong>no tag at all</strong>.</li>
-<li><strong>Impact:</strong> <code>/api/v1/store/stores/{scopeId}/orders…</code> (list/detail/accept/reject/fulfill) have empty <code>tags</code> in the enriched spec → missing module tag in the docs UI.</li>
-<li><strong>Reproduction:</strong> <code>GET /api/doc.json</code> → <code>paths['/api/v1/store/stores/{scopeId}/orders/{orderUuid}/accept']['post']['tags'] === []</code>.</li>
+<li><strong>Impact:</strong> <code>/api/v1/store/{scopeId}/orders…</code> (list/detail/accept/reject/fulfill) have empty <code>tags</code> in the enriched spec → missing module tag in the docs UI.</li>
+<li><strong>Reproduction:</strong> <code>GET /api/doc.json</code> → <code>paths['/api/v1/store/{scopeId}/orders/{orderUuid}/accept']['post']['tags'] === []</code>.</li>
 <li><strong>Proposed fix:</strong> strip the method prefix before detection (e.g. <code>preg_replace('/^(get|post|put|delete|patch)_/', '', $opId)</code>), or use <code>str_contains</code> for the prefix checks.</li>
 <li><strong>Tests:</strong> <code>testStoreOrderEndpointsAreLeftUntaggedCurrently</code> (regression, pass); <code>testStoreOrderEndpointsShouldBeTaggedStore</code> (correct-behavior, <strong>skipped</strong>).</li>
 </ul>

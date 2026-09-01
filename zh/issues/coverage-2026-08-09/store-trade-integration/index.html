@@ -600,7 +600,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1109,7 +1109,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1310,7 +1310,7 @@
   <span class="md-ellipsis">
     
   
-    Store Catalog (Target)
+    商店目录（目标）
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2506,7 +2506,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2713,10 +2713,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#skipped-tests" class="md-nav__link">
     <span class="md-ellipsis">
       
-        跳过测试
+        Skipped tests
       
     </span>
   </a>
@@ -2724,10 +2724,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#observations-not-bugs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        观察结果（不是错误）
+        Observations (not bugs)
       
     </span>
   </a>
@@ -2735,10 +2735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#final-test-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        最终测试运行
+        Final test run
       
     </span>
   </a>
@@ -2938,7 +2938,7 @@
 <p><strong><code>StoreTradeFlowTest</code>（禁用库存）</strong></p>
 <ol>
 <li><code>testFullTradeToStoreAcceptanceThroughHttpAndOutboxCommands</code> — <code>202</code> → <code>awaiting_store_acceptance</code> → <code>trade.order.created.v1</code> outbox → <code>app:trade:outbox:publish</code> (sync bus, output "Published 1") → StoreOrder <code>accepted</code> + <code>store.order.accepted.v1</code> outbox → <code>app:store:outbox:publish</code> → Trade <code>store_accepted</code> → idempotent second publish ("Published 0") → HTTP <code>confirm</code> → <code>confirmed</code>.</li>
-<li><code>testStoreRejectionLeavesTradeOrderInStoreRejectedUntilExplicitCancel</code> — real Staff <code>POST /store/stores/{uuid}/orders/{uuid}/reject</code> (with membership grant) → <code>store.order.rejected.v1</code> outbox → publish → Trade order <strong><code>store_rejected</code></strong> (see Bug 1) → explicit HTTP <code>cancel</code> → <code>cancelled</code>.</li>
+<li><code>testStoreRejectionLeavesTradeOrderInStoreRejectedUntilExplicitCancel</code> — real Staff <code>POST /store/{uuid}/orders/{uuid}/reject</code> (with membership grant) → <code>store.order.rejected.v1</code> outbox → publish → Trade order <strong><code>store_rejected</code></strong> (see Bug 1) → explicit HTTP <code>cancel</code> → <code>cancelled</code>.</li>
 <li><code>testStoreBecomingUnavailableAfterPlacementRejectsTheOrder</code> — order placed while store active, store suspended before the Trade outbox is relayed → Store handler emits <code>store.order.rejected.v1</code> (<code>STORE_UNAVAILABLE</code>) → publish → Trade <code>store_rejected</code>.</li>
 <li><code>testUnknownStoreCodeReturnsBadRequestAndCreatesNoOrder</code> — unknown <code>X-Store-Code</code> → HTTP <code>400</code>, no Trade outbox, no Store order.</li>
 <li><code>testDuplicateEventDeliveryIsDeduplicatedByInbox</code> — same event delivered twice to <code>TradeOrderCreatedHandler</code> → one StoreOrder, one <code>store.order.accepted.v1</code> outbox, one <code>store_consumed_event</code> row.</li>
@@ -2970,20 +2970,20 @@
 </ul>
 <h3 id="bug-3-low-previously-documented-storeorder-snapshot-idempotency-is-key-order-sensitive">Bug 3 (LOW, previously documented) — StoreOrder snapshot idempotency is key-order sensitive<a class="headerlink" href="#bug-3-low-previously-documented-storeorder-snapshot-idempotency-is-key-order-sensitive" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/Service/StoreOrderService.php:180</code> （<code>matchesSnapshot</code> 在 <code>order_snapshot</code> JSON 数组上使用 <code>===</code>）。</li>
-<li><strong>描述：</strong> E2E跨eventId幂等性测试（<code>testStoreOrderAlreadyProcessedIsIdempotentAcrossEventIds</code>）通过，因为中继的负载是字节相同的。但是，重新传递的 <code>trade.order.created</code> 其 JSON 键顺序不同（例如不同的生产者序列化）将被视为快照冲突 → <code>LogicException</code> → 有害消息。已记录在 <code>docs/issues/coverage-2026-08-09/store-command-repo-entity.md</code> 中并在 <code>tests/Store/Service/StoreOrderServiceTest.php::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code> 中跳过。</li>
-<li><strong>建议的修复：</strong> 将快照与规范的、对键顺序不敏感的规范化（例如 <code>ksort</code> 递归地）或哈希进行比较。</li>
+<li><strong>File/line:</strong> <code>src/Store/Service/StoreOrderService.php:180</code> (<code>matchesSnapshot</code> uses <code>===</code> on the <code>order_snapshot</code> JSON array).</li>
+<li><strong>Description:</strong> the E2E cross-eventId idempotency test (<code>testStoreOrderAlreadyProcessedIsIdempotentAcrossEventIds</code>) passes because the relayed payload is byte-identical. But a redelivered <code>trade.order.created</code> whose JSON key order differs (e.g. a different producer serialization) is treated as a snapshot conflict → <code>LogicException</code> → poison message. Already documented in <code>docs/issues/coverage-2026-08-09/store-command-repo-entity.md</code> and skipped in <code>tests/Store/Service/StoreOrderServiceTest.php::testCreateFromSnapshotIsIdempotentDespiteSnapshotKeyOrder</code>.</li>
+<li><strong>Proposed fix:</strong> compare snapshots with a canonical, key-order-insensitive normalization (e.g. <code>ksort</code> recursively) or hash.</li>
 </ul>
-<h2 id="_2">跳过测试<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>App\Tests\Integration\StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully</code> — 断言正确的行为（在其保留之前到达的释放请求不得抛出）。针对当前 src 失败（错误 2）。跳过以保持套件绿色；该差距已记录为 TODO (<code>context.md</code> §22.1)。</li>
+<li><code>App\Tests\Integration\StoreTradeInventoryEnabledFlowTest::testReleaseBeforeReserveIsHandledGracefully</code> — asserts the correct behaviour (a release request that arrives before its reservation must not throw). Fails against current src (Bug 2). Skipped to keep the suite green; the gap is a documented TODO (<code>context.md</code> §22.1).</li>
 </ul>
-<h2 id="_3">观察结果（不是错误）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="observations-not-bugs">Observations (not bugs)<a class="headerlink" href="#observations-not-bugs" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>InventoryOutboxMessage</code> API 不对称性：</strong> 与 <code>StoreOutboxMessage</code> / <code>TradeOutboxMessage</code> 不同，库存发件箱实体仅公开 <code>getId()</code>/<code>getEventId()</code>/<code>isPublished()</code>/<code>markPublished()</code>/<code>recordAttempt()</code> — 不公开 <code>getTopic()</code>/<code>getPayload()</code>。测试必须使用返回数组的 <code>findUnpublishedForPublishing()</code>。化妆品;今天 <code>src/</code> 中没有任何内容读取这些吸气剂。</li>
-<li>真正的存储/贸易发布命令<strong>仅</strong>在总线同步时才驱动处理程序完成。在生产中，消息通过 <code>config/packages/messenger.yaml</code> 路由到 <code>async</code>（Doctrine）传输，因此命令将它们标记为已发布，同时单独的 <code>worker</code> 使用它们 - E2E 同步总线工具是测试时的等效项，并执行完全相同的命令 + 处理程序代码。</li>
+<li><strong><code>InventoryOutboxMessage</code> API asymmetry:</strong> unlike <code>StoreOutboxMessage</code> / <code>TradeOutboxMessage</code>, the inventory outbox entity exposes only <code>getId()</code>/<code>getEventId()</code>/<code>isPublished()</code>/<code>markPublished()</code>/<code>recordAttempt()</code> — no <code>getTopic()</code>/<code>getPayload()</code>. Tests had to use the array-returning <code>findUnpublishedForPublishing()</code>. Cosmetic; nothing in <code>src/</code> reads those getters today.</li>
+<li>The real Store/Trade publish commands drive the handlers to completion <strong>only</strong> when the bus is synchronous. In production the messages are routed to the <code>async</code> (Doctrine) transport by <code>config/packages/messenger.yaml</code>, so the command marks them published while a separate <code>worker</code> consumes them — the E2E sync-bus harness is the test-time equivalent and exercises the exact same command + handler code.</li>
 </ul>
-<h2 id="_4">最终测试运行<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="final-test-run">Final test run<a class="headerlink" href="#final-test-run" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    tests/Integration/StoreTradeFlowTest.php \
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    tests/Integration/StoreTradeInventoryEnabledFlowTest.php --no-coverage
@@ -2991,7 +2991,7 @@
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>OK, but some tests were skipped!
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Tests: 11, Assertions: 112, Skipped: 1.
 </code></pre></div>
-<p>（当并发运行程序删除/重新创建架构时，共享的 <code>var/test.db</code> 有时会显示暂时的 <code>no such table</code> / <code>database is locked</code> 错误 - 根据项目约定，等待 10-15 秒并重新运行。该套件在首次运行时引导架构，并且隔离时为绿色。）</p>
+<p>(The shared <code>var/test.db</code> occasionally shows transient <code>no such table</code> / <code>database is locked</code> errors when concurrent runners drop/recreate the schema — wait 10–15 s and re-run, per the project convention. This suite bootstraps the schema on first run and is green in isolation.)</p>
 
 
 

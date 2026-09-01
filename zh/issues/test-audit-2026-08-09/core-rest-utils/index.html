@@ -600,7 +600,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1109,7 +1109,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1310,7 +1310,7 @@
   <span class="md-ellipsis">
     
   
-    Store Catalog (Target)
+    商店目录（目标）
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2506,7 +2506,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2630,10 +2630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delete-candidates-table" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DELETE CANDIDATES — table
+        删除候选人 — 表
       
     </span>
   </a>
@@ -2939,18 +2939,18 @@
 - <code>AccessLogListenerTest</code> — thorough and unique: method whitelist, auth-path body hiding, truncation, binary/empty bodies, anon/username resolution.
 - <code>ControllerListenerExtendedTest</code>, <code>ExceptionInterceptorExtendedTest</code>, <code>LocaleListenerTest</code> — the substantive branch tables.
 - <code>OpenApiEnricherListenerCoverageTest</code> — the four early-return guards are not exercised by <code>CoreOpenApiEnricherApiTest</code> (which only hits the happy path). Note: <code>testJsonContentWithoutPathsReturnsEarly</code> and <code>testJsonArrayContentWithoutPathsReturnsEarly</code> hit the <em>same</em> <code>!is_array($spec) || !isset($spec['paths'])</code> guard — collapse those two.</p>
-<p><strong>Controller</strong>
-- <code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> — envelope shape, <code>@display</code> (complex/reduce/expr), <code>@expands</code>, pagination slices, 204.
-- <code>RestControllerCoverage2Test</code> — unique error/edge branches (<code>resolveService</code>, expand chain-shift, silent getter/expression swallow). The four dependency-getter exception tests (<code>getRequestStack</code>/<code>getSerializer</code>/<code>getTranslator</code>/<code>getService</code>) are thin IMPLEMENTATION-DETAIL — consider after merge.
-- <code>RestControllerPaginationIntegrationTest</code> — only test that drives <code>pagination()</code> through a real QueryBuilder + DoctrinePaginator. KEEP (do not parallelize with DB-bootstrapping tests).
-- <code>EntityControllerExtendedTest</code>, <code>RouterControllerTest</code> — retain after trimming dups.
-- <code>CoreExtensionTest</code> / <code>ConfigurationTest</code> — verify the DI wiring in <code>services.yaml</code>/<code>Configuration</code>; genuinely useful contract tests.</p>
-<p><strong>Serializer / Exception / DI</strong>
-- <code>FlatNormalizerCoverageTest</code> — unique branches (decorated-failure fallback, <code>__metadata</code> reduce, JSON-string decode — which documents the JSON-string-corruption bug, bug 11 in the coverage report), serializer/normalizer forwarding.
-- <code>Normalizer/CircularReferenceHandlerTest</code> — KEEP only because it still documents the contract of a class that <em>may</em> be referenced by future wiring; note the class is orphaned today (nothing in <code>src/</code>/<code>config/</code> references <code>App\Core\Serializer\Normalizer\CircularReferenceHandler</code>).
-- <code>MessageHttpExceptionExtendedTest</code> — keep as the canonical file.
-- <code>Serializer/CircularReferenceHandlerTest</code> — keep (this is the handler actually wired in <code>config/packages/serializer.yaml</code>).</p>
-<h2 id="delete-candidates-table">DELETE CANDIDATES — table<a class="headerlink" href="#delete-candidates-table" title="Permanent link">&para;</a></h2>
+<p><strong>控制器</strong>
+- <code>RestControllerTest</code> + <code>RestControllerExtendedTest</code> — 信封形状，<code>@display</code>（复杂/减少/表达式），<code>@expands</code>，分页切片，204。
+- <code>RestControllerCoverage2Test</code> — 独特的错误/边缘分支（<code>resolveService</code>、扩展链移位、静默吸气剂/表达式吞咽）。四个依赖项获取异常测试 (<code>getRequestStack</code>/<code>getSerializer</code>/<code>getTranslator</code>/<code>getService</code>) 是很薄的实现细节 — 在合并后考虑。
+- <code>RestControllerPaginationIntegrationTest</code> — 仅测试通过真正的 QueryBuilder + DoctrinePaginator 驱动 <code>pagination()</code>。 KEEP（不要与数据库引导测试并行）。
+- <code>EntityControllerExtendedTest</code>、<code>RouterControllerTest</code> — 修剪重复项后保留。
+- <code>CoreExtensionTest</code> / <code>ConfigurationTest</code> — 验证<code>services.yaml</code>/<code>Configuration</code>中的DI接线；真正有用的合同测试。</p>
+<p><strong>序列化器/异常/DI</strong>
+- <code>FlatNormalizerCoverageTest</code> - 独特的分支（装饰失败回退，<code>__metadata</code>减少，JSON字符串解码 - 记录JSON字符串损坏错误，覆盖报告中的错误11），序列化器/规范化器转发。
+- <code>Normalizer/CircularReferenceHandlerTest</code> — 保留只是因为它仍然记录了<em>可能</em>被未来连线引用的类的契约；请注意，该类今天是孤立类（<code>src/</code>/<code>config/</code> 中没有任何内容引用 <code>App\Core\Serializer\Normalizer\CircularReferenceHandler</code>）。
+- <code>MessageHttpExceptionExtendedTest</code> — 保留为规范文件。
+- <code>Serializer/CircularReferenceHandlerTest</code> — keep（这是实际连接在<code>config/packages/serializer.yaml</code>中的处理程序）。</p>
+<h2 id="_1">删除候选人 — 表<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>

@@ -600,7 +600,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1109,7 +1109,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1310,7 +1310,7 @@
   <span class="md-ellipsis">
     
   
-    Store Catalog (Target)
+    商店目录（目标）
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2506,7 +2506,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2691,10 +2691,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        注释
+        Notes
       
     </span>
   </a>
@@ -2834,17 +2834,17 @@
 </ul>
 <h3 id="bug-4-">Bug #4（验证差距，低）- 超大数量通过处理程序验证，然后在服务内崩溃<a class="headerlink" href="#bug-4-" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:122</code>（项目数量正则表达式<code>/^[0-9]+(?:\.[0-9]{1,6})?$/</code>）与<code>src/Inventory/Service/Quantity.php:20-22</code>（14位整数上限，<code>decimal(20,6)</code>）。</li>
-<li><strong>描述：</strong> 处理程序的数量正则表达式允许任意长的整数部分。 <code>Quantity::normalize()</code> 将整数部分限制为 14 位并抛出 <code>InvalidArgumentException: Quantity exceeds decimal(20, 6).</code>。发送 <code>quantity: '123456789012345'</code> 的生产者传递 <code>validateEnvelope()</code>，然后服务在处理程序的事务中抛出异常，导致消息失败（并且根据 Bug #3，关闭 EM）。</li>
-<li><strong>影响：</strong>低；语法上有效但超出范围的数量会成为永远重试的有害消息，而不是被信封验证器拒绝。</li>
-<li><strong>复制（集成探针）：</strong>带有 <code>quantity = '123456789012345'</code> 的请求消息通过 <code>validateEnvelope()</code>，然后处理程序失败并返回 <code>InvalidArgumentException: Quantity exceeds decimal(20, 6).</code>。</li>
-<li><strong>建议的修复：</strong> 绑定处理程序正则表达式中的数字，例如<code>/^[0-9]{1,14}(?:\.[0-9]{1,6})?$/</code>，或对 <code>validateEnvelope()</code> 内的每个项目调用 <code>Quantity::normalize()</code>，以便预先拒绝超出范围的数量。</li>
+<li><strong>File/line:</strong> <code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:122</code> (item quantity regex <code>/^[0-9]+(?:\.[0-9]{1,6})?$/</code>) vs <code>src/Inventory/Service/Quantity.php:20-22</code> (14-digit integer cap, <code>decimal(20,6)</code>).</li>
+<li><strong>Description:</strong> The handler's quantity regex permits arbitrarily long integer parts. <code>Quantity::normalize()</code> caps the integer part at 14 digits and throws <code>InvalidArgumentException: Quantity exceeds decimal(20, 6).</code>. A producer sending <code>quantity: '123456789012345'</code> passes <code>validateEnvelope()</code>, then the service throws inside the handler's transaction, failing the message (and, per Bug #3, closing the EM).</li>
+<li><strong>Impact:</strong> Low; a syntactically-valid but out-of-range quantity becomes a poison message retried forever instead of being rejected by the envelope validator.</li>
+<li><strong>Reproduction (integration probe):</strong> requested message with <code>quantity = '123456789012345'</code> passes <code>validateEnvelope()</code>, then the handler fails with <code>InvalidArgumentException: Quantity exceeds decimal(20, 6).</code>.</li>
+<li><strong>Proposed fix:</strong> bound the digits in the handler regex, e.g. <code>/^[0-9]{1,14}(?:\.[0-9]{1,6})?$/</code>, or call <code>Quantity::normalize()</code> on each item inside <code>validateEnvelope()</code> so out-of-range quantities are rejected up front.</li>
 </ul>
-<h2 id="_4">注释<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>src/Inventory/Message/*</code> 类已经被预先存在的 <code>tests/Inventory/Message/InventoryMessageTest.php</code> 加上发件箱发布测试覆盖；不需要新消息测试。</li>
-<li>无需跳过任何正确行为测试：所有 36 个新测试都通过了当前的 <code>src/</code>。 Bug #1、#3 和 #4 是通过一次性集成探针（随后删除）确认的，而不是通过提交的通过/失败测试来确认的。</li>
-<li>当在单个 PHPUnit 进程中执行多个 <code>DatabaseBootstrapTrait</code> 测试类时，共享的 <code>var/test.db</code> 可能会抛出短暂的 <code>no such table</code> / <code>database is locked</code> / leftover-row 故障；解决方法是单独运行每个文件（或小组），如任务简介中所述。单独而言，每个新文件都是绿色的。</li>
+<li><code>src/Inventory/Message/*</code> classes were already covered by the pre-existing <code>tests/Inventory/Message/InventoryMessageTest.php</code> plus the outbox-publish tests; no new message tests were needed.</li>
+<li>No correct-behaviour test had to be skipped: all 36 new tests pass against the current <code>src/</code>. Bugs #1, #3 and #4 were confirmed with throwaway integration probes (deleted afterwards), not by committed passing/failing tests.</li>
+<li>When several <code>DatabaseBootstrapTrait</code> test classes are executed in a single PHPUnit process, the shared <code>var/test.db</code> can throw transient <code>no such table</code> / <code>database is locked</code> / leftover-row failures; the workaround is running each file (or small group) separately, as documented in the task brief. Individually, every new file is green.</li>
 </ul>
 
 

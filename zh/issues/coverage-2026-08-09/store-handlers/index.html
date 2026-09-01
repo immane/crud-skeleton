@@ -600,7 +600,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1109,7 +1109,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1282,7 +1282,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1310,7 +1310,7 @@
   <span class="md-ellipsis">
     
   
-    Store Catalog (Target)
+    商店目录（目标）
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -2282,7 +2282,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -2478,7 +2478,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -2506,7 +2506,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -2653,10 +2653,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-2-medium-tradeordercreated" class="md-nav__link">
+  <a href="#bug-2-medium-deterministically-invalid-tradeordercreated-payloads-become-poison-messages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 2 (MEDIUM) — 确定性无效的 trade.order.created 有效负载变成有害消息
+        Bug 2 (MEDIUM) — deterministically-invalid trade.order.created payloads become poison messages
       
     </span>
   </a>
@@ -2664,10 +2664,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-3-" class="md-nav__link">
+  <a href="#bug-3-lowmedium-store-side-dedup-has-no-payload-hash-integrity-check" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 3（低/中）- 存储端重复数据删除没有有效负载哈希完整性检查
+        Bug 3 (LOW/MEDIUM) — Store-side dedup has no payload-hash integrity check
       
     </span>
   </a>
@@ -2675,10 +2675,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bug-4-confirmedatrejectedatreleasedat" class="md-nav__link">
+  <a href="#bug-4-low-confirmedatrejectedatreleasedat-are-required-but-never-used" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bug 4（低）- confirmedAt/rejectedAt/releasedAt 是必需的，但从未使用过
+        Bug 4 (LOW) — confirmedAt/rejectedAt/releasedAt are required but never used
       
     </span>
   </a>
@@ -2824,72 +2824,72 @@
 生产者（贸易）和消费者（库存）。</p>
 <h3 id="bug-1-">Bug 1（中）- 商店发布库存预订请求 库存永远无法接受<a class="headerlink" href="#bug-1-" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:132-137</code>
-  (<code>inventoryItems()</code>) — 仅需要 <code>is_string($item['catalogReference'] ?? null)</code>。</li>
-<li><strong>描述：</strong> 贸易序列化 <code>catalogReference</code> 为
-  <code>$item-&gt;getSpecification()?-&gt;getUuid() ?? ''</code> (<code>src/Trade/Service/OrderService.php:128</code>)，所以
-  无规范的订单项目会生成 <code>catalogReference = ''</code>。 Store 处理程序接受
-  （空字符串是字符串），构建 <code>inventory.reservation.requested.v1</code> 发件箱
-  负载，但库存消费者（<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:119-120</code>）
-  要求 <code>catalogReference</code> 匹配 UUID 并抛出 <code>InvalidArgumentException</code>。</li>
-<li><strong>影响：</strong> 预订请求是有害消息（重试 3 次，然后 <code>failed</code>
-  运输），并且商店订单永久卡在<code>awaiting_inventory</code>中 -
-  确认永远无法到达。具有任何无规格行的交易订单永远不会
-  <code>INVENTORY_ENABLED=1</code> 时由 Store 投影接受。</li>
-<li><strong>复制：</strong> 创建一个项目没有规格的贸易订单（规格已删除
-  / 空）；观察 <code>trade.order.created</code> → 存储订单 <code>awaiting_inventory</code>，发件箱请求
-  <code>items[0].catalogReference = ''</code>；库存 <code>InventoryReservationRequestedHandler</code> 抛出
-  每次交付时<code>Invalid inventory reservation request item.</code>。</li>
-<li><strong>建议的修复：</strong> 根据 UUID 格式验证 <code>catalogReference</code> （和 <code>lineId</code>）（和
-  非空）在 <code>inventoryItems()</code> 中，在 Store 边界处确定性失败；和/或使
-  Trade 为无规范的项目发出稳定的 UUID 参考，而不是 <code>''</code>。</li>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:132-137</code>
+  (<code>inventoryItems()</code>) — requires only <code>is_string($item['catalogReference'] ?? null)</code>.</li>
+<li><strong>Description:</strong> Trade serialises <code>catalogReference</code> as
+  <code>$item-&gt;getSpecification()?-&gt;getUuid() ?? ''</code> (<code>src/Trade/Service/OrderService.php:128</code>), so
+  a specification-less order item produces <code>catalogReference = ''</code>. The Store handler accepts
+  that (empty string is a string), builds the <code>inventory.reservation.requested.v1</code> outbox
+  payload, but the Inventory consumer (<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:119-120</code>)
+  requires <code>catalogReference</code> to match a UUID and throws <code>InvalidArgumentException</code>.</li>
+<li><strong>Impact:</strong> the reservation request is a poison message (3 retries, then the <code>failed</code>
+  transport), and the Store order is permanently stuck in <code>awaiting_inventory</code> — the
+  confirmation can never arrive. A trade order with any specification-less line can never be
+  accepted by the Store projection while <code>INVENTORY_ENABLED=1</code>.</li>
+<li><strong>Reproduction:</strong> create a Trade order whose item has no specification (specification deleted
+  / null); observe <code>trade.order.created</code> → Store order <code>awaiting_inventory</code>, outbox request with
+  <code>items[0].catalogReference = ''</code>; the Inventory <code>InventoryReservationRequestedHandler</code> throws
+  <code>Invalid inventory reservation request item.</code> on every delivery.</li>
+<li><strong>Proposed fix:</strong> validate <code>catalogReference</code> (and <code>lineId</code>) against the UUID format (and
+  non-empty) in <code>inventoryItems()</code>, failing deterministically at the Store boundary; and/or make
+  Trade emit a stable UUID reference for specification-less items instead of <code>''</code>.</li>
 </ul>
-<h3 id="bug-2-medium-tradeordercreated">Bug 2 (MEDIUM) — 确定性无效的 <code>trade.order.created</code> 有效负载变成有害消息<a class="headerlink" href="#bug-2-medium-tradeordercreated" title="Permanent link">&para;</a></h3>
+<h3 id="bug-2-medium-deterministically-invalid-tradeordercreated-payloads-become-poison-messages">Bug 2 (MEDIUM) — deterministically-invalid <code>trade.order.created</code> payloads become poison messages<a class="headerlink" href="#bug-2-medium-deterministically-invalid-tradeordercreated-payloads-become-poison-messages" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:37-38</code>（浅
-  信封验证），<code>:56-61</code>（<code>StoreConsumedEvent</code>在交易中持续存在），
-  <code>:106-107</code>（<code>recordRejected()</code> orderUuid 抛出）、<code>:126-137</code>（<code>inventoryItems()</code> 抛出）、
-  加上 <code>src/Store/Service/StoreOrderService.php:84-86,110-111</code> （快照上的 <code>LogicException</code>
-  冲突）。</li>
-<li><strong>描述：</strong> 只有 <code>is_string($eventId) &amp;&amp; is_array($payload)</code> 被预先验证。任意
-  更深层次的失败（<code>recordRejected()</code> 中缺少 <code>orderUuid</code>、空/无效项、冲突
-  snapshot) 抛出 <strong>inside</strong> <code>wrapInTransaction</code>，这会回滚已经持久化的
-  <code>StoreConsumedEvent</code>。因此，该事件永远不会被标记为已消耗，并且会重试 (3×)
-  在<code>failed</code>运输机着陆之前成功的机会。对比取消处理程序，
-  验证完整的信封（type/version/eventId/payload/orderUuid/storeUuid/cancelledAt/
-  时间戳）在任何持久性之前。</li>
-<li><strong>影响：</strong> 单个格式错误但结构有效的 <code>trade.order.created</code> 事件会阻止
-  该贸易订单的订单接受，需要手动<code>failed</code>-传输干预，并且
-  每次重试时重新运行整个事务（重新创建并回滚商店订单）。</li>
-<li><strong>复制：</strong> 使用包含有效 <code>store.uuid</code> 的有效负载调度 <code>trade.order.created</code>
-  但每次重新投递时都没有 <code>orderUuid</code> 且不存在商店 → <code>InvalidArgumentException: Trade order event does
-  not include an order UUID.</code>； <code>store_consumed_event</code> 从不包含
-  事件 ID。</li>
-<li><strong>建议的修复：</strong>移动确定性结构验证（orderUuid存在，项目格式良好
-  当启用库存时，在交易之前存储快照形状），或消耗并记录
-  终端 <code>StoreConsumedEvent</code> 用于无效信封而不是抛出。</li>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/TradeOrderCreatedHandler.php:37-38</code> (shallow
+  envelope validation), <code>:56-61</code> (<code>StoreConsumedEvent</code> persisted inside the transaction),
+  <code>:106-107</code> (<code>recordRejected()</code> orderUuid throw), <code>:126-137</code> (<code>inventoryItems()</code> throws),
+  plus <code>src/Store/Service/StoreOrderService.php:84-86,110-111</code> (<code>LogicException</code> on snapshot
+  conflict).</li>
+<li><strong>Description:</strong> only <code>is_string($eventId) &amp;&amp; is_array($payload)</code> is validated up front. Any
+  deeper failure (missing <code>orderUuid</code> in <code>recordRejected()</code>, empty/invalid items, conflicting
+  snapshot) throws <strong>inside</strong> <code>wrapInTransaction</code>, which rolls back the already-persisted
+  <code>StoreConsumedEvent</code>. The event is therefore never marked consumed and is retried (3×) with no
+  chance of success before landing in the <code>failed</code> transport. Contrast the cancellation handler,
+  which validates the full envelope (type/version/eventId/payload/orderUuid/storeUuid/cancelledAt/
+  timestamp) before any persistence.</li>
+<li><strong>Impact:</strong> a single malformed-but-structurally-valid <code>trade.order.created</code> event blocks
+  order acceptance for that trade order, requires manual <code>failed</code>-transport intervention, and
+  re-runs the whole transaction (re-creating and rolling back a Store order) on every retry.</li>
+<li><strong>Reproduction:</strong> dispatch <code>trade.order.created</code> with a payload containing a valid <code>store.uuid</code>
+  but no <code>orderUuid</code> and a non-existent store → <code>InvalidArgumentException: Trade order event does
+  not include an order UUID.</code> on every redelivery; <code>store_consumed_event</code> never contains the
+  eventId.</li>
+<li><strong>Proposed fix:</strong> move deterministic structural validation (orderUuid present, items well-formed
+  when inventory is enabled, store snapshot shape) ahead of the transaction, or consume-and-record
+  a terminal <code>StoreConsumedEvent</code> for invalid envelopes instead of throwing.</li>
 </ul>
-<h3 id="bug-3-">Bug 3（低/中）- 存储端重复数据删除没有有效负载哈希完整性检查<a class="headerlink" href="#bug-3-" title="Permanent link">&para;</a></h3>
+<h3 id="bug-3-lowmedium-store-side-dedup-has-no-payload-hash-integrity-check">Bug 3 (LOW/MEDIUM) — Store-side dedup has no payload-hash integrity check<a class="headerlink" href="#bug-3-lowmedium-store-side-dedup-has-no-payload-hash-integrity-check" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>src/Store/MessageHandler/TradeOrderCancelledHandler.php:48,53</code>，
-  <code>TradeOrderCreatedHandler.php:40,51</code>、<code>InventoryReservationConfirmedHandler.php:42,47</code>、
-  <code>InventoryReservationRejectedHandler.php:42,47</code>、<code>InventoryReservationReleasedHandler.php:34,39</code>。</li>
-<li><strong>描述：</strong> 所有五个处理程序仅通过 <code>eventId</code> 进行重复数据删除 (<code>findOneBy(['eventId' =&gt; ...])</code>)
-  并默默返回。库存处理程序 (<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:181-192</code>,
-  <code>InventoryReservationReleaseRequestedHandler.php:122-133</code>) 另外比较有效负载
-  当 eventId 与不同的事件重用时，散列并引发 <code>InventoryMessageIntegrityException</code>
-  有效负载。</li>
-<li><strong>影响：</strong> 如果生产者重用带有修改后的有效负载的 eventId（重新交付或
-  被篡改/损坏的消息），存储会默默地忽略新的有效负载而不是标记
-  违反诚信行为；对于同一故障，双方的行为有所不同。</li>
-<li><strong>重现：</strong> 传递 <code>inventory.reservation.confirmed</code> 和 eventId <code>E</code>，然后传递它
-  再次使用 eventId <code>E</code> 和不同的 <code>storeOrderUuid</code>。商店：默默消费（订单从未
-  接受）。库存（在其自己的处理程序上的情况相同）：<code>InventoryMessageIntegrityException</code>。</li>
-<li><strong>建议的修复：</strong> 存储 <code>hash('sha256', json_encode($envelope))</code> （已经为
-  <code>StoreConsumedEvent</code>) 和 <code>hash_equals()</code> 进行重复数据删除，抛出完整性异常
-  不匹配，反映库存方面。</li>
+<li><strong>File / line:</strong> <code>src/Store/MessageHandler/TradeOrderCancelledHandler.php:48,53</code>,
+  <code>TradeOrderCreatedHandler.php:40,51</code>, <code>InventoryReservationConfirmedHandler.php:42,47</code>,
+  <code>InventoryReservationRejectedHandler.php:42,47</code>, <code>InventoryReservationReleasedHandler.php:34,39</code>.</li>
+<li><strong>Description:</strong> all five handlers dedup by <code>eventId</code> alone (<code>findOneBy(['eventId' =&gt; ...])</code>)
+  and silently return on a hit. The Inventory handlers (<code>src/Inventory/MessageHandler/InventoryReservationRequestedHandler.php:181-192</code>,
+  <code>InventoryReservationReleaseRequestedHandler.php:122-133</code>) additionally compare the payload
+  hash and raise <code>InventoryMessageIntegrityException</code> when an eventId is reused with a different
+  payload.</li>
+<li><strong>Impact:</strong> if a producer reuses an eventId with a modified payload (a redelivery, or a
+  tampered/corrupted message), the Store silently ignores the new payload instead of flagging
+  the integrity violation; the two sides behave differently for the same fault.</li>
+<li><strong>Reproduction:</strong> deliver <code>inventory.reservation.confirmed</code> with eventId <code>E</code>, then deliver it
+  again with eventId <code>E</code> and a different <code>storeOrderUuid</code>. Store: silently consumed (order never
+  accepted). Inventory (same scenario on its own handlers): <code>InventoryMessageIntegrityException</code>.</li>
+<li><strong>Proposed fix:</strong> store <code>hash('sha256', json_encode($envelope))</code> (already computed for the
+  <code>StoreConsumedEvent</code>) and <code>hash_equals()</code> it on dedup, throwing an integrity exception on
+  mismatch, mirroring the Inventory side.</li>
 </ul>
-<h3 id="bug-4-confirmedatrejectedatreleasedat">Bug 4（低）- <code>confirmedAt</code>/<code>rejectedAt</code>/<code>releasedAt</code> 是必需的，但从未使用过<a class="headerlink" href="#bug-4-confirmedatrejectedatreleasedat" title="Permanent link">&para;</a></h3>
+<h3 id="bug-4-low-confirmedatrejectedatreleasedat-are-required-but-never-used">Bug 4 (LOW) — <code>confirmedAt</code>/<code>rejectedAt</code>/<code>releasedAt</code> are required but never used<a class="headerlink" href="#bug-4-low-confirmedatrejectedatreleasedat-are-required-but-never-used" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>InventoryReservationConfirmedHandler.php:37-40</code>，
   <code>InventoryReservationRejectedHandler.php:37-40</code>、<code>InventoryReservationReleasedHandler.php:30-31</code>；

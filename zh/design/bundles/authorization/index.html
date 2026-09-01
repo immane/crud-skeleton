@@ -604,7 +604,7 @@
   <span class="md-ellipsis">
     
   
-    Development Workflow
+    开发流程
   
 
     
@@ -688,7 +688,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -716,7 +716,7 @@
   <span class="md-ellipsis">
     
   
-    Integration Events
+    整合活动
   
 
     
@@ -744,7 +744,7 @@
   <span class="md-ellipsis">
     
   
-    Database & Migrations
+    数据库和迁移
   
 
     
@@ -1113,7 +1113,7 @@
   <span class="md-ellipsis">
     
   
-    Naming Convention
+    命名约定
   
 
     
@@ -1286,7 +1286,7 @@
   <span class="md-ellipsis">
     
   
-    Store (Multi-Store Operations)
+    商店（多商店运营）
   
 
     
@@ -1314,7 +1314,7 @@
   <span class="md-ellipsis">
     
   
-    Store Catalog (Target)
+    商店目录（目标）
   
 
     
@@ -2383,7 +2383,7 @@
   <span class="md-ellipsis">
     
   
-    Wechat (Login + Pay)
+    微信（登录+支付）
   
 
     
@@ -3131,7 +3131,7 @@
   <span class="md-ellipsis">
     
   
-    Production Validation Overview
+    生产验证概述
   
 
     
@@ -3243,7 +3243,7 @@
   <span class="md-ellipsis">
     
   
-    Business Invariants
+    业务不变量
   
 
     
@@ -3327,7 +3327,7 @@
   <span class="md-ellipsis">
     
   
-    Release Validation
+    发布验证
   
 
     
@@ -3355,7 +3355,7 @@
   <span class="md-ellipsis">
     
   
-    AI Development Process
+    人工智能开发流程
   
 
     
@@ -4367,7 +4367,7 @@ JWT 主题，并且不做出资源级授权决策。</p>
 时间戳。它<strong>没有</strong>有 <code>storeUuid</code> — 商店关联不是内容模型的一部分。现有应用内容
 普通经过身份验证的 API 用户可以读取端点；管理内容控制器是 <code>ROLE_ADMIN</code> CRUD，现在
 接受 <code>metadata</code> 作为白名单字段，以证明严格的字段授予执行。</p>
-<p>内容的字段级授权由 <code>common:content</code> <code>create</code>/<code>update</code> 字段授权提供（<code>metadata</code> 与非 <code>metadata</code> 角色）。商店范围的内容路由 (<code>/store/stores/{storeUuid}/contents</code>) 在此阶段<strong>不</strong>存在；存储范围仍用于其他资源（例如 <code>store:order:*</code>），但内容的范围仅由字段授予确定，而不是由存储行范围确定。</p>
+<p>内容的字段级授权由 <code>common:content</code> <code>create</code>/<code>update</code> 字段授权提供（<code>metadata</code> 与非 <code>metadata</code> 角色）。商店范围的内容路由 (<code>/store/{storeUuid}/contents</code>) 在此阶段<strong>不</strong>存在；存储范围仍用于其他资源（例如 <code>store:order:*</code>），但内容的范围仅由字段授予确定，而不是由存储行范围确定。</p>
 <h3 id="25">2.5 审计过程中发现的限制<a class="headerlink" href="#25" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>BaseService</code> 在其构造函数中捕获当前安全令牌的用户。新
@@ -4797,7 +4797,7 @@ JWT 主题，并且不做出资源级授权决策。</p>
 返回 404 而不是 403。</p>
 <h3 id="73">7.3 安全创建作用域（当为存储作用域时）<a class="headerlink" href="#73" title="Permanent link">&para;</a></h3>
 <p>当资源属于 Store 范围时，创建路由时将 Store 范围包含在路由中，而不是请求正文中：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>POST /api/v1/store/stores/{storeUuid}/orders
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>POST /api/v1/store/{storeUuid}/orders
 </code></pre></div>
 <p>控制器需要<code>{storeUuid}</code>的相关权限（例如<code>store:order:create</code>）并设置
 仅来自路线的商店关联。接受的客户端中缺少商店标识符
@@ -4880,7 +4880,7 @@ JSON 字段。在此阶段，内容<strong>不是</strong>商店范围（仅限 
 </tr>
 </tbody>
 </table>
-<p><code>common:content</code> 的字段级执行通过 <code>FieldAuthorizationService</code> 进行验证（<code>RoleFieldGrant</code> 与控制器 <code>accepted*Properties</code> 的并集，严格 403）。 <code>store:order:*</code> 权限仍然是存储范围决策的示例；商店内容路由 (<code>/store/stores/{storeUuid}/contents</code>) 在此阶段<strong>未</strong>实现。</p>
+<p><code>common:content</code> 的字段级执行通过 <code>FieldAuthorizationService</code> 进行验证（<code>RoleFieldGrant</code> 与控制器 <code>accepted*Properties</code> 的并集，严格 403）。 <code>store:order:*</code> 权限仍然是存储范围决策的示例；商店内容路由 (<code>/store/{storeUuid}/contents</code>) 在此阶段<strong>未</strong>实现。</p>
 <h3 id="83">8.3 决策示例（现场级）<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>User A: store_content_editor at Store X (has common:content:update, fields title/body/category/tags)
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>  PUT Content with title/body -&gt; allowed
