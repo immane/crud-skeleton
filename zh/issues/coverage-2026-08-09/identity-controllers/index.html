@@ -2911,7 +2911,7 @@ After = 使用 Xdebug + Clover 对照这些类的现有 + 新测试进行测量
 <h3 id="bug-d">Bug D — 具有纯数字用户名的用户永远无法使用其用户名登录<a class="headerlink" href="#bug-d" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>AuthController.php</code> 82–89（登录）；与<code>UserRepository::findByIdentifier()</code> (40–51)交互，它<em>确实</em>处理电话标识符。</li>
-<li><strong>描述：</strong> <code>login()</code> 通过 <code>findByPhone()</code> 路由与 <code>/^\+?[0-9]{7,20}$/</code> 匹配的每个标识符，并且永远不会回退到 <code>findByIdentifier()</code>。因此，<strong>用户名</strong>仅包含数字（注册允许任何非空用户名字符串，例如 <code>13800138000</code>）的用户永远无法使用该用户名进行身份验证 - <code>findByPhone()</code> 返回 <code>null</code> 并且代码返回 <code>401 Invalid credentials</code> 而无需查询用户名索引。</li>
+<li><strong>描述：</strong> <code>login()</code> 通过 <code>findByPhone()</code> 路由与 <code>/^\+?[0-9]{7,20}$/</code> 匹配的每个标识符，并且永远不会回退到 <code>findByIdentifier()</code>。因此，<strong>用户名</strong>仅包含数字（注册允许任何非空用户名字符串，例如 <code>13800138000</code>）的用户永远无法使用该用户名进行身份验证 - <code>findByPhone()</code> 返回 <code>null</code> 并且代码返回 <code>401 Invalid credentials</code> 而无需查阅用户名索引。</li>
 <li><strong>影响：</strong> 具有数字用户名的帐户无法通过用户名登录；唯一的工作标识符是电子邮件（或他们的电话，如果设置+验证）。合法凭证的静默身份验证失败。</li>
 <li><strong>复制：</strong>注册<code>num@example.com</code> / 用户名<code>13800138000</code>； <code>POST /api/auth/login</code> 与 <code>identifier: '13800138000'</code>，正确的密码 → <code>401</code>（已验证：单元测试断言 <code>200</code> 因实际 <code>401</code> 而失败）。</li>
 <li><strong>建议的修复：</strong> 当 <code>findByPhone()</code> 返回 <code>null</code> 时，转到 <code>findByIdentifier($identifier)</code> （或者始终调用 <code>findByIdentifier()</code> 并将未经验证的手机壳单独映射到 403）。 <code>findByIdentifier()</code> 已经对电话标识符应用了 <code>phoneVerified</code> 保护，因此保留了电话语义。</li>

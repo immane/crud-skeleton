@@ -2641,10 +2641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -2652,10 +2652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -2882,7 +2882,7 @@
 <li><code>BaseServiceReadListTraitTest</code> — <code>get()</code> 通过 id/uuid/object/array/QB（包括 NoResult），<code>list()</code> 与
   <code>@dql/@filter/@order/@sort/@select/@groupBy/@hints/@showDQL</code>，特权参数的管理门控，身份选择
   和非字符串选择拒绝，遗留内存过滤器回退。这是唯一的地方
-  可以执行管理控制的 <code>@dql/@sort/@hints</code> 分支（HTTP 路径已损坏 - BUG-1
+  admin-gate <code>@dql/@sort/@hints</code> 分支可以被执行（HTTP 路径已损坏 - BUG-1
   <code>core-integration-extra.md</code>，由 <code>tests/Integration/CoreDynamicQueryApiTest</code> 断言）。</li>
 <li><code>BaseServiceInfrastructureTraitCoverageTest</code> — <code>wrapInTransaction()</code> 提交/回滚/非活动跳过/回退
   基本测试未到达的路径和容器重新获取分支；真正的分支机构覆盖。</li>
@@ -3121,80 +3121,80 @@
 </tr>
 </tbody>
 </table>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<h2 id="_3">合并建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Service/BaseServiceUnitTest.php + Service/BaseServiceCoverageTest.php</strong> → delete outright; every method is
-  duplicated (see table). No merge needed.</li>
-<li><strong>Service/BaseServiceInfrastructureTraitTest.php + Service/BaseServiceInfrastructureTraitCoverageTest.php</strong> → merge
-  (same SUT, shared fake style); the Coverage file's <code>wrapInTransaction</code> and container-re-fetch branches fold into
-  the base file.</li>
-<li><strong>Service/BaseServiceMutationTraitTest.php + Service/BaseServiceMutationTraitCoverageTest.php</strong> → merge; the
-  Coverage file's relation/exception branches fold into the base file (drop the one duplicate date-conversion test).</li>
-<li><strong>Service/BaseServiceReadListTraitTest.php + Service/BaseServiceReadListTraitCoverageTest.php</strong> → merge.</li>
-<li><strong>Service/DefaultServiceLocatorTest.php + Service/DefaultServiceLocatorCoverageTest.php</strong> → merge; drop the
-  duplicate both-missing serializer test.</li>
-<li><strong>Service/ExpressionServiceTest.php + Service/ExpressionServiceCoverageTest.php</strong> → merge (cache branches into
-  the base buildFilter test).</li>
-<li><strong>Service/LegacyEvaluatorTest.php + Service/LegacyEvaluatorCoverageTest.php</strong> → merge and delete the
-  <code>language===null</code> test.</li>
-<li><strong>Parser/ExpressionDqlParserTest.php + ExpressionDqlParserXTest.php</strong> → merge/delete XTest; its 2 unique cases
-  (<code>&lt;</code> operator, pre-compile fragments) are either duplicated elsewhere or trivial.</li>
-<li><strong>View/SingleCreateAndUpdateApiViewMixinTest.php + View/SingleCreateAndUpdateApiViewMixinCoverageTest.php</strong> → merge
-  the two branch tests (falsy-result warning, NotFound→404) into the base file.</li>
+<li><strong>Service/BaseServiceUnitTest.php + Service/BaseServiceCoverageTest.php</strong> → 彻底删除；每个方法都是
+  重复（见表）。无需合并。</li>
+<li><strong>Service/BaseServiceInfrastructTraitTest.php + Service/BaseServiceInfrastructTraitCoverageTest.php</strong> → 合并
+  （相同的SUT，共享假样式）； Coverage 文件的 <code>wrapInTransaction</code> 和 container-re-fetch 分支折叠到
+  基础文件。</li>
+<li><strong>Service/BaseServiceMutationTraitTest.php + Service/BaseServiceMutationTraitCoverageTest.php</strong> → 合并；的
+  覆盖文件的关系/异常分支折叠到基本文件中（删除一个重复的日期转换测试）。</li>
+<li><strong>Service/BaseServiceReadListTraitTest.php + Service/BaseServiceReadListTraitCoverageTest.php</strong> → 合并。</li>
+<li><strong>Service/DefaultServiceLocatorTest.php + Service/DefaultServiceLocatorCoverageTest.php</strong> → 合并；放下
+  重复两个缺失的序列化器测试。</li>
+<li><strong>Service/ExpressionServiceTest.php + Service/ExpressionServiceCoverageTest.php</strong> → 合并（缓存分支到
+  基本 buildFilter 测试）。</li>
+<li><strong>Service/LegacyEvaluatorTest.php + Service/LegacyEvaluatorCoverageTest.php</strong> → 合并并删除
+  <code>language===null</code>测试。</li>
+<li><strong>Parser/ExpressionDqlParserTest.php + ExpressionDqlParserXTest.php</strong> → 合并/删除 XTest；其2个独特案例
+  （<code>&lt;</code> 运算符、预编译片段）要么在其他地方重复，要么微不足道。</li>
+<li><strong>View/SingleCreateAndUpdateApiViewMixinTest.php + View/SingleCreateAndUpdateApiViewMixinCoverageTest.php</strong> → 合并
+  将两个分支测试（错误结果警告，NotFound→404）放入基本文件中。</li>
 </ul>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>All commands from repo root with the project PHP runtime (<code>TEST_STRATEGY.md</code>):
+<h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>来自存储库根目录和项目 PHP 运行时 (<code>TEST_STRATEGY.md</code>) 的所有命令：
 <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code></p>
 <ol>
 <li>
-<p><strong>Baseline (before deleting anything):</strong>
+<p><strong>基线（删除任何内容之前）：</strong>
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit \
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  --coverage-filter src/Core/Service --coverage-filter src/Core/View --coverage-filter src/Core/Parser \
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  --coverage-xml var/coverage-audit-before --no-progress
 </code></pre></div>
-   Record the per-file line counts for <code>BaseService.php</code>, the three <code>Concern/*Trait.php</code> files,
-   <code>DefaultServiceLocator.php</code>, <code>ExpressionService.php</code>, <code>LegacyEvaluator.php</code>, <code>QueryBuilderFactory.php</code>,
-   <code>src/Core/View/*</code> and <code>src/Core/Parser/*</code>.</p>
+   记录 <code>BaseService.php</code>、三个 <code>Concern/*Trait.php</code> 文件的每个文件行数，
+   <code>DefaultServiceLocator.php</code>、<code>ExpressionService.php</code>、<code>LegacyEvaluator.php</code>、<code>QueryBuilderFactory.php</code>、
+   <code>src/Core/View/*</code> 和 <code>src/Core/Parser/*</code>。</p>
 </li>
 <li>
-<p><strong>Delete the HIGH-confidence items</strong> (exact duplicates only), in two rounds so each is independently
-   verifiable:</p>
+<p><strong>删除高置信度项目</strong>（仅精确重复），分两轮，因此每个项目都是独立的
+   可验证：</p>
 </li>
-<li>Round 1 (whole files): <code>tests/Core/Service/BaseServiceUnitTest.php</code>,
-     <code>tests/Core/Service/BaseServiceCoverageTest.php</code>, <code>tests/Core/Parser/ExpressionDqlParserXTest.php</code>.</li>
+<li>第 1 轮（整个文件）：<code>tests/Core/Service/BaseServiceUnitTest.php</code>，
+     <code>tests/Core/Service/BaseServiceCoverageTest.php</code>、<code>tests/Core/Parser/ExpressionDqlParserXTest.php</code>。</li>
 <li>
-<p>Round 2 (methods, requires editing): <code>DefaultServiceLocatorCoverageTest::testGetSerializerReturnsNullWhenBothServicesMissing</code>,
-     <code>ExpressionDqlParserFullTest::{testCompileWithMatchesPlainText,testCompileWithMatchesRegex,testCompileWithUnsupportedMatchesRegexFlagThrows}</code>,
-     <code>ExpressionDqlParserCoverageTest::{testValidateFragmentsRejectsUnknownAliasInWhere,testValidateFragmentsSkipsEmptyJoinPath}</code>,
-     <code>ExpressionQueryBuilderAssemblerCoverageTest::{testGetRootAliasesFailureFallsBackToEmptyAndAddsFrom,testGetAllAliasesFailureFallsBackToRootAliases,testLeftJoinFailureIsSilentlyIgnored}</code>.</p>
+<p>第 2 轮（方法，需要编辑）：<code>DefaultServiceLocatorCoverageTest::testGetSerializerReturnsNullWhenBothServicesMissing</code>，
+     <code>ExpressionDqlParserFullTest::{testCompileWithMatchesPlainText,testCompileWithMatchesRegex,testCompileWithUnsupportedMatchesRegexFlagThrows}</code>，
+     <code>ExpressionDqlParserCoverageTest::{testValidateFragmentsRejectsUnknownAliasInWhere,testValidateFragmentsSkipsEmptyJoinPath}</code>，
+     <code>ExpressionQueryBuilderAssemblerCoverageTest::{testGetRootAliasesFailureFallsBackToEmptyAndAddsFrom,testGetAllAliasesFailureFallsBackToRootAliases,testLeftJoinFailureIsSilentlyIgnored}</code>。</p>
 </li>
 <li>
-<p><strong>Re-run after each round:</strong>
+<p><strong>每轮后重新运行：</strong>
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit \
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  --coverage-filter src/Core/Service --coverage-filter src/Core/View --coverage-filter src/Core/Parser \
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  --coverage-xml var/coverage-audit-after --no-progress
 </code></pre></div>
-   Assert: 0 failures; and <code>var/coverage-audit-after</code> shows <strong>no decrease</strong> in line coverage for any
-   <code>src/Core/{Service,View,Parser}</code> file versus the before-run (for the HIGH deletions the delta must be zero —
-   that is the correctness criterion for this audit).</p>
+   断言：0 次失败；并且<code>var/coverage-audit-after</code>显示任何线路覆盖率<strong>没有减少</strong>
+   <code>src/Core/{Service,View,Parser}</code> 文件与运行前文件（对于高删除量，增量必须为零 —
+   这是本次审核的正确性标准）。</p>
 </li>
 <li>
-<p><strong>Static gates:</strong> <code>composer phpstan</code> and <code>composer rector:types:check</code> must stay green (they scan the whole
-   tree; deleting unused test helpers is safe).</p>
+<p><strong>静态门：</strong> <code>composer phpstan</code> 和 <code>composer rector:types:check</code> 必须保持绿色（它们扫描整个
+   树；删除未使用的测试助手是安全的）。</p>
 </li>
 <li>
-<p><strong>MEDIUM/LOW items</strong> (defensive branches, partial duplicates): defer deletion until the src bugs they pin are
-   fixed (e.g. <code>BaseServiceMutationTrait</code> immutable-DateTime bug, <code>LegacyEvaluator</code> null-language guard,
-   <code>ExpressionQueryBuilderAssembler</code> swallowed joins) — or delete alongside those fixes since the branch tests only
-   exist to cover dead/defensive code.</p>
+<p><strong>中/低项</strong>（防御性分支，部分重复）：推迟删除，直到它们固定的 src bug 被删除
+   已修复（例如 <code>BaseServiceMutationTrait</code> 不可变日期时间错误、<code>LegacyEvaluator</code> 空语言保护、
+   <code>ExpressionQueryBuilderAssembler</code> 吞噬连接） - 或与这些修复一起删除，因为分支仅测试
+   存在是为了覆盖死代码/防御代码。</p>
 </li>
 <li>
-<p><strong>Coverage-gate caveat:</strong> <code>TEST_STRATEGY.md</code> requires ≥90% line coverage on <code>src/</code>. Because every HIGH deletion
-   is covered by a named surviving test, the gate is unaffected; if the MEDIUM defensive-branch deletions are
-   pursued, expect the affected <code>src</code> file's percentage to drop only on the previously-dead lines (acceptable only
-   after the dead code is removed — see the campaign's follow-up 2).</p>
+<p><strong>覆盖范围门警告：</strong> <code>TEST_STRATEGY.md</code> 要求 <code>src/</code> 上的线路覆盖率≥90%。因为每次 HIGH 删除
+   被指定的幸存测试覆盖，门不受影响；如果中度防御分支删除是
+   继续进行，预计受影响的 <code>src</code> 文件的百分比仅在先前的死行上下降（仅可接受
+   删除无效代码后 — 请参阅该活动的后续行动 2)。</p>
 </li>
 </ol>
 

@@ -751,22 +751,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-ci-pipeline" class="md-nav__link">
+  <a href="#6-ci" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. CI Pipeline
+        6. CI 管道
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6. CI Pipeline">
+    <nav class="md-nav" aria-label="6. CI 管道">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61-ciyml-phpstan-phpunit-with-coverage-rector" class="md-nav__link">
+  <a href="#61-ciyml-phpstan-phpunit-rector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 ci.yml — PHPStan + PHPUnit (with coverage) + Rector
+        6.1 ci.yml — PHPStan + PHPUnit（带覆盖）+ Rector
       
     </span>
   </a>
@@ -774,10 +774,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62-migrationsyml-mysql-migration-chain" class="md-nav__link">
+  <a href="#62-migrationsyml-mysql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 migrations.yml — MySQL migration chain
+        6.2 migrations.yml — MySQL 迁移链
       
     </span>
   </a>
@@ -785,10 +785,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-docsyml-docs-build-github-pages-deploy" class="md-nav__link">
+  <a href="#63-docsyml-github-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 docs.yml — Docs build &amp; GitHub Pages deploy
+        6.3 docs.yml — 文档构建和 GitHub Pages 部署
       
     </span>
   </a>
@@ -801,10 +801,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-local-vs-ci-database" class="md-nav__link">
+  <a href="#7-ci" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Local vs CI Database
+        7. 本地数据库与 CI 数据库
       
     </span>
   </a>
@@ -812,10 +812,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-definition-of-done" class="md-nav__link">
+  <a href="#8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Definition of Done
+        8. 完成的定义
       
     </span>
   </a>
@@ -2919,22 +2919,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-ci-pipeline" class="md-nav__link">
+  <a href="#6-ci" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. CI Pipeline
+        6. CI 管道
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="6. CI Pipeline">
+    <nav class="md-nav" aria-label="6. CI 管道">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61-ciyml-phpstan-phpunit-with-coverage-rector" class="md-nav__link">
+  <a href="#61-ciyml-phpstan-phpunit-rector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 ci.yml — PHPStan + PHPUnit (with coverage) + Rector
+        6.1 ci.yml — PHPStan + PHPUnit（带覆盖）+ Rector
       
     </span>
   </a>
@@ -2942,10 +2942,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62-migrationsyml-mysql-migration-chain" class="md-nav__link">
+  <a href="#62-migrationsyml-mysql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 migrations.yml — MySQL migration chain
+        6.2 migrations.yml — MySQL 迁移链
       
     </span>
   </a>
@@ -2953,10 +2953,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-docsyml-docs-build-github-pages-deploy" class="md-nav__link">
+  <a href="#63-docsyml-github-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 docs.yml — Docs build &amp; GitHub Pages deploy
+        6.3 docs.yml — 文档构建和 GitHub Pages 部署
       
     </span>
   </a>
@@ -2969,10 +2969,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-local-vs-ci-database" class="md-nav__link">
+  <a href="#7-ci" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Local vs CI Database
+        7. 本地数据库与 CI 数据库
       
     </span>
   </a>
@@ -2980,10 +2980,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-definition-of-done" class="md-nav__link">
+  <a href="#8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Definition of Done
+        8. 完成的定义
       
     </span>
   </a>
@@ -3256,39 +3256,39 @@
 <h2 id="5">5. 拉取请求清单<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <p>每个 PR 必须满足存储库模板 (<code>.github/pull_request_template.md</code>)：</p>
 <ul>
-<li>[ ] Branch is up-to-date with <code>main</code></li>
-<li>[ ] Summary describes the change; related issues linked</li>
-<li>[ ] Type of change flagged (bug / feature / docs / tests / refactor / CI / i18n)</li>
-<li>[ ] <code>./vendor/bin/phpunit</code> — all tests pass</li>
-<li>[ ] Coverage does not drop below <strong>90%</strong></li>
-<li>[ ] <code>composer phpstan</code> — Level 8 check passes</li>
-<li>[ ] <code>composer rector:types:check</code> — no PHPDoc type changes required</li>
-<li>[ ] Manual smoke test performed (described in the PR)</li>
-<li>[ ] Commits follow Conventional Commits</li>
-<li>[ ] New features include tests</li>
-<li>[ ] API changes documented with <code>#[OA\*]</code> attributes</li>
-<li>[ ] Behaviour changes reflected in <code>docs/ai/context.md</code> where appropriate</li>
-<li>[ ] i18n translation keys added for new user-facing messages (en, zh, zh_Hant, ja)</li>
+<li>[ ] 分支已与 <code>main</code> 保持同步</li>
+<li>[ ] 摘要描述了更改；相关问题已链接</li>
+<li>[ ] 标记的更改类型（错误/功能/文档/测试/重构/CI/i18n）</li>
+<li>[ ] <code>./vendor/bin/phpunit</code> — 所有测试均通过</li>
+<li>[ ] 覆盖率不低于 <strong>90%</strong></li>
+<li>[ ] <code>composer phpstan</code> — 8 级检查通过</li>
+<li>[ ] <code>composer rector:types:check</code> — 无需更改 PHPDoc 类型</li>
+<li>[ ] 执行手动烟雾测试（PR 中描述）</li>
+<li>[ ] 提交遵循常规提交</li>
+<li>[ ] 新功能包括测试</li>
+<li>[ ] API 更改用 <code>#[OA\*]</code> 属性记录</li>
+<li>[ ] 行为变化反映在 <code>docs/ai/context.md</code> 中（如果适用）</li>
+<li>[ ] 为新的面向用户的消息添加了 i18n 翻译键（en、zh、zh_Hant、ja）</li>
 </ul>
 <hr />
-<h2 id="6-ci-pipeline">6. CI Pipeline<a class="headerlink" href="#6-ci-pipeline" title="Permanent link">&para;</a></h2>
-<p>Three workflows live in <code>.github/workflows/</code>. All are <strong>path-triggered</strong> — unrelated
-changes do not re-run the whole pipeline.</p>
-<h3 id="61-ciyml-phpstan-phpunit-with-coverage-rector">6.1 <code>ci.yml</code> — PHPStan + PHPUnit (with coverage) + Rector<a class="headerlink" href="#61-ciyml-phpstan-phpunit-with-coverage-rector" title="Permanent link">&para;</a></h3>
-<p><strong>Triggers</strong> — push to <code>main</code>/<code>master</code> and pull requests against <code>main</code>, <code>master</code>, or
-<code>dev</code>, limited to these paths:</p>
+<h2 id="6-ci">6. CI 管道<a class="headerlink" href="#6-ci" title="Permanent link">&para;</a></h2>
+<p><code>.github/workflows/</code> 中存在三个工作流程。全部都是<strong>路径触发的</strong> — 不相关
+更改不会重新运行整个管道。</p>
+<h3 id="61-ciyml-phpstan-phpunit-rector">6.1 <code>ci.yml</code> — PHPStan + PHPUnit（带覆盖）+ Rector<a class="headerlink" href="#61-ciyml-phpstan-phpunit-rector" title="Permanent link">&para;</a></h3>
+<p><strong>触发器</strong> — 推送到 <code>main</code>/<code>master</code> 并针对 <code>main</code>、<code>master</code> 或拉取请求
+<code>dev</code>，仅限于这些路径：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>src/**            tests/**          config/**         migrations/**
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>bin/**            composer.json     composer.lock     symfony.lock
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>phpunit.dist.xml  phpstan.neon      phpstan-bootstrap.php
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>rector*.php       .env.test         .github/workflows/ci.yml
 </code></pre></div>
-<p><strong>Jobs</strong> (PHP 8.4 on <code>ubuntu-latest</code>):</p>
+<p><strong>工作</strong>（<code>ubuntu-latest</code> 上的 PHP 8.4）：</p>
 <table>
 <thead>
 <tr>
-<th>Job</th>
-<th>What it runs</th>
-<th>Notes</th>
+<th>工作</th>
+<th>它运行什么</th>
+<th>笔记</th>
 </tr>
 </thead>
 <tbody>
@@ -3299,121 +3299,121 @@ changes do not re-run the whole pipeline.</p>
 </tr>
 <tr>
 <td><code>tests</code></td>
-<td><code>composer install</code> → boot Postgres 16 service → create <code>app_test_1..4</code> → run <strong>ParaTest with 4 workers</strong> + PCOV coverage → enforce 90% line threshold</td>
-<td>matrix: <code>php: ['8.4']</code></td>
+<td><code>composer install</code> → 启动 Postgres 16 服务 → 创建 <code>app_test_1..4</code> → 运行 <strong>ParaTest，有 4 个工作人员</strong> + PCOV 覆盖范围 → 强制执行 90% 的线路阈值</td>
+<td>矩阵： <code>php: ['8.4']</code></td>
 </tr>
 <tr>
 <td><code>rector</code></td>
-<td><code>composer rector:types:check</code> (dry-run)</td>
+<td><code>composer rector:types:check</code>（试运行）</td>
 <td><code>DATABASE_URL=sqlite:///.../var/rector.db</code></td>
 </tr>
 </tbody>
 </table>
-<p><strong>The parallel test job in detail:</strong></p>
+<p><strong>并行测试作业详细信息：</strong></p>
 <ol>
-<li><code>shivammathur/setup-php</code> with <code>coverage: pcov</code>, <code>ini-values: pcov.directory=src</code>
-   — so PCOV measures only application code under <code>src/</code>.</li>
-<li>A <code>postgres:16</code> service container is started with <code>app</code>/<code>app_secret</code> credentials and
-   health checks.</li>
-<li><code>app_test_1</code> … <code>app_test_4</code> databases are created via <code>psql</code>.</li>
-<li>Tests run with:</li>
+<li><code>shivammathur/setup-php</code> 与 <code>coverage: pcov</code>、<code>ini-values: pcov.directory=src</code>
+   — 因此 PCOV 仅测量 <code>src/</code> 下的应用程序代码。</li>
+<li><code>postgres:16</code> 服务容器使用 <code>app</code>/<code>app_secret</code> 凭据启动，并且
+   健康检查。</li>
+<li><code>app_test_1</code> … <code>app_test_4</code> 数据库是通过<code>psql</code> 创建的。</li>
+<li>测试运行：</li>
 </ol>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">PCOV_ENABLED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">PARATEST</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>php<span class="w"> </span>vendor/bin/paratest<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--processes<span class="o">=</span><span class="m">4</span><span class="w"> </span>--coverage-text<span class="o">=</span>/tmp/coverage.txt<span class="w"> </span>--display-deprecations
 </code></pre></div>
-<p>Each ParaTest worker (tokens 1–4) gets its own Postgres database through
-   <code>PARATEST_DATABASE_URL_TEMPLATE=postgresql://.../app_test_{token}?...</code> — concurrent
-   schema drops/creates can never race.
-5. The 90% gate parses <code>Lines: &lt;pct&gt;</code> from the coverage text and fails via
-   <code>bc</code> comparison if it drops below <code>90.0</code>.</p>
-<p>Full env for the <code>tests</code> job mirrors <code>.env.test</code> (JWT keys at
-<code>tests/Identity/Security/</code>, <code>APP_ENV=test</code>, <code>MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0</code>,
-<code>MAILER_DSN=null://null</code>, <code>OTP_REDIS_DSN</code>, Aliyun SMS test values with dry-run on).</p>
-<h3 id="62-migrationsyml-mysql-migration-chain">6.2 <code>migrations.yml</code> — MySQL migration chain<a class="headerlink" href="#62-migrationsyml-mysql-migration-chain" title="Permanent link">&para;</a></h3>
-<p><strong>Triggers</strong> — push to <code>main</code>/<code>master</code> and PRs against <code>main</code>/<code>master</code>/<code>dev</code>, on
-<code>migrations/**</code>, <code>config/**</code>, <code>bin/**</code>, <code>composer.json</code>, <code>composer.lock</code>,
-<code>symfony.lock</code>, and the workflow file itself.</p>
-<p><strong>Job <code>mysql-migration-chain</code>:</strong></p>
+<p>每个 ParaTest 工作线程（标记 1-4）通过以下方式获取自己的 Postgres 数据库
+   <code>PARATEST_DATABASE_URL_TEMPLATE=postgresql://.../app_test_{token}?...</code> — 并发
+   模式删除/创建永远不会竞争。
+5. 90% 门从覆盖文本中解析 <code>Lines: &lt;pct&gt;</code> 并通过以下方式失败
+   <code>bc</code> 如果低于 <code>90.0</code> 则进行比较。</p>
+<p><code>tests</code> 作业的完整环境镜像 <code>.env.test</code> （JWT 键位于
+<code>tests/Identity/Security/</code>、<code>APP_ENV=test</code>、<code>MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0</code>、
+<code>MAILER_DSN=null://null</code>、<code>OTP_REDIS_DSN</code>，空运行时的阿里云短信测试值）。</p>
+<h3 id="62-migrationsyml-mysql">6.2 <code>migrations.yml</code> — MySQL 迁移链<a class="headerlink" href="#62-migrationsyml-mysql" title="Permanent link">&para;</a></h3>
+<p><strong>触发器</strong> — 推送到 <code>main</code>/<code>master</code> 并针对 <code>main</code>/<code>master</code>/<code>dev</code> 推送 PR，
+<code>migrations/**</code>、<code>config/**</code>、<code>bin/**</code>、<code>composer.json</code>、<code>composer.lock</code>、
+<code>symfony.lock</code>，以及工作流程文件本身。</p>
+<p><strong>作业<code>mysql-migration-chain</code>：</strong></p>
 <ol>
-<li>Start <code>mysql:8.4</code> service (<code>crud_skeleton_test</code> database, user <code>app</code>/<code>app</code>).</li>
-<li><code>composer install</code> with <code>DATABASE_URL=mysql://app:app@127.0.0.1:3306/crud_skeleton_test?serverVersion=8.4&amp;charset=utf8mb4</code>.</li>
+<li>启动<code>mysql:8.4</code>服务（<code>crud_skeleton_test</code>数据库，用户<code>app</code>/<code>app</code>）。</li>
+<li><code>composer install</code> 与 <code>DATABASE_URL=mysql://app:app@127.0.0.1:3306/crud_skeleton_test?serverVersion=8.4&amp;charset=utf8mb4</code>。</li>
 <li><code>php bin/console doctrine:migrations:migrate --no-interaction --env=dev</code></li>
 <li><code>php bin/console doctrine:migrations:status --env=dev</code></li>
 </ol>
-<p>This proves the full <strong>migration chain</strong> works against a real MySQL 8.4 instance
-(downstream of the schema-tool-based test schema).</p>
-<h3 id="63-docsyml-docs-build-github-pages-deploy">6.3 <code>docs.yml</code> — Docs build &amp; GitHub Pages deploy<a class="headerlink" href="#63-docsyml-docs-build-github-pages-deploy" title="Permanent link">&para;</a></h3>
-<p><strong>Triggers</strong> — push to <code>main</code>/<code>dev</code> and PRs against <code>main</code>/<code>master</code>/<code>dev</code>, on
-<code>docs/**</code>, <code>README*.md</code>, <code>scripts/build-docs.sh</code>, <code>scripts/translate-docs.py</code>,
-<code>mkdocs.yml</code>, and the workflow file itself.</p>
+<p>这证明完整的<strong>迁移链</strong>适用于真实的 MySQL 8.4 实例
+（基于模式工具的测试模式的下游）。</p>
+<h3 id="63-docsyml-github-pages">6.3 <code>docs.yml</code> — 文档构建和 GitHub Pages 部署<a class="headerlink" href="#63-docsyml-github-pages" title="Permanent link">&para;</a></h3>
+<p><strong>触发器</strong> — 推送到 <code>main</code>/<code>dev</code> 并针对 <code>main</code>/<code>master</code>/<code>dev</code> 推送 PR，
+<code>docs/**</code>、<code>README*.md</code>、<code>scripts/build-docs.sh</code>、<code>scripts/translate-docs.py</code>、
+<code>mkdocs.yml</code>，以及工作流程文件本身。</p>
 <table>
 <thead>
 <tr>
-<th>Job</th>
-<th>Runs on</th>
-<th>Action</th>
+<th>工作</th>
+<th>运行于</th>
+<th>行动</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>build</code></td>
-<td>pull_request only</td>
-<td><code>pip install mkdocs-material deep-translator</code> → <code>bash scripts/build-docs.sh</code> (bilingual site build)</td>
+<td>仅限 pull_request</td>
+<td><code>pip install mkdocs-material deep-translator</code> → <code>bash scripts/build-docs.sh</code>（双语网站建设）</td>
 </tr>
 <tr>
 <td><code>deploy</code></td>
-<td>push only</td>
-<td>same build, then <code>peaceiris/actions-gh-pages</code> publishes <code>./site</code> to the <code>gh-pages</code> branch</td>
+<td>只推</td>
+<td>相同的构建，然后 <code>peaceiris/actions-gh-pages</code> 将 <code>./site</code> 发布到 <code>gh-pages</code> 分支</td>
 </tr>
 </tbody>
 </table>
-<p><code>scripts/translate-docs.py</code> + <code>build-docs.sh</code> produce the bilingual
-(English/Chinese) mkdocs site — do not bypass it by committing generated files.</p>
+<p><code>scripts/translate-docs.py</code> + <code>build-docs.sh</code> 产生双语
+（英文/中文）mkdocs 站点 — 不要通过提交生成的文件来绕过它。</p>
 <hr />
-<h2 id="7-local-vs-ci-database">7. Local vs CI Database<a class="headerlink" href="#7-local-vs-ci-database" title="Permanent link">&para;</a></h2>
+<h2 id="7-ci">7. 本地数据库与 CI 数据库<a class="headerlink" href="#7-ci" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Context</th>
-<th>Database</th>
-<th>How it is isolated</th>
+<th>背景</th>
+<th>数据库</th>
+<th>如何隔离</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>tests</code> job (CI)</td>
+<td><code>tests</code> 工作 (CI)</td>
 <td>PostgreSQL 16 (<code>app_test_1..4</code>)</td>
-<td>one DB per ParaTest token</td>
+<td>每个 ParaTest 代币一个数据库</td>
 </tr>
 <tr>
-<td>Local parallel run</td>
-<td>SQLite per worker (<code>var/test_paratest_{pid}.db</code>)</td>
-<td>one file per process</td>
+<td>本地并行运行</td>
+<td>每个工作线程的 SQLite (<code>var/test_paratest_{pid}.db</code>)</td>
+<td>每个进程一个文件</td>
 </tr>
 <tr>
-<td>Local serial run</td>
+<td>本地串行运行</td>
 <td>SQLite (<code>var/test.db</code>)</td>
-<td>single file</td>
+<td>单个文件</td>
 </tr>
 </tbody>
 </table>
-<p><code>tests/bootstrap.php</code> decides: if <code>PARATEST=1</code> and no explicit <code>DATABASE_URL</code> template
-is provided, it switches each worker to its own <code>var/test_paratest_{pid}.db</code> and eagerly
-creates the schema. When CI provides <code>PARATEST_DATABASE_URL_TEMPLATE</code>, it substitutes
-the worker token instead. An explicit <code>DATABASE_URL</code> from the real environment is never
-clobbered by the sqlite fallback.</p>
-<p>Coverage is always measured with <strong>PCOV</strong> (<code>PCOV_ENABLED=1</code> / <code>coverage: pcov</code>).
-Xdebug-based coverage (<code>XDEBUG_MODE=coverage</code>) works locally but is not used in CI.</p>
+<p><code>tests/bootstrap.php</code> 决定：如果 <code>PARATEST=1</code> 并且没有明确的 <code>DATABASE_URL</code> 模板
+提供后，它将每个工作线程切换到自己的 <code>var/test_paratest_{pid}.db</code> 并急切地
+创建架构。当 CI 提供 <code>PARATEST_DATABASE_URL_TEMPLATE</code> 时，它会替换
+而是使用工人令牌。来自真实环境的显式 <code>DATABASE_URL</code> 永远不会
+受到 sqlite 后备的打击。</p>
+<p>覆盖范围始终使用 <strong>PCOV</strong> (<code>PCOV_ENABLED=1</code> / <code>coverage: pcov</code>) 进行测量。
+基于 Xdebug 的覆盖 (<code>XDEBUG_MODE=coverage</code>) 在本地工作，但不在 CI 中使用。</p>
 <hr />
-<h2 id="8-definition-of-done">8. Definition of Done<a class="headerlink" href="#8-definition-of-done" title="Permanent link">&para;</a></h2>
-<p>A change is done when, on top of the PR checklist:</p>
+<h2 id="8">8. 完成的定义<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<p>在 PR 清单之上，当出现以下情况时，变更就完成了：</p>
 <ol>
-<li><code>composer phpstan</code> — Level 8 clean (no new baseline entries without justification).</li>
-<li><code>composer rector:types:check</code> — no required type-rule changes.</li>
-<li><code>./vendor/bin/phpunit</code> (or <code>PARATEST=1 ./vendor/bin/paratest --processes 8 --runner WrapperRunner</code>) — green, coverage ≥ 90% Lines.</li>
-<li>Migration chain verified against MySQL (CI <code>migrations.yml</code> job).</li>
-<li>OpenAPI <code>#[OA\*]</code> attributes updated for any endpoint change.</li>
-<li>User-facing strings have translation keys (en, zh, zh_Hant, ja).</li>
+<li><code>composer phpstan</code> — 8 级干净（没有理由没有新的基线条目）。</li>
+<li><code>composer rector:types:check</code> — 无需更改类型规则。</li>
+<li><code>./vendor/bin/phpunit</code>（或<code>PARATEST=1 ./vendor/bin/paratest --processes 8 --runner WrapperRunner</code>）—绿色，覆盖率≥90%的线路。</li>
+<li>针对 MySQL 验证迁移链（CI <code>migrations.yml</code> 作业）。</li>
+<li>针对任何端点更改更新 OpenAPI <code>#[OA\*]</code> 属性。</li>
+<li>面向用户的字符串具有翻译键（en、zh、zh_Hant、ja）。</li>
 </ol>
 
 

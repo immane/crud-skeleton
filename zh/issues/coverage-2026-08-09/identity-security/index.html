@@ -2864,7 +2864,7 @@
 <h3 id="bug-3-revokeaccesstoken-jti-null">Bug #3（死代码）- <code>revokeAccessToken()</code> 无法访问 <code>$jti === null</code> 守卫<a class="headerlink" href="#bug-3-revokeaccesstoken-jti-null" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:330-333</code>。</li>
-<li><strong>描述：</strong> <code>decodeAccessTokenWithoutBlacklist()</code> 要求 <code>jti</code> 是一个字符串（第 169 行），否则返回 <code>null</code> （在第 325-328 行处理）。因此<code>$payload['jti']</code>在这里永远不可能是<code>null</code>并且第332行是无法访问的。</li>
+<li><strong>描述：</strong> <code>decodeAccessTokenWithoutBlacklist()</code> 要求 <code>jti</code> 是一个字符串（第 169 行），否则返回 <code>null</code> （在第 325-328 行处理）。因此<code>$payload['jti']</code>在这里永远不能是<code>null</code>并且第332行是无法到达的。</li>
 <li><strong>影响：</strong>无（仅防御）；死枝。</li>
 <li><strong>建议的修复：</strong> 拆除防护罩。</li>
 </ul>
@@ -2878,7 +2878,7 @@
 <h3 id="openssl_sign">无法访问的防御分支 — <code>openssl_sign()</code> 失败路径<a class="headerlink" href="#openssl_sign" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Identity/Security/TokenManager.php:100-101</code>。</li>
-<li><strong>说明：</strong>构造函数保证私钥有效； <code>openssl_sign()</code> 在此环境中，使用 SHA-256 成功实现 RSA、EC 和 DSA 密钥。在不使构造函数契约无效的情况下，无法触发 <code>$signed !== true</code> 分支。</li>
+<li><strong>说明：</strong> 构造函数保证私钥有效； <code>openssl_sign()</code> 在此环境中，使用 SHA-256 成功实现 RSA、EC 和 DSA 密钥。在不使构造函数合约无效的情况下，无法触发 <code>$signed !== true</code> 分支。</li>
 <li><strong>建议：</strong> 保留纵深防御；无法在单元测试中进行测试。记录下来而不是经过强制测试。</li>
 </ul>
 <h2 id="_4">观察结果（不是错误）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>

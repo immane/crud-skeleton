@@ -822,10 +822,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-operators-people-notes" class="md-nav__link">
+  <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Operators &amp; People Notes
+        6. 操作员和人员注释
       
     </span>
   </a>
@@ -3112,10 +3112,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-operators-people-notes" class="md-nav__link">
+  <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Operators &amp; People Notes
+        6. 操作员和人员注释
       
     </span>
   </a>
@@ -3439,7 +3439,7 @@ DQL 编译必须是安全的。</p>
 <hr />
 <h2 id="3">3.视图级参数<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <p>在查询之后应用，在 <code>RestController::success()</code>/<code>requestProcess()</code> 中，并且
-在创建/更新 mixins 中。</p>
+在创建/更新 mixin 中。</p>
 <h3 id="expands"><code>@expands</code><a class="headerlink" href="#expands" title="Permanent link">&para;</a></h3>
 <p>点关系的 JSON 数组（允许单引号，<code>FixJSON</code> 处理它们）
 通过附加 <code>__metadata</code> 属性（对象本身）来扩展链
@@ -3453,7 +3453,7 @@ DQL 编译必须是安全的。</p>
 <li><strong><code>@display=&lt;json array&gt;</code></strong> — 例如<code>['id','name','category.name']</code> 产生
   具有请求字段的平面对象（通过 getter 遍历的虚线路径）。</li>
 <li><strong><code>@display=&lt;json object&gt;</code></strong> — 键是输出字段，值是
-  <code>ExpressionLanguage</code> 表达式用 <code>entity</code>、<code>Math</code> 计算，并且
+  <code>ExpressionLanguage</code> 表达式用 <code>entity</code>、<code>Math</code> 计算，以及
   <code>ArrayCommon</code>。</li>
 <li>省略（默认 <code>complex</code>） — 完整序列化实体。</li>
 </ul>
@@ -3519,68 +3519,68 @@ JSON 对象将字段映射到重写的 <code>ExpressionLanguage</code> 表达式
 <table>
 <thead>
 <tr>
-<th>Parameter</th>
-<th>Requires <code>ROLE_ADMIN</code></th>
-<th>Notes</th>
+<th>参数</th>
+<th>需要 <code>ROLE_ADMIN</code></th>
+<th>笔记</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>@dql</code></td>
 <td>✅</td>
-<td>Raw SQL surface</td>
+<td>原始 SQL 表面</td>
 </tr>
 <tr>
 <td><code>@sort</code></td>
 <td>✅</td>
-<td>In-memory evaluation</td>
+<td>内存中评估</td>
 </tr>
 <tr>
 <td><code>@hints</code></td>
 <td>✅</td>
-<td>Raw query hints</td>
+<td>原始查询提示</td>
 </tr>
 <tr>
 <td><code>@filter</code></td>
-<td>only for the in-memory fallback</td>
-<td>DQL-fast-path is allowed; non-admin failures → <code>AccessDeniedHttpException</code></td>
+<td>仅适用于内存中回退</td>
+<td>允许 DQL-fast-path；非管理员故障 → <code>AccessDeniedHttpException</code></td>
 </tr>
 <tr>
 <td><code>@showDQL</code></td>
-<td>✅ (env-gated)</td>
-<td><code>dev</code> only</td>
+<td>✅（环境门控）</td>
+<td>仅<code>dev</code></td>
 </tr>
 <tr>
 <td><code>@select</code></td>
-<td>guarded, not gated</td>
-<td><code>assertSafeSelect()</code> blocks identity data</td>
+<td>有守卫，没有门禁</td>
+<td><code>assertSafeSelect()</code> 阻止身份数据</td>
 </tr>
 <tr>
-<td><code>DqlExpression</code> (<code>commonFilter</code> server scope)</td>
-<td>N/A — code-owned</td>
-<td>Fail-closed, never <code>PUBLIC_ACCESS</code>; compilation/validation failure → 500, never in-memory fallback</td>
+<td><code>DqlExpression</code>（<code>commonFilter</code> 服务器范围）</td>
+<td>N/A — 代码拥有</td>
+<td>失败关闭，从不<code>PUBLIC_ACCESS</code>；编译/验证失败 → 500，从不内存中回退</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><code>DqlExpression</code> is the server-owned counterpart to <code>@filter</code> for row-level
-authorization: <code>commonFilter()</code> may return <code>new DqlExpression(...)</code>; it shares the
-operator set (including <code>in</code>/<code>not in</code>) but is constructed in PHP, bound via
-<code>withCriteria()</code>/<code>withContext()</code> and validated before any query executes.</p>
+<p><code>DqlExpression</code> 是服务器拥有的行级 <code>@filter</code> 对应项
+授权：<code>commonFilter()</code>可能返回<code>new DqlExpression(...)</code>；它共享
+运算符集（包括 <code>in</code>/<code>not in</code>），但在 PHP 中构造，通过绑定
+<code>withCriteria()</code>/<code>withContext()</code> 并在任何查询执行之前进行验证。</p>
 </blockquote>
 <hr />
-<h2 id="6-operators-people-notes">6. Operators &amp; People Notes<a class="headerlink" href="#6-operators-people-notes" title="Permanent link">&para;</a></h2>
+<h2 id="6">6. 操作员和人员注释<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Chained attribute access uses the root alias <code>entity.getX().getY()</code> form in
-  <code>@filter</code>; the DQL tier maps these to joins (<code>filter_entity_x_y</code>).</li>
-<li><code>matches</code> with a <code>/pattern/flags</code> value compiles to <code>REGEXP(...) = TRUE</code>
-  (supported flags <code>gimsux</code>); a plain string compiles to <code>LIKE '%...%'</code> with
-  <code>!</code> escaping.</li>
-<li>The <code>ExternalExpressionValues</code> available inside filter expressions include
-  <code>math</code>/<code>Math</code>, <code>datetime</code>/<code>Datetime</code>, and <code>ArrayCommon</code>.</li>
+<li>链式属性访问使用根别名 <code>entity.getX().getY()</code> 形式
+  <code>@filter</code>; DQL 层将它们映射到联接 (<code>filter_entity_x_y</code>)。</li>
+<li>具有 <code>/pattern/flags</code> 值的 <code>matches</code> 编译为 <code>REGEXP(...) = TRUE</code>
+  （支持的标志 <code>gimsux</code>）；普通字符串编译为 <code>LIKE '%...%'</code>
+  <code>!</code> 逃跑。</li>
+<li>过滤器表达式内可用的 <code>ExternalExpressionValues</code> 包括
+  <code>math</code>/<code>Math</code>、<code>datetime</code>/<code>Datetime</code>和<code>ArrayCommon</code>。</li>
 </ul>
-<p>For parsing internals and class-level details, see
-<a href="../core-framework/">core-framework.md</a> (§4 Parser &amp; Expression Engine).</p>
+<p>有关解析内部结构和类级详细信息，请参阅
+<a href="../core-framework/">core-framework.md</a>（§4 解析器和表达式引擎）。</p>
 
 
 

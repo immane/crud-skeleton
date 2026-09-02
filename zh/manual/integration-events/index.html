@@ -936,10 +936,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63" class="md-nav__link">
+  <a href="#63-fulfillmentrequireverificationtrue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 过期预订
+        6.3 已完成→商店验证→已完成（当fulfillment.requireVerification=true时）
       
     </span>
   </a>
@@ -950,7 +950,18 @@
   <a href="#64" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.4 结算分配过帐
+        6.4 过期预订
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 结算分配过帐
       
     </span>
   </a>
@@ -3031,10 +3042,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63" class="md-nav__link">
+  <a href="#63-fulfillmentrequireverificationtrue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 过期预订
+        6.3 已完成→商店验证→已完成（当fulfillment.requireVerification=true时）
       
     </span>
   </a>
@@ -3045,7 +3056,18 @@
   <a href="#64" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.4 结算分配过帐
+        6.4 过期预订
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 结算分配过帐
       
     </span>
   </a>
@@ -3090,7 +3112,7 @@
 
 <h1 id="_1">集成事件（发件箱/收件箱模式）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>本项目中的模块（交易、店铺、库存、结算、钱包、支付）共用一个
-内核、一个 Doctrine EntityManager 和一个 Messenger 总线，但它们不得<strong>触及
+内核、一个 Doctrine EntityManager 和一个 Messenger 总线，但它们不能<strong>接触到
 彼此的实体或存储库。跨模块通信是事件驱动的
 持久：模块通过</strong>发件箱<strong>发出<em>它拥有的事实，并</em>消耗*来自其他模块的事实
 通过 </strong>收件箱** 模块，通过 Symfony Messenger 连接。</p>
@@ -3099,7 +3121,7 @@
 <li><strong>丢失事件</strong> — 事件被写入与业务<em>相同的数据库事务</em>中
   更改（事务发件箱），因此即使进程在运行中终止，它也永远不会丢失。</li>
 <li><strong>重复交付</strong> — 消费者在<em>同一事务</em>中记录消费事件行
-  作为业务效果，以 <code>eventId</code> （幂等收件箱）为键。</li>
+  作为业务效果，以 <code>eventId</code>（幂等收件箱）为键。</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
     subgraph Producer["Producer (module A)"]
@@ -3151,13 +3173,14 @@
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderVerifiedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 </code></pre></div>
 <ul>
 <li>所有集成消息路由到单个 <code>async</code> 传输（一个 Doctrine 表
@@ -3166,7 +3189,7 @@
 <li>Messenger 应用自己的传输中重试（3 次重试，指数乘数 2）；
   耗尽的消息将转到 <code>failed</code> 传输。</li>
 <li>发件箱在顶部添加了自己的<strong>声明/延迟层</strong>（请参阅
-  <a href="#3-publishing-flow">Publishing flow</a>) 所以同一个信封永远不会被交给
+  <a href="#3-publishing-flow">Publishing flow</a>) 因此同一个信封永远不会被交给
   Messenger 两次，即使两个调度程序发生争用。</li>
 </ul>
 <h2 id="2">2. 消息和信封<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
@@ -3201,7 +3224,7 @@
 <td>✅ <code>envelope</code></td>
 </tr>
 <tr>
-<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>、<code>StoreOrderRejectedMessage</code></td>
+<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>、<code>StoreOrderRejectedMessage</code>、<code>StoreOrderVerifiedMessage</code></td>
 <td>商店发件箱</td>
 <td>贸易</td>
 <td>✅ <code>envelope</code></td>
@@ -3364,7 +3387,7 @@
 <tr>
 <td><code>trade.order.created.v1</code></td>
 <td><code>trade_outbox_message</code></td>
-<td>商店 (<code>TradeOrderCreatedHandler</code>)</td>
+<td>存储 (<code>TradeOrderCreatedHandler</code>) — 仅当 <code>settings.order.requireAcceptance=true</code></td>
 </tr>
 <tr>
 <td><code>trade.order.cancelled.v1</code></td>
@@ -3380,6 +3403,11 @@
 <td><code>store.order.rejected.v1</code></td>
 <td><code>store_outbox_message</code></td>
 <td>贸易 (<code>StoreOrderRejectedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>store.order.verified.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>交易 (<code>StoreOrderVerifiedHandler</code> → <code>request_verification</code> + <code>store_verify</code>) — 仅当 <code>settings.fulfillment.requireVerification=true</code> 时；带有审计的有效负载 <code>{orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}</code></td>
 </tr>
 <tr>
 <td><code>inventory.reservation.requested.v1</code></td>
@@ -3559,7 +3587,7 @@
   <code>causationId = null</code> 在每个出站信封上 — 整个订单传奇（订单创建 →
   店铺受理→库存预约→取消）共享该关联范围。</li>
 <li><strong>结算</strong> 是唯一将跟踪保存到其域模型中的模块：
-  <code>SettlementFundingConfirmedMessage</code> 带有 <code>correlationId</code>/<code>causationId</code>，并且
+  <code>SettlementFundingConfirmedMessage</code> 携带 <code>correlationId</code>/<code>causationId</code>，并且
   <code>settlement_plan</code> 存储 <code>correlation_id</code> 和 <code>causation_id</code> 列。的
   <code>SettlementFundingConfirmedHandler</code> 将它们复制到 <code>SettlementFunding</code> 合约中。</li>
 <li><strong>商店/库存</strong>信封不带有相关性/因果关系标头；血统是
@@ -3628,12 +3656,27 @@
             S-&gt;&gt;S: persist StoreTradeOrderCancellation (applied later)
         end
     end</code></pre>
-<h3 id="63">6.3 过期预订<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
+<h3 id="63-fulfillmentrequireverificationtrue">6.3 已完成→商店验证→已完成（当<code>fulfillment.requireVerification=true</code>时）<a class="headerlink" href="#63-fulfillmentrequireverificationtrue" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant T as Trade
+    participant S as Store
+    participant SO as Store Outbox
+    participant TO as Trade Outbox
+
+    T-&gt;&gt;T: fulfill: paid --fulfill--&gt; fulfilled (OrderWorkflowListener sets fulfilledAt)
+    S-&gt;&gt;S: StoreOrder fulfill (if accepted) -&gt; fulfilled
+    S-&gt;&gt;S: POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}&lt;br/&gt;StoreOrderService::verify() (txn) verify(code, verifiedBy) -&gt; verifiedAt
+    S-&gt;&gt;SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}
+    SO-&gt;&gt;T: app:store:outbox:publish -&gt; StoreOrderVerifiedMessage
+    T-&gt;&gt;T: (txn) StoreOrderVerifiedHandler: if can(request_verification) apply -&gt; awaiting_store_verification; if can(store_verify) apply -&gt; completed (Trade OrderWorkflowListener sets completedAt via status-driven completed)</code></pre>
+<p>Guard <code>StoreOrderWorkflowGuardListener</code> 在 <code>requireVerification=true</code> 时阻止直接 <code>fulfilled --complete--&gt; completed</code> 并允许 <code>request_verification</code> + <code>store_verify</code>。 Trade <code>OrderWorkflowListener</code> 处理状态驱动的 <code>completed</code>，因此它永远不会硬编码 <code>store_verify</code>。店铺<code>verificationCode</code>为必填项（≤64人），<code>verifiedBy</code>为代理人员<code>userUuid</code>。</p>
+<h3 id="64">6.4 过期预订<a class="headerlink" href="#64" title="Permanent link">&para;</a></h3>
 <p><code>app:inventory:reservations:release-expired</code> →
 <code>InventoryService::releaseExpiredReservations()</code> 查找过去的 <code>confirmed</code> 预订
 <code>expires_at</code> 并以原因 <code>reservation expired</code> 释放它们，从而重新进入
 上面的标准 <code>inventory.reservation.released.v1</code> 发件箱流程。</p>
-<h3 id="64">6.4 结算分配过帐<a class="headerlink" href="#64" title="Permanent link">&para;</a></h3>
+<h3 id="65">6.5 结算分配过帐<a class="headerlink" href="#65" title="Permanent link">&para;</a></h3>
 <p>结算是一个<strong>收件箱优先</strong>模块：资金确认从外部到达
 显式字段消息。</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -3678,7 +3721,7 @@ posted</code>（终端<code>cancelled</code>/<code>failed</code>/<code>reversed<
   available_at &lt;= now</code>），加上每个发件箱上的索引<code>(published_at, available_at)</code>
   表（库存附加<code>id</code>）。</li>
 <li><code>INVENTORY_ENABLED</code>环境切换决定商店是否跳过库存
-  完全并立即接受订单，或等待 <code>inventory.reservation.confirmed.v1</code>。</li>
+  完全并立即接受订单，或等待<code>inventory.reservation.confirmed.v1</code>。</li>
 </ul>
 
 

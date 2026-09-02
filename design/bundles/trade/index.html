@@ -1345,10 +1345,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-store-scoped-orders" class="md-nav__link">
+  <a href="#12-store-scoped-orders-optional-default-off" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 Store-Scoped Orders
+        1.2 Store-Scoped Orders (optional, default off)
       
     </span>
   </a>
@@ -1561,10 +1561,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62-valid-transitions" class="md-nav__link">
+  <a href="#62-valid-transitions-non-store-happy-path-store-branches" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 Valid Transitions
+        6.2 Valid Transitions (non-Store happy path + Store branches)
       
     </span>
   </a>
@@ -3175,10 +3175,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-store-scoped-orders" class="md-nav__link">
+  <a href="#12-store-scoped-orders-optional-default-off" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 Store-Scoped Orders
+        1.2 Store-Scoped Orders (optional, default off)
       
     </span>
   </a>
@@ -3391,10 +3391,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62-valid-transitions" class="md-nav__link">
+  <a href="#62-valid-transitions-non-store-happy-path-store-branches" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 Valid Transitions
+        6.2 Valid Transitions (non-Store happy path + Store branches)
       
     </span>
   </a>
@@ -3703,15 +3703,22 @@ commercial-order authority and references the Store catalog via scalar snapshots
 </tr>
 </tbody>
 </table>
-<h3 id="12-store-scoped-orders">1.2 Store-Scoped Orders<a class="headerlink" href="#12-store-scoped-orders" title="Permanent link">&para;</a></h3>
+<h3 id="12-store-scoped-orders-optional-default-off">1.2 Store-Scoped Orders (optional, default off)<a class="headerlink" href="#12-store-scoped-orders-optional-default-off" title="Permanent link">&para;</a></h3>
 <p><code>POST /api/v1/app/orders</code> remains the sole customer order entry point. A trusted
 <code>X-Store-Code</code> is resolved by the Store bundle into the Trade-owned scalar
-<code>StoreContext</code>; Trade never imports a Store entity. The order receives an <code>_store</code>
-metadata snapshot, enters <code>awaiting_store_acceptance</code>, and writes
-<code>trade.order.created.v1</code> in the same transaction.</p>
-<p><code>app:trade:outbox:publish</code> dispatches the event through Messenger. Store consumes it
-idempotently, writes its StoreOrder and result Outbox event, and Trade consumers apply
-<code>store.order.accepted.v1</code> or <code>store.order.rejected.v1</code>. The status column is
+<code>StoreContext</code>; Trade never imports a Store entity. The order always receives an <code>_store</code>
+metadata snapshot, but whether it enters the Store workflow is controlled by
+<code>Store.settings</code> (see <code>store.md §5.1.1</code>, both <code>false</code> by default):</p>
+<ul>
+<li><code>order.requireAcceptance=false</code> (default): order stays <code>draft</code> (like a plain order),
+  <code>POST /api/v1/app/orders</code> returns <code>201 Order created</code>, no <code>trade.order.created.v1</code>.</li>
+<li><code>order.requireAcceptance=true</code>: order enters <code>awaiting_store_acceptance</code>, writes
+  <code>trade.order.created.v1</code> in the same transaction and returns <code>202 Order submitted for store acceptance</code>.</li>
+</ul>
+<p><code>app:trade:outbox:publish</code> dispatches the event through Messenger when emitted. Store consumes it
+idempotently, writes its StoreOrder and result Outbox event (<code>store.order.accepted/rejected/verified</code>),
+and Trade consumers apply <code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</code> /
+<code>store.order.verified.v1</code> (latter drives <code>fulfilled --request_verification--&gt; awaiting_store_verification --store_verify--&gt; completed</code> when <code>fulfillment.requireVerification=true</code>). Guard blocking is in <code>Store/EventListener/StoreOrderWorkflowGuardListener</code>; <code>Trade/EventListener/OrderWorkflowListener</code> is status-driven for <code>completed</code> and does not hard-code Store transition names. The status column is
 <code>VARCHAR(40)</code> to support these workflow states.</p>
 <hr />
 <h2 id="2-file-structure">2. File Structure<a class="headerlink" href="#2-file-structure" title="Permanent link">&para;</a></h2>
@@ -3938,39 +3945,48 @@ and write to it as output. The contract is:</p>
 <hr />
 <h2 id="6-order-state-machine">6. Order State Machine<a class="headerlink" href="#6-order-state-machine" title="Permanent link">&para;</a></h2>
 <h3 id="61-configuration">6.1 Configuration<a class="headerlink" href="#61-configuration" title="Permanent link">&para;</a></h3>
-<p><strong>File</strong>: <code>config/packages/workflow.yaml</code></p>
+<p><strong>File</strong>: <code>config/packages/workflow.yaml</code> — two optional Store flows (both <code>false</code> by default, see <code>store.md §5.1.1</code>).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">framework</span><span class="p">:</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">workflows</span><span class="p">:</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">order</span><span class="p">:</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state_machine</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">marking_store</span><span class="p">:</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">method</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">places</span><span class="p">:</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">draft</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">confirmed</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paid</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cancelled</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refunded</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">      </span><span class="nt">transitions</span><span class="p">:</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">        </span><span class="nt">submit</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">draft -&gt; pending</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">        </span><span class="nt">confirm</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">pending -&gt; confirmed</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">        </span><span class="nt">pay</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">confirmed -&gt; paid</span>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">        </span><span class="nt">fulfill</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">paid -&gt; fulfilled</span>
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">        </span><span class="nt">complete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled -&gt; completed</span>
-<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">        </span><span class="nt">cancel</span><span class="p">:</span><span class="w">   </span><span class="p p-Indicator">[</span><span class="nv">draft</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pending</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">confirmed</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-&gt; cancelled</span>
-<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">        </span><span class="nt">refund</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">completed -&gt; refunded</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">marking_store</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">method</span><span class="p p-Indicator">,</span><span class="nt"> property</span><span class="p">:</span><span class="w"> </span><span class="nv">status</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">places</span><span class="p">:</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">draft</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">awaiting_store_acceptance</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">store_accepted</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">store_rejected</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">confirmed</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paid</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">awaiting_store_verification</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cancelled</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refunded</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nt">transitions</span><span class="p">:</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">        </span><span class="nt">submit</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">draft -&gt; pending</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">        </span><span class="nt">store_submit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">draft -&gt; awaiting_store_acceptance</span><span class="w"> </span><span class="c1"># guard: order.requireAcceptance &amp;&amp; hasStore</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">        </span><span class="nt">store_accept</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">awaiting_store_acceptance -&gt; store_accepted</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">        </span><span class="nt">store_reject</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">awaiting_store_acceptance -&gt; store_rejected</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">        </span><span class="nt">confirm</span><span class="p">:</span><span class="w">  </span><span class="p p-Indicator">[</span><span class="nv">pending</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">store_accepted</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-&gt; confirmed</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="w">        </span><span class="nt">pay</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">confirmed -&gt; paid</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="w">        </span><span class="nt">fulfill</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">paid -&gt; fulfilled</span>
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a><span class="w">        </span><span class="nt">request_verification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled -&gt; awaiting_store_verification</span><span class="w"> </span><span class="c1"># guard: fulfillment.requireVerification &amp;&amp; hasStore</span>
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a><span class="w">        </span><span class="nt">store_verify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">awaiting_store_verification -&gt; completed</span><span class="w">           </span><span class="c1"># Staff verify</span>
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a><span class="w">        </span><span class="nt">complete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fulfilled -&gt; completed</span><span class="w">                                 </span><span class="c1"># guard blocks when requireVerification</span>
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a><span class="w">        </span><span class="nt">cancel</span><span class="p">:</span><span class="w">   </span><span class="p p-Indicator">[</span><span class="nv">draft</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pending</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">awaiting_store_acceptance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">store_accepted</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">store_rejected</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">confirmed</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">fulfilled</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">awaiting_store_verification</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-&gt; cancelled</span>
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a><span class="w">        </span><span class="nt">refund</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">completed -&gt; refunded</span>
 </code></pre></div>
-<h3 id="62-valid-transitions">6.2 Valid Transitions<a class="headerlink" href="#62-valid-transitions" title="Permanent link">&para;</a></h3>
+<p>Guards live in <code>Store/EventListener/StoreOrderWorkflowGuardListener</code> (reads <code>Store.settings</code> via <code>StoreRepository</code>). Plain orders (<code>_store</code> absent) remain permissive at the workflow layer.</p>
+<h3 id="62-valid-transitions-non-store-happy-path-store-branches">6.2 Valid Transitions (non-Store happy path + Store branches)<a class="headerlink" href="#62-valid-transitions-non-store-happy-path-store-branches" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>From</th>
 <th>To</th>
 <th>Transition Name</th>
+<th>When</th>
 </tr>
 </thead>
 <tbody>
@@ -3978,54 +3994,81 @@ and write to it as output. The contract is:</p>
 <td>draft</td>
 <td>pending</td>
 <td><code>submit</code></td>
+<td>always / <code>requireAcceptance=false + hasStore</code></td>
 </tr>
 <tr>
-<td>pending</td>
+<td>draft</td>
+<td>awaiting_store_acceptance</td>
+<td><code>store_submit</code></td>
+<td><code>requireAcceptance=true + hasStore</code></td>
+</tr>
+<tr>
+<td>awaiting_store_acceptance</td>
+<td>store_accepted</td>
+<td><code>store_accept</code></td>
+<td>via <code>store.order.accepted.v1</code></td>
+</tr>
+<tr>
+<td>awaiting_store_acceptance</td>
+<td>store_rejected</td>
+<td><code>store_reject</code></td>
+<td>via <code>store.order.rejected.v1</code></td>
+</tr>
+<tr>
+<td>pending / store_accepted</td>
 <td>confirmed</td>
 <td><code>confirm</code></td>
+<td></td>
 </tr>
 <tr>
 <td>confirmed</td>
 <td>paid</td>
 <td><code>pay</code></td>
+<td></td>
 </tr>
 <tr>
 <td>paid</td>
 <td>fulfilled</td>
 <td><code>fulfill</code></td>
+<td></td>
+</tr>
+<tr>
+<td>fulfilled</td>
+<td>awaiting_store_verification</td>
+<td><code>request_verification</code></td>
+<td><code>requireVerification=true + hasStore</code></td>
+</tr>
+<tr>
+<td>awaiting_store_verification</td>
+<td>completed</td>
+<td><code>store_verify</code></td>
+<td><code>store.order.verified.v1 {verificationCode, verifiedBy}</code></td>
 </tr>
 <tr>
 <td>fulfilled</td>
 <td>completed</td>
 <td><code>complete</code></td>
+<td><code>requireVerification=false</code> or no Store</td>
 </tr>
 <tr>
-<td>draft</td>
+<td>draft/pending/.../fulfilled/awaiting_store_verification</td>
 <td>cancelled</td>
 <td><code>cancel</code></td>
-</tr>
-<tr>
-<td>pending</td>
-<td>cancelled</td>
-<td><code>cancel</code></td>
-</tr>
-<tr>
-<td>confirmed</td>
-<td>cancelled</td>
-<td><code>cancel</code></td>
+<td></td>
 </tr>
 <tr>
 <td>completed</td>
 <td>refunded</td>
 <td><code>refund</code></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 <h3 id="63-workflow-listener">6.3 Workflow Listener<a class="headerlink" href="#63-workflow-listener" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="x">class OrderWorkflowListener</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="x">{</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">    // On cancel transition -&gt; set cancelledAt = now</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">    // On complete transition -&gt; set completedAt = now</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="x">    // On cancel/paying/fulfill/refund -&gt; set timestamps per transition</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="x">    // On *landed in* completed (complete via Trade OR store_verify via Store) -&gt; set completedAt + dispatch OrderCompletedEvent (status-driven, no Store transition name)</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="x">}</span>
 </code></pre></div>
 <hr />

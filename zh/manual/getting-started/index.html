@@ -3152,46 +3152,46 @@ nginx 背后的功能（请参阅 <code>docker/nginx/default.conf</code> 了解�
 <table>
 <thead>
 <tr>
-<th>Symptom</th>
-<th>Likely cause</th>
-<th>Fix</th>
+<th>症状</th>
+<th>可能的原因</th>
+<th>修复</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Doctrine\DBAL\Exception\DriverException: could not find driver</code></td>
-<td>The <code>pdo_mysql</code> PHP extension is missing</td>
-<td>Check <code>php -m \| grep -i mysql</code>. On macOS Homebrew: <code>brew install php</code> bundles it; ensure <code>/opt/homebrew/opt/php/bin/php</code> is first on <code>PATH</code></td>
+<td>缺少 <code>pdo_mysql</code> PHP 扩展</td>
+<td>检查<code>php -m \| grep -i mysql</code>。在 macOS Homebrew 上：<code>brew install php</code> 捆绑它；确保 <code>/opt/homebrew/opt/php/bin/php</code> 位于 <code>PATH</code> 的第一位</td>
 </tr>
 <tr>
-<td><code>JWT ... key not found</code> / 401 on protected routes</td>
-<td>JWT keys not generated, or paths mismatch <code>.env.local</code></td>
-<td>Run the openssl commands above and verify <code>JWT_PRIVATE_KEY_PATH</code> / <code>JWT_PUBLIC_KEY_PATH</code> are absolute and point at existing PEM files</td>
+<td><code>JWT ... key not found</code> / 401 受保护的路由</td>
+<td>JWT 密钥未生成，或路径不匹配 <code>.env.local</code></td>
+<td>运行上面的 openssl 命令并验证 <code>JWT_PRIVATE_KEY_PATH</code> / <code>JWT_PUBLIC_KEY_PATH</code> 是绝对的并指向现有的 PEM 文件</td>
 </tr>
 <tr>
-<td><code>Permission denied</code> when the app reads the private key</td>
-<td>Private key mode too open</td>
-<td><code>chmod 600 var/jwt/jwt_private.pem</code> (it is git-ignored)</td>
+<td><code>Permission denied</code> 当应用程序读取私钥时</td>
+<td>私钥模式太开放</td>
+<td><code>chmod 600 var/jwt/jwt_private.pem</code> （它被 git 忽略）</td>
 </tr>
 <tr>
 <td><code>Address already in use: 8080</code> / <code>8000</code></td>
-<td>Another process occupies the port</td>
-<td><code>docker compose</code> — set <code>APP_PORT=8090 docker compose up -d</code>; native — pick another port, e.g. <code>php -S localhost:8001 -t public/</code></td>
+<td>另一个进程占用了端口</td>
+<td><code>docker compose</code> — 设置<code>APP_PORT=8090 docker compose up -d</code>；本机 - 选择另一个端口，例如<code>php -S localhost:8001 -t public/</code></td>
 </tr>
 <tr>
-<td><code>php</code> is an old version (e.g. 7.4) on macOS</td>
-<td>Homebrew <code>php</code> not linked/first</td>
-<td>Run <code>/opt/homebrew/opt/php/bin/php bin/console ...</code> or <code>PATH="/opt/homebrew/opt/php/bin:$PATH" php ...</code></td>
+<td><code>php</code> 是 macOS 上的旧版本（例如 7.4）</td>
+<td>自制 <code>php</code> 未链接/第一个</td>
+<td>运行 <code>/opt/homebrew/opt/php/bin/php bin/console ...</code> 或 <code>PATH="/opt/homebrew/opt/php/bin:$PATH" php ...</code></td>
 </tr>
 <tr>
-<td>Migrations fail with <code>Unknown database 'app'</code></td>
-<td>Database not created</td>
-<td><code>docker compose exec app php bin/console doctrine:database:create</code> (native: run the same without <code>exec</code>)</td>
+<td>迁移失败并显示 <code>Unknown database 'app'</code></td>
+<td>数据库未创建</td>
+<td><code>docker compose exec app php bin/console doctrine:database:create</code>（本机：在没有 <code>exec</code> 的情况下运行相同的操作）</td>
 </tr>
 <tr>
-<td>Mail not arriving</td>
-<td>Mailpit not running or wrong DSN</td>
-<td>Native: start Mailpit (<code>docker compose up -d mailer</code>) and use <code>MAILER_DSN=smtp://127.0.0.1:1025</code>; check the UI at <code>http://localhost:8025</code></td>
+<td>邮件未到达</td>
+<td>Mailpit 未运行或 DSN 错误</td>
+<td>Native：启动Mailpit（<code>docker compose up -d mailer</code>）并使用<code>MAILER_DSN=smtp://127.0.0.1:1025</code>；检查 UI <code>http://localhost:8025</code></td>
 </tr>
 </tbody>
 </table>

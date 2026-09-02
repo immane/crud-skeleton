@@ -27,7 +27,7 @@
     
     
       
-        <title>Trade (core: entity/service/workflow/repo/command/listener) test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09） - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#trade-core-entityserviceworkflowrepocommandlistener-test-audit-2026-08-09" class="md-skip">
+        <a href="#traderepo2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Trade (core: entity/service/workflow/repo/command/listener) test audit (2026-08-09)
+              Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09）
             
           </span>
         </div>
@@ -2608,10 +2608,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Summary
+        总结
       
     </span>
   </a>
@@ -2619,10 +2619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#keep" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        KEEP
+        保留
       
     </span>
   </a>
@@ -2630,10 +2630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delete-candidates" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DELETE CANDIDATES
+        删除候选者
       
     </span>
   </a>
@@ -2641,10 +2641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -2652,10 +2652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -2682,151 +2682,151 @@
   
 
 
-<h1 id="trade-core-entityserviceworkflowrepocommandlistener-test-audit-2026-08-09">Trade (core: entity/service/workflow/repo/command/listener) test audit (2026-08-09)<a class="headerlink" href="#trade-core-entityserviceworkflowrepocommandlistener-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Read-only audit of <code>tests/Trade/Entity</code>, <code>tests/Trade/Service</code>, <code>tests/Trade/Service/Pricing</code>,
-<code>tests/Trade/Pricing</code>, <code>tests/Trade/Workflow</code>, <code>tests/Trade/Repository</code>,
-<code>tests/Trade/Command</code>, and <code>tests/Trade/EventListener</code>. Cross-read against
-<code>src/Trade/</code> and the integration suite (<code>tests/Trade/Integration/OrderWorkflowApiTest.php</code>,
-<code>TradeRepoFullTest.php</code>, <code>TradeRepositoryIntegrationTest.php</code>).</p>
-<p>All findings assume the files flagged for deletion are removed AFTER confirming zero
-coverage delta on <code>src/Trade/</code> (see Verification steps). Skipped tests that document known
-bugs (<code>docs/issues/coverage-2026-08-09/README.md</code>) are KEEP.</p>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<h1 id="traderepo2026-08-09">Trade（核心：实体/服务/工作流/repo/命令/监听器）测试审计（2026-08-09）<a class="headerlink" href="#traderepo2026-08-09" title="Permanent link">&para;</a></h1>
+<p><code>tests/Trade/Entity</code>、<code>tests/Trade/Service</code>、<code>tests/Trade/Service/Pricing</code>、的只读审计
+<code>tests/Trade/Pricing</code>、<code>tests/Trade/Workflow</code>、<code>tests/Trade/Repository</code>、
+<code>tests/Trade/Command</code>和<code>tests/Trade/EventListener</code>。交叉阅读反对
+<code>src/Trade/</code> 和集成套件 (<code>tests/Trade/Integration/OrderWorkflowApiTest.php</code>,
+<code>TradeRepoFullTest.php</code>、<code>TradeRepositoryIntegrationTest.php</code>）。</p>
+<p>所有结果均假设标记为删除的文件在确认为零后被删除
+<code>src/Trade/</code> 的覆盖范围增量（请参阅验证步骤）。跳过已知记录的测试
+bug (<code>docs/issues/coverage-2026-08-09/README.md</code>) 被保留。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>tests/Trade/Entity/OrderTest.php</td>
+<td>测试/贸易/实体/OrderTest.php</td>
 <td>18</td>
-<td>KEEP core (constructor defaults, money/currency, collections, lifecycle); DELETE 8 trivial accessor/constant tests</td>
+<td>18 KEEP 核心（构造函数默认值、货币/货币、集合、生命周期）；删除 8 个简单的访问器/常量测试</td>
 </tr>
 <tr>
-<td>tests/Trade/Entity/OrderItemTest.php</td>
+<td>测试/贸易/实体/OrderItemTest.php</td>
 <td>12</td>
-<td>KEEP snapshot/price/quantity logic; DELETE ~4 trivial setter/fluency tests + 1 duplicate</td>
+<td>12保留快照/价格/数量逻辑；删除 ~4 个简单的二传手/流畅度测试 + 1 个重复</td>
 </tr>
 <tr>
-<td>tests/Trade/Entity/ProductTest.php</td>
+<td>测试/贸易/实体/ProductTest.php</td>
 <td>11</td>
-<td>KEEP status validation + collection/lifecycle; DELETE ~5 trivial accessor tests</td>
+<td>11 KEEP状态验证+收集/生命周期；删除 ~5 个简单的访问器测试</td>
 </tr>
 <tr>
-<td>tests/Trade/Entity/SpecificationTest.php</td>
+<td>测试/贸易/实体/SpecificationTest.php</td>
 <td>11</td>
-<td>KEEP price/status validation; DELETE ~6 trivial accessor tests</td>
+<td>11保持价格/状态验证；删除 ~6 个简单的访问器测试</td>
 </tr>
 <tr>
-<td>tests/Trade/Entity/TradeOutboxMessageTest.php</td>
+<td>测试/贸易/实体/TradeOutboxMessageTest.php</td>
 <td>5</td>
-<td>DELETE candidates: 4/5 trivial accessors; keep availableAt==occurredAt invariant</td>
+<td>删除候选者：4/5 普通访问器；保持 availableAt==occurredAt 不变</td>
 </tr>
 <tr>
-<td>tests/Trade/Service/OrderServiceTest.php</td>
+<td>测试/贸易/服务/OrderServiceTest.php</td>
 <td>13</td>
-<td>KEEP (core pricing pipeline + pay/refund/fulfill behavior)</td>
+<td>KEEP（核心定价管道+支付/退款/履行行为）</td>
 </tr>
 <tr>
-<td>tests/Trade/Service/OrderServicePaymentsTest.php</td>
+<td>测试/贸易/服务/OrderServicePaymentsTest.php</td>
 <td>28</td>
-<td>KEEP payment/refund/createOrder orchestration + store-submit; DELETE ~6 defensive-guard/impl tests</td>
+<td>28 KEEP付款/退款/创建订单编排+商店提交；删除 ~6 次防守/impl 测试</td>
 </tr>
 <tr>
-<td>tests/Trade/Service/Pricing/PriceCalculationResultTest.php</td>
+<td>测试/贸易/服务/定价/PriceCalculationResultTest.php</td>
 <td>5</td>
-<td>MERGE candidate (trivial DTO, duplicated by PricingTest)</td>
+<td>MERGE 候选者（简单的 DTO，由 PricingTest 复制）</td>
 </tr>
 <tr>
-<td>tests/Trade/Pricing/PricingTest.php</td>
+<td>测试/贸易/定价/PricingTest.php</td>
 <td>17</td>
-<td>KEEP calculator/pipeline logic; DELETE ~5 trivial context/result tests</td>
+<td>17保留计算器/管道逻辑；删除 ~5 个琐碎的上下文/结果测试</td>
 </tr>
 <tr>
-<td>tests/Trade/Workflow/OrderWorkflowStateMachineTest.php</td>
+<td>测试/贸易/工作流程/OrderWorkflowStateMachineTest.php</td>
 <td>26</td>
-<td>KEEP transition matrix + guard-absence probes; DELETE ~13 duplicate chain/timestamp tests</td>
+<td>26 KEEP 转移矩阵 + 保护缺失探针；删除 ~13 个重复的链/时间戳测试</td>
 </tr>
 <tr>
-<td>tests/Trade/Repository/ProductRepositoryTest.php</td>
+<td>测试/贸易/存储库/ProductRepositoryTest.php</td>
 <td>2</td>
-<td>DELETE file (trivial <code>find()</code> delegation; real repo logic covered in integration)</td>
+<td>删除文件（简单的 <code>find()</code> 委托；集成中涵盖了真正的存储库逻辑）</td>
 </tr>
 <tr>
-<td>tests/Trade/Repository/SpecificationRepositoryTest.php</td>
+<td>测试/贸易/存储库/SpecificationRepositoryTest.php</td>
 <td>4</td>
-<td>KEEP <code>findByIdForUpdate</code> (lock SQL); DELETE <code>findById</code> trivial pair</td>
+<td>KEEP <code>findByIdForUpdate</code>（锁定SQL）；删除 <code>findById</code> 平凡对</td>
 </tr>
 <tr>
-<td>tests/Trade/Repository/TradeOutboxMessageRepositoryTest.php</td>
+<td>测试/贸易/存储库/TradeOutboxMessageRepositoryTest.php</td>
 <td>13</td>
-<td>KEEP (real-DB outbox semantics + command; 2 skipped bug-doc tests)</td>
+<td>KEEP（真实数据库发件箱语义 + 命令；2 个跳过的错误文档测试）</td>
 </tr>
 <tr>
-<td>tests/Trade/Command/PublishOutboxCommandTest.php</td>
+<td>测试/贸易/命令/PublishOutb​​oxCommandTest.php</td>
 <td>8</td>
-<td>MERGE/DUPLICATE candidates vs TradeOutboxMessageRepositoryTest</td>
+<td>合并/重复候选者与 TradeOutboxMessageRepositoryTest</td>
 </tr>
 <tr>
-<td>tests/Trade/EventListener/OrderWorkflowListenerTest.php</td>
+<td>测试/Trade/EventListener/OrderWorkflowListenerTest.php</td>
 <td>15</td>
-<td>KEEP outbox-recording branch tests; timestamp tests duplicate state-machine file</td>
+<td>15 KEEP 发件箱记录分支测试；时间戳测试重复状态机文件</td>
 </tr>
 <tr>
-<td>tests/Trade/EventListener/OrderInvoiceListenerTest.php</td>
+<td>测试/Trade/EventListener/OrderInvoiceListenerTest.php</td>
 <td>21</td>
-<td>KEEP (core invoice→order propagation; skipped payer bug test)</td>
+<td>21 KEEP（核心发票→订单传播；跳过付款人错误测试）</td>
 </tr>
 </tbody>
 </table>
-<h2 id="keep">KEEP<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
+<h2 id="_2">保留<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Pricing &amp; snapshot behavior</strong> — <code>OrderServiceTest::testPricingCalculations</code> (5-case DP),
-  <code>testCalculatePricesDelegatesToPipeline/WithCustomCurrency/WithEmptyItems</code>;
-  <code>OrderItemTest::testPrePersist*</code> (snapshot population + price calc);
-  <code>PricingTest</code> calculator tests (<code>BasePriceCalculator</code> not-found/deleted/inactive/
-  product-unavailable throws, default quantity, <code>QuantityCalculator</code>, <code>TotalAggregator</code>,
-  <code>PipelineExecutionOrder</code>, <code>PipelineHandlesMultipleItemsWithDifferentPrices</code>).</li>
-<li><strong>Money movement</strong> — <code>OrderServiceTest::testPayTransfersFromUserWalletAndMarksPayment</code>,
-  <code>testRefundTransfersToUserWalletAndMarksRefund</code>, status guards
-  (<code>testPayRejectsNonConfirmedOrder</code>, <code>testRefundRejectsNonCompletedOrder</code>,
-  <code>testFulfillRejectsNonPaidOrder</code>), <code>testFulfillStoresShippingData</code>.</li>
-<li><strong>Payment orchestration</strong> — <code>OrderServicePaymentsTest</code>: <code>createOrder</code> store-submit/outbox
-  path, <code>createPayment</code> (reuse/new-invoice), <code>refundPayment</code> (remaining amount),
-  <code>cancel</code> variants, and <code>testCreatePaymentReusesInvoiceRegardlessOfItsStatus</code>
-  (passes today, pins known Bug #1). <code>testCreatePaymentCreatesFreshInvoiceWhenExistingInvoiceIsNotPayable</code> (skipped) = KEEP.</li>
-<li><strong>Workflow matrix + guard findings</strong> — <code>OrderWorkflowStateMachineTest</code>:
-  <code>testEnabledTransitionsMatchWorkflowConfig</code> (all 11 states),
+<li><strong>定价和快照行为</strong> - <code>OrderServiceTest::testPricingCalculations</code>（5-case DP），
+  <code>testCalculatePricesDelegatesToPipeline/WithCustomCurrency/WithEmptyItems</code>；
+  <code>OrderItemTest::testPrePersist*</code>（快照人口+价格计算）；
+  <code>PricingTest</code> 计算器测试 (<code>BasePriceCalculator</code> not-found/deleted/inactive/
+  产品不可用抛出，默认数量，<code>QuantityCalculator</code>，<code>TotalAggregator</code>，
+  <code>PipelineExecutionOrder</code>、<code>PipelineHandlesMultipleItemsWithDifferentPrices</code>)。</li>
+<li><strong>货币流动</strong> — <code>OrderServiceTest::testPayTransfersFromUserWalletAndMarksPayment</code>，
+  <code>testRefundTransfersToUserWalletAndMarksRefund</code>，状态守卫
+  （<code>testPayRejectsNonConfirmedOrder</code>、<code>testRefundRejectsNonCompletedOrder</code>、
+  <code>testFulfillRejectsNonPaidOrder</code>), <code>testFulfillStoresShippingData</code>。</li>
+<li><strong>支付编排</strong> — <code>OrderServicePaymentsTest</code>: <code>createOrder</code> 商店提交/发件箱
+  路径，<code>createPayment</code>（重用/新发票），<code>refundPayment</code>（剩余金额），
+  <code>cancel</code> 变体，以及 <code>testCreatePaymentReusesInvoiceRegardlessOfItsStatus</code>
+  （今天通过，引脚已知 Bug #1）。 <code>testCreatePaymentCreatesFreshInvoiceWhenExistingInvoiceIsNotPayable</code>（跳过）= 保留。</li>
+<li><strong>工作流程矩阵 + 警卫发现</strong> — <code>OrderWorkflowStateMachineTest</code>：
+  <code>testEnabledTransitionsMatchWorkflowConfig</code>（所有 11 个州），
   <code>testApplyingValidTransitionMovesToTargetState</code> (15), <code>testApplyingInvalidTransitionThrowsAndLeavesStateUnchanged</code>
-  (~40), unknown-transition/<code>can()</code> probes, <code>testNoTransitionInWorkflowConfigDeclaresAGuard</code>
-  and the three <code>testWorkflowLayerAllows*</code> probes (document Bug #68: no guards in workflow.yaml),
-  <code>testOrderEntityExposesMarkingViaGetStatusSetStatus</code>.</li>
-<li><strong>Outbox repository (real DB)</strong> — <code>TradeOutboxMessageRepositoryTest</code>: <code>findUnpublished</code>
-  (filtering/order/limit), <code>claim</code> (double-claim, published, future <code>availableAt</code>, unknown id),
-  <code>defer</code> (attempts/lastError/availableAt, accumulate, already-published), the two
-  <code>testPublishOutboxCommand*AgainstRealDatabase</code> command tests, and the two skipped
-  <code>markTestSkipped</code> bug-doc tests (Bug #1 no max-attempts, Bug #2 metadata not cleared).</li>
-<li><strong>Listeners</strong> — <code>OrderInvoiceListenerTest</code> (all 21, incl. <code>testPaidIgnoresInvoicePaidByADifferentPayer</code>
-  skipped Bug #22, amount/currency mismatch guards, refunded/cancelled/failed propagation);
+  (~40)，未知转换/<code>can()</code> 探针，<code>testNoTransitionInWorkflowConfigDeclaresAGuard</code>
+  和三个 <code>testWorkflowLayerAllows*</code> 探针（文档 Bug #68：workflow.yaml 中没有防护），
+  <code>testOrderEntityExposesMarkingViaGetStatusSetStatus</code>。</li>
+<li><strong>发件箱存储库（真实数据库）</strong> — <code>TradeOutboxMessageRepositoryTest</code>：<code>findUnpublished</code>
+  （过滤/排序/限制），<code>claim</code>（双重声明，已发布，未来<code>availableAt</code>，未知id），
+  <code>defer</code>（attempts/lastError/availableAt，累积，已发布），这两个
+  <code>testPublishOutboxCommand*AgainstRealDatabase</code>命令测试，两个都跳过
+  <code>markTestSkipped</code> bug-doc 测试（Bug #1 没有最大尝试次数，Bug #2 元数据未清除）。</li>
+<li><strong>听众</strong> — <code>OrderInvoiceListenerTest</code>（全部 21 个，包括 <code>testPaidIgnoresInvoicePaidByADifferentPayer</code>
+  跳过 Bug #22、金额/货币不匹配防护、退款/取消/传播失败）；
   <code>OrderWorkflowListenerTest::testCancelTransitionRecordsOutboxMessageWhenStoreMetadataPresent</code>
-  and the three store-metadata skip variants + <code>testNonCancelTransitionDoesNotRecordOutboxEvenWithStoreMetadata</code>
-  (unique outbox-recording branches).</li>
-<li><strong>Entity domain rules</strong> — <code>OrderTest::testCurrencyIsUpperCase</code> (strtoupper),
-  <code>testOrderItemRelationships</code>/<code>testAddOrderItemDoesNotDuplicate</code>,
-  <code>testPrePersist</code>/<code>testTouch</code>; <code>ProductTest::testStatusValidation</code>,
-  <code>testSpecificationRelationships</code>/<code>testAddSpecificationDoesNotDuplicate</code>,
-  <code>testPrePersistInitializesCreatedAtWhenConstructorWasSkipped</code>/<code>KeepsCreatedAtWhenAlreadySet</code>;
-  <code>SpecificationTest::testPriceValidation</code>/<code>testStatusValidation</code>;
-  <code>OrderItemTest::testQuantityValidation</code>, <code>testCostAndProfit</code>.</li>
-<li><strong>Repository locking</strong> — <code>SpecificationRepositoryTest::testFindByIdForUpdateReturnsSpecification</code>
-  and <code>ReturnsNullForUnknownId</code> (pessimistic-write SQL is real, DB-backed behavior).</li>
+  以及三个存储元数据跳过变体 + <code>testNonCancelTransitionDoesNotRecordOutboxEvenWithStoreMetadata</code>
+  （独特的发件箱记录分支）。</li>
+<li><strong>实体域规则</strong> — <code>OrderTest::testCurrencyIsUpperCase</code> (strtoupper),
+  <code>testOrderItemRelationships</code>/<code>testAddOrderItemDoesNotDuplicate</code>，
+  <code>testPrePersist</code>/<code>testTouch</code>； <code>ProductTest::testStatusValidation</code>,
+  <code>testSpecificationRelationships</code>/<code>testAddSpecificationDoesNotDuplicate</code>，
+  <code>testPrePersistInitializesCreatedAtWhenConstructorWasSkipped</code>/<code>KeepsCreatedAtWhenAlreadySet</code>；
+  <code>SpecificationTest::testPriceValidation</code>/<code>testStatusValidation</code>；
+  <code>OrderItemTest::testQuantityValidation</code>、<code>testCostAndProfit</code>。</li>
+<li><strong>存储库锁定</strong> — <code>SpecificationRepositoryTest::testFindByIdForUpdateReturnsSpecification</code>
+  和 <code>ReturnsNullForUnknownId</code> （悲观写入 SQL 是真实的、数据库支持的行为）。</li>
 </ul>
-<h2 id="delete-candidates">DELETE CANDIDATES<a class="headerlink" href="#delete-candidates" title="Permanent link">&para;</a></h2>
-<p>Reason codes: 1=COVERAGE-CHASING, 2=DUPLICATE, 3=IMPLEMENTATION-DETAIL, 4=REDUNDANT-REGRESSION, 5=NEAR-EMPTY.</p>
+<h2 id="_3">删除候选者<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>原因代码：1=覆盖范围追踪、2=重复、3=实施详细信息、4=冗余回归、5=接近空。</p>
 <table>
 <thead>
 <tr>
@@ -3115,31 +3115,31 @@ bugs (<code>docs/issues/coverage-2026-08-09/README.md</code>) are KEEP.</p>
 </tr>
 </tbody>
 </table>
-<p>Note on <code>OrderWorkflowStateMachineTest</code> timestamp tests (rows 27–36): either file may be kept,
-but the timestamp behavior is asserted identically in <code>OrderWorkflowListenerTest</code>. Recommendation:
-keep <code>OrderWorkflowStateMachineTest</code>'s transition matrix/guard probes and delete its Section-5
-timestamp duplicates; wiring is still verified by the happy-path chain. Keep the outbox-recording
-tests in <code>OrderWorkflowListenerTest</code> (unique). Do NOT delete both copies.</p>
-<p>Note on <code>PublishOutboxCommandTest::testExecutePublishesCreatedMessageWithFullEnvelope</code>: it asserts
-the full envelope (eventId/type/version/occurredAt/correlationId) which the integration test only
-partially checks; before deleting, fold those envelope-field assertions into
-<code>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase</code>.</p>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<p>关于 <code>OrderWorkflowStateMachineTest</code> 时间戳测试的注意事项（第 27-36 行）：可以保留任一文件，
+但时间戳行为在 <code>OrderWorkflowListenerTest</code> 中断言是相同的。推荐：
+保留<code>OrderWorkflowStateMachineTest</code>的转换矩阵/保护探针并删除其Section-5
+时间戳重复；接线仍然由 happy-path 链验证。保留发件箱录音
+在 <code>OrderWorkflowListenerTest</code> 中进行测试（唯一）。不要删除两个副本。</p>
+<p>注意 <code>PublishOutboxCommandTest::testExecutePublishesCreatedMessageWithFullEnvelope</code>：它断言
+仅集成测试的完整信封（eventId/type/version/occurredAt/correlationId）
+部分检查；在删除之前，将这些信封字段断言折叠到
+<code>TradeOutboxMessageRepositoryTest::testPublishOutboxCommandRunsAgainstRealDatabase</code>。</p>
+<h2 id="_4">合并建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong><code>OrderServicePaymentsTest.php</code> → <code>OrderServiceTest.php</code></strong> — both test <code>src/Trade/Service/OrderService.php</code>
-   with the same reflection-based construction helper. The split was campaign-artificial (the file
-   header even says "branches not exercised by OrderServiceTest"). Consolidate into one file.</li>
-<li><strong><code>PriceCalculationResultTest.php</code> → <code>tests/Trade/Pricing/PricingTest.php</code></strong> — the result DTO
-   is a value object (<code>PriceCalculationResult::fromContext</code> is a plain copy); keep the meta-copying
-   assertions, drop the duplicated constructor assertions.</li>
-<li><strong><code>PublishOutboxCommandTest.php</code> → <code>TradeOutboxMessageRepositoryTest.php</code></strong> — the mock-only command
-   tests duplicate the real-DB command tests; fold the envelope-field assertions into the integration
-   test and delete the mock file.</li>
-<li><strong><code>OrderWorkflowStateMachineTest</code> Section-5 timestamp tests ↔ <code>OrderWorkflowListenerTest</code></strong> —
-   keep one layer for timestamp side effects (see note above).</li>
+<li><strong><code>OrderServicePaymentsTest.php</code> → <code>OrderServiceTest.php</code></strong> — 均测试 <code>src/Trade/Service/OrderService.php</code>
+   使用相同的基于反射的构造助手。这次分裂是竞选人为的（文件
+   标头甚至显示“OrderServiceTest 未执行的分支”）。合并为一个文件。</li>
+<li><strong><code>PriceCalculationResultTest.php</code> → <code>tests/Trade/Pricing/PricingTest.php</code></strong> — 结果DTO
+   是一个值对象（<code>PriceCalculationResult::fromContext</code>是一个普通副本）；保留元复制
+   断言，删除重复的构造函数断言。</li>
+<li><strong><code>PublishOutboxCommandTest.php</code> → <code>TradeOutboxMessageRepositoryTest.php</code></strong> — 仅模拟命令
+   测试重复真实数据库命令测试；将信封字段断言折叠到积分中
+   测试并删除模拟文件。</li>
+<li><strong><code>OrderWorkflowStateMachineTest</code> 第 5 节时间戳测试 ↔ <code>OrderWorkflowListenerTest</code></strong> —
+   保留一层以防止时间戳副作用（参见上面的注释）。</li>
 </ol>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>Run from the repo root. Read-only for <code>src/</code> and <code>tests/</code>; only the report file is written.</p>
+<h2 id="_5">验证步骤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>从存储库根运行。 <code>src/</code>和<code>tests/</code>为只读；仅写入报告文件。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">PHP</span><span class="o">=</span>/opt/homebrew/opt/php@8.5/bin/php
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># 1. Baseline: full suite + Trade coverage BEFORE any deletion</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nv">XDEBUG_MODE</span><span class="o">=</span>coverage<span class="w"> </span><span class="s2">"</span><span class="nv">$PHP</span><span class="s2">"</span><span class="w"> </span>./vendor/bin/phpunit<span class="w"> </span>--coverage-html<span class="w"> </span>var/coverage-before-trade-audit
@@ -3159,9 +3159,9 @@ partially checks; before deleting, fold those envelope-field assertions into
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># 5. Full serial suite on the CI database flavour (PostgreSQL) to prove no ordering leak:</span>
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s2">"</span><span class="nv">$PHP</span><span class="s2">"</span><span class="w"> </span>./vendor/bin/phpunit
 </code></pre></div>
-<p>Compare <code>var/coverage-before-trade-audit</code> vs <code>var/coverage-after-trade-audit</code> for <code>src/Trade</code>
-(expect identical line/method numbers). If a <code>src/Trade</code> line loses coverage, that test is NOT
-redundant — restore it.</p>
+<p>比较 <code>var/coverage-before-trade-audit</code> 与 <code>var/coverage-after-trade-audit</code> 的 <code>src/Trade</code>
+（期望相同的行/方法号）。如果 <code>src/Trade</code> 线路失去覆盖范围，则该测试不是
+多余的——恢复它。</p>
 
 
 

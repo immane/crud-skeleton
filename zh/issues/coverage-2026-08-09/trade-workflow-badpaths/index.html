@@ -27,7 +27,7 @@
     
     
       
-        <title>Trade Order Workflow — State Machine & Bad-Path Coverage Report - CRUD Skeleton</title>
+        <title>交易订单工作流程 — 状态机和不良路径覆盖率报告 - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#trade-order-workflow-state-machine-bad-path-coverage-report" class="md-skip">
+        <a href="#_1" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Trade Order Workflow — State Machine &amp; Bad-Path Coverage Report
+              交易订单工作流程 — 状态机和不良路径覆盖率报告
             
           </span>
         </div>
@@ -2608,10 +2608,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#test-files-added" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Test files added
+        添加测试文件
       
     </span>
   </a>
@@ -2619,10 +2619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coverage-results" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Coverage results
+        覆盖结果
       
     </span>
   </a>
@@ -2630,10 +2630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-each-group-covers" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What each group covers
+        每组涵盖的内容
       
     </span>
   </a>
@@ -2641,22 +2641,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bugs-found" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bugs found
+        发现错误
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Bugs found">
+    <nav class="md-nav" aria-label="发现错误">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#finding-1-the-order-workflow-has-no-guard-rules-dotransition-lets-an-admin-run-the-whole-paid-lifecycle-without-payment-medium-high" class="md-nav__link">
+  <a href="#1-dotransition-" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Finding 1 — The order workflow has NO guard rules; /do/{transition} lets an admin run the whole paid lifecycle without payment (MEDIUM-HIGH)
+        发现 1 — 订单工作流程没有保护规则； /do/{transition} 让管理员无需付费即可运行整个付费生命周期（中-高）
       
     </span>
   </a>
@@ -2746,7 +2746,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         已验证的非错误（已调查并清除）
@@ -2757,7 +2757,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         最终测试运行
@@ -2787,138 +2787,138 @@
   
 
 
-<h1 id="trade-order-workflow-state-machine-bad-path-coverage-report">Trade Order Workflow — State Machine &amp; Bad-Path Coverage Report<a class="headerlink" href="#trade-order-workflow-state-machine-bad-path-coverage-report" title="Permanent link">&para;</a></h1>
+<h1 id="_1">交易订单工作流程 — 状态机和不良路径覆盖率报告<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <ul>
-<li>Date: 2026-08-09</li>
-<li>Scope: <code>config/packages/workflow.yaml</code> (order state machine), <code>src/Trade/Entity/Order.php</code>, <code>src/Trade/Service/OrderService.php</code>, <code>src/Trade/EventListener/OrderWorkflowListener.php</code>, <code>src/Trade/Controller/App/OrderController.php</code>, <code>src/Trade/Controller/Manage/OrderController.php</code>, plus the HTTP endpoints they expose.</li>
-<li>Task: exhaustively exercise every order workflow transition (all states, guards, bad paths), find bugs.</li>
-<li>Constraint honored: <strong>nothing under <code>src/</code> was modified</strong>. Only new test files under <code>tests/</code> and this report were added.</li>
+<li>日期：2026-08-09</li>
+<li>范围：<code>config/packages/workflow.yaml</code>（订单状态机）、<code>src/Trade/Entity/Order.php</code>、<code>src/Trade/Service/OrderService.php</code>、<code>src/Trade/EventListener/OrderWorkflowListener.php</code>、<code>src/Trade/Controller/App/OrderController.php</code>、<code>src/Trade/Controller/Manage/OrderController.php</code>以及它们公开的 HTTP 端点。</li>
+<li>任务：详尽地练习每个订单工作流程转换（所有状态、防护、不良路径），查找错误。</li>
+<li>遵守约束：<strong><code>src/</code> 下的任何内容均未修改</strong>。仅添加了 <code>tests/</code> 下的新测试文件和此报告。</li>
 </ul>
-<h2 id="test-files-added">Test files added<a class="headerlink" href="#test-files-added" title="Permanent link">&para;</a></h2>
-<p>All new files use <code>declare(strict_types=1);</code>.</p>
+<h2 id="_2">添加测试文件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>所有新文件都使用<code>declare(strict_types=1);</code>。</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Namespace</th>
-<th>Kind</th>
-<th>Covers</th>
+<th>文件</th>
+<th>命名空间</th>
+<th>亲切</th>
+<th>封面</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tests/Trade/Workflow/OrderWorkflowStateMachineTest.php</code></td>
 <td><code>App\Tests\Trade\Workflow</code></td>
-<td><code>KernelTestCase</code> (real container service <code>state_machine.order</code>, no DB)</td>
-<td>The full order state machine: every transition from every state, invalid/duplicate/unknown transitions, enabled-transition listing, listener timestamp side-effects, guard absence probes</td>
+<td><code>KernelTestCase</code>（真正的容器服务<code>state_machine.order</code>，无DB）</td>
+<td>全序状态机：每个状态的每个转换、无效/重复/未知转换、启用转换列表、侦听器时间戳副作用、守卫缺席探测</td>
 </tr>
 <tr>
 <td><code>tests/Trade/Integration/OrderWorkflowApiTest.php</code></td>
 <td><code>App\Tests\Trade\Integration</code></td>
 <td><code>WebTestCase</code> + <code>IntegrationWebTestCase</code> + <code>DatabaseBootstrapTrait</code></td>
-<td>End-to-end HTTP: manage <code>pay/fulfill/refund/todo/transitions/do/{transition}</code>, app <code>submit/confirm/cancel</code>, guard rejections, not-found, duplicate/unknown transitions, wallet transfers, status-reset route</td>
+<td>端到端 HTTP：管理 <code>pay/fulfill/refund/todo/transitions/do/{transition}</code>、应用程序 <code>submit/confirm/cancel</code>、防护拒绝、未找到、重复/未知转换、钱包转账、状态重置路由</td>
 </tr>
 </tbody>
 </table>
-<h2 id="coverage-results">Coverage results<a class="headerlink" href="#coverage-results" title="Permanent link">&para;</a></h2>
-<p>Generated with <code>XDEBUG_MODE=coverage</code> over both files (clover merged). Incremental line coverage on <code>src/Trade/**</code> exercised by the two new files:</p>
+<h2 id="_3">覆盖结果<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>使用 <code>XDEBUG_MODE=coverage</code> 在两个文件上生成（clover 合并）。两个新文件对 <code>src/Trade/**</code> 执行的增量行覆盖：</p>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Lines (covered/total)</th>
-<th>Coverage</th>
+<th>文件</th>
+<th>行数（涵盖/总计）</th>
+<th>覆盖范围</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>src/Trade/EventListener/OrderWorkflowListener.php</code></td>
 <td>86/102</td>
-<td><strong>84.3%</strong></td>
+<td>86/102 <strong>84.3%</strong></td>
 </tr>
 <tr>
 <td><code>src/Trade/Entity/Order.php</code></td>
 <td>108/184</td>
-<td><strong>58.7%</strong></td>
+<td>108/184 <strong>58.7%</strong></td>
 </tr>
 <tr>
 <td><code>src/Trade/Controller/Manage/OrderController.php</code></td>
 <td>95/302</td>
-<td>31.5%</td>
+<td>95/302 31.5%</td>
 </tr>
 <tr>
 <td><code>src/Trade/Controller/App/OrderController.php</code></td>
 <td>63/206</td>
-<td>30.6%</td>
+<td>63/206 30.6%</td>
 </tr>
 <tr>
 <td><code>src/Trade/Service/OrderService.php</code></td>
 <td>89/368</td>
-<td>24.2%</td>
+<td>89/368 24.2%</td>
 </tr>
 <tr>
-<td><code>src/Trade/Event/*</code> (OrderPaid/Fulfilled/Completed/Cancelled/Refunded)</td>
+<td><code>src/Trade/Event/*</code>（订单已付款/已履行/已完成/已取消/已退款）</td>
 <td>10/10</td>
-<td><strong>100%</strong></td>
+<td>10/10 <strong>100%</strong></td>
 </tr>
 <tr>
-<td><code>src/Trade/Service/Pricing/*</code> (calculator pipeline)</td>
+<td><code>src/Trade/Service/Pricing/*</code>（计算器管道）</td>
 <td>50/118</td>
-<td>42.4%</td>
+<td>50/118 42.4%</td>
 </tr>
 <tr>
-<td><strong>Total <code>src/Trade/**</code> exercised</strong></td>
+<td><strong>总<code>src/Trade/**</code>锻炼</strong></td>
 <td>604/2004</td>
 <td>30.1%</td>
 </tr>
 </tbody>
 </table>
-<p>Combined suite: <strong>123 tests, 555 assertions, 1 intentional skip</strong> — green (<code>OK, but some tests were skipped!</code>).</p>
+<p>组合套件：<strong>123 个测试、555 个断言、1 个有意跳过</strong> — 绿色 (<code>OK, but some tests were skipped!</code>)。</p>
 <blockquote>
-<p>Coverage notes: the two files target the workflow + its HTTP surface, so the low <code>Total src/Trade</code> figure is expected — commands, repositories, DTOs, message handlers and outbox (covered elsewhere) are not the subject. <code>OrderWorkflowListener</code> and the five domain events are now essentially fully covered.</p>
+<p>覆盖范围注释：这两个文件的目标是工作流及其 HTTP 表面，因此 <code>Total src/Trade</code> 的数字较低是预期的 — 命令、存储库、DTO、消息处理程序和发件箱（在其他地方介绍）不是主题。 <code>OrderWorkflowListener</code> 和五个领域事件现在基本上已完全覆盖。</p>
 </blockquote>
-<h2 id="what-each-group-covers">What each group covers<a class="headerlink" href="#what-each-group-covers" title="Permanent link">&para;</a></h2>
-<p><strong>Workflow state machine unit tests (no DB):</strong></p>
+<h2 id="_4">每组涵盖的内容<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p><strong>工作流状态机单元测试（无数据库）：</strong></p>
 <ol>
-<li><strong>Every enabled transition from every state</strong> (<code>enabledTransitionsProvider</code>, <code>validTransitionProvider</code>) — the exact arcs from <code>config/packages/workflow.yaml</code>:</li>
+<li><strong>来自每个状态的每个启用的转换</strong> (<code>enabledTransitionsProvider</code>、<code>validTransitionProvider</code>) — 来自 <code>config/packages/workflow.yaml</code> 的确切弧线：</li>
 <li><code>draft</code> → <code>submit</code>/<code>store_submit</code>/<code>cancel</code></li>
 <li><code>pending</code> → <code>confirm</code>/<code>cancel</code></li>
 <li><code>awaiting_store_acceptance</code> → <code>store_accept</code>/<code>store_reject</code>/<code>cancel</code></li>
-<li><code>store_accepted</code> → <code>confirm</code>/<code>cancel</code>; <code>store_rejected</code> → <code>cancel</code></li>
-<li><code>confirmed</code> → <code>pay</code>/<code>cancel</code>; <code>paid</code> → <code>fulfill</code>; <code>fulfilled</code> → <code>complete</code>; <code>completed</code> → <code>refund</code></li>
-<li><code>cancelled</code>/<code>refunded</code> are terminal (no enabled transitions)</li>
-<li><strong>Bad paths</strong> (<code>invalidTransitionProvider</code>, ~39 cases) — applying a non-enabled transition throws <code>NotEnabledTransitionException</code> and leaves the status unchanged; unknown transition names throw <code>UndefinedTransitionException</code>; <code>can()</code> is false for them; duplicate <code>submit</code>/<code>pay</code> are rejected.</li>
-<li><strong>Timestamp side-effects</strong> of <code>OrderWorkflowListener</code> — <code>cancel→cancelledAt</code>, <code>pay→paidAt</code> (set only when null), <code>fulfill→fulfilledAt</code> (only when null), <code>complete→completedAt</code>, <code>refund→refundedAt</code> (only when null); <code>submit/confirm/store_*</code> set none.</li>
-<li><strong>Guard probes</strong> — proves <code>config/packages/workflow.yaml</code> declares NO guard rules: the workflow alone permits <code>pay</code> on an order with no amount/user/wallet, <code>complete</code> without <code>fulfilledAt</code>, and <code>refund</code> without a reason.</li>
+<li><code>store_accepted</code>→<code>confirm</code>/<code>cancel</code>； <code>store_rejected</code> → <code>cancel</code></li>
+<li><code>confirmed</code>→<code>pay</code>/<code>cancel</code>； <code>paid</code> → <code>fulfill</code>; <code>fulfilled</code>→<code>complete</code>； <code>completed</code> → <code>refund</code></li>
+<li><code>cancelled</code>/<code>refunded</code> 是终端（没有启用的转换）</li>
+<li><strong>错误路径</strong>（<code>invalidTransitionProvider</code>，约 39 例）- 应用未启用的转换会抛出 <code>NotEnabledTransitionException</code> 并使状态保持不变；未知的转换名称抛出<code>UndefinedTransitionException</code>； <code>can()</code> 对他们来说是错误的；重复的 <code>submit</code>/<code>pay</code> 被拒绝。</li>
+<li><code>OrderWorkflowListener</code>的<strong>时间戳副作用</strong> - <code>cancel→cancelledAt</code>、<code>pay→paidAt</code>（仅当为空时设置）、<code>fulfill→fulfilledAt</code>（仅当为空时）、<code>complete→completedAt</code>、<code>refund→refundedAt</code>（仅当为空时）； <code>submit/confirm/store_*</code> 不设置。</li>
+<li><strong>Guard 探针</strong> — 证明 <code>config/packages/workflow.yaml</code> 声明无 Guard 规则：工作流程单独允许在没有金额/用户/钱包的订单上使用 <code>pay</code>，没有 <code>fulfilledAt</code> 的 <code>complete</code> 以及没有原因的 <code>refund</code>。</li>
 </ol>
-<p><strong>HTTP integration tests (real SQLite schema):</strong></p>
+<p><strong>HTTP 集成测试（真实 SQLite 模式）：</strong></p>
 <ol>
-<li>Happy path <code>draft→pending→confirmed→paid→fulfilled→completed→refunded</code> through <code>/do/{transition}</code> with timestamp assertions.</li>
-<li>Store branch: <code>store_submit→store_accept→confirm→pay</code> and <code>store_submit→store_reject→cancel</code> via <code>/do</code>; <code>store_accept</code> from draft is rejected.</li>
-<li>Cancel from all six cancellable states; <code>cancel</code> rejected after <code>paid</code>.</li>
-<li>Duplicate <code>submit</code>/<code>refund</code> rejected with state unchanged; unknown transition rejected; <code>/do</code> on a missing order → 404.</li>
-<li><code>/transitions</code> endpoint lists the exact enabled set per state (data-driven across all states); 404 on missing order.</li>
-<li><code>/todo</code> returns orders with enabled transitions and excludes terminal (<code>cancelled</code>, <code>refunded</code>) orders.</li>
-<li><code>/pay</code> — guard rejections (draft → 400, missing <code>systemWalletId</code> → 400, missing order → 404, order without user/wallet → 400), wallet-transfer success (balances move 3000 user→system, <code>paidAt</code>+<code>paymentMethod</code> set, status <code>paid</code>), second payment rejected.</li>
-<li><code>/fulfill</code> — wrong status → 400, not found → 404, success stores <code>trackingNumber</code>/<code>shippingAddress</code> + <code>fulfilledAt</code>, status <code>fulfilled</code>.</li>
-<li><code>/refund</code> — wrong status → 400, missing <code>reason</code> → 400, not found → 404, wallet-refund success (balances restored, <code>refundedAt</code>+<code>refundReason</code> set, status <code>refunded</code>).</li>
-<li>App endpoints — create/submit/confirm/cancel happy path, duplicate submit → 400, cancel after paid → 400, cross-user → 404, not found → 404.</li>
-<li>Status-reset: <code>PUT /manage/orders/{id}/status-reset</code> returns <strong>404</strong> — the reset route is dead code for orders (see Finding 5).</li>
+<li>带有时间戳断言的愉快路径 <code>draft→pending→confirmed→paid→fulfilled→completed→refunded</code> 到 <code>/do/{transition}</code>。</li>
+<li>商店分支：通过<code>/do</code>的<code>store_submit→store_accept→confirm→pay</code>和<code>store_submit→store_reject→cancel</code>；草稿中的 <code>store_accept</code> 被拒绝。</li>
+<li>从所有六种可取消状态取消； <code>cancel</code> 在 <code>paid</code> 之后被拒绝。</li>
+<li>重复的<code>submit</code>/<code>refund</code>被拒绝，状态不变；未知的转换被拒绝； <code>/do</code> 缺少订单 → 404。</li>
+<li><code>/transitions</code>端点列出了每个状态的确切启用集（跨所有状态的数据驱动）； 404 缺少订单。</li>
+<li><code>/todo</code> 返回已启用转换的订单，不包括终端（<code>cancelled</code>、<code>refunded</code>）订单。</li>
+<li><code>/pay</code> — 防护拒绝（汇票 → 400、缺少 <code>systemWalletId</code> → 400、缺少订单 → 404、无用户/钱包的订单 → 400）、钱包转账成功（余额移动 3000 用户→系统、<code>paidAt</code>+<code>paymentMethod</code> 设置、状态 <code>paid</code>）、第二次付款被拒绝。</li>
+<li><code>/fulfill</code> — 错误状态 → 400，未找到 → 404，成功存储 <code>trackingNumber</code>/<code>shippingAddress</code> + <code>fulfilledAt</code>，状态 <code>fulfilled</code>。</li>
+<li><code>/refund</code> — 状态错误 → 400，缺少 <code>reason</code> → 400，未找到 → 404，钱包退款成功（余额已恢复，<code>refundedAt</code>+<code>refundReason</code> 设置，状态 <code>refunded</code>）。</li>
+<li>应用端点——创建/提交/确认/取消快乐路径，重复提交→400，付费后取消→400，跨用户→404，未找到→404。</li>
+<li>状态重置：<code>PUT /manage/orders/{id}/status-reset</code> 返回 <strong>404</strong> — 重置路由是订单的死代码（参见发现 5）。</li>
 </ol>
-<h2 id="bugs-found">Bugs found<a class="headerlink" href="#bugs-found" title="Permanent link">&para;</a></h2>
-<h3 id="finding-1-the-order-workflow-has-no-guard-rules-dotransition-lets-an-admin-run-the-whole-paid-lifecycle-without-payment-medium-high">Finding 1 — The order workflow has NO guard rules; <code>/do/{transition}</code> lets an admin run the whole paid lifecycle without payment (MEDIUM-HIGH)<a class="headerlink" href="#finding-1-the-order-workflow-has-no-guard-rules-dotransition-lets-an-admin-run-the-whole-paid-lifecycle-without-payment-medium-high" title="Permanent link">&para;</a></h3>
+<h2 id="_5">发现错误<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="1-dotransition-">发现 1 — 订单工作流程没有保护规则； <code>/do/{transition}</code> 让管理员无需付费即可运行整个付费生命周期（中-高）<a class="headerlink" href="#1-dotransition-" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>文件/行：</strong> <code>config/packages/workflow.yaml</code>（订单部分）-任何转换上都没有<code>guard:</code>； <code>src/Trade/Controller/Manage/OrderController.php:308-339</code> (<code>doTransitionAction</code>)。</li>
+<li><strong>文件/行：</strong> <code>config/packages/workflow.yaml</code>（订单部分） - 任何转换上都没有 <code>guard:</code>； <code>src/Trade/Controller/Manage/OrderController.php:308-339</code> (<code>doTransitionAction</code>)。</li>
 <li><strong>描述：</strong> 工作流程仅定义圆弧。安装的 Symfony Workflow <code>Transition</code> 值对象不再具有防护 API (<code>vendor/symfony/workflow/Transition.php</code>)，因此防护表达式是不可能的。唯一的强制执行是 <code>OrderService</code> 状态检查（<code>pay</code> 需要 <code>confirmed</code>、<code>refund</code> 需要 <code>completed</code>、<code>fulfill</code> 需要 <code>paid</code>）以及控制器 <code>can()</code> 调用。通用<code>POST /manage/orders/{id}/do/{transition}</code>端点仅调用<code>can()</code> - 因此<code>ROLE_ADMIN</code>可以移动任何订单<code>draft→paid</code>（<code>do/submit</code>，<code>do/confirm</code>，<code>do/pay</code>），<code>→fulfilled</code>，<code>→completed</code>，<code>→refunded</code>，没有钱包，没有发票，也没有资金移动。</li>
 <li><strong>影响：</strong> 订单可以标记为已付款/履行/已完成/退款，而无需任何实际付款；财务状态完整性完全取决于每个调用者记得使用钱包端点，而不是 <code>/do</code>。这是演示脚本自己的快乐路径（<code>scripts/tests/demo-trade-workflow.php</code> 步骤 1 使用 <code>do/pay</code>），因此它旨在用于演示 - 但对于生产而言，它是一个真正的数据完整性漏洞。</li>
-<li><strong>复制：</strong> <code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code>（按设计通过）和<code>OrderWorkflowStateMachineTest::testWorkflowLayerAllowsPayWithoutAmountWalletOrUser</code>（通过-证明没有守卫）。</li>
+<li><strong>复制：</strong> <code>OrderWorkflowApiTest::testHappyPathDraftToRefundedViaDoTransitions</code>（按设计通过）和<code>OrderWorkflowStateMachineTest::testWorkflowLayerAllowsPayWithoutAmountWalletOrUser</code>（通过-证明没有警卫）。</li>
 <li><strong>建议的修复：</strong> 不要通过 <code>/do/{transition}</code> 公开货币转换 (<code>pay</code>/<code>refund</code>) - 将 <code>/do</code> 限制为非货币转换（<code>submit</code>、<code>store_*</code>、<code>confirm</code>、<code>fulfill</code>、<code>complete</code>）或要求 <code>pay</code>/<code>refund</code> 提供付款参考。或者重新添加守卫表达式作为工作流事件侦听器/阻止程序（守卫作为 API 在此 Symfony 版本中不再存在）。</li>
 </ul>
 <h3 id="2-orderservicepayrefundfulfill">发现 2 — OrderService::pay/refund/fulfill 不应用工作流程转换（低/设计拆分）<a class="headerlink" href="#2-orderservicepayrefundfulfill" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>文件/行：</strong> <code>src/Trade/Service/OrderService.php:146-265</code>（<code>pay</code>、<code>refund</code>、<code>fulfill</code>）。</li>
 <li><strong>描述：</strong>这些方法验证当前状态，执行钱包转账/设置业务字段（<code>paidAt</code>、<code>refundedAt</code>、<code>fulfilledAt</code>、<code>trackingNumber</code>、<code>paymentMethod</code>、<code>refundReason</code>），但<strong>从不</strong>调用<code>$this-&gt;workflow-&gt;apply(...)</code>。状态更改仅发生在控制器中（<code>Manage/OrderController::payAction/fulfillAction/refundAction</code> 在 <code>wrapInTransaction</code> 内调用 <code>workflow-&gt;apply()</code>）。 <code>OrderWorkflowListener</code>特意保留了预设的<code>paidAt</code>/<code>fulfilledAt</code>/<code>refundedAt</code>（仅在为空时设置），这确认了拆分设计。</li>
-<li><strong>影响：</strong> 任何直接使用 <code>OrderService::pay()</code> 的调用者（未来的命令/worker/saga）都将设置 <code>paidAt</code>，而订单保持 <code>confirmed</code> — 不一致的状态。方法中的状态检查是唯一的保护措施，它们不能防止直接调用者跳过转换。</li>
+<li><strong>影响：</strong> 直接使用 <code>OrderService::pay()</code> 的任何调用者（未来的命令/worker/saga）都将设置 <code>paidAt</code>，而订单保持 <code>confirmed</code> — 不一致的状态。方法中的状态检查是唯一的保护措施，它们不能防止直接调用者跳过转换。</li>
 <li><strong>复制：</strong> 单位级 — 已确认订单上的 <code>OrderService::pay()</code> 设置 <code>paidAt</code> 并留下 <code>status === 'confirmed'</code>（由现有 <code>OrderServiceTest</code> 覆盖）。</li>
 <li><strong>建议的修复：</strong>要么让 <code>OrderService::pay/refund/fulfill</code> 自己应用匹配的工作流转换，要么大声记录调用者必须将每个服务调用与工作流转换配对。</li>
 </ul>
@@ -2959,15 +2959,15 @@
 <li><code>App\Tests\Trade\Integration\OrderWorkflowApiTest::testDoTransitionMustNotForwardArbitraryBodyFieldsToUpdate</code> — <strong>跳过</strong>；断言 <code>/do/submit</code> 主体中的 <code>totalAmount</code> 不得持续存在。与当前代码相比失败（结果 3）。 （反映 <code>tests/Trade/Controller/Manage/OrderControllerTest.php</code> 中已跳过的单元测试。）
 -（仅供参考）<code>App\Tests\Trade\Controller\App\OrderControllerTest::testSubmitActionReturnsWarningWhenTransitionFails</code> 和 <code>...Manage\OrderControllerTest::testDoTransitionDoesNotForwardArbitraryFieldsToUpdate</code> — 之前在 <code>trade-controllers.md</code> 中跳过；这里不再重复。</li>
 </ul>
-<h2 id="_1">已验证的非错误（已调查并清除）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_6">已验证的非错误（已调查并清除）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>工作流程允许从 <code>store_accepted</code> 中获取 <code>pay</code>？</strong> 否 — <code>confirm</code> 必须先出现 (<code>confirm: from: [pending, store_accepted]</code>)； <code>pay</code>仅来自<code>confirmed</code>。由 <code>invalidTransitionProvider</code> + 集成快乐路径覆盖。</li>
 <li><strong><code>pending → awaiting_store_acceptance</code>？</strong> 不是转换 - <code>store_submit</code> 仅来自 <code>draft</code>（文档 <code>context.md</code> §7.1 图是一个简化）。根据实际 <code>workflow.yaml</code> 进行测试。</li>
 <li><strong>从 <code>paid</code>/<code>fulfilled</code> 退款（任务短语“已付款/…→已退款”）？</strong> 该配置仅允许 <code>refund: from: completed</code>。 <code>refundAction</code>正确守护<code>can('refund')</code>；来自 <code>paid</code> 的直接 <code>do/refund</code> 被拒绝。由 <code>testRefundEndpointRejectsNonCompletedOrder</code> + <code>invalidTransitionProvider</code> 确认。</li>
 <li><strong>管理 <code>refundAction</code> 发票分支跳过工作流转换</strong> - 不是错误：<code>InvoiceService::refund()</code> 调度 <code>InvoiceRefundedEvent</code> 且 <code>OrderInvoiceListener::onInvoiceRefunded()</code> 应用 <code>refund</code> 转换（由现有 <code>TradePaymentIntegrationTest</code> 覆盖）。</li>
-<li><strong><code>/todo</code> 分页/查询参数</strong> — <code>list(null, null, false)</code> 有意评估请求；不发送任何过滤器参数，并且 <code>assertPrivilegedQueryParameters</code> 允许普通的管理 GET。只是 mixin 中的可扩展性 TODO，而不是正确性错误。</li>
+<li><strong><code>/todo</code> 分页/查询参数</strong> — <code>list(null, null, false)</code> 有意评估请求；不发送任何过滤器参数，并且 <code>assertPrivilegedQueryParameters</code> 允许普通的管理 GET。 mixin 中只有可扩展性 TODO，而不是正确性错误。</li>
 </ul>
-<h2 id="_2">最终测试运行<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_7">最终测试运行<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>XDEBUG_MODE=off /opt/homebrew/opt/php@8.5/bin/php vendor/bin/phpunit \
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    tests/Trade/Workflow/OrderWorkflowStateMachineTest.php \
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    tests/Trade/Integration/OrderWorkflowApiTest.php --no-coverage

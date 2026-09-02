@@ -2945,7 +2945,7 @@
 <ul>
 <li><code>src/Core/EventListener/OpenApiEnricherListener.php:110-112</code> — <code>$content === false</code> 无法访问（仅当使用 <code>getContent(true)</code> 时才可访问，但事实并非如此）；空字符串守卫是真正的路径。</li>
 <li><code>:115</code> — 正文以 <code>{</code>（前导模板文本）开头的 HTML <code>/api/doc</code> 响应将被错误分类为原始 JSON 和 <code>json_decode</code>d；今天无害但脆弱。</li>
-<li><code>:196</code> — <code>$t['name']</code> 在不检查键是否存在的情况下取消引用； <code>tags</code> 条目缺少 <code>name</code> 的规范（例如自定义工具）将引发未定义键警告/通知。</li>
+<li><code>:196</code> — <code>$t['name']</code> 在不检查键是否存在的情况下被取消引用； <code>tags</code> 条目缺少 <code>name</code> 的规范（例如自定义工具）将引发未定义键警告/通知。</li>
 <li><code>:134-138</code> — <code>if (is_string($newJson))</code> 块缩进错误（功能上正确，但令人困惑）。</li>
 </ul>
 <p>没有测试被标记为跳过：我编写的所有“正确行为”测试都通过了当前源。 §3.4 中的 4 个枯枝是故意不被覆盖的（它们是无法到达的）；尝试强制它们需要反射注入的假 AST 节点，而这在实践中是不可能发生的。</p>
@@ -2957,10 +2957,10 @@
 </ul>
 <h2 id="5">5. 建议的后续行动<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Fix §3.1 (JSON string corruption) and §3.2 (relation field loss) in <code>FlatNormalizer</code> — both change API response payloads.</li>
-<li>Harden §3.3 (<code>Accept-Language</code> parsing) with a proper tokenizer.</li>
-<li>Clean up the §3.4 dead branches or add a <code>@codeCoverageIgnore</code>/comment so coverage audits stop flagging them.</li>
-<li>Make <code>ExpressionQueryBuilderAssembler</code> join failures visible (§3.5).</li>
+<li>修复 <code>FlatNormalizer</code> 中的 §3.1（JSON 字符串损坏）和 §3.2（关系字段丢失）——两者都会更改 API 响应负载。</li>
+<li>使用适当的分词器强化 §3.3（<code>Accept-Language</code> 解析）。</li>
+<li>清理 §3.4 死分支或添加 <code>@codeCoverageIgnore</code>/ 注释，以便覆盖率审计停止标记它们。</li>
+<li>使 <code>ExpressionQueryBuilderAssembler</code> 连接失败可见（第 3.5 节）。</li>
 </ol>
 
 

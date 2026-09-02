@@ -2711,7 +2711,7 @@
   <a href="#bug-6-default_locale-zh" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BUG-6 — default_locale: zh 不会成为活动区域设置 — 有效的默认值是英语 — 低
+        BUG-6 — default_locale: zh 不会成为活动区域设置 — 有效默认值为英语 — 低
       
     </span>
   </a>
@@ -2991,7 +2991,7 @@
 <li><strong>建议的修复：</strong> 将拦截器模式扩展到 <code>/system</code> （或在 <code>EntityController::retrieveAction()</code> 和 <code>warning(…, 404, …, 404)</code> 中捕获 <code>MappingException</code>）。</li>
 <li><strong>测试：</strong> <code>testMissingEntityReturns500HtmlCurrently</code>（回归，通过）； <code>testMissingEntityShouldReturn404Json</code>（正确行为，<strong>跳过</strong>）。</li>
 </ul>
-<h3 id="bug-6-default_locale-zh">BUG-6 — <code>default_locale: zh</code> 不会成为活动区域设置 — 有效的默认值是英语 — <strong>低</strong><a class="headerlink" href="#bug-6-default_locale-zh" title="Permanent link">&para;</a></h3>
+<h3 id="bug-6-default_locale-zh">BUG-6 — <code>default_locale: zh</code> 不会成为活动区域设置 — 有效默认值为英语 — <strong>低</strong><a class="headerlink" href="#bug-6-default_locale-zh" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>位置：</strong> <code>config/packages/translation.yaml:2</code> (<code>default_locale: zh</code>);框架 <code>Symfony\Component\HttpKernel\EventListener\LocaleListener</code> 仅将<em>默认</em>区域设置设置为优先级 100，并且在没有显式 <code>_locale</code> 的情况下绝不会激活它；应用程序的自定义 <code>App\Core\EventListener\LocaleListener</code> （优先级 20）仅覆盖匹配的 <code>?_locale</code>/Accept-Language。</li>
 <li><strong>描述：</strong> 没有区域设置提示时，活动请求区域设置保持 <code>en</code> （PHP <code>Request</code> 默认值） - 在 <code>reqDefaultLocale=zh</code> 时验证 <code>reqLocale=en</code>/<code>translatorLocale=en</code>。因此，<code>default_locale: zh</code> 只为翻译器提供缺失键的后备（这可能会产生奇怪的 en-with-zh-fallback 混合）。 LocaleListener 文档块和 <code>docs/ai/context.md</code> 都声明回退 <code>en</code>，它与<em>有效</em>行为匹配，但与配置相矛盾。</li>

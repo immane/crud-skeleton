@@ -2852,7 +2852,7 @@
 <tr>
 <td><code>tests/Core/Utils/RsaClientTest.php</code></td>
 <td><code>RsaClient</code></td>
-<td>使用 <code>openssl_pkey_new()</code> 生成并通过公钥属性注入的真实 RSA 密钥对。涵盖 <code>rsaSign</code>/<code>rsaVerifySign</code>、<code>sign</code>/<code>verifySign</code>、<code>getSignContent</code>（ksort + 空值跳过）、<code>checkEmpty</code>、<code>getPrivateKey</code>/<code>getPublicKey</code> 快乐 + 错误路径（内联 PEM、原始 Base64 包装、文件路径、丢失文件 → <code>false</code>）、<code>getPrivateKenLen</code>/<code>getPublicKenLen</code> 以及完整加密/解密往返返回非字符串/缺失键错误。</td>
+<td>使用 <code>openssl_pkey_new()</code> 生成并通过公钥属性注入的真实 RSA 密钥对。涵盖 <code>rsaSign</code>/<code>rsaVerifySign</code>、<code>sign</code>/<code>verifySign</code>、<code>getSignContent</code>（ksort + 空值跳过）、<code>checkEmpty</code>、<code>getPrivateKey</code>/<code>getPublicKey</code> 快乐 + 错误路径（内联 PEM、原始 Base64 包装、文件路径、丢失文件 → <code>false</code>）、<code>getPrivateKenLen</code>/<code>getPublicKenLen</code> 以及完整加密/解密往返以及返回非字符串/缺失键错误。</td>
 </tr>
 <tr>
 <td><code>tests/Core/Utils/LocationTest.php</code></td>
@@ -2950,7 +2950,7 @@
 <li><strong>说明：</strong> 所有签名/验证操作均使用 MD5 作为摘要算法。</li>
 <li><strong>影响：</strong> MD5被破坏（碰撞/伪造攻击）；签名不防篡改。 FIPS 140-2/3 环境通常会禁用 MD5，因此 <code>openssl_sign</code>/<code>openssl_verify</code> 在这些环境中会默默失败。该类是一个支付/RSA 签名助手，这使其成为一个安全缺陷。</li>
 <li><strong>复制：</strong> <code>(new RsaClient())</code> 具有有效的密钥 - <code>openssl_get_md5_methods()</code> 仍然在 PHP 8.5 上列出 <code>md5</code>，因此它可以工作，但只是因为环境允许 MD5。</li>
-<li><strong>建议的修复：</strong> 使用 <code>OPENSSL_ALGO_SHA256</code> （或使用 <code>SHA-256</code> 与 <code>openssl</code> CLI 来兼容对等点）。</li>
+<li><strong>建议的修复：</strong> 使用 <code>OPENSSL_ALGO_SHA256</code> （或使用 <code>SHA-256</code> 与 <code>openssl</code> CLI 兼容的对等点）。</li>
 </ul>
 <h3 id="bug-r-2-openssl_sign-sign-base64">Bug R-2 — 当 <code>openssl_sign()</code> 失败时，<code>sign()</code> 对未定义的变量进行 base64 编码（高）<a class="headerlink" href="#bug-r-2-openssl_sign-sign-base64" title="Permanent link">&para;</a></h3>
 <ul>

@@ -1075,10 +1075,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-docker" class="md-nav__link">
+  <a href="#9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Docker
+        9. 码头工人
       
     </span>
   </a>
@@ -1086,10 +1086,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#practice-settlement-vs-wallet" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Practice: Settlement vs Wallet
+        练习：结算与钱包
       
     </span>
   </a>
@@ -3125,10 +3125,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-docker" class="md-nav__link">
+  <a href="#9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Docker
+        9. 码头工人
       
     </span>
   </a>
@@ -3136,10 +3136,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#practice-settlement-vs-wallet" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Practice: Settlement vs Wallet
+        练习：结算与钱包
       
     </span>
   </a>
@@ -3454,7 +3454,7 @@ API 框架超出了模块实际使用的部分。</p>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> resource</span><span class="p">:</span><span class="w"> </span><span class="s">'../src/Settlement/Resources/config/services_settlement.yaml'</span><span class="p p-Indicator">,</span><span class="nt"> ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 <h3 id="_6">重新指向端口<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
-<p>在整体中，<code>SettlementVoucherPort</code> 的别名为
+<p>在整体中，<code>SettlementVoucherPort</code> 的别名是
 <code>App\Wallet\Integration\Settlement\WalletSettlementVoucherPort</code>。在新的
 服务，端口必须解析为随服务一起提供的实现：</p>
 <ul>
@@ -3476,7 +3476,7 @@ API 框架超出了模块实际使用的部分。</p>
 <p>将 <code>config/packages/messenger.yaml</code> 中的模块条目移动到新应用程序
 （例如<code>routing: App\Settlement\Message\SettlementFundingConfirmedMessage: async</code>）。
 在整体中，删除这些路由，如果模块的消息现在是
-流程外交付，通过集成取代剩余的消费者
+流程外交付，通过集成替换剩余的消费者
 点（webhook/HTTP 调度或共享传输）。</p>
 <h3 id="_8">调度程序和控制台命令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>已导出的命令 (<code>app:settlement:...</code>) 由
@@ -3494,91 +3494,91 @@ API 框架超出了模块实际使用的部分。</p>
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">done</span>
 </code></pre></div>
 <h2 id="7">7. 测试<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<p>The module already ships its own test doubles, so the new service can test the
-module in complete isolation:</p>
+<p>该模块已经发布了自己的测试替身，因此新服务可以测试
+完全隔离的模块：</p>
 <ul>
-<li><code>App\Settlement\Integration\Fake\InMemorySettlementVoucherPort</code> — implements
-  the host port with no database.</li>
-<li><code>App\Settlement\Integration\Fixture\FundingSnapshotContextResolver</code> — a
-  tagged <code>settlement.context_resolver</code> fixture for integration tests.</li>
+<li><code>App\Settlement\Integration\Fake\InMemorySettlementVoucherPort</code> — 实现
+  没有数据库的主机端口。</li>
+<li><code>App\Settlement\Integration\Fixture\FundingSnapshotContextResolver</code> — 一个
+  用于集成测试的标记为 <code>settlement.context_resolver</code> 的固定装置。</li>
 </ul>
-<p>Reuse the monolith's testing conventions (see <code>docs/design/system-contracts.md</code>
-§7 and <code>docs/testing/crud-skeleton-production/</code>):</p>
+<p>重用单体的测试约定（参见<code>docs/design/system-contracts.md</code>
+§7 和 <code>docs/testing/crud-skeleton-production/</code>):</p>
 <table>
 <thead>
 <tr>
-<th>Contract</th>
-<th>Requirement</th>
+<th>合同</th>
+<th>要求</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Coverage</td>
-<td>≥ 90% line coverage, enforced in CI</td>
+<td>覆盖范围</td>
+<td>≥ 90% 线路覆盖率，在 CI 中强制执行</td>
 </tr>
 <tr>
-<td>Test DB</td>
-<td>Clean schema per test, built by schema tool</td>
+<td>测试数据库</td>
+<td>每个测试的干净模式，由模式工具构建</td>
 </tr>
 <tr>
-<td>Unit tests</td>
-<td><code>PHPUnit\Framework\TestCase</code> — no kernel</td>
+<td>单元测试</td>
+<td><code>PHPUnit\Framework\TestCase</code> — 无内核</td>
 </tr>
 <tr>
-<td>Kernel tests</td>
-<td><code>IntegrationKernelTestCase</code> — booted kernel</td>
+<td>内核测试</td>
+<td><code>IntegrationKernelTestCase</code> — 启动内核</td>
 </tr>
 <tr>
-<td>Web tests</td>
-<td><code>IntegrationWebTestCase</code> — full HTTP cycle</td>
+<td>网络测试</td>
+<td><code>IntegrationWebTestCase</code> — 完整的 HTTP 周期</td>
 </tr>
 <tr>
-<td><code>when@test</code> wiring</td>
-<td>Ports/fakes + <code>when@test</code> sections in the module config</td>
+<td><code>when@test</code> 接线</td>
+<td>模块配置中的 Ports/fakes + <code>when@test</code> 部分</td>
 </tr>
 </tbody>
 </table>
-<p>Copy the relevant test files from <code>tests/UnitTest/Settlement</code> and
-<code>tests/Integration</code> that exercise the module, then delete them from the
-monolith. Static analysis stays identical:</p>
+<p>从 <code>tests/UnitTest/Settlement</code> 复制相关测试文件并
+<code>tests/Integration</code> 执行该模块，然后将它们从
+整体。静态分析保持相同：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>composer<span class="w"> </span>phpstan<span class="w">            </span><span class="c1"># Level 8, isolated SQLite DATABASE_URL</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>composer<span class="w"> </span>rector:types:check<span class="w"> </span><span class="c1"># Rector type rules dry-run</span>
 </code></pre></div>
 <h2 id="8-ci">8. CI<a class="headerlink" href="#8-ci" title="Permanent link">&para;</a></h2>
-<p>The monolith's CI is three jobs in <code>.github/workflows/*</code>. Re-produce them in
-the new repo:</p>
+<p>单体应用的 CI 是 <code>.github/workflows/*</code> 中的三个作业。重新生产它们
+新的回购协议：</p>
 <table>
 <thead>
 <tr>
-<th>Job</th>
-<th>Source workflow</th>
-<th>Command</th>
+<th>工作</th>
+<th>源工作流程</th>
+<th>命令</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Static analysis</td>
+<td>静态分析</td>
 <td><code>ci.yml</code> → <code>phpstan</code></td>
-<td><code>composer phpstan</code> (PHP 8.4, SQLite DB URL)</td>
+<td><code>composer phpstan</code>（PHP 8.4，SQLite 数据库 URL）</td>
 </tr>
 <tr>
-<td>Rector</td>
+<td>校长</td>
 <td><code>ci.yml</code> → <code>rector</code></td>
-<td><code>composer rector:types:check</code> (SQLite DB URL)</td>
+<td><code>composer rector:types:check</code>（SQLite 数据库 URL）</td>
 </tr>
 <tr>
-<td>Tests</td>
+<td>测试</td>
 <td><code>ci.yml</code> → <code>tests</code></td>
-<td>Paratest with coverage ≥ 90%, PostgreSQL 16</td>
+<td>Paratest 覆盖率 ≥ 90%，PostgreSQL 16</td>
 </tr>
 <tr>
-<td>Migrations</td>
+<td>移民</td>
 <td><code>migrations.yml</code></td>
-<td>Fresh MySQL 8.4 chain apply + status</td>
+<td>新鲜MySQL 8.4链申请+状态</td>
 </tr>
 </tbody>
 </table>
-<p>Reference <code>DATABASE_URL</code> values used by CI:</p>
+<p>参考 CI 使用的 <code>DATABASE_URL</code> 值：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a># phpstan / rector (no DB server needed)
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>DATABASE_URL="sqlite:///%kernel.project_dir%/var/phpstan.db"
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
@@ -3589,9 +3589,9 @@ the new repo:</p>
 <a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a># migrations
 <a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>DATABASE_URL="mysql://app:app@127.0.0.1:3306/...?serverVersion=8.4&amp;charset=utf8mb4"
 </code></pre></div>
-<h2 id="9-docker">9. Docker<a class="headerlink" href="#9-docker" title="Permanent link">&para;</a></h2>
-<p>Re-use the existing <code>Dockerfile</code> and compose layout as the template for the new
-service. The production picture after extraction:</p>
+<h2 id="9">9. 码头工人<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<p>重新使用现有的 <code>Dockerfile</code> 并编写布局作为新的模板
+服务。提取后的制作图：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># monolith compose.yaml — Settlement lines removed from scheduler's loop,</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1"># Settlement messages removed from messenger routing</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nt">scheduler</span><span class="p">:</span>
@@ -3665,73 +3665,73 @@ service. The production picture after extraction:</p>
 <a id="__codelineno-15-56" name="__codelineno-15-56" href="#__codelineno-15-56"></a><span class="nt">volumes</span><span class="p">:</span>
 <a id="__codelineno-15-57" name="__codelineno-15-57" href="#__codelineno-15-57"></a><span class="w">  </span><span class="nt">settlement_db_data</span><span class="p">:</span>
 </code></pre></div>
-<p>Key points carried over unchanged:</p>
+<p>要点保持不变：</p>
 <ul>
-<li>The entrypoint (JWT key bootstrap + prod validation) and healthcheck
-  endpoints (<code>/health/live</code>, <code>/health/ready</code>) move with the app — they live in
-  <code>src/Core</code>, so copy <code>src/Core</code> (or at least the parts the module uses) with
-  the extraction.</li>
-<li><code>nginx</code> publishes on its own host port and health-checks through
-  <code>/health/ready</code>.</li>
-<li>Cross-service messaging is the only genuinely new piece: the two services
-  either share a transport (same <code>MESSENGER_TRANSPORT_DSN</code> broker) or the
-  consuming service calls a port implementation via HTTP.</li>
-<li>Production rollout is additive: deploy the new service, migrate the data
-  (one cutover migration on the monolith, one baseline on the new service),
-  then remove the module's scheduler lines, messenger routes, and tables.</li>
+<li>入口点（JWT 密钥引导 + 产品验证）和健康检查
+  端点（<code>/health/live</code>、<code>/health/ready</code>）随应用程序移动 - 它们位于
+  <code>src/Core</code>，因此复制 <code>src/Core</code> （或至少模块使用的部分）
+  提取。</li>
+<li><code>nginx</code> 在其自己的主机端口上发布并通过以下方式进行健康检查
+  <code>/health/ready</code>。</li>
+<li>跨服务消息传递是唯一真正的新部分：这两项服务
+  共享传输（相同 <code>MESSENGER_TRANSPORT_DSN</code> 代理）或
+  消费服务通过 HTTP 调用端口实现。</li>
+<li>生产部署是附加的：部署新服务、迁移数据
+  （单体上的一次转换迁移，新服务上的一个基线），
+  然后删除模块的调度程序行、信使路由和表。</li>
 </ul>
-<h2 id="practice-settlement-vs-wallet">Practice: Settlement vs Wallet<a class="headerlink" href="#practice-settlement-vs-wallet" title="Permanent link">&para;</a></h2>
+<h2 id="_9">练习：结算与钱包<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Concern</th>
-<th>Settlement (extract first)</th>
-<th>Wallet (currently the host)</th>
+<th>关注</th>
+<th>结算（先提取）</th>
+<th>钱包（当前主机）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Owns contracts</td>
-<td><code>Contract/*</code>, <code>Port/SettlementVoucherPort</code></td>
-<td>consumes <code>App\Settlement\Contract\*</code></td>
+<td>拥有合同</td>
+<td><code>Contract/*</code>、<code>Port/SettlementVoucherPort</code></td>
+<td>消耗 <code>App\Settlement\Contract\*</code></td>
 </tr>
 <tr>
-<td>Implements ports</td>
+<td>实现端口</td>
 <td>—</td>
 <td><code>Integration/Settlement/WalletSettlementVoucherPort</code></td>
 </tr>
 <tr>
-<td>DB tables</td>
-<td><code>settlement_*</code> only, no FKs out</td>
-<td><code>wallet_*</code>, <code>voucher_*</code>, <code>transaction_*</code>, ...</td>
+<td>数据库表</td>
+<td>仅<code>settlement_*</code>，没有FKs</td>
+<td><code>wallet_*</code>、<code>voucher_*</code>、<code>transaction_*</code>、...</td>
 </tr>
 <tr>
-<td>Cross-module refs</td>
-<td>UUID columns (<code>plan_uuid</code>, <code>rule_version_uuid</code>)</td>
-<td><code>deposit('settlement', ...)</code> + voucher fields</td>
+<td>跨模块参考</td>
+<td>UUID 列（<code>plan_uuid</code>、<code>rule_version_uuid</code>）</td>
+<td><code>deposit('settlement', ...)</code> + 凭证字段</td>
 </tr>
 <tr>
-<td>Async edges</td>
-<td>outbox publish + <code>SettlementFundingConfirmedMessage</code>, <code>SettlementAllocationPostingMessage</code></td>
-<td>consumes settlement postings synchronously via port</td>
+<td>异步边缘</td>
+<td>发件箱发布 + <code>SettlementFundingConfirmedMessage</code>、<code>SettlementAllocationPostingMessage</code></td>
+<td>通过端口同步消耗结算过帐</td>
 </tr>
 <tr>
-<td>Test seams</td>
-<td><code>InMemorySettlementVoucherPort</code>, <code>FundingSnapshotContextResolver</code></td>
-<td>— (it provides them)</td>
+<td>测试接缝</td>
+<td><code>InMemorySettlementVoucherPort</code>、<code>FundingSnapshotContextResolver</code></td>
+<td>—（它提供了它们）</td>
 </tr>
 </tbody>
 </table>
-<p>Extracting Settlement = taking the domain, contracts, commands, and test
-doubles, implementing <code>SettlementVoucherPort</code> as an HTTP/queue adapter, and
-shipping its baseline migration + CI + compose. Because Wallet only ever touches
-Settlement through <code>Contract/*</code> and <code>Port/SettlementVoucherPort</code>, the monolith
-side needs no business-logic changes — only the alias in
-<code>services_settlement.yaml</code> (which leaves the monolith) and the messenger routing
-entries (which leave the monolith).</p>
-<p>Extracting Wallet (a later step) then uses the identical recipe, with the extra
-step that the module that hosted its port (Settlement) must now call it
-remotely.</p>
+<p>提取结算=获取域名、合约、命令和测试
+双倍，将 <code>SettlementVoucherPort</code> 实现为 HTTP/队列适配器，以及
+交付其基线迁移 + CI + compose。因为钱包只会接触
+通过<code>Contract/*</code>和<code>Port/SettlementVoucherPort</code>进行结算，单体
+side 不需要更改业务逻辑 - 只需要别名
+<code>services_settlement.yaml</code> （离开整体）和信使路由
+条目（离开整体）。</p>
+<p>然后提取钱包（稍后的步骤）使用相同的配方，以及额外的
+托管其端口（结算）的模块现在必须调用它
+远程。</p>
 
 
 

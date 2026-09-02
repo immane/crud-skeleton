@@ -936,10 +936,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-expired-reservations" class="md-nav__link">
+  <a href="#63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 Expired reservations
+        6.3 Fulfilled → Store verification → Completed (when fulfillment.requireVerification=true)
       
     </span>
   </a>
@@ -947,10 +947,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#64-settlement-allocation-posting" class="md-nav__link">
+  <a href="#64-expired-reservations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.4 Settlement allocation posting
+        6.4 Expired reservations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-settlement-allocation-posting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Settlement allocation posting
       
     </span>
   </a>
@@ -3031,10 +3042,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-expired-reservations" class="md-nav__link">
+  <a href="#63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 Expired reservations
+        6.3 Fulfilled → Store verification → Completed (when fulfillment.requireVerification=true)
       
     </span>
   </a>
@@ -3042,10 +3053,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#64-settlement-allocation-posting" class="md-nav__link">
+  <a href="#64-expired-reservations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.4 Settlement allocation posting
+        6.4 Expired reservations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-settlement-allocation-posting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Settlement allocation posting
       
     </span>
   </a>
@@ -3151,13 +3173,14 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderVerifiedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 </code></pre></div>
 <ul>
 <li>All integration messages route to the single <code>async</code> transport (a Doctrine table
@@ -3201,7 +3224,7 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <td>✅ <code>envelope</code></td>
 </tr>
 <tr>
-<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>, <code>StoreOrderRejectedMessage</code></td>
+<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>, <code>StoreOrderRejectedMessage</code>, <code>StoreOrderVerifiedMessage</code></td>
 <td>Store outbox</td>
 <td>Trade</td>
 <td>✅ <code>envelope</code></td>
@@ -3364,7 +3387,7 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <tr>
 <td><code>trade.order.created.v1</code></td>
 <td><code>trade_outbox_message</code></td>
-<td>Store (<code>TradeOrderCreatedHandler</code>)</td>
+<td>Store (<code>TradeOrderCreatedHandler</code>) — only when <code>settings.order.requireAcceptance=true</code></td>
 </tr>
 <tr>
 <td><code>trade.order.cancelled.v1</code></td>
@@ -3380,6 +3403,11 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <td><code>store.order.rejected.v1</code></td>
 <td><code>store_outbox_message</code></td>
 <td>Trade (<code>StoreOrderRejectedHandler</code>)</td>
+</tr>
+<tr>
+<td><code>store.order.verified.v1</code></td>
+<td><code>store_outbox_message</code></td>
+<td>Trade (<code>StoreOrderVerifiedHandler</code> → <code>request_verification</code> + <code>store_verify</code>) — only when <code>settings.fulfillment.requireVerification=true</code>; payload <code>{orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}</code> with audit</td>
 </tr>
 <tr>
 <td><code>inventory.reservation.requested.v1</code></td>
@@ -3628,12 +3656,27 @@ simpler: a reused id is silently skipped.</p>
             S-&gt;&gt;S: persist StoreTradeOrderCancellation (applied later)
         end
     end</code></pre>
-<h3 id="63-expired-reservations">6.3 Expired reservations<a class="headerlink" href="#63-expired-reservations" title="Permanent link">&para;</a></h3>
+<h3 id="63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue">6.3 Fulfilled → Store verification → Completed (when <code>fulfillment.requireVerification=true</code>)<a class="headerlink" href="#63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant T as Trade
+    participant S as Store
+    participant SO as Store Outbox
+    participant TO as Trade Outbox
+
+    T-&gt;&gt;T: fulfill: paid --fulfill--&gt; fulfilled (OrderWorkflowListener sets fulfilledAt)
+    S-&gt;&gt;S: StoreOrder fulfill (if accepted) -&gt; fulfilled
+    S-&gt;&gt;S: POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}&lt;br/&gt;StoreOrderService::verify() (txn) verify(code, verifiedBy) -&gt; verifiedAt
+    S-&gt;&gt;SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}
+    SO-&gt;&gt;T: app:store:outbox:publish -&gt; StoreOrderVerifiedMessage
+    T-&gt;&gt;T: (txn) StoreOrderVerifiedHandler: if can(request_verification) apply -&gt; awaiting_store_verification; if can(store_verify) apply -&gt; completed (Trade OrderWorkflowListener sets completedAt via status-driven completed)</code></pre>
+<p>Guard <code>StoreOrderWorkflowGuardListener</code> blocks direct <code>fulfilled --complete--&gt; completed</code> when <code>requireVerification=true</code> and allows <code>request_verification</code> + <code>store_verify</code>. Trade <code>OrderWorkflowListener</code> handles <code>completed</code> status-driven so it never hard-codes <code>store_verify</code>. Store <code>verificationCode</code> is required (≤64) and <code>verifiedBy</code> is the acting staff <code>userUuid</code>.</p>
+<h3 id="64-expired-reservations">6.4 Expired reservations<a class="headerlink" href="#64-expired-reservations" title="Permanent link">&para;</a></h3>
 <p><code>app:inventory:reservations:release-expired</code> →
 <code>InventoryService::releaseExpiredReservations()</code> finds <code>confirmed</code> reservations past
 <code>expires_at</code> and releases them with reason <code>reservation expired</code>, which re-enters the
 standard <code>inventory.reservation.released.v1</code> outbox flow above.</p>
-<h3 id="64-settlement-allocation-posting">6.4 Settlement allocation posting<a class="headerlink" href="#64-settlement-allocation-posting" title="Permanent link">&para;</a></h3>
+<h3 id="65-settlement-allocation-posting">6.5 Settlement allocation posting<a class="headerlink" href="#65-settlement-allocation-posting" title="Permanent link">&para;</a></h3>
 <p>Settlement is an <strong>inbox-first</strong> module: funding confirmations arrive from outside as
 explicit-field messages.</p>
 <pre class="mermaid"><code>sequenceDiagram
