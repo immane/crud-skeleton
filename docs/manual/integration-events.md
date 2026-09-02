@@ -69,6 +69,7 @@ framework:
             App\Trade\Message\TradeOrderCancelledMessage: async
             App\Trade\Message\StoreOrderAcceptedMessage: async
             App\Trade\Message\StoreOrderRejectedMessage: async
+            App\Trade\Message\StoreOrderVerifiedMessage: async
             App\Inventory\Message\ReservationRequestedMessage: async
             App\Inventory\Message\ReservationReleaseRequestedMessage: async
             App\Inventory\Message\ReservationConfirmedMessage: async
@@ -105,7 +106,7 @@ final readonly class TradeOrderCreatedMessage
 |---------|------------|-------------|----------------|
 | `App\Trade\Message\TradeOrderCreatedMessage` | Trade outbox | Store | ✅ `envelope` |
 | `App\Trade\Message\TradeOrderCancelledMessage` | Trade outbox | Store | ✅ `envelope` |
-| `App\Store\Message…` → `StoreOrderAcceptedMessage`, `StoreOrderRejectedMessage` | Store outbox | Trade | ✅ `envelope` |
+| `App\Store\Message…` → `StoreOrderAcceptedMessage`, `StoreOrderRejectedMessage`, `StoreOrderVerifiedMessage` | Store outbox | Trade | ✅ `envelope` |
 | `App\Inventory\Message\ReservationRequestedMessage` | Store outbox | Inventory | ✅ `envelope` |
 | `App\Inventory\Message\ReservationReleaseRequestedMessage` | Store outbox | Inventory | ✅ `envelope` |
 | `App\Inventory\Message\ReservationConfirmedMessage` | Inventory outbox | Store | ✅ `envelope` |
@@ -162,10 +163,11 @@ carry **explicit scalar fields** rather than an envelope (see
 
 | Topic (`.v1` suffix = version) | Emitter outbox | Consumer |
 |--------------------------------|----------------|----------|
-| `trade.order.created.v1` | `trade_outbox_message` | Store (`TradeOrderCreatedHandler`) |
+| `trade.order.created.v1` | `trade_outbox_message` | Store (`TradeOrderCreatedHandler`) — only when `settings.order.requireAcceptance=true` |
 | `trade.order.cancelled.v1` | `trade_outbox_message` | Store (`TradeOrderCancelledHandler`) |
 | `store.order.accepted.v1` | `store_outbox_message` | Trade (`StoreOrderAcceptedHandler`) |
 | `store.order.rejected.v1` | `store_outbox_message` | Trade (`StoreOrderRejectedHandler`) |
+| `store.order.verified.v1` | `store_outbox_message` | Trade (`StoreOrderVerifiedHandler` → `request_verification` + `store_verify`) — only when `settings.fulfillment.requireVerification=true`; payload `{orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}` with audit |
 | `inventory.reservation.requested.v1` | `store_outbox_message` | Inventory (`ReservationRequestedHandler`) |
 | `inventory.reservation.release.requested.v1` | `store_outbox_message` | Inventory (`ReservationReleaseRequestedHandler`) |
 | `inventory.reservation.confirmed.v1` | `inventory_outbox_message` | Store (`ReservationConfirmedHandler`) |
@@ -385,14 +387,34 @@ sequenceDiagram
     end
 ```
 
-### 6.3 Expired reservations
+### 6.3 Fulfilled → Store verification → Completed (when `fulfillment.requireVerification=true`)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant T as Trade
+    participant S as Store
+    participant SO as Store Outbox
+    participant TO as Trade Outbox
+
+    T->>T: fulfill: paid --fulfill--> fulfilled (OrderWorkflowListener sets fulfilledAt)
+    S->>S: StoreOrder fulfill (if accepted) -> fulfilled
+    S->>S: POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}<br/>StoreOrderService::verify() (txn) verify(code, verifiedBy) -> verifiedAt
+    S->>SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}
+    SO->>T: app:store:outbox:publish -> StoreOrderVerifiedMessage
+    T->>T: (txn) StoreOrderVerifiedHandler: if can(request_verification) apply -> awaiting_store_verification; if can(store_verify) apply -> completed (Trade OrderWorkflowListener sets completedAt via status-driven completed)
+```
+
+Guard `StoreOrderWorkflowGuardListener` blocks direct `fulfilled --complete--> completed` when `requireVerification=true` and allows `request_verification` + `store_verify`. Trade `OrderWorkflowListener` handles `completed` status-driven so it never hard-codes `store_verify`. Store `verificationCode` is required (≤64) and `verifiedBy` is the acting staff `userUuid`.
+
+### 6.4 Expired reservations
 
 `app:inventory:reservations:release-expired` →
 `InventoryService::releaseExpiredReservations()` finds `confirmed` reservations past
 `expires_at` and releases them with reason `reservation expired`, which re-enters the
 standard `inventory.reservation.released.v1` outbox flow above.
 
-### 6.4 Settlement allocation posting
+### 6.5 Settlement allocation posting
 
 Settlement is an **inbox-first** module: funding confirmations arrive from outside as
 explicit-field messages.

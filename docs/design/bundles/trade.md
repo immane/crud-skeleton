@@ -36,17 +36,23 @@ Product and Specification are `Store` entities (`Product.store` nullable). `Stor
 | `OrderItem` | `trade_order_item` | Line item with `specificationUuid` (scalar), `specificationTitle`, snapshots, quantity, unit price |
 | `TradeOutboxMessage` | `trade_outbox_message` | Transactional integration event relay record |
 
-### 1.2 Store-Scoped Orders
+### 1.2 Store-Scoped Orders (optional, default off)
 
 `POST /api/v1/app/orders` remains the sole customer order entry point. A trusted
 `X-Store-Code` is resolved by the Store bundle into the Trade-owned scalar
-`StoreContext`; Trade never imports a Store entity. The order receives an `_store`
-metadata snapshot, enters `awaiting_store_acceptance`, and writes
-`trade.order.created.v1` in the same transaction.
+`StoreContext`; Trade never imports a Store entity. The order always receives an `_store`
+metadata snapshot, but whether it enters the Store workflow is controlled by
+`Store.settings` (see `store.md §5.1.1`, both `false` by default):
 
-`app:trade:outbox:publish` dispatches the event through Messenger. Store consumes it
-idempotently, writes its StoreOrder and result Outbox event, and Trade consumers apply
-`store.order.accepted.v1` or `store.order.rejected.v1`. The status column is
+- `order.requireAcceptance=false` (default): order stays `draft` (like a plain order),
+  `POST /api/v1/app/orders` returns `201 Order created`, no `trade.order.created.v1`.
+- `order.requireAcceptance=true`: order enters `awaiting_store_acceptance`, writes
+  `trade.order.created.v1` in the same transaction and returns `202 Order submitted for store acceptance`.
+
+`app:trade:outbox:publish` dispatches the event through Messenger when emitted. Store consumes it
+idempotently, writes its StoreOrder and result Outbox event (`store.order.accepted/rejected/verified`),
+and Trade consumers apply `store.order.accepted.v1` / `store.order.rejected.v1` /
+`store.order.verified.v1` (latter drives `fulfilled --request_verification--> awaiting_store_verification --store_verify--> completed` when `fulfillment.requireVerification=true`). Guard blocking is in `Store/EventListener/StoreOrderWorkflowGuardListener`; `Trade/EventListener/OrderWorkflowListener` is status-driven for `completed` and does not hard-code Store transition names. The status column is
 `VARCHAR(40)` to support these workflow states.
 
 ---
@@ -262,56 +268,68 @@ New calculators can be added by implementing the interface -- no other code chan
 
 ### 6.1 Configuration
 
-**File**: `config/packages/workflow.yaml`
+**File**: `config/packages/workflow.yaml` — two optional Store flows (both `false` by default, see `store.md §5.1.1`).
 
 ```yaml
 framework:
   workflows:
     order:
       type: state_machine
-      marking_store:
-        type: method
-        property: status
+      marking_store: { type: method, property: status }
       places:
         - draft
         - pending
+        - awaiting_store_acceptance
+        - store_accepted
+        - store_rejected
         - confirmed
         - paid
         - fulfilled
+        - awaiting_store_verification
         - completed
         - cancelled
         - refunded
       transitions:
         submit:   draft -> pending
-        confirm:  pending -> confirmed
+        store_submit: draft -> awaiting_store_acceptance # guard: order.requireAcceptance && hasStore
+        store_accept: awaiting_store_acceptance -> store_accepted
+        store_reject: awaiting_store_acceptance -> store_rejected
+        confirm:  [pending, store_accepted] -> confirmed
         pay:      confirmed -> paid
         fulfill:  paid -> fulfilled
-        complete: fulfilled -> completed
-        cancel:   [draft, pending, confirmed] -> cancelled
+        request_verification: fulfilled -> awaiting_store_verification # guard: fulfillment.requireVerification && hasStore
+        store_verify: awaiting_store_verification -> completed           # Staff verify
+        complete: fulfilled -> completed                                 # guard blocks when requireVerification
+        cancel:   [draft, pending, awaiting_store_acceptance, store_accepted, store_rejected, confirmed, fulfilled, awaiting_store_verification] -> cancelled
         refund:   completed -> refunded
 ```
 
-### 6.2 Valid Transitions
+Guards live in `Store/EventListener/StoreOrderWorkflowGuardListener` (reads `Store.settings` via `StoreRepository`). Plain orders (`_store` absent) remain permissive at the workflow layer.
 
-| From | To | Transition Name |
-|------|-----|----------------|
-| draft | pending | `submit` |
-| pending | confirmed | `confirm` |
-| confirmed | paid | `pay` |
-| paid | fulfilled | `fulfill` |
-| fulfilled | completed | `complete` |
-| draft | cancelled | `cancel` |
-| pending | cancelled | `cancel` |
-| confirmed | cancelled | `cancel` |
-| completed | refunded | `refund` |
+### 6.2 Valid Transitions (non-Store happy path + Store branches)
+
+| From | To | Transition Name | When |
+|------|-----|----------------|------|
+| draft | pending | `submit` | always / `requireAcceptance=false + hasStore` |
+| draft | awaiting_store_acceptance | `store_submit` | `requireAcceptance=true + hasStore` |
+| awaiting_store_acceptance | store_accepted | `store_accept` | via `store.order.accepted.v1` |
+| awaiting_store_acceptance | store_rejected | `store_reject` | via `store.order.rejected.v1` |
+| pending / store_accepted | confirmed | `confirm` | |
+| confirmed | paid | `pay` | |
+| paid | fulfilled | `fulfill` | |
+| fulfilled | awaiting_store_verification | `request_verification` | `requireVerification=true + hasStore` |
+| awaiting_store_verification | completed | `store_verify` | `store.order.verified.v1 {verificationCode, verifiedBy}` |
+| fulfilled | completed | `complete` | `requireVerification=false` or no Store |
+| draft/pending/.../fulfilled/awaiting_store_verification | cancelled | `cancel` | |
+| completed | refunded | `refund` | |
 
 ### 6.3 Workflow Listener
 
 ```php
 class OrderWorkflowListener
 {
-    // On cancel transition -> set cancelledAt = now
-    // On complete transition -> set completedAt = now
+    // On cancel/paying/fulfill/refund -> set timestamps per transition
+    // On *landed in* completed (complete via Trade OR store_verify via Store) -> set completedAt + dispatch OrderCompletedEvent (status-driven, no Store transition name)
 }
 ```
 
