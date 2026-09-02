@@ -169,7 +169,7 @@ final class OrderControllerTest extends TestCase
         self::assertSame('Order created', $body['message']);
     }
 
-    public function testCreateActionReturns202WhenStoreContextPresent(): void
+    public function testCreateActionReturns201WhenStoreContextPresent(): void
     {
         $requestStack = new RequestStack();
         $requestStack->push($this->jsonRequest('POST', '/api/v1/app/orders', [
@@ -185,9 +185,9 @@ final class OrderControllerTest extends TestCase
 
         $response = $this->controller->createAction($requestStack->getCurrentRequest());
 
-        self::assertSame(202, $response->getStatusCode());
+        self::assertSame(201, $response->getStatusCode());
         $body = json_decode((string) $response->getContent(), true);
-        self::assertSame('Order submitted for store acceptance', $body['message']);
+        self::assertSame('Order created', $body['message']);
     }
 
     public function testCreateActionReturns400WhenPriceCalculationFails(): void

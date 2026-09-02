@@ -662,16 +662,6 @@ nelmio_api_doc:
                         settings: { type: object, nullable: true }
                         createdAt: { type: string, format: date-time }
 
-                StoreOrder:
-                    type: object
-                    properties:
-                        id: { type: integer }
-                        uuid: { type: string }
-                        tradeOrderUuid: { type: string }
-                        store: { $ref: '#/components/schemas/Store' }
-                        status: { type: string, enum: [pending, accepted, rejected, fulfilled], example: 'pending' }
-                        createdAt: { type: string, format: date-time }
-
                 # ---- Inventory ----
                 Material:
                     type: object

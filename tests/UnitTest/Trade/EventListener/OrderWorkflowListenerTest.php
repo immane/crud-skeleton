@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\UnitTest\Trade\EventListener;
 
 use App\Trade\Entity\Order;
-use App\Trade\Entity\TradeOutboxMessage;
 use App\Trade\EventListener\OrderWorkflowListener;
-use App\Trade\Service\TradeOutboxService;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -143,100 +140,6 @@ final class OrderWorkflowListenerTest extends TestCase
         $listener->onTransition($event);
 
         self::assertSame('draft', $order->getStatus());
-    }
-
-    public function testCancelTransitionRecordsOutboxMessageWhenStoreMetadataPresent(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => '00000000-0000-4000-8000-000000000099']]);
-
-        $persisted = [];
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::atLeastOnce())->method('persist')->willReturnCallback(static function (object $entity) use (&$persisted): void {
-            $persisted[] = $entity;
-        });
-        $outbox = new TradeOutboxService($em);
-
-        $listener = new OrderWorkflowListener(
-            $this->createStub(LoggerInterface::class),
-            $this->createStub(EventDispatcherInterface::class),
-            $outbox,
-        );
-        $listener->onTransition($this->createTransitionEvent($order, 'cancel'));
-
-        self::assertCount(1, $persisted);
-        self::assertInstanceOf(TradeOutboxMessage::class, $persisted[0]);
-        self::assertSame('trade.order.cancelled.v1', $persisted[0]->getTopic());
-        self::assertSame($order->getUuid(), $persisted[0]->getAggregateId());
-
-        $payload = $persisted[0]->getPayload();
-        self::assertSame($order->getUuid(), $payload['orderUuid']);
-        self::assertSame('00000000-0000-4000-8000-000000000099', $payload['storeUuid']);
-        self::assertSame($order->getCancelledAt()?->format(DATE_ATOM), $payload['cancelledAt']);
-        self::assertNotNull($order->getCancelledAt());
-    }
-
-    public function testCancelTransitionSkipsOutboxWhenStoreMetadataMissing(): void
-    {
-        $order = new Order();
-
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::never())->method('persist');
-        $outbox = new TradeOutboxService($em);
-
-        $listener = new OrderWorkflowListener(
-            $this->createStub(LoggerInterface::class),
-            $this->createStub(EventDispatcherInterface::class),
-            $outbox,
-        );
-        $listener->onTransition($this->createTransitionEvent($order, 'cancel'));
-    }
-
-    public function testCancelTransitionSkipsOutboxWhenStoreMetadataIsNotArray(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => 'not-an-array']);
-
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::never())->method('persist');
-        $outbox = new TradeOutboxService($em);
-
-        $listener = new OrderWorkflowListener(
-            $this->createStub(LoggerInterface::class),
-            $this->createStub(EventDispatcherInterface::class),
-            $outbox,
-        );
-        $listener->onTransition($this->createTransitionEvent($order, 'cancel'));
-    }
-
-    public function testCancelTransitionSkipsOutboxWhenStoreUuidIsNotString(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => 12345]]);
-
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::never())->method('persist');
-        $outbox = new TradeOutboxService($em);
-
-        $listener = new OrderWorkflowListener(
-            $this->createStub(LoggerInterface::class),
-            $this->createStub(EventDispatcherInterface::class),
-            $outbox,
-        );
-        $listener->onTransition($this->createTransitionEvent($order, 'cancel'));
-    }
-
-    public function testNonCancelTransitionDoesNotRecordOutboxEvenWithStoreMetadata(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => '00000000-0000-4000-8000-000000000099']]);
-
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::never())->method('persist');
-        $outbox = new TradeOutboxService($em);
-
-        $listener = new OrderWorkflowListener(
-            $this->createStub(LoggerInterface::class),
-            $this->createStub(EventDispatcherInterface::class),
-            $outbox,
-        );
-        $listener->onTransition($this->createTransitionEvent($order, 'complete'));
     }
 
     private function createListener(): OrderWorkflowListener

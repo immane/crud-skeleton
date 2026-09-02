@@ -121,12 +121,7 @@ class OpenApiEnricherListener
         '/api/v1/manage/stores/{uuid}/members' => ['summary' => ['get' => 'List store members', 'post' => 'Grant store member'], 'desc' => ['get' => 'Returns membership list for store.', 'post' => 'Body: userUuid, role in [owner,manager,clerk,fulfillment]. ROLE_ADMIN.']],
         '/api/v1/app/stores' => ['summary' => ['get' => 'List my stores']],
         '/api/v1/app/stores/{id}' => ['summary' => ['get' => 'Get store detail']],
-        '/api/v1/manage/store-orders' => ['summary' => ['get' => 'List store orders']],
-        '/api/v1/app/store-orders' => ['summary' => ['get' => 'List my store orders']],
-        '/api/v1/store/{scopeId}/orders' => ['summary' => ['get' => 'List scoped store orders'], 'desc' => ['get' => 'Staff scoped list via store uuid. Requires store membership.']],
-        '/api/v1/store/{scopeId}/orders/{orderUuid}/accept' => ['summary' => ['post' => 'Accept store order'], 'desc' => ['post' => 'Staff accept pending order. Requires owner|manager|clerk.']],
-        '/api/v1/store/{scopeId}/orders/{orderUuid}/reject' => ['summary' => ['post' => 'Reject store order'], 'desc' => ['post' => 'Body: code, reason. Requires owner|manager|clerk.']],
-        '/api/v1/store/{scopeId}/orders/{orderUuid}/fulfill' => ['summary' => ['post' => 'Fulfill store order'], 'desc' => ['post' => 'Staff fulfillment step. Requires owner|manager|fulfillment.']],
+
         '/api/v1/manage/inventory/materials' => ['summary' => ['get' => 'List materials', 'post' => 'Create material'], 'desc' => ['post' => 'code unique, immutably frozen after stock mutation.']],
         '/api/v1/manage/inventory/stocks/{storeUuid}/{materialUuid}' => ['summary' => ['get' => 'Get stock (virtual zero if absent)'], 'desc' => ['get' => 'Per-store per-material balance: onHand, reserved, allowNegativeStock.']],
         '/api/v1/manage/inventory/stocks/{storeUuid}/{materialUuid}/adjust' => ['summary' => ['post' => 'Adjust stock'], 'desc' => ['post' => 'Body: quantityDelta (string bcmath), reason, referenceId, allowNegativeStock. Append-only ledger.']],
@@ -149,7 +144,7 @@ class OpenApiEnricherListener
         '/api/v1/store/{scopeId}/products/{productUuid}/specifications' => ['tag' => 'Store', 'summary' => ['get' => 'List scoped specifications for product', 'post' => 'Create scoped specification (SKU)'], 'desc' => ['get' => 'List specifications filtered by productUuid within store scopeId. Requires store:specification:read. Path params: scopeId, productUuid.', 'post' => 'Create specification under productUuid in store scopeId. Body: name required, price in cents (e.g. 699900), status, sort. Requires store:specification:create.']],
         '/api/v1/store/{scopeId}/products/{productUuid}/specifications/batch-update' => ['tag' => 'Store', 'summary' => ['post' => 'Batch update/upsert scoped specifications'], 'desc' => ['post' => 'Batch upsert specifications for productUuid in store scopeId. Query: @mode, @basis, @partial. Body: array of spec objects. Requires store:specification:update|create.']],
         '/api/v1/store/{scopeId}/products/{productUuid}/specifications/{id}' => ['tag' => 'Store', 'summary' => ['get' => 'Get scoped specification detail', 'put' => 'Update scoped specification', 'delete' => 'Delete scoped specification'], 'desc' => ['get' => 'Detail by id within productUuid + scopeId. Path params: scopeId, productUuid, id. Requires store:specification:read.', 'put' => 'Update name, price, status, sort within scopeId/product. Requires store:specification:update.', 'delete' => 'Soft delete within scopeId/product. Requires store:specification:delete.']],
-        '/api/v1/store/{scopeId}/orders/{id}' => ['tag' => 'Store', 'summary' => ['get' => 'Get scoped store order detail'], 'desc' => ['get' => 'Staff scoped order detail via store uuid (scopeId) + order id/uuid. Requires store membership (store:order:read).']],
+
 
         // --- Authorization: assignments / roles / permissions / audit-logs ---
         '/api/v1/manage/assignments' => ['tag' => 'Authorization', 'summary' => ['get' => 'List assignments (grants)', 'post' => 'Create assignment (grant role)'], 'desc' => ['get' => 'Paginated. Filters: userUuid, scopeType=global|store, scopeUuid, includeRevoked bool, roleId. ROLE_ADMIN. Requires bearer JWT.', 'post' => 'Grant role to user. Body: userUuid (UUID) required, roleUuid|role_uuid|roleId required (UUID|id|code), scopeType=global|store required, scopeUuid (UUID, null for global, required for store). Example: {"userUuid":"...","roleUuid":"...","scopeType":"store","scopeUuid":"..."}. ROLE_ADMIN. Audited + cache invalidated.']],
@@ -404,9 +399,6 @@ class OpenApiEnricherListener
             // ---- Store: manage stores + scoped orders ----
             'post:/api/v1/manage/stores/{uuid}/status/{status}' => $inline([], [], false),
             'post:/api/v1/manage/stores/{uuid}/members' => $inline(['userUuid'=>['type'=>'string','format'=>'uuid','example'=>'550e8400-e29b-41d4-a716-446655440000'],'role'=>['type'=>'string','enum'=>['owner','manager','clerk','fulfillment'],'example'=>'manager']], ['userUuid','role']),
-            'post:/api/v1/store/{scopeId}/orders/{orderUuid}/accept' => $inline(['reservationId'=>['type'=>'string','description'=>'Optional reservation id']], [], false),
-            'post:/api/v1/store/{scopeId}/orders/{orderUuid}/reject' => $inline(['code'=>['type'=>'string','example'=>'out_of_stock'],'reason'=>['type'=>'string','example'=>'Insufficient stock']], ['code','reason']),
-            'post:/api/v1/store/{scopeId}/orders/{orderUuid}/fulfill' => $inline(['fulfillmentData'=>['type'=>'object','description'=>'Optional fulfillment payload']], [], false),
             // ---- Inventory ----
             'post:/api/v1/manage/inventory/stocks/{storeUuid}/{materialUuid}/adjust' => $inline(['quantityDelta'=>['type'=>'string','example'=>'10.000','description'=>'BCMath string'],'reason'=>['type'=>'string'],'referenceId'=>['type'=>'string'],'allowNegativeStock'=>['type'=>'boolean']], ['quantityDelta','reason']),
             'put:/api/v1/manage/inventory/stocks/{storeUuid}/{materialUuid}/policy' => $inline(['allowNegativeStock'=>['type'=>'boolean']], ['allowNegativeStock']),

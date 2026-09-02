@@ -74,8 +74,8 @@ class OrderController extends RestController
 
             return $this->success(
                 $order,
-                $storeContext === null ? 'Order created' : 'Order submitted for store acceptance',
-                $storeContext === null ? 201 : 202,
+                'Order created',
+                201,
             );
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);

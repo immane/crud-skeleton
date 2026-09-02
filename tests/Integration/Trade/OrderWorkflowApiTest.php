@@ -73,40 +73,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     }
 
     // =====================================================================
-    // Store branch
     // =====================================================================
-
-    public function testStoreBranchAcceptThenConfirmViaDoTransitions(): void
-    {
-        $specId = $this->createSpecification($this->createProduct());
-        $orderId = $this->createOrder($specId);
-
-        $this->doTransitionOk($orderId, 'store_submit', 'awaiting_store_acceptance');
-        $this->doTransitionOk($orderId, 'store_accept', 'store_accepted');
-        $this->doTransitionOk($orderId, 'confirm', Order::STATUS_CONFIRMED);
-        $this->doTransitionOk($orderId, 'pay', Order::STATUS_PAID);
-    }
-
-    public function testStoreBranchRejectThenCancelViaDoTransitions(): void
-    {
-        $specId = $this->createSpecification($this->createProduct());
-        $orderId = $this->createOrder($specId);
-
-        $this->doTransitionOk($orderId, 'store_submit', 'awaiting_store_acceptance');
-        $this->doTransitionOk($orderId, 'store_reject', 'store_rejected');
-        $this->doTransitionOk($orderId, 'cancel', Order::STATUS_CANCELLED);
-    }
-
-    public function testStoreAcceptIsRejectedFromDraft(): void
-    {
-        $specId = $this->createSpecification($this->createProduct());
-        $orderId = $this->createOrder($specId);
-
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/store_accept");
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertNotSame(0, $content['code']);
-    }
-
     // =====================================================================
     // Cancel from every cancellable state + rejection after paid
     // =====================================================================
@@ -118,9 +85,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $cases = [
             'draft' => [],
             'pending' => ['submit'],
-            'awaiting_store_acceptance' => ['store_submit'],
-            'store_accepted' => ['store_submit', 'store_accept'],
-            'store_rejected' => ['store_submit', 'store_reject'],
             'confirmed' => ['submit', 'confirm'],
         ];
 
@@ -219,9 +183,8 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId);
 
         $expectedByState = [
-            Order::STATUS_DRAFT => ['submit', 'store_submit', 'cancel'],
+            Order::STATUS_DRAFT => ['submit', 'cancel'],
             Order::STATUS_PENDING => ['confirm', 'cancel'],
-            'awaiting_store_acceptance' => ['store_accept', 'store_reject', 'cancel'],
             Order::STATUS_CONFIRMED => ['pay', 'cancel'],
             Order::STATUS_PAID => ['fulfill'],
             Order::STATUS_FULFILLED => ['complete'],
@@ -698,7 +661,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             Order::STATUS_COMPLETED => ['submit', 'confirm', 'pay', 'fulfill', 'complete'],
             Order::STATUS_REFUNDED => ['submit', 'confirm', 'pay', 'fulfill', 'complete', 'refund'],
             Order::STATUS_CANCELLED => ['cancel'],
-            'awaiting_store_acceptance' => ['store_submit'],
         ];
 
         foreach ($path[$state] as $transition) {

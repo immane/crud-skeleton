@@ -20,9 +20,7 @@ use App\Trade\Service\Pricing\PriceCalculatorInterface;
 use App\Wallet\Repository\WalletRepository;
 use App\Wallet\Service\Transfer\TransferServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 /** @extends BaseService<\App\Trade\Entity\Order> */
 final class OrderService extends BaseService implements OrderServiceInterface
@@ -37,9 +35,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
         private readonly ?WalletRepository $walletRepository = null,
         private readonly ?TransferServiceInterface $transferService = null,
         private readonly ?InvoiceServiceInterface $invoiceService = null,
-        private readonly ?TradeOutboxServiceInterface $outboxService = null,
-        #[Target('state_machine.order')]
-        private readonly ?WorkflowInterface $workflow = null,
     ) {
         parent::__construct($container, Order::class);
     }
@@ -115,37 +110,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
 
             $this->getEntityManager()->persist($order);
             $this->getEntityManager()->flush();
-
-            if ($storeContext !== null) {
-                if ($this->workflow === null || $this->outboxService === null) {
-                    throw new \RuntimeException('Store order orchestration is not configured.');
-                }
-                if (!$this->workflow->can($order, 'store_submit')) {
-                    throw new \RuntimeException('Order cannot be submitted for store acceptance.');
-                }
-
-                $this->workflow->apply($order, 'store_submit');
-                $this->outboxService->record('trade.order.created.v1', 'trade_order', $order->getUuid(), [
-                    'orderUuid' => $order->getUuid(),
-                    'store' => $storeContext->toSnapshot(),
-                    'customerUserUuid' => $order->getUser()?->getUuid(),
-                    'currency' => $order->getCurrency(),
-                    'totalAmount' => $order->getTotalAmount(),
-                    'items' => array_map(static fn (OrderItem $item): array => [
-                        'lineId' => $item->getUuid(),
-                        'catalogReference' => $item->getSpecificationUuid() ?? $item->getSpecSnapshot()['uuid'] ?? '',
-                        'quantity' => $item->getQuantity(),
-                        'unitPrice' => $item->getUnitPrice(),
-                        'lineAmount' => $item->getPrice(),
-                        'snapshot' => [
-                            'specification' => $item->getSpecSnapshot() ?? [],
-                            'product' => $item->getProductSnapshot() ?? [],
-                        ],
-                    ], $order->getItems()->toArray()),
-                    'delivery' => is_array($metadata['delivery'] ?? null) ? $metadata['delivery'] : [],
-                    'placedAt' => $order->getCreatedAt()->format(DATE_ATOM),
-                ]);
-            }
 
             return $order;
         });

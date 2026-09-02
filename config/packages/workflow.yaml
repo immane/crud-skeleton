@@ -47,9 +47,6 @@ framework:
             places:
                 - draft
                 - pending
-                - awaiting_store_acceptance
-                - store_accepted
-                - store_rejected
                 - confirmed
                 - paid
                 - fulfilled
@@ -60,17 +57,8 @@ framework:
                 submit:
                     from: draft
                     to: pending
-                store_submit:
-                    from: draft
-                    to: awaiting_store_acceptance
-                store_accept:
-                    from: awaiting_store_acceptance
-                    to: store_accepted
-                store_reject:
-                    from: awaiting_store_acceptance
-                    to: store_rejected
                 confirm:
-                    from: [pending, store_accepted]
+                    from: pending
                     to: confirmed
                 pay:
                     from: confirmed
@@ -82,7 +70,7 @@ framework:
                     from: fulfilled
                     to: completed
                 cancel:
-                    from: [draft, pending, awaiting_store_acceptance, store_accepted, store_rejected, confirmed]
+                    from: [draft, pending, confirmed]
                     to: cancelled
                 refund:
                     from: completed

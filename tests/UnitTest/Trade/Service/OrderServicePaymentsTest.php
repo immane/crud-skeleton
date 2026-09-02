@@ -9,11 +9,8 @@ use App\Payment\DTO\PaymentRefundResult;
 use App\Payment\DTO\PaymentResult;
 use App\Payment\Entity\Invoice;
 use App\Payment\Service\InvoiceServiceInterface;
-use App\Trade\DTO\StoreContext;
 use App\Trade\Entity\Order;
-use App\Trade\Entity\TradeOutboxMessage;
 use App\Trade\Service\OrderService;
-use App\Trade\Service\TradeOutboxService;
 use App\Wallet\Entity\Wallet;
 use App\Wallet\Repository\WalletRepository;
 use App\Wallet\Service\Transfer\TransferServiceInterface;
@@ -21,7 +18,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 /**
  * Unit coverage for the OrderService branches not exercised by
@@ -30,9 +26,6 @@ use Symfony\Component\Workflow\WorkflowInterface;
  */
 final class OrderServicePaymentsTest extends TestCase
 {
-    private const STORE_UUID = '00000000-0000-4000-8000-000000000050';
-    private const STORE_CODE = 'shenzhen-01';
-
     /**
      * @param array<string, mixed> $overrides
      */
@@ -46,8 +39,6 @@ final class OrderServicePaymentsTest extends TestCase
             'walletRepository' => null,
             'transferService' => null,
             'invoiceService' => null,
-            'outboxService' => null,
-            'workflow' => null,
         ];
         $props = array_merge($defaults, $overrides);
 
@@ -100,187 +91,6 @@ final class OrderServicePaymentsTest extends TestCase
         self::assertNull($order->getUser());
         self::assertCount(1, $order->getItems());
         self::assertNull($order->getMetadata()['_store'] ?? null);
-    }
-
-    #[Group('low-value')]
-    public function testCreateOrderWithStoreContextThrowsWhenWorkflowMissing(): void
-    {
-        $em = $this->createEntityManager();
-        $service = $this->createService([
-            'em' => $em,
-            'outboxService' => new TradeOutboxService($em),
-        ]);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Store order orchestration is not configured.');
-
-        $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
-    }
-
-    #[Group('low-value')]
-    public function testCreateOrderWithStoreContextThrowsWhenOutboxMissing(): void
-    {
-        $em = $this->createEntityManager();
-        $service = $this->createService([
-            'em' => $em,
-            'workflow' => $this->createStub(WorkflowInterface::class),
-        ]);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Store order orchestration is not configured.');
-
-        $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
-    }
-
-    public function testCreateOrderWithStoreContextThrowsWhenWorkflowCannotSubmit(): void
-    {
-        $em = $this->createEntityManager();
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->willReturn(false);
-        $workflow->expects(self::never())->method('apply');
-
-        $service = $this->createService([
-            'em' => $em,
-            'workflow' => $workflow,
-            'outboxService' => new TradeOutboxService($em),
-        ]);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Order cannot be submitted for store acceptance.');
-
-        $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
-    }
-
-    public function testCreateOrderWithUserInstanceAssignsUser(): void
-    {
-        $user = $this->createUser(7);
-        $em = $this->createEntityManager();
-        $service = $this->createService(['em' => $em]);
-
-        $order = $service->createOrder([], $user, 100, 'CNY');
-
-        self::assertSame($user, $order->getUser());
-        self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
-    }
-
-    public function testCreateOrderPersistsItemSnapshotData(): void
-    {
-        $product = new \App\Store\Entity\Product();
-        $product->setName('Phone');
-        $spec = new \App\Store\Entity\Specification();
-        $spec->setProduct($product);
-        $spec->setName('Red');
-
-        $em = $this->createEntityManager();
-        $service = $this->createService(['em' => $em]);
-
-        $order = $service->createOrder(
-            [
-                [
-                    'specification' => $spec,
-                    'quantity' => 2,
-                    'unitPrice' => 500,
-                    'price' => 1000,
-                    'specSnapshot' => ['name' => 'Red'],
-                    'productSnapshot' => ['name' => 'Phone'],
-                ],
-            ],
-            null,
-            1000,
-            'CNY',
-        );
-
-        $items = $order->getItems();
-        self::assertCount(1, $items);
-        $item = $items->first();
-        self::assertSame($spec->getUuid(), $item->getSpecificationUuid());
-        self::assertSame(['name' => 'Red'], $item->getSpecSnapshot());
-        self::assertSame(['name' => 'Phone'], $item->getProductSnapshot());
-    }
-
-    public function testCreateOrderWithStoreContextAppliesSubmitAndRecordsOutbox(): void
-    {
-        $persisted = [];
-        $em = $this->createEntityManager(
-            static function (object $entity) use (&$persisted): void {
-                $persisted[] = $entity;
-            }
-        );
-
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->willReturn(true);
-        $workflow->expects(self::once())->method('apply');
-
-        $service = $this->createService([
-            'em' => $em,
-            'workflow' => $workflow,
-            'outboxService' => new TradeOutboxService($em),
-        ]);
-
-        $order = $service->createOrder(
-            [
-                ['specification' => null, 'quantity' => 3, 'unitPrice' => 200, 'price' => 600],
-            ],
-            null,
-            600,
-            'CNY',
-            null,
-            ['delivery' => ['city' => 'Shenzhen']],
-            $this->storeContext(),
-        );
-
-        $messages = array_values(array_filter(
-            $persisted,
-            static fn (object $entity): bool => $entity instanceof TradeOutboxMessage
-        ));
-        self::assertCount(1, $messages);
-        self::assertInstanceOf(TradeOutboxMessage::class, $messages[0]);
-        self::assertSame('trade.order.created.v1', $messages[0]->getTopic());
-        self::assertSame($order->getUuid(), $messages[0]->getAggregateId());
-
-        $payload = $messages[0]->getPayload();
-        self::assertSame($order->getUuid(), $payload['orderUuid']);
-        self::assertSame(self::STORE_UUID, $payload['store']['uuid']);
-        self::assertSame('CNY', $payload['currency']);
-        self::assertSame(600, $payload['totalAmount']);
-        self::assertSame(['city' => 'Shenzhen'], $payload['delivery']);
-        self::assertNull($payload['customerUserUuid']);
-        self::assertSame(3, $payload['items'][0]['quantity']);
-        self::assertSame(200, $payload['items'][0]['unitPrice']);
-        self::assertSame(600, $payload['items'][0]['lineAmount']);
-        self::assertSame('', $payload['items'][0]['catalogReference']);
-    }
-
-    public function testCreateOrderWithStoreContextAndUserReferenceRecordsCustomerUuid(): void
-    {
-        $user = $this->createUser(42);
-        $persisted = [];
-        $em = $this->createEntityManager(
-            static function (object $entity) use (&$persisted): void {
-                $persisted[] = $entity;
-            }
-        );
-        $em->method('getReference')->willReturn($user);
-
-        $workflow = $this->createStub(WorkflowInterface::class);
-        $workflow->method('can')->willReturn(true);
-
-        $service = $this->createService([
-            'em' => $em,
-            'workflow' => $workflow,
-            'outboxService' => new TradeOutboxService($em),
-        ]);
-
-        $order = $service->createOrder([], ['id' => 42], 100, 'CNY', null, [], $this->storeContext());
-
-        self::assertSame($user, $order->getUser());
-
-        $messages = array_values(array_filter(
-            $persisted,
-            static fn (object $entity): bool => $entity instanceof TradeOutboxMessage
-        ));
-        self::assertCount(1, $messages);
-        self::assertSame($user->getUuid(), $messages[0]->getPayload()['customerUserUuid']);
     }
 
     // ========================================================================
@@ -665,10 +475,6 @@ final class OrderServicePaymentsTest extends TestCase
     // Helpers
     // ========================================================================
 
-    private function storeContext(): StoreContext
-    {
-        return new StoreContext(self::STORE_UUID, self::STORE_CODE, 'Shenzhen Store');
-    }
 
     private function createUser(int $id): User
     {

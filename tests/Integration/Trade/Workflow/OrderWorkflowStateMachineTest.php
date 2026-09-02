@@ -36,7 +36,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     protected static function getKernelClass(): string
     {
         if (!class_exists(\App\Kernel::class, false)) {
-            require_once dirname(__DIR__, 3) . '/src/Kernel.php';
+            require_once dirname(__DIR__, 4) . '/src/Kernel.php';
         }
 
         return \App\Kernel::class;
@@ -77,7 +77,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
 
         self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
         self::assertTrue($this->workflow->can($order, 'submit'));
-        self::assertTrue($this->workflow->can($order, 'store_submit'));
         self::assertTrue($this->workflow->can($order, 'cancel'));
     }
 
@@ -104,38 +103,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     }
 
     #[Group('low-value')]
-    public function testStoreBranchChainDraftToCancelledViaReject(): void
-    {
-        $order = new Order();
-
-        $this->workflow->apply($order, 'store_submit');
-        self::assertSame('awaiting_store_acceptance', $order->getStatus());
-
-        $this->workflow->apply($order, 'store_reject');
-        self::assertSame('store_rejected', $order->getStatus());
-
-        $this->workflow->apply($order, 'cancel');
-        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
-    }
-
     #[Group('low-value')]
-    public function testStoreBranchChainAwaitingAcceptToConfirmed(): void
-    {
-        $order = new Order();
-
-        $this->workflow->apply($order, 'store_submit');
-        self::assertSame('awaiting_store_acceptance', $order->getStatus());
-
-        $this->workflow->apply($order, 'store_accept');
-        self::assertSame('store_accepted', $order->getStatus());
-
-        $this->workflow->apply($order, 'confirm');
-        self::assertSame(Order::STATUS_CONFIRMED, $order->getStatus());
-
-        $this->workflow->apply($order, 'pay');
-        self::assertSame(Order::STATUS_PAID, $order->getStatus());
-    }
-
     // =====================================================================
     // 2. Every enabled transition from every state (per workflow.yaml)
     // =====================================================================
@@ -146,11 +114,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     public static function enabledTransitionsProvider(): array
     {
         return [
-            'draft' => ['draft', ['submit', 'store_submit', 'cancel']],
+            'draft' => ['draft', ['submit', 'cancel']],
             'pending' => ['pending', ['confirm', 'cancel']],
-            'awaiting_store_acceptance' => ['awaiting_store_acceptance', ['store_accept', 'store_reject', 'cancel']],
-            'store_accepted' => ['store_accepted', ['confirm', 'cancel']],
-            'store_rejected' => ['store_rejected', ['cancel']],
             'confirmed' => ['confirmed', ['pay', 'cancel']],
             'paid' => ['paid', ['fulfill']],
             'fulfilled' => ['fulfilled', ['complete']],
@@ -186,16 +151,9 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     {
         return [
             'draft->submit' => ['draft', 'submit', 'pending'],
-            'draft->store_submit' => ['draft', 'store_submit', 'awaiting_store_acceptance'],
             'draft->cancel' => ['draft', 'cancel', 'cancelled'],
             'pending->confirm' => ['pending', 'confirm', 'confirmed'],
             'pending->cancel' => ['pending', 'cancel', 'cancelled'],
-            'awaiting_store_acceptance->store_accept' => ['awaiting_store_acceptance', 'store_accept', 'store_accepted'],
-            'awaiting_store_acceptance->store_reject' => ['awaiting_store_acceptance', 'store_reject', 'store_rejected'],
-            'awaiting_store_acceptance->cancel' => ['awaiting_store_acceptance', 'cancel', 'cancelled'],
-            'store_accepted->confirm' => ['store_accepted', 'confirm', 'confirmed'],
-            'store_accepted->cancel' => ['store_accepted', 'cancel', 'cancelled'],
-            'store_rejected->cancel' => ['store_rejected', 'cancel', 'cancelled'],
             'confirmed->pay' => ['confirmed', 'pay', 'paid'],
             'confirmed->cancel' => ['confirmed', 'cancel', 'cancelled'],
             'paid->fulfill' => ['paid', 'fulfill', 'fulfilled'],
@@ -229,18 +187,14 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'draft->fulfill' => ['draft', 'fulfill'],
             'draft->complete' => ['draft', 'complete'],
             'draft->refund' => ['draft', 'refund'],
-            'draft->store_accept' => ['draft', 'store_accept'],
-            'draft->store_reject' => ['draft', 'store_reject'],
             'pending->pay' => ['pending', 'pay'],
             'pending->fulfill' => ['pending', 'fulfill'],
             'pending->submit' => ['pending', 'submit'],
-            'pending->store_submit' => ['pending', 'store_submit'],
             'confirmed->submit' => ['confirmed', 'submit'],
             'confirmed->confirm' => ['confirmed', 'confirm'],
             'confirmed->fulfill' => ['confirmed', 'fulfill'],
             'confirmed->complete' => ['confirmed', 'complete'],
             'confirmed->refund' => ['confirmed', 'refund'],
-            'confirmed->store_submit' => ['confirmed', 'store_submit'],
             'paid->pay' => ['paid', 'pay'],
             'paid->confirm' => ['paid', 'confirm'],
             'paid->complete' => ['paid', 'complete'],
@@ -262,8 +216,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'refunded->pay' => ['refunded', 'pay'],
             'refunded->refund' => ['refunded', 'refund'],
             'refunded->cancel' => ['refunded', 'cancel'],
-            'store_accepted->store_accept' => ['store_accepted', 'store_accept'],
-            'store_rejected->confirm' => ['store_rejected', 'confirm'],
         ];
     }
 
@@ -364,8 +316,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             $definition->getTransitions(),
         );
 
-        // Multi-from transitions (confirm, cancel) are expanded by Symfony into
-        // one Transition object per (name, from-place) arc, hence 16 arcs for 10
+        // Multi-from transitions (cancel) are expanded by Symfony into
+        // one Transition object per (name, from-place) arc, hence 9 arcs for 7
         // unique transition names.
         $unique = array_values(array_unique($names));
         sort($unique);
@@ -377,9 +329,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'fulfill',
             'pay',
             'refund',
-            'store_accept',
-            'store_reject',
-            'store_submit',
             'submit',
         ], $unique);
     }
@@ -502,16 +451,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     }
 
     #[Group('low-value')]
-    public function testStoreRejectDoesNotSetTimestamp(): void
-    {
-        $order = new Order();
-        $this->workflow->apply($order, 'store_submit');
-        $this->workflow->apply($order, 'store_reject');
-
-        self::assertNull($order->getCancelledAt());
-        self::assertSame('store_rejected', $order->getStatus());
-    }
-
     public function testOrderEntityExposesMarkingViaGetStatusSetStatus(): void
     {
         // Guards the marking_store wiring (method + property 'status') declared
