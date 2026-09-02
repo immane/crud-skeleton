@@ -48,6 +48,7 @@ final class OrderServicePaymentsTest extends TestCase
             'invoiceService' => null,
             'outboxService' => null,
             'workflow' => null,
+            'storeRepository' => null,
         ];
         $props = array_merge($defaults, $overrides);
 
@@ -139,10 +140,20 @@ final class OrderServicePaymentsTest extends TestCase
         $workflow->expects(self::once())->method('can')->willReturn(false);
         $workflow->expects(self::never())->method('apply');
 
+        // Store requires acceptance -> can=false should throw
+        $store = new \App\Store\Entity\Store('STORE001', 'Test Store');
+        $store->setSettings(['order' => ['requireAcceptance' => true]]);
+        // Need to set uuid to match StoreContext STORE_UUID constant
+        $ref = new \ReflectionProperty(\App\Store\Entity\Store::class, 'uuid');
+        $ref->setValue($store, self::STORE_UUID);
+        $storeRepository = $this->createMock(\App\Store\Repository\StoreRepository::class);
+        $storeRepository->method('findOneBy')->willReturn($store);
+
         $service = $this->createService([
             'em' => $em,
             'workflow' => $workflow,
             'outboxService' => new TradeOutboxService($em),
+            'storeRepository' => $storeRepository,
         ]);
 
         $this->expectException(\RuntimeException::class);

@@ -224,7 +224,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             'awaiting_store_acceptance' => ['store_accept', 'store_reject', 'cancel'],
             Order::STATUS_CONFIRMED => ['pay', 'cancel'],
             Order::STATUS_PAID => ['fulfill'],
-            Order::STATUS_FULFILLED => ['complete'],
+            Order::STATUS_FULFILLED => ['complete', 'cancel'],
             Order::STATUS_COMPLETED => ['refund'],
             Order::STATUS_CANCELLED => [],
             Order::STATUS_REFUNDED => [],

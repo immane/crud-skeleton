@@ -178,6 +178,7 @@ final class SeedAuthorizationCommand extends Command
             ['code' => 'store:order:accept', 'module' => 'store', 'resource' => 'order', 'action' => 'accept', 'name' => 'Accept store orders'],
             ['code' => 'store:order:reject', 'module' => 'store', 'resource' => 'order', 'action' => 'reject', 'name' => 'Reject store orders'],
             ['code' => 'store:order:fulfill', 'module' => 'store', 'resource' => 'order', 'action' => 'fulfill', 'name' => 'Fulfill store orders'],
+            ['code' => 'store:order:verify', 'module' => 'store', 'resource' => 'order', 'action' => 'verify', 'name' => 'Verify store orders'],
             ['code' => 'store:product:read', 'module' => 'store', 'resource' => 'product', 'action' => 'read', 'name' => 'Read store products'],
             ['code' => 'store:product:create', 'module' => 'store', 'resource' => 'product', 'action' => 'create', 'name' => 'Create store products'],
             ['code' => 'store:product:update', 'module' => 'store', 'resource' => 'product', 'action' => 'update', 'name' => 'Update store products'],

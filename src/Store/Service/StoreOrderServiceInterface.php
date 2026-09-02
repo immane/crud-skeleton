@@ -24,4 +24,6 @@ interface StoreOrderServiceInterface extends BaseServiceInterface
 
     /** @param array<string, mixed>|null $fulfillmentData */
     public function fulfill(StoreOrder $storeOrder, ?array $fulfillmentData = null): StoreOrder;
+
+    public function verify(StoreOrder $storeOrder, string $verificationCode, ?string $verifiedBy = null): StoreOrder;
 }

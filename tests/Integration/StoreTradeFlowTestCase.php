@@ -147,7 +147,11 @@ abstract class StoreTradeFlowTestCase extends IntegrationWebTestCase
 
     protected function createStore(ContainerInterface $container, string $code): Store
     {
-        return $container->get(StoreServiceInterface::class)->createStore($code, ucfirst($code) . ' Store', 'UTC');
+        $store = $container->get(StoreServiceInterface::class)->createStore($code, ucfirst($code) . ' Store', 'UTC');
+        $store->setSettings(['order' => ['requireAcceptance' => true]]);
+        $container->get(EntityManagerInterface::class)->flush();
+
+        return $store;
     }
 
     /** @return array{0: Product, 1: Specification} */

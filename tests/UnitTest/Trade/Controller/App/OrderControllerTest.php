@@ -181,7 +181,9 @@ final class OrderControllerTest extends TestCase
 
         $this->storeContextResolver->method('resolve')->willReturn(new StoreContext('store-uuid-1', 'STORE01', 'Store One'));
         $this->service->method('calculatePrices')->willReturn($this->priceResult(1000));
-        $this->service->method('createOrder')->willReturn($this->orderOwnedBy(1));
+        $order = $this->orderOwnedBy(1);
+        $order->method('getStatus')->willReturn('awaiting_store_acceptance');
+        $this->service->method('createOrder')->willReturn($order);
 
         $response = $this->controller->createAction($requestStack->getCurrentRequest());
 

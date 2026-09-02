@@ -59,6 +59,7 @@ final class StoreOrderController extends RestController
             'accept' => 'store:order:accept',
             'reject' => 'store:order:reject',
             'fulfill' => 'store:order:fulfill',
+            'verify' => 'store:order:verify',
         ];
     }
 
@@ -130,6 +131,42 @@ final class StoreOrderController extends RestController
         $this->service->fulfill($order, $fulfillmentData);
 
         return $this->success($order, 'Store order fulfilled.');
+    }
+
+    #[Route('/{orderUuid}/verify', name: 'verify', methods: ['POST'], requirements: ['orderUuid' => '[0-9a-fA-F-]{36}'])]
+    public function verifyAction(Request $request, string $scopeId, string $orderUuid): Response
+    {
+        $this->authorizeStoreAction('verify');
+        $order = $this->storeOrder($orderUuid);
+        if ($order === null) {
+            return $this->warning('Store order not found or access denied.', 404, '', 404);
+        }
+        if ($order->getOperationalStatus() !== StoreOrder::STATUS_FULFILLED) {
+            return $this->warning('Store order cannot be verified in its current status.', 400, '', 400);
+        }
+        if ($order->getVerifiedAt() !== null) {
+            return $this->warning('Store order already verified.', 400, '', 400);
+        }
+
+        $data = $this->body($request);
+        $verificationCode = $data['verificationCode'] ?? null;
+        if (!is_string($verificationCode) || trim($verificationCode) === '') {
+            return $this->warning('verificationCode is required.', 400, '', 400);
+        }
+        $verificationCode = trim($verificationCode);
+        if (strlen($verificationCode) > 64) {
+            return $this->warning('verificationCode must not exceed 64 characters.', 400, '', 400);
+        }
+
+        $user = $this->getUser();
+        $verifiedBy = null;
+        if ($user !== null && method_exists($user, 'getUuid')) {
+            $verifiedBy = $user->getUuid();
+        }
+
+        $this->service->verify($order, $verificationCode, $verifiedBy);
+
+        return $this->success($order, 'Store order verified.');
     }
 
     /** @return array<string, mixed> */

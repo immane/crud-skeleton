@@ -53,6 +53,7 @@ framework:
                 - confirmed
                 - paid
                 - fulfilled
+                - awaiting_store_verification
                 - completed
                 - cancelled
                 - refunded
@@ -78,11 +79,17 @@ framework:
                 fulfill:
                     from: paid
                     to: fulfilled
+                request_verification:
+                    from: fulfilled
+                    to: awaiting_store_verification
+                store_verify:
+                    from: awaiting_store_verification
+                    to: completed
                 complete:
                     from: fulfilled
                     to: completed
                 cancel:
-                    from: [draft, pending, awaiting_store_acceptance, store_accepted, store_rejected, confirmed]
+                    from: [draft, pending, awaiting_store_acceptance, store_accepted, store_rejected, confirmed, fulfilled, awaiting_store_verification]
                     to: cancelled
                 refund:
                     from: completed

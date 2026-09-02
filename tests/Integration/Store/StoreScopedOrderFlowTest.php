@@ -32,6 +32,9 @@ final class StoreScopedOrderFlowTest extends IntegrationWebTestCase
         $container = $client->getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
         $store = $container->get(StoreServiceInterface::class)->createStore('xuhui', 'Xuhui Store', 'Asia/Shanghai');
+        $store->setSettings(['order' => ['requireAcceptance' => true]]);
+        $entityManager->persist($store);
+        $entityManager->flush();
 
         $product = new Product();
         $product->setName('Tea');

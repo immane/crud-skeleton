@@ -40,6 +40,13 @@ final class TradeStoreOrderEventTest extends IntegrationWebTestCase
         $em->persist($specification);
         $em->flush();
 
+        $store = new \App\Store\Entity\Store('duplicate-lines', 'Duplicate Lines');
+        $store->setSettings(['order' => ['requireAcceptance' => true]]);
+        $ref = new \ReflectionProperty(\App\Store\Entity\Store::class, 'uuid');
+        $ref->setValue($store, '00000000-0000-4000-8000-000000000050');
+        $em->persist($store);
+        $em->flush();
+
         $container->get(OrderServiceInterface::class)->createOrder([
             ['specification' => $specification, 'quantity' => 1, 'unitPrice' => 100, 'price' => 100, 'specSnapshot' => [], 'productSnapshot' => []],
             ['specification' => $specification, 'quantity' => 2, 'unitPrice' => 100, 'price' => 200, 'specSnapshot' => [], 'productSnapshot' => []],

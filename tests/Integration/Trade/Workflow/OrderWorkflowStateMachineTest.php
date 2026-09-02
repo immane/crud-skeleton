@@ -36,7 +36,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     protected static function getKernelClass(): string
     {
         if (!class_exists(\App\Kernel::class, false)) {
-            require_once dirname(__DIR__, 3) . '/src/Kernel.php';
+            require_once dirname(__DIR__, 4) . '/src/Kernel.php';
         }
 
         return \App\Kernel::class;
@@ -153,7 +153,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'store_rejected' => ['store_rejected', ['cancel']],
             'confirmed' => ['confirmed', ['pay', 'cancel']],
             'paid' => ['paid', ['fulfill']],
-            'fulfilled' => ['fulfilled', ['complete']],
+            'fulfilled' => ['fulfilled', ['complete', 'cancel']],
+            'awaiting_store_verification' => ['awaiting_store_verification', ['cancel']],
             'completed' => ['completed', ['refund']],
             'cancelled' => ['cancelled', []],
             'refunded' => ['refunded', []],
@@ -200,6 +201,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'confirmed->cancel' => ['confirmed', 'cancel', 'cancelled'],
             'paid->fulfill' => ['paid', 'fulfill', 'fulfilled'],
             'fulfilled->complete' => ['fulfilled', 'complete', 'completed'],
+            'fulfilled->cancel' => ['fulfilled', 'cancel', 'cancelled'],
+            'awaiting_store_verification->cancel' => ['awaiting_store_verification', 'cancel', 'cancelled'],
             'completed->refund' => ['completed', 'refund', 'refunded'],
         ];
     }
@@ -249,7 +252,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'fulfilled->pay' => ['fulfilled', 'pay'],
             'fulfilled->fulfill' => ['fulfilled', 'fulfill'],
             'fulfilled->refund' => ['fulfilled', 'refund'],
-            'fulfilled->cancel' => ['fulfilled', 'cancel'],
             'completed->pay' => ['completed', 'pay'],
             'completed->complete' => ['completed', 'complete'],
             'completed->cancel' => ['completed', 'cancel'],
@@ -354,9 +356,10 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     {
         // In the installed Symfony Workflow version the Transition value object
         // exposes no guard API at all, and config/packages/workflow.yaml does
-        // not set `guard:` on any order transition. Guard enforcement lives in
-        // OrderService + controllers. This test pins that fact down so a future
-        // "fix" that relies on workflow guards is caught.
+        // not set `guard:` on any order transition. Guard enforcement for
+        // store acceptance/verification lives in StoreOrderWorkflowGuardListener
+        // (event guard), not in workflow.yaml guard expressions. This test pins
+        // the set of transition names so accidental renames are caught.
         $definition = $this->workflow->getDefinition();
 
         $names = array_map(
@@ -365,8 +368,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         );
 
         // Multi-from transitions (confirm, cancel) are expanded by Symfony into
-        // one Transition object per (name, from-place) arc, hence 16 arcs for 10
-        // unique transition names.
+        // one Transition object per (name, from-place) arc, hence 18 arcs for 12
+        // unique transition names (added request_verification + store_verify).
         $unique = array_values(array_unique($names));
         sort($unique);
 
@@ -377,9 +380,11 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'fulfill',
             'pay',
             'refund',
+            'request_verification',
             'store_accept',
             'store_reject',
             'store_submit',
+            'store_verify',
             'submit',
         ], $unique);
     }

@@ -72,10 +72,11 @@ class OrderController extends RestController
                 $storeContext,
             );
 
+            $isAwaitingAcceptance = $order->getStatus() === Order::STATUS_AWAITING_STORE_ACCEPTANCE;
             return $this->success(
                 $order,
-                $storeContext === null ? 'Order created' : 'Order submitted for store acceptance',
-                $storeContext === null ? 201 : 202,
+                $isAwaitingAcceptance ? 'Order submitted for store acceptance' : 'Order created',
+                $isAwaitingAcceptance ? 202 : 201,
             );
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);

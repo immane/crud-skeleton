@@ -18,9 +18,13 @@ class Order
 {
     public const STATUS_DRAFT = 'draft';
     public const STATUS_PENDING = 'pending';
+    public const STATUS_AWAITING_STORE_ACCEPTANCE = 'awaiting_store_acceptance';
+    public const STATUS_STORE_ACCEPTED = 'store_accepted';
+    public const STATUS_STORE_REJECTED = 'store_rejected';
     public const STATUS_CONFIRMED = 'confirmed';
     public const STATUS_PAID = 'paid';
     public const STATUS_FULFILLED = 'fulfilled';
+    public const STATUS_AWAITING_STORE_VERIFICATION = 'awaiting_store_verification';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_REFUNDED = 'refunded';
