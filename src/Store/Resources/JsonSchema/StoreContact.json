@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "Store/StoreContact",
+  "title": "Store Contact",
+  "description": "Contact info for Store.contact. All fields optional; unknown keys are rejected.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "phone": {
+      "type": "string",
+      "pattern": "^(\\+?[0-9\\- ]{7,20}|1[3-9][0-9]{9})$",
+      "description": "Store phone (mobile or landline)"
+    },
+    "managerPhone": {
+      "type": "string",
+      "pattern": "^(\\+?[0-9\\- ]{7,20}|1[3-9][0-9]{9})$"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 255
+    },
+    "managerEmail": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 255
+    },
+    "managerName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "managerUserUuid": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12}$"
+    },
+    "wechat": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "serviceHours": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "e.g. 09:00-21:00"
+    }
+  },
+  "required": []
+}

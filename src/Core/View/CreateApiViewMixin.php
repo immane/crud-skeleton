@@ -3,6 +3,7 @@
 namespace App\Core\View;
 
 use App\Core\Utils\FixJSON;
+use App\Core\Validator\JsonSchemaValidator;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,32 @@ trait CreateApiViewMixin
     {
         /** Default values */
         return $content;
+    }
+
+    /**
+     * Validate JSON fields against bundle JSON Schemas if controller declares $jsonSchemas.
+     * Expected shape: ['fieldName' => 'Bundle/SchemaName'] e.g. ['settings' => 'Store/StoreSettings']
+     *
+     * @param array<string, mixed> $content
+     */
+    private function validateCreateJsonSchemas(array $content): void
+    {
+        if (!property_exists($this, 'jsonSchemas') || empty($this->jsonSchemas)) {
+            return;
+        }
+        $container = $this->serviceContainer ?? $this->container ?? null;
+        if ($container === null || !$container->has(JsonSchemaValidator::class)) {
+            return;
+        }
+        $validator = $container->get(JsonSchemaValidator::class);
+        if (!$validator instanceof JsonSchemaValidator) {
+            return;
+        }
+        foreach ($this->jsonSchemas as $field => $schemaName) {
+            if (array_key_exists($field, $content) && $content[$field] !== null) {
+                $validator->validate($content[$field], $schemaName);
+            }
+        }
     }
 
     /**
@@ -139,6 +166,7 @@ trait CreateApiViewMixin
                 $data = json_decode($transformer, true);
                 $content = $this->transformContent($content, $data, $entity);
             }
+            $this->validateCreateJsonSchemas($content);
             $content = $this->processCreateContent($content, $entity);
 
             // process entity

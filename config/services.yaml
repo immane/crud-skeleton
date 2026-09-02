@@ -120,6 +120,9 @@ services:
     App\Wechat\Service\WechatServiceInterface: '@App\Wechat\Service\WechatService'
     App\Wechat\Service\WechatAuthServiceInterface: '@App\Wechat\Service\WechatAuthService'
 
+    App\Core\Validator\JsonSchemaValidator:
+        public: true
+
     App\Identity\Service\LocalCacheOtpStorage:
         arguments:
             $cache: '@cache.app'

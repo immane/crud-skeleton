@@ -34,6 +34,13 @@ final class StoreController extends RestController
     /** @var list<string> */
     protected array $acceptedUpdateProperties = ['name', 'timezone', 'contact', 'address', 'settings'];
 
+    /** @var array<string, string> JSON field → bundle schema */
+    protected array $jsonSchemas = [
+        'contact' => 'Store/StoreContact',
+        'address' => 'Store/StoreAddress',
+        'settings' => 'Store/StoreSettings',
+    ];
+
     public function __construct(
         protected readonly StoreServiceInterface $service,
         private readonly MembershipServiceInterface $membershipService,

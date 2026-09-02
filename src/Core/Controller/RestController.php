@@ -26,7 +26,7 @@ class RestController extends AbstractController
     private ?RequestStack $requestStack = null;
     private ?SerializerInterface $serializer = null;
     private ?TranslatorInterface $translator = null;
-    private ?ContainerInterface $serviceContainer = null;
+    protected ?ContainerInterface $serviceContainer = null;
 
     /**
      * Constructor accepts optional dependencies so subclasses can call parent::__construct()

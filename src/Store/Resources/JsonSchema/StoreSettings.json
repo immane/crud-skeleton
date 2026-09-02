@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "Store/StoreSettings",
+  "title": "Store Settings",
+  "description": "Store-local configuration (Store.settings). Both flows default to false.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "order": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requireAcceptance": {
+          "type": "boolean",
+          "description": "When true, Trade order with X-Store-Code must go through awaiting_store_acceptance → store_accept/reject. Default false.",
+          "default": false
+        }
+      },
+      "required": []
+    },
+    "fulfillment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requireVerification": {
+          "type": "boolean",
+          "description": "When true, fulfilled Trade order must go through awaiting_store_verification → store_verify via StoreOrder verificationCode. Default false.",
+          "default": false
+        }
+      },
+      "required": []
+    }
+  },
+  "required": []
+}

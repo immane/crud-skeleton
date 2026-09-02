@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "Store/StoreAddress",
+  "title": "Store Address",
+  "description": "Structured address for Store.address. All fields optional; unknown keys are rejected to keep API standardized. Extra display detail lives in 'detail'.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "province": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "description": "Province / state"
+    },
+    "city": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "description": "City"
+    },
+    "district": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "description": "District / county"
+    },
+    "street": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Street"
+    },
+    "detail": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Detailed address, building/floor/room"
+    },
+    "building": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "floor": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "postalCode": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z\\- ]{3,20}$",
+      "description": "Postal code"
+    },
+    "formattedAddress": {
+      "type": "string",
+      "maxLength": 255,
+      "description": "Human-readable full address for display"
+    },
+    "latitude": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "WGS84 latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "WGS84 longitude"
+    },
+    "geohash": {
+      "type": "string",
+      "pattern": "^[0-9bcdefghjkmnpqrstuvwxyz]{1,12}$",
+      "description": "Geohash (auto-filled from lat/lng if missing)"
+    },
+    "poiId": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Third-party POI ID (amap/gaode, tencent)"
+    }
+  },
+  "required": [],
+  "dependencies": {
+    "latitude": ["longitude"],
+    "longitude": ["latitude"]
+  }
+}
