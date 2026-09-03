@@ -188,7 +188,7 @@ framework:
                     from: [draft, pending, awaiting_store_acceptance, store_accepted, store_rejected, confirmed, fulfilled, awaiting_store_verification]
                     to: cancelled
 
-                # refund: completed -> refunded. Terminal refund after completed, via Payment refund (gateway + wallet adjustments). Sets refundedAt/refundReason.
+                # refund: paid -> refunded. Only paid orders can be refunded (business rule). Triggered via OrderService::refund() after Payment refund; fulfilled/completed cannot directly refund.
                 refund:
-                    from: completed
+                    from: paid
                     to: refunded

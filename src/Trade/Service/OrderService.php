@@ -211,9 +211,9 @@ final class OrderService extends BaseService implements OrderServiceInterface
 
     public function refund(Order $order, int $systemWalletId, string $reason, ?string $referenceId = null): void
     {
-        if ($order->getStatus() !== Order::STATUS_COMPLETED) {
+        if ($order->getStatus() !== Order::STATUS_PAID) {
             throw new \RuntimeException(sprintf(
-                'Order #%d must be in "completed" status to refund, current: %s',
+                'Order #%d must be in "paid" status to refund, current: %s',
                 $order->getId() ?? 0,
                 $order->getStatus(),
             ));
