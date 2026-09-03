@@ -47,7 +47,7 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
         // Start payment with wallet deduction (creates invoice in "paying")
-        $this->jsonPost("/api/v1/manage/orders/{$orderId}/payment", [
+        $this->createInvoiceForOrder($orderId, [
             'payment' => Invoice::PAYMENT_MOCK,
             'walletAmount' => 1000,
             'systemWalletId' => $systemWallet->getId(),
@@ -68,8 +68,8 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
         self::assertSame(4000, $userWallet->getBalance());
         self::assertSame(1000, $systemWallet->getBalance());
 
-        // Cancel order via manage do/cancel
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/cancel");
+        // Cancel order via the app endpoint, which cancels the linked invoice (invoice-aware cancel).
+        [$response, $content] = $this->jsonPost("/api/v1/app/orders/{$orderId}/cancel");
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(0, $content['code']);
 
@@ -115,7 +115,7 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
         // Start payment without autoPaid to keep invoice in "paying"
-        $this->jsonPost("/api/v1/manage/orders/{$orderId}/payment", [
+        $this->createInvoiceForOrder($orderId, [
             'payment' => Invoice::PAYMENT_MOCK,
         ]);
 
@@ -142,7 +142,7 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        $this->jsonPost("/api/v1/manage/orders/{$orderId}/payment", [
+        $this->createInvoiceForOrder($orderId, [
             'payment' => Invoice::PAYMENT_MOCK,
         ]);
 
@@ -170,6 +170,50 @@ final class TradeOrderCancelWithInvoiceIntegrationTest extends IntegrationWebTes
     // ========================================================================
     // Helpers
     // ========================================================================
+
+
+    private function createInvoiceForOrder(int $orderId, array $payOptions = []): int
+    {
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        self::assertInstanceOf(Order::class, $order);
+        $payload = [
+            'sourceType' => 'trade_order',
+            'sourceId' => $order->getUuid(),
+            'scene' => Invoice::SCENE_ORDER,
+            'amount' => $order->getTotalAmount(),
+            'currency' => $order->getCurrency(),
+        ];
+        if ($order->getUser()?->getId() !== null) {
+            $payload['payer'] = $order->getUser()->getId();
+        }
+        [, $result] = $this->jsonPost('/api/v1/manage/invoices', $payload);
+        self::assertSame(0, $result['code'], 'createInvoiceForOrder failed: '.json_encode($result));
+        $invoiceId = (int) $result['data']['id'];
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        $invoice = $this->em->getRepository(Invoice::class)->find($invoiceId);
+        if ($order instanceof Order && $invoice instanceof Invoice) {
+            $order->setInvoiceId($invoice->getUuid());
+            $order->setInvoiceNo($invoice->getOutTradeNo());
+            $order->setPaymentStatus($invoice->getStatus());
+            $this->em->flush();
+        }
+        if ($payOptions !== []) {
+            $payment = $payOptions['payment'] ?? Invoice::PAYMENT_MOCK;
+            unset($payOptions['payment']);
+            $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/{$payment}", $payOptions);
+            // Refresh order payment status after pay
+            $this->em->clear();
+            $order = $this->em->getRepository(Order::class)->find($orderId);
+            $invoice = $this->em->getRepository(Invoice::class)->find($invoiceId);
+            if ($order instanceof Order && $invoice instanceof Invoice) {
+                $order->setPaymentStatus($invoice->getStatus());
+                $this->em->flush();
+            }
+        }
+        return $invoiceId;
+    }
 
     private function createConfirmedOrder(int $specId, ?int $userId = null): int
     {

@@ -124,8 +124,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_WALLET,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/wallet", [
             'systemWalletId' => $systemWallet->getId(),
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -159,9 +159,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
-        ]);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", []);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $this->em->clear();
@@ -201,7 +200,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         $user = $this->currentUser();
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", ['payment' => Invoice::PAYMENT_MOCK]);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", []);
 
         $this->em->clear();
         $invoice = $this->loadInvoiceByOrder($orderId);
@@ -250,8 +250,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_WALLET,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/wallet", [
             'systemWalletId' => $systemWallet->getId(),
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -330,8 +330,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'walletAmount' => 500,
             'systemWalletId' => $systemWallet->getId(),
         ]);
@@ -374,8 +374,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'walletAmount' => self::SPEC_PRICE,
             'systemWalletId' => $systemWallet->getId(),
         ]);
@@ -405,8 +405,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'walletAmount' => 200,
             'systemWalletId' => $systemWallet->getId(),
         ]);
@@ -458,9 +458,10 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/cancel", ['reason' => 'nope']);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
 
-        // --- unknown gateway on order payment → 400 ---
+        // --- unknown gateway on invoice payment → 400 ---
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", ['payment' => 'does-not-exist']);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/does-not-exist", []);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
 
         // --- mismatch payer: user B cannot pay user A's invoice via app endpoint → 404 ---
@@ -495,16 +496,15 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'walletAmount' => 500,
             'systemWalletId' => $systemWallet->getId(),
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         // Second payment attempt on the same (paying) invoice must be rejected without double-deducting
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'walletAmount' => 500,
             'systemWalletId' => $systemWallet->getId(),
         ]);
@@ -549,7 +549,8 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         $user = $this->currentUser();
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", ['payment' => Invoice::PAYMENT_MOCK]);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", []);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $this->em->clear();
@@ -566,10 +567,9 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         $invoice = $this->loadInvoiceByOrder($orderId);
         self::assertSame(Invoice::STATUS_FAILED, $invoice->getStatus());
 
-        // BUG-001 reproduction: createPayment() reuses the failed invoice; "start_pay" is not
-        // enabled from "failed", so the retry is rejected and the order is permanently stuck.
-        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK, 'autoPaid' => true,
+        // BUG-001 reproduction: invoice in failed status cannot be re-paid via start_pay
+        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
+            'autoPaid' => true,
         ]);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertStringContainsString('cannot apply transition "start_pay"', (string) ($content['message'] ?? ''));
@@ -591,8 +591,9 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_WALLET, 'systemWalletId' => $systemWallet->getId(),
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/wallet", [
+            'systemWalletId' => $systemWallet->getId(),
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
@@ -622,8 +623,9 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         $systemWallet = $this->findWallet($systemUser);
 
         $orderId = $this->createConfirmedOrder($specId, $user->getId());
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_WALLET, 'systemWalletId' => $systemWallet->getId(),
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/wallet", [
+            'systemWalletId' => $systemWallet->getId(),
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
@@ -669,6 +671,38 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
     // ========================================================================
     // Helpers
     // ========================================================================
+
+
+    private function createInvoiceForOrder(int $orderId, ?int $amount = null): int
+    {
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        self::assertInstanceOf(Order::class, $order);
+        $payload = [
+            'sourceType' => 'trade_order',
+            'sourceId' => $order->getUuid(),
+            'scene' => Invoice::SCENE_ORDER,
+            'amount' => $amount ?? $order->getTotalAmount(),
+            'currency' => $order->getCurrency(),
+        ];
+        if ($order->getUser()?->getId() !== null) {
+            $payload['payer'] = $order->getUser()->getId();
+        }
+        [, $content] = $this->jsonRequest('POST', '/api/v1/manage/invoices', $payload);
+        self::assertSame(0, $content['code'], 'createInvoiceForOrder failed: '.json_encode($content));
+        $invoiceId = (int) $content['data']['id'];
+        // Link invoice to order immediately (mimics OrderService::createPayment)
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        $invoice = $this->em->getRepository(Invoice::class)->find($invoiceId);
+        if ($order instanceof Order && $invoice instanceof Invoice) {
+            $order->setInvoiceId($invoice->getUuid());
+            $order->setInvoiceNo($invoice->getOutTradeNo());
+            $order->setPaymentStatus($invoice->getStatus());
+            $this->em->flush();
+        }
+        return $invoiceId;
+    }
 
     private function createProduct(): int
     {

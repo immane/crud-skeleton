@@ -181,7 +181,7 @@ abstract class StoreTradeFlowTestCase extends IntegrationWebTestCase
             'currency' => 'CNY',
             'items' => [['specificationId' => $specificationId, 'quantity' => 2]],
         ]);
-        self::assertResponseStatusCodeSame(202);
+        self::assertResponseStatusCodeSame(201);
         $data = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR)['data'];
 
         return ['uuid' => $data['uuid'], 'id' => (int) $data['id'], 'status' => 'awaiting_store_acceptance'];

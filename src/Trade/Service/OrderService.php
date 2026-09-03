@@ -47,6 +47,18 @@ final class OrderService extends BaseService implements OrderServiceInterface
         parent::__construct($container, Order::class);
     }
 
+    public function update(mixed $object, ?array $data = null, bool $noFlush = false): object|false
+    {
+        // When called via CreateApiViewMixin for Order creation, processEntity has already
+        // created the order via createOrder and stored calculated data in $data.
+        // The mixin then calls update() with that already-persisted order; we should not
+        // try to re-apply the items via generic serializer, which would duplicate.
+        if ($object instanceof Order && isset($data['__calculatedItems'])) {
+            return $object;
+        }
+        return parent::update($object, $data, $noFlush);
+    }
+
     /**
      * @param list<array<string, mixed>> $items
      * @param array<string, mixed>       $meta

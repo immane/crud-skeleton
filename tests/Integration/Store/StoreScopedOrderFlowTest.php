@@ -49,7 +49,7 @@ final class StoreScopedOrderFlowTest extends IntegrationWebTestCase
             'items' => [['specificationId' => $specification->getId(), 'quantity' => 2]],
         ], JSON_THROW_ON_ERROR));
 
-        self::assertResponseStatusCodeSame(202);
+        self::assertResponseStatusCodeSame(201);
         $response = json_decode((string) $client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
         $orderUuid = $response['data']['uuid'];
         $order = $entityManager->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);

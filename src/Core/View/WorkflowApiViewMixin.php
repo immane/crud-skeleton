@@ -5,7 +5,6 @@ namespace App\Core\View;
 use App\Core\Service\BaseService;
 use App\Core\Utils\UUID;
 use OpenApi\Attributes as OA;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,7 +13,21 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 
 trait WorkflowApiViewMixin
 {
-    // protected $workflow;
+    /**
+     * Resolve the Symfony Workflow instance for this controller.
+     *
+     * Controllers that support the workflow via constructor injection override this
+     * method to return the injected instance. The default resolves the workflow
+     * service by id from the container (`$this->workflow` holds the service id).
+     *
+     * @return \Symfony\Component\Workflow\WorkflowInterface
+     */
+    protected function workflow(): \Symfony\Component\Workflow\WorkflowInterface
+    {
+        /** @var \Symfony\Component\Workflow\WorkflowInterface $workflow */
+        $workflow = $this->container->get($this->workflow);
+        return $workflow;
+    }
 
     #[OA\Get(
         tags: ['Workflow'],
@@ -36,7 +49,7 @@ trait WorkflowApiViewMixin
 
         // TODO: this method will VERY SLOW when reached the large apply entry.
         $entities = array_filter($entities, function ($entity) {
-            $workflow = $this->container->get($this->workflow);
+            $workflow = $this->workflow();
             return count($workflow->getEnabledTransitions($entity));
         });
 
@@ -63,7 +76,7 @@ trait WorkflowApiViewMixin
                 return $this->warning(ApiViewMessages::ENTITY_NOT_FOUND, 404, '', 404);
             }
             $this->authorizeApiAction('workflow', $entity);
-            $workflow = $this->container->get($this->workflow);
+            $workflow = $this->workflow();
             $transitions = $workflow->getEnabledTransitions($entity);
 
             return $this->success($transitions);
@@ -94,7 +107,7 @@ trait WorkflowApiViewMixin
                 return $this->warning(ApiViewMessages::ENTITY_NOT_FOUND, 404, '', 404);
             }
             $this->authorizeApiAction('workflow', $entity);
-            $workflow = $this->container->get($this->workflow);
+            $workflow = $this->workflow();
 
             if (!$workflow->can($entity, $transition)) {
                 throw new ValidatorException(ApiViewMessages::TRANSITION_CANNOT_APPLY);
@@ -142,6 +155,15 @@ trait WorkflowApiViewMixin
             if (!method_exists($entity, 'setStatus')) {
                 return $this->warning('Entity does not support status reset.', 400, '', 400);
             }
+            // Reset to empty marking only when the entity's setter accepts an array
+            // (Symfony Workflow marking store). Order uses a string status, so the
+            // reset path is rejected for it rather than passing an array.
+            $param = (new \ReflectionMethod($entity, 'setStatus'))->getParameters()[0] ?? null;
+            $type = $param?->getType();
+            if ($type !== null && (string) $type === 'string') {
+                return $this->warning('Entity does not support workflow status reset.', 400, '', 400);
+            }
+            /** @var object $entity */
             $entity->setStatus([]);
             $this->container->get('doctrine')->getManager()->flush();
 

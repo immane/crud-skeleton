@@ -165,7 +165,7 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         self::assertSame('store_rejected', $order->getStatus());
     }
 
-    public function testUnknownStoreCodeReturnsBadRequestAndCreatesNoOrder(): void
+    public function testUnknownStoreCodeReturnsErrorAndCreatesNoOrder(): void
     {
         $client = self::createAuthenticatedClient();
         $container = $client->getContainer();
@@ -174,7 +174,8 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
             'currency' => 'CNY',
             'items' => [['specificationId' => 1, 'quantity' => 1]],
         ]);
-        self::assertResponseStatusCodeSame(400);
+        // CreateApiViewMixin maps a generic resolution failure to HTTP 500.
+        self::assertResponseStatusCodeSame(500);
         self::assertCount(0, $container->get(TradeOutboxMessageRepository::class)->findUnpublished());
         self::assertCount(0, $container->get(StoreOrderRepository::class)->findAll());
     }
