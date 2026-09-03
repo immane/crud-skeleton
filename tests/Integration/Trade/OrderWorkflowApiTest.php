@@ -94,7 +94,12 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
 
         $this->doTransitionOk($orderId, 'store_submit', 'awaiting_store_acceptance');
         $this->doTransitionOk($orderId, 'store_reject', 'store_rejected');
-        $this->doTransitionOk($orderId, 'cancel', Order::STATUS_CANCELLED);
+        // cancel only from [draft, pending, confirmed] — store_rejected must be rejected
+        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/cancel");
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertNotSame(0, $content['code'], 'cancel from store_rejected must be rejected');
+        [, $detail] = $this->jsonGet("/api/v1/manage/orders/{$orderId}");
+        self::assertSame('store_rejected', $detail['data']['status']);
     }
 
     public function testStoreAcceptIsRejectedFromDraft(): void
@@ -118,9 +123,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $cases = [
             'draft' => [],
             'pending' => ['submit'],
-            'awaiting_store_acceptance' => ['store_submit'],
-            'store_accepted' => ['store_submit', 'store_accept'],
-            'store_rejected' => ['store_submit', 'store_reject'],
             'confirmed' => ['submit', 'confirm'],
         ];
 
@@ -221,10 +223,12 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $expectedByState = [
             Order::STATUS_DRAFT => ['submit', 'store_submit', 'cancel'],
             Order::STATUS_PENDING => ['confirm', 'cancel'],
-            'awaiting_store_acceptance' => ['store_accept', 'store_reject', 'cancel'],
+            'awaiting_store_acceptance' => ['store_accept', 'store_reject'],
+            'store_accepted' => ['confirm'],
+            'store_rejected' => [],
             Order::STATUS_CONFIRMED => ['pay', 'cancel'],
             Order::STATUS_PAID => ['fulfill', 'refund'],
-            Order::STATUS_FULFILLED => ['complete', 'cancel'],
+            Order::STATUS_FULFILLED => ['complete'],
             Order::STATUS_COMPLETED => [],
             Order::STATUS_CANCELLED => [],
             Order::STATUS_REFUNDED => [],
@@ -696,6 +700,8 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             Order::STATUS_REFUNDED => ['submit', 'confirm', 'pay', 'refund'],
             Order::STATUS_CANCELLED => ['cancel'],
             'awaiting_store_acceptance' => ['store_submit'],
+            'store_accepted' => ['store_submit', 'store_accept'],
+            'store_rejected' => ['store_submit', 'store_reject'],
         ];
 
         foreach ($path[$state] as $transition) {

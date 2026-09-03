@@ -128,12 +128,13 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         self::assertInstanceOf(Order::class, $order);
         self::assertSame('store_rejected', $order->getStatus());
 
+        // cancel only from [draft, pending, confirmed] — store_rejected must not cancel
         $client->request('POST', '/api/v1/app/orders/' . $placed['id'] . '/cancel');
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(400);
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('cancelled', $order->getStatus());
+        self::assertSame('store_rejected', $order->getStatus());
     }
 
     public function testStoreBecomingUnavailableAfterPlacementRejectsTheOrder(): void
@@ -262,8 +263,19 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         [$product, $specification] = $this->createProduct($em, 'E2E Tombstone Product');
         $placed = $this->placeStoreOrder($client, $store->getCode(), (int) $specification->getId());
 
+        // cancel only from [draft, pending, confirmed] — reset to draft before cancelling to keep tombstone flow
+        $em->clear();
+        $tmp = $em->getRepository(Order::class)->findOneBy(['uuid' => $placed['uuid']]);
+        self::assertInstanceOf(Order::class, $tmp);
+        $tmp->setStatus(Order::STATUS_DRAFT);
+        $em->flush();
+
         $client->request('POST', '/api/v1/app/orders/' . $placed['id'] . '/cancel');
         self::assertResponseIsSuccessful();
+        $em->clear();
+        $chk = $em->getRepository(Order::class)->findOneBy(['uuid' => $placed['uuid']]);
+        self::assertInstanceOf(Order::class, $chk);
+        self::assertSame('cancelled', $chk->getStatus());
 
         $tradeOutbox = $container->get(TradeOutboxMessageRepository::class)->findUnpublished();
         self::assertCount(2, $tradeOutbox);

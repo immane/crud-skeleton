@@ -101,6 +101,14 @@ final class StoreTradeInventoryEnabledFlowTest extends StoreTradeFlowTestCase
         self::assertInstanceOf(Order::class, $order);
         self::assertSame('store_accepted', $order->getStatus());
 
+        // cancel only from [draft, pending, confirmed] — confirm before cancelling
+        $client->request('POST', '/api/v1/app/orders/' . $placed['id'] . '/confirm');
+        self::assertResponseIsSuccessful();
+        $em->clear();
+        $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
+        self::assertInstanceOf(Order::class, $order);
+        self::assertSame('confirmed', $order->getStatus());
+
         $client->request('POST', '/api/v1/app/orders/' . $placed['id'] . '/cancel');
         self::assertResponseIsSuccessful();
         $em->clear();
