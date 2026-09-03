@@ -108,10 +108,10 @@ framework:
                 # completed: order completed (either via direct complete or store_verify). Terminal success, can be refunded.
                 - completed
 
-                # cancelled: terminal cancelled — only from draft or pending (business rule). No further transitions.
+                # cancelled: terminal cancelled. Only draft, pending, and confirmed can be cancelled (business rule) — other states (store handoff, fulfilled, awaiting verification, paid, etc.) must not directly cancel.
                 - cancelled
 
-                # refunded: terminal refunded from paid (only paid can refund). No further transitions.
+                # refunded: terminal refunded from paid (full refund via Payment). Only paid can go to refunded; no further transitions.
                 - refunded
 
                 # --- Store handoff (acceptance) ---
@@ -183,9 +183,9 @@ framework:
                     to: completed
 
                 # --- Order: terminal ---
-                # cancel: draft/pending -> cancelled. Only draft and pending can be cancelled (business rule). Triggers inventory release if needed and store cancellation via outbox when applicable.
+                # cancel: draft/pending/confirmed -> cancelled. Only these three places can be cancelled (business rule). Terminal cancellation; triggers inventory release if needed and store cancellation via outbox. Other states must not directly cancel.
                 cancel:
-                    from: [draft, pending]
+                    from: [draft, pending, confirmed]
                     to: cancelled
 
                 # refund: paid -> refunded. Only paid orders can be refunded (business rule). Triggered via OrderService::refund() after Payment refund; fulfilled/completed cannot directly refund.
