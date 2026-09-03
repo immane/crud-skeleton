@@ -164,10 +164,9 @@ BaseService (abstract)
 
 ### 4.1.1 Identifier Lookup Contract
 
-`get()` is the common lookup facade. The current implementation resolves scalar values
-through the local primary key. The following is the target compatibility contract for
-the UUID-aware implementation; it must be covered by Core regression tests before code
-changes are released:
+`get()` is the common lookup facade for the mandatory local integer ID and an optional
+mapped UUID. Core CRUD routes keep `{id}` as the route parameter and pass either form
+to this method:
 
 ```php
 $service->get(123);                  // local integer primary key
@@ -186,10 +185,10 @@ Rules:
 5. The implementation MUST NOT use an "id lookup then UUID fallback" heuristic because
    it is ambiguous and adds unnecessary queries.
 
-Cross-module services, event consumers, and external API code SHOULD use explicit
-`get(['uuid' => $uuid])` or a module-specific `getByUuid()` convenience method. The
-plain `get($uuid)` form is available for ergonomic controller/service code, not as an
-authorization shortcut.
+Cross-module services and event consumers MUST use explicit UUID criteria or a
+module-specific `getByUuid()` convenience method. Client-facing Core CRUD routes may
+use the plain `get($identifier)` form because the route accepts exactly one unambiguous
+numeric ID or UUID. Neither form is an authorization shortcut.
 
 ### 4.2 Dynamic Query Pipeline (`list()` method)
 
@@ -242,11 +241,11 @@ The 9 traits in `src/Core/View/` provide the controller composition toolkit:
 | `CreateApiViewMixin` | `POST /` | Single + batch create |
 | `UpdateApiViewMixin` | `PUT /{id}`, `POST /batch-update` | Single update + batch upsert by numeric ID or UUID |
 | `DeleteApiViewMixin` | `DELETE /{id}` | Entity removal by numeric ID or UUID |
-| `ScopedListApiViewMixin` | `GET /` | Collection scoped by a required parent route parameter |
-| `ScopedDetailApiViewMixin` | `GET /{id}` | Detail scoped by a required parent route parameter |
+| `ScopedListApiViewMixin` | `GET /` | Collection scoped by a required parent route parameter (`scopeId` as numeric ID or UUID) |
+| `ScopedDetailApiViewMixin` | `GET /{id}` | Detail scoped by a required parent route parameter; `scopeId` and `id` each accept numeric ID or UUID |
 | `SingleCreateAndUpdateApiViewMixin` | `PUT /` | Singleton upsert |
 | `SingleDetailApiViewMixin` | `GET /` | Singleton detail |
-| `WorkflowApiViewMixin` | `/todo`, `/transitions`, `/do/{*}`, `/status-reset` | State machine ops |
+| `WorkflowApiViewMixin` | `/todo`, `/transitions`, `/do/{*}`, `/status-reset` | State machine ops by numeric ID or UUID (via `mixIdToCommonFilter()`) |
 | `TransformContent` | (used by others) | Expression-based field transformation |
 
 ---

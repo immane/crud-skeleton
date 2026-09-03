@@ -83,12 +83,12 @@ trait StoreScopedAuthorizationApiMixin
     protected function storeForAuthorization(): Store
     {
         $request = $this->getRequestStack()->getCurrentRequest();
-        $storeUuid = $request?->attributes->get($this->storeScopeRouteParameter);
-        if (!is_string($storeUuid) || $storeUuid === '') {
+        $storeIdentifier = $request?->attributes->get($this->storeScopeRouteParameter);
+        if (!is_string($storeIdentifier) || $storeIdentifier === '') {
             throw new AccessDeniedException(ApiViewMessages::STORE_SCOPE_REQUIRED);
         }
 
-        $store = $this->storeService()->get(['uuid' => $storeUuid]);
+        $store = $this->storeService()->get($this->identifierCriteria($storeIdentifier), false);
         if (!$store instanceof Store) {
             throw new AccessDeniedException(ApiViewMessages::STORE_NOT_FOUND_OR_ACCESS_DENIED);
         }

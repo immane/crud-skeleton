@@ -7,7 +7,7 @@
 
 ## 1. Entity Base Contract
 
-Every entity MUST have:
+Every **CRUD aggregate** entity MUST have (defaults for domain aggregates such as `Category`, `Order`, `Wallet`, `Store`, etc.):
 
 | Element | Requirement |
 |---------|-------------|
@@ -17,6 +17,14 @@ Every entity MUST have:
 | Created timestamp | `$createdAt` (DateTimeImmutable) |
 | Updated timestamp | `$updatedAt` (DateTimeImmutable) |
 | `__toString()` method | Returns human-readable identifier |
+
+> **Exception categories** (not CRUD aggregates): Inbox/Outbox event records
+> (`eventId` identity, claim fields, no `updatedAt`/`__toString`), append-only
+> audit / ledger / projection records, join / pivot tables, DTO / value objects,
+> and infrastructure records. Those records may omit `createdAt/updatedAt`,
+> `__toString()`, or a dedicated repository per projection and are documented
+> in the owning bundle doc. The table above is the default, not a universal
+> requirement.
 
 ```php
 #[ORM\Entity(repositoryClass: XxxRepository::class)]
@@ -184,13 +192,13 @@ Every relationship MUST declare:
 
 ## 7. Special Patterns
 
-### 7.1 UUID for External And Cross-Boundary Identity
+### 7.1 Optional UUID for External And Cross-Boundary Identity
 
 Entities retain an integer auto-increment `id` for local Doctrine relations, joins, and
 storage efficiency. A UUID is a separate, stable identity for an entity that leaves its
 bounded context.
 
-An entity MUST have a UUID when it is any of the following:
+An entity SHOULD have a UUID when it is any of the following:
 
 - Addressable through a public API, URL, webhook, or third-party integration.
 - Included in a cross-module or cross-service event payload.
@@ -204,12 +212,18 @@ still receive a UUID.
 
 ```text
 Local database key / Doctrine relation: integer id
-Public API path and response identity: uuid
+Public API path and response identity: integer id, or UUID when the entity exposes one
 Cross-module/service reference: uuid or immutable business key
 Event aggregateId, sourceId, correlationId: uuid
 ```
 
-New cross-boundary entities use a canonical UUID string alongside the integer `id`:
+Core CRUD routes use the `{id}` path parameter for both forms. Digit-only values are
+local IDs; canonical UUID values are resolved against the unique `uuid` field. The two
+forms are unambiguous and must not be sent as separate request values. A resource that
+has no UUID field accepts only its integer ID.
+
+New cross-boundary entities use a canonical UUID string alongside the mandatory integer
+`id`:
 
 ```php
 #[ORM\Column(type: 'string', length: 36, unique: true)]
@@ -255,15 +269,17 @@ private ?array $snapshot = null;
 
 **Populated at creation** (in `#[ORM\PrePersist]` or service method), never updated.
 
-### 7.4 Optimistic Locking
+### 7.4 Wallet Concurrency — Pessimistic Lock + Manual Version
 
-```php
-#[ORM\Version]
-#[ORM\Column]
-private int $version = 1;
-```
+Wallet balances use `SELECT ... FOR UPDATE` (pessimistic locking) with a manually
+incremented `version` column (`SET version = version + 1`). There is **no**
+`#[ORM\Version]` mapping. The `version` field is an ordinary `int` column
+used only for audit ordering, not for Doctrine optimistic-lock checks.
 
-**Use when**: Concurrent updates to the same record risk data corruption (e.g., wallet balances).
+See `docs/design/bundles/wallet.md` §4 for the locked transfer / deposit / withdrawal
+flows. For other aggregates that handle money or inventory, use the same service-layer
+pessimistic-lock + explicit bump pattern and do not introduce `#[ORM\Version]` without
+a documented decision.
 
 ### 7.5 Polymorphic Association
 
@@ -357,6 +373,6 @@ Validation is invoked in `BaseService::update()` via Symfony Validator. Entities
 | Injecting services into Entity | Entities MUST NOT use DI |
 | Direct `$em->persist()` in Entity | Use Service layer |
 | Mutable `DateTime` | Use `DateTimeImmutable` |
-| Exposing internal IDs as external identifiers | Use UUID for external-facing references |
+| Using a local ID as a durable cross-module reference | Use UUID or a documented immutable business key |
 | Storing money as float/decimal in code | Store as int (cents), convert at API boundary |
 | Circular references in JSON without handling | Use `CircularReferenceHandler` or serializer groups |

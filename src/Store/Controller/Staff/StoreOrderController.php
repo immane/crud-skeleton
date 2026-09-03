@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/store/{scopeId}/orders', name: 'store-orders-', requirements: ['scopeId' => '[0-9a-fA-F-]{36}'])]
+#[Route('/store/{scopeId}/orders', name: 'store-orders-', requirements: ['scopeId' => '\d+|[0-9a-fA-F-]{36}'])]
 #[IsGranted('ROLE_USER')]
 final class StoreOrderController extends RestController
 {
@@ -49,7 +49,7 @@ final class StoreOrderController extends RestController
     /** @return array<string, mixed> */
     protected function scopedDetailFilter(string $scopeId, string $id): array
     {
-        return ['uuid' => $id, ...$this->storeScopedFilter($this->storeForAuthorization())];
+        return [$this->identifierField($id) => $id, ...$this->storeScopedFilter($this->storeForAuthorization())];
     }
 
     /** @return array<string, string> */
@@ -68,7 +68,7 @@ final class StoreOrderController extends RestController
         return 'order';
     }
 
-    #[Route('/{orderUuid}/accept', name: 'accept', methods: ['POST'], requirements: ['orderUuid' => '[0-9a-fA-F-]{36}'])]
+    #[Route('/{orderUuid}/accept', name: 'accept', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
     public function acceptAction(Request $request, string $scopeId, string $orderUuid): Response
     {
         $this->authorizeStoreAction('accept');
@@ -90,7 +90,7 @@ final class StoreOrderController extends RestController
         return $this->success($order, 'Store order accepted.');
     }
 
-    #[Route('/{orderUuid}/reject', name: 'reject', methods: ['POST'], requirements: ['orderUuid' => '[0-9a-fA-F-]{36}'])]
+    #[Route('/{orderUuid}/reject', name: 'reject', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
     public function rejectAction(Request $request, string $scopeId, string $orderUuid): Response
     {
         $this->authorizeStoreAction('reject');
@@ -111,7 +111,7 @@ final class StoreOrderController extends RestController
         return $this->success($order, 'Store order rejected.');
     }
 
-    #[Route('/{orderUuid}/fulfill', name: 'fulfill', methods: ['POST'], requirements: ['orderUuid' => '[0-9a-fA-F-]{36}'])]
+    #[Route('/{orderUuid}/fulfill', name: 'fulfill', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
     public function fulfillAction(Request $request, string $scopeId, string $orderUuid): Response
     {
         $this->authorizeStoreAction('fulfill');
@@ -133,7 +133,7 @@ final class StoreOrderController extends RestController
         return $this->success($order, 'Store order fulfilled.');
     }
 
-    #[Route('/{orderUuid}/verify', name: 'verify', methods: ['POST'], requirements: ['orderUuid' => '[0-9a-fA-F-]{36}'])]
+    #[Route('/{orderUuid}/verify', name: 'verify', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
     public function verifyAction(Request $request, string $scopeId, string $orderUuid): Response
     {
         $this->authorizeStoreAction('verify');

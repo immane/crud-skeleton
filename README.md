@@ -6,6 +6,8 @@ A Symfony 8.1 backend foundation for modular CRUD and transaction-heavy APIs. It
 
 > Documentation site: [GitHub Pages](https://immane.github.io/crud-skeleton) | Development manual: [docs/manual/index.md](docs/manual/index.md) | Architecture: [docs/design/system-architecture.md](docs/design/system-architecture.md)
 
+> **Production status**: Inventory (`INVENTORY_ENABLED`) is preview-only and must stay `0` outside isolated dev/test; health checks, rate limiting, and metrics are implemented (rate-limit cache is per-process filesystem — use Redis for multi-worker). See `docs/ai/context.md` §22–24 and `docs/testing/crud-skeleton-production/PRODUCTION_VALIDATION.md`; known defects in `docs/issues/coverage-2026-08-09/README.md`.
+
 ## Architecture
 
 The application is a layered Symfony API: controllers compose trait-based view mixins over `BaseService` (CRUD + dynamic query), services own business rules, and Doctrine ORM persists to MySQL. It is a modular monolith whose modules collaborate through explicit service and event boundaries within one Symfony application.
@@ -72,8 +74,11 @@ sequenceDiagram
 ### Commerce Orchestration
 
 Order fulfilment crosses synchronous transaction boundaries and asynchronous event
-delivery. Settlement is intentionally shown separately: it begins with externally
-confirmed funding, not with an implemented Payment-to-Settlement event.
+delivery. Store acceptance/verification is gated by `StoreSettings` (default: no
+verification — auto-accept) and inventory reservation is gated by
+`INVENTORY_ENABLED` (default `0` = disabled). Settlement is intentionally shown
+separately: it begins with externally confirmed funding, not with an implemented
+Payment-to-Settlement event.
 
 ```mermaid
 sequenceDiagram
@@ -88,45 +93,50 @@ sequenceDiagram
     participant W as Wallet
     participant Se as Settlement
 
-    T->>T: Create store order (transaction)<br/>store_submit
-    T->>TO: Same transaction: order-created event
-    TO-->>S: Async relay and handler
+    Note over T,S: StoreContext via X-Store-Code, StoreSettings controls acceptance
+    Note over S,I: INVENTORY_ENABLED is 0 by default, skips reservation
 
-    alt Store unavailable
-        S->>SO: Same transaction: order-rejected event
-    else Inventory disabled
-        S->>SO: Same transaction: order-accepted event
-    else Inventory enabled
-        S->>SO: Same transaction: reservation request
-        SO-->>I: Async relay and handler
-        alt Reservation rejected
-            I->>IO: Same transaction: reservation-rejected event
-        else Reservation confirmed
-            I->>IO: Same transaction: reservation-confirmed event
+    T->>T: createOrder() store_submit (txn)
+    T->>TO: trade.order.created.v1 (txn)
+    TO-->>S: relay
+
+    alt store inactive
+        S->>SO: store.order.rejected.v1 STORE_UNAVAILABLE (txn)
+    else INVENTORY_ENABLED=0 or immediate accept
+        S->>S: accept storeOrder (txn)
+        S->>SO: store.order.accepted.v1 (txn)
+    else reservation branch
+        S->>SO: inventory.reservation.requested.v1 (txn)
+        SO-->>I: relay
+        I->>I: reserve txn per Stock allowNegativeStock
+        alt rejected
+            I->>IO: inventory.reservation.rejected.v1 (txn)
+        else confirmed
+            I->>IO: inventory.reservation.confirmed.v1 (txn)
         end
-        IO-->>S: Async relay and handler
-        S->>SO: Same transaction: order accepted or rejected
+        IO-->>S: relay
+        S->>S: accept / reject on outcome (txn)
+        S->>SO: store.order.accepted.v1 or rejected.v1 (txn)
     end
-    SO-->>T: Async relay and handler
-    T->>T: store_accept or store_reject
+    SO-->>T: relay
+    T->>T: store_accept / store_reject
 
-    Note over T,P: Payment requires store_accept, then explicit confirmation
-    T->>P: Create and pay invoice (synchronous)
-    opt walletAmount supplied
-        P->>W: Immediate wallet deduction / transfer
+    Note over T,P: Payment requires store_accept where enforced, then explicit confirmation
+    T->>P: create and pay invoice sync with wallet_balance adjustment
+    opt wallet amount
+        P->>W: deduction transfer (txn)
     end
-    alt Wallet or fully adjusted payment
-        P->>P: Mark invoice paid
-    else External gateway
-        P->>P: Invoice remains paying until callback
+    alt fully adjusted / wallet
+        P->>P: mark paid
+    else external gateway
+        P->>P: paying until callback
     end
-    P->>T: InvoicePaidEvent updates order (synchronous)
+    P->>T: InvoicePaidEvent to paid sync
 
-    Note over P,Se: No implemented Payment-to-Settlement event
-    Se->>Se: External funding confirmation (async)
-    Se->>Se: Create plan, allocations, audit snapshots (transaction)
-    Se->>Se: Settlement outbox posts allocations asynchronously
-    Se->>W: Voucher credit through Wallet port
+    Note over P,Se: No Payment to Settlement event (by design)
+    Se->>Se: external funding to plan allocations (txn)
+    Se->>Se: outbox posts allocations async
+    Se->>W: voucher credit via Wallet port
 ```
 
 ## Table of Contents

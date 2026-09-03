@@ -8,7 +8,7 @@ when it is introduced.
 |---|---|---|
 | Transactions | A successful multi-write operation commits all required changes; a failure leaves no partial durable state. | service integration rollback test |
 | Authorization | Anonymous users have only explicitly public access. App users see only their own resources; store staff and admins remain within their declared scope. | HTTP allow/deny and cross-owner tests |
-| Identity | Refresh-token rotation revokes the old token, and reuse is detected. Password/OTP failures do not issue a valid session. | `tests/Identity/` security and integration tests |
+| Identity | Refresh-token rotation revokes the old token, and reuse is detected. Password/OTP failures do not issue a valid session. | `tests/UnitTest/Identity/` and `tests/Integration/Identity/` security and integration tests |
 | Dynamic query | User-provided filter, sort, select, expand, and DQL input cannot bypass the controller's `commonFilter()` scope. | Core query API integration tests |
 | Orders | Only configured workflow transitions occur. An order item retains its product/specification snapshot after creation. | Trade workflow and order integration tests |
 | Money | Values are represented in integer cents; an operation never creates or destroys balance except through an auditable transaction, adjustment, or reconciliation. | Wallet and Payment integration tests |

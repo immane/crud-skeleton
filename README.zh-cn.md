@@ -6,6 +6,8 @@
 
 > 文档站点: [GitHub Pages](https://immane.github.io/crud-skeleton) | 开发手册: [docs/manual/index.md](docs/manual/index.md) | 架构: [docs/design/system-architecture.md](docs/design/system-architecture.md)
 
+> **生产状态**：Inventory（`INVENTORY_ENABLED`）为预览功能，非隔离开发/测试环境必须保持 `0`；健康检查、限流与指标已实现（限流缓存为进程内文件系统——多 worker 请使用 Redis）。参见 `docs/ai/context.md` §22–24 与 `docs/testing/crud-skeleton-production/PRODUCTION_VALIDATION.md`；已知缺陷见 `docs/issues/coverage-2026-08-09/README.md`。
+
 ## 架构
 
 应用是分层 Symfony API：控制器基于 trait 组合的视图 mixin 调用 `BaseService`（CRUD + 动态查询），服务承载业务规则，Doctrine ORM 持久化到 MySQL。它是一个模块化单体，各模块在同一个 Symfony 应用内通过显式的服务与事件边界协作。
@@ -69,7 +71,7 @@ sequenceDiagram
 
 ### 电商编排
 
-订单履约会跨越同步事务边界与异步事件投递。结算在图中被刻意独立展示：它由外部确认的资金启动，而不是由尚未实现的 Payment-to-Settlement 事件触发。
+订单履约会跨越同步事务边界与异步事件投递。门店接受/核销由 `StoreSettings` 控制（默认无需核销——自动接受），库存预留由 `INVENTORY_ENABLED` 控制（默认 `0`=关闭）。结算在图中被刻意独立展示：它由外部确认的资金启动，而不是由尚未实现的 Payment-to-Settlement 事件触发。
 
 ```mermaid
 sequenceDiagram
@@ -84,45 +86,50 @@ sequenceDiagram
     participant W as Wallet
     participant Se as Settlement
 
-    T->>T: 创建门店订单（事务）<br/>store_submit
-    T->>TO: 同一事务：订单创建事件
-    TO-->>S: 异步投递与处理
+    Note over T,S: StoreContext via X-Store-Code, StoreSettings 控制接受/核销
+    Note over S,I: INVENTORY_ENABLED 为 0 默认跳过预留
+
+    T->>T: createOrder() store_submit（事务）
+    T->>TO: trade.order.created.v1（事务）
+    TO-->>S: 投递
 
     alt 门店不可用
-        S->>SO: 同一事务：订单拒绝事件
-    else 库存功能关闭
-        S->>SO: 同一事务：订单接受事件
-    else 库存功能启用
-        S->>SO: 同一事务：库存预留请求
-        SO-->>I: 异步投递与处理
+        S->>SO: store.order.rejected.v1 STORE_UNAVAILABLE（事务）
+    else INVENTORY_ENABLED=0 或直接接受
+        S->>S: 接受门店订单（事务）
+        S->>SO: store.order.accepted.v1（事务）
+    else 预留分支
+        S->>SO: inventory.reservation.requested.v1（事务）
+        SO-->>I: 投递
+        I->>I: reserve txn per Stock allowNegativeStock
         alt 预留被拒绝
-            I->>IO: 同一事务：预留拒绝事件
+            I->>IO: inventory.reservation.rejected.v1（事务）
         else 预留已确认
-            I->>IO: 同一事务：预留确认事件
+            I->>IO: inventory.reservation.confirmed.v1（事务）
         end
-        IO-->>S: 异步投递与处理
-        S->>SO: 同一事务：订单接受或拒绝
+        IO-->>S: 投递
+        S->>S: 根据结果接受 / 拒绝（事务）
+        S->>SO: store.order.accepted.v1 或 rejected.v1（事务）
     end
-    SO-->>T: 异步投递与处理
-    T->>T: store_accept 或 store_reject
+    SO-->>T: 投递
+    T->>T: store_accept / store_reject
 
-    Note over T,P: 支付要求 store_accept，随后显式确认
-    T->>P: 创建并支付发票（同步）
-    opt 提供 walletAmount
-        P->>W: 立即钱包扣款 / 转账
+    Note over T,P: 仅在 StoreSettings 要求时才需 store_accept，随后显式确认
+    T->>P: 创建并支付发票同步经 Wallet wallet_balance 抵扣
+    opt wallet amount
+        P->>W: 抵扣转账（事务）
     end
-    alt 钱包支付或抵扣覆盖全额
-        P->>P: 将发票标记为已支付
+    alt 全额抵扣 / 钱包
+        P->>P: 标记已支付
     else 外部网关
-        P->>P: 发票保持支付中，直至回调
+        P->>P: 支付中直至回调
     end
-    P->>T: InvoicePaidEvent 同步更新订单
+    P->>T: InvoicePaidEvent 到 已支付 同步
 
-    Note over P,Se: 尚未实现 Payment-to-Settlement 事件
-    Se->>Se: 外部资金确认（异步）
-    Se->>Se: 创建计划、分账与审计快照（事务）
-    Se->>Se: 结算 outbox 异步发布分账
-    Se->>W: 通过 Wallet port 进行凭证入账
+    Note over P,Se: 尚无 Payment 到 Settlement 事件（设计如此）
+    Se->>Se: 外部资金确认到 计划分账 事务
+    Se->>Se: outbox 异步发布分账
+    Se->>W: 经 Wallet port 凭证入账
 ```
 
 ## 目录
@@ -183,7 +190,7 @@ CRUD Skeleton 面向那些需要超越生成式 CRUD、但暂时不需要分布�
 
 ## 项目结构
 
-仓库是一个模块化单体：`src/` 存放应用代码（Core 框架以及 Common、Identity、Trade、Payment、Wallet、Storage、Authorization 等业务模块），旁边是 `config/`、`migrations/`、`tests/`、`docs/` 以及 Docker/Compose 文件。`src/Authorization/` 的种子化与运维见 [Authorization Setup](docs/manual/authorization.md)。
+仓库是一个模块化单体：`src/` 存放应用代码（Core 框架以及 Common、Identity、Authorization、Trade（经 Store 目录的订单）、Store（目录、成员、StoreOrder）、Inventory、Payment、Wallet、Promotion、Storage、Settlement、Exchange 等业务模块），旁边是 `config/`、`migrations/`、`tests/`、`docs/` 以及 Docker/Compose 文件。`src/Authorization/` 的种子化与运维见 [Authorization Setup](docs/manual/authorization.md)。
 
 完整的详细目录树（到每个模块的控制器、服务、实体、仓库层级），请参阅
 **[项目结构 — 开发手册](docs/manual/project-structure.md)**。
@@ -230,8 +237,8 @@ Docker 开发环境无需创建 env 文件即可启动。本机 PHP/Symfony 运�
 |------|------|---------|
 | **Core** | API 基础 | REST 控制器支持、共享服务行为、视图 mixin、表达式查询 |
 | **Common** | CMS 与设置 | 分类、标签、内容、媒体、页面、评论与键值设置 |
-| **Trade** | 电商 | 产品、规格、订单工作流与价格计算 |
-| **Store** | 多门店运营 | 门店会员与可靠的订单事件交接 |
+| **Trade** | 电商 | 订单、订单工作流与基于 Store 目录的定价（经 `CatalogResolver`，`specificationUuid` 快照） |
+| **Store** | 多门店运营 | 门店会员、可靠的订单事件交接与 Product/Specification 目录（`store = NULL` 为全局共享） |
 | **Inventory** | 库存控制 | 门店库存、预留、配方与库存台账策略 |
 | **Payment** | 发票编排 | 发票生命周期、网关抽象、支付抵扣、Webhook |
 | **Wallet** | 余额操作 | 转账、存款、取款、凭证与对账 |

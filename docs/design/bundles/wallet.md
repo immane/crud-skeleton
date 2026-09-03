@@ -11,7 +11,7 @@
 
 Wallet is a financial module for managing user balances:
 
-- **Wallets** per user per currency with balance in cents, optimistic locking, freeze capability, and available/held balance separation
+- **Wallets** per user per currency with balance in cents, pessimistic locking (`SELECT ... FOR UPDATE`) + manual `version` counter (no `#[ORM\Version]`), freeze capability, and available/held balance separation
 - **Transactions** with UUID, type classification, status tracking, and idempotency via `referenceId`
 - **TransferService** with atomic from-wallet-to-wallet transfers, deadlock prevention, and rollback recovery
 - **Deposit** endpoint for system-injected funding with audit trail
@@ -89,7 +89,7 @@ src/Wallet/
 | `currency` | string(32) | Unit of account code (see below) |
 | `balance` | int (bigint) | **Total** balance in cents (`balance = available + held`) |
 | `held` | int (bigint) | Frozen amount in cents; available balance = `balance - held` |
-| `version` | int | `#[ORM\Version]` optimistic locking |
+| `version` | int | Manual version counter (`SET version = version + 1` under `FOR UPDATE` lock); no `#[ORM\Version]` |
 | `status` | string | `active` or `frozen` |
 | `label` | string | Human-readable wallet name |
 
@@ -534,13 +534,15 @@ These references are passed to `TransferServiceInterface::transfer()` and stored
 
 ---
 
-## 9. Optimistic Locking Contract
+## 9. Concurrency Contract — Pessimistic Lock + Manual Version
 
-Wallets use `#[ORM\Version]` for optimistic concurrency control:
+Wallets use `SELECT ... FOR UPDATE` (pessimistic locking) with a manually
+incremented `version` column. There is **no** `#[ORM\Version]` mapping:
 
-- On concurrent updates, Doctrine throws `OptimisticLockException`
-- The caller should retry or report the conflict
-- This protects against race conditions on balance updates outside TransferService
+- `TransferService` / `DepositService` / `WithdrawService` lock the target wallet row(s) `FOR UPDATE` in a deterministic order, validate, then `UPDATE wallet SET balance = ..., version = version + 1`
+- Concurrent transactions block on the row lock; the loser re-reads the updated balance after the winner commits
+- `version` is an ordinary `int` used for audit ordering, not for Doctrine optimistic-lock checks
+- Do not add `#[ORM\Version]` without a documented architectural decision
 
 ---
 

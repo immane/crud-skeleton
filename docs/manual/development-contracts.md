@@ -230,10 +230,23 @@ inconsistent prefixes inside a module, non-mirrored controller/service names.
 
 ```
 Controller field whitelist ($requiredCreateProperties / $acceptedCreateProperties)
-  → controller hook validation (processCreateContent / processUpdateContent)
-    → @transform expression
-      → Service::update() → Symfony Validator → entity #[Assert\*] constraints
+  → JSON Schema validation via $jsonSchemas (CreateApiViewMixin/UpdateApiViewMixin → Core\Validator\JsonSchemaValidator)
+    → controller hook validation (processCreateContent / processUpdateContent)
+      → @transform expression
+        → Service::update() → Symfony Validator → entity #[Assert\*] constraints
 ```
+
+- **JSON Schema step** runs **before** `processCreateContent`/`processUpdateContent`. Declare on the controller:
+
+  ```php
+  protected array $jsonSchemas = [
+      'address'  => 'Store/StoreAddress',
+      'contact'  => 'Store/StoreContact',
+      'settings' => 'Store/StoreSettings',
+  ];
+  ```
+
+  Each declared field present and non-null is validated against `src/{Bundle}/Resources/JsonSchema/{Name}.json` (`Core\Validator\JsonSchemaValidator::validate()`). Violations throw `JsonSchemaViolationException` → `ValidatorException` → `400` via `warning()`. `Store` bundle ships `StoreAddress` (province/city/district/street/detail/latitude/longitude/geohash...; `latitude↔longitude` dependencies, `additionalProperties:false`), `StoreContact` (phone/email/uuid), `StoreSettings` (order/fulfillment booleans, top-level `additionalProperties:true` for forward compat). Validator lives in `Core`, schemas in each bundle.
 
 ### Rate limiting
 

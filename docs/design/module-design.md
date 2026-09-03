@@ -96,14 +96,24 @@ class CategoryService extends BaseService implements CategoryServiceInterface
 
 Controllers follow two roles. See the [Controller Design Contract](controller-design.md) for full details.
 
-#### App Controller (Public Read-Only)
+#### App Controller (Client-Facing, Authenticated)
 
 - **Location**: `src/{Module}/Controller/App/{Name}Controller.php`
 - **Namespace**: `App\{Module}\Controller\App`
 - **Must**: Extend `RestController`
-- **Must**: Use `ApiView`, `DetailApiViewMixin`, `ListApiViewMixin` traits
+- **Must**: Use `ApiView` and the appropriate mixins (`List`, `Detail` always; `Create`/`Update`/`Delete` when the client workflow requires writes)
 - **Must**: Set `$serviceClass` property
-- **Should**: Override `commonFilter()` to scope data (e.g., `enabled = true`)
+- **Must**: Scope every query through `commonFilter()` / `scopedDetailFilter()` to the authenticated user (or store-membership) and enforce authorization (voter / field grants) — App writes are allowed only when ownership and permission are enforced
+- **Should**: Override `commonFilter()` to scope data (e.g., current user, enabled scope)
+
+#### Public Controller (Anonymous, Read-Only)
+
+- **Location**: `src/{Module}/Controller/Public/{Name}Controller.php`
+- **Namespace**: `App\{Module}\Controller\Public`
+- **Must**: Extend `RestController`
+- **Must**: Use `ApiView`, `DetailApiViewMixin`, `ListApiViewMixin` traits only
+- **Must**: Set `$serviceClass` property
+- **Must**: Expose only data that is safe for anonymous access (e.g., `user IS NULL` media) and never rely on `getUser()`
 - **Must NOT**: Create, update, or delete entities
 
 #### Manage Controller (Admin CRUD)
@@ -200,13 +210,13 @@ When creating a new module, verify:
 
 ## 5. Module Testing Contract
 
-Every module MUST have:
+Every module MUST have tests at the layer that matches the change (see `docs/testing/crud-skeleton-production/TEST_STRATEGY.md`). Historical `tests/{Module}/` paths are deprecated — current layout is layer-first:
 
 | Test Suite | Location | Coverage Target |
 |------------|----------|----------------|
-| Entity unit tests | `tests/{Module}/Entity/` | `__toString()`, getter/setter, lifecycle |
-| Service tests | `tests/{Module}/Service/` | All public service methods |
-| Integration tests | `tests/{Module}/Integration/` | API endpoints, full request/response cycle |
+| Entity / domain unit tests | `tests/UnitTest/{Module}/` | `__toString()`, getter/setter, lifecycle |
+| Service / pure logic tests | `tests/UnitTest/{Module}/` | All public service methods (mocked) |
+| Integration / HTTP tests | `tests/Integration/{Module}/` or `tests/Integration/*` | API endpoints, Doctrine mapping, full request/response cycle |
 
 ### 5.1 Test Base Classes
 
@@ -218,8 +228,11 @@ Every module MUST have:
 
 ### 5.2 Test Database
 
-- Test environment uses SQLite (`var/test.db`)
-- Schema is created from Doctrine migrations in test bootstrap
+Canonical contract is `docs/testing/crud-skeleton-production/TEST_STRATEGY.md`.
+
+- Test environment uses SQLite (`var/test.db`) for local, PostgreSQL 16 in CI
+- **Integration tests** use `DatabaseBootstrapTrait` + Doctrine `SchemaTool` (not migrations) for per-test schema + auto-rollback (fast isolation)
+- **Migrations** are validated separately via `migrations.yml` on MySQL 8.4 and disposable-env `doctrine:migrations:migrate`
 - Each test method is wrapped in a transaction and rolled back
 
 ---

@@ -3,6 +3,7 @@
 namespace App\Core\View;
 
 use App\Core\Service\BaseService;
+use App\Core\Utils\UUID;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,16 +49,29 @@ trait WorkflowApiViewMixin
             new OA\Response(response: 200, description: 'List enabled transitions'),
         ]
     )]
-    #[Route('/{id}/transitions', name: 'available-transition', methods: ['GET'])]
-    public function availableTransitionsAction($id)
+    #[Route('/{id}/transitions', name: 'available-transition', methods: ['GET'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function availableTransitionsAction(int|string $id): Response
     {
-        $service = $this->service ?? $this->container->get($this->serviceClass);
-        $entity = $service->get(['id' => $id]);
+        try {
+            $this->authorizeApiAction('workflow');
+            $service = $this->service ?? $this->container->get($this->serviceClass);
+            $filter = method_exists($this, 'mixIdToCommonFilter')
+                ? $this->mixIdToCommonFilter($id)
+                : [UUID::is_valid((string) $id) ? 'uuid' : 'id' => $id];
+            $entity = $service->get($filter, false);
+            if ($entity === null) {
+                return $this->warning(ApiViewMessages::ENTITY_NOT_FOUND, 404, '', 404);
+            }
+            $this->authorizeApiAction('workflow', $entity);
+            $workflow = $this->container->get($this->workflow);
+            $transitions = $workflow->getEnabledTransitions($entity);
 
-        $workflow = $this->container->get($this->workflow);
-        $transitions = $workflow->getEnabledTransitions($entity);
-
-        return $this->success($transitions);
+            return $this->success($transitions);
+        } catch (\Symfony\Component\Security\Core\Exception\AccessDeniedException $e) {
+            return $this->warning($e->getMessage() ?: ApiViewMessages::ACCESS_DENIED, 403, '', 403);
+        } catch (\Throwable $e) {
+            return $this->warning($e->getMessage() ?: self::UNKNOWN_ERROR, 500, '', 500);
+        }
     }
 
     #[OA\Post(
@@ -66,12 +80,20 @@ trait WorkflowApiViewMixin
             new OA\Response(response: 200, description: 'Do transition'),
         ]
     )]
-    #[Route('/{id}/do/{transition}', name: 'do-transition', methods: ['POST'])]
-    public function doTransitionAction(Request $request, $id, $transition)
+    #[Route('/{id}/do/{transition}', name: 'do-transition', methods: ['POST'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function doTransitionAction(Request $request, int|string $id, string $transition): Response
     {
         try {
+            $this->authorizeApiAction('workflow');
             $service = $this->service ?? $this->container->get($this->serviceClass);
-            $entity = $service->get(['id' => $id]);
+            $filter = method_exists($this, 'mixIdToCommonFilter')
+                ? $this->mixIdToCommonFilter($id)
+                : [UUID::is_valid((string) $id) ? 'uuid' : 'id' => $id];
+            $entity = $service->get($filter, false);
+            if ($entity === null) {
+                return $this->warning(ApiViewMessages::ENTITY_NOT_FOUND, 404, '', 404);
+            }
+            $this->authorizeApiAction('workflow', $entity);
             $workflow = $this->container->get($this->workflow);
 
             if (!$workflow->can($entity, $transition)) {
@@ -86,9 +108,12 @@ trait WorkflowApiViewMixin
                 }
                 $workflow->apply($entity, $transition);
             });
-
+        } catch (ValidatorException $e) {
+            return $this->warning($e->getMessage(), 400, '', 400);
+        } catch (\Symfony\Component\Security\Core\Exception\AccessDeniedException $e) {
+            return $this->warning($e->getMessage() ?: ApiViewMessages::ACCESS_DENIED, 403, '', 403);
         } catch (\Throwable $e) {
-            return $this->warning($e->getMessage());
+            return $this->warning($e->getMessage() ?: self::UNKNOWN_ERROR, 500, '', 500);
         }
 
         return $this->success();
@@ -101,12 +126,30 @@ trait WorkflowApiViewMixin
         ]
     )]
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id}/status-reset', name: 'reset-status', methods: ['PUT'])]
-    public function resetMarkingAction($entity)
+    #[Route('/{id}/status-reset', name: 'reset-status', methods: ['PUT'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function resetMarkingAction(int|string $id): Response
     {
-        $entity->setStatus([]);
-        $this->container->get('doctrine')->getManager()->flush();
+        try {
+            $service = $this->service ?? $this->container->get($this->serviceClass);
+            $filter = method_exists($this, 'mixIdToCommonFilter')
+                ? $this->mixIdToCommonFilter($id)
+                : [UUID::is_valid((string) $id) ? 'uuid' : 'id' => $id];
+            $entity = $service->get($filter, false);
+            if ($entity === null) {
+                return $this->warning(ApiViewMessages::ENTITY_NOT_FOUND, 404, '', 404);
+            }
+            $this->authorizeApiAction('workflow', $entity);
+            if (!method_exists($entity, 'setStatus')) {
+                return $this->warning('Entity does not support status reset.', 400, '', 400);
+            }
+            $entity->setStatus([]);
+            $this->container->get('doctrine')->getManager()->flush();
 
-        return $this->success();
+            return $this->success();
+        } catch (\Symfony\Component\Security\Core\Exception\AccessDeniedException $e) {
+            return $this->warning($e->getMessage() ?: ApiViewMessages::ACCESS_DENIED, 403, '', 403);
+        } catch (\Throwable $e) {
+            return $this->warning($e->getMessage() ?: self::UNKNOWN_ERROR, 500, '', 500);
+        }
     }
 }

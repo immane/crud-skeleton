@@ -99,6 +99,9 @@ merging used by the read mixins.
 | `entityNotFoundMessage()` | Default `'Entity not found'`. |
 | `commonFilter()` | Extension point: return an array, `QueryBuilder`, or `DqlExpression` restricting all queries on the controller (e.g. `['enabled' => true]`, `['user' => $this->getUser()]`, or `new DqlExpression('entity.getUser() == this.getUser()')`). |
 | `resolvedCommonFilter()` | Internal resolver used by the mixins: returns `commonFilter()` with `this` bound for `DqlExpression`. Do not override. |
+| `identifierField(int\|string $value)` | Returns `uuid` for a canonical UUID string, otherwise `id`. Use when building scope-aware or custom filters so both forms remain unambiguous. |
+| `identifierCriteria(int\|string $value)` | Returns `['uuid' => $value]` or `['id' => $value]` via `identifierField()`. |
+| `scopeIdentifierCriteria(int\|string $scopeId)` | Convenience wrapper over `identifierCriteria()` for scoped parent identifiers (e.g. `scopeId` in `/store/{scopeId}/orders/{id}`). |
 | `mixIdToCommonFilter(int\|string $id)` | Merges an id into the common filter; uses `uuid` as the key when the id is a valid UUID, otherwise `id`. For `DqlExpression` it appends the id as an additional `AND` criterion. |
 | `mixToCommonFilter(array $data)` | Merges `$data` into the common filter. For a `QueryBuilder` it appends `AND alias.key = :key` conditions; for `DqlExpression` it appends criteria via `withCriteria()`. |
 
@@ -115,8 +118,8 @@ use ApiView, DetailApiViewMixin, ListApiViewMixin,
 |-------|----------|---------|----------|
 | `ListApiViewMixin` | `/` (name `list`) | GET | Calls `service->list($this->listFilter($this->commonFilter()), null, false)`, then `listProcessor` / `listResponses`. |
 | `DetailApiViewMixin` | `/{id}` (name `detail`) | GET | `mixIdToCommonFilter`, then `detailFilter`, `detailProcessor`, `detailResponse`. 404 when missing. |
-| `CreateApiViewMixin` | `/` (name `create`) | POST | Accepts a single object or array (batch). Enforces `requiredCreateProperties` / `acceptedCreateProperties`, applies `defaultCreateValues`, `processCreateContent`, `processEntity`, `afterCreated`. Batch/transactional unless `@partial`. |
-| `UpdateApiViewMixin` | `/{id}` (PUT, `update`); `/batch-update` (POST) | PUT/POST | Single update by id plus batch/upsert mode via `@mode` and `@basis`. Enforces `requiredUpdateProperties` / `acceptedUpdateProperties`. |
+| `CreateApiViewMixin` | `/` (name `create`) | POST | Accepts a single object or array (batch). Enforces `requiredCreateProperties` / `acceptedCreateProperties`, applies `defaultCreateValues`, `processCreateContent`, `processEntity`, `afterCreated`. Batch/transactional unless `@partial`. Supports `jsonSchemas` (see below) — validated before `processCreateContent`. |
+| `UpdateApiViewMixin` | `/{id}` (PUT, `update`); `/batch-update` (POST) | PUT/POST | Single update by id plus batch/upsert mode via `@mode` and `@basis`. Enforces `requiredUpdateProperties` / `acceptedUpdateProperties`. Supports `jsonSchemas` — validated before `processUpdateContent`/`processCreateContent`. |
 | `DeleteApiViewMixin` | `/{id}` (name `delete`) | DELETE | `deletionFilter`, `service->get`, then `service->remove`; returns `204` on success, 404 when missing. |
 
 #### `CreateApiViewMixin` key points
@@ -146,8 +149,8 @@ use ApiView, DetailApiViewMixin, ListApiViewMixin,
 
 | Mixin | Route | Behavior |
 |-------|-------|----------|
-| `ScopedListApiViewMixin` | `/{scopeId}` (name `list`) | Calls the abstract `scopedListFilter($scopeId)` then `service->list(...)`. |
-| `ScopedDetailApiViewMixin` | `/{scopeId}/{id}` (name `detail`) | Calls abstract `scopedDetailFilter($scopeId, $id)` and returns 404 when nothing matches. |
+| `ScopedListApiViewMixin` | `/{scopeId}` (name `list`) | Calls the abstract `scopedListFilter($scopeId)` then `service->list(...)`. `scopeId` accepts numeric ID or UUID; implementations should use `identifierCriteria()` / `identifierField()` so both forms are handled without fallback guessing. |
+| `ScopedDetailApiViewMixin` | `/{scopeId}/{id}` (name `detail`) | Calls abstract `scopedDetailFilter($scopeId, $id)` and returns 404 when nothing matches. Both `scopeId` and `id` accept numeric ID or UUID (`\d+\|[0-9a-fA-F-]{36}`) and controllers must resolve them via `identifierField()` / `identifierCriteria()` or `mixIdToCommonFilter()`. |
 
 ### "Single resource" mixins
 
@@ -167,9 +170,11 @@ service (and typically a `$serviceClass`):
 | Route | Method | Behavior |
 |-------|--------|----------|
 | `/todo` | GET | Lists entities with at least one enabled transition. |
-| `/{id}/transitions` | GET | Lists enabled transitions for an entity. |
-| `/{id}/do/{transition}` | POST | Applies a transition inside a transaction (optionally updating the entity first). Throws `TRANSITION_CANNOT_APPLY` when `can()` fails. |
-| `/{id}/status-reset` | PUT | `ROLE_ADMIN` only — resets the workflow marking. |
+| `/{id}/transitions` | GET | Lists enabled transitions for an entity by numeric ID or UUID (`mixIdToCommonFilter()`). Returns `404` when not found. |
+| `/{id}/do/{transition}` | POST | Applies a transition inside a transaction (optionally updating the entity first) by numeric ID or UUID. Returns `404` when not found, `403` on authorization failure, throws `TRANSITION_CANNOT_APPLY` when `can()` fails. |
+| `/{id}/status-reset` | PUT | `ROLE_ADMIN` only — resets the workflow marking by numeric ID or UUID (`mixIdToCommonFilter()`). Returns `404` when not found. |
+
+Scoped routes such as `/store/{scopeId}/orders/{id}` follow the same rule: both `scopeId` and `id` accept numeric ID or UUID. Implement `scopedDetailFilter()` with `identifierField()` / `identifierCriteria()` (e.g. `[$this->identifierField($id) => $id, ...$storeFilter]`) and resolve the parent Store via `identifierCriteria($scopeId)` so resolution is explicit and never relies on an `id`-then-`uuid` fallback. |
 
 > Note: Many modules (e.g. Trade `OrderController`) implement workflow actions
 > inline rather than using this trait — prefer the trait when it fits, or follow
@@ -207,6 +212,31 @@ Constant/helper set for shared user-facing messages:
 | `TRANSITION_CANNOT_APPLY` | `Current transition cannot be applied.` |
 | `propertyRequired($p)` | `"{P} is required"` |
 | `propertyCannotBeEmpty($p)` | `"{P} cannot be empty."` |
+
+### `src/Core/Validator/JsonSchemaValidator.php`
+
+Generic JSON Schema validator (`justinrainbow/json-schema` `^6.11`). Bundle schemas live under `src/{Bundle}/Resources/JsonSchema/{Name}.json` (e.g. `Store/StoreAddress`).
+
+| Member | Purpose |
+|--------|---------|
+| `validate(mixed $data, string $schemaName)` | Load `src/{Bundle}/Resources/JsonSchema/{Name}.json` via `%kernel.project_dir%`, coerce PHP arrays to objects, run draft-07 validation, throw `JsonSchemaViolationException` on failure (`property: message`). `null` is skipped (field is nullable). |
+| `validateInline(mixed $data, array $inlineSchema)` | Validate against an inline schema array. |
+
+`Store` bundle ships `StoreAddress`, `StoreContact`, `StoreSettings` schemas (see `store.md §5.1.1`); `Core` owns only the validator. Register `App\Core\Validator\JsonSchemaValidator` as `public: true` so `Create/UpdateApiViewMixin` can fetch it from the container (`serviceContainer`/`container`).
+
+#### `jsonSchemas` on controllers
+
+Any controller using `CreateApiViewMixin`/`UpdateApiViewMixin` may declare:
+
+```php
+protected array $jsonSchemas = [
+    'address'  => 'Store/StoreAddress',
+    'contact'  => 'Store/StoreContact',
+    'settings' => 'Store/StoreSettings',
+];
+```
+
+The mixins call `validateJsonSchemas($content)` — for each declared field present and non-null — **before** `processCreateContent`/`processUpdateContent`. Violations become `400` via `ValidatorException`→`warning()`. Unknown keys are rejected when the schema sets `additionalProperties: false` (Store `address`/`contact`), while `StoreSettings` keeps `additionalProperties:true` for forward compatibility.
 
 ---
 

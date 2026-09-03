@@ -48,8 +48,7 @@
 
 ### Authentication
 
-- [ ] Integrate Symfony's `RateLimiter` component and configure per-account + per-IP policies on
-  `/api/auth/login` to prevent brute-force attacks.
+- [x] Integrated Symfony's `RateLimiter` component and configured per-IP policies on `/api/auth/login` (+ `register`, `otp/request`, `otp/verify`, `wechat/miniapp/login`, `payment`) — see `src/Core/EventListener/RateLimitListener.php` + `config/packages/rate_limiter.yaml` (test env uses high limits; remaining: per-process filesystem cache → needs Redis for multi-worker).
 - [ ] Add a progressive backoff or CAPTCHA requirement after repeated login failures.
 - [ ] Unify registration error messages — use a single generic response regardless of which
   field (email / username / phone) conflicts — to prevent user enumeration.

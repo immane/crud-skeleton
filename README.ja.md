@@ -6,6 +6,8 @@
 
 > ドキュメントサイト: [GitHub Pages](https://immane.github.io/crud-skeleton) | 開発マニュアル: [docs/manual/index.md](docs/manual/index.md) | アーキテクチャ: [docs/design/system-architecture.md](docs/design/system-architecture.md)
 
+> **本番ステータス**: Inventory（`INVENTORY_ENABLED`）はプレビュー機能であり、分離された開発/テスト環境以外では `0` のままにしてください。ヘルスチェック、レート制限、メトリクスは実装済みです（レート制限のキャッシュはプロセス内ファイルシステム — マルチワーカーでは Redis を使用）。詳細は `docs/ai/context.md` §22–24 および `docs/testing/crud-skeleton-production/PRODUCTION_VALIDATION.md`、既知の不具合は `docs/issues/coverage-2026-08-09/README.md` を参照してください。
+
 ## アーキテクチャ
 
 アプリケーションは階層型 Symfony API です。コントローラは trait ベースのビューミックスインを `BaseService`（CRUD + 動的クエリ）の上に組み合わせ、サービスがビジネスルールを担い、Doctrine ORM が MySQL に永続化します。これはモジュラーモノリスであり、各モジュールは単一の Symfony アプリケーション内で明示的なサービス・イベント境界を通じて連携します。
@@ -69,7 +71,7 @@ sequenceDiagram
 
 ### コマースオーケストレーション
 
-注文の履行は、同期トランザクション境界と非同期イベント配信をまたぎます。決済分配は意図的に別に示しています。外部で確認された資金から開始され、未実装の Payment-to-Settlement イベントからは開始されません。
+注文の履行は、同期トランザクション境界と非同期イベント配信をまたぎます。ストアの受付/検証は `StoreSettings` により制御され（デフォルトは検証なし — 自動受付）、在庫予約は `INVENTORY_ENABLED` により制御されます（デフォルト `0`=無効）。決済分配は意図的に別に示しています。外部で確認された資金から開始され、未実装の Payment-to-Settlement イベントからは開始されません。
 
 ```mermaid
 sequenceDiagram
@@ -84,44 +86,49 @@ sequenceDiagram
     participant W as Wallet
     participant Se as Settlement
 
-    T->>T: ストア注文を作成（トランザクション）<br/>store_submit
-    T->>TO: 同一トランザクション：注文作成イベント
-    TO-->>S: 非同期リレーとハンドラ
+    Note over T,S: StoreContext via X-Store-Code, StoreSettings が受付/検証を制御
+    Note over S,I: INVENTORY_ENABLED は 0 がデフォルトで予約をスキップ
+
+    T->>T: createOrder() store_submit（トランザクション）
+    T->>TO: trade.order.created.v1（トランザクション）
+    TO-->>S: リレー
 
     alt ストアが利用不可
-        S->>SO: 同一トランザクション：注文拒否イベント
-    else 在庫機能が無効
-        S->>SO: 同一トランザクション：注文受付イベント
-    else 在庫機能が有効
-        S->>SO: 同一トランザクション：在庫予約リクエスト
-        SO-->>I: 非同期リレーとハンドラ
-        alt 予約が拒否された
-            I->>IO: 同一トランザクション：予約拒否イベント
-        else 予約が確認された
-            I->>IO: 同一トランザクション：予約確認イベント
+        S->>SO: store.order.rejected.v1 STORE_UNAVAILABLE（トランザクション）
+    else INVENTORY_ENABLED=0 または即時受付
+        S->>S: ストア注文を受付（トランザクション）
+        S->>SO: store.order.accepted.v1（トランザクション）
+    else 予約ブランチ
+        S->>SO: inventory.reservation.requested.v1（トランザクション）
+        SO-->>I: リレー
+        I->>I: reserve txn per Stock allowNegativeStock
+        alt 拒否
+            I->>IO: inventory.reservation.rejected.v1（トランザクション）
+        else 確認
+            I->>IO: inventory.reservation.confirmed.v1（トランザクション）
         end
-        IO-->>S: 非同期リレーとハンドラ
-        S->>SO: 同一トランザクション：注文を受付または拒否
+        IO-->>S: リレー
+        S->>S: 結果に応じて受付 / 拒否（トランザクション）
+        S->>SO: store.order.accepted.v1 または rejected.v1（トランザクション）
     end
-    SO-->>T: 非同期リレーとハンドラ
-    T->>T: store_accept または store_reject
+    SO-->>T: リレー
+    T->>T: store_accept / store_reject
 
-    Note over T,P: 決済には store_accept と明示的な確認が必要
-    T->>P: 請求書を作成して決済（同期）
-    opt walletAmount が指定された場合
-        P->>W: 即時のウォレット控除 / 振替
+    Note over T,P: StoreSettings が要求する場合のみ store_accept が必要、その後明示的に確認
+    T->>P: 請求書を作成して決済同期 Wallet wallet_balance 調整経由
+    opt wallet amount
+        P->>W: 控除振替（トランザクション）
     end
-    alt ウォレットまたは調整で全額を充当
-        P->>P: 請求書を支払済みにする
+    alt 全額調整 / ウォレット
+        P->>P: 支払済みにする
     else 外部ゲートウェイ
-        P->>P: コールバックまで請求書は支払い中
+        P->>P: コールバックまで支払い中
     end
-    P->>T: InvoicePaidEvent が注文を同期更新
+    P->>T: InvoicePaidEvent to paid sync
 
-    Note over P,Se: Payment-to-Settlement イベントは未実装
-    Se->>Se: 外部資金確認（非同期）
-    Se->>Se: プラン、分配、監査スナップショットを作成（トランザクション）
-    Se->>Se: Settlement outbox が分配を非同期で発行
+    Note over P,Se: No Payment to Settlement event (by design)
+    Se->>Se: 外部資金確認 to プラン分配 トランザクション
+    Se->>Se: outbox が分配を非同期で発行
     Se->>W: Wallet port 経由でバウチャーを入金
 ```
 
@@ -183,7 +190,7 @@ CRUD Skeleton は、生成された CRUD 以上のものを必要とするが、
 
 ## プロジェクト構成
 
-リポジトリはモジュラーモノリスです。`src/` にアプリケーションコード（Core フレームワークと、Common、Identity、Trade、Payment、Wallet、Storage、Authorization などのビジネスモジュール）が置かれ、その隣に `config/`、`migrations/`、`tests/`、`docs/`、Docker/Compose ファイルがあります。`src/Authorization` のシードと運用は [Authorization Setup](docs/manual/authorization.md) を参照してください。
+リポジトリはモジュラーモノリスです。`src/` にアプリケーションコード（Core フレームワークと、Common、Identity、Authorization、Trade（Store カタログ経由の注文）、Store（カタログ、メンバーシップ、StoreOrder）、Inventory、Payment、Wallet、Promotion、Storage、Settlement、Exchange などのビジネスモジュール）が置かれ、その隣に `config/`、`migrations/`、`tests/`、`docs/`、Docker/Compose ファイルがあります。`src/Authorization` のシードと運用は [Authorization Setup](docs/manual/authorization.md) を参照してください。
 
 完全な詳細ディレクトリツリー（各モジュールのコントローラ、サービス、エンティティ、リポジトリまで）は、
 **[プロジェクト構成 — 開発マニュアル](docs/manual/project-structure.md)** を参照してください。
@@ -233,8 +240,8 @@ PHP/Symfony でネイティブに実行するか、Docker Compose（app、nginx�
 |-----------|------|---------|
 | **Core** | API 基盤 | REST コントローラサポート、共有サービス動作、ビューミックスイン、式クエリ |
 | **Common** | CMS と設定 | カテゴリ、タグ、コンテンツ、メディア、ページ、コメント、キーバリュー設定 |
-| **Trade** | コマース | 商品、仕様、注文ワークフロー、価格計算 |
-| **Store** | マルチストア運用 | ストアメンバーシップと信頼性の高い注文イベント引き継ぎ |
+| **Trade** | コマース | 注文、注文ワークフローと Store カタログ経由の価格計算（`CatalogResolver`、`specificationUuid` スナップショット） |
+| **Store** | マルチストア運用 | ストアメンバーシップ、信頼性の高い注文イベント引き継ぎと Product/Specification カタログ（`store = NULL` はグローバル共有） |
 | **Inventory** | 在庫管理 | ストア別在庫、予約、レシピ、在庫台帳ポリシー |
 | **Payment** | 請求書オーケストレーション | 請求書ライフサイクル、ゲートウェイ抽象化、決済調整、Webhook |
 | **Wallet** | 残高操作 | 転送、入金、出金、バウチャー、照合 |

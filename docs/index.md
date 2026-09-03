@@ -6,14 +6,23 @@ Symfony 8.1 API backend skeleton with modular architecture, JWT authentication, 
 
 ```text
 src/
-├── Core/       # Framework core (RestController, BaseService, View Mixins, Expression Parser)
-├── Common/     # CMS module (Category, Tag, Content, Comment, Page, Media, Setting)
-├── Trade/      # E-Commerce (Product, Specification, Order, OrderItem, Pricing Pipeline)
-├── Payment/    # Payments (Invoice, Gateway abstraction, Webhooks, Events)
-├── Wallet/     # Wallet (Balance, Atomic Transfers, Idempotency)
-├── Wechat/     # WeChat (Mini Program/Official Account Login, WeChat Pay V3, Gateway)
-└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
+├── Core/         # Framework core (RestController, BaseService, View Mixins, Expression Parser)
+├── Common/       # CMS (Category, Tag, Content, Comment, Page, Media, Setting, Picture)
+├── Identity/     # Authentication (JWT RS256, OTP, User, Profile)
+├── Authorization/# RBAC (Permission, Role, Assignment, Field Grants, Audit, Voter)
+├── Trade/        # E-Commerce (Order, OrderItem — catalog via Store CatalogResolver)
+├── Store/        # Multi-store ops + catalog (Store, Product, Specification, Membership, StoreOrder, Outbox/Inbox)
+├── Inventory/    # Stock & reservation (Material, Stock, Recipe, Reservation, Ledger)
+├── Payment/      # Invoices (Gateway abstraction, Webhooks, Adjustment providers)
+├── Wallet/       # Balances (Wallet, Transaction, Voucher, Deductions, Transfers)
+├── Promotion/    # Promotion DSL + strategies (Priority-ordered calculator)
+├── Storage/      # Media storage drivers (Local, Qiniu)
+├── Wechat/       # WeChat (Mini Program/Official Account Login, WeChat Pay V3)
+├── Settlement/   # Allocation & finality (Rules, Plans, Allocations — separate funding)
+└── Exchange/     # Points economy (design only, pool-backed rates)
 ```
+
+> **Store catalog**: `Store` owns `Product`/`Specification` (`trade_product`/`trade_specification`, `store_id` nullable — `NULL` = shared/global). `Trade` owns orders and resolves prices via `CatalogResolver`; see `design/store-catalog.md`.
 
 ## Tech Stack
 
@@ -38,7 +47,7 @@ src/
 - **Invoice-based payment framework**: Gateway abstraction (mock/wallet/wechat), webhooks, provider-agnostic invoice events
 - **WeChat integration**: Mini Program and Official Account login, WeChat Pay V3 gateway, WechatUser entity (OneToOne→User)
 - **System introspection**: Entity metadata and route export via `/system/*` endpoints
-- **Atomic wallet transfers**: Deadlock prevention, optimistic locking, idempotency
+- **Atomic wallet transfers**: Deadlock prevention, pessimistic locking (`SELECT ... FOR UPDATE`) + manual `version` counter, idempotency
 - **Token rotation with reuse detection**: Refresh tokens hashed (HMAC-SHA256), rotated on use
 
 ## Quick Start
@@ -60,9 +69,14 @@ docker compose exec app php bin/console app:identity:user:create admin@example.c
 
 ## Documentation
 
-- **[Design Contracts](design/system-architecture.md)** -- System architecture rules, API design, data model, controller contract
-- **[Bundles](design/bundles/core.md)** -- Per-module design documents (Core, Common, Trade, Wallet, Identity)
-- **[API Docs](/api/doc)** -- Interactive Swagger UI (when running)
+- **[Development Manual](manual/index.md)** — Setup, architecture, testing, deployment, and runbooks
+- **[Design Contracts](design/system-architecture.md)** — System architecture, API, data-model, controller, and cross-cutting contracts
+- **[Bundles](design/bundles/core.md)** — Per-module design (Core, Common, Trade, Store, Inventory, Payment, Wallet, Promotion, Storage, Authorization, Settlement, Exchange, etc.)
+- **[Security Hardening](design/security-hardening.md)** & **[Extension Points](design/extension-points.md)**
+- **[Testing & Production Validation](testing/crud-skeleton-production/README.md)** — Evidence, matrix, and production readiness
+- **[AI Context](ai/context.md)** — Whole-repo map + operational status
+- **[Order & Payment Flow](openapi/order-payment-flow.md)** — Consumer API workflow
+- **[API Docs](/api/doc)** — Swagger UI (when running) and `openapi/endpoints.yaml`
 
 ## Quality Checks
 

@@ -55,6 +55,7 @@ src/
 │   ├── Parser/                     # ExpressionDqlParser, ExpressionQueryBuilderAssembler
 │   ├── Serializer/                 # Normalizers, circular-reference handling
 │   ├── EventListener/              # AccessLog, ExceptionInterceptor, RateLimit, Locale, …
+│   ├── Validator/                  # JsonSchemaValidator + JsonSchemaViolation (justinrainbow/json-schema)
 │   ├── Doctrine/Dql/               # (reserved) custom DQL functions
 │   ├── Metrics/, Exception/, Utils/  # MetricsRegistry, UUID, Math, RsaClient, …
 │   └── Resources/config/services.yaml
@@ -91,6 +92,7 @@ src/
 │   ├── Controller/{App,Manage,Staff}/
 │   ├── Service/                    # StoreService, StoreOrderService, StoreOutboxService
 │   ├── Entity/                     # Store, Membership, StoreOrder, StoreOutboxMessage, …
+│   ├── Resources/JsonSchema/       # StoreAddress.json, StoreContact.json, StoreSettings.json (bundle schemas)
 │   ├── MessageHandler/             # Reservation*, TradeOrder* handlers
 │   └── Command/PublishOutboxCommand.php
 │

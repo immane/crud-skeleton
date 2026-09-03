@@ -41,7 +41,8 @@ Each business domain is a self-contained module under `src/`:
 ```
 src/{Module}/
 |-- Controller/
-|   |-- App/              # Public/read-only endpoints
+|   |-- App/              # Client-facing endpoints (authenticated; may include writes when ownership-scoped)
+|   |-- Public/           # Anonymous read-only endpoints (when applicable)
 |   |-- Manage/           # Admin CRUD endpoints
 |-- Entity/               # Domain entities (Doctrine)
 |-- Repository/           # Data access (ServiceEntityRepository)
@@ -60,8 +61,19 @@ src/{Module}/
 | Repository class(es) | Extends `ServiceEntityRepository` |
 | Service class(es) | Extends `BaseService`, implements `{Name}ServiceInterface` |
 | Service interface | Extends `BaseServiceInterface` (can be empty) |
-| App controller(s) | Read-only public endpoints |
+| App controller(s) | Client-facing endpoints (authenticated; writes allowed when ownership/authorization-scoped) |
+| Public controller(s) | Anonymous read-only endpoints (only for safe public data; optional) |
 | Manage controller(s) | CRUD endpoints guarded by `ROLE_ADMIN` |
+
+> **Defaults vs. exceptions**: The table is the default for CRUD aggregates
+> (Category, Content, Order, Wallet, Store, etc.). Explicit exception
+> categories exist for non-CRUD records and are documented in the owning
+> bundle doc (`docs/design/bundles/*`) and `docs/design/data-model.md` §1.1:
+> Inbox/Outbox (append-only + claim, no `updatedAt`/`__toString` per record),
+> immutable audit / projection / ledger records, join / pivot tables, DTO / value
+> objects, and infrastructure records (Messenger, cache). Those records do not
+> require a dedicated repository per projection, `createdAt/updatedAt`, or a
+> full CRUD controller set.
 
 ---
 
@@ -92,14 +104,15 @@ src/{Module}/
 
 ### 3.4 Cross-Boundary Identity Contract
 
-Modules and future services MUST NOT exchange local auto-increment database IDs as
-durable references. Each cross-boundary aggregate exposes a UUID or another explicitly
-documented immutable business key.
+Every persisted entity retains its local integer `id` primary key. Modules and future
+services MUST NOT exchange that local auto-increment ID as a durable reference. Each
+cross-boundary aggregate exposes a UUID or another explicitly documented immutable
+business key.
 
 | Context | Identifier to use |
 |---------|-------------------|
 | Local Doctrine relation inside one module | Integer `id` is allowed |
-| Public API route/response | UUID |
+| Public API route/response | Numeric `id` or UUID through the Core identifier lookup; UUID is preferred when the aggregate has a durable external identity |
 | Service interface crossing module boundary | UUID or documented immutable business key |
 | Integration event aggregate/source/correlation id | UUID |
 | Future service database relation | UUID/business key only; no cross-service FK |
@@ -108,6 +121,12 @@ An event carries scalar snapshots and external identities only. It MUST NOT carr
 Doctrine entity, repository, EntityManager, or a local primary key as a durable
 reference. UUID lookup does not grant access; the receiving module still enforces its
 own authorization and ownership rules.
+
+Core CRUD routes retain `{id}` as their compatibility parameter name. The parameter
+accepts either a digit-only local ID or a canonical UUID when the entity maps a unique
+`uuid` field. A request must provide one identifier in the path, never separate `id`
+and `uuid` values that could disagree. Digit-only values resolve only as IDs; UUID
+values resolve only as UUIDs; an entity without a UUID field does not accept UUID input.
 
 ---
 

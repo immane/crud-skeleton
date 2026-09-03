@@ -252,8 +252,11 @@ Supported via `SerializerContextFactory`:
 
 ### 7.4 Test Database Contract
 
+Canonical contract is `docs/testing/crud-skeleton-production/TEST_STRATEGY.md` §Test Environments / §Test Layers.
+
 - Each test method starts with a clean schema
-- Schema is created from Doctrine schema tool (not migrations) in `DatabaseBootstrapTrait`
+- **Integration / kernel tests** (`tests/Integration/` + `Integration*TestCase` helpers) create the schema from the Doctrine `SchemaTool` (not migrations) in `DatabaseBootstrapTrait` — fast, per-test isolation with auto-rollback
+- **Migration chain** is validated separately in CI on MySQL 8.4 (`migrations.yml`) and on demand via `doctrine:migrations:migrate` on a disposable env; `DatabaseBootstrapTrait` does not prove migration correctness
 - Test data fixtures are inserted per-test or per-class
 - Transactions are wrapped per test and rolled back (auto-rollback)
 
@@ -424,9 +427,10 @@ class XxxCommand extends Command
 
 | Document | Location | Contents |
 |----------|----------|----------|
-| Design doc | `docs/design/{module}.md` | Business flow, API design, data model sketch |
-| API usage guide | `docs/api/{module}-api.md` | Endpoint listing, curl examples, auth |
-| OpenAPI spec | Code attributes `#[OA\*]` | Auto-generated at `/api/doc` |
+| Bundle design doc | `docs/design/bundles/{module}.md` | Business flow, API design, data model, store/catalog or domain rules |
+| Operational guide | `docs/manual/{module}.md` + `docs/runbooks/{module}.md` (when applicable) | Seeding, deployment, and recovery procedures |
+| OpenAPI spec | Code attributes `#[OA\*]` (`/api/doc` + `/api/doc.json`) + `docs/openapi/endpoints.yaml` + `docs/openapi/order-payment-flow.md` | Machine-readable spec + human consumer flow |
+| Testing evidence | `docs/testing/crud-skeleton-production/TEST_MATRIX.md` / `BUSINESS_INVARIANTS.md` for critical modules | Required validation per change type |
 
 ### 13.2 Code Documentation Rules
 

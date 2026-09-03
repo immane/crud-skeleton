@@ -70,11 +70,12 @@ Registers `GET /` and provides paginated list endpoint:
 
 **File**: `src/Core/View/DetailApiViewMixin.php`
 
-Registers `GET /{id}` (numeric ID required):
+Registers `GET /{id}`. The Core identifier lookup accepts a digit-only local ID or a
+canonical UUID when the entity has a mapped `uuid` field:
 
 | Route | Method | Action |
 |-------|--------|--------|
-| `GET /{id}` | detailAction | Single entity by ID |
+| `GET /{id}` | detailAction | Single entity by numeric ID or UUID |
 
 **Hook Methods**:
 
@@ -124,7 +125,7 @@ Registers two routes:
 
 | Route | Method | Action |
 |-------|--------|--------|
-| `PUT /{id}` | updateAction | Single entity update |
+| `PUT /{id}` | updateAction | Single entity update by numeric ID or UUID |
 | `POST /batch-update` | batchUpdateAction | Batch upsert (create or update) |
 
 **Query Parameters**: `@mode=mixed|strict`, `@basis=field1,field2`, `@partial`, `@transform`
@@ -166,7 +167,7 @@ Registers `DELETE /{id}`:
 
 | Route | Method | Action |
 |-------|--------|--------|
-| `DELETE /{id}` | deleteAction | Remove entity |
+| `DELETE /{id}` | deleteAction | Remove entity by numeric ID or UUID |
 
 **Hook Methods**:
 
@@ -205,12 +206,39 @@ For entities governed by Symfony Workflow state machines:
 | Route | Method | Action |
 |-------|--------|--------|
 | `GET /todo` | todoAction | List entities with available transitions |
-| `GET /{id}/transitions` | availableTransitionsAction | Get enabled transitions for an entity |
-| `POST /{id}/do/{transition}` | doTransitionAction | Execute a workflow transition |
-| `PUT /{id}/status-reset` | resetMarkingAction | Reset state machine marking (admin only) |
+| `GET /{id}/transitions` | availableTransitionsAction | Get enabled transitions for an entity by numeric ID or UUID |
+| `POST /{id}/do/{transition}` | doTransitionAction | Execute a workflow transition by numeric ID or UUID |
+| `PUT /{id}/status-reset` | resetMarkingAction | Reset state machine marking by numeric ID or UUID (admin only) |
+
+All three identifier-aware actions resolve `id` through `ApiView::mixIdToCommonFilter()`
+(digit-only → `id`, canonical UUID → `uuid`), merged with `commonFilter()` and
+`authorizeApiAction('workflow', $entity)`. Missing entities return `404`; authorization
+failures return `403`. The `{id}` route parameter accepts `\d+|[0-9a-fA-F-]{36}`.
 
 **Properties** the controller MUST declare:
 - `protected $workflow;` -- the workflow service ID (e.g., `'state_machine.order'`)
+
+### 2.10 Scoped: `ScopedListApiViewMixin` and `ScopedDetailApiViewMixin`
+
+**Files**: `src/Core/View/ScopedListApiViewMixin.php`, `src/Core/View/ScopedDetailApiViewMixin.php`
+
+For nested resources such as `/store/{scopeId}/orders/{id}`:
+
+| Trait | Route | Behavior |
+|-------|-------|----------|
+| `ScopedListApiViewMixin` | `GET /` (parent `/{scopeId}` on the controller) | Calls abstract `scopedListFilter($scopeId)` and lists with `service->list()` |
+| `ScopedDetailApiViewMixin` | `GET /{id}` with `requirements: ['id' => '\\d+|[0-9a-fA-F-]{36}']` | Calls abstract `scopedDetailFilter($scopeId, $id)`; `scopeId` and `id` each accept numeric ID or UUID |
+
+Both `scopeId` and `id` follow the same rule as the core mixins: digit-only → `id`, canonical UUID → `uuid`. Controllers MUST resolve them explicitly via `ApiView::identifierField()` / `identifierCriteria()` or `mixIdToCommonFilter()` and MUST NOT rely on an `id`-then-`uuid` fallback. For Store-scoped controllers, the parent Store is resolved through `StoreScopedAuthorizationApiMixin::storeForAuthorization()`, which now uses `identifierCriteria($scopeId)` so `/store/1/orders/2` and `/store/{storeUuid}/orders/{uuid}` are both valid. Example:
+
+```php
+protected function scopedDetailFilter(string $scopeId, string $id): array
+{
+    return [$this->identifierField($id) => $id, ...$this->storeScopedFilter($this->storeForAuthorization())];
+}
+```
+
+The class-level route SHOULD declare `requirements: ['scopeId' => '\\d+|[0-9a-fA-F-]{36}']` when the parent resource exposes both forms.
 
 ---
 
@@ -379,7 +407,7 @@ mixIdToCommonFilter(id)
 | R1 | Controller MUST extend `RestController` |
 | R2 | Controller MUST `use ApiView` trait |
 | R3 | Controller MUST set `protected ?string $serviceClass` |
-| R4 | App (public) controllers MUST NOT use Create/Update/Delete mixins |
+| R4 | Public (anonymous) controllers (`Controller/Public/`) MUST NOT use Create/Update/Delete mixins; App controllers (`Controller/App/`) are authenticated client-facing APIs and MAY use those mixins when writes are ownership-scoped and authorization-checked |
 | R5 | Manage (admin) controllers MUST be guarded by `#[IsGranted('ROLE_ADMIN')]` |
 | R6 | Admin CRUD controllers MUST declare `$requiredCreateProperties` and `$acceptedCreateProperties` |
 | R7 | Every public action MUST have `#[OA\*]` OpenAPI attributes |

@@ -1,6 +1,6 @@
 # CRUD Skeleton - Full Codebase Context
 
-> Context snapshot. Last updated: 2026-09-01
+> Context snapshot. Last updated: 2026-09-03
 
 ---
 
@@ -153,7 +153,7 @@
 │       ├── workflow.yaml         # Order state machine, including Store acceptance
 │       ├── messenger.yaml        # Trade/Store integration messages to async transport
 │       └── ...
-├── migrations/                   # 31 migrations (latest: 20260902000000 `store_id` nullable + 20260903000000/20260903000001 OrderItem `specificationUuid` two-step, irreversible)
+├── migrations/                   # 33 migrations (latest: 20260903000003 — see `migrations/`; includes store `store_id` nullable and OrderItem `specificationUuid` backfill)
 ├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
 ├── docs/
 │   ├── ai/context.md             # This file
@@ -638,7 +638,7 @@ Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_pat
 | **Order metadata** | Trade | App order creation accepts optional `metadata` JSON and persists it as-is to `trade_order.metadata`, useful for receiver/address snapshots and frontend extension data |
 | **State machine** | Trade | Symfony Workflow for orders |
 | **Token rotation + reuse detection** | Identity | HMAC-SHA256 refresh tokens |
-| **Idempotency** | Wallet + Authorization Assignment | `referenceId` unique constraint on Transaction; `UNIQUE(user_uuid, role_id, scope_type, scope_uuid)` on Assignment with reactivation of revoked rows |
+| **Idempotency** | Wallet + Authorization Assignment | `referenceId` unique constraint on Transaction; `UNIQUE(user_uuid, role_id, scope_type, scope_key)` (`scope_key=''` for global, Store UUID for store) on Assignment with reactivation of revoked rows |
 | **Pipeline** | Trade | `PriceCalculatorInterface` with priority ordering |
 | **Meta channel** | Trade | `PriceCalculationContext.meta` / `PriceCalculationResult.meta` — bidirectional opaque channel. Calculators read/write module-specific keys (`meta['promotion']`, `meta['coupon']`). Trade never inspects content. |
 | **Optimistic locking** | Wallet | `SELECT … FOR UPDATE` pessimistic locking + manual `version` counter (`SET version = version + 1`); no `#[ORM\Version]` attribute |
@@ -716,7 +716,7 @@ Enriches all endpoints (90+):
 
 44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat, Authorization, Store). Each with field-level type, description, enum, and example values. `path_patterns` includes both `^/api` and `^/system`.
 
-## 15. Database Tables (26 Migrations)
+## 15. Database Tables (33 Migrations — single source: `migrations/` directory)
 
 | Version | Tables |
 |---------|--------|
@@ -739,8 +739,14 @@ Enriches all endpoints (90+):
 | 20260815010000 | `wallet.held` column (frozen/available balance separation) |
 | 20260815020000 | `wallet_voucher` (boundary ledger: credit/debit vouchers, unique `reference_id` + `(voucher_type, voucher_id)`, FK to `wallet`) |
 | 20260815030000 | `wallet_voucher_comment` (append-only annotations on vouchers, FK cascade) |
-| 20260901000000 | Authorization foundation: `authorization_permission`, `authorization_role`, `authorization_role_permission`, `authorization_assignment` (with `UNIQUE(user_uuid, role_id, scope_type, scope_uuid)` + indexes), `authorization_role_field_grant`, `authorization_audit_log` |
+| 20260819000000 | Settlement core: `settlement_rule`, `settlement_rule_version`, `settlement_plan`, `settlement_allocation`, `settlement_consumed_event`, `settlement_outbox_message` |
+| 20260819000001 | Settlement allocation source item snapshot fields |
+| 20260901000000 | Authorization foundation: `authorization_permission`, `authorization_role`, `authorization_role_permission`, `authorization_assignment` (with `UNIQUE(user_uuid, role_id, scope_type, scope_key)` + portable `scope_key` + indexes), `authorization_role_field_grant`, `authorization_audit_log` |
 | 20260901000001 | Content pilot: `common_content.store_uuid` nullable indexed + `common_content.metadata` json |
+| 20260902000000 | Store catalog: `trade_product.store_id` / `trade_specification.store_id` nullable (global vs store-private) |
+| 20260903000000-20260903000001 | Trade OrderItem `specificationUuid` backfill two-step (add uuid, drop FK) — irreversible |
+| 20260903000002 | Identity `users.created_at` / `updated_at` timestamps |
+| 20260903000003 | Store order verification fields (`verified_at`, `verified_by`, `verification_code`) |
 
 ## 16. Documentation Assets
 
@@ -949,7 +955,7 @@ Recipes expand a Specification into material demand. Material demand is aggregat
 
 ### 23.1 Status summary (2026-08-09)
 
-- **Engineering maturity is high** (module boundaries, PHPStan L8, 99.46% line coverage, dual-DB CI). **Production-readiness is medium**: deployment orchestration exists, but observability, rate limiting, and external-provider certification are missing, and a batch of known `src/` bugs are unfixed.
+- **Engineering maturity is high** (module boundaries, PHPStan L8, 99.46% line coverage, dual-DB CI). **Production-readiness is medium**: deployment orchestration exists, health checks / rate limiting / metrics are implemented (see §23.2 / §24), but alerting, shared rate-limit cache, external-provider certification, and a batch of known `src/` bugs remain unfixed. Single source for readiness is §23–24 and `docs/testing/crud-skeleton-production/PRODUCTION_VALIDATION.md`.
 - **Blocked for production until fixed** (CRITICAL):
   1. `src/Core/Utils/RsaClient.php:51,99` signs with **MD5** (forgeable, fails FIPS) — should be `OPENSSL_ALGO_SHA256`.
   2. `src/Core/Utils/Location.php` depends on `php-curl-class`, which is **not installed** — every call fatals `Class "Curl\Curl" not found`.

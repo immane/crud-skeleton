@@ -145,18 +145,16 @@ final class WorkflowApiViewMixinTest extends TestCase
 
     public function testAvailableTransitionsActionMissingEntityThrowsTypeError(): void
     {
-        // KNOWN GAP: availableTransitionsAction has no entity-not-found guard. The
-        // workflow receives null and WorkflowInterface::getEnabledTransitions(object)
-        // raises a TypeError (a 500). A 404 would be the expected behaviour.
         $service = new WorkflowFakeService();
         $service->getResult = null;
 
         $workflow = $this->createWorkflow();
 
         $controller = $this->createController($service, $workflow, $this->createDoctrine());
+        $response = $controller->availableTransitionsAction(99);
 
-        $this->expectException(\TypeError::class);
-        $controller->availableTransitionsAction(99);
+        self::assertSame(404, $response->getStatusCode());
+        self::assertStringContainsString(ApiViewMessages::ENTITY_NOT_FOUND, $response->getContent());
     }
 
     // ────────────────── doTransitionAction ──────────────────
@@ -197,7 +195,7 @@ final class WorkflowApiViewMixinTest extends TestCase
         $request = Request::create('/', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{"note":"hi"}');
         $response = $controller->doTransitionAction($request, 1, 'approve');
 
-        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(400, $response->getStatusCode());
         self::assertStringContainsString(ApiViewMessages::TRANSITION_CANNOT_APPLY, $response->getContent());
         self::assertSame(0, $service->updateCalls);
     }
@@ -236,14 +234,12 @@ final class WorkflowApiViewMixinTest extends TestCase
         $request = Request::create('/', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{}');
         $response = $controller->doTransitionAction($request, 1, 'approve');
 
-        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(500, $response->getStatusCode());
         self::assertStringContainsString('workflow exploded', $response->getContent());
     }
 
     public function testDoTransitionActionMissingEntityWarnsAboutTypeError(): void
     {
-        // No not-found guard: the null entity reaches the workflow. WorkflowInterface::can
-        // requires an object, so a TypeError surfaces (as a warning) instead of a 404.
         $service = new WorkflowFakeService();
         $service->getResult = null;
 
@@ -253,8 +249,8 @@ final class WorkflowApiViewMixinTest extends TestCase
         $request = Request::create('/', 'POST', server: ['CONTENT_TYPE' => 'application/json'], content: '{}');
         $response = $controller->doTransitionAction($request, 404, 'approve');
 
-        self::assertSame(200, $response->getStatusCode());
-        self::assertStringContainsString('must be of type object', $response->getContent());
+        self::assertSame(404, $response->getStatusCode());
+        self::assertStringContainsString(ApiViewMessages::ENTITY_NOT_FOUND, $response->getContent());
     }
 
     // ────────────────── resetMarkingAction ──────────────────
@@ -265,27 +261,21 @@ final class WorkflowApiViewMixinTest extends TestCase
         $entity->status = ['current' => ['on'], 'places' => []];
 
         $service = new WorkflowFakeService();
+        $service->getResult = $entity;
         $workflow = $this->createWorkflow();
         $doctrine = $this->createDoctrine();
 
         $controller = $this->createController($service, $workflow, $doctrine);
-        $response = $controller->resetMarkingAction($entity);
+        $response = $controller->resetMarkingAction(1);
 
         self::assertSame([], $entity->status);
         self::assertTrue($doctrine->getManager()->flushed);
         self::assertSame(200, $response->getStatusCode());
+        self::assertSame(['id' => 1], $service->lastGetCriteria);
     }
 
     public function testResetMarkingRoutePlaceholderMatchesActionArgument(): void
     {
-        // KNOWN BUG: the route is /{id}/status-reset but the action argument is named
-        // $entity. Symfony matches route placeholders to arguments by name, so {id} is
-        // never injected and $entity is unresolvable at runtime (500).
-        $this->markTestSkipped(
-            'Known bug (src/Core/View/WorkflowApiViewMixin.php:105): route placeholder {id} '
-            . 'does not match the action argument name $entity. See docs/issues/coverage-2026-08-09/core-view.md.'
-        );
-
         $controller = $this->createController(
             new WorkflowFakeService(),
             $this->createWorkflow(),
@@ -298,7 +288,9 @@ final class WorkflowApiViewMixinTest extends TestCase
 
         /** @var Route $route */
         $route = $attributes[0]->newInstance();
-        $variables = $route->compile()->getVariables();
+        $path = method_exists($route, 'getPath') ? $route->getPath() : ($route->path ?? '');
+        preg_match_all('/\{(\w+)\}/', (string) $path, $matches);
+        $variables = $matches[1] ?? [];
 
         $argumentNames = array_map(
             static fn (\ReflectionParameter $p): string => $p->getName(),

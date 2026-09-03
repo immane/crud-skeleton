@@ -342,6 +342,25 @@ curl -X PUT http://localhost:8080/api/v1/manage/stores/{uuid} \
   -H "Content-Type: application/json" -d '{"settings":{"order":{"requireAcceptance":true},"fulfillment":{"requireVerification":true}}}'
 ```
 
+#### 5.1.2 Store Address / Contact Schemas (standardized via JSON Schema)
+
+`address` and `contact` are validated in the API layer **before** `processCreateContent` via `Core/Validator/JsonSchemaValidator` driven by `CreateApiViewMixin`/`UpdateApiViewMixin` (`$jsonSchemas`). Schemas live in `src/Store/Resources/JsonSchema/`; validator lives in `Core`.
+
+```php
+// Manage/StoreController
+protected array $jsonSchemas = [
+    'address'  => 'Store/StoreAddress',
+    'contact'  => 'Store/StoreContact',
+    'settings' => 'Store/StoreSettings',
+];
+```
+
+- **`StoreAddress.json`** — `province/city/district/street/detail/building/floor/postalCode/formattedAddress` (strings, `maxLength`), `latitude [-90,90]` + `longitude [-180,180]` (`number`) with `dependencies: latitude↔longitude`, `geohash` regex, `poiId`; `type: object`, `additionalProperties:false`, `null` skipped (field is nullable). Extra keys → `400`.
+- **`StoreContact.json`** — `phone/managerPhone` regex, `email/managerEmail` `format:email`, `managerUserUuid` `format:uuid`, `wechat/serviceHours`; `additionalProperties:false`.
+- **`StoreSettings.json`** — as above, top-level `additionalProperties:true` for forward compat, inner `order`/`fulfillment` `additionalProperties:false`.
+
+All `json` columns remain nullable; the schemas provide the **API contract** while preserving the current `1w`-store `json` storage and `Cache`-based distance calculation (no `latitude/longitude` columns yet). Violations throw `JsonSchemaViolationException` → `400`.
+
 ### 5.2 Membership
 
 **Table:** `store_membership`
