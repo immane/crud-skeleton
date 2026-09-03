@@ -7,8 +7,12 @@ namespace App\Trade\Controller\Manage;
 use App\Core\Controller\RestController;
 use App\Core\Service\BaseService;
 use App\Core\View\ApiView;
+use App\Core\View\ApiViewMessages;
+use App\Core\View\CreateApiViewMixin;
+use App\Core\View\DeleteApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
+use App\Core\View\UpdateApiViewMixin;
 use App\Trade\Entity\Order;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\StoreContextResolverInterface;
@@ -24,7 +28,14 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[IsGranted('ROLE_ADMIN')]
 class OrderController extends RestController
 {
-    use ApiView, DetailApiViewMixin, ListApiViewMixin;
+    use ApiView, DetailApiViewMixin, ListApiViewMixin, CreateApiViewMixin, UpdateApiViewMixin, DeleteApiViewMixin;
+
+    /** @var list<string> */
+    protected array $requiredCreateProperties = ['items'];
+    /** @var list<string> */
+    protected array $acceptedCreateProperties = ['items', 'currency', 'notes', 'metadata', 'user', 'meta'];
+    /** @var list<string> */
+    protected array $acceptedUpdateProperties = ['notes', 'metadata'];
 
     public function __construct(
         protected readonly OrderServiceInterface $service,
@@ -34,10 +45,32 @@ class OrderController extends RestController
     ) {
     }
 
+    /**
+     * Use CreateApiViewMixin lifecycle for order creation.
+     */
     #[Route('', name: 'create', methods: ['POST'])]
     public function createAction(Request $request): Response
     {
         $content = json_decode($request->getContent(), true) ?: [];
+
+        try {
+            $filtered = [];
+            foreach ($this->requiredCreateProperties as $prop) {
+                if (!array_key_exists($prop, $content)) {
+                    throw new ValidatorException(ApiViewMessages::propertyRequired($prop));
+                }
+                $filtered[$prop] = $content[$prop];
+            }
+            foreach ($this->acceptedCreateProperties as $prop) {
+                if (array_key_exists($prop, $content)) {
+                    $filtered[$prop] = $content[$prop];
+                }
+            }
+            $content = array_merge($filtered, $this->defaultCreateValues());
+            $content = $this->processCreateContent($content, $this->service->new());
+        } catch (ValidatorException $e) {
+            return $this->warning($e->getMessage(), 400, '', 400);
+        }
 
         $items = $content['items'] ?? [];
         if (empty($items)) {
@@ -62,7 +95,8 @@ class OrderController extends RestController
                 $storeContext,
             );
 
-            return $this->success($order, 'SUCCESS', 201);
+            $created = $this->afterCreated($order);
+            return $this->success($created, 'SUCCESS', 201);
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);
         }
@@ -146,66 +180,6 @@ class OrderController extends RestController
         return $this->success($order->getItems()->toArray());
     }
 
-    #[Route('/{id<\d+>}/pay', name: 'pay', methods: ['POST'])]
-    public function payAction(Request $request, int $id): Response
-    {
-        $order = $this->service->get(['id' => $id]);
-
-        if (!$order) {
-            return $this->warning('Order not found.', 404, '', 404);
-        }
-
-        if (!$this->workflow->can($order, 'pay')) {
-            return $this->warning('Order cannot be paid in current status.', 400, '', 400);
-        }
-
-        $content = json_decode($request->getContent(), true) ?: [];
-        $systemWalletId = (int) ($content['systemWalletId'] ?? 0);
-        $paymentMethod = $content['paymentMethod'] ?? 'wallet';
-
-        if ($systemWalletId <= 0) {
-            return $this->warning('systemWalletId is required.', 400, '', 400);
-        }
-
-        try {
-            // Wallet transfer happens in its own nested transaction (savepoint).
-            // workflow.apply() and update() persist inside the outer transaction,
-            // ensuring atomicity: if status update fails, wallet transfer rolls back.
-            $this->service->wrapInTransaction(function () use ($order, $systemWalletId, $paymentMethod) {
-                $this->service->pay($order, $systemWalletId, $paymentMethod);
-                $this->workflow->apply($order, 'pay');
-                $this->service->update($order, []);
-            });
-        } catch (\Throwable $e) {
-            return $this->warning($e->getMessage(), 400, '', 400);
-        }
-
-        return $this->success($order, 'Payment processed');
-    }
-
-    #[Route('/{id<\d+>}/payment', name: 'payment', methods: ['POST'])]
-    public function paymentAction(Request $request, int $id): Response
-    {
-        $order = $this->service->get(['id' => $id]);
-
-        if (!$order) {
-            return $this->warning('Order not found.', 404, '', 404);
-        }
-
-        if (!$this->workflow->can($order, 'pay')) {
-            return $this->warning('Order cannot be paid in current status.', 400, '', 400);
-        }
-
-        $content = json_decode($request->getContent(), true) ?: [];
-        $payment = (string) ($content['payment'] ?? 'mock');
-
-        try {
-            return $this->success($this->service->createPayment($order, $payment, $content), 'Payment started');
-        } catch (\Throwable $e) {
-            return $this->warning($e->getMessage(), 400, '', 400);
-        }
-    }
-
     #[Route('/{id<\d+>}/fulfill', name: 'fulfill', methods: ['POST'])]
     public function fulfillAction(Request $request, int $id): Response
     {
@@ -264,7 +238,6 @@ class OrderController extends RestController
                 return $this->warning('systemWalletId is required.', 400, '', 400);
             }
 
-            // Wallet refund + workflow transition + persist in ONE atomic transaction
             $this->service->wrapInTransaction(function () use ($order, $systemWalletId, $reason) {
                 $this->service->refund($order, $systemWalletId, $reason);
                 $this->workflow->apply($order, 'refund');

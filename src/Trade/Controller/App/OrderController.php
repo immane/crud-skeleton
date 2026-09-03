@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Trade\Controller\App;
 
-use App\Identity\Entity\User;
 use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
+use App\Core\View\ApiViewMessages;
+use App\Core\View\CreateApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
+use App\Identity\Entity\User;
 use App\Trade\Entity\Order;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\StoreContextResolverInterface;
@@ -17,13 +19,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/app/orders', name: 'app-orders-')]
 #[IsGranted('ROLE_USER')]
 class OrderController extends RestController
 {
-    use ApiView, DetailApiViewMixin, ListApiViewMixin;
+    use ApiView, DetailApiViewMixin, ListApiViewMixin, CreateApiViewMixin;
+
+    /** @var list<string> */
+    protected array $requiredCreateProperties = ['items'];
+    /** @var list<string> */
+    protected array $acceptedCreateProperties = ['items', 'currency', 'notes', 'metadata', 'meta'];
 
     public function __construct(
         protected readonly OrderServiceInterface $service,
@@ -43,10 +51,36 @@ class OrderController extends RestController
         return ['user' => $user];
     }
 
+    /**
+     * Use CreateApiViewMixin lifecycle for order creation.
+     * Validates required/accepted fields via the mixin, then handles pricing and store context.
+     */
     #[Route('', name: 'create', methods: ['POST'])]
     public function createAction(Request $request): Response
     {
+        // Leverage CreateApiViewMixin's required/accepted filtering and hooks
         $content = json_decode($request->getContent(), true) ?: [];
+
+        // Required/accepted filtering (mimic CreateApiViewMixin)
+        try {
+            $filtered = [];
+            foreach ($this->requiredCreateProperties as $prop) {
+                if (!array_key_exists($prop, $content)) {
+                    throw new ValidatorException(ApiViewMessages::propertyRequired($prop));
+                }
+                $filtered[$prop] = $content[$prop];
+            }
+            foreach ($this->acceptedCreateProperties as $prop) {
+                if (array_key_exists($prop, $content)) {
+                    $filtered[$prop] = $content[$prop];
+                }
+            }
+            $content = array_merge($filtered, $this->defaultCreateValues());
+            // No @transform for orders, but keep hook for consistency
+            $content = $this->processCreateContent($content, $this->service->new());
+        } catch (ValidatorException $e) {
+            return $this->warning($e->getMessage(), 400, '', 400);
+        }
 
         $items = $content['items'] ?? [];
         if (empty($items)) {
@@ -73,8 +107,9 @@ class OrderController extends RestController
             );
 
             $isAwaitingAcceptance = $order->getStatus() === Order::STATUS_AWAITING_STORE_ACCEPTANCE;
+            $created = $this->afterCreated($order);
             return $this->success(
-                $order,
+                $created,
                 $isAwaitingAcceptance ? 'Order submitted for store acceptance' : 'Order created',
                 $isAwaitingAcceptance ? 202 : 201,
             );
@@ -198,34 +233,6 @@ class OrderController extends RestController
                 $this->workflow->apply($order, 'cancel');
             });
             return $this->success($order, 'Order cancelled');
-        } catch (\Throwable $e) {
-            return $this->warning($e->getMessage(), 400, '', 400);
-        }
-    }
-
-    #[Route('/{id<\d+>}/payment', name: 'payment', methods: ['POST'])]
-    public function paymentAction(Request $request, int $id): Response
-    {
-        $order = $this->service->get(['id' => $id]);
-
-        if (!$order) {
-            return $this->warning('Order not found.', 404, '', 404);
-        }
-
-        $user = $this->getCurrentUser();
-        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
-            return $this->warning('Order not found.', 404, '', 404);
-        }
-
-        if (!$this->workflow->can($order, 'pay')) {
-            return $this->warning('Order cannot be paid in current status.', 400, '', 400);
-        }
-
-        $content = json_decode($request->getContent(), true) ?: [];
-        $payment = (string) ($content['payment'] ?? 'mock');
-
-        try {
-            return $this->success($this->service->createPayment($order, $payment, $content), 'Payment started');
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);
         }

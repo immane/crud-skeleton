@@ -160,55 +160,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
         });
     }
 
-    public function pay(Order $order, int $systemWalletId, string $paymentMethod = 'wallet', ?string $referenceId = null): void
-    {
-        if ($order->getStatus() !== Order::STATUS_CONFIRMED) {
-            throw new \RuntimeException(sprintf(
-                'Order #%d must be in "confirmed" status to pay, current: %s',
-                $order->getId() ?? 0,
-                $order->getStatus(),
-            ));
-        }
-
-        if ($this->walletRepository === null || $this->transferService === null) {
-            throw new \RuntimeException('Wallet module is not configured. Set up wallet before processing payments.');
-        }
-
-        $user = $order->getUser();
-        if ($user === null) {
-            throw new \RuntimeException('Order has no associated user.');
-        }
-
-        $userId = $user->getId();
-        if ($userId === null) {
-            throw new \RuntimeException('User has not been persisted yet (no ID).');
-        }
-
-        $userWallet = $this->walletRepository->findByUserAndCurrency($userId, $order->getCurrency());
-        if ($userWallet === null) {
-            throw new \RuntimeException(sprintf(
-                'No %s wallet found for user #%d.',
-                $order->getCurrency(),
-                $user->getId(),
-            ));
-        }
-        $userWalletId = $userWallet->getId();
-        if ($userWalletId === null) {
-            throw new \RuntimeException('Wallet has not been persisted yet (no ID).');
-        }
-
-        $this->transferService->transfer(
-            $userWalletId,
-            $systemWalletId,
-            $order->getTotalAmount(),
-            $referenceId ?? 'order-pay-' . $order->getUuid(),
-            sprintf('Payment for order #%d', $order->getId() ?? 0),
-        );
-
-        $order->setPaidAt(new \DateTimeImmutable());
-        $order->setPaymentMethod($paymentMethod);
-    }
-
     public function refund(Order $order, int $systemWalletId, string $reason, ?string $referenceId = null): void
     {
         if ($order->getStatus() !== Order::STATUS_PAID) {

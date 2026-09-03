@@ -26,8 +26,6 @@ interface OrderServiceInterface extends BaseServiceInterface
      */
     public function createOrder(array $calculatedItems, mixed $user, int $totalAmount, string $currency = 'CNY', ?string $notes = null, ?array $metadata = null, ?StoreContext $storeContext = null): Order;
 
-    public function pay(Order $order, int $systemWalletId, string $paymentMethod = 'wallet', ?string $referenceId = null): void;
-
     public function refund(Order $order, int $systemWalletId, string $reason, ?string $referenceId = null): void;
 
     /**
