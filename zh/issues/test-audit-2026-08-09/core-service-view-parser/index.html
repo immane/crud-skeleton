@@ -27,7 +27,7 @@
     
     
       
-        <title>Core (Service/View/Parser) test audit (2026-08-09) - CRUD Skeleton</title>
+        <title>核心（服务/视图/解析器）测试审核（2026-08-09） - CRUD Skeleton</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#core-serviceviewparser-test-audit-2026-08-09" class="md-skip">
+        <a href="#2026-08-09" class="md-skip">
           跳转至
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Core (Service/View/Parser) test audit (2026-08-09)
+              核心（服务/视图/解析器）测试审核（2026-08-09）
             
           </span>
         </div>
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Development Contracts
+    开发合同
   
 
     
@@ -1165,7 +1165,7 @@
   <span class="md-ellipsis">
     
   
-    命名约定
+    Naming Convention
   
 
     
@@ -1366,7 +1366,7 @@
   <span class="md-ellipsis">
     
   
-    商店目录（目标）
+    Store Catalog (Target)
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    结算（分配+最终确定）
+    Settlement (Allocation + Finality)
   
 
     
@@ -1562,7 +1562,7 @@
   <span class="md-ellipsis">
     
   
-    交易所（矿池支持经济）
+    Exchange (Pool-backed Economy)
   
 
     
@@ -1646,7 +1646,7 @@
   <span class="md-ellipsis">
     
   
-    微信（登录+支付）
+    Wechat (Login + Pay)
   
 
     
@@ -2305,7 +2305,7 @@
   <span class="md-ellipsis">
     
   
-    架构回顾 2026-06-26
+    Architecture Review 2026-06-26
   
 
     
@@ -2394,7 +2394,7 @@
   <span class="md-ellipsis">
     
   
-    生产验证概述
+    Production Validation Overview
   
 
     
@@ -2422,7 +2422,7 @@
   <span class="md-ellipsis">
     
   
-    测试策略
+    Test Strategy
   
 
     
@@ -2450,7 +2450,7 @@
   <span class="md-ellipsis">
     
   
-    系统演练和测试接缝
+    System Walkthrough And Test Seams
   
 
     
@@ -2506,7 +2506,7 @@
   <span class="md-ellipsis">
     
   
-    业务不变量
+    Business Invariants
   
 
     
@@ -2534,7 +2534,7 @@
   <span class="md-ellipsis">
     
   
-    架构测试映射
+    Architecture Test Mapping
   
 
     
@@ -2562,7 +2562,7 @@
   <span class="md-ellipsis">
     
   
-    失效模式
+    Failure Modes
   
 
     
@@ -2590,7 +2590,7 @@
   <span class="md-ellipsis">
     
   
-    发布验证
+    Release Validation
   
 
     
@@ -2618,7 +2618,7 @@
   <span class="md-ellipsis">
     
   
-    人工智能开发流程
+    AI Development Process
   
 
     
@@ -2838,29 +2838,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keep-behavioral-tests-worth-preserving" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        KEEP — behavioral tests worth preserving
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KEEP——值得保留的行为测试
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         删除候选者
@@ -2871,10 +2871,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#merge-suggestions" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MERGE SUGGESTIONS
+        合并建议
       
     </span>
   </a>
@@ -2882,10 +2882,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verification-steps" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verification steps
+        验证步骤
       
     </span>
   </a>
@@ -2912,197 +2912,197 @@
   
 
 
-<h1 id="core-serviceviewparser-test-audit-2026-08-09">Core (Service/View/Parser) test audit (2026-08-09)<a class="headerlink" href="#core-serviceviewparser-test-audit-2026-08-09" title="Permanent link">&para;</a></h1>
-<p>Read-only audit of <code>tests/Core/Service</code>, <code>tests/Core/View</code>, <code>tests/Core/Parser</code> for redundant tests
-added by the 2026-08-09 coverage campaign (commit <code>4c62b5f</code>, +96 test files) and pre-existing
-duplication. Nothing under <code>src/</code> or <code>tests/</code> was modified; this report is the only deliverable.</p>
-<p>Campaign context: <code>docs/issues/coverage-2026-08-09/README.md</code>; per-module reports
-<code>core-service.md</code>, <code>core-view.md</code>, <code>core-parser-listener.md</code>. Test-ownership rule:
-<code>TEST_STRATEGY.md</code> ("one behaviour → one primary layer"), <code>BUSINESS_INVARIANTS.md</code>
-("assert the public or persisted outcome, not that the implementation method was called").</p>
-<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<h1 id="2026-08-09">核心（服务/视图/解析器）测试审核（2026-08-09）<a class="headerlink" href="#2026-08-09" title="Permanent link">&para;</a></h1>
+<p>对<code>tests/Core/Service</code>、<code>tests/Core/View</code>、<code>tests/Core/Parser</code>进行只读审核以进行冗余测试
+由 2026-08-09 覆盖活动添加（提交 <code>4c62b5f</code>，+96 测试文件）和预先存在的
+重复。 <code>src/</code> 或 <code>tests/</code> 下的任何内容均未修改；该报告是唯一的可交付成果。</p>
+<p>活动上下文：<code>docs/issues/coverage-2026-08-09/README.md</code>；每个模块的报告
+<code>core-service.md</code>、<code>core-view.md</code>、<code>core-parser-listener.md</code>。测试所有权规则：
+<code>TEST_STRATEGY.md</code>（“一个行为→一个主要层”），<code>BUSINESS_INVARIANTS.md</code>
+（“断言公共或持久的结果，而不是调用了实现方法”）。</p>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tests</th>
-<th>Verdict</th>
+<th>文件</th>
+<th>测试</th>
+<th>判决</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>tests/Core/Service/BaseServiceUnitTest.php</td>
+<td>测试/核心/服务/BaseServiceUnitTest.php</td>
 <td>3</td>
-<td>DELETE</td>
+<td>删除</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceCoverageTest.php</td>
+<td>测试/核心/服务/BaseServiceCoverageTest.php</td>
 <td>5</td>
-<td>DELETE</td>
+<td>删除</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceInfrastructureTraitTest.php</td>
+<td>测试/核心/服务/BaseServiceInfrastructureTraitTest.php</td>
 <td>14</td>
-<td>KEEP</td>
+<td>14保持</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceInfrastructureTraitCoverageTest.php</td>
+<td>测试/核心/服务/BaseServiceInfrastructTraitCoverageTest.php</td>
 <td>17</td>
-<td>KEEP (MERGE)</td>
+<td>17保留（合并）</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceMutationTraitTest.php</td>
+<td>测试/核心/服务/BaseServiceMutationTraitTest.php</td>
 <td>17</td>
-<td>KEEP</td>
+<td>17保持</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceMutationTraitCoverageTest.php</td>
-<td>14 (1 skipped)</td>
-<td>KEEP (MERGE)</td>
+<td>测试/核心/服务/BaseServiceMutationTraitCoverageTest.php</td>
+<td>14（跳过 1）</td>
+<td>保留（合并）</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceReadListTraitTest.php</td>
+<td>测试/核心/服务/BaseServiceReadListTraitTest.php</td>
 <td>20</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Service/BaseServiceReadListTraitCoverageTest.php</td>
+<td>测试/核心/服务/BaseServiceReadListTraitCoverageTest.php</td>
 <td>5</td>
-<td>KEEP (MERGE)</td>
+<td>保留（合并）</td>
 </tr>
 <tr>
-<td>tests/Core/Service/DefaultServiceLocatorTest.php</td>
+<td>测试/核心/服务/DefaultServiceLocatorTest.php</td>
 <td>8</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Service/DefaultServiceLocatorCoverageTest.php</td>
+<td>测试/核心/服务/DefaultServiceLocatorCoverageTest.php</td>
 <td>4</td>
-<td>MERGE (1 duplicate)</td>
+<td>合并（1 个重复）</td>
 </tr>
 <tr>
-<td>tests/Core/Service/ExpressionServiceTest.php</td>
+<td>测试/核心/服务/ExpressionServiceTest.php</td>
 <td>1</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Service/ExpressionServiceCoverageTest.php</td>
+<td>测试/核心/服务/ExpressionServiceCoverageTest.php</td>
 <td>4</td>
-<td>KEEP (MERGE)</td>
+<td>保留（合并）</td>
 </tr>
 <tr>
-<td>tests/Core/Service/LegacyEvaluatorTest.php</td>
+<td>测试/核心/服务/LegacyEvaluatorTest.php</td>
 <td>2</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Service/LegacyEvaluatorCoverageTest.php</td>
+<td>测试/核心/服务/LegacyEvaluatorCoverageTest.php</td>
 <td>1</td>
-<td>DELETE</td>
+<td>删除</td>
 </tr>
 <tr>
-<td>tests/Core/Service/QueryBuilderFactoryTest.php</td>
+<td>测试/核心/服务/QueryBuilderFactoryTest.php</td>
 <td>1</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/ApiViewMessagesTest.php</td>
+<td>测试/核心/视图/ApiViewMessagesTest.php</td>
 <td>3</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/ApiViewTest.php</td>
+<td>测试/Core/View/ApiViewTest.php</td>
 <td>5</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/CreateApiViewMixinTest.php</td>
+<td>测试/Core/View/CreateApiViewMixinTest.php</td>
 <td>5</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/DeleteApiViewMixinTest.php</td>
+<td>测试/Core/View/DeleteApiViewMixinTest.php</td>
 <td>4</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/DetailApiViewMixinTest.php</td>
+<td>测试/核心/视图/DetailApiViewMixinTest.php</td>
 <td>3</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/ScopedApiViewMixinTest.php</td>
+<td>测试/Core/View/ScopedApiViewMixinTest.php</td>
 <td>2</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/SingleCreateAndUpdateApiViewMixinTest.php</td>
+<td>测试/核心/视图/SingleCreateAndUpdateApiViewMixinTest.php</td>
 <td>12</td>
-<td>KEEP</td>
+<td>12保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/SingleCreateAndUpdateApiViewMixinCoverageTest.php</td>
+<td>测试/Core/View/SingleCreateAndUpdateApiViewMixinCoverageTest.php</td>
 <td>2</td>
-<td>MERGE</td>
+<td>合并</td>
 </tr>
 <tr>
-<td>tests/Core/View/TransformContentTest.php</td>
+<td>测试/核心/视图/TransformContentTest.php</td>
 <td>11</td>
-<td>KEEP</td>
+<td>11保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/UpdateApiViewMixinTest.php</td>
+<td>测试/核心/视图/UpdateApiViewMixinTest.php</td>
 <td>11</td>
-<td>KEEP</td>
+<td>11保持</td>
 </tr>
 <tr>
-<td>tests/Core/View/WorkflowApiViewMixinTest.php</td>
-<td>11 (2 skipped)</td>
-<td>KEEP</td>
+<td>测试/核心/视图/WorkflowApiViewMixinTest.php</td>
+<td>11 (2 跳过)</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionDqlParserTest.php</td>
+<td>测试/核心/解析器/ExpressionDqlParserTest.php</td>
 <td>20</td>
-<td>KEEP</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionDqlParserXTest.php</td>
+<td>测试/核心/解析器/ExpressionDqlParserXTest.php</td>
 <td>8</td>
-<td>DELETE (mostly duplicate)</td>
+<td>删除（大部分重复）</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionDqlParserFullTest.php</td>
+<td>测试/核心/解析器/ExpressionDqlParserFullTest.php</td>
 <td>24</td>
-<td>KEEP (trim 3 matches dups)</td>
+<td>保留（删除 3 场重复比赛）</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionDqlParserMatchesTest.php</td>
-<td>8 methods / ~37 cases</td>
-<td>KEEP</td>
+<td>测试/核心/解析器/ExpressionDqlParserMatchesTest.php</td>
+<td>8 种方法 / ~37 例</td>
+<td>保持</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionDqlParserCoverageTest.php</td>
+<td>测试/核心/解析器/ExpressionDqlParserCoverageTest.php</td>
 <td>10</td>
-<td>KEEP (trim 2 impl-detail)</td>
+<td>10 KEEP（修剪 2 实现细节）</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionQueryBuilderAssemblerFullTest.php</td>
+<td>测试/核心/解析器/ExpressionQueryBuilderAssemblerFullTest.php</td>
 <td>12</td>
-<td>KEEP</td>
+<td>12保持</td>
 </tr>
 <tr>
-<td>tests/Core/Parser/ExpressionQueryBuilderAssemblerCoverageTest.php</td>
+<td>测试/核心/解析器/ExpressionQueryBuilderAssemblerCoverageTest.php</td>
 <td>4</td>
-<td>KEEP (trim 3 defensive)</td>
+<td>保持（修剪 3 防守）</td>
 </tr>
 </tbody>
 </table>
-<p>Net: <strong>2 files</strong> fully redundant (<code>BaseServiceUnitTest</code>, <code>BaseServiceCoverageTest</code>),
-<strong>1 file</strong> largely redundant (<code>ExpressionDqlParserXTest</code>), <strong>1 test</strong> coverage-chasing
-(<code>LegacyEvaluatorCoverageTest</code>), plus ~15 individual methods flagged for trimming and
-6 merge groups. Deleting the HIGH items has <strong>zero</strong> coverage impact because every one
-has an exact covering test listed below.</p>
-<h2 id="keep-behavioral-tests-worth-preserving">KEEP — behavioral tests worth preserving<a class="headerlink" href="#keep-behavioral-tests-worth-preserving" title="Permanent link">&para;</a></h2>
+<p>网络：<strong>2 个文件</strong>完全冗余（<code>BaseServiceUnitTest</code>、<code>BaseServiceCoverageTest</code>），
+<strong>1 个文件</strong> 大部分是冗余的 (<code>ExpressionDqlParserXTest</code>)，<strong>1 个测试</strong> 覆盖率追踪
+(<code>LegacyEvaluatorCoverageTest</code>)，加上约 15 个标记为修剪的单独方法
+6个合并组。删除 HIGH 项目对覆盖范围的影响<strong>为零</strong>，因为每一项
+下面列出了精确的覆盖测试。</p>
+<h2 id="keep">KEEP——值得保留的行为测试<a class="headerlink" href="#keep" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>BaseServiceInfrastructureTraitTest</code> - <code>listResultToCollection</code>，<code>externalExpressionValues</code>，
   惰性 EM/logger/serializer/validator/QBF/ExpressionService/LegacyEvaluator 访问器，当前请求
@@ -3112,7 +3112,7 @@ has an exact covering test listed below.</p>
 <li><code>BaseServiceReadListTraitTest</code> — <code>get()</code> 通过 id/uuid/object/array/QB（包括 NoResult），<code>list()</code> 与
   <code>@dql/@filter/@order/@sort/@select/@groupBy/@hints/@showDQL</code>，特权参数的管理门控，身份选择
   和非字符串选择拒绝，遗留内存过滤器回退。这是唯一的地方
-  可以执行管理控制的 <code>@dql/@sort/@hints</code> 分支（HTTP 路径已损坏 - BUG-1
+  admin-gate <code>@dql/@sort/@hints</code> 分支可以被执行（HTTP 路径已损坏 - BUG-1
   <code>core-integration-extra.md</code>，由 <code>tests/Integration/CoreDynamicQueryApiTest</code> 断言）。</li>
 <li><code>BaseServiceInfrastructureTraitCoverageTest</code> — <code>wrapInTransaction()</code> 提交/回滚/非活动跳过/回退
   基本测试未到达的路径和容器重新获取分支；真正的分支机构覆盖。</li>
@@ -3152,7 +3152,7 @@ has an exact covering test listed below.</p>
 <li><code>ExpressionQueryBuilderAssemblerCoverageTest::testDuplicateJoinAliasIsSkipped</code> — 唯一的行为（非防御）
   在该文件中进行测试。</li>
 </ul>
-<h2 id="_1">删除候选者<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_2">删除候选者<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3351,80 +3351,80 @@ has an exact covering test listed below.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="merge-suggestions">MERGE SUGGESTIONS<a class="headerlink" href="#merge-suggestions" title="Permanent link">&para;</a></h2>
+<h2 id="_3">合并建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Service/BaseServiceUnitTest.php + Service/BaseServiceCoverageTest.php</strong> → delete outright; every method is
-  duplicated (see table). No merge needed.</li>
-<li><strong>Service/BaseServiceInfrastructureTraitTest.php + Service/BaseServiceInfrastructureTraitCoverageTest.php</strong> → merge
-  (same SUT, shared fake style); the Coverage file's <code>wrapInTransaction</code> and container-re-fetch branches fold into
-  the base file.</li>
-<li><strong>Service/BaseServiceMutationTraitTest.php + Service/BaseServiceMutationTraitCoverageTest.php</strong> → merge; the
-  Coverage file's relation/exception branches fold into the base file (drop the one duplicate date-conversion test).</li>
-<li><strong>Service/BaseServiceReadListTraitTest.php + Service/BaseServiceReadListTraitCoverageTest.php</strong> → merge.</li>
-<li><strong>Service/DefaultServiceLocatorTest.php + Service/DefaultServiceLocatorCoverageTest.php</strong> → merge; drop the
-  duplicate both-missing serializer test.</li>
-<li><strong>Service/ExpressionServiceTest.php + Service/ExpressionServiceCoverageTest.php</strong> → merge (cache branches into
-  the base buildFilter test).</li>
-<li><strong>Service/LegacyEvaluatorTest.php + Service/LegacyEvaluatorCoverageTest.php</strong> → merge and delete the
-  <code>language===null</code> test.</li>
-<li><strong>Parser/ExpressionDqlParserTest.php + ExpressionDqlParserXTest.php</strong> → merge/delete XTest; its 2 unique cases
-  (<code>&lt;</code> operator, pre-compile fragments) are either duplicated elsewhere or trivial.</li>
-<li><strong>View/SingleCreateAndUpdateApiViewMixinTest.php + View/SingleCreateAndUpdateApiViewMixinCoverageTest.php</strong> → merge
-  the two branch tests (falsy-result warning, NotFound→404) into the base file.</li>
+<li><strong>Service/BaseServiceUnitTest.php + Service/BaseServiceCoverageTest.php</strong> → 彻底删除；每个方法都是
+  重复（见表）。无需合并。</li>
+<li><strong>Service/BaseServiceInfrastructTraitTest.php + Service/BaseServiceInfrastructTraitCoverageTest.php</strong> → 合并
+  （相同的SUT，共享假样式）； Coverage 文件的 <code>wrapInTransaction</code> 和 container-re-fetch 分支折叠到
+  基础文件。</li>
+<li><strong>Service/BaseServiceMutationTraitTest.php + Service/BaseServiceMutationTraitCoverageTest.php</strong> → 合并；的
+  覆盖文件的关系/异常分支折叠到基本文件中（删除一个重复的日期转换测试）。</li>
+<li><strong>Service/BaseServiceReadListTraitTest.php + Service/BaseServiceReadListTraitCoverageTest.php</strong> → 合并。</li>
+<li><strong>Service/DefaultServiceLocatorTest.php + Service/DefaultServiceLocatorCoverageTest.php</strong> → 合并；放下
+  重复两个缺失的序列化器测试。</li>
+<li><strong>Service/ExpressionServiceTest.php + Service/ExpressionServiceCoverageTest.php</strong> → 合并（缓存分支到
+  基本 buildFilter 测试）。</li>
+<li><strong>Service/LegacyEvaluatorTest.php + Service/LegacyEvaluatorCoverageTest.php</strong> → 合并并删除
+  <code>language===null</code>测试。</li>
+<li><strong>Parser/ExpressionDqlParserTest.php + ExpressionDqlParserXTest.php</strong> → 合并/删除 XTest；其2个独特案例
+  （<code>&lt;</code> 运算符、预编译片段）要么在其他地方重复，要么微不足道。</li>
+<li><strong>View/SingleCreateAndUpdateApiViewMixinTest.php + View/SingleCreateAndUpdateApiViewMixinCoverageTest.php</strong> → 合并
+  将两个分支测试（错误结果警告，NotFound→404）放入基本文件中。</li>
 </ul>
-<h2 id="verification-steps">Verification steps<a class="headerlink" href="#verification-steps" title="Permanent link">&para;</a></h2>
-<p>All commands from repo root with the project PHP runtime (<code>TEST_STRATEGY.md</code>):
+<h2 id="_4">验证步骤<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>来自存储库根目录和项目 PHP 运行时 (<code>TEST_STRATEGY.md</code>) 的所有命令：
 <code>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit</code></p>
 <ol>
 <li>
-<p><strong>Baseline (before deleting anything):</strong>
+<p><strong>基线（删除任何内容之前）：</strong>
    <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit \
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  --coverage-filter src/Core/Service --coverage-filter src/Core/View --coverage-filter src/Core/Parser \
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  --coverage-xml var/coverage-audit-before --no-progress
 </code></pre></div>
-   Record the per-file line counts for <code>BaseService.php</code>, the three <code>Concern/*Trait.php</code> files,
-   <code>DefaultServiceLocator.php</code>, <code>ExpressionService.php</code>, <code>LegacyEvaluator.php</code>, <code>QueryBuilderFactory.php</code>,
-   <code>src/Core/View/*</code> and <code>src/Core/Parser/*</code>.</p>
+   记录 <code>BaseService.php</code>、三个 <code>Concern/*Trait.php</code> 文件的每个文件行数，
+   <code>DefaultServiceLocator.php</code>、<code>ExpressionService.php</code>、<code>LegacyEvaluator.php</code>、<code>QueryBuilderFactory.php</code>、
+   <code>src/Core/View/*</code> 和 <code>src/Core/Parser/*</code>。</p>
 </li>
 <li>
-<p><strong>Delete the HIGH-confidence items</strong> (exact duplicates only), in two rounds so each is independently
-   verifiable:</p>
+<p><strong>删除高置信度项目</strong>（仅精确重复），分两轮，因此每个项目都是独立的
+   可验证：</p>
 </li>
-<li>Round 1 (whole files): <code>tests/Core/Service/BaseServiceUnitTest.php</code>,
-     <code>tests/Core/Service/BaseServiceCoverageTest.php</code>, <code>tests/Core/Parser/ExpressionDqlParserXTest.php</code>.</li>
+<li>第 1 轮（整个文件）：<code>tests/Core/Service/BaseServiceUnitTest.php</code>，
+     <code>tests/Core/Service/BaseServiceCoverageTest.php</code>、<code>tests/Core/Parser/ExpressionDqlParserXTest.php</code>。</li>
 <li>
-<p>Round 2 (methods, requires editing): <code>DefaultServiceLocatorCoverageTest::testGetSerializerReturnsNullWhenBothServicesMissing</code>,
-     <code>ExpressionDqlParserFullTest::{testCompileWithMatchesPlainText,testCompileWithMatchesRegex,testCompileWithUnsupportedMatchesRegexFlagThrows}</code>,
-     <code>ExpressionDqlParserCoverageTest::{testValidateFragmentsRejectsUnknownAliasInWhere,testValidateFragmentsSkipsEmptyJoinPath}</code>,
-     <code>ExpressionQueryBuilderAssemblerCoverageTest::{testGetRootAliasesFailureFallsBackToEmptyAndAddsFrom,testGetAllAliasesFailureFallsBackToRootAliases,testLeftJoinFailureIsSilentlyIgnored}</code>.</p>
+<p>第 2 轮（方法，需要编辑）：<code>DefaultServiceLocatorCoverageTest::testGetSerializerReturnsNullWhenBothServicesMissing</code>，
+     <code>ExpressionDqlParserFullTest::{testCompileWithMatchesPlainText,testCompileWithMatchesRegex,testCompileWithUnsupportedMatchesRegexFlagThrows}</code>，
+     <code>ExpressionDqlParserCoverageTest::{testValidateFragmentsRejectsUnknownAliasInWhere,testValidateFragmentsSkipsEmptyJoinPath}</code>，
+     <code>ExpressionQueryBuilderAssemblerCoverageTest::{testGetRootAliasesFailureFallsBackToEmptyAndAddsFrom,testGetAllAliasesFailureFallsBackToRootAliases,testLeftJoinFailureIsSilentlyIgnored}</code>。</p>
 </li>
 <li>
-<p><strong>Re-run after each round:</strong>
+<p><strong>每轮后重新运行：</strong>
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>XDEBUG_MODE=coverage /opt/homebrew/opt/php@8.5/bin/php ./vendor/bin/phpunit \
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  --coverage-filter src/Core/Service --coverage-filter src/Core/View --coverage-filter src/Core/Parser \
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  --coverage-xml var/coverage-audit-after --no-progress
 </code></pre></div>
-   Assert: 0 failures; and <code>var/coverage-audit-after</code> shows <strong>no decrease</strong> in line coverage for any
-   <code>src/Core/{Service,View,Parser}</code> file versus the before-run (for the HIGH deletions the delta must be zero —
-   that is the correctness criterion for this audit).</p>
+   断言：0 次失败；并且<code>var/coverage-audit-after</code>显示任何线路覆盖率<strong>没有减少</strong>
+   <code>src/Core/{Service,View,Parser}</code> 文件与运行前文件（对于高删除量，增量必须为零 —
+   这是本次审核的正确性标准）。</p>
 </li>
 <li>
-<p><strong>Static gates:</strong> <code>composer phpstan</code> and <code>composer rector:types:check</code> must stay green (they scan the whole
-   tree; deleting unused test helpers is safe).</p>
+<p><strong>静态门：</strong> <code>composer phpstan</code> 和 <code>composer rector:types:check</code> 必须保持绿色（它们扫描整个
+   树；删除未使用的测试助手是安全的）。</p>
 </li>
 <li>
-<p><strong>MEDIUM/LOW items</strong> (defensive branches, partial duplicates): defer deletion until the src bugs they pin are
-   fixed (e.g. <code>BaseServiceMutationTrait</code> immutable-DateTime bug, <code>LegacyEvaluator</code> null-language guard,
-   <code>ExpressionQueryBuilderAssembler</code> swallowed joins) — or delete alongside those fixes since the branch tests only
-   exist to cover dead/defensive code.</p>
+<p><strong>中/低项</strong>（防御性分支，部分重复）：推迟删除，直到它们固定的 src bug 被删除
+   已修复（例如 <code>BaseServiceMutationTrait</code> 不可变日期时间错误、<code>LegacyEvaluator</code> 空语言保护、
+   <code>ExpressionQueryBuilderAssembler</code> 吞噬连接） - 或与这些修复一起删除，因为分支仅测试
+   存在是为了覆盖死代码/防御代码。</p>
 </li>
 <li>
-<p><strong>Coverage-gate caveat:</strong> <code>TEST_STRATEGY.md</code> requires ≥90% line coverage on <code>src/</code>. Because every HIGH deletion
-   is covered by a named surviving test, the gate is unaffected; if the MEDIUM defensive-branch deletions are
-   pursued, expect the affected <code>src</code> file's percentage to drop only on the previously-dead lines (acceptable only
-   after the dead code is removed — see the campaign's follow-up 2).</p>
+<p><strong>覆盖范围门警告：</strong> <code>TEST_STRATEGY.md</code> 要求 <code>src/</code> 上的线路覆盖率≥90%。因为每次 HIGH 删除
+   被指定的幸存测试覆盖，门不受影响；如果中度防御分支删除是
+   继续进行，预计受影响的 <code>src</code> 文件的百分比仅在先前的死行上下降（仅可接受
+   删除无效代码后 — 请参阅该活动的后续行动 2)。</p>
 </li>
 </ol>
 
