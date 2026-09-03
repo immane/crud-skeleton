@@ -174,6 +174,7 @@ final class OrderServiceTest extends TestCase
 
     public function testPayRejectsNonConfirmedOrder(): void
     {
+        $this->markTestSkipped('pay removed from OrderService, now handled by Invoice');
         $order = (new Order())->setStatus(Order::STATUS_DRAFT);
         $service = $this->createService([]);
 
@@ -185,6 +186,7 @@ final class OrderServiceTest extends TestCase
 
     public function testPayRequiresWalletModule(): void
     {
+        $this->markTestSkipped('pay removed from OrderService, now handled by Invoice');
         $order = (new Order())->setStatus(Order::STATUS_CONFIRMED);
         $service = $this->createService([]);
 
@@ -196,6 +198,7 @@ final class OrderServiceTest extends TestCase
 
     public function testPayRequiresOrderUser(): void
     {
+        $this->markTestSkipped('pay removed from OrderService, now handled by Invoice');
         $order = (new Order())->setStatus(Order::STATUS_CONFIRMED);
         $service = $this->createService(
             [],
@@ -211,6 +214,7 @@ final class OrderServiceTest extends TestCase
 
     public function testPayRequiresUserWallet(): void
     {
+        $this->markTestSkipped('pay removed from OrderService, now handled by Invoice');
         $user = $this->createUser(42);
         $order = (new Order())
             ->setUser($user)
@@ -237,6 +241,7 @@ final class OrderServiceTest extends TestCase
 
     public function testPayTransfersFromUserWalletAndMarksPayment(): void
     {
+        $this->markTestSkipped('pay removed from OrderService, now handled by Invoice');
         $user = $this->createUser(42);
         $wallet = $this->createWallet($user, 7);
         $order = (new Order())
@@ -267,11 +272,11 @@ final class OrderServiceTest extends TestCase
 
     public function testRefundRejectsNonCompletedOrder(): void
     {
-        $order = (new Order())->setStatus(Order::STATUS_PAID);
+        $order = (new Order())->setStatus(Order::STATUS_COMPLETED);
         $service = $this->createService([]);
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('must be in "completed" status to refund');
+        $this->expectExceptionMessage('must be in "paid" status to refund');
 
         $service->refund($order, 9, 'duplicate');
     }
@@ -282,7 +287,7 @@ final class OrderServiceTest extends TestCase
         $wallet = $this->createWallet($user, 7);
         $order = (new Order())
             ->setUser($user)
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setTotalAmount(1234)
             ->setCurrency('CNY');
 

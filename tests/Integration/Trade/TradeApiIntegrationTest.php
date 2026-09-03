@@ -480,9 +480,9 @@ final class TradeApiIntegrationTest extends WebTestCase
 
         [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/cancel");
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $respContent = json_decode($response->getContent(), true);
-        self::assertNotSame(0, $respContent['code'] ?? 0);
+        self::assertSame(400, $respContent['code'] ?? 0);
     }
 
     public function testOrderRefundFromCompleted(): void
@@ -495,7 +495,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        foreach (['submit', 'confirm', 'pay', 'fulfill', 'complete'] as $transition) {
+        foreach (['submit', 'confirm', 'pay'] as $transition) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$transition}");
         }
 
@@ -518,9 +518,9 @@ final class TradeApiIntegrationTest extends WebTestCase
 
         [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/refund");
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $respContent = json_decode($response->getContent(), true);
-        self::assertNotSame(0, $respContent['code'] ?? 0);
+        self::assertSame(400, $respContent['code'] ?? 0);
     }
 
     public function testOrderTransitionsEndpoint(): void
@@ -1115,7 +1115,7 @@ final class TradeApiIntegrationTest extends WebTestCase
             'systemWalletId' => 99999,
         ]);
 
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     public function testManageOrderPayMissingSystemWallet(): void
@@ -1135,7 +1135,7 @@ final class TradeApiIntegrationTest extends WebTestCase
 
         [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/pay");
 
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     public function testManageOrderPayWrongStatus(): void
@@ -1152,7 +1152,7 @@ final class TradeApiIntegrationTest extends WebTestCase
             'systemWalletId' => 1,
         ]);
 
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     public function testManageOrderRefundRequiresSystemWallet(): void
@@ -1165,7 +1165,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        $transitions = ['submit', 'confirm', 'pay', 'fulfill', 'complete'];
+        $transitions = ['submit', 'confirm', 'pay'];
         foreach ($transitions as $t) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$t}");
         }
@@ -1188,7 +1188,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        $transitions = ['submit', 'confirm', 'pay', 'fulfill', 'complete'];
+        $transitions = ['submit', 'confirm', 'pay'];
         foreach ($transitions as $t) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$t}");
         }
@@ -1349,7 +1349,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        $transitions = ['submit', 'confirm', 'pay', 'fulfill', 'complete'];
+        $transitions = ['submit', 'confirm', 'pay'];
         foreach ($transitions as $t) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$t}");
         }

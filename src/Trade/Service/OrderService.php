@@ -47,6 +47,18 @@ final class OrderService extends BaseService implements OrderServiceInterface
         parent::__construct($container, Order::class);
     }
 
+    public function update(mixed $object, ?array $data = null, bool $noFlush = false): object|false
+    {
+        // When called via CreateApiViewMixin for Order creation, processEntity has already
+        // created the order via createOrder and stored calculated data in $data.
+        // The mixin then calls update() with that already-persisted order; we should not
+        // try to re-apply the items via generic serializer, which would duplicate.
+        if ($object instanceof Order && isset($data['__calculatedItems'])) {
+            return $object;
+        }
+        return parent::update($object, $data, $noFlush);
+    }
+
     /**
      * @param list<array<string, mixed>> $items
      * @param array<string, mixed>       $meta
@@ -160,60 +172,11 @@ final class OrderService extends BaseService implements OrderServiceInterface
         });
     }
 
-    public function pay(Order $order, int $systemWalletId, string $paymentMethod = 'wallet', ?string $referenceId = null): void
-    {
-        if ($order->getStatus() !== Order::STATUS_CONFIRMED) {
-            throw new \RuntimeException(sprintf(
-                'Order #%d must be in "confirmed" status to pay, current: %s',
-                $order->getId() ?? 0,
-                $order->getStatus(),
-            ));
-        }
-
-        if ($this->walletRepository === null || $this->transferService === null) {
-            throw new \RuntimeException('Wallet module is not configured. Set up wallet before processing payments.');
-        }
-
-        $user = $order->getUser();
-        if ($user === null) {
-            throw new \RuntimeException('Order has no associated user.');
-        }
-
-        $userId = $user->getId();
-        if ($userId === null) {
-            throw new \RuntimeException('User has not been persisted yet (no ID).');
-        }
-
-        $userWallet = $this->walletRepository->findByUserAndCurrency($userId, $order->getCurrency());
-        if ($userWallet === null) {
-            throw new \RuntimeException(sprintf(
-                'No %s wallet found for user #%d.',
-                $order->getCurrency(),
-                $user->getId(),
-            ));
-        }
-        $userWalletId = $userWallet->getId();
-        if ($userWalletId === null) {
-            throw new \RuntimeException('Wallet has not been persisted yet (no ID).');
-        }
-
-        $this->transferService->transfer(
-            $userWalletId,
-            $systemWalletId,
-            $order->getTotalAmount(),
-            $referenceId ?? 'order-pay-' . $order->getUuid(),
-            sprintf('Payment for order #%d', $order->getId() ?? 0),
-        );
-
-        $order->setPaidAt(new \DateTimeImmutable());
-        $order->setPaymentMethod($paymentMethod);
-    }
-
     public function refund(Order $order, int $systemWalletId, string $reason, ?string $referenceId = null): void
     {
-        if ($order->getStatus() !== Order::STATUS_COMPLETED) {
+        if ($order->getStatus() !== Order::STATUS_PAID) {
             throw new \RuntimeException(sprintf(
-                'Order #%d must be in "completed" status to refund, current: %s',
+                'Order #%d must be in "paid" status to refund, current: %s',
                 $order->getId() ?? 0,
                 $order->getStatus(),
             ));
@@ -297,7 +260,7 @@ final class OrderService extends BaseService implements OrderServiceInterface
         if ($order->getInvoiceId() !== null) {
             $invoice = $this->invoiceService->get(['uuid' => $order->getInvoiceId()]);
         }
-        if (!$invoice instanceof Invoice) {
+        if (!$invoice instanceof Invoice || $invoice->getStatus() !== Invoice::STATUS_PENDING) {
             $invoice = $this->invoiceService->createInvoice(new CreateInvoiceRequest(
                 sourceType: 'trade_order',
                 sourceId: $order->getUuid(),

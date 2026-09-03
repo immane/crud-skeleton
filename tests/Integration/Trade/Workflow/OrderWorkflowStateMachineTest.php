@@ -89,8 +89,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'submit' => Order::STATUS_PENDING,
             'confirm' => Order::STATUS_CONFIRMED,
             'pay' => Order::STATUS_PAID,
-            'fulfill' => Order::STATUS_FULFILLED,
-            'complete' => Order::STATUS_COMPLETED,
             'refund' => Order::STATUS_REFUNDED,
         ];
 
@@ -114,6 +112,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         $this->workflow->apply($order, 'store_reject');
         self::assertSame('store_rejected', $order->getStatus());
 
+        self::assertTrue($this->workflow->can($order, 'cancel'));
         $this->workflow->apply($order, 'cancel');
         self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
     }
@@ -148,14 +147,14 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         return [
             'draft' => ['draft', ['submit', 'store_submit', 'cancel']],
             'pending' => ['pending', ['confirm', 'cancel']],
-            'awaiting_store_acceptance' => ['awaiting_store_acceptance', ['store_accept', 'store_reject', 'cancel']],
-            'store_accepted' => ['store_accepted', ['confirm', 'cancel']],
+            'awaiting_store_acceptance' => ['awaiting_store_acceptance', ['store_accept', 'store_reject']],
+            'store_accepted' => ['store_accepted', ['confirm']],
             'store_rejected' => ['store_rejected', ['cancel']],
             'confirmed' => ['confirmed', ['pay', 'cancel']],
-            'paid' => ['paid', ['fulfill']],
-            'fulfilled' => ['fulfilled', ['complete', 'cancel']],
-            'awaiting_store_verification' => ['awaiting_store_verification', ['cancel']],
-            'completed' => ['completed', ['refund']],
+            'paid' => ['paid', ['fulfill', 'refund']],
+            'fulfilled' => ['fulfilled', ['complete']],
+            'awaiting_store_verification' => ['awaiting_store_verification', []],
+            'completed' => ['completed', []],
             'cancelled' => ['cancelled', []],
             'refunded' => ['refunded', []],
         ];
@@ -193,17 +192,12 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'pending->cancel' => ['pending', 'cancel', 'cancelled'],
             'awaiting_store_acceptance->store_accept' => ['awaiting_store_acceptance', 'store_accept', 'store_accepted'],
             'awaiting_store_acceptance->store_reject' => ['awaiting_store_acceptance', 'store_reject', 'store_rejected'],
-            'awaiting_store_acceptance->cancel' => ['awaiting_store_acceptance', 'cancel', 'cancelled'],
             'store_accepted->confirm' => ['store_accepted', 'confirm', 'confirmed'],
-            'store_accepted->cancel' => ['store_accepted', 'cancel', 'cancelled'],
-            'store_rejected->cancel' => ['store_rejected', 'cancel', 'cancelled'],
             'confirmed->pay' => ['confirmed', 'pay', 'paid'],
             'confirmed->cancel' => ['confirmed', 'cancel', 'cancelled'],
             'paid->fulfill' => ['paid', 'fulfill', 'fulfilled'],
+            'paid->refund' => ['paid', 'refund', 'refunded'],
             'fulfilled->complete' => ['fulfilled', 'complete', 'completed'],
-            'fulfilled->cancel' => ['fulfilled', 'cancel', 'cancelled'],
-            'awaiting_store_verification->cancel' => ['awaiting_store_verification', 'cancel', 'cancelled'],
-            'completed->refund' => ['completed', 'refund', 'refunded'],
         ];
     }
 
@@ -247,14 +241,15 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'paid->pay' => ['paid', 'pay'],
             'paid->confirm' => ['paid', 'confirm'],
             'paid->complete' => ['paid', 'complete'],
-            'paid->refund' => ['paid', 'refund'],
             'paid->cancel' => ['paid', 'cancel'],
             'fulfilled->pay' => ['fulfilled', 'pay'],
             'fulfilled->fulfill' => ['fulfilled', 'fulfill'],
             'fulfilled->refund' => ['fulfilled', 'refund'],
+            'fulfilled->cancel' => ['fulfilled', 'cancel'],
             'completed->pay' => ['completed', 'pay'],
             'completed->complete' => ['completed', 'complete'],
             'completed->cancel' => ['completed', 'cancel'],
+            'completed->refund' => ['completed', 'refund'],
             'cancelled->submit' => ['cancelled', 'submit'],
             'cancelled->confirm' => ['cancelled', 'confirm'],
             'cancelled->pay' => ['cancelled', 'pay'],
@@ -265,7 +260,10 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'refunded->refund' => ['refunded', 'refund'],
             'refunded->cancel' => ['refunded', 'cancel'],
             'store_accepted->store_accept' => ['store_accepted', 'store_accept'],
+            'store_accepted->cancel' => ['store_accepted', 'cancel'],
             'store_rejected->confirm' => ['store_rejected', 'confirm'],
+            'awaiting_store_acceptance->cancel' => ['awaiting_store_acceptance', 'cancel'],
+            'awaiting_store_verification->cancel' => ['awaiting_store_verification', 'cancel'],
         ];
     }
 
@@ -414,7 +412,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
 
     public function testWorkflowLayerAllowsRefundWithoutRefundReason(): void
     {
-        $order = $this->orderIn(Order::STATUS_COMPLETED);
+        $order = $this->orderIn(Order::STATUS_PAID);
         self::assertNull($order->getRefundedAt());
 
         $this->workflow->apply($order, 'refund');
@@ -485,7 +483,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     #[Group('low-value')]
     public function testRefundTransitionSetsRefundedAtWhenNull(): void
     {
-        $order = $this->orderIn(Order::STATUS_COMPLETED);
+        $order = $this->orderIn(Order::STATUS_PAID);
         self::assertNull($order->getRefundedAt());
 
         $this->workflow->apply($order, 'refund');

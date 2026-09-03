@@ -47,8 +47,8 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/submit");
         $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/confirm");
 
-        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'autoPaid' => true,
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -62,9 +62,6 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         self::assertSame(Invoice::STATUS_PAID, $order->getPaymentStatus());
         self::assertNotNull($order->getInvoiceId());
         self::assertNotNull($order->getInvoiceNo());
-
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/fulfill", ['trackingNumber' => 'TRACK-1']);
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/complete");
 
         [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/refund", ['reason' => 'invoice refund']);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -99,8 +96,8 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         self::assertSame(0, $content['code']);
         self::assertSame(Order::STATUS_CONFIRMED, $content['data']['status']);
 
-        [$response, $content] = $this->jsonRequest('POST', "/api/v1/app/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'autoPaid' => true,
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -156,8 +153,8 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/submit");
         $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/confirm");
 
-        [$response] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/payment", [
-            'payment' => Invoice::PAYMENT_MOCK,
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonRequest('POST', "/api/v1/manage/invoices/{$invoiceId}/pay/mock", [
             'walletAmount' => 1000,
             'systemWalletId' => $systemWallet->getId(),
             'autoPaid' => true,
@@ -175,6 +172,37 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         $systemWallet = $this->em->getRepository(Wallet::class)->find($systemWallet->getId());
         self::assertSame(4000, $userWallet->getBalance());
         self::assertSame(1000, $systemWallet->getBalance());
+    }
+
+
+    private function createInvoiceForOrder(int $orderId, ?int $amount = null): int
+    {
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        self::assertInstanceOf(Order::class, $order);
+        $payload = [
+            'sourceType' => 'trade_order',
+            'sourceId' => $order->getUuid(),
+            'scene' => Invoice::SCENE_ORDER,
+            'amount' => $amount ?? $order->getTotalAmount(),
+            'currency' => $order->getCurrency(),
+        ];
+        if ($order->getUser()?->getId() !== null) {
+            $payload['payer'] = $order->getUser()->getId();
+        }
+        [, $result] = $this->jsonRequest('POST', '/api/v1/manage/invoices', $payload);
+        self::assertSame(0, $result['code'], 'createInvoiceForOrder failed: '.json_encode($result));
+        $invoiceId = (int) $result['data']['id'];
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        $invoice = $this->em->getRepository(Invoice::class)->find($invoiceId);
+        if ($order instanceof Order && $invoice instanceof Invoice) {
+            $order->setInvoiceId($invoice->getUuid());
+            $order->setInvoiceNo($invoice->getOutTradeNo());
+            $order->setPaymentStatus($invoice->getStatus());
+            $this->em->flush();
+        }
+        return $invoiceId;
     }
 
     private function createProduct(): int

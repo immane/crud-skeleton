@@ -347,7 +347,7 @@ final class OrderServicePaymentsTest extends TestCase
 
     public function testRefundRequiresWalletModule(): void
     {
-        $order = (new Order())->setStatus(Order::STATUS_COMPLETED);
+        $order = (new Order())->setStatus(Order::STATUS_PAID);
         $service = $this->createService([]);
 
         $this->expectException(\RuntimeException::class);
@@ -358,7 +358,7 @@ final class OrderServicePaymentsTest extends TestCase
 
     public function testRefundRejectsOrderWithoutUser(): void
     {
-        $order = (new Order())->setStatus(Order::STATUS_COMPLETED)->setCurrency('CNY');
+        $order = (new Order())->setStatus(Order::STATUS_PAID)->setCurrency('CNY');
         $service = $this->createService([
             'walletRepository' => $this->createStub(WalletRepository::class),
             'transferService' => $this->createStub(TransferServiceInterface::class),
@@ -374,7 +374,7 @@ final class OrderServicePaymentsTest extends TestCase
     public function testRefundRejectsUserWithoutPersistedId(): void
     {
         $order = (new Order())
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setUser(new User())
             ->setCurrency('CNY');
 
@@ -393,7 +393,7 @@ final class OrderServicePaymentsTest extends TestCase
     {
         $user = $this->createUser(42);
         $order = (new Order())
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setUser($user)
             ->setCurrency('CNY');
 
@@ -417,7 +417,7 @@ final class OrderServicePaymentsTest extends TestCase
         $user = $this->createUser(42);
         $wallet = new Wallet($user, 'CNY');
         $order = (new Order())
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setUser($user)
             ->setCurrency('CNY');
 
@@ -520,22 +520,20 @@ final class OrderServicePaymentsTest extends TestCase
         self::assertSame(Invoice::STATUS_PAYING, $result->status);
     }
 
-    public function testCreatePaymentReusesInvoiceRegardlessOfItsStatus(): void
+    public function testCreatePaymentReusesPendingInvoice(): void
     {
-        // Documents Bug #1 (see report): a failed/cancelled invoice is handed to
-        // InvoiceService::pay(), which requires the invoice to be in "pending".
-        $failed = (new Invoice())->setStatus(Invoice::STATUS_FAILED)->setAmount(1000)->setCurrency('CNY');
+        $pending = (new Invoice())->setStatus(Invoice::STATUS_PENDING)->setAmount(1000)->setCurrency('CNY');
         $order = (new Order())
             ->setStatus(Order::STATUS_CONFIRMED)
-            ->setInvoiceId($failed->getUuid())
+            ->setInvoiceId($pending->getUuid())
             ->setTotalAmount(1000)
             ->setCurrency('CNY');
 
         $invoiceService = $this->createMock(InvoiceServiceInterface::class);
-        $invoiceService->expects(self::once())->method('get')->with(['uuid' => $failed->getUuid()])->willReturn($failed);
+        $invoiceService->expects(self::once())->method('get')->with(['uuid' => $pending->getUuid()])->willReturn($pending);
         $invoiceService->expects(self::never())->method('createInvoice');
-        $invoiceService->expects(self::once())->method('pay')->with($failed, 'mock', [])->willReturn(
-            new PaymentResult($failed, Invoice::STATUS_PAYING)
+        $invoiceService->expects(self::once())->method('pay')->with($pending, 'mock', [])->willReturn(
+            new PaymentResult($pending, Invoice::STATUS_PAYING)
         );
 
         $service = $this->createService(['invoiceService' => $invoiceService]);
@@ -545,14 +543,8 @@ final class OrderServicePaymentsTest extends TestCase
 
     public function testCreatePaymentCreatesFreshInvoiceWhenExistingInvoiceIsNotPayable(): void
     {
-        // SKIPPED: documents Bug #1 from the report. Correct behaviour would create a
-        // fresh invoice (and a new payable flow) when the order's linked invoice is in a
-        // terminal status (failed/cancelled). The current implementation reuses that
-        // invoice and forwards it to InvoiceService::pay(), which throws
-        // InvoiceInvalidTransitionException because `start_pay` only applies from "pending".
-        $this->markTestSkipped('Known bug: OrderService::createPayment reuses non-payable invoices (see report Bug #1).');
-
         $failed = (new Invoice())->setStatus(Invoice::STATUS_FAILED)->setAmount(1000)->setCurrency('CNY');
+        $created = (new Invoice())->setStatus(Invoice::STATUS_PENDING)->setAmount(1000)->setCurrency('CNY');
         $order = (new Order())
             ->setStatus(Order::STATUS_CONFIRMED)
             ->setInvoiceId($failed->getUuid())
@@ -560,13 +552,21 @@ final class OrderServicePaymentsTest extends TestCase
             ->setCurrency('CNY');
 
         $invoiceService = $this->createMock(InvoiceServiceInterface::class);
-        $invoiceService->expects(self::once())->method('get')->willReturn($failed);
-        $invoiceService->expects(self::once())->method('createInvoice')->willReturn(new Invoice());
-        $invoiceService->expects(self::never())->method('pay')->with($failed, self::anything());
+        $invoiceService->expects(self::once())->method('get')->with(['uuid' => $failed->getUuid()])->willReturn($failed);
+        $invoiceService->expects(self::once())->method('createInvoice')->willReturn($created);
+        $invoiceService->expects(self::once())->method('pay')->with($created, 'mock', [])->willReturn(
+            new PaymentResult($created, Invoice::STATUS_PAYING)
+        );
 
-        $service = $this->createService(['invoiceService' => $invoiceService]);
+        $service = $this->createService([
+            'em' => $this->createEntityManager(),
+            'invoiceService' => $invoiceService,
+        ]);
 
         $service->createPayment($order);
+
+        self::assertSame($created->getUuid(), $order->getInvoiceId());
+        self::assertSame($created->getOutTradeNo(), $order->getInvoiceNo());
     }
 
     // ========================================================================

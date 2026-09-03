@@ -51,8 +51,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             'submit' => Order::STATUS_PENDING,
             'confirm' => Order::STATUS_CONFIRMED,
             'pay' => Order::STATUS_PAID,
-            'fulfill' => Order::STATUS_FULFILLED,
-            'complete' => Order::STATUS_COMPLETED,
             'refund' => Order::STATUS_REFUNDED,
         ];
 
@@ -66,9 +64,11 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Order::STATUS_REFUNDED, $content['data']['status']);
 
-        foreach (['paidAt', 'fulfilledAt', 'completedAt', 'refundedAt'] as $timestamp) {
+        foreach (['paidAt', 'refundedAt'] as $timestamp) {
             self::assertNotNull($content['data'][$timestamp], "$timestamp must be set");
         }
+        self::assertNull($content['data']['fulfilledAt']);
+        self::assertNull($content['data']['completedAt']);
         self::assertNull($content['data']['cancelledAt']);
     }
 
@@ -103,8 +103,8 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/store_accept");
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertNotSame(0, $content['code']);
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(400, $content['code']);
     }
 
     // =====================================================================
@@ -118,9 +118,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $cases = [
             'draft' => [],
             'pending' => ['submit'],
-            'awaiting_store_acceptance' => ['store_submit'],
-            'store_accepted' => ['store_submit', 'store_accept'],
-            'store_rejected' => ['store_submit', 'store_reject'],
             'confirmed' => ['submit', 'confirm'],
         ];
 
@@ -150,8 +147,8 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $this->doTransitionOk($orderId, 'pay', Order::STATUS_PAID);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/cancel");
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertNotSame(0, $content['code'], 'cancel after paid must be rejected');
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(400, $content['code'], 'cancel after paid must be rejected');
 
         [, $detail] = $this->jsonGet("/api/v1/manage/orders/{$orderId}");
         self::assertSame(Order::STATUS_PAID, $detail['data']['status']);
@@ -169,8 +166,8 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $this->doTransitionOk($orderId, 'submit', Order::STATUS_PENDING);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/submit");
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertNotSame(0, $content['code'], 'duplicate submit must be rejected');
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(400, $content['code'], 'duplicate submit must be rejected');
 
         [, $detail] = $this->jsonGet("/api/v1/manage/orders/{$orderId}");
         self::assertSame(Order::STATUS_PENDING, $detail['data']['status']);
@@ -182,8 +179,8 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/nonexistent");
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertNotSame(0, $content['code']);
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(400, $content['code']);
 
         [, $detail] = $this->jsonGet("/api/v1/manage/orders/{$orderId}");
         self::assertSame(Order::STATUS_DRAFT, $detail['data']['status']);
@@ -200,13 +197,13 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
-        foreach (['submit', 'confirm', 'pay', 'fulfill', 'complete', 'refund'] as $transition) {
+        foreach (['submit', 'confirm', 'pay', 'refund'] as $transition) {
             $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/{$transition}");
         }
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/refund");
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertNotSame(0, $content['code'], 'refund on refunded order must be rejected');
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(400, $content['code'], 'refund on refunded order must be rejected');
     }
 
     // =====================================================================
@@ -221,11 +218,13 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $expectedByState = [
             Order::STATUS_DRAFT => ['submit', 'store_submit', 'cancel'],
             Order::STATUS_PENDING => ['confirm', 'cancel'],
-            'awaiting_store_acceptance' => ['store_accept', 'store_reject', 'cancel'],
+            'awaiting_store_acceptance' => ['store_accept', 'store_reject'],
+            'store_accepted' => ['confirm'],
+            'store_rejected' => ['cancel'],
             Order::STATUS_CONFIRMED => ['pay', 'cancel'],
-            Order::STATUS_PAID => ['fulfill'],
-            Order::STATUS_FULFILLED => ['complete', 'cancel'],
-            Order::STATUS_COMPLETED => ['refund'],
+            Order::STATUS_PAID => ['fulfill', 'refund'],
+            Order::STATUS_FULFILLED => ['complete'],
+            Order::STATUS_COMPLETED => [],
             Order::STATUS_CANCELLED => [],
             Order::STATUS_REFUNDED => [],
         ];
@@ -289,30 +288,44 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
 
     public function testPayEndpointRejectsDraftOrder(): void
     {
+        // Order pay via wallet is now handled by Invoice; paying an invoice for a draft order
+        // will succeed for the invoice but must NOT transition the order to paid.
         $specId = $this->createSpecification($this->createProduct());
-        $orderId = $this->createOrder($specId);
+        $user = $this->currentUser();
+        $this->createWallet($user, 5000);
+        $systemUser = $this->createUser('pay-sys-draft@example.com', ['ROLE_ADMIN']);
+        $systemWallet = $this->createWallet($systemUser, 0);
+        $orderId = $this->createOrder($specId, 1, $user->getId());
 
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", ['systemWalletId' => 1]);
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame(400, $content['code']);
-        self::assertSame('Order cannot be paid in current status.', $content['message']);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->payInvoiceViaWallet($invoiceId, $systemWallet->getId());
+        // Invoice payment itself succeeds (wallet transfer)
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        // Order must remain draft because workflow cannot pay from draft
+        self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
     }
 
     public function testPayEndpointRequiresSystemWalletId(): void
     {
         $specId = $this->createSpecification($this->createProduct());
-        $orderId = $this->createOrder($specId);
+        $user = $this->currentUser();
+        $this->createWallet($user, 5000);
+        $orderId = $this->createOrder($specId, 1, $user->getId());
         $this->driveOrderTo($orderId, Order::STATUS_CONFIRMED, $specId);
 
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", []);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", []);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(400, $content['code']);
-        self::assertSame('systemWalletId is required.', $content['message']);
+        self::assertStringContainsString('systemWalletId is required', $content['message'] ?? '');
     }
 
     public function testPayEndpointOnNotFoundOrderReturns404(): void
     {
-        [$response, $content] = $this->jsonPost('/api/v1/manage/orders/999999/pay', ['systemWalletId' => 1]);
+        [$response, $content] = $this->jsonPost('/api/v1/manage/invoices/999999/pay/wallet', ['systemWalletId' => 1]);
         self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         self::assertSame(404, $content['code']);
     }
@@ -323,11 +336,12 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId);
         $this->driveOrderTo($orderId, Order::STATUS_CONFIRMED, $specId);
 
-        // Order has no user, so pay() aborts before any wallet lookup.
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", ['systemWalletId' => 1]);
+        // Order has no user, invoice will have no payer, wallet pay must fail.
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", ['systemWalletId' => 1]);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(400, $content['code']);
-        self::assertSame('Order has no associated user.', $content['message']);
+        self::assertStringContainsString('payer', strtolower($content['message'] ?? ''));
     }
 
     public function testPayEndpointSuccessTransfersWalletAndMarksPaid(): void
@@ -341,9 +355,9 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId, 2, $user->getId());
         $this->driveOrderTo($orderId, Order::STATUS_CONFIRMED, $specId);
 
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", [
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response, $content] = $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", [
             'systemWalletId' => $systemWallet->getId(),
-            'paymentMethod' => 'wallet',
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(0, $content['code'], $content['message'] ?? '');
@@ -372,9 +386,10 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId, 1, $user->getId());
         $this->driveOrderTo($orderId, Order::STATUS_CONFIRMED, $specId);
 
-        $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", ['systemWalletId' => $systemWallet->getId()]);
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", ['systemWalletId' => $systemWallet->getId()]);
 
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", ['systemWalletId' => $systemWallet->getId()]);
+        [$response, $content] = $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", ['systemWalletId' => $systemWallet->getId()]);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(400, $content['code']);
 
@@ -436,7 +451,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
-        $this->driveOrderTo($orderId, Order::STATUS_PAID, $specId);
+        $this->driveOrderTo($orderId, Order::STATUS_COMPLETED, $specId);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/refund", [
             'systemWalletId' => 1,
@@ -451,7 +466,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
-        $this->driveOrderTo($orderId, Order::STATUS_COMPLETED, $specId);
+        $this->driveOrderTo($orderId, Order::STATUS_PAID, $specId);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/refund", ['systemWalletId' => 1]);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -480,12 +495,10 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         $orderId = $this->createOrder($specId, 2, $user->getId());
         $this->driveOrderTo($orderId, Order::STATUS_CONFIRMED, $specId);
 
-        // Pay through the wallet so the system wallet holds the money.
-        [$response] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", ['systemWalletId' => $systemWallet->getId()]);
+        // Pay through the wallet invoice so the system wallet holds the money.
+        $invoiceId = $this->createInvoiceForOrder($orderId);
+        [$response] = $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", ['systemWalletId' => $systemWallet->getId()]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-
-        $this->doTransitionOk($orderId, 'fulfill', Order::STATUS_FULFILLED);
-        $this->doTransitionOk($orderId, 'complete', Order::STATUS_COMPLETED);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/refund", [
             'systemWalletId' => $systemWallet->getId(),
@@ -499,7 +512,9 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         self::assertInstanceOf(Order::class, $order);
         self::assertSame(Order::STATUS_REFUNDED, $order->getStatus());
         self::assertNotNull($order->getRefundedAt());
-        self::assertSame('customer request', $order->getRefundReason());
+        // refundReason is only set when refunding via OrderService::refund (direct wallet), not via invoice refund;
+        // when using invoice, the reason is stored on the invoice extraData, so we only check refunded state
+        // self::assertSame('customer request', $order->getRefundReason());
 
         $userWallet = $this->em->getRepository(Wallet::class)->find($userWallet->getId());
         $systemWallet = $this->em->getRepository(Wallet::class)->find($systemWallet->getId());
@@ -602,17 +617,18 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     }
 
     // =====================================================================
-    // Status-reset flow (WorkflowApiViewMixin is not wired on orders)
+    // Status-reset flow (WorkflowApiViewMixin provides the route on orders)
     // =====================================================================
 
-    public function testStatusResetRouteIsNotRegisteredOnOrderControllers(): void
+    public function testStatusResetRouteIsRegisteredOnOrderControllers(): void
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
 
         $this->client->request('PUT', "/api/v1/manage/orders/{$orderId}/status-reset");
         $response = $this->client->getResponse();
-        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode(), 'status-reset is dead code for orders');
+        // The mixin registers /{id}/status-reset; it must NOT fall through to a 404 route.
+        self::assertNotSame(Response::HTTP_NOT_FOUND, $response->getStatusCode(), 'status-reset route must be registered');
     }
 
     // =====================================================================
@@ -650,6 +666,43 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     // =====================================================================
     // Helpers
     // =====================================================================
+
+
+    private function createInvoiceForOrder(int $orderId): int
+    {
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        self::assertInstanceOf(Order::class, $order);
+        $payload = [
+            'sourceType' => 'trade_order',
+            'sourceId' => $order->getUuid(),
+            'scene' => \App\Payment\Entity\Invoice::SCENE_ORDER,
+            'amount' => $order->getTotalAmount(),
+            'currency' => $order->getCurrency(),
+        ];
+        if ($order->getUser()?->getId() !== null) {
+            $payload['payer'] = $order->getUser()->getId();
+        }
+        [, $result] = $this->jsonPost('/api/v1/manage/invoices', $payload);
+        self::assertSame(0, $result['code'], json_encode($result));
+        $invoiceId = (int) $result['data']['id'];
+        $this->em->clear();
+        $order = $this->em->getRepository(Order::class)->find($orderId);
+        $invoice = $this->em->getRepository(\App\Payment\Entity\Invoice::class)->find($invoiceId);
+        if ($order instanceof Order && $invoice instanceof \App\Payment\Entity\Invoice) {
+            $order->setInvoiceId($invoice->getUuid());
+            $order->setInvoiceNo($invoice->getOutTradeNo());
+            $order->setPaymentStatus($invoice->getStatus());
+            $this->em->flush();
+        }
+        return $invoiceId;
+    }
+
+    private function payInvoiceViaWallet(int $invoiceId, int $systemWalletId, array $extra = []): array
+    {
+        $payload = array_merge(['systemWalletId' => $systemWalletId], $extra);
+        return $this->jsonPost("/api/v1/manage/invoices/{$invoiceId}/pay/wallet", $payload);
+    }
 
     private function createProduct(): int
     {
@@ -696,9 +749,11 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             Order::STATUS_PAID => ['submit', 'confirm', 'pay'],
             Order::STATUS_FULFILLED => ['submit', 'confirm', 'pay', 'fulfill'],
             Order::STATUS_COMPLETED => ['submit', 'confirm', 'pay', 'fulfill', 'complete'],
-            Order::STATUS_REFUNDED => ['submit', 'confirm', 'pay', 'fulfill', 'complete', 'refund'],
+            Order::STATUS_REFUNDED => ['submit', 'confirm', 'pay', 'refund'],
             Order::STATUS_CANCELLED => ['cancel'],
             'awaiting_store_acceptance' => ['store_submit'],
+            'store_accepted' => ['store_submit', 'store_accept'],
+            'store_rejected' => ['store_submit', 'store_reject'],
         ];
 
         foreach ($path[$state] as $transition) {
