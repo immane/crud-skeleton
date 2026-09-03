@@ -45,22 +45,27 @@ framework:
                 - App\Trade\Entity\Order
             initial_marking: draft
             places:
+                # --- Order (core) ---
                 - draft
                 - pending
-                - awaiting_store_acceptance
-                - store_accepted
-                - store_rejected
                 - confirmed
                 - paid
                 - fulfilled
-                - awaiting_store_verification
                 - completed
                 - cancelled
                 - refunded
+                # --- Store handoff (acceptance) ---
+                - awaiting_store_acceptance
+                - store_accepted
+                - store_rejected
+                # --- Store verification ---
+                - awaiting_store_verification
             transitions:
+                # --- Order: local submission ---
                 submit:
                     from: draft
                     to: pending
+                # --- Trade -> Store: handoff for acceptance ---
                 store_submit:
                     from: draft
                     to: awaiting_store_acceptance
@@ -70,6 +75,7 @@ framework:
                 store_reject:
                     from: awaiting_store_acceptance
                     to: store_rejected
+                # --- Order: confirmation & lifecycle ---
                 confirm:
                     from: [pending, store_accepted]
                     to: confirmed
@@ -79,6 +85,7 @@ framework:
                 fulfill:
                     from: paid
                     to: fulfilled
+                # --- Store verification ---
                 request_verification:
                     from: fulfilled
                     to: awaiting_store_verification
@@ -88,6 +95,7 @@ framework:
                 complete:
                     from: fulfilled
                     to: completed
+                # --- Order: terminal ---
                 cancel:
                     from: [draft, pending, awaiting_store_acceptance, store_accepted, store_rejected, confirmed, fulfilled, awaiting_store_verification]
                     to: cancelled
