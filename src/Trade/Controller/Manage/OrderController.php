@@ -46,9 +46,12 @@ class OrderController extends RestController
     ) {
     }
 
-    protected function workflow(): \Symfony\Component\Workflow\WorkflowInterface
+    /** @param array<string, mixed>|null $content */
+    protected function beforeTransition(string $transition, object $entity, ?array $content): void
     {
-        return $this->orderWorkflow;
+        if ($transition === 'cancel' && $entity instanceof Order) {
+            $this->service->cancel($entity);
+        }
     }
 
     /**

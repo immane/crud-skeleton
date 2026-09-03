@@ -33,6 +33,8 @@ class OrderController extends RestController
     protected array $requiredCreateProperties = ['items'];
     /** @var list<string> */
     protected array $acceptedCreateProperties = ['items', 'currency', 'notes', 'metadata', 'meta'];
+    /** @var list<string> */
+    protected array $acceptedUpdateProperties = ['notes', 'metadata'];
 
     public function __construct(
         protected readonly OrderServiceInterface $service,
@@ -52,9 +54,23 @@ class OrderController extends RestController
         return ['user' => $user];
     }
 
-    protected function workflow(): \Symfony\Component\Workflow\WorkflowInterface
+    protected function authorizeTransition(string $transition, object $entity): void
     {
-        return $this->orderWorkflow;
+        if ($entity instanceof Order) {
+            $user = $this->getCurrentUser();
+            if ($user === null || $entity->getUser()?->getId() !== $user->getId()) {
+                throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Order not found.');
+            }
+        }
+        $this->authorizeApiAction('workflow', $entity);
+    }
+
+    /** @param array<string, mixed>|null $content */
+    protected function beforeTransition(string $transition, object $entity, ?array $content): void
+    {
+        if ($transition === 'cancel' && $entity instanceof Order) {
+            $this->service->cancel($entity);
+        }
     }
 
     /**
@@ -186,9 +202,13 @@ class OrderController extends RestController
             return $this->warning($invalidMessage, 400, '', 400);
         }
 
-        $this->service->wrapInTransaction(function () use ($order, $transition) {
-            $this->orderWorkflow->apply($order, $transition);
-        });
+        try {
+            $this->service->wrapInTransaction(function () use ($order, $transition) {
+                $this->orderWorkflow->apply($order, $transition);
+            });
+        } catch (\Throwable $e) {
+            return $this->warning($e->getMessage(), 400, '', 400);
+        }
 
         return $this->success($order, $successMessage);
     }
@@ -232,5 +252,51 @@ class OrderController extends RestController
     private function cancelLinkedInvoice(Order $order): void
     {
         $this->service->cancel($order);
+    }
+
+    #[Route('/{id}/refund', name: 'refund', methods: ['POST'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function refundAction(Request $request, int|string $id): Response
+    {
+        $order = $this->service->get($this->mixIdToCommonFilter($id), false);
+
+        if (!$order) {
+            return $this->warning('Order not found.', 404, '', 404);
+        }
+
+        $user = $this->getCurrentUser();
+        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+            return $this->warning('Order not found.', 404, '', 404);
+        }
+
+        if (!$this->orderWorkflow->can($order, 'refund')) {
+            return $this->warning('Order cannot be refunded in current status.', 400, '', 400);
+        }
+
+        $content = json_decode($request->getContent(), true) ?: [];
+        $reason = $content['reason'] ?? '';
+        if ($reason === '' || !is_string($reason)) {
+            return $this->warning('reason is required.', 400, '', 400);
+        }
+
+        try {
+            if ($order->getInvoiceId() !== null) {
+                return $this->success($this->service->refundPayment($order, $reason, $content), 'Refund processed');
+            }
+
+            $systemWalletId = (int) ($content['systemWalletId'] ?? 0);
+            if ($systemWalletId <= 0) {
+                return $this->warning('systemWalletId is required.', 400, '', 400);
+            }
+
+            $this->service->wrapInTransaction(function () use ($order, $systemWalletId, $reason): void {
+                $this->service->refund($order, $systemWalletId, $reason);
+                $this->orderWorkflow->apply($order, 'refund');
+                $this->service->update($order, []);
+            });
+        } catch (\Throwable $e) {
+            return $this->warning($e->getMessage(), 400, '', 400);
+        }
+
+        return $this->success($order, 'Refund processed');
     }
 }

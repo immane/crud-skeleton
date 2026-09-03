@@ -31,15 +31,6 @@ parameters:
             message: '#(Qiniu\\|Class Qiniu)#'
             path: src/Storage/Service/QiniuStorage.php
 
-        # --- WorkflowApiViewMixin (generic trait, now used by Order controllers) ---
-        # The trait accesses $this->service / $this->workflow / container services and calls
-        # methods on the resolved workflow object. Because the trait is composed into
-        # controllers that define those members differently (typed DI vs dynamic), PHPStan
-        # cannot fully resolve them in trait context. Same rationale as the top-of-file note.
-        -
-            message: '#(on left side of \?\? is not nullable|Property .+on left side of|Parameter .+\$id of method|method_exists|call to an undefined method|has no return type|array_filter expects|setStatus|method.notFound)#'
-            path: src/Core/View/WorkflowApiViewMixin.php
-
         # --- Curl\Curl — optional third-party HTTP client not in composer.json ---
         -
             message: '#Curl\\Curl#'
