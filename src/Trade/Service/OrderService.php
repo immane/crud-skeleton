@@ -260,7 +260,7 @@ final class OrderService extends BaseService implements OrderServiceInterface
         if ($order->getInvoiceId() !== null) {
             $invoice = $this->invoiceService->get(['uuid' => $order->getInvoiceId()]);
         }
-        if (!$invoice instanceof Invoice) {
+        if (!$invoice instanceof Invoice || $invoice->getStatus() !== Invoice::STATUS_PENDING) {
             $invoice = $this->invoiceService->createInvoice(new CreateInvoiceRequest(
                 sourceType: 'trade_order',
                 sourceId: $order->getUuid(),

@@ -121,7 +121,7 @@ framework:
                 # store_accepted: Store accepted (immediately if INVENTORY_ENABLED=0 or via inventory reservation confirmed). Can be confirmed to `confirmed`.
                 - store_accepted
 
-                # store_rejected: Store rejected (store inactive, validation failed, or inventory rejected). Can be cancelled; Trade stays in store_rejected until explicit cancel.
+                # store_rejected: Store rejected (store inactive, validation failed, or inventory rejected). Can be cancelled by the customer or manager.
                 - store_rejected
 
                 # --- Store verification ---
@@ -183,9 +183,9 @@ framework:
                     to: completed
 
                 # --- Order: terminal ---
-                # cancel: draft/pending/confirmed -> cancelled. Only these three places can be cancelled (business rule). Terminal cancellation; triggers inventory release if needed and store cancellation via outbox. Other states must not directly cancel.
+                # cancel: draft/pending/confirmed/store_rejected -> cancelled. Terminal cancellation; triggers inventory release if needed and store cancellation via outbox. Other states must not directly cancel.
                 cancel:
-                    from: [draft, pending, confirmed]
+                    from: [draft, pending, confirmed, store_rejected]
                     to: cancelled
 
                 # refund: paid -> refunded. Only paid orders can be refunded (business rule). Triggered via OrderService::refund() after Payment refund; fulfilled/completed cannot directly refund.

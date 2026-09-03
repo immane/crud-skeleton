@@ -128,13 +128,12 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         self::assertInstanceOf(Order::class, $order);
         self::assertSame('store_rejected', $order->getStatus());
 
-        // cancel only from [draft, pending, confirmed] — store_rejected must not cancel
         $client->request('POST', '/api/v1/app/orders/' . $placed['id'] . '/cancel');
-        self::assertResponseStatusCodeSame(400);
+        self::assertResponseIsSuccessful();
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('store_rejected', $order->getStatus());
+        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
     }
 
     public function testStoreBecomingUnavailableAfterPlacementRejectsTheOrder(): void

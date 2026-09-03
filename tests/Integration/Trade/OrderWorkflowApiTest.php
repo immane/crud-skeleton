@@ -94,12 +94,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
 
         $this->doTransitionOk($orderId, 'store_submit', 'awaiting_store_acceptance');
         $this->doTransitionOk($orderId, 'store_reject', 'store_rejected');
-        // cancel only from [draft, pending, confirmed] — store_rejected must be rejected
-        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/cancel");
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame(400, $content['code'], 'cancel from store_rejected must be rejected');
-        [, $detail] = $this->jsonGet("/api/v1/manage/orders/{$orderId}");
-        self::assertSame('store_rejected', $detail['data']['status']);
+        $this->doTransitionOk($orderId, 'cancel', Order::STATUS_CANCELLED);
     }
 
     public function testStoreAcceptIsRejectedFromDraft(): void
@@ -225,7 +220,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             Order::STATUS_PENDING => ['confirm', 'cancel'],
             'awaiting_store_acceptance' => ['store_accept', 'store_reject'],
             'store_accepted' => ['confirm'],
-            'store_rejected' => [],
+            'store_rejected' => ['cancel'],
             Order::STATUS_CONFIRMED => ['pay', 'cancel'],
             Order::STATUS_PAID => ['fulfill', 'refund'],
             Order::STATUS_FULFILLED => ['complete'],

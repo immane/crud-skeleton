@@ -112,10 +112,9 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         $this->workflow->apply($order, 'store_reject');
         self::assertSame('store_rejected', $order->getStatus());
 
-        // cancel is only allowed from [draft, pending, confirmed] — store_rejected must not cancel
-        self::assertFalse($this->workflow->can($order, 'cancel'));
-        $this->expectException(NotEnabledTransitionException::class);
+        self::assertTrue($this->workflow->can($order, 'cancel'));
         $this->workflow->apply($order, 'cancel');
+        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
     }
 
     #[Group('low-value')]
@@ -150,7 +149,7 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'pending' => ['pending', ['confirm', 'cancel']],
             'awaiting_store_acceptance' => ['awaiting_store_acceptance', ['store_accept', 'store_reject']],
             'store_accepted' => ['store_accepted', ['confirm']],
-            'store_rejected' => ['store_rejected', []],
+            'store_rejected' => ['store_rejected', ['cancel']],
             'confirmed' => ['confirmed', ['pay', 'cancel']],
             'paid' => ['paid', ['fulfill', 'refund']],
             'fulfilled' => ['fulfilled', ['complete']],
@@ -263,7 +262,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'store_accepted->store_accept' => ['store_accepted', 'store_accept'],
             'store_accepted->cancel' => ['store_accepted', 'cancel'],
             'store_rejected->confirm' => ['store_rejected', 'confirm'],
-            'store_rejected->cancel' => ['store_rejected', 'cancel'],
             'awaiting_store_acceptance->cancel' => ['awaiting_store_acceptance', 'cancel'],
             'awaiting_store_verification->cancel' => ['awaiting_store_verification', 'cancel'],
         ];
