@@ -63,9 +63,6 @@ final class TradePaymentIntegrationTest extends IntegrationWebTestCase
         self::assertNotNull($order->getInvoiceId());
         self::assertNotNull($order->getInvoiceNo());
 
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/fulfill", ['trackingNumber' => 'TRACK-1']);
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/complete");
-
         [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/refund", ['reason' => 'invoice refund']);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(0, $content['code']);

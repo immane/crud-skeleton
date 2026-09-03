@@ -347,7 +347,7 @@ final class OrderServicePaymentsTest extends TestCase
 
     public function testRefundRequiresWalletModule(): void
     {
-        $order = (new Order())->setStatus(Order::STATUS_COMPLETED);
+        $order = (new Order())->setStatus(Order::STATUS_PAID);
         $service = $this->createService([]);
 
         $this->expectException(\RuntimeException::class);
@@ -358,7 +358,7 @@ final class OrderServicePaymentsTest extends TestCase
 
     public function testRefundRejectsOrderWithoutUser(): void
     {
-        $order = (new Order())->setStatus(Order::STATUS_COMPLETED)->setCurrency('CNY');
+        $order = (new Order())->setStatus(Order::STATUS_PAID)->setCurrency('CNY');
         $service = $this->createService([
             'walletRepository' => $this->createStub(WalletRepository::class),
             'transferService' => $this->createStub(TransferServiceInterface::class),
@@ -374,7 +374,7 @@ final class OrderServicePaymentsTest extends TestCase
     public function testRefundRejectsUserWithoutPersistedId(): void
     {
         $order = (new Order())
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setUser(new User())
             ->setCurrency('CNY');
 
@@ -393,7 +393,7 @@ final class OrderServicePaymentsTest extends TestCase
     {
         $user = $this->createUser(42);
         $order = (new Order())
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setUser($user)
             ->setCurrency('CNY');
 
@@ -417,7 +417,7 @@ final class OrderServicePaymentsTest extends TestCase
         $user = $this->createUser(42);
         $wallet = new Wallet($user, 'CNY');
         $order = (new Order())
-            ->setStatus(Order::STATUS_COMPLETED)
+            ->setStatus(Order::STATUS_PAID)
             ->setUser($user)
             ->setCurrency('CNY');
 

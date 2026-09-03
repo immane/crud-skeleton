@@ -495,7 +495,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        foreach (['submit', 'confirm', 'pay', 'fulfill', 'complete'] as $transition) {
+        foreach (['submit', 'confirm', 'pay'] as $transition) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$transition}");
         }
 
@@ -1165,7 +1165,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        $transitions = ['submit', 'confirm', 'pay', 'fulfill', 'complete'];
+        $transitions = ['submit', 'confirm', 'pay'];
         foreach ($transitions as $t) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$t}");
         }
@@ -1188,7 +1188,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        $transitions = ['submit', 'confirm', 'pay', 'fulfill', 'complete'];
+        $transitions = ['submit', 'confirm', 'pay'];
         foreach ($transitions as $t) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$t}");
         }
@@ -1349,7 +1349,7 @@ final class TradeApiIntegrationTest extends WebTestCase
         ]);
         $orderId = $createContent['data']['id'];
 
-        $transitions = ['submit', 'confirm', 'pay', 'fulfill', 'complete'];
+        $transitions = ['submit', 'confirm', 'pay'];
         foreach ($transitions as $t) {
             $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/{$t}");
         }

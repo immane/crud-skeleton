@@ -51,8 +51,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             'submit' => Order::STATUS_PENDING,
             'confirm' => Order::STATUS_CONFIRMED,
             'pay' => Order::STATUS_PAID,
-            'fulfill' => Order::STATUS_FULFILLED,
-            'complete' => Order::STATUS_COMPLETED,
             'refund' => Order::STATUS_REFUNDED,
         ];
 
@@ -66,9 +64,11 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Order::STATUS_REFUNDED, $content['data']['status']);
 
-        foreach (['paidAt', 'fulfilledAt', 'completedAt', 'refundedAt'] as $timestamp) {
+        foreach (['paidAt', 'refundedAt'] as $timestamp) {
             self::assertNotNull($content['data'][$timestamp], "$timestamp must be set");
         }
+        self::assertNull($content['data']['fulfilledAt']);
+        self::assertNull($content['data']['completedAt']);
         self::assertNull($content['data']['cancelledAt']);
     }
 
@@ -200,7 +200,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
-        foreach (['submit', 'confirm', 'pay', 'fulfill', 'complete', 'refund'] as $transition) {
+        foreach (['submit', 'confirm', 'pay', 'refund'] as $transition) {
             $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/{$transition}");
         }
 
@@ -223,9 +223,9 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             Order::STATUS_PENDING => ['confirm', 'cancel'],
             'awaiting_store_acceptance' => ['store_accept', 'store_reject', 'cancel'],
             Order::STATUS_CONFIRMED => ['pay', 'cancel'],
-            Order::STATUS_PAID => ['fulfill'],
+            Order::STATUS_PAID => ['fulfill', 'refund'],
             Order::STATUS_FULFILLED => ['complete', 'cancel'],
-            Order::STATUS_COMPLETED => ['refund'],
+            Order::STATUS_COMPLETED => [],
             Order::STATUS_CANCELLED => [],
             Order::STATUS_REFUNDED => [],
         ];
@@ -436,7 +436,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
-        $this->driveOrderTo($orderId, Order::STATUS_PAID, $specId);
+        $this->driveOrderTo($orderId, Order::STATUS_COMPLETED, $specId);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/refund", [
             'systemWalletId' => 1,
@@ -451,7 +451,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     {
         $specId = $this->createSpecification($this->createProduct());
         $orderId = $this->createOrder($specId);
-        $this->driveOrderTo($orderId, Order::STATUS_COMPLETED, $specId);
+        $this->driveOrderTo($orderId, Order::STATUS_PAID, $specId);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/refund", ['systemWalletId' => 1]);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -483,9 +483,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         // Pay through the wallet so the system wallet holds the money.
         [$response] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/pay", ['systemWalletId' => $systemWallet->getId()]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-
-        $this->doTransitionOk($orderId, 'fulfill', Order::STATUS_FULFILLED);
-        $this->doTransitionOk($orderId, 'complete', Order::STATUS_COMPLETED);
 
         [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/refund", [
             'systemWalletId' => $systemWallet->getId(),
@@ -696,7 +693,7 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
             Order::STATUS_PAID => ['submit', 'confirm', 'pay'],
             Order::STATUS_FULFILLED => ['submit', 'confirm', 'pay', 'fulfill'],
             Order::STATUS_COMPLETED => ['submit', 'confirm', 'pay', 'fulfill', 'complete'],
-            Order::STATUS_REFUNDED => ['submit', 'confirm', 'pay', 'fulfill', 'complete', 'refund'],
+            Order::STATUS_REFUNDED => ['submit', 'confirm', 'pay', 'refund'],
             Order::STATUS_CANCELLED => ['cancel'],
             'awaiting_store_acceptance' => ['store_submit'],
         ];

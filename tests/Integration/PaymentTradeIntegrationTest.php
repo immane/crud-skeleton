@@ -258,9 +258,6 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         self::assertSame(3500, $this->walletBalance($userWallet));
         self::assertSame(1500, $this->walletBalance($systemWallet));
 
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/fulfill", ['trackingNumber' => 'TRK-1']);
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/complete");
-
         [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/refund", [
             'reason' => 'integration refund',
             'systemWalletId' => $systemWallet->getId(),
@@ -611,8 +608,7 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $this->em->clear();
         $order = $this->loadOrder($orderId);
-        // FINDING: money is returned but the order is left in "paid" (order refund only from "completed")
-        self::assertSame(Order::STATUS_PAID, $order->getStatus());
+        self::assertSame(Order::STATUS_REFUNDED, $order->getStatus());
         self::assertSame(Invoice::STATUS_REFUNDED, $order->getPaymentStatus());
         self::assertSame(5000, $this->walletBalance($userWallet));
     }
@@ -631,9 +627,6 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
         ]);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/fulfill", ['trackingNumber' => 'TRK-2']);
-        $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/do/complete");
-
         // No systemWalletId re-supplied → the wallet gateway cannot refund (injected default is 0)
         [$response, $content] = $this->jsonRequest('POST', "/api/v1/manage/orders/{$orderId}/refund", ['reason' => 'r']);
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -641,7 +634,7 @@ final class PaymentTradeIntegrationTest extends IntegrationWebTestCase
 
         $this->em->clear();
         $order = $this->loadOrder($orderId);
-        self::assertSame(Order::STATUS_COMPLETED, $order->getStatus());
+        self::assertSame(Order::STATUS_PAID, $order->getStatus());
     }
 
     public function testInvoicePaidWithMismatchedAmountDoesNotAdvanceOrder(): void
