@@ -1203,6 +1203,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#210-scoped-scopedlistapiviewmixin-and-scopeddetailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.10 Scoped: ScopedListApiViewMixin and ScopedDetailApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1454,6 +1465,62 @@
     
   
     System Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
   
 
     
@@ -1767,6 +1834,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2932,9 +3055,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2948,7 +3089,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3095,6 +3336,17 @@
     <span class="md-ellipsis">
       
         2.9 Workflow: WorkflowApiViewMixin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#210-scoped-scopedlistapiviewmixin-and-scopeddetailapiviewmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.10 Scoped: ScopedListApiViewMixin and ScopedDetailApiViewMixin
       
     </span>
   </a>
@@ -3408,7 +3660,8 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <code>page</code>, <code>limit</code>, <code>@order</code>, <code>@dql</code>, <code>@select</code>, <code>@groupBy</code>, <code>@hints</code>, <code>@filter</code>, <code>@sort</code>, <code>@expands</code>, <code>@display</code>, <code>@showDQL</code></p>
 <h3 id="23-detail-detailapiviewmixin">2.3 Detail: <code>DetailApiViewMixin</code><a class="headerlink" href="#23-detail-detailapiviewmixin" title="Permanent link">&para;</a></h3>
 <p><strong>File</strong>: <code>src/Core/View/DetailApiViewMixin.php</code></p>
-<p>Registers <code>GET /{id}</code> (numeric ID required):</p>
+<p>Registers <code>GET /{id}</code>. The Core identifier lookup accepts a digit-only local ID or a
+canonical UUID when the entity has a mapped <code>uuid</code> field:</p>
 <table>
 <thead>
 <tr>
@@ -3421,7 +3674,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <tr>
 <td><code>GET /{id}</code></td>
 <td>detailAction</td>
-<td>Single entity by ID</td>
+<td>Single entity by numeric ID or UUID</td>
 </tr>
 </tbody>
 </table>
@@ -3553,7 +3806,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <tr>
 <td><code>PUT /{id}</code></td>
 <td>updateAction</td>
-<td>Single entity update</td>
+<td>Single entity update by numeric ID or UUID</td>
 </tr>
 <tr>
 <td><code>POST /batch-update</code></td>
@@ -3659,7 +3912,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <tr>
 <td><code>DELETE /{id}</code></td>
 <td>deleteAction</td>
-<td>Remove entity</td>
+<td>Remove entity by numeric ID or UUID</td>
 </tr>
 </tbody>
 </table>
@@ -3741,145 +3994,180 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 <tr>
 <td><code>GET /{id}/transitions</code></td>
 <td>availableTransitionsAction</td>
-<td>Get enabled transitions for an entity</td>
+<td>Get enabled transitions for an entity by numeric ID or UUID</td>
 </tr>
 <tr>
 <td><code>POST /{id}/do/{transition}</code></td>
 <td>doTransitionAction</td>
-<td>Execute a workflow transition</td>
+<td>Execute a workflow transition by numeric ID or UUID</td>
 </tr>
 <tr>
 <td><code>PUT /{id}/status-reset</code></td>
 <td>resetMarkingAction</td>
-<td>Reset state machine marking (admin only)</td>
+<td>Reset state machine marking by numeric ID or UUID (admin only)</td>
 </tr>
 </tbody>
 </table>
+<p>All three identifier-aware actions resolve <code>id</code> through <code>ApiView::mixIdToCommonFilter()</code>
+(digit-only → <code>id</code>, canonical UUID → <code>uuid</code>), merged with <code>commonFilter()</code> and
+<code>authorizeApiAction('workflow', $entity)</code>. Missing entities return <code>404</code>; authorization
+failures return <code>403</code>. The <code>{id}</code> route parameter accepts <code>\d+|[0-9a-fA-F-]{36}</code>.</p>
 <p><strong>Properties</strong> the controller MUST declare:
 - <code>protected $workflow;</code> -- the workflow service ID (e.g., <code>'state_machine.order'</code>)</p>
+<h3 id="210-scoped-scopedlistapiviewmixin-and-scopeddetailapiviewmixin">2.10 Scoped: <code>ScopedListApiViewMixin</code> and <code>ScopedDetailApiViewMixin</code><a class="headerlink" href="#210-scoped-scopedlistapiviewmixin-and-scopeddetailapiviewmixin" title="Permanent link">&para;</a></h3>
+<p><strong>Files</strong>: <code>src/Core/View/ScopedListApiViewMixin.php</code>, <code>src/Core/View/ScopedDetailApiViewMixin.php</code></p>
+<p>For nested resources such as <code>/store/{scopeId}/orders/{id}</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Trait</th>
+<th>Route</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ScopedListApiViewMixin</code></td>
+<td><code>GET /</code> (parent <code>/{scopeId}</code> on the controller)</td>
+<td>Calls abstract <code>scopedListFilter($scopeId)</code> and lists with <code>service-&gt;list()</code></td>
+</tr>
+<tr>
+<td><code>ScopedDetailApiViewMixin</code></td>
+<td><code>GET /{id}</code> with <code>requirements: ['id' =&gt; '\\d+|[0-9a-fA-F-]{36}']</code></td>
+<td>Calls abstract <code>scopedDetailFilter($scopeId, $id)</code>; <code>scopeId</code> and <code>id</code> each accept numeric ID or UUID</td>
+</tr>
+</tbody>
+</table>
+<p>Both <code>scopeId</code> and <code>id</code> follow the same rule as the core mixins: digit-only → <code>id</code>, canonical UUID → <code>uuid</code>. Controllers MUST resolve them explicitly via <code>ApiView::identifierField()</code> / <code>identifierCriteria()</code> or <code>mixIdToCommonFilter()</code> and MUST NOT rely on an <code>id</code>-then-<code>uuid</code> fallback. For Store-scoped controllers, the parent Store is resolved through <code>StoreScopedAuthorizationApiMixin::storeForAuthorization()</code>, which now uses <code>identifierCriteria($scopeId)</code> so <code>/store/1/orders/2</code> and <code>/store/{storeUuid}/orders/{uuid}</code> are both valid. Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">protected function scopedDetailFilter(string $scopeId, string $id): array</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    return [$this-&gt;identifierField($id) =&gt; $id, ...$this-&gt;storeScopedFilter($this-&gt;storeForAuthorization())];</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">}</span>
+</code></pre></div>
+<p>The class-level route SHOULD declare <code>requirements: ['scopeId' =&gt; '\\d+|[0-9a-fA-F-]{36}']</code> when the parent resource exposes both forms.</p>
 <hr />
 <h2 id="3-controller-assembly-patterns">3. Controller Assembly Patterns<a class="headerlink" href="#3-controller-assembly-patterns" title="Permanent link">&para;</a></h2>
 <h3 id="31-standard-admin-crud-controller">3.1 Standard Admin CRUD Controller<a class="headerlink" href="#31-standard-admin-crud-controller" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">class CategoryController extends RestController</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    use ApiView;</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">    use ListApiViewMixin;</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="x">    use DetailApiViewMixin;</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="x">    use CreateApiViewMixin;</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="x">    use UpdateApiViewMixin;</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="x">    use DeleteApiViewMixin;</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="x">    protected ?string $serviceClass = CategoryService::class;</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="x">    protected array $requiredCreateProperties = ['name'];</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="x">    protected array $acceptedCreateProperties = ['name', 'slug', 'description', 'parent', 'enabled'];</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="x">    protected array $acceptedUpdateProperties = ['name', 'slug', 'description', 'parent', 'enabled', 'sortOrder'];</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">class CategoryController extends RestController</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">{</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    use ApiView;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    use ListApiViewMixin;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">    use DetailApiViewMixin;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">    use CreateApiViewMixin;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">    use UpdateApiViewMixin;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">    use DeleteApiViewMixin;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="x">    protected ?string $serviceClass = CategoryService::class;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="x">    protected array $requiredCreateProperties = ['name'];</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="x">    protected array $acceptedCreateProperties = ['name', 'slug', 'description', 'parent', 'enabled'];</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="x">    protected array $acceptedUpdateProperties = ['name', 'slug', 'description', 'parent', 'enabled', 'sortOrder'];</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="32-public-read-only-controller">3.2 Public Read-Only Controller<a class="headerlink" href="#32-public-read-only-controller" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="x">class CategoryController extends RestController</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="x">{</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="x">    use ApiView;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="x">    use ListApiViewMixin;</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">    use DetailApiViewMixin;</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">    protected ?string $serviceClass = CategoryService::class;</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">    protected function commonFilter()</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="x">    {</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="x">        return ['enabled' =&gt; true];  // Only show enabled categories</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="x">    }</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="x">}</span>
-</code></pre></div>
-<h3 id="33-custom-business-logic-controller-beyond-crud">3.3 Custom Business Logic Controller (Beyond CRUD)<a class="headerlink" href="#33-custom-business-logic-controller-beyond-crud" title="Permanent link">&para;</a></h3>
-<p>When a controller needs endpoints not covered by mixins, add custom action methods:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">class OrderController extends RestController</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">class CategoryController extends RestController</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">{</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    use ApiView;</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">    use ListApiViewMixin;</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="x">    use DetailApiViewMixin;</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">    protected ?string $serviceClass = OrderService::class;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="x">    protected ?string $serviceClass = CategoryService::class;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="x">    #[Route('/my-orders', name: 'my-orders', methods: ['GET'])]</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="x">    public function myOrdersAction(): Response</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="x">    {</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">        $service = $this-&gt;get($this-&gt;serviceClass);</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="x">        $filter = $this-&gt;commonFilter();  // scopes to current user</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="x">        $entities = $service-&gt;list($filter);</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="x">        return $this-&gt;success($entities);</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="x">    }</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="x">}</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="x">    protected function commonFilter()</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="x">    {</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="x">        return ['enabled' =&gt; true];  // Only show enabled categories</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="x">    }</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="x">}</span>
+</code></pre></div>
+<h3 id="33-custom-business-logic-controller-beyond-crud">3.3 Custom Business Logic Controller (Beyond CRUD)<a class="headerlink" href="#33-custom-business-logic-controller-beyond-crud" title="Permanent link">&para;</a></h3>
+<p>When a controller needs endpoints not covered by mixins, add custom action methods:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">class OrderController extends RestController</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    use ApiView;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">    use ListApiViewMixin;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    use DetailApiViewMixin;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    protected ?string $serviceClass = OrderService::class;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="x">    #[Route('/my-orders', name: 'my-orders', methods: ['GET'])]</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="x">    public function myOrdersAction(): Response</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    {</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">        $service = $this-&gt;get($this-&gt;serviceClass);</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">        $filter = $this-&gt;commonFilter();  // scopes to current user</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">        $entities = $service-&gt;list($filter);</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="x">        return $this-&gt;success($entities);</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">    }</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">}</span>
 </code></pre></div>
 <h3 id="34-workflow-enabled-controller">3.4 Workflow-Enabled Controller<a class="headerlink" href="#34-workflow-enabled-controller" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">class OrderController extends RestController</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">{</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">    use ApiView;</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    use ListApiViewMixin;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="x">    use DetailApiViewMixin;</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    use UpdateApiViewMixin;           // For updating draft orders</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">    use WorkflowApiViewMixin;         // For state transitions</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="x">    protected ?string $serviceClass = OrderService::class;</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    protected $workflow = 'state_machine.order';</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">    protected array $acceptedUpdateProperties = ['notes', 'metadata'];</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">#[IsGranted('ROLE_ADMIN')]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">class OrderController extends RestController</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    use ApiView;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    use ListApiViewMixin;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="x">    use DetailApiViewMixin;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="x">    use UpdateApiViewMixin;           // For updating draft orders</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="x">    use WorkflowApiViewMixin;         // For state transitions</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="x">    protected ?string $serviceClass = OrderService::class;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="x">    protected $workflow = 'state_machine.order';</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="x">    protected array $acceptedUpdateProperties = ['notes', 'metadata'];</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="x">}</span>
 </code></pre></div>
 <hr />
 <h2 id="4-hook-execution-order">4. Hook Execution Order<a class="headerlink" href="#4-hook-execution-order" title="Permanent link">&para;</a></h2>
 <h3 id="41-get-list-pipeline">4.1 GET List Pipeline<a class="headerlink" href="#41-get-list-pipeline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>commonFilter()
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  -&gt; listFilter()
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    -&gt; service.list(filter)
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>      -&gt; listProcessor(entities)
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        -&gt; listResponses(entities)
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>          -&gt; success(response)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>commonFilter()
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  -&gt; listFilter()
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    -&gt; service.list(filter)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>      -&gt; listProcessor(entities)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        -&gt; listResponses(entities)
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>          -&gt; success(response)
 </code></pre></div>
 <h3 id="42-get-detail-pipeline">4.2 GET Detail Pipeline<a class="headerlink" href="#42-get-detail-pipeline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>commonFilter()
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  -&gt; mixIdToCommonFilter(id)
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    -&gt; detailFilter(filter)
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>      -&gt; service.get(filter)
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        -&gt; detailProcessor(entity)
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>          -&gt; detailResponse(entity)
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>            -&gt; success(response)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>commonFilter()
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  -&gt; mixIdToCommonFilter(id)
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    -&gt; detailFilter(filter)
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>      -&gt; service.get(filter)
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        -&gt; detailProcessor(entity)
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>          -&gt; detailResponse(entity)
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>            -&gt; success(response)
 </code></pre></div>
 <h3 id="43-post-create-pipeline">4.3 POST Create Pipeline<a class="headerlink" href="#43-post-create-pipeline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>json_decode(content)
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  -&gt; check input type (object vs array)
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    -&gt; service.new()
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>      -&gt; requiredCreateProperties check
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        -&gt; acceptedCreateProperties filter
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>          -&gt; defaultCreateValues()
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>            -&gt; @transform (expression)
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>              -&gt; processCreateContent(content, entity)
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>                -&gt; processEntity(content, entity)
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                  -&gt; service.update(entity, content)
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>                    -&gt; afterCreated(entity)
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>                      -&gt; success(response)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>json_decode(content)
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  -&gt; check input type (object vs array)
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    -&gt; service.new()
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>      -&gt; requiredCreateProperties check
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        -&gt; acceptedCreateProperties filter
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>          -&gt; defaultCreateValues()
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            -&gt; @transform (expression)
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>              -&gt; processCreateContent(content, entity)
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>                -&gt; processEntity(content, entity)
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>                  -&gt; service.update(entity, content)
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>                    -&gt; afterCreated(entity)
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>                      -&gt; success(response)
 </code></pre></div>
 <h3 id="44-put-update-pipeline">4.4 PUT Update Pipeline<a class="headerlink" href="#44-put-update-pipeline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>json_decode(content)
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  -&gt; mixIdToCommonFilter(id)
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    -&gt; service.get(filter)
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>      -&gt; requiredUpdateProperties check
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        -&gt; acceptedUpdateProperties filter
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>          -&gt; defaultUpdateValues()
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            -&gt; @transform (expression)
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>              -&gt; processUpdateContent(content, entity)
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>                -&gt; service.update(entity, content)
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>                  -&gt; afterUpdated(entity)
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>                    -&gt; success(response)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>json_decode(content)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  -&gt; mixIdToCommonFilter(id)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    -&gt; service.get(filter)
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>      -&gt; requiredUpdateProperties check
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        -&gt; acceptedUpdateProperties filter
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>          -&gt; defaultUpdateValues()
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>            -&gt; @transform (expression)
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>              -&gt; processUpdateContent(content, entity)
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>                -&gt; service.update(entity, content)
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>                  -&gt; afterUpdated(entity)
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>                    -&gt; success(response)
 </code></pre></div>
 <h3 id="45-delete-pipeline">4.5 DELETE Pipeline<a class="headerlink" href="#45-delete-pipeline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mixIdToCommonFilter(id)
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  -&gt; deletionFilter(filter)
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    -&gt; service.get(filter)
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>      -&gt; service.remove(entity)
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        -&gt; success(...) | warning(...)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>mixIdToCommonFilter(id)
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  -&gt; deletionFilter(filter)
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    -&gt; service.get(filter)
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>      -&gt; service.remove(entity)
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>        -&gt; success(...) | warning(...)
 </code></pre></div>
 <hr />
 <h2 id="5-contract-rules">5. Contract Rules<a class="headerlink" href="#5-contract-rules" title="Permanent link">&para;</a></h2>
@@ -3906,7 +4194,7 @@ Controllers compose behaviors (list, detail, create, update, delete, workflow) b
 </tr>
 <tr>
 <td>R4</td>
-<td>App (public) controllers MUST NOT use Create/Update/Delete mixins</td>
+<td>Public (anonymous) controllers (<code>Controller/Public/</code>) MUST NOT use Create/Update/Delete mixins; App controllers (<code>Controller/App/</code>) are authenticated client-facing APIs and MAY use those mixins when writes are ownership-scoped and authorization-checked</td>
 </tr>
 <tr>
 <td>R5</td>

@@ -13,6 +13,10 @@
         <link rel="canonical" href="https://immane.github.io/crud-skeleton/design/security-hardening/">
       
       
+        <link rel="prev" href="../extension-points/">
+      
+      
+        <link rel="next" href="../naming-convention/">
       
       
         
@@ -27,7 +31,7 @@
     
     
       
-        <title>Security Hardening Roadmap - CRUD Skeleton</title>
+        <title>Security Hardening - CRUD Skeleton</title>
       
     
     
@@ -114,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Security Hardening Roadmap
+              Security Hardening
             
           </span>
         </div>
@@ -849,8 +853,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -861,13 +867,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -888,7 +892,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1090,6 +1094,331 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#priority-p0-immediate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority P0 — Immediate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Priority P0 — Immediate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serialization-sensitive-data-exposure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization / Sensitive Data Exposure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-upload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Upload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#payment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Payment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#priority-p1-this-week" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority P1 — This Week
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Priority P1 — This Week">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#payment_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Payment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dos-resource-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DoS / Resource Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#priority-p2-this-month" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority P2 — This Month
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Priority P2 — This Month">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-upload_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Upload
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#payment_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Payment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dos-query-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DoS / Query Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serialization_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#priority-p3-ongoing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Priority P3 — Ongoing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Priority P3 — Ongoing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cross-cutting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Cutting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1395,6 +1724,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2560,9 +2945,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2576,7 +2979,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -2894,8 +3397,7 @@ See the project's <a href="https://github.com/immane/crud-skeleton/blob/dev/SECU
 <h2 id="priority-p1-this-week">Priority P1 — This Week<a class="headerlink" href="#priority-p1-this-week" title="Permanent link">&para;</a></h2>
 <h3 id="authentication_1">Authentication<a class="headerlink" href="#authentication_1" title="Permanent link">&para;</a></h3>
 <ul>
-<li>[ ] Integrate Symfony's <code>RateLimiter</code> component and configure per-account + per-IP policies on
-  <code>/api/auth/login</code> to prevent brute-force attacks.</li>
+<li>[x] Integrated Symfony's <code>RateLimiter</code> component and configured per-IP policies on <code>/api/auth/login</code> (+ <code>register</code>, <code>otp/request</code>, <code>otp/verify</code>, <code>wechat/miniapp/login</code>, <code>payment</code>) — see <code>src/Core/EventListener/RateLimitListener.php</code> + <code>config/packages/rate_limiter.yaml</code> (test env uses high limits; remaining: per-process filesystem cache → needs Redis for multi-worker).</li>
 <li>[ ] Add a progressive backoff or CAPTCHA requirement after repeated login failures.</li>
 <li>[ ] Unify registration error messages — use a single generic response regardless of which
   field (email / username / phone) conflicts — to prevent user enumeration.</li>

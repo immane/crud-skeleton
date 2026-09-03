@@ -16,7 +16,7 @@
         <link rel="prev" href="../api-documentation/">
       
       
-        <link rel="next" href="../naming-convention/">
+        <link rel="next" href="../extension-points/">
       
       
         
@@ -1808,6 +1808,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../naming-convention/" class="md-nav__link">
         
   
@@ -2101,6 +2157,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -3266,9 +3378,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -3282,7 +3412,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -4442,9 +4672,11 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 </tbody>
 </table>
 <h3 id="74-test-database-contract">7.4 Test Database Contract<a class="headerlink" href="#74-test-database-contract" title="Permanent link">&para;</a></h3>
+<p>Canonical contract is <code>docs/testing/crud-skeleton-production/TEST_STRATEGY.md</code> §Test Environments / §Test Layers.</p>
 <ul>
 <li>Each test method starts with a clean schema</li>
-<li>Schema is created from Doctrine schema tool (not migrations) in <code>DatabaseBootstrapTrait</code></li>
+<li><strong>Integration / kernel tests</strong> (<code>tests/Integration/</code> + <code>Integration*TestCase</code> helpers) create the schema from the Doctrine <code>SchemaTool</code> (not migrations) in <code>DatabaseBootstrapTrait</code> — fast, per-test isolation with auto-rollback</li>
+<li><strong>Migration chain</strong> is validated separately in CI on MySQL 8.4 (<code>migrations.yml</code>) and on demand via <code>doctrine:migrations:migrate</code> on a disposable env; <code>DatabaseBootstrapTrait</code> does not prove migration correctness</li>
 <li>Test data fixtures are inserted per-test or per-class</li>
 <li>Transactions are wrapped per test and rolled back (auto-rollback)</li>
 </ul>
@@ -4844,19 +5076,24 @@ validation, testing, and deployment. Every module, service, and controller MUST 
 </thead>
 <tbody>
 <tr>
-<td>Design doc</td>
-<td><code>docs/design/{module}.md</code></td>
-<td>Business flow, API design, data model sketch</td>
+<td>Bundle design doc</td>
+<td><code>docs/design/bundles/{module}.md</code></td>
+<td>Business flow, API design, data model, store/catalog or domain rules</td>
 </tr>
 <tr>
-<td>API usage guide</td>
-<td><code>docs/api/{module}-api.md</code></td>
-<td>Endpoint listing, curl examples, auth</td>
+<td>Operational guide</td>
+<td><code>docs/manual/{module}.md</code> + <code>docs/runbooks/{module}.md</code> (when applicable)</td>
+<td>Seeding, deployment, and recovery procedures</td>
 </tr>
 <tr>
 <td>OpenAPI spec</td>
-<td>Code attributes <code>#[OA\*]</code></td>
-<td>Auto-generated at <code>/api/doc</code></td>
+<td>Code attributes <code>#[OA\*]</code> (<code>/api/doc</code> + <code>/api/doc.json</code>) + <code>docs/openapi/endpoints.yaml</code> + <code>docs/openapi/order-payment-flow.md</code></td>
+<td>Machine-readable spec + human consumer flow</td>
+</tr>
+<tr>
+<td>Testing evidence</td>
+<td><code>docs/testing/crud-skeleton-production/TEST_MATRIX.md</code> / <code>BUSINESS_INVARIANTS.md</code> for critical modules</td>
+<td>Required validation per change type</td>
 </tr>
 </tbody>
 </table>

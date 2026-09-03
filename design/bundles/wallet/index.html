@@ -16,7 +16,7 @@
         <link rel="prev" href="../payment/">
       
       
-        <link rel="next" href="../settlement/">
+        <link rel="next" href="../promotion/">
       
       
         
@@ -1106,6 +1106,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../naming-convention/" class="md-nav__link">
         
   
@@ -1795,10 +1851,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-optimistic-locking-contract" class="md-nav__link">
+  <a href="#9-concurrency-contract-pessimistic-lock-manual-version" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Optimistic Locking Contract
+        9. Concurrency Contract — Pessimistic Lock + Manual Version
       
     </span>
   </a>
@@ -1842,6 +1898,62 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2999,9 +3111,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -3015,7 +3145,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3391,10 +3621,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-optimistic-locking-contract" class="md-nav__link">
+  <a href="#9-concurrency-contract-pessimistic-lock-manual-version" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Optimistic Locking Contract
+        9. Concurrency Contract — Pessimistic Lock + Manual Version
       
     </span>
   </a>
@@ -3465,7 +3695,7 @@ wallet-to-wallet transfers with deadlock prevention and idempotency,
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
 <p>Wallet is a financial module for managing user balances:</p>
 <ul>
-<li><strong>Wallets</strong> per user per currency with balance in cents, optimistic locking, freeze capability, and available/held balance separation</li>
+<li><strong>Wallets</strong> per user per currency with balance in cents, pessimistic locking (<code>SELECT ... FOR UPDATE</code>) + manual <code>version</code> counter (no <code>#[ORM\Version]</code>), freeze capability, and available/held balance separation</li>
 <li><strong>Transactions</strong> with UUID, type classification, status tracking, and idempotency via <code>referenceId</code></li>
 <li><strong>TransferService</strong> with atomic from-wallet-to-wallet transfers, deadlock prevention, and rollback recovery</li>
 <li><strong>Deposit</strong> endpoint for system-injected funding with audit trail</li>
@@ -3581,7 +3811,7 @@ wallet-to-wallet transfers with deadlock prevention and idempotency,
 <tr>
 <td><code>version</code></td>
 <td>int</td>
-<td><code>#[ORM\Version]</code> optimistic locking</td>
+<td>Manual version counter (<code>SET version = version + 1</code> under <code>FOR UPDATE</code> lock); no <code>#[ORM\Version]</code></td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -4293,12 +4523,14 @@ wallet-to-wallet transfers with deadlock prevention and idempotency,
 </tbody>
 </table>
 <hr />
-<h2 id="9-optimistic-locking-contract">9. Optimistic Locking Contract<a class="headerlink" href="#9-optimistic-locking-contract" title="Permanent link">&para;</a></h2>
-<p>Wallets use <code>#[ORM\Version]</code> for optimistic concurrency control:</p>
+<h2 id="9-concurrency-contract-pessimistic-lock-manual-version">9. Concurrency Contract — Pessimistic Lock + Manual Version<a class="headerlink" href="#9-concurrency-contract-pessimistic-lock-manual-version" title="Permanent link">&para;</a></h2>
+<p>Wallets use <code>SELECT ... FOR UPDATE</code> (pessimistic locking) with a manually
+incremented <code>version</code> column. There is <strong>no</strong> <code>#[ORM\Version]</code> mapping:</p>
 <ul>
-<li>On concurrent updates, Doctrine throws <code>OptimisticLockException</code></li>
-<li>The caller should retry or report the conflict</li>
-<li>This protects against race conditions on balance updates outside TransferService</li>
+<li><code>TransferService</code> / <code>DepositService</code> / <code>WithdrawService</code> lock the target wallet row(s) <code>FOR UPDATE</code> in a deterministic order, validate, then <code>UPDATE wallet SET balance = ..., version = version + 1</code></li>
+<li>Concurrent transactions block on the row lock; the loser re-reads the updated balance after the winner commits</li>
+<li><code>version</code> is an ordinary <code>int</code> used for audit ordering, not for Doctrine optimistic-lock checks</li>
+<li>Do not add <code>#[ORM\Version]</code> without a documented architectural decision</li>
 </ul>
 <hr />
 <h2 id="10-money-handling-contract">10. Money Handling Contract<a class="headerlink" href="#10-money-handling-contract" title="Permanent link">&para;</a></h2>

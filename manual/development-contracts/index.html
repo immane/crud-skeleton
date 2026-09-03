@@ -1436,6 +1436,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../design/extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../design/naming-convention/" class="md-nav__link">
         
   
@@ -1729,6 +1785,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2894,9 +3006,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2910,7 +3040,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3705,10 +3935,21 @@ inconsistent prefixes inside a module, non-mirrored controller/service names.</p
 </ul>
 <h3 id="validation-order">Validation order<a class="headerlink" href="#validation-order" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Controller field whitelist ($requiredCreateProperties / $acceptedCreateProperties)
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  → controller hook validation (processCreateContent / processUpdateContent)
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    → @transform expression
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      → Service::update() → Symfony Validator → entity #[Assert\*] constraints
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  → JSON Schema validation via $jsonSchemas (CreateApiViewMixin/UpdateApiViewMixin → Core\Validator\JsonSchemaValidator)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    → controller hook validation (processCreateContent / processUpdateContent)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      → @transform expression
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        → Service::update() → Symfony Validator → entity #[Assert\*] constraints
 </code></pre></div>
+<ul>
+<li><strong>JSON Schema step</strong> runs <strong>before</strong> <code>processCreateContent</code>/<code>processUpdateContent</code>. Declare on the controller:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">protected array $jsonSchemas = [</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="x">    'address'  =&gt; 'Store/StoreAddress',</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="x">    'contact'  =&gt; 'Store/StoreContact',</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="x">    'settings' =&gt; 'Store/StoreSettings',</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="x">];</span>
+</code></pre></div>
+<p>Each declared field present and non-null is validated against <code>src/{Bundle}/Resources/JsonSchema/{Name}.json</code> (<code>Core\Validator\JsonSchemaValidator::validate()</code>). Violations throw <code>JsonSchemaViolationException</code> → <code>ValidatorException</code> → <code>400</code> via <code>warning()</code>. <code>Store</code> bundle ships <code>StoreAddress</code> (province/city/district/street/detail/latitude/longitude/geohash...; <code>latitude↔longitude</code> dependencies, <code>additionalProperties:false</code>), <code>StoreContact</code> (phone/email/uuid), <code>StoreSettings</code> (order/fulfillment booleans, top-level <code>additionalProperties:true</code> for forward compat). Validator lives in <code>Core</code>, schemas in each bundle.</p>
 <h3 id="rate-limiting">Rate limiting<a class="headerlink" href="#rate-limiting" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

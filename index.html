@@ -1228,6 +1228,62 @@
   
   
     <li class="md-nav__item">
+      <a href="design/extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="design/security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="design/naming-convention/" class="md-nav__link">
         
   
@@ -1521,6 +1577,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="design/bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="design/bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2686,9 +2798,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2702,7 +2832,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -2834,14 +3064,24 @@
 <p>Symfony 8.1 API backend skeleton with modular architecture, JWT authentication, dynamic query engine, and pluggable business modules.</p>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Core/       # Framework core (RestController, BaseService, View Mixins, Expression Parser)
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Common/     # CMS module (Category, Tag, Content, Comment, Page, Media, Setting)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Trade/      # E-Commerce (Product, Specification, Order, OrderItem, Pricing Pipeline)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── Payment/    # Payments (Invoice, Gateway abstraction, Webhooks, Events)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── Wallet/     # Wallet (Balance, Atomic Transfers, Idempotency)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── Wechat/     # WeChat (Mini Program/Official Account Login, WeChat Pay V3, Gateway)
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── Identity/   # Authentication (JWT RS256, OTP SMS, Refresh Token Rotation)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Core/         # Framework core (RestController, BaseService, View Mixins, Expression Parser)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Common/       # CMS (Category, Tag, Content, Comment, Page, Media, Setting, Picture)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Identity/     # Authentication (JWT RS256, OTP, User, Profile)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── Authorization/# RBAC (Permission, Role, Assignment, Field Grants, Audit, Voter)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── Trade/        # E-Commerce (Order, OrderItem — catalog via Store CatalogResolver)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── Store/        # Multi-store ops + catalog (Store, Product, Specification, Membership, StoreOrder, Outbox/Inbox)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── Inventory/    # Stock &amp; reservation (Material, Stock, Recipe, Reservation, Ledger)
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├── Payment/      # Invoices (Gateway abstraction, Webhooks, Adjustment providers)
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>├── Wallet/       # Balances (Wallet, Transaction, Voucher, Deductions, Transfers)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── Promotion/    # Promotion DSL + strategies (Priority-ordered calculator)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├── Storage/      # Media storage drivers (Local, Qiniu)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>├── Wechat/       # WeChat (Mini Program/Official Account Login, WeChat Pay V3)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>├── Settlement/   # Allocation &amp; finality (Rules, Plans, Allocations — separate funding)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>└── Exchange/     # Points economy (design only, pool-backed rates)
 </code></pre></div>
+<blockquote>
+<p><strong>Store catalog</strong>: <code>Store</code> owns <code>Product</code>/<code>Specification</code> (<code>trade_product</code>/<code>trade_specification</code>, <code>store_id</code> nullable — <code>NULL</code> = shared/global). <code>Trade</code> owns orders and resolves prices via <code>CatalogResolver</code>; see <code>design/store-catalog.md</code>.</p>
+</blockquote>
 <h2 id="tech-stack">Tech Stack<a class="headerlink" href="#tech-stack" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2898,7 +3138,7 @@
 <li><strong>Invoice-based payment framework</strong>: Gateway abstraction (mock/wallet/wechat), webhooks, provider-agnostic invoice events</li>
 <li><strong>WeChat integration</strong>: Mini Program and Official Account login, WeChat Pay V3 gateway, WechatUser entity (OneToOne→User)</li>
 <li><strong>System introspection</strong>: Entity metadata and route export via <code>/system/*</code> endpoints</li>
-<li><strong>Atomic wallet transfers</strong>: Deadlock prevention, optimistic locking, idempotency</li>
+<li><strong>Atomic wallet transfers</strong>: Deadlock prevention, pessimistic locking (<code>SELECT ... FOR UPDATE</code>) + manual <code>version</code> counter, idempotency</li>
 <li><strong>Token rotation with reuse detection</strong>: Refresh tokens hashed (HMAC-SHA256), rotated on use</li>
 </ul>
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
@@ -2917,9 +3157,14 @@
 </code></pre></div>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><a href="design/system-architecture/">Design Contracts</a></strong> -- System architecture rules, API design, data model, controller contract</li>
-<li><strong><a href="design/bundles/core/">Bundles</a></strong> -- Per-module design documents (Core, Common, Trade, Wallet, Identity)</li>
-<li><strong><a href="/api/doc">API Docs</a></strong> -- Interactive Swagger UI (when running)</li>
+<li><strong><a href="manual/">Development Manual</a></strong> — Setup, architecture, testing, deployment, and runbooks</li>
+<li><strong><a href="design/system-architecture/">Design Contracts</a></strong> — System architecture, API, data-model, controller, and cross-cutting contracts</li>
+<li><strong><a href="design/bundles/core/">Bundles</a></strong> — Per-module design (Core, Common, Trade, Store, Inventory, Payment, Wallet, Promotion, Storage, Authorization, Settlement, Exchange, etc.)</li>
+<li><strong><a href="design/security-hardening/">Security Hardening</a></strong> &amp; <strong><a href="design/extension-points/">Extension Points</a></strong></li>
+<li><strong><a href="testing/crud-skeleton-production/">Testing &amp; Production Validation</a></strong> — Evidence, matrix, and production readiness</li>
+<li><strong><a href="ai/context/">AI Context</a></strong> — Whole-repo map + operational status</li>
+<li><strong><a href="openapi/order-payment-flow/">Order &amp; Payment Flow</a></strong> — Consumer API workflow</li>
+<li><strong><a href="/api/doc">API Docs</a></strong> — Swagger UI (when running) and <code>openapi/endpoints.yaml</code></li>
 </ul>
 <h2 id="quality-checks">Quality Checks<a class="headerlink" href="#quality-checks" title="Permanent link">&para;</a></h2>
 <p>Use PHP 8.4 or newer, then run the checks enforced by CI:</p>

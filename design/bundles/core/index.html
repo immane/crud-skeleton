@@ -1106,6 +1106,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../naming-convention/" class="md-nav__link">
         
   
@@ -1812,6 +1868,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2977,9 +3089,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2993,7 +3123,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3632,10 +3862,9 @@ It provides the controller base class, CRUD service abstraction, dynamic query e
 </tbody>
 </table>
 <h3 id="411-identifier-lookup-contract">4.1.1 Identifier Lookup Contract<a class="headerlink" href="#411-identifier-lookup-contract" title="Permanent link">&para;</a></h3>
-<p><code>get()</code> is the common lookup facade. The current implementation resolves scalar values
-through the local primary key. The following is the target compatibility contract for
-the UUID-aware implementation; it must be covered by Core regression tests before code
-changes are released:</p>
+<p><code>get()</code> is the common lookup facade for the mandatory local integer ID and an optional
+mapped UUID. Core CRUD routes keep <code>{id}</code> as the route parameter and pass either form
+to this method:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">$service-&gt;get(123);                  // local integer primary key</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">$service-&gt;get('123');                // local integer primary key, backward compatible</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">$service-&gt;get('canonical-uuid');     // unique uuid field</span>
@@ -3651,10 +3880,10 @@ changes are released:</p>
 <li>The implementation MUST NOT use an "id lookup then UUID fallback" heuristic because
    it is ambiguous and adds unnecessary queries.</li>
 </ol>
-<p>Cross-module services, event consumers, and external API code SHOULD use explicit
-<code>get(['uuid' =&gt; $uuid])</code> or a module-specific <code>getByUuid()</code> convenience method. The
-plain <code>get($uuid)</code> form is available for ergonomic controller/service code, not as an
-authorization shortcut.</p>
+<p>Cross-module services and event consumers MUST use explicit UUID criteria or a
+module-specific <code>getByUuid()</code> convenience method. Client-facing Core CRUD routes may
+use the plain <code>get($identifier)</code> form because the route accepts exactly one unambiguous
+numeric ID or UUID. Neither form is an authorization shortcut.</p>
 <h3 id="42-dynamic-query-pipeline-list-method">4.2 Dynamic Query Pipeline (<code>list()</code> method)<a class="headerlink" href="#42-dynamic-query-pipeline-list-method" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>request params
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  -&gt; @dql         (DQL WHERE sub-clause)
@@ -3727,12 +3956,12 @@ authorization shortcut.</p>
 <tr>
 <td><code>ScopedListApiViewMixin</code></td>
 <td><code>GET /</code></td>
-<td>Collection scoped by a required parent route parameter</td>
+<td>Collection scoped by a required parent route parameter (<code>scopeId</code> as numeric ID or UUID)</td>
 </tr>
 <tr>
 <td><code>ScopedDetailApiViewMixin</code></td>
 <td><code>GET /{id}</code></td>
-<td>Detail scoped by a required parent route parameter</td>
+<td>Detail scoped by a required parent route parameter; <code>scopeId</code> and <code>id</code> each accept numeric ID or UUID</td>
 </tr>
 <tr>
 <td><code>SingleCreateAndUpdateApiViewMixin</code></td>
@@ -3747,7 +3976,7 @@ authorization shortcut.</p>
 <tr>
 <td><code>WorkflowApiViewMixin</code></td>
 <td><code>/todo</code>, <code>/transitions</code>, <code>/do/{*}</code>, <code>/status-reset</code></td>
-<td>State machine ops</td>
+<td>State machine ops by numeric ID or UUID (via <code>mixIdToCommonFilter()</code>)</td>
 </tr>
 <tr>
 <td><code>TransformContent</code></td>

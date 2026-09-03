@@ -1481,6 +1481,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../naming-convention/" class="md-nav__link">
         
   
@@ -1774,6 +1830,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2939,9 +3051,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2955,7 +3085,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3431,15 +3661,16 @@
 <p>Each business domain is a self-contained module under <code>src/</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/{Module}/
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>|-- Controller/
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/              # Public/read-only endpoints
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   |-- Manage/           # Admin CRUD endpoints
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>|-- Entity/               # Domain entities (Doctrine)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|-- Repository/           # Data access (ServiceEntityRepository)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|-- Service/              # Business logic (extends BaseService)
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|-- Exception/            # Module-specific exceptions
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>|-- EventListener/        # Module-specific event subscribers
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|-- Command/              # CLI commands
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|-- Resources/config/     # Module-specific DI configuration
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |-- App/              # Client-facing endpoints (authenticated; may include writes when ownership-scoped)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   |-- Public/           # Anonymous read-only endpoints (when applicable)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>|   |-- Manage/           # Admin CRUD endpoints
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|-- Entity/               # Domain entities (Doctrine)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|-- Repository/           # Data access (ServiceEntityRepository)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>|-- Service/              # Business logic (extends BaseService)
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>|-- Exception/            # Module-specific exceptions
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|-- EventListener/        # Module-specific event subscribers
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|-- Command/              # CLI commands
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|-- Resources/config/     # Module-specific DI configuration
 </code></pre></div>
 <h3 id="21-mandatory-artifacts-per-module">2.1 Mandatory Artifacts per Module<a class="headerlink" href="#21-mandatory-artifacts-per-module" title="Permanent link">&para;</a></h3>
 <table>
@@ -3468,7 +3699,11 @@
 </tr>
 <tr>
 <td>App controller(s)</td>
-<td>Read-only public endpoints</td>
+<td>Client-facing endpoints (authenticated; writes allowed when ownership/authorization-scoped)</td>
+</tr>
+<tr>
+<td>Public controller(s)</td>
+<td>Anonymous read-only endpoints (only for safe public data; optional)</td>
 </tr>
 <tr>
 <td>Manage controller(s)</td>
@@ -3476,6 +3711,17 @@
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Defaults vs. exceptions</strong>: The table is the default for CRUD aggregates
+(Category, Content, Order, Wallet, Store, etc.). Explicit exception
+categories exist for non-CRUD records and are documented in the owning
+bundle doc (<code>docs/design/bundles/*</code>) and <code>docs/design/data-model.md</code> §1.1:
+Inbox/Outbox (append-only + claim, no <code>updatedAt</code>/<code>__toString</code> per record),
+immutable audit / projection / ledger records, join / pivot tables, DTO / value
+objects, and infrastructure records (Messenger, cache). Those records do not
+require a dedicated repository per projection, <code>createdAt/updatedAt</code>, or a
+full CRUD controller set.</p>
+</blockquote>
 <hr />
 <h2 id="3-cross-module-communication-contract">3. Cross-Module Communication Contract<a class="headerlink" href="#3-cross-module-communication-contract" title="Permanent link">&para;</a></h2>
 <h3 id="31-allowed">3.1 Allowed<a class="headerlink" href="#31-allowed" title="Permanent link">&para;</a></h3>
@@ -3539,9 +3785,10 @@
 <li>Interfaces are auto-discovered via <code>services.yaml</code></li>
 </ul>
 <h3 id="34-cross-boundary-identity-contract">3.4 Cross-Boundary Identity Contract<a class="headerlink" href="#34-cross-boundary-identity-contract" title="Permanent link">&para;</a></h3>
-<p>Modules and future services MUST NOT exchange local auto-increment database IDs as
-durable references. Each cross-boundary aggregate exposes a UUID or another explicitly
-documented immutable business key.</p>
+<p>Every persisted entity retains its local integer <code>id</code> primary key. Modules and future
+services MUST NOT exchange that local auto-increment ID as a durable reference. Each
+cross-boundary aggregate exposes a UUID or another explicitly documented immutable
+business key.</p>
 <table>
 <thead>
 <tr>
@@ -3556,7 +3803,7 @@ documented immutable business key.</p>
 </tr>
 <tr>
 <td>Public API route/response</td>
-<td>UUID</td>
+<td>Numeric <code>id</code> or UUID through the Core identifier lookup; UUID is preferred when the aggregate has a durable external identity</td>
 </tr>
 <tr>
 <td>Service interface crossing module boundary</td>
@@ -3576,6 +3823,11 @@ documented immutable business key.</p>
 Doctrine entity, repository, EntityManager, or a local primary key as a durable
 reference. UUID lookup does not grant access; the receiving module still enforces its
 own authorization and ownership rules.</p>
+<p>Core CRUD routes retain <code>{id}</code> as their compatibility parameter name. The parameter
+accepts either a digit-only local ID or a canonical UUID when the entity maps a unique
+<code>uuid</code> field. A request must provide one identifier in the path, never separate <code>id</code>
+and <code>uuid</code> values that could disagree. Digit-only values resolve only as IDs; UUID
+values resolve only as UUIDs; an entity without a UUID field does not accept UUID input.</p>
 <hr />
 <h2 id="4-core-framework-srccore">4. Core Framework (<code>src/Core/</code>)<a class="headerlink" href="#4-core-framework-srccore" title="Permanent link">&para;</a></h2>
 <p>Core provides foundational abstractions. It MUST NOT depend on any business module.</p>

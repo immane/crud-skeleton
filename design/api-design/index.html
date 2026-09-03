@@ -1492,6 +1492,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../extension-points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extension Points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../naming-convention/" class="md-nav__link">
         
   
@@ -1785,6 +1841,62 @@
     
   
     Wallet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
   
 
     
@@ -2950,9 +3062,27 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+    
+    
+    
+    
+      
         
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -2966,7 +3096,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/order-payment-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order & Payment Flow (guide)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../openapi/endpoints.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger UI (live)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3555,9 +3785,9 @@
 <td>HTTP method semantic</td>
 </tr>
 <tr>
-<td>ID in path</td>
-<td><code>/{id}</code> where <code>id</code> is <code>\d+</code></td>
-<td>Direct resource access</td>
+<td>Resource identifier in path</td>
+<td><code>/{id}</code> where <code>id</code> is digits or a canonical UUID</td>
+<td>Core resolves digits as the local ID and UUIDs as the mapped <code>uuid</code> field</td>
 </tr>
 <tr>
 <td>Sub-resources</td>
@@ -3566,6 +3796,11 @@
 </tr>
 </tbody>
 </table>
+<p><code>{id}</code> is the stable Core route parameter name, not a promise that every resource uses
+only a numeric identifier. Clients provide exactly one value: a digit-only local ID or,
+when the resource exposes one, a canonical UUID. Do not add parallel <code>id</code> and <code>uuid</code>
+path/query parameters for the same target. New cross-module integrations and durable
+external references should use UUIDs when available.</p>
 <h3 id="23-special-routes-non-crud">2.3 Special Routes (Non-CRUD)<a class="headerlink" href="#23-special-routes-non-crud" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3589,20 +3824,24 @@
 <tr>
 <td>Workflow transitions</td>
 <td><code>GET /{resource}/{id}/transitions</code></td>
-<td><code>GET /orders/5/transitions</code></td>
+<td><code>GET /orders/5/transitions</code> or <code>GET /orders/{uuid}/transitions</code></td>
 </tr>
 <tr>
 <td>Workflow execute</td>
 <td><code>POST /{resource}/{id}/do/{transition}</code></td>
-<td><code>POST /orders/5/do/confirm</code></td>
+<td><code>POST /orders/5/do/confirm</code> or <code>POST /orders/{uuid}/do/confirm</code></td>
 </tr>
 <tr>
 <td>Workflow reset</td>
 <td><code>PUT /{resource}/{id}/status-reset</code></td>
-<td><code>PUT /orders/5/status-reset</code></td>
+<td><code>PUT /orders/5/status-reset</code> or <code>PUT /orders/{uuid}/status-reset</code></td>
 </tr>
 </tbody>
 </table>
+<p><code>WorkflowApiViewMixin</code> resolves workflow targets through the Core identifier lookup
+(<code>mixIdToCommonFilter()</code>): digit-only values as local <code>id</code>, canonical UUID values
+as <code>uuid</code>, merged with <code>commonFilter()</code> and authorization. It returns <code>404</code> when the
+identifier is not found and <code>403</code> on authorization failure.</p>
 <hr />
 <h2 id="3-http-method-semantics">3. HTTP Method Semantics<a class="headerlink" href="#3-http-method-semantics" title="Permanent link">&para;</a></h2>
 <table>
