@@ -174,8 +174,7 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
             'currency' => 'CNY',
             'items' => [['specificationId' => 1, 'quantity' => 1]],
         ]);
-        // CreateApiViewMixin maps a generic resolution failure to HTTP 500.
-        self::assertResponseStatusCodeSame(500);
+        self::assertResponseStatusCodeSame(404);
         self::assertCount(0, $container->get(TradeOutboxMessageRepository::class)->findUnpublished());
         self::assertCount(0, $container->get(StoreOrderRepository::class)->findAll());
     }

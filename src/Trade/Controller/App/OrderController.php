@@ -9,7 +9,6 @@ use App\Core\View\ApiView;
 use App\Core\View\CreateApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
 use App\Core\View\ListApiViewMixin;
-use App\Core\View\WorkflowApiViewMixin;
 use App\Identity\Entity\User;
 use App\Trade\Entity\Order;
 use App\Trade\Service\OrderServiceInterface;
@@ -25,9 +24,7 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[IsGranted('ROLE_USER')]
 class OrderController extends RestController
 {
-    use ApiView, DetailApiViewMixin, ListApiViewMixin, CreateApiViewMixin, WorkflowApiViewMixin;
-
-    protected string $workflow = 'state_machine.order';
+    use ApiView, DetailApiViewMixin, ListApiViewMixin, CreateApiViewMixin;
 
     /** @var list<string> */
     protected array $requiredCreateProperties = ['items'];
@@ -52,25 +49,6 @@ class OrderController extends RestController
             return ['id' => -1];
         }
         return ['user' => $user];
-    }
-
-    protected function authorizeTransition(string $transition, object $entity): void
-    {
-        if ($entity instanceof Order) {
-            $user = $this->getCurrentUser();
-            if ($user === null || $entity->getUser()?->getId() !== $user->getId()) {
-                throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('Order not found.');
-            }
-        }
-        $this->authorizeApiAction('workflow', $entity);
-    }
-
-    /** @param array<string, mixed>|null $content */
-    protected function beforeTransition(string $transition, object $entity, ?array $content): void
-    {
-        if ($transition === 'cancel' && $entity instanceof Order) {
-            $this->service->cancel($entity);
-        }
     }
 
     /**
@@ -252,6 +230,38 @@ class OrderController extends RestController
     private function cancelLinkedInvoice(Order $order): void
     {
         $this->service->cancel($order);
+    }
+
+    #[Route('/{id}/payment', name: 'payment', methods: ['POST'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function paymentAction(Request $request, int|string $id): Response
+    {
+        $order = $this->service->get($this->mixIdToCommonFilter($id), false);
+
+        if (!$order) {
+            return $this->warning('Order not found.', 404, '', 404);
+        }
+
+        $user = $this->getCurrentUser();
+        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+            return $this->warning('Order not found.', 404, '', 404);
+        }
+
+        if (!$this->orderWorkflow->can($order, 'pay')) {
+            return $this->warning('Order cannot be paid in current status.', 400, '', 400);
+        }
+
+        $content = json_decode($request->getContent(), true) ?: [];
+        $payment = $content['payment'] ?? 'mock';
+        if (!is_string($payment) || $payment === '') {
+            $payment = 'mock';
+        }
+
+        try {
+            $result = $this->service->createPayment($order, $payment, $content);
+            return $this->success($result, 'Payment started');
+        } catch (\Throwable $e) {
+            return $this->warning($e->getMessage(), 400, '', 400);
+        }
     }
 
     #[Route('/{id}/refund', name: 'refund', methods: ['POST'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]

@@ -74,6 +74,8 @@ class OrderController extends RestController
         $content['__totalAmount'] = $result->totalAmount;
         $content['__currency'] = $currency;
         $content['__storeContext'] = $storeContext;
+        $content['__notes'] = $content['notes'] ?? null;
+        $content['__metadata'] = $content['metadata'] ?? null;
 
         return $content;
     }
@@ -94,8 +96,8 @@ class OrderController extends RestController
                 $user,
                 $content['__totalAmount'] ?? 0,
                 $content['__currency'] ?? 'CNY',
-                $content['notes'] ?? null,
-                null,
+                $content['__notes'] ?? null,
+                $content['__metadata'] ?? null,
                 $content['__storeContext'] ?? null,
             );
             return $order;
