@@ -42,12 +42,12 @@ final class StoreContextResolverTest extends TestCase
 
     public function testResolveThrowsWhenStoreIsNotActive(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $store->suspend();
         $repository = $this->createMock(StoreRepository::class);
-        $repository->method('findOneByCode')->with('xuhui')->willReturn($store);
+        $repository->method('findOneByCode')->with('demo')->willReturn($store);
         $requestStack = new RequestStack();
-        $requestStack->push(Request::create('/api/v1/app/orders', 'POST', server: ['HTTP_X_STORE_CODE' => 'xuhui']));
+        $requestStack->push(Request::create('/api/v1/app/orders', 'POST', server: ['HTTP_X_STORE_CODE' => 'demo']));
         $resolver = new StoreContextResolver($requestStack, $repository);
 
         $this->expectException(\RuntimeException::class);
@@ -57,12 +57,12 @@ final class StoreContextResolverTest extends TestCase
 
     public function testResolveBuildsContextWithChannelHeader(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $repository = $this->createMock(StoreRepository::class);
-        $repository->method('findOneByCode')->with('xuhui')->willReturn($store);
+        $repository->method('findOneByCode')->with('demo')->willReturn($store);
         $requestStack = new RequestStack();
         $requestStack->push(Request::create('/api/v1/app/orders', 'POST', server: [
-            'HTTP_X_STORE_CODE' => 'xuhui',
+            'HTTP_X_STORE_CODE' => 'demo',
             'HTTP_X_STORE_CHANNEL' => 'wechat',
         ]));
         $resolver = new StoreContextResolver($requestStack, $repository);
@@ -71,8 +71,9 @@ final class StoreContextResolverTest extends TestCase
 
         self::assertInstanceOf(StoreContext::class, $context);
         self::assertSame($store->getUuid(), $context->storeUuid);
-        self::assertSame('xuhui', $context->storeCode);
-        self::assertSame('Xuhui', $context->storeName);
+        self::assertSame('demo', $context->storeCode);
+        self::assertSame('Demo', $context->storeName);
         self::assertSame('wechat', $context->channel);
+        self::assertSame('CNY', $context->currency);
     }
 }

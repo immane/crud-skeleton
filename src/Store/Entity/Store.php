@@ -38,6 +38,9 @@ class Store
     #[ORM\Column(type: 'string', length: 64)]
     private string $timezone = 'UTC';
 
+    #[ORM\Column(type: 'string', length: 32, options: ['default' => 'CNY'])]
+    private string $currency = 'CNY';
+
     /** @var array<string, mixed>|null */
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $contact = null;
@@ -76,6 +79,7 @@ class Store
     public function getName(): string { return $this->name; }
     public function getStatus(): string { return $this->status; }
     public function getTimezone(): string { return $this->timezone; }
+    public function getCurrency(): string { return $this->currency; }
     /** @return array<string, mixed>|null */
     public function getContact(): ?array { return $this->contact; }
     /** @return array<string, mixed>|null */
@@ -88,6 +92,7 @@ class Store
     public function setName(string $name): self { $this->name = $name; return $this->touch(); }
     public function setCode(string $code): self { $this->code = $code; return $this->touch(); }
     public function setTimezone(string $timezone): self { $this->timezone = $timezone; return $this->touch(); }
+    public function setCurrency(string $currency): self { $this->currency = strtoupper($currency); return $this->touch(); }
     /** @param array<string, mixed>|null $contact */
     public function setContact(?array $contact): self { $this->contact = $contact; return $this->touch(); }
     /** @param array<string, mixed>|null $address */

@@ -65,10 +65,14 @@ final readonly class TradeOrderCreatedHandler
                 throw new \LogicException('Trade order cancellation conflicts with the Store order snapshot.');
             }
 
+            $orderUuid = $payload['orderUuid'] ?? null;
+            if (!is_string($orderUuid) || $orderUuid === '') {
+                throw new \InvalidArgumentException('Trade order event does not include an order UUID.');
+            }
+
             $store = $this->storeRepository->findOneByUuid($storeUuid);
             if ($store === null || !$store->isActive()) {
-                $this->recordRejected($payload, $storeUuid, 'STORE_UNAVAILABLE', 'Store is not available.');
-                return;
+                throw new \RuntimeException('Store is not available.');
             }
 
             $storeOrder = $this->storeOrderService->createFromTradeOrderSnapshot($store, $payload);
@@ -97,23 +101,6 @@ final readonly class TradeOrderCreatedHandler
                 'requestedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
             ]);
         });
-    }
-
-    /** @param array<string, mixed> $payload */
-    private function recordRejected(array $payload, string $storeUuid, string $code, string $reason): void
-    {
-        $orderUuid = $payload['orderUuid'] ?? null;
-        if (!is_string($orderUuid)) {
-            throw new \InvalidArgumentException('Trade order event does not include an order UUID.');
-        }
-        $this->outboxService->record('store.order.rejected.v1', 'trade_order', $orderUuid, [
-            'orderUuid' => $orderUuid,
-            'storeOrderUuid' => null,
-            'storeUuid' => $storeUuid,
-            'reasonCode' => $code,
-            'reason' => $reason,
-            'rejectedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-        ]);
     }
 
     /**

@@ -71,16 +71,11 @@ framework:
                     to: refunded
 
         # ---------------------------------------------------------------------
-        # Order: Trade module with Store handoff and verification
+        # Order: Trade module lifecycle
         # ---------------------------------------------------------------------
         order:
             # State machine for Trade orders. Marking is via Order::getStatus()/setStatus().
             # Supports App\Trade\Entity\Order only. Initial place is `draft` (order created locally, not yet submitted).
-            # Store handoff and verification are gated:
-            #  - store_submit / store_accept / store_reject require StoreContext (X-Store-Code) and StoreSettings.requireAcceptance (default false = auto-accept).
-            #  - request_verification / store_verify require StoreSettings.requireVerification (default false = direct complete).
-            #  - Inventory reservation (awaiting_store_acceptance -> store_accepted via inventory) is gated by INVENTORY_ENABLED (default 0 = immediate accept).
-            # See docs/manual/integration-events.md §6 and src/Store/EventListener/StoreOrderWorkflowGuardListener.php.
             type: 'state_machine'
             marking_store:
                 type: 'method'
@@ -90,10 +85,10 @@ framework:
             initial_marking: draft
             places:
                 # --- Order (core) ---
-                # draft: order created in Trade DB, not yet submitted. Can submit (no store) or store_submit (with store). Can be cancelled directly.
+                # draft: order created in Trade DB, not yet submitted.
                 - draft
 
-                # pending: submitted without store (submit) or waiting for internal confirm after store_accepted. Can be confirmed to `confirmed`.
+                # pending: submitted and waiting for confirmation.
                 - pending
 
                 # confirmed: order confirmed, ready for payment (Invoice creation). Next is pay -> paid.
@@ -102,58 +97,28 @@ framework:
                 # paid: payment succeeded (wallet/gateway). Next is fulfill -> fulfilled.
                 - paid
 
-                # fulfilled: logistics fulfilled, ready for completion or verification. If StoreSettings.requiresVerification, goes to awaiting_store_verification.
+                # fulfilled: logistics fulfilled, ready for explicit completion.
                 - fulfilled
 
-                # completed: order completed (either via direct complete or store_verify). Terminal success, can be refunded.
+                # completed: order completed. Terminal success.
                 - completed
 
-                # cancelled: terminal cancelled. Only draft, pending, and confirmed can be cancelled (business rule) — other states (store handoff, fulfilled, awaiting verification, paid, etc.) must not directly cancel.
+                # cancelled: terminal cancelled. Only draft, pending, and confirmed can be cancelled.
                 - cancelled
 
                 # refunded: terminal refunded from paid (full refund via Payment). Only paid can go to refunded; no further transitions.
                 - refunded
 
-                # --- Store handoff (acceptance) ---
-                # awaiting_store_acceptance: submitted with store (store_submit), waiting for Store to accept/reject. Created via TradeOutbox -> Store Inbox.
-                - awaiting_store_acceptance
-
-                # store_accepted: Store accepted (immediately if INVENTORY_ENABLED=0 or via inventory reservation confirmed). Can be confirmed to `confirmed`.
-                - store_accepted
-
-                # store_rejected: Store rejected (store inactive, validation failed, or inventory rejected). Can be cancelled by the customer or manager.
-                - store_rejected
-
-                # --- Store verification ---
-                # awaiting_store_verification: fulfilled but requires store verification (StoreSettings.requireVerification=true). Waiting for staff verify via POST /store/{scopeId}/orders/{uuid}/verify.
-                - awaiting_store_verification
             transitions:
-                # --- Order: local submission ---
-                # submit: draft -> pending. Local submit without store (no X-Store-Code or StoreSettings auto-accept disabled). Uses standard Trade flow.
+                # submit: draft -> pending.
                 submit:
                     from: draft
                     to: pending
 
-                # --- Trade -> Store: handoff for acceptance ---
-                # store_submit: draft -> awaiting_store_acceptance. With StoreContext (X-Store-Code), creates StoreOrder and emits trade.order.created.v1. Blocked by StoreOrderWorkflowGuardListener when StoreSettings does not require acceptance (order stays draft).
-                store_submit:
-                    from: draft
-                    to: awaiting_store_acceptance
-
-                # store_accept: awaiting_store_acceptance -> store_accepted. Triggered by StoreOrderAcceptedHandler (store.order.accepted.v1) or immediate accept when INVENTORY_ENABLED=0. Guarded by inventory reservation outcome.
-                store_accept:
-                    from: awaiting_store_acceptance
-                    to: store_accepted
-
-                # store_reject: awaiting_store_acceptance -> store_rejected. Triggered by StoreOrderRejectedHandler (store.order.rejected.v1) when store inactive, validation fails, or inventory rejected.
-                store_reject:
-                    from: awaiting_store_acceptance
-                    to: store_rejected
-
                 # --- Order: confirmation & lifecycle ---
-                # confirm: pending/store_accepted -> confirmed. Internal confirmation step before payment. For pending (no store) or store_accepted (with store), moves to confirmed and allows pay.
+                # confirm: pending -> confirmed. Internal confirmation step before payment.
                 confirm:
-                    from: [pending, store_accepted]
+                    from: pending
                     to: confirmed
 
                 # pay: confirmed -> paid. Triggered by OrderService::pay() or Payment InvoicePaidEvent (wallet/gateway). Sets paidAt.
@@ -166,26 +131,15 @@ framework:
                     from: paid
                     to: fulfilled
 
-                # --- Store verification ---
-                # request_verification: fulfilled -> awaiting_store_verification. Triggered when StoreSettings.requireVerification=true after fulfill (via StoreOrderWorkflowGuardListener). Blocks direct complete.
-                request_verification:
-                    from: fulfilled
-                    to: awaiting_store_verification
-
-                # store_verify: awaiting_store_verification -> completed. Triggered by StoreOrderVerifiedHandler (store.order.verified.v1) after staff POST /store/{scopeId}/orders/{uuid}/verify with verificationCode (≤64) and verifiedBy. Guarded to only allow verified completion.
-                store_verify:
-                    from: awaiting_store_verification
-                    to: completed
-
-                # complete: fulfilled -> completed. Direct completion when verification not required (StoreSettings.requireVerification=false). Trade OrderWorkflowListener sets completedAt via status-driven complete.
+                # complete: fulfilled -> completed. Store verification may invoke this normal transition.
                 complete:
                     from: fulfilled
                     to: completed
 
                 # --- Order: terminal ---
-                # cancel: draft/pending/confirmed/store_rejected -> cancelled. Terminal cancellation; triggers inventory release if needed and store cancellation via outbox. Other states must not directly cancel.
+                # cancel: draft/pending/confirmed -> cancelled.
                 cancel:
-                    from: [draft, pending, confirmed, store_rejected]
+                    from: [draft, pending, confirmed]
                     to: cancelled
 
                 # refund: paid -> refunded. Only paid orders can be refunded (business rule). Triggered via OrderService::refund() after Payment refund; fulfilled/completed cannot directly refund.

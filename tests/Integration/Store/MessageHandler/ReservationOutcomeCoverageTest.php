@@ -214,8 +214,7 @@ final class ReservationOutcomeCoverageTest extends IntegrationWebTestCase
         self::assertSame(StoreOrder::STATUS_REJECTED, $stored?->getOperationalStatus());
         self::assertSame('OUT_OF_STOCK', $stored?->getRejectionCode());
         $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
-        self::assertCount(1, $outbox);
-        self::assertSame('store.order.rejected.v1', $outbox[0]->getTopic());
+        self::assertCount(0, $outbox);
     }
 
     public function testRejectionIsIgnoredForUnknownStoreOrder(): void

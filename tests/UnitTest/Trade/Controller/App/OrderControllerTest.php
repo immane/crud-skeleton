@@ -239,7 +239,7 @@ final class OrderControllerTest extends TestCase
         ]));
         $this->injectDependencies($requestStack);
 
-        $this->storeContextResolver->method('resolve')->willReturn(new StoreContext('store-uuid-1', 'STORE01', 'Store One'));
+        $this->storeContextResolver->method('resolve')->willReturn(new StoreContext('store-uuid-1', 'STORE01', 'Store One', 'api', 'USD'));
         $this->service->method('calculatePrices')->willReturn($this->priceResult(2000, 'USD'));
 
         $response = $this->controller->quoteAction($requestStack->getCurrentRequest());

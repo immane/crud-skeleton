@@ -26,23 +26,28 @@ final readonly class StoreOrderVerifiedHandler
         $payload = $message->envelope['payload'] ?? null;
         $orderUuid = is_array($payload) ? ($payload['orderUuid'] ?? null) : null;
         $storeUuid = is_array($payload) ? ($payload['storeUuid'] ?? null) : null;
-        $verificationCode = is_array($payload) ? ($payload['verificationCode'] ?? null) : null;
-        if (!is_string($orderUuid) || !is_string($storeUuid) || !is_string($verificationCode) || trim($verificationCode) === '') {
+        if (!is_string($orderUuid) || !is_string($storeUuid)) {
             throw new \InvalidArgumentException('Invalid store.order.verified.v1 envelope.');
         }
         $order = $this->orderService->get(['uuid' => $orderUuid]);
         if (!$order instanceof Order || ($order->getMetadata()['_store']['uuid'] ?? null) !== $storeUuid) {
             return;
         }
+        if (($order->getMetadata()['_completionMode'] ?? null) !== 'store_verification') {
+            return;
+        }
 
         $this->orderService->wrapInTransaction(function () use ($order): void {
-            // If verification flow enabled, order should be in fulfilled -> awaiting_store_verification -> completed
-            // Auto-move fulfilled -> awaiting_store_verification if needed before store_verify
-            if ($this->workflow->can($order, 'request_verification')) {
-                $this->workflow->apply($order, 'request_verification');
-            }
-            if ($this->workflow->can($order, 'store_verify')) {
-                $this->workflow->apply($order, 'store_verify');
+            $metadata = $order->getMetadata() ?? [];
+            $metadata['_storeVerificationReceived'] = true;
+            $order->setMetadata($metadata);
+            $order->allowCompletionFromStoreVerification();
+            try {
+                if ($this->workflow->can($order, 'complete')) {
+                    $this->workflow->apply($order, 'complete');
+                }
+            } finally {
+                $order->disallowCompletionFromStoreVerification();
             }
         });
     }

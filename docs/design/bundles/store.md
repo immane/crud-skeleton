@@ -1,8 +1,10 @@
 # Store Bundle Design
 
 > **Status: phase 1-3 implemented in the modular monolith.** Store, membership,
-> StoreOrder, Trade/Store Outbox-Inbox, Messenger consumers, and Store acceptance are
-> implemented. Inventory reservation remains an intentionally deferred boundary.
+> StoreOrder, Trade/Store Outbox-Inbox, and Messenger consumers are implemented.
+> Trade workflow is simplified (`draft -> pending -> confirmed -> paid -> fulfilled -> completed`);
+> StoreOrder is a projection created from `trade.order.created.v1` and auto-accepted when
+> `INVENTORY_ENABLED=0`. Inventory reservation remains an intentionally deferred boundary.
 > The Store bundle (`src/Store/`) owns multi-store context, store operations, the
 > store-side order projection, and the Product/Specification catalog (shared/global
 > `Product.store = NULL` and store-private `Product.store = Store`, tables
@@ -39,7 +41,7 @@ The bundle owns:
 - Store request context resolution and validation.
 - The `StoreOrder` projection/aggregate for store acceptance and fulfillment data.
 - Idempotent consumption and publication of Store integration events.
-- The contract by which a store accepts or rejects a Trade order.
+- The contract by which a store fulfills and verifies a Trade order (acceptance removed; fulfillment + verification only).
 - Product and Specification catalog (shared/global and store-private, nullable `store`).
 
 The bundle does not own:
@@ -68,7 +70,7 @@ The first Store phase MUST NOT:
 | Order UUID, line-item amount, total, currency | Trade | Consume immutable snapshot only |
 | Customer payment and refund | Trade + Payment | React to resulting business events only |
 | Store identity and membership | Store | Authoritative |
-| Store acceptance/rejection | Store | Authoritative |
+| Store acceptance (historical, now auto-accept) | Store | Projection only; auto-accept when `INVENTORY_ENABLED=0` |
 | Store fulfillment operations | Store | Authoritative once introduced |
 | Store-specific item eligibility | Store | Validate during acceptance |
 | Inventory reservation | Inventory, future | Request and react; do not own stock ledger |
@@ -132,7 +134,7 @@ PHP-FPM request process:
 The scheduler and worker use the same application image and environment as `app`. This
 keeps the Outbox pattern durable in SQL while making the monolith operationally automatic.
 
-### 2.4 Stable Scalar References
+### 2.5 Stable Scalar References
 
 Cross-boundary references are UUIDs and scalar snapshots, never Doctrine associations.
 
@@ -154,22 +156,18 @@ and generic; Trade MUST NOT import Store entities, repositories, or services.
 
 | Area | Required target change | Reason |
 |---|---|---|
-| Trade order workflow | Add `awaiting_store_acceptance`, `store_accepted`, and `store_rejected` places/transitions | Prevent payment before store acceptance |
-| Trade order creation | Persist server-generated store snapshot and a `trade.order.created.v1` outbox event | Start asynchronous Store processing |
-| Trade payment entry | Permit payment only after `store_accepted` | Avoid payment for unavailable stock/store |
+| Trade order workflow | Simplified: `draft -> pending -> confirmed -> paid -> fulfilled -> completed` (no Store acceptance states) | Store is a projection; payment is not gated on Store acceptance |
+| Trade order creation | Persist server-generated Store snapshot (`_store`, `_completionMode`) and always emit `trade.order.created.v1` when a `StoreContext` exists | Start asynchronous Store projection; `TradeOrder` always enters `pending` |
+| Trade payment entry | No Store gate; standard Trade payment eligibility applies | Store no longer blocks payment |
+| Trade completion guard | Enforce `fulfilled -> completed` only via `OrderCompletionGuardListener` / `OrderVerificationCompletionListener` when `_completionMode=store_verification` | Immutable verification requirement per order |
 | Trade outbox relay | Publish versioned integration events | Decouple publisher from Store consumer |
 | Identity User identity | Add a unique User UUID before Store persists or publishes user references | Prevent Store from depending on `users.id` |
 | Root routing/DI | Register Store controllers and Store service configuration | Compose the new bundle |
 
-The implemented Store-scoped workflow is `draft -> awaiting_store_acceptance ->
-store_accepted -> confirmed -> paid -> fulfilled -> completed`. Store rejection follows
-`awaiting_store_acceptance -> store_rejected -> cancelled`. Non-Store orders retain the
-existing Trade workflow.
+The implemented Trade workflow is `draft -> pending -> confirmed -> paid -> fulfilled -> completed` for both store and non-store orders. There are no `awaiting_store_acceptance`, `store_accepted`, or `store_rejected` places. `Trade/Service/OrderService::createOrder` always applies `submit` (`draft -> pending`) when a `StoreContext` exists and always writes a `trade.order.created.v1` outbox row (see §6.3).
 
 The current context transport is `X-Store-Code`, resolved only against an active Store
-by `StoreContextResolver`. A Store-scoped App order returns `202`. The Trade-order
-consumer currently auto-accepts eligible active Stores; Inventory reservation is the
-future decision boundary.
+by `StoreContextResolver`. A Store-scoped App order creates a `pending` Trade order (HTTP `201`) and the Store consumer auto-accepts eligible active Stores when `INVENTORY_ENABLED=0`; inventory reservation is the future decision boundary. When the Store is unavailable (not found / not active) the consumer throws `RuntimeException` to trigger Messenger retry/DLQ.
 
 ### 3.1 Store Context At The Trade Entry Point
 
@@ -184,9 +182,24 @@ final readonly class StoreContext
         public string $storeCode,
         public string $storeName,
         public string $channel,
+        public bool $requireVerification = false,
     ) {}
+
+    /** @return array{uuid: string, code: string, name: string, channel: string, requireVerification: bool} */
+    public function toSnapshot(): array
+    {
+        return [
+            'uuid' => $this->storeUuid,
+            'code' => $this->storeCode,
+            'name' => $this->storeName,
+            'channel' => $this->channel,
+            'requireVerification' => $this->requireVerification,
+        ];
+    }
 }
 ```
+
+Resolved by `Store/Service/StoreContextResolver` from `StoreSettings::from($store->getSettings())->requireVerification`.
 
 The Store bundle implements the resolver. Trade consumes only the resolved scalar data.
 The exact location mechanism may be one of:
@@ -209,17 +222,24 @@ Trade stores a historical display snapshot under a reserved metadata key:
 {
   "_store": {
     "uuid": "store-uuid",
-    "code": "shanghai-xuhui",
-    "name": "Xuhui Store",
-    "channel": "mini_program"
-  }
+    "code": "shanghai-demo",
+    "name": "Demo Store",
+    "channel": "mini_program",
+    "requireVerification": false
+  },
+  "_completionMode": "manual",
+  "_storeVerificationReceived": true
 }
 ```
+
+- `_store.requireVerification` — snapshot of `Store.settings.fulfillment.requireVerification` at order creation time (immutable per order). Also carried in `trade.order.created.v1` `store.requireVerification` and persisted as `StoreOrder.verificationRequired` (see §5.3). Live `Store.settings` changes do **not** affect inflight orders.
+- `_completionMode` — `manual` (default) or `store_verification`. Snapshotted by `Trade/Service/OrderService` as `storeContext->requireVerification ? 'store_verification' : 'manual'`. Enforced by `Trade/EventListener/OrderCompletionGuardListener` (blocks `complete` unless `allowCompletionFromStoreVerification`) and `Trade/EventListener/OrderVerificationCompletionListener` / `Trade/MessageHandler/StoreOrderVerifiedHandler`.
+- `_storeVerificationReceived` — optional boolean flag set by `StoreOrderVerifiedHandler` when `store.order.verified.v1` arrives. If the Trade order is not yet `fulfilled`, the flag is stored and `OrderVerificationCompletionListener` auto-completes after `fulfill` (out-of-order handling).
 
 The snapshot is written by trusted server code only. It is useful for audit and order
 display, but it is not a query, authorization, or integrity boundary. `StoreOrder` is
 the Store-side authoritative record, and the integration event carries the same
-immutable snapshot.
+immutable snapshot. `TradeOrder.metadata` is the authoritative completion-mode source; `StoreOrder` stores the Store-side `verificationRequired` snapshot.
 
 ---
 
@@ -247,11 +267,11 @@ src/Store/
 |   `-- StoreConsumedEvent.php
 |-- Event/
 |   |-- TradeOrderCreatedV1.php             # Deserialized integration contract
-|   |-- StoreOrderAcceptedV1.php
-|   `-- StoreOrderRejectedV1.php
-|-- EventListener/
-|   |-- TradeOrderCreatedConsumer.php
-|   `-- ReservationListener.php    # Future adapter boundary
+|   `-- StoreOrderVerifiedV1.php            # Store verification event (accepted/rejected removed)
+|-- MessageHandler/
+|   |-- TradeOrderCreatedHandler.php        # trade.order.created.v1 -> StoreOrder (auto-accept)
+|   |-- TradeOrderCancelledHandler.php
+|   `-- Reservation*.php                    # Future inventory adapter boundary
 |-- Exception/
 |   |-- StoreContextNotFoundException.php
 |   |-- StoreOrderConflictException.php
@@ -269,14 +289,11 @@ src/Store/
 |   |-- StoreContextResolver.php
 |   |-- MembershipService.php
 |   |-- MembershipServiceInterface.php
-|   |-- StoreOrderService.php
+|   |-- StoreOrderService.php               # fulfill + verify (accept/reject removed)
 |   |-- StoreOrderServiceInterface.php
-|   |-- StoreOrderDecisionService.php
-|   |-- Outbox/
-|   |   |-- OutboxPublisherInterface.php
-|   |   `-- StoreOutboxPublisher.php
-|   `-- Consumer/
-|       `-- TradeOrderCreatedConsumer.php
+|   |-- StoreOutboxService.php
+|   |-- StoreOutboxServiceInterface.php
+|   `-- StoreSettings.php                   # DTO for fulfillment.requireVerification
 `-- Resources/config/
     `-- services_store.yaml
 ```
@@ -313,33 +330,32 @@ Rules:
 - `closed` stores cannot be selected for new orders.
 - Historical orders use snapshots, so Store deletion is forbidden; closure is a status.
 
-#### 5.1.1 Store Settings Schema (optional flows, default `false`)
+#### 5.1.1 Store Settings Schema (single flow, default `false`)
 
-`settings` is validated by `Manage/StoreController::validateStoreSettings` and parsed by `Store/DTO/StoreSettings` (`StoreSettingsResolver`). Unknown keys are tolerated for forward compatibility.
+`settings` is validated by `Store/Resources/JsonSchema/StoreSettings.json` (via `Manage/StoreController` + `Core/Validator/JsonSchemaValidator`) and parsed by `Store/DTO/StoreSettings`. Unknown top-level keys are tolerated for forward compatibility. Only fulfillment verification remains; `order.requireAcceptance` has been removed.
 
 ```json
 {
-  "order": { "requireAcceptance": false },
   "fulfillment": { "requireVerification": false }
 }
 ```
 
 | Key | Type | Default | Effect |
 |---|---|---|---|
-| `order.requireAcceptance` | `bool` | `false` | `true` → Trade order with `X-Store-Code` must `draft --store_submit--> awaiting_store_acceptance` and await `store.order.accepted/rejected.v1`. `false` → draft stays inline (`draft --submit--> pending` is allowed), `_store` snapshot is still kept, no Trade outbox `trade.order.created.v1` is emitted. Guard: `Store/EventListener/StoreOrderWorkflowGuardListener` blocks `store_submit` when disabled and blocks `submit` when enabled + hasStore. |
-| `fulfillment.requireVerification` | `bool` | `false` | `true` → Trade `fulfilled --request_verification--> awaiting_store_verification --store_verify--> completed` via `store.order.verified.v1`. Guard blocks direct `complete` and requires `request_verification`+`store_verify`. `false` → `fulfilled --complete--> completed` directly. `Trade/EventListener/OrderWorkflowListener` is status-driven for `completed` so it does not hard-code `store_verify`. |
+| `fulfillment.requireVerification` | `bool` | `false` | `false` → Trade `fulfilled --complete--> completed` directly (`_completionMode=manual`). `true` → Trade `fulfilled` can only `complete` via Store verification (`_completionMode=store_verification`). `StoreOrder.verificationRequired` is snapshotted at creation; Trade completion is gated by `Trade/EventListener/OrderCompletionGuardListener` (blocks `complete` unless `Order::allowCompletionFromStoreVerification()` has been called) and `Trade/EventListener/OrderVerificationCompletionListener` (auto-completes after `fulfill` if `_storeVerificationReceived=true`). Store side: `POST /store/{scopeId}/orders/{uuid}/verify` (`StoreOrderService::verify` → `store.order.verified.v1` → `Trade/MessageHandler/StoreOrderVerifiedHandler`). |
 
 Validation:
 
-- `settings` must be `object|null`; `order`/`fulfillment` must be `object|null`.
-- `requireAcceptance` / `requireVerification` must be `bool` when present.
-- `null` or missing `settings` is treated as both `false` (legacy stores). Change is immediate; inflight `fulfilled` orders whose Store flips to `true` will be blocked on next `complete` and must go through `request_verification`.
+- `settings` must be `object|null`; `fulfillment` must be `object|null` when present.
+- `fulfillment.requireVerification` must be `bool` when present.
+- `null` or missing `settings` is treated as `false` (legacy stores).
+- The value is **snapshotted per order** into `TradeOrder.metadata._store.requireVerification`, `TradeOrder.metadata._completionMode`, and `StoreOrder.verificationRequired` at `trade.order.created.v1` time. Changing `Store.settings` after order creation does **not** affect inflight orders (immutable per-order verification requirement).
 
-Example — enable both flows:
+Example — enable verification:
 
 ```bash
 curl -X PUT http://localhost:8080/api/v1/manage/stores/{uuid} \
-  -H "Content-Type: application/json" -d '{"settings":{"order":{"requireAcceptance":true},"fulfillment":{"requireVerification":true}}}'
+  -H "Content-Type: application/json" -d '{"settings":{"fulfillment":{"requireVerification":true}}}'
 ```
 
 #### 5.1.2 Store Address / Contact Schemas (standardized via JSON Schema)
@@ -357,7 +373,7 @@ protected array $jsonSchemas = [
 
 - **`StoreAddress.json`** — `province/city/district/street/detail/building/floor/postalCode/formattedAddress` (strings, `maxLength`), `latitude [-90,90]` + `longitude [-180,180]` (`number`) with `dependencies: latitude↔longitude`, `geohash` regex, `poiId`; `type: object`, `additionalProperties:false`, `null` skipped (field is nullable). Extra keys → `400`.
 - **`StoreContact.json`** — `phone/managerPhone` regex, `email/managerEmail` `format:email`, `managerUserUuid` `format:uuid`, `wechat/serviceHours`; `additionalProperties:false`.
-- **`StoreSettings.json`** — as above, top-level `additionalProperties:true` for forward compat, inner `order`/`fulfillment` `additionalProperties:false`.
+- **`StoreSettings.json`** — `fulfillment.requireVerification` (`bool`, default `false`); top-level `additionalProperties:true` for forward compat, inner `fulfillment` `additionalProperties:false`. No `order` key; `order.requireAcceptance` was removed.
 
 All `json` columns remain nullable; the schemas provide the **API contract** while preserving the current `1w`-store `json` storage and `Cache`-based distance calculation (no `latitude/longitude` columns yet). Violations throw `JsonSchemaViolationException` → `400`.
 
@@ -409,9 +425,9 @@ It is not a second commercial order.
 | `rejectedAt` | datetime_immutable nullable | No | Store rejection time |
 | `fulfillmentData` | json nullable | No | Pickup/delivery/assignment data, Store-owned |
 | `reservationId` | string(64) nullable | No | Future inventory reservation reference |
-| `verifiedAt` | datetime_immutable nullable | No | Store verification time (when `settings.fulfillment.requireVerification=true`, set by `POST /store/{scopeId}/orders/{uuid}/verify`) |
+| `verificationRequired` | bool | Yes | Immutable snapshot of `settings.fulfillment.requireVerification` at projection time (from `trade.order.created.v1` `store.requireVerification`). Default `false`. Controls whether `verify` is allowed. |
+| `verifiedAt` | datetime_immutable nullable | No | Store verification time (set by `POST /store/{scopeId}/orders/{uuid}/verify`; requires `verificationRequired=true` and `operationalStatus=fulfilled`) |
 | `verifiedBy` | string(36) nullable | No | Verifying staff `userUuid` (audit) |
-| `verificationCode` | string(64) nullable | No | Client-supplied verification code (e.g. pickup/核销码, audit) |
 | `createdAt` | datetime_immutable | Yes | Projection creation time |
 | `updatedAt` | datetime_immutable nullable | No | Last update |
 
@@ -432,17 +448,22 @@ violation, not a Store-side repricing opportunity.
 
 | Status | Meaning | Owner |
 |---|---|---|
-| `pending_validation` | Event received; Store checks eligibility | Store |
-| `awaiting_inventory` | Store validated; reservation pending | Store/Inventory integration |
-| `accepted` | Store can fulfill order; acceptance event emitted | Store |
-| `rejected` | Store cannot fulfill order; rejection event emitted | Store |
+| `pending_validation` | Event received; Store checks eligibility (transient, immediately accepted when `INVENTORY_ENABLED=0`) | Store |
+| `awaiting_inventory` | Store validated; reservation pending (only when `INVENTORY_ENABLED=1`) | Store/Inventory integration |
+| `accepted` | Projection accepted (auto-accepted when `INVENTORY_ENABLED=0`); Store can fulfill | Store |
+| `rejected` | Reserved for future inventory rejection path only | Store |
 | `fulfillment_pending` | Commercial payment complete; Store may prepare work | Store |
 | `fulfilling` | Store is actively preparing/dispatching | Store |
 | `fulfilled` | Store reports local fulfillment complete | Store |
+| `verified` | Store verification completed (`fulfilled -> verified` via `POST .../verify`); emits `store.order.verified.v1` | Store |
 | `cancelled` | Store operation stopped after Trade cancellation | Store |
 
-The Store workflow MUST NOT use `paid`, `refunded`, or `completed` as its own state
-names. Those remain Trade commercial states.
+Notes:
+
+- In the current simplified coupling, `pending_validation -> accepted` is auto-applied by `Store/MessageHandler/TradeOrderCreatedHandler` when `INVENTORY_ENABLED=0`. No `store.order.accepted.v1` / `rejected.v1` is emitted.
+- When `verificationRequired=true`, the only Store verification transition is `fulfilled -> verified`. Verification is checked against the immutable `StoreOrder.verificationRequired` snapshot, not live `Store.settings`.
+- The Store workflow MUST NOT use `paid`, `refunded`, or `completed` as its own state
+  names. Those remain Trade commercial states.
 
 ### 5.5 Outbox And Inbox Entities
 
@@ -454,7 +475,7 @@ names. Those remain Trade commercial states.
 |---|---|---|
 | `id` | bigint | Internal sequence |
 | `eventId` | string(36), unique | Globally unique event identifier |
-| `topic` | string(120) | e.g. `store.order.accepted.v1` |
+| `topic` | string(120) | e.g. `store.order.verified.v1` (accepted/rejected removed) |
 | `aggregateType` | string(80) | `store_order` |
 | `aggregateId` | string(64) | StoreOrder UUID |
 | `payload` | json | Event envelope/payload, safe to serialize |
@@ -486,80 +507,65 @@ business unique key on `StoreOrder.tradeOrderUuid` remains mandatory defense in 
 
 ### 6.1 Target States
 
-Trade `order` workflow now carries two **optional** Store flows controlled by `Store.settings` (both `false` by default). See `config/packages/workflow.yaml`.
-
-**A. Store acceptance (pre-confirm) — `order.requireAcceptance`**
+Trade `order` workflow is intentionally simple and does **not** carry a Store acceptance branch. See `config/packages/workflow.yaml` and `src/Trade/Entity/Order.php`.
 
 ```text
-# when requireAcceptance = false (default) — order stays draft/pending like a plain order
-# Store snapshot still kept in metadata, no outbox, no StoreOrder is strictly required
-draft -> pending -> confirmed -> paid -> fulfilled -> completed -> refunded
-
-# when requireAcceptance = true
-draft -> awaiting_store_acceptance -> store_accepted -> confirmed -> paid ...
-awaiting_store_acceptance -> store_rejected -> cancelled
-awaiting_store_acceptance -> cancelled (timeout or customer cancellation)
-store_accepted -> cancelled (before payment)
+draft -> pending -> confirmed -> paid -> fulfilled -> completed
+draft -> cancelled
+pending -> cancelled
+confirmed -> cancelled
+paid -> refunded
+fulfilled -> completed
+fulfilled -> cancelled
 ```
 
-Guard: `Store/EventListener/StoreOrderWorkflowGuardListener` blocks `store_submit` when
-`requireAcceptance=false` and blocks `submit` when `true + hasStore`. `Trade/Service/OrderService::createOrder` emits `trade.order.created.v1` **only** when `store_submit` is actually taken.
+- There are no `awaiting_store_acceptance`, `store_accepted`, `store_rejected`, `awaiting_store_verification`, `store_submit`, `store_accept`, `store_reject`, `request_verification`, or `store_verify` places/transitions.
+- `Trade/Service/OrderService::createOrder` always applies `submit` (`draft -> pending`) when a `StoreContext` is present, persists `_store` + `_completionMode` into `metadata` (see §3.2), and always writes a `trade.order.created.v1` outbox row.
+- Store verification does **not** introduce workflow states; it gates the existing `fulfilled -> completed` transition via guards (see below).
 
-**B. Store verification (post-fulfill) — `fulfillment.requireVerification`**
+**Store verification completion (single optional flow) — `fulfillment.requireVerification`**
 
-```text
-# when requireVerification = false (default)
-paid -> fulfilled --complete--> completed
+| `fulfillment.requireVerification` | `metadata._completionMode` | Trade completion behavior |
+|---|---|---|
+| `false` (default) | `manual` | `fulfilled --complete--> completed` directly. No Store verification required. |
+| `true` | `store_verification` | `fulfilled --complete--> completed` only when `Order::isCompletingFromStoreVerification()=true`. Direct `complete` is blocked by `Trade/EventListener/OrderCompletionGuardListener`. Verification fact arrives via `store.order.verified.v1` → `Trade/MessageHandler/StoreOrderVerifiedHandler` (sets `_storeVerificationReceived=true` and calls `allowCompletionFromStoreVerification()` → `workflow->apply(complete)`). Out-of-order case: if `verified.v1` arrives before `fulfilled`, the handler stores `_storeVerificationReceived` and `Trade/EventListener/OrderVerificationCompletionListener` auto-completes right after `fulfill`. |
 
-# when requireVerification = true
-paid -> fulfilled --request_verification--> awaiting_store_verification --store_verify--> completed
-fulfilled/cancel & awaiting_store_verification/cancel also allowed
-```
+Store side: `POST /store/{scopeId}/orders/{uuid}/verify` (no `verificationCode`; UUID is the verification token) checks `StoreOrder.isVerificationRequired()` (immutable snapshot) and `operationalStatus=fulfilled`, then transitions `fulfilled -> verified` and emits `store.order.verified.v1` with `verifiedBy/verifiedAt`.
 
-Guard blocks direct `complete` and requires `request_verification`+`store_verify` when enabled.
-Store side: `POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}` (`StoreOrderService::verify` → `store.order.verified.v1` → `Trade/MessageHandler/StoreOrderVerifiedHandler` applies `request_verification` then `store_verify`). `Trade/EventListener/OrderWorkflowListener` sets `completedAt`/dispatches `OrderCompletedEvent` status-driven so it does not hard-code `store_verify`.
+Invariants:
 
-Invariants (when the corresponding flag is `true`):
-
-1. Trade emits `trade.order.created.v1` only after it has an immutable order UUID and
-   Store snapshot.
-2. A payment invoice cannot be created or paid before Store acceptance.
-3. A Store rejection or acceptance timeout makes the commercial order terminally
-   cancelled before payment.
-4. Store acceptance/rejection/verification consumers are idempotent.
-5. When `requireVerification=true`, `fulfilled` cannot `complete` without Store verification.
+1. Trade always emits `trade.order.created.v1` when a `StoreContext` exists, after it has an immutable order UUID and Store snapshot (including `requireVerification`).
+2. Payment is **not** gated on Store state. `pending -> confirmed -> paid` proceeds normally.
+3. Store projection is eventual; `TradeOrderCreatedHandler` auto-accepts (`pending_validation -> accepted`) when `INVENTORY_ENABLED=0`.
+4. Verification consumers are idempotent (`StoreConsumedEvent` + `workflow.can()` checks + store-uuid match).
+5. When `_completionMode=store_verification`, `fulfilled` cannot `complete` without the Store verification flag (`OrderCompletionGuardListener` + `OrderVerificationCompletionListener`).
 
 ### 6.2 Payment Gate
 
-The Trade payment service checks `order.status` is payment-eligible. Payment endpoints
-MUST return a conflict response while an order is awaiting Store acceptance. This is a
-business gate, not a UI convention.
+No Store gate exists. The Trade payment service checks standard `order.status` eligibility (`pending`, `confirmed`, etc.). Payment endpoints do **not** return a conflict for Store-scoped orders awaiting any Store step. This was changed when `awaiting_store_acceptance` was removed.
 
 ### 6.3 Order Creation Response
 
-When `settings.order.requireAcceptance=false` (default), `POST /api/v1/app/orders` with
-`X-Store-Code` returns `201` `Order created` and the order stays in `draft` (no Store
-outbox). Only when `requireAcceptance=true` does the Trade outbox emit
-`trade.order.created.v1` and the API return `202`:
+`POST /api/v1/app/orders` with `X-Store-Code` always creates a `pending` order and returns `201` `Order created` (even for Store-scoped orders). A `trade.order.created.v1` outbox row is always written when `StoreContext` exists:
 
 ```json
 {
   "data": {
     "orderUuid": "trade-order-uuid",
-    "status": "awaiting_store_acceptance",
+    "status": "pending",
     "store": {
       "uuid": "store-uuid",
-      "name": "Xuhui Store"
+      "name": "Demo Store"
     }
   },
-  "code": 202,
-  "message": "Order submitted for store acceptance"
+  "code": 201,
+  "message": "Order created"
 }
 ```
 
-Similarly `paid --complete--> completed` is direct when
-`settings.fulfillment.requireVerification=false`; with `true` the client must drive
-`fulfilled --request_verification--> awaiting_store_verification --store_verify--> completed` via Store verification (see §7.6). The client polls the order detail endpoint; a `202` does not mean stock is available.
+The Store projection is created asynchronously; the client polls `GET /api/v1/app/store-orders/{uuid}` or the Trade order detail endpoint. Store availability does not affect the HTTP status; unavailable Store handling is via async retry/DLQ (see §8.1).
+
+For completion: `fulfilled --complete--> completed` is direct when `fulfillment.requireVerification=false` (`_completionMode=manual`). When `true` (`_completionMode=store_verification`), the client/staff must trigger `POST /store/{scopeId}/orders/{uuid}/verify` and the Trade order auto-completes on `store.order.verified.v1` (see §7.5 and §8.1).
 
 ---
 
@@ -598,16 +604,17 @@ Rules:
 
 **Publisher:** Trade outbox relay after order creation commits.
 
-**Consumer:** Store `TradeOrderCreatedConsumer`.
+**Consumer:** Store `TradeOrderCreatedHandler` (`Store/MessageHandler/TradeOrderCreatedHandler`).
 
 ```json
 {
   "orderUuid": "trade-order-uuid",
   "store": {
     "uuid": "store-uuid",
-    "code": "shanghai-xuhui",
-    "name": "Xuhui Store",
-    "channel": "mini_program"
+    "code": "shanghai-demo",
+    "name": "Demo Store",
+    "channel": "mini_program",
+    "requireVerification": false
   },
   "customerUserUuid": "identity-user-uuid",
   "currency": "CNY",
@@ -627,15 +634,14 @@ Rules:
 }
 ```
 
+- `store.requireVerification` is the snapshot of `Store.settings.fulfillment.requireVerification` at order creation (see §3.2, §5.1.1, §6.1). Store persists it as `StoreOrder.verificationRequired`; Trade persists it as `metadata._store.requireVerification` and derives `metadata._completionMode`.
+
 The event is a historical placement snapshot. Store does not re-read Trade tables to
 complete the payload.
 
-### 7.3 `store.order.accepted.v1`
+### 7.3 `store.order.accepted.v1` — Removed
 
-**Publisher:** Store, after local validation and the future inventory reservation
-contract succeed.
-
-**Consumer:** Trade order decision consumer.
+> **Removed in the simplified coupling.** The Store no longer emits `store.order.accepted.v1`. `StoreOrder` is auto-accepted synchronously in `Store/MessageHandler/TradeOrderCreatedHandler` when `INVENTORY_ENABLED=0`; when `INVENTORY_ENABLED=1` it enters `awaiting_inventory` and future inventory confirms it. No `store_accept` workflow transition exists. Historical payload for reference:
 
 ```json
 {
@@ -647,28 +653,11 @@ contract succeed.
 }
 ```
 
-Trade applies the `store_accept` transition only when the event store UUID matches the
-server-written order snapshot and the order is awaiting Store acceptance. Duplicates
-are no-ops.
+### 7.4 `store.order.rejected.v1` — Removed
 
-### 7.4 `store.order.rejected.v1`
+> **Removed in the simplified coupling.** The Store no longer emits `store.order.rejected.v1`. Rejection reasons below are retained only as a future inventory-rejection vocabulary; Trade does not consume a Store rejection event and does not transition to `cancelled` from a Store event.
 
-**Publisher:** Store, when validation or inventory reservation cannot succeed.
-
-**Consumer:** Trade order decision consumer.
-
-```json
-{
-  "orderUuid": "trade-order-uuid",
-  "storeOrderUuid": "store-order-uuid",
-  "storeUuid": "store-uuid",
-  "reasonCode": "OUT_OF_STOCK",
-  "reason": "One or more items are unavailable.",
-  "rejectedAt": "2026-07-24T12:01:00+00:00"
-}
-```
-
-Allowed `reasonCode` values begin with:
+Previously allowed `reasonCode` values:
 
 | Code | Meaning |
 |---|---|
@@ -680,25 +669,24 @@ Allowed `reasonCode` values begin with:
 | `ACCEPTANCE_TIMEOUT` | Store decision did not arrive before the Trade deadline |
 | `SYSTEM_ERROR` | Retry budget exhausted; operator action required |
 
-Trade transitions the unpaid order to cancellation and records a user-safe reason. It
-does not expose internal exception details.
-
 ### 7.5 Implemented Verification Event
 
-**`store.order.verified.v1`** (Store → Trade) is implemented when `settings.fulfillment.requireVerification=true`.
+**`store.order.verified.v1`** (Store → Trade) is implemented when the order's snapshotted `verificationRequired=true` (i.e. `Store.settings.fulfillment.requireVerification=true` at order creation time, `metadata._completionMode=store_verification`).
 
 ```json
 {
   "orderUuid": "trade-order-uuid",
   "storeOrderUuid": "store-order-uuid",
   "storeUuid": "store-uuid",
-  "verificationCode": "PICKUP-OTP-123",
   "verifiedBy": "staff-user-uuid",
   "verifiedAt": "2026-09-03T08:00:00+00:00"
 }
 ```
 
-Published by `Store/Service/StoreOrderService::verify()` via `store_outbox_message`. `PublishOutbox` routes it as `StoreOrderVerifiedMessage` to `Trade/MessageHandler/StoreOrderVerifiedHandler`, which (inside one transaction) applies Trade `request_verification` if still in `fulfilled`, then `store_verify` to `completed`. Audit fields are `verifiedAt/verifiedBy/verificationCode` on `store_order` (see §5.3). Idempotent: `StoreOrderVerifiedHandler` checks store-uuid match and `workflow.can()`.
+- No `verificationCode`. Verification uses the order UUID as the verification token: `POST /store/{scopeId}/orders/{uuid}/verify` takes no body (empty JSON `{}` accepted). The controller resolves the StoreOrder by UUID and verifies membership scope.
+- Preconditions in `Store/Service/StoreOrderService::verify()`: `isVerificationRequired()=true` and `operationalStatus=fulfilled`; otherwise `LogicException`. On success transitions `fulfilled -> verified` (`StoreOrder::verify()` sets `verifiedAt/verifiedBy`) and records `store.order.verified.v1` via `store_outbox_message` (`Store/Service/StoreOutboxService`).
+- Consumer: `Trade/MessageHandler/StoreOrderVerifiedHandler` (async `StoreOrderVerifiedMessage`). Checks `order.metadata._store.uuid === payload.storeUuid` and `metadata._completionMode === 'store_verification'`. Inside a transaction sets `metadata._storeVerificationReceived=true`, calls `Order::allowCompletionFromStoreVerification()`, then `workflow->can(complete)` → `workflow->apply(complete)` if `fulfilled`; otherwise the flag remains and `Trade/EventListener/OrderVerificationCompletionListener` completes after `fulfill` (out-of-order handling). Idempotent via `workflow.can()` and repeated flag writes.
+- Audit fields on `store_order` are `verifiedAt/verifiedBy` only (see §5.3); `verificationCode` column was removed.
 
 ### 7.6 Future Events
 
@@ -720,22 +708,27 @@ The following remain reserved:
 
 ### 8.1 Trade Order Created Consumer
 
-`TradeOrderCreatedConsumer` processes one message as follows:
+`Store/MessageHandler/TradeOrderCreatedHandler` (`TradeOrderCreatedMessage`) processes one message as follows:
 
 ```text
-receive message
-  -> validate envelope and schema version
+receive message (trade.order.created.v1)
+  -> validate envelope and schema version (eventId + payload)
   -> start Store local transaction
-  -> insert StoreConsumedEvent(eventId), or return if already present
-  -> find Store by payload.store.uuid
-  -> create/find StoreOrder by tradeOrderUuid
-  -> validate Store status, channel, local eligibility
-  -> request inventory reservation (future boundary)
-  -> set StoreOrder accepted or rejected
-  -> insert StoreOutboxMessage for result event
+  -> insert StoreConsumedEvent(eventId), or return if already present (inbox dedup)
+  -> find Store by payload.store.uuid; if not found or not active, throw RuntimeException
+     (triggers Messenger retry; not a business rejection)
+  -> create/find StoreOrder by tradeOrderUuid via StoreOrderService::createFromTradeOrderSnapshot
+     (includes verificationRequired snapshot from payload.store.requireVerification;
+      idempotent on duplicate tradeOrderUuid with same snapshot; LogicException on mismatch)
+  -> if StoreTradeOrderCancellation exists for this tradeOrderUuid -> StoreOrder.cancel()
+  -> if StoreOrder.operationalStatus != pending_validation -> return (already handled)
+  -> if !INVENTORY_ENABLED -> StoreOrderService::accept() (pending_validation -> accepted, no outbox)
+  -> else -> StoreOrder.awaitInventory(reservationId) + StoreOutboxService.record('inventory.reservation.requested.v1')
   -> commit
   -> acknowledge broker message
 ```
+
+No `store.order.accepted.v1` / `rejected.v1` is emitted. The unavailable-Store path throws `RuntimeException('Store is not available.')` so the broker retries rather than committing a rejected projection.
 
 The broker message is acknowledged only after the Store transaction commits. If the
 process crashes before acknowledgement, the event is delivered again and becomes an
@@ -762,12 +755,13 @@ can replace the transport without changing StoreOrder business code.
 
 | Failure | Consumer action |
 |---|---|
-| Duplicate `eventId` | Acknowledge; no mutation |
-| Duplicate `tradeOrderUuid`, same snapshot | Continue idempotently; ensure result event exists |
-| Duplicate `tradeOrderUuid`, different snapshot | Do not overwrite; critical alert and DLQ |
+| Duplicate `eventId` | Acknowledge; no mutation (inbox hit) |
+| Duplicate `tradeOrderUuid`, same snapshot | Continue idempotently; return existing StoreOrder |
+| Duplicate `tradeOrderUuid`, different snapshot | Do not overwrite; throw `LogicException` → critical alert and DLQ |
 | Temporary database/broker failure | Roll back and retry |
-| Invalid event schema/version | DLQ; do not retry blindly |
-| Business rejection such as out of stock | Commit rejected StoreOrder + rejection outbox event |
+| Invalid event schema/version | DLQ; do not retry blindly (`InvalidArgumentException`) |
+| Store not found / not active | Throw `RuntimeException('Store is not available.')` → retry with backoff (Messenger retry), then DLQ |
+| Inventory rejection (future) | Commit `rejected` StoreOrder; inventory DLQ handling to be defined |
 | Unexpected domain exception | Roll back; retry with bounded backoff, then DLQ |
 
 ### 8.4 Ordering And Concurrency
@@ -776,8 +770,8 @@ can replace the transport without changing StoreOrder business code.
   unique StoreOrder key and transaction locking where necessary.
 - An event topic should preserve ordering per aggregate key where the transport supports
   it, but correctness must not rely on global ordering.
-- Store acceptance after a terminal Trade cancellation is harmless: Trade ignores the
-  stale accept event and Store consumes `trade.order.cancelled.v1` to release work.
+- Store verification after a Trade `fulfilled` is the only cross-bundle result event; `store.order.verified.v1` is idempotent via `_storeVerificationReceived` + `workflow.can(complete)`.
+- Trade cancellation is consumed by `Store/MessageHandler/TradeOrderCancelledHandler` (`StoreTradeOrderCancellation` + `StoreOrder.cancel()`), ensuring late verification is ignored.
 - All result handlers validate expected source state before applying transitions.
 
 ---
@@ -825,14 +819,12 @@ Store staff must not use generic Trade `manage/orders` routes, which are platfor
 |---|---|---|---|
 | GET | `/api/v1/store/manage/orders` | active member | Current store work queue |
 | GET | `/api/v1/store/manage/orders/{uuid}` | active member | StoreOrder operational detail |
-| POST | `/api/v1/store/manage/orders/{uuid}/accept` | owner/manager (`store:order:accept`) | Manual acceptance when `order.requireAcceptance=true` |
-| POST | `/api/v1/store/manage/orders/{uuid}/reject` | owner/manager (`store:order:reject`) | Reject before payment with reason code |
-| POST | `/api/v1/store/manage/orders/{uuid}/fulfill` | fulfillment/manager (`store:order:fulfill`) | Mark Store operation fulfilled (local) |
-| POST | `/api/v1/store/{scopeId}/orders/{uuid}/verify` | fulfillment/manager/owner (`store:order:verify`) | Store verification post-fulfill — requires `fulfillment.requireVerification=true`, `operationalStatus=fulfilled`, body `{verificationCode}`; records `store.order.verified.v1` with audit `verifiedAt/verifiedBy/verificationCode` |
+| POST | `/api/v1/store/manage/orders/{uuid}/fulfill` | fulfillment/manager/owner (`store:order:fulfill`) | Mark Store operation `fulfilled` (local transition; fulfilled -> fulfilled). Triggers `OrderVerificationCompletionListener` auto-complete if `_storeVerificationReceived` already true. |
+| POST | `/api/v1/store/{scopeId}/orders/{uuid}/verify` | fulfillment/manager/owner (`store:order:verify`) | Store verification post-fulfill — requires `StoreOrder.isVerificationRequired()=true` (snapshotted, not live settings) and `operationalStatus=fulfilled`; body is empty (`{}`); uses order UUID as verification token. Transitions `fulfilled -> verified` and emits `store.order.verified.v1` with `verifiedAt/verifiedBy` (no `verificationCode`). Staff `userUuid` is taken from the authenticated Identity user. |
 
-The first asynchronous acceptance implementation may not expose manual actions until
-the timeout/escalation policy is ready. All actions check membership against the
-StoreOrder's local Store relation, not a request-supplied store identifier.
+> `POST .../accept` and `POST .../reject` have been removed. Store acceptance is automatic; rejection is deferred to future inventory.
+
+All actions check membership against the `StoreOrder`'s local `Store` relation, not a request-supplied store identifier. `fulfill`/`verify` are idempotent guards: `verify` fails with `LogicException` if not `fulfilled` or not `verificationRequired`.
 
 ---
 
@@ -843,8 +835,8 @@ StoreOrder's local Store relation, not a request-supplied store identifier.
 | Principal | Scope | Capabilities |
 |---|---|---|
 | `ROLE_ADMIN` | Platform | All Store administration and reporting |
-| Store `owner` | One Store | Membership, store settings, acceptance, fulfillment |
-| Store `manager` | One Store | Acceptance, rejection, fulfillment, operational views |
+| Store `owner` | One Store | Membership, store settings, fulfillment, verification |
+| Store `manager` | One Store | Fulfillment, verification, operational views |
 | Store `clerk` | One Store | Read operational queue; limited configured actions |
 | Store `fulfillment` | One Store | Fulfillment-only operational actions |
 | Customer | Own orders | Read customer-safe StoreOrder view only |
@@ -857,8 +849,7 @@ StoreOrder's local Store relation, not a request-supplied store identifier.
    queries Store membership locally.
 4. `ROLE_ADMIN` bypasses membership checks only on explicitly administrative routes.
 5. Store staff cannot elevate a Trade order's commercial status directly.
-6. Store staff actions produce Store events; Trade applies commercial transitions only
-   through its own event consumers and workflow guards.
+6. Store staff actions (`fulfill`, `verify`) produce Store events; Trade applies commercial `complete` only through `StoreOrderVerifiedHandler` + `OrderCompletionGuardListener`/`OrderVerificationCompletionListener` and workflow guards.
 
 ---
 
@@ -894,12 +885,13 @@ Inventory is deliberately excluded from the first Store data model. Store define
 command/result boundary it needs:
 
 ```text
-Store validates order
-  -> inventory.reservation.requested.v1
-  -> Inventory reserves quantity idempotently
-  -> inventory.reservation.confirmed.v1
-       or inventory.reservation.rejected.v1
-  -> Store accepts/rejects StoreOrder
+Store validates order (TradeOrderCreatedHandler)
+  -> if INVENTORY_ENABLED=0: auto-accept (pending_validation -> accepted), no inventory event
+  -> if INVENTORY_ENABLED=1:
+       inventory.reservation.requested.v1
+       -> Inventory reserves quantity idempotently
+       -> inventory.reservation.confirmed.v1  -> StoreOrder.accept()
+            or inventory.reservation.rejected.v1 -> StoreOrder.reject()
 ```
 
 The future request payload must include:
@@ -968,8 +960,7 @@ to the local `store` table. It MUST NOT add foreign keys to `users`, `trade_orde
 ### 14.2 Trade Migration
 
 A separate Trade migration adds only generic order orchestration data required by the
-new workflow, such as a Store snapshot in existing JSON metadata and any explicit
-acceptance deadline field. It must not add a foreign key to Store.
+new workflow, such as a Store snapshot (`_store`), `_completionMode`, and `_storeVerificationReceived` in existing `trade_order.metadata` JSON. No acceptance deadline field or Store FK is added.
 
 ### 14.3 Data Backfill
 
@@ -978,7 +969,7 @@ For existing orders without Store metadata:
 - Treat them as legacy/global orders.
 - Do not fabricate `StoreOrder` records unless a reliable external mapping exists.
 - Existing payment/refund behavior remains unchanged.
-- New Store acceptance workflow applies only to newly created Store-scoped orders.
+- The simplified projection (auto-accept) and verification gate (`_completionMode`) apply only to newly created Store-scoped orders after this change.
 
 ---
 
@@ -989,10 +980,11 @@ For existing orders without Store metadata:
 | Category | HTTP/Event behavior | Logging |
 |---|---|---|
 | Invalid Store context | Reject before Trade creates order | Warning with safe store hint |
-| Store business rejection | Publish rejection event | Info with reason code/correlation |
+| Store unavailable (not found / not active) | Consumer throws `RuntimeException('Store is not available.')` → retry/DLQ | Warning with storeUuid/tradeOrderUuid/attempt |
 | Event schema violation | DLQ | Error with event id/topic |
 | Consumer transient failure | Retry | Warning with attempt count |
-| Snapshot mismatch | Do not mutate existing StoreOrder | Critical alert |
+| Snapshot mismatch (`tradeOrderUuid` conflicts on `storeCode`/`verificationRequired`/amount) | Do not mutate existing StoreOrder; throw `LogicException` → critical alert | Critical alert |
+| Verification precondition failure (`!verificationRequired` or `status != fulfilled`) | HTTP 409/422 from `StoreOrderService::verify` | Warning with storeOrderUuid/verificationRequired/status |
 | Outbox publishing failure | Retry/DLQ | Error with aggregate/event id |
 
 ### 15.2 Required Structured Log Fields
@@ -1013,9 +1005,9 @@ The target deployment exports at least:
 
 - Outbox backlog count and oldest unpublished age.
 - Consumer lag by topic.
-- Acceptance/rejection count by Store and reason code.
-- Acceptance latency from Trade order creation to Store decision.
-- Timeout cancellation count.
+- StoreOrder creation count by Store (auto-accept vs awaiting_inventory).
+- Verification count by Store (`verified` status).
+- Fulfillment-to-completion latency (manual vs store_verification).
 - Inbox duplicate count.
 - DLQ count and oldest message age.
 
@@ -1027,24 +1019,28 @@ The target deployment exports at least:
 
 | Suite | Required cases |
 |---|---|
-| `tests/Store/Entity/` | Store lifecycle, membership role/status, StoreOrder snapshots/statuses, outbox/inbox fields |
-| `tests/Store/Service/` | Context resolution, membership authorization, Store acceptance/rejection rules |
-| `tests/Store/Consumer/` | Valid event, duplicate event, duplicate business key, schema error, rejection event creation |
+| `tests/Store/Entity/` | Store lifecycle, membership role/status, StoreOrder snapshots/statuses/verificationRequired, outbox/inbox fields |
+| `tests/Store/Service/` | Context resolution, membership authorization, Store verify/fulfill guards (verificationRequired, fulfilled status), snapshot matching |
+| `tests/Store/Consumer/` | Valid event (auto-accept), duplicate event, duplicate business key same/different snapshot, schema error, unavailable Store throws RuntimeException |
 | `tests/Store/Outbox/` | Publish retry classification and event envelope serialization |
+| `tests/Trade/` | Order `submit` always creates pending + outbox; `OrderCompletionGuardListener` blocks/permits `complete`; `StoreOrderVerifiedHandler` + `OrderVerificationCompletionListener` out-of-order handling |
 
 ### 16.2 Integration Tests
 
 | Scenario | Expected result |
 |---|---|
-| Active Store receives valid Trade event | One accepted StoreOrder and one accepted outbox event |
-| Store is closed | Rejected StoreOrder and rejection outbox event |
-| Same `eventId` redelivered | No second StoreOrder or result event |
-| Different event ids with same Trade UUID/same payload | One StoreOrder; idempotent result behavior |
-| Same Trade UUID/different payload | No overwrite; critical failure/DLQ |
+| Active Store receives valid Trade event (`INVENTORY_ENABLED=0`) | One `accepted` StoreOrder, no Store outbox (auto-accept) |
+| Active Store with `requireVerification=true` | `StoreOrder.verificationRequired=true` snapshotted; Trade `metadata._completionMode=store_verification` |
+| Store is closed / not found | Consumer throws `RuntimeException('Store is not available.')` → retry/DLQ; no StoreOrder committed |
+| Same `eventId` redelivered | No second StoreOrder or outbox event (inbox dedup) |
+| Different event ids with same Trade UUID/same payload | One StoreOrder; idempotent |
+| Same Trade UUID/different payload (e.g. different `requireVerification` or amount) | No overwrite; `LogicException` → critical/DLQ |
 | Store staff reads another store order | 404/403 without information leak |
 | Customer reads another customer's StoreOrder | 404/403 without information leak |
-| Trade receives Store acceptance twice | One legal workflow transition only |
-| Trade acceptance timeout races Store acceptance | Exactly one terminal Trade outcome; stale event safely ignored |
+| Store `fulfill` then `verify` (verificationRequired) | StoreOrder `fulfilled -> verified` + `store.order.verified.v1`; Trade `fulfilled -> completed` |
+| Store `verify` before Trade `fulfilled` (out-of-order) | Trade stores `_storeVerificationReceived=true`; `OrderVerificationCompletionListener` completes after `fulfill` |
+| Trade `fulfilled -> complete` without verification when `store_verification` | Blocked by `OrderCompletionGuardListener` (409/conflict) |
+| Store `verify` when `verificationRequired=false` or `status != fulfilled` | 409/422 `LogicException` |
 
 ### 16.3 Contract Tests
 
@@ -1071,22 +1067,22 @@ serialization. Tests validate:
 
 ### Phase 2: Trade Orchestration Contract
 
-1. Add target Trade workflow states/transitions and payment gate.
-2. Add server-generated Store snapshot to new Trade orders.
+1. Simplify Trade workflow to `draft -> pending -> confirmed -> paid -> fulfilled -> completed` (remove acceptance states).
+2. Add server-generated Store snapshot (`_store` + `_completionMode` + `_storeVerificationReceived`) to new Trade orders.
 3. Add a generic Trade integration-event outbox abstraction.
-4. Publish `trade.order.created.v1` only after the Trade transaction commits.
-5. Return `202` for Store-scoped order creation.
+4. Always publish `trade.order.created.v1` when a `StoreContext` exists, after the Trade transaction commits; `draft -> pending` via `submit`.
+5. Return `201` (`pending`) for Store-scoped order creation (no `202`).
 6. Preserve legacy order behavior when no Store context is present, only if that legacy
    mode remains a product requirement.
 
 ### Phase 3: Store Consumer And Decision Events
 
-1. Implement `TradeOrderCreatedConsumer` with inbox and business idempotency.
-2. Create StoreOrder from immutable event snapshot.
-3. Implement Store eligibility checks and accepted/rejected decisions.
-4. Write `store.order.accepted.v1` / `store.order.rejected.v1` to Store outbox.
-5. Implement Trade consumers that apply guarded workflow transitions.
-6. Add timeout cancellation and late-event handling.
+1. Implement `Store/MessageHandler/TradeOrderCreatedHandler` with inbox and business idempotency.
+2. Create StoreOrder from immutable event snapshot (including `verificationRequired`).
+3. Auto-accept (`pending_validation -> accepted`) when `INVENTORY_ENABLED=0`; otherwise request inventory reservation (`awaiting_inventory`).
+4. Retries on unavailable Store via `RuntimeException` (no rejection event).
+5. Implement `StoreOrderService::fulfill` / `verify` and `store.order.verified.v1` outbox.
+6. Implement `Trade/MessageHandler/StoreOrderVerifiedHandler` + `OrderCompletionGuardListener` / `OrderVerificationCompletionListener` (including out-of-order handling).
 
 ### Phase 4: Fulfillment And Inventory Integration
 
@@ -1119,8 +1115,9 @@ The Store bundle design is implemented when:
 | Event isolation | Integration event payloads are versioned scalar/JSON contracts, never Doctrine entities |
 | Reliable publication | Business mutation and local outbox write share one transaction |
 | Reliable consumption | Inbox event-id uniqueness and StoreOrder business uniqueness protect retries |
-| Payment gate | A Store-scoped order cannot begin payment before Store acceptance |
-| Rejection/timeout | Trade cancels unpaid orders on Store rejection or acceptance timeout |
-| Authorization | Store membership scopes Store operations; platform admin retains explicit override |
+| Payment gate | No Store gate; Trade payment eligibility is standard (no `awaiting_store_acceptance` block) |
+| Rejection/timeout | No Store rejection event / acceptance timeout; unavailable Store is retried via DLQ, not cancelled |
+| Verification gate | When `fulfillment.requireVerification=true`, `fulfilled -> completed` requires `store.order.verified.v1` (immutable per-order snapshot, `verificationRequired` + `_completionMode`) |
+| Authorization | Store membership scopes `fulfill`/`verify`; platform admin retains explicit override |
 | Inventory boundary | Store has reservation contract hooks but no embedded inventory ledger |
 | Extraction readiness | Store can move to a separate database/consumer with no cross-schema joins or transactions |

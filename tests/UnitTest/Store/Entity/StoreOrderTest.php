@@ -13,10 +13,10 @@ final class StoreOrderTest extends TestCase
     public function testSnapshotIsInitializedAndOperationalStatusChanges(): void
     {
         $order = new StoreOrder(
-            new Store('xuhui', 'Xuhui', 'Asia/Shanghai'),
+            new Store('demo', 'Demo', 'Asia/Shanghai'),
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57',
             'cny',
             12800,

@@ -63,8 +63,16 @@ class OrderController extends RestController
         }
         /** @var list<array<string, mixed>> $items */
 
-        $currency = $content['currency'] ?? 'CNY';
         $storeContext = $this->storeContextResolver->resolve();
+        $requestedCurrency = $content['currency'] ?? null;
+        if ($storeContext !== null) {
+            $currency = $storeContext->currency;
+            if ($requestedCurrency !== null && strtoupper((string) $requestedCurrency) !== strtoupper($currency)) {
+                throw new \InvalidArgumentException(sprintf('Currency mismatch: store %s expects %s, got %s', $storeContext->storeCode, $currency, (string) $requestedCurrency));
+            }
+        } else {
+            $currency = $requestedCurrency ?? 'CNY';
+        }
         $result = $this->service->calculatePrices($items, $currency, $storeContext?->storeCode, $content['meta'] ?? []);
 
         $content['__calculatedItems'] = $result->items;
@@ -113,10 +121,17 @@ class OrderController extends RestController
             return $this->warning('Items are required.', 400, '', 400);
         }
 
-        $currency = $content['currency'] ?? 'CNY';
-
+        $requestedCurrency = $content['currency'] ?? null;
         try {
             $storeContext = $this->storeContextResolver->resolve();
+            if ($storeContext !== null) {
+                $currency = $storeContext->currency;
+                if ($requestedCurrency !== null && strtoupper((string) $requestedCurrency) !== strtoupper($currency)) {
+                    throw new \InvalidArgumentException(sprintf('Currency mismatch: store %s expects %s, got %s', $storeContext->storeCode, $currency, (string) $requestedCurrency));
+                }
+            } else {
+                $currency = $requestedCurrency ?? 'CNY';
+            }
             $result = $this->service->calculatePrices($items, $currency, $storeContext?->storeCode, $content['meta'] ?? []);
             return $this->success($result, 'Quote calculated');
         } catch (\Throwable $e) {

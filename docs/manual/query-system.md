@@ -30,7 +30,7 @@ The system has two tiers:
 | `@hints` | JSON | SQL | Query hints set on the Doctrine query | `{"hint.name": "value"}` |
 | `@sort` | expression | In-memory | In-memory comparator (admin-only) | `x.getPrice() <=> y.getPrice()` |
 | `@showDQL` | boolean | Info | Dump the generated DQL (dev-only) | `true` |
-| `@expands` | JSON | View | Nested relation expansion (`__metadata`) | `category,tags` |
+| `@expands` | JSON / list | View | Nested relation expansion (`__metadata`) — accepts JSON array `["a","b"]`, single value `a`, or comma-separated `a,b` (all equivalent) | `specifications` / `category,tags` |
 | `@display` | string | View | Response projection: `complex`, `reduce`, JSON projection | `reduce` |
 | `@transform` | JSON | View | Expression-based content transform (create/update actions) | `{"category": "Service.get(...)"}` |
 | `@partial` | boolean | View | Disable the surrounding transaction (create/batch-update) | `true` |
@@ -209,12 +209,27 @@ in the create/update mixins.
 
 ### `@expands`
 
-JSON array (single quotes allowed, `FixJSON` handles them) of dotted relation
-chains to expand by attaching a `__metadata` attribute (the object itself) to
-each related node, so the flat serializer can include it:
+JSON array (single quotes allowed, `FixJSON` handles them) **or** plain
+comma-separated list / single value (all equivalent) of dotted relation chains
+to expand by attaching a `__metadata` attribute (clone of the related object) to
+each related node, so `FlatNormalizer` can include the full normalized data:
 
 ```
 # GET /api/v1/manage/contents?@expands=['category','tags']
+# GET /api/v1/app/products?@expands=specifications
+# GET /api/v1/app/products?@expands=specifications,category
+# GET /api/v1/app/products?@expands=["specifications"]
+```
+
+When `@expands` is present, `RestController::expandObjects()` sets
+`__metadata = clone node` (avoids self-reference recursion) and
+`FlatNormalizer` returns the full decorated normalization for that relation
+(`id`, `uuid`, `name`, `price`, etc. plus `__metadata` with the same full data)
+instead of the reduced `id/__toString` view. Example for `Product`:
+
+```
+# GET /api/v1/app/products?@expands=specifications&X-Store-Code=BUND
+# → specifications: [{id:3, name:"经典", price:68000, ..., __metadata:{id:3, name:"经典", price:68000, ...}}]
 ```
 
 ### `@display`
@@ -288,9 +303,13 @@ per-item exceptions).
 2. **`@dql`** — appended as `id IN (subDql)`.
 3. **`@filter`** — compiled by `ExpressionService::buildFilter()` →
    `ExpressionDqlParser` → `ExpressionQueryBuilderAssembler`; the resulting
-   ids are applied via `id IN (filterQb)` with parameters merged. On
-   compilation failure, non-admins get `AccessDeniedHttpException`, admins fall
-   back to in-memory filtering.
+   ids are applied via `id IN (filterQb)` with parameters merged (parameter
+   names are de-duplicated when `commonFilter` is a `DqlExpression` — e.g.
+   `Store` `App/Product`'s `(!store||store==store) && status=='active'` now
+   coexists with `@filter=entity.getName()=="金汤力"` as
+   `filter_parameter_1` vs `filter_parameter_1_1`). On compilation failure,
+   non-admins get `AccessDeniedHttpException`, admins fall back to in-memory
+   filtering.
 4. **`@select` / `@groupBy`** — applied; the `joiner` derives `leftJoin`s for
    dotted paths.
 5. **`@order`** — applied (`field|DIRECTION`), joins derived as needed.

@@ -149,6 +149,24 @@ Related optional variables: `OTP_REDIS_DSN`, `ALIYUN_*` (SMS), `WECHAT_*`
 (WeChat login/pay), `MAILER_DSN`, `MESSENGER_TRANSPORT_DSN`, `INVENTORY_ENABLED`.
 See `.env.example` for the full reference.
 
+## Async workers (Trade → Store)
+
+Docker Compose starts `worker` (`messenger:consume async --time-limit=3600`) and `scheduler` (outbox publish every 5s) automatically. For native PHP or one-shot local verification after creating a `X-Store-Code` order:
+
+```bash
+# One-shot: publish loop (5s) in background + consume for 60s (default)
+./scripts/dev/run-async.sh          # 60s
+./scripts/dev/run-async.sh 120      # 120s / 2m
+./scripts/dev/run-async.sh 10 --interval 2  # publish every 2s
+./scripts/dev/run-async.sh --dry-run
+# Inside Docker
+docker compose exec app ./scripts/dev/run-async.sh 60
+```
+The loop is required because `TradeOrderCreatedHandler` creates `store_outbox` rows *during* `consume`; a single pre-publish would miss them.
+
+For long-running native workers, keep the two terminals from `QUICKSTART.md`:
+`messenger:consume async --time-limit=3600` + `while true; do app:*:outbox:publish; sleep 5; done`.
+
 ## Verifying the Setup
 
 ```bash

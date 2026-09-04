@@ -6,25 +6,13 @@
   "type": "object",
   "additionalProperties": true,
   "properties": {
-    "order": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "requireAcceptance": {
-          "type": "boolean",
-          "description": "When true, Trade order with X-Store-Code must go through awaiting_store_acceptance → store_accept/reject. Default false.",
-          "default": false
-        }
-      },
-      "required": []
-    },
     "fulfillment": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "requireVerification": {
           "type": "boolean",
-          "description": "When true, fulfilled Trade order must go through awaiting_store_verification → store_verify via StoreOrder verificationCode. Default false.",
+          "description": "When true, a fulfilled Store order must be verified before it can be completed.",
           "default": false
         }
       },

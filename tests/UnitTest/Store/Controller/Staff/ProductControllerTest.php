@@ -29,7 +29,7 @@ final class ProductControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $this->store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $this->productService = $this->createMock(ProductServiceInterface::class);
         $this->storeService = $this->createMock(StoreServiceInterface::class);
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
