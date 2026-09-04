@@ -9,7 +9,9 @@ use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 /** @extends BaseService<StoreOrder> */
 final class StoreOrderService extends BaseService implements StoreOrderServiceInterface
@@ -18,9 +20,21 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
         ContainerInterface $container,
         private readonly StoreOrderRepository $storeOrderRepository,
         private readonly ?StoreOutboxServiceInterface $outboxService = null,
+        #[Target('state_machine.store_order')]
+        private readonly ?WorkflowInterface $storeOrderWorkflow = null,
     )
     {
         parent::__construct($container, StoreOrder::class);
+    }
+
+    public function awaitInventory(StoreOrder $storeOrder, string $reservationId): StoreOrder
+    {
+        return $this->transaction(function () use ($storeOrder, $reservationId): StoreOrder {
+            $this->assertStoreOrderCan($storeOrder, 'await_inventory');
+            $storeOrder->awaitInventory($reservationId);
+
+            return $storeOrder;
+        });
     }
 
     public function accept(StoreOrder $storeOrder, ?string $reservationId = null): StoreOrder
@@ -29,6 +43,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
+            $this->assertStoreOrderCan($storeOrder, 'accept');
             $storeOrder->accept($reservationId);
             $this->outboxService->record('store.order.accepted.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
@@ -48,6 +63,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
+            $this->assertStoreOrderCan($storeOrder, 'reject');
             $storeOrder->reject($code, $reason);
             $this->outboxService->record('store.order.rejected.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
@@ -66,6 +82,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
     public function fulfill(StoreOrder $storeOrder, ?array $fulfillmentData = null): StoreOrder
     {
         return $this->transaction(function () use ($storeOrder, $fulfillmentData): StoreOrder {
+            $this->assertStoreOrderCan($storeOrder, 'fulfill');
             $storeOrder->fulfill($fulfillmentData);
 
             return $storeOrder;
@@ -198,6 +215,31 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             && $storeOrder->getCurrency() === $data['currency']
             && $storeOrder->getTotalAmount() === $data['totalAmount']
             && $storeOrder->getOrderSnapshot() === $data['orderSnapshot'];
+    }
+
+    public function cancel(StoreOrder $storeOrder): StoreOrder
+    {
+        return $this->transaction(function () use ($storeOrder): StoreOrder {
+            $this->assertStoreOrderCan($storeOrder, 'cancel');
+            $storeOrder->cancel();
+
+            return $storeOrder;
+        });
+    }
+
+    private function assertStoreOrderCan(StoreOrder $storeOrder, string $transition): void
+    {
+        if ($this->storeOrderWorkflow === null) {
+            return;
+        }
+        if (!$this->storeOrderWorkflow->can($storeOrder, $transition)) {
+            throw new \LogicException(sprintf(
+                'StoreOrder %s cannot %s from %s.',
+                $storeOrder->getUuid(),
+                $transition,
+                $storeOrder->getOperationalStatus(),
+            ));
+        }
     }
 
     private function transaction(callable $callback): mixed

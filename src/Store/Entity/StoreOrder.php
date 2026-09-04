@@ -124,6 +124,17 @@ class StoreOrder
     /** @return array<string, mixed> */
     public function getOrderSnapshot(): array { return $this->orderSnapshot; }
     public function getOperationalStatus(): string { return $this->operationalStatus; }
+
+    /**
+     * @internal Used by Symfony Workflow marking store.
+     */
+    public function setOperationalStatus(string $operationalStatus): self
+    {
+        $this->operationalStatus = $operationalStatus;
+
+        return $this->touch();
+    }
+
     public function getRejectionCode(): ?string { return $this->rejectionCode; }
     public function getRejectionReason(): ?string { return $this->rejectionReason; }
     public function getAcceptedAt(): ?\DateTimeImmutable { return $this->acceptedAt; }

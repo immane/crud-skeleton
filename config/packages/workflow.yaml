@@ -71,6 +71,43 @@ framework:
                     to: refunded
 
         # ---------------------------------------------------------------------
+        # StoreOrder: Store operational fulfillment
+        # ---------------------------------------------------------------------
+        store_order:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'operationalStatus'
+            supports:
+                - App\Store\Entity\StoreOrder
+            initial_marking: pending_validation
+            places:
+                - pending_validation
+                - awaiting_inventory
+                - accepted
+                - rejected
+                - fulfillment_pending
+                - fulfilling
+                - fulfilled
+                - cancelled
+            transitions:
+                await_inventory:
+                    from: pending_validation
+                    to: awaiting_inventory
+                accept:
+                    from: [pending_validation, awaiting_inventory]
+                    to: accepted
+                reject:
+                    from: [pending_validation, awaiting_inventory]
+                    to: rejected
+                fulfill:
+                    from: [accepted, fulfillment_pending, fulfilling]
+                    to: fulfilled
+                cancel:
+                    from: [pending_validation, awaiting_inventory, accepted, fulfillment_pending, fulfilling]
+                    to: cancelled
+
+        # ---------------------------------------------------------------------
         # Order: Trade module with Store handoff and verification
         # ---------------------------------------------------------------------
         order:

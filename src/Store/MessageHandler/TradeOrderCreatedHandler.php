@@ -73,7 +73,7 @@ final readonly class TradeOrderCreatedHandler
 
             $storeOrder = $this->storeOrderService->createFromTradeOrderSnapshot($store, $payload);
             if ($cancellation !== null) {
-                $storeOrder->cancel();
+                $this->storeOrderService->cancel($storeOrder);
                 return;
             }
             if ($storeOrder->getOperationalStatus() !== \App\Store\Entity\StoreOrder::STATUS_PENDING_VALIDATION) {
@@ -86,7 +86,7 @@ final readonly class TradeOrderCreatedHandler
             }
 
             $reservationId = \App\Core\Utils\UUID::v4();
-            $storeOrder->awaitInventory($reservationId);
+            $this->storeOrderService->awaitInventory($storeOrder, $reservationId);
             $this->outboxService->record('inventory.reservation.requested.v1', 'inventory_reservation', $reservationId, [
                 'reservationId' => $reservationId,
                 'storeUuid' => $storeOrder->getStore()->getUuid(),
