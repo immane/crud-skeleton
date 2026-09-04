@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Store\EventListener;
 
-use App\Store\DTO\StoreSettings;
-use App\Store\Repository\StoreRepository;
 use App\Trade\Entity\Order;
 use App\Trade\Entity\OrderStoreLifecycle;
 use App\Trade\Repository\OrderStoreLifecycleRepository;
@@ -15,7 +13,6 @@ use Symfony\Component\Workflow\Event\GuardEvent;
 final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly StoreRepository $storeRepository,
         private readonly ?OrderStoreLifecycleRepository $lifecycleRepository = null,
     ) {
     }
@@ -25,8 +22,6 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         return [
             'workflow.order.guard.confirm' => 'onGuard',
             'workflow.order.guard.complete' => 'onGuard',
-            'workflow.order.guard.request_verification' => 'onGuard',
-            'workflow.order.guard.store_verify' => 'onGuard',
         ];
     }
 
@@ -41,14 +36,11 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         }
 
         $transition = $event->getTransition()->getName();
-        $settings = $this->resolveSettings($subject);
         $hasStore = $this->hasStore($subject);
 
         match ($transition) {
             'confirm' => $this->guardConfirm($event, $hasStore),
-            'complete' => $this->guardComplete($event, $settings, $hasStore),
-            'request_verification' => $this->guardRequestVerification($event, $settings, $hasStore),
-            'store_verify' => $this->guardStoreVerify($event, $settings, $hasStore),
+            'complete' => $this->guardComplete($event, $hasStore),
             default => null,
         };
     }
@@ -75,39 +67,19 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
     /**
      * @param GuardEvent<Order> $event
      */
-    private function guardComplete(GuardEvent $event, StoreSettings $settings, bool $hasStore): void
-    {
-        // When verification required, direct complete must be blocked
-        if ($hasStore && $settings->requireVerification) {
-            $event->setBlocked(true, 'Store verification required: fulfill -> request_verification -> store_verify.');
-        }
-    }
-
-    /**
-     * @param GuardEvent<Order> $event
-     */
-    private function guardRequestVerification(GuardEvent $event, StoreSettings $settings, bool $hasStore): void
+    private function guardComplete(GuardEvent $event, bool $hasStore): void
     {
         if (!$hasStore) {
-            $event->setBlocked(true, 'No store context.');
             return;
         }
-        if (!$settings->requireVerification) {
-            $event->setBlocked(true, 'Store verification is disabled for this store.');
-        }
-    }
-
-    /**
-     * @param GuardEvent<Order> $event
-     */
-    private function guardStoreVerify(GuardEvent $event, StoreSettings $settings, bool $hasStore): void
-    {
-        if (!$hasStore) {
-            $event->setBlocked(true, 'No store context.');
+        if ($this->lifecycleRepository === null) {
             return;
         }
-        if (!$settings->requireVerification) {
-            $event->setBlocked(true, 'Store verification is disabled for this store.');
+        $order = $event->getSubject();
+        \assert($order instanceof Order);
+        $lifecycle = $this->lifecycleRepository->findOneByTradeOrderUuid($order->getUuid());
+        if ($lifecycle !== null && $lifecycle->getVerificationStatus() === OrderStoreLifecycle::VERIFICATION_PENDING) {
+            $event->setBlocked(true, 'Store verification required before complete.');
         }
     }
 
@@ -116,22 +88,5 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         $metadata = $order->getMetadata();
         $store = is_array($metadata) ? ($metadata['_store'] ?? null) : null;
         return is_array($store) && is_string($store['uuid'] ?? null) && $store['uuid'] !== '';
-    }
-
-    private function resolveSettings(Order $order): StoreSettings
-    {
-        $metadata = $order->getMetadata();
-        $store = is_array($metadata) ? ($metadata['_store'] ?? null) : null;
-        if (!is_array($store) || !is_string($store['uuid'] ?? null)) {
-            return new StoreSettings(false, false);
-        }
-
-        $storeEntity = $this->storeRepository->findOneBy(['uuid' => $store['uuid']]);
-        if ($storeEntity === null) {
-            // Store deleted/invalid: treat as no requirement to avoid blocking legacy orders
-            return new StoreSettings(false, false);
-        }
-
-        return StoreSettings::from($storeEntity->getSettings());
     }
 }

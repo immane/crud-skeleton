@@ -66,4 +66,26 @@ class OrderStoreLifecycleService
 
         return $lifecycle;
     }
+
+    public function markFulfilled(string $tradeOrderUuid, string $storeUuid, ?string $storeOrderUuid = null, bool $requiresVerification = false): OrderStoreLifecycle
+    {
+        $lifecycle = $this->getOrCreate($tradeOrderUuid, $storeUuid, $storeOrderUuid);
+        if ($lifecycle->getFulfillmentStatus() === OrderStoreLifecycle::FULFILLMENT_FULFILLED) {
+            return $lifecycle;
+        }
+        $lifecycle->markFulfilled($storeOrderUuid, $requiresVerification);
+
+        return $lifecycle;
+    }
+
+    public function markVerified(string $tradeOrderUuid, string $storeUuid, ?string $storeOrderUuid = null): OrderStoreLifecycle
+    {
+        $lifecycle = $this->getOrCreate($tradeOrderUuid, $storeUuid, $storeOrderUuid);
+        if ($lifecycle->getVerificationStatus() === OrderStoreLifecycle::VERIFICATION_VERIFIED) {
+            return $lifecycle;
+        }
+        $lifecycle->markVerified($storeOrderUuid);
+
+        return $lifecycle;
+    }
 }

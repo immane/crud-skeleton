@@ -108,6 +108,27 @@ class OrderStoreLifecycle
         return $this->touch();
     }
 
+    public function markFulfilled(?string $storeOrderUuid = null, bool $requiresVerification = false): self
+    {
+        $this->fulfillmentStatus = self::FULFILLMENT_FULFILLED;
+        if ($storeOrderUuid !== null) {
+            $this->storeOrderUuid = $storeOrderUuid;
+        }
+        $this->verificationStatus = $requiresVerification ? self::VERIFICATION_PENDING : self::VERIFICATION_NOT_REQUIRED;
+
+        return $this->touch();
+    }
+
+    public function markVerified(?string $storeOrderUuid = null): self
+    {
+        $this->verificationStatus = self::VERIFICATION_VERIFIED;
+        if ($storeOrderUuid !== null) {
+            $this->storeOrderUuid = $storeOrderUuid;
+        }
+
+        return $this->touch();
+    }
+
     private function touch(): self
     {
         $this->updatedAt = new \DateTimeImmutable();

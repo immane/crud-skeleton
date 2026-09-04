@@ -110,7 +110,7 @@ framework:
                     to: cancelled
 
         # ---------------------------------------------------------------------
-        # Order: Trade module - core lifecycle, store acceptance via projection
+        # Order: Trade module - core lifecycle (store fulfillment/verification via events)
         # ---------------------------------------------------------------------
         order:
             type: 'state_machine'
@@ -121,76 +121,54 @@ framework:
                 - App\Trade\Entity\Order
             initial_marking: draft
             places:
-                # --- Order (core) ---
-                # draft: order created in Trade DB, not yet submitted. Can submit to pending.
+                # draft: order created, not yet submitted.
                 - draft
 
-                # pending: submitted, waiting for store acceptance (if store-scoped) then confirm. Can be confirmed to `confirmed`.
+                # pending: submitted, waiting for store acceptance (if store-scoped) then confirm.
                 - pending
 
-                # confirmed: order confirmed, ready for payment (Invoice creation). Next is pay -> paid.
+                # confirmed: order confirmed, ready for payment.
                 - confirmed
 
-                # paid: payment succeeded (wallet/gateway). Next is fulfill -> fulfilled.
+                # paid: payment succeeded. Next is fulfill -> fulfilled.
                 - paid
 
-                # fulfilled: logistics fulfilled, ready for completion or verification. If StoreSettings.requiresVerification, goes to awaiting_store_verification.
+                # fulfilled: logistics fulfilled, ready for completion. Store verification gates complete via lifecycle.
                 - fulfilled
 
-                # completed: order completed (either via direct complete or store_verify). Terminal success, can be refunded.
+                # completed: order completed. Terminal success.
                 - completed
 
                 # cancelled: terminal cancelled. Only draft, pending, and confirmed can be cancelled.
                 - cancelled
 
-                # refunded: terminal refunded from paid (full refund via Payment). Only paid can go to refunded; no further transitions.
+                # refunded: terminal refunded from paid.
                 - refunded
-
-                # --- Store verification (to be eventized in commit 4) ---
-                # awaiting_store_verification: fulfilled but requires store verification (StoreSettings.requireVerification=true). Waiting for staff verify via POST /store/{scopeId}/orders/{uuid}/verify.
-                - awaiting_store_verification
             transitions:
-                # submit: draft -> pending. Local submit; store acceptance now gates confirm via projection, not submit.
                 submit:
                     from: draft
                     to: pending
 
-                # confirm: pending -> confirmed. Guarded to require store acceptance (lifecycle) when store-scoped.
                 confirm:
                     from: pending
                     to: confirmed
 
-                # pay: confirmed -> paid. Triggered by OrderService::pay() or Payment InvoicePaidEvent (wallet/gateway). Sets paidAt.
                 pay:
                     from: confirmed
                     to: paid
 
-                # fulfill: paid -> fulfilled. Triggered by OrderService::fulfill() with tracking/shipping data. Sets fulfilledAt.
                 fulfill:
                     from: paid
                     to: fulfilled
 
-                # request_verification: fulfilled -> awaiting_store_verification. Triggered when StoreSettings.requireVerification=true after fulfill. Blocks direct complete.
-                request_verification:
-                    from: fulfilled
-                    to: awaiting_store_verification
-
-                # store_verify: awaiting_store_verification -> completed. Triggered by StoreOrderVerifiedHandler (store.order.verified.v1) after staff verify. Guarded to only allow verified completion.
-                store_verify:
-                    from: awaiting_store_verification
-                    to: completed
-
-                # complete: fulfilled -> completed. Direct completion when verification not required. Trade OrderWorkflowListener sets completedAt via status-driven complete.
                 complete:
                     from: fulfilled
                     to: completed
 
-                # cancel: draft/pending/confirmed -> cancelled. Terminal cancellation; triggers inventory release if needed and store cancellation via outbox.
                 cancel:
                     from: [draft, pending, confirmed]
                     to: cancelled
 
-                # refund: paid -> refunded. Only paid orders can be refunded. Triggered via OrderService::refund() after Payment refund; fulfilled/completed cannot directly refund.
                 refund:
                     from: paid
                     to: refunded

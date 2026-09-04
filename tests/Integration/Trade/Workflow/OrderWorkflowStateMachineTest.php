@@ -129,7 +129,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'confirmed' => ['confirmed', ['pay', 'cancel']],
             'paid' => ['paid', ['fulfill', 'refund']],
             'fulfilled' => ['fulfilled', ['complete']],
-            'awaiting_store_verification' => ['awaiting_store_verification', []],
             'completed' => ['completed', []],
             'cancelled' => ['cancelled', []],
             'refunded' => ['refunded', []],
@@ -238,9 +237,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'refunded->pay' => ['refunded', 'pay'],
             'refunded->refund' => ['refunded', 'refund'],
             'refunded->cancel' => ['refunded', 'cancel'],
-            'awaiting_store_verification->cancel' => ['awaiting_store_verification', 'cancel'],
-            'awaiting_store_verification->confirm' => ['awaiting_store_verification', 'confirm'],
-            'pending->store_verify' => ['pending', 'store_verify'],
         ];
     }
 
@@ -346,8 +342,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'fulfill',
             'pay',
             'refund',
-            'request_verification',
-            'store_verify',
             'submit',
         ], $unique);
     }
