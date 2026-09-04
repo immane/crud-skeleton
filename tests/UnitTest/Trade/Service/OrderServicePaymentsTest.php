@@ -162,6 +162,35 @@ final class OrderServicePaymentsTest extends TestCase
         $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
     }
 
+    public function testCreateOrderWithStoreContextRecordsOutboxWhenAcceptanceIsDisabled(): void
+    {
+        $persisted = [];
+        $em = $this->createEntityManager(
+            static function (object $entity) use (&$persisted): void {
+                $persisted[] = $entity;
+            }
+        );
+        $workflow = $this->createMock(WorkflowInterface::class);
+        $workflow->expects(self::once())->method('can')->with(self::isInstanceOf(Order::class), 'store_submit')->willReturn(false);
+        $workflow->expects(self::never())->method('apply');
+        $service = $this->createService([
+            'em' => $em,
+            'workflow' => $workflow,
+            'outboxService' => new TradeOutboxService($em),
+        ]);
+
+        $order = $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
+        $messages = array_values(array_filter(
+            $persisted,
+            static fn (object $entity): bool => $entity instanceof TradeOutboxMessage,
+        ));
+
+        self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
+        self::assertCount(1, $messages);
+        self::assertSame('trade.order.created.v1', $messages[0]->getTopic());
+        self::assertSame($order->getUuid(), $messages[0]->getPayload()['orderUuid']);
+    }
+
     public function testCreateOrderWithUserInstanceAssignsUser(): void
     {
         $user = $this->createUser(7);

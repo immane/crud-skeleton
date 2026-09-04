@@ -83,6 +83,33 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         self::assertSame('confirmed', $order->getStatus());
     }
 
+    public function testStoreOrderIsCreatedWhenStoreAcceptanceIsDisabled(): void
+    {
+        $client = self::createAuthenticatedClient();
+        $container = $client->getContainer();
+        $em = $container->get(EntityManagerInterface::class);
+        $store = $this->createStore($container, 'e2e-no-acceptance');
+        $store->setSettings(['order' => ['requireAcceptance' => false]]);
+        $em->flush();
+        [, $specification] = $this->createProduct($em, 'E2E No Acceptance Product');
+
+        $placed = $this->placeStoreOrder($client, $store->getCode(), (int) $specification->getId());
+        $em->clear();
+        $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $placed['uuid']]);
+        self::assertInstanceOf(Order::class, $order);
+        self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
+
+        $tradeOutbox = $container->get(TradeOutboxMessageRepository::class)->findUnpublished();
+        self::assertCount(1, $tradeOutbox);
+        self::assertSame('trade.order.created.v1', $tradeOutbox[0]->getTopic());
+
+        $this->tradePublish($container);
+
+        $storeOrder = $container->get(StoreOrderRepository::class)->findOneByTradeOrderUuid($placed['uuid']);
+        self::assertInstanceOf(StoreOrder::class, $storeOrder);
+        self::assertSame(StoreOrder::STATUS_ACCEPTED, $storeOrder->getOperationalStatus());
+    }
+
     public function testStoreRejectionLeavesTradeOrderInStoreRejectedUntilExplicitCancel(): void
     {
         $client = self::createAuthenticatedClient();
