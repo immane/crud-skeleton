@@ -126,11 +126,8 @@ trait BaseServiceReadListTrait
 
                 /** @var QueryBuilder $filterQb */
                 $filterQb = $result['qb'];
-                $qb->andWhere((new Expr())->in("$alias.id", $filterQb->getDQL()));
-
-                foreach ($result['parameters'] as $parameter) {
-                    $qb->setParameter($parameter->getName(), $parameter->getValue());
-                }
+                $filterDql = $this->bindFilterParameters($qb, $filterQb->getDQL(), $result['parameters']);
+                $qb->andWhere((new Expr())->in("$alias.id", $filterDql));
             } catch (\Exception $exception) {
                 $this->logger->error('Filter validation exception: '. $exception->getMessage());
                 $this->logger->error('Filter source: '. $filter);
@@ -294,6 +291,45 @@ trait BaseServiceReadListTrait
         if ($request->query->has('@showDQL') && !$this->isDevelopmentEnvironment()) {
             throw new AccessDeniedHttpException('@showDQL is only available in the dev environment.');
         }
+    }
+
+    /**
+     * Bind @filter parameters without overwriting values already applied by a
+     * common filter or caller-provided QueryBuilder.
+     *
+     * @param iterable<object> $parameters
+     */
+    private function bindFilterParameters(object $qb, string $dql, iterable $parameters): string
+    {
+        $names = [];
+        try {
+            foreach ($qb->getParameters() as $parameter) {
+                $names[$parameter->getName()] = true;
+            }
+        } catch (\Throwable) {
+            // Lightweight test query builders may not expose Doctrine parameters.
+        }
+
+        $counter = 0;
+        foreach ($parameters as $parameter) {
+            $name = $parameter->getName();
+            $boundName = $name;
+            if (isset($names[$name])) {
+                do {
+                    $boundName = $name . '_filter_' . (++$counter);
+                } while (isset($names[$boundName]));
+                $dql = preg_replace(
+                    '/(?<![A-Za-z0-9_]):' . preg_quote($name, '/') . '(?![A-Za-z0-9_])/',
+                    ':' . $boundName,
+                    $dql,
+                ) ?? $dql;
+            }
+
+            $qb->setParameter($boundName, $parameter->getValue());
+            $names[$boundName] = true;
+        }
+
+        return $dql;
     }
 
     private function assertSafeSelect(string $select): void
