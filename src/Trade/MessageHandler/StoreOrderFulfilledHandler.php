@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Trade\MessageHandler;
 
-use App\Store\DTO\StoreSettings;
-use App\Store\Repository\StoreRepository;
 use App\Trade\Entity\TradeConsumedEvent;
 use App\Trade\Message\StoreOrderFulfilledMessage;
 use App\Trade\Repository\TradeConsumedEventRepository;
@@ -20,7 +18,6 @@ final readonly class StoreOrderFulfilledHandler
         private readonly ?TradeConsumedEventRepository $consumedRepository = null,
         private readonly ?OrderStoreLifecycleService $lifecycleService = null,
         private readonly ?EntityManagerInterface $entityManager = null,
-        private readonly ?StoreRepository $storeRepository = null,
     ) {
     }
 
@@ -64,12 +61,9 @@ final readonly class StoreOrderFulfilledHandler
             return;
         }
         $storeOrderUuid = is_string($payload['storeOrderUuid'] ?? null) ? $payload['storeOrderUuid'] : null;
-        $requiresVerification = false;
-        if ($this->storeRepository !== null) {
-            $store = $this->storeRepository->findOneBy(['uuid' => $storeUuid]);
-            if ($store !== null) {
-                $requiresVerification = StoreSettings::from($store->getSettings())->requireVerification;
-            }
+        $requiresVerification = $payload['requiresVerification'] ?? null;
+        if (!is_bool($requiresVerification)) {
+            throw new \InvalidArgumentException('Invalid store.order.fulfilled.v1 envelope.');
         }
         $this->lifecycleService->markFulfilled($orderUuid, $storeUuid, $storeOrderUuid, $requiresVerification);
     }

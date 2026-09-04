@@ -78,7 +78,11 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         $order = $event->getSubject();
         \assert($order instanceof Order);
         $lifecycle = $this->lifecycleRepository->findOneByTradeOrderUuid($order->getUuid());
-        if ($lifecycle !== null && $lifecycle->getVerificationStatus() === OrderStoreLifecycle::VERIFICATION_PENDING) {
+        if ($lifecycle === null || $lifecycle->getFulfillmentStatus() !== OrderStoreLifecycle::FULFILLMENT_FULFILLED) {
+            $event->setBlocked(true, 'Store fulfillment required before complete.');
+            return;
+        }
+        if ($lifecycle->getVerificationStatus() === OrderStoreLifecycle::VERIFICATION_PENDING) {
             $event->setBlocked(true, 'Store verification required before complete.');
         }
     }

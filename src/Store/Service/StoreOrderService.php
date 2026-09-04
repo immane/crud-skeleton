@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Store\Service;
 
 use App\Core\Service\BaseService;
+use App\Store\DTO\StoreSettings;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
@@ -82,14 +83,18 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
     public function fulfill(StoreOrder $storeOrder, ?array $fulfillmentData = null): StoreOrder
     {
         return $this->transaction(function () use ($storeOrder, $fulfillmentData): StoreOrder {
+            if ($this->outboxService === null) {
+                throw new \RuntimeException('Store outbox is not configured.');
+            }
             $this->assertStoreOrderCan($storeOrder, 'fulfill');
             $storeOrder->fulfill($fulfillmentData);
-            $this->outboxService?->record('store.order.fulfilled.v1', 'store_order', $storeOrder->getUuid(), [
+            $this->outboxService->record('store.order.fulfilled.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
                 'storeOrderUuid' => $storeOrder->getUuid(),
                 'storeUuid' => $storeOrder->getStore()->getUuid(),
                 'fulfilledAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
                 'fulfillmentData' => $fulfillmentData,
+                'requiresVerification' => StoreSettings::from($storeOrder->getStore()->getSettings())->requireVerification,
             ]);
 
             return $storeOrder;

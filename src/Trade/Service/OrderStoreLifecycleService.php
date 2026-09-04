@@ -25,6 +25,18 @@ class OrderStoreLifecycleService
     {
         $existing = $this->repository->findOneByTradeOrderUuid($tradeOrderUuid);
         if ($existing !== null) {
+            if ($existing->getStoreUuid() !== $storeUuid) {
+                throw new \LogicException('Store lifecycle event does not belong to the order store.');
+            }
+            if ($storeOrderUuid !== null
+                && $existing->getStoreOrderUuid() !== null
+                && $existing->getStoreOrderUuid() !== $storeOrderUuid) {
+                throw new \LogicException('Store lifecycle event does not belong to the Store order.');
+            }
+            if ($storeOrderUuid !== null && $existing->getStoreOrderUuid() === null) {
+                $existing->setStoreOrderUuid($storeOrderUuid);
+            }
+
             return $existing;
         }
 

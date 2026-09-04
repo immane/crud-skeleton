@@ -106,16 +106,29 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame('out_of_stock', $persisted[0]->getPayload()['reasonCode']);
     }
 
-    public function testFulfillStoresFulfillmentData(): void
+    public function testFulfillRecordsVerificationPolicySnapshot(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $persisted = [];
         $entityManager->method('getRepository')->with(StoreOrder::class)->willReturn($this->createMock(StoreOrderRepository::class));
-        $service = new StoreOrderService($this->createContainer($entityManager), $this->createMock(StoreOrderRepository::class));
+        $entityManager->method('persist')->willReturnCallback(static function (object $entity) use (&$persisted): void {
+            $persisted[] = $entity;
+        });
+        $service = new StoreOrderService(
+            $this->createContainer($entityManager),
+            $this->createMock(StoreOrderRepository::class),
+            new StoreOutboxService($entityManager),
+        );
         $order = $this->createOrder();
+        $order->getStore()->setSettings(['fulfillment' => ['requireVerification' => true]]);
 
         self::assertSame($order, $service->fulfill($order, ['trackingNumber' => 'TRACK-1']));
         self::assertSame(StoreOrder::STATUS_FULFILLED, $order->getOperationalStatus());
         self::assertSame(['trackingNumber' => 'TRACK-1'], $order->getFulfillmentData());
+        self::assertCount(1, $persisted);
+        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
+        self::assertSame('store.order.fulfilled.v1', $persisted[0]->getTopic());
+        self::assertTrue($persisted[0]->getPayload()['requiresVerification']);
     }
 
     public function testAcceptRequiresAnOutboxService(): void

@@ -114,7 +114,10 @@ class OrderStoreLifecycle
         if ($storeOrderUuid !== null) {
             $this->storeOrderUuid = $storeOrderUuid;
         }
-        $this->verificationStatus = $requiresVerification ? self::VERIFICATION_PENDING : self::VERIFICATION_NOT_REQUIRED;
+        // A verified event may arrive before the fulfilled event on an async transport.
+        if ($this->verificationStatus !== self::VERIFICATION_VERIFIED) {
+            $this->verificationStatus = $requiresVerification ? self::VERIFICATION_PENDING : self::VERIFICATION_NOT_REQUIRED;
+        }
 
         return $this->touch();
     }
