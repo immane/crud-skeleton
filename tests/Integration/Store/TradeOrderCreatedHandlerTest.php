@@ -44,7 +44,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         $client = static::createClient();
         $container = $client->getContainer();
         $stores = $container->get(StoreServiceInterface::class);
-        $store = $stores->createStore('xuhui', 'Xuhui Store', 'Asia/Shanghai');
+        $store = $stores->createStore('demo', 'Demo Store', 'Asia/Shanghai');
         $handler = $container->get(\App\Store\MessageHandler\TradeOrderCreatedHandler::class);
 
         $message = new TradeOrderCreatedMessage([

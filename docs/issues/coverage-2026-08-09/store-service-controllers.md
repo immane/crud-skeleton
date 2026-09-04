@@ -85,7 +85,7 @@ All `src/` bugs below are **documented only** — no fix was applied.
 - **File/line:** `src/Store/Service/StoreContextResolver.php:37`
 - **Description:** `$request->headers->get('X-Store-Channel', 'api')` returns the header verbatim; an explicitly-present-but-empty header yields channel `''` instead of `'api'`.
 - **Impact:** `StoreContext->channel` becomes `''` for such clients, which can break channel-conditional logic downstream.
-- **Reproduction:** send `X-Store-Code: xuhui` and `X-Store-Channel:` (empty) — `resolve()->channel === ''`.
+- **Reproduction:** send `X-Store-Code: demo` and `X-Store-Channel:` (empty) — `resolve()->channel === ''`.
 - **Proposed fix:** use `$request->headers->get('X-Store-Channel') ?: 'api'`.
 
 ## Skipped tests

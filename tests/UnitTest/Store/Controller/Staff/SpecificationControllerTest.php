@@ -33,7 +33,7 @@ final class SpecificationControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $this->store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $this->product = new Product($this->store);
         $this->product->setName('Tea');
         $this->specService = $this->createMock(SpecificationServiceInterface::class);

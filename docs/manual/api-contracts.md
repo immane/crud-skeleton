@@ -192,7 +192,7 @@ the `App` and `Manage` controller trees (attribute routing).
 | `/api/v1/manage/stores/{uuid}/members` | POST | `ROLE_ADMIN` | Grant membership (`userUuid`, `role` `owner/manager/clerk/fulfillment`) — upsert & re-activate |
 | `/api/v1/app/stores/{uuid}/membership` | POST | `ROLE_USER` | **Self-join as member** (idempotent, fixed `role=clerk`, body ignored, `200 Already a member` / `201 Joined`) |
 | `/api/v1/app/stores/{uuid}/membership` | GET | `ROLE_USER` | Get own membership for store |
-| `/api/v1/app/orders` | POST | `ROLE_USER` | Create order — `currency` is **authoritative from `Store`** via `X-Store-Code` header (`LIANSHENG_POINT` for points mall, `CNY` otherwise); mismatch `400 Currency mismatch`; global (no header) defaults to `CNY` |
+| `/api/v1/app/orders` | POST | `ROLE_USER` | Create order — `currency` is **authoritative from `Store`** via `X-Store-Code` header (`REWARD_POINT` for points mall, `CNY` otherwise); mismatch `400 Currency mismatch`; global (no header) defaults to `CNY` |
 
 `StoreContact` (`Store/StoreContact` schema) now includes `subTitle` (1..100) and `tags` (array 1..30×20 unique) alongside `phone`, `email`, `serviceHours`, etc.; `StoreAddress` includes `province/city/district/street/detail/formattedAddress/latitude/longitude` with `additionalProperties:false`.
 

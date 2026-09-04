@@ -222,8 +222,8 @@ Trade stores a historical display snapshot under a reserved metadata key:
 {
   "_store": {
     "uuid": "store-uuid",
-    "code": "shanghai-xuhui",
-    "name": "Xuhui Store",
+    "code": "shanghai-demo",
+    "name": "Demo Store",
     "channel": "mini_program",
     "requireVerification": false
   },
@@ -555,7 +555,7 @@ No Store gate exists. The Trade payment service checks standard `order.status` e
     "status": "pending",
     "store": {
       "uuid": "store-uuid",
-      "name": "Xuhui Store"
+      "name": "Demo Store"
     }
   },
   "code": 201,
@@ -611,8 +611,8 @@ Rules:
   "orderUuid": "trade-order-uuid",
   "store": {
     "uuid": "store-uuid",
-    "code": "shanghai-xuhui",
-    "name": "Xuhui Store",
+    "code": "shanghai-demo",
+    "name": "Demo Store",
     "channel": "mini_program",
     "requireVerification": false
   },

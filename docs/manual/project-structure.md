@@ -83,7 +83,7 @@ src/
 │   │   ├── OrderService.php (currency from StoreContext), ProductService.php, SpecificationService.php
 │   │   ├── Pricing/                # BasePrice → Quantity → TotalAggregator pipeline (currency validated)
 │   │   └── TradeOutboxService.php
-│   ├── Entity/                     # Product (store-private), Specification, Order (currency varchar(32), LIANSHENG_POINT), OrderItem, TradeOutboxMessage
+│   ├── Entity/                     # Product (store-private), Specification, Order (currency varchar(32), REWARD_POINT), OrderItem, TradeOutboxMessage
 │   ├── DTO/StoreContext.php        # StoreContext with currency snapshot (code, uuid, name, channel, currency)
 │   ├── Message/ + MessageHandler/  # TradeOrderCreated/Cancelled, StoreOrderAccepted/Rejected
 │   ├── Event/ + EventListener/     # Order*Event, OrderInvoiceListener, OrderWorkflowListener
@@ -92,7 +92,7 @@ src/
 ├── Store/                          # Multi-store operations
 │   ├── Controller/{App,Manage,Staff}/  # App: Store (public) + Membership self-join (`POST /app/stores/{uuid}/membership`); Manage: Store CRUD + members; Staff: Store-scoped ops
 │   ├── Service/                    # StoreService, StoreOrderService, StoreOutboxService, StoreContextResolver (X-Store-Code → StoreContext with currency)
-│   ├── Entity/                     # Store (currency varchar(32) DEFAULT CNY, LIANSHENG_POINT for points mall), Membership, StoreOrder (currency), StoreOutboxMessage, …
+│   ├── Entity/                     # Store (currency varchar(32) DEFAULT CNY, REWARD_POINT for points mall), Membership, StoreOrder (currency), StoreOutboxMessage, …
 │   ├── Resources/JsonSchema/       # StoreAddress.json, StoreContact.json (subTitle 1..100 + tags array 1..30×20), StoreSettings.json
 │   ├── MessageHandler/             # Reservation*, TradeOrder* handlers
 │   └── Command/PublishOutboxCommand.php

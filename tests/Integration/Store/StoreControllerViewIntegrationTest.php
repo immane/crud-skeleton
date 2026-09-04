@@ -28,8 +28,8 @@ final class StoreControllerViewIntegrationTest extends IntegrationWebTestCase
         $entityManager = $container->get(EntityManagerInterface::class);
 
         $client->request('POST', '/api/v1/manage/stores', [], [], [], json_encode([
-            'code' => 'xuhui',
-            'name' => 'Xuhui Store',
+            'code' => 'demo',
+            'name' => 'Demo Store',
             'timezone' => 'Asia/Shanghai',
             'settings' => ['acceptingOrders' => true],
         ], JSON_THROW_ON_ERROR));
@@ -53,7 +53,7 @@ final class StoreControllerViewIntegrationTest extends IntegrationWebTestCase
         self::assertResponseIsSuccessful();
 
         $client->request('PUT', '/api/v1/manage/stores/' . $storeUuid, [], [], [], json_encode([
-            'name' => 'Updated Xuhui Store',
+            'name' => 'Updated Demo Store',
         ], JSON_THROW_ON_ERROR));
         self::assertResponseIsSuccessful();
         $client->request('PUT', '/api/v1/manage/stores/' . $storeUuid, [], [], [], json_encode([

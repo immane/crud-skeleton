@@ -31,7 +31,7 @@ final class StoreOrderControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $this->store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $this->user = new User();
         $this->orderService = $this->createMock(StoreOrderServiceInterface::class);
         $this->storeService = $this->createMock(StoreServiceInterface::class);
@@ -57,8 +57,8 @@ final class StoreOrderControllerTest extends TestCase
         return new StoreOrder(
             $this->store,
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             $this->user->getUuid(),
             'CNY',
             12800,

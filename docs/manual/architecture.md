@@ -38,7 +38,7 @@ one Messenger bus, but they must behave as if they were independent services.
 | `Common` | CMS primitives: Category, Tag, Content, Comment, Page, Media, Picture, Setting |
 | `Identity` | Authentication & accounts: User, Profile, RefreshToken, JWT/OTP flows |
 | `Trade` | E-commerce transactions: Order (`currency` from `Store` via `X-Store-Code`), OrderItem, pricing pipeline (single currency per order), payment orchestration; references Store catalog |
-| `Store` | Multi-store operations: Store (`currency` varchar(32) DEFAULT `CNY`, `LIANSHENG_POINT` for points mall, `X-Store-Code` → `StoreContext`), Membership (self-join `POST /app/stores/{uuid}/membership` as `clerk`), StoreOrder distribution; owns Product and Specification catalog (shared `NULL` / store-private, [Store Catalog Model](../design/store-catalog.md)) |
+| `Store` | Multi-store operations: Store (`currency` varchar(32) DEFAULT `CNY`, `REWARD_POINT` for points mall, `X-Store-Code` → `StoreContext`), Membership (self-join `POST /app/stores/{uuid}/membership` as `clerk`), StoreOrder distribution; owns Product and Specification catalog (shared `NULL` / store-private, [Store Catalog Model](../design/store-catalog.md)) |
 | `Inventory` | Stock, materials, recipes, reservations, ledger |
 | `Payment` | Invoice lifecycle, gateway abstraction, webhooks, events |
 | `Wallet` | Balances, atomic transfers, deposits/withdrawals, vouchers, deductions |

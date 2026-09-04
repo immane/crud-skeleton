@@ -11,7 +11,7 @@ final class Version20260903000005 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Expand currency columns to VARCHAR(32) to support LIANSHENG_POINT and extended codes';
+        return 'Expand currency columns to VARCHAR(32) to support extended codes (e.g. REWARD_POINT)';
     }
 
     public function up(Schema $schema): void

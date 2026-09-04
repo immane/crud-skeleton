@@ -12,14 +12,14 @@ final class StoreTest extends TestCase
 {
     public function testLifecycleAndMutableStoreDetails(): void
     {
-        $store = new Store('shanghai-xuhui', 'Xuhui Store', 'Asia/Shanghai');
+        $store = new Store('shanghai-demo', 'Demo Store', 'Asia/Shanghai');
 
         self::assertMatchesRegularExpression('/^[0-9a-f-]{36}$/', $store->getUuid());
-        self::assertSame('shanghai-xuhui', $store->getCode());
+        self::assertSame('shanghai-demo', $store->getCode());
         self::assertTrue($store->isActive());
         self::assertNull($store->getUpdatedAt());
 
-        $store->setName('Xuhui Flagship')->suspend();
+        $store->setName('Demo Flagship')->suspend();
         self::assertSame(Store::STATUS_SUSPENDED, $store->getStatus());
         self::assertInstanceOf(\DateTimeImmutable::class, $store->getUpdatedAt());
 
@@ -29,7 +29,7 @@ final class StoreTest extends TestCase
 
     public function testContactAddressAndSettingsSettersTouchUpdatedAt(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $store->setContact(['phone' => '021-12345678']);
         $store->setAddress(['city' => 'Shanghai']);
@@ -48,7 +48,7 @@ final class StoreTest extends TestCase
 
     public function testActivateRestoresActiveStatus(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $store->suspend();
         self::assertFalse($store->isActive());
 
@@ -62,12 +62,12 @@ final class StoreTest extends TestCase
     #[Group('low-value')]
     public function testCodeAndTimezoneAreMutable(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
-        $store->setCode('xuhui-flagship')->setTimezone('Asia/Shanghai');
+        $store->setCode('demo-flagship')->setTimezone('Asia/Shanghai');
 
-        self::assertSame('xuhui-flagship', $store->getCode());
-        self::assertSame('Xuhui', $store->getName());
+        self::assertSame('demo-flagship', $store->getCode());
+        self::assertSame('Demo', $store->getName());
         self::assertSame('Asia/Shanghai', $store->getTimezone());
         self::assertNull($store->getId());
         self::assertInstanceOf(\DateTimeImmutable::class, $store->getCreatedAt());
@@ -75,10 +75,10 @@ final class StoreTest extends TestCase
 
     public function testStringRepresentationPrefersNameOverCode(): void
     {
-        $withName = new Store('xuhui', 'Xuhui Store', 'Asia/Shanghai');
-        self::assertSame('Xuhui Store', (string) $withName);
+        $withName = new Store('demo', 'Demo Store', 'Asia/Shanghai');
+        self::assertSame('Demo Store', (string) $withName);
 
-        $withoutName = new Store('xuhui');
-        self::assertSame('xuhui', (string) $withoutName);
+        $withoutName = new Store('demo');
+        self::assertSame('demo', (string) $withoutName);
     }
 }

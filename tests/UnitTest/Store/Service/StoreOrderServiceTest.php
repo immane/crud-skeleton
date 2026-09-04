@@ -35,10 +35,10 @@ final class StoreOrderServiceTest extends TestCase
         });
 
         $service = new StoreOrderService($this->createContainer($entityManager), $repository);
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $snapshot = [
             'orderUuid' => '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'store' => ['uuid' => $store->getUuid(), 'code' => 'xuhui', 'name' => 'Xuhui', 'channel' => 'mini_program'],
+            'store' => ['uuid' => $store->getUuid(), 'code' => 'demo', 'name' => 'Demo', 'channel' => 'mini_program'],
             'customerUserUuid' => '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57',
             'currency' => 'CNY',
             'totalAmount' => 12800,
@@ -132,7 +132,7 @@ final class StoreOrderServiceTest extends TestCase
     public function testCreateFromSnapshotRejectsInvalidSnapshot(): void
     {
         $service = $this->createService();
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid Trade order snapshot.');
@@ -144,7 +144,7 @@ final class StoreOrderServiceTest extends TestCase
     public function testCreateFromSnapshotRejectsNonStringCustomerUserUuid(): void
     {
         $service = $this->createService();
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Trade order customer user UUID must be a string or null.');
@@ -156,7 +156,7 @@ final class StoreOrderServiceTest extends TestCase
     public function testCreateFromSnapshotRejectsNegativeTotalAmount(): void
     {
         $service = $this->createService();
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Trade order total amount cannot be negative.');
@@ -168,7 +168,7 @@ final class StoreOrderServiceTest extends TestCase
     public function testCreateFromSnapshotRejectsNonStringChannel(): void
     {
         $service = $this->createService();
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Trade order store channel must be a string.');
@@ -179,12 +179,12 @@ final class StoreOrderServiceTest extends TestCase
 
     public function testCreateFromSnapshotConflictsWithExistingOrder(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $conflicting = new StoreOrder(
             $store,
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             null,
             'CNY',
             9999,
@@ -201,7 +201,7 @@ final class StoreOrderServiceTest extends TestCase
 
     public function testCreateFromSnapshotRethrowsUniqueConstraintWhenExistingDisappears(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $repository = $this->createMock(StoreOrderRepository::class);
         $repository->method('findOneByTradeOrderUuid')->willReturnOnConsecutiveCalls(null, null);
         $entityManager = $this->createEntityManager($repository);
@@ -214,12 +214,12 @@ final class StoreOrderServiceTest extends TestCase
 
     public function testCreateFromSnapshotRethrowsConflictWithUniqueConstraintCause(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $conflicting = new StoreOrder(
             $store,
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             null,
             'CNY',
             9999,
@@ -242,7 +242,7 @@ final class StoreOrderServiceTest extends TestCase
 
     public function testCreateFromSnapshotReturnsExistingAfterUniqueConstraint(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $existing = $this->matchingOrder($store);
         $repository = $this->createMock(StoreOrderRepository::class);
         $repository->method('findOneByTradeOrderUuid')->willReturnOnConsecutiveCalls(null, $existing);
@@ -299,12 +299,12 @@ final class StoreOrderServiceTest extends TestCase
     {
         self::markTestSkipped('StoreOrderService::matchesSnapshot uses order-sensitive === (bug).');
 
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $existing = new StoreOrder(
             $store,
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57',
             'CNY',
             12800,
@@ -338,7 +338,7 @@ final class StoreOrderServiceTest extends TestCase
     {
         return [
             'orderUuid' => '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'store' => ['uuid' => $store->getUuid(), 'code' => 'xuhui', 'name' => 'Xuhui', 'channel' => 'mini_program'],
+            'store' => ['uuid' => $store->getUuid(), 'code' => 'demo', 'name' => 'Demo', 'channel' => 'mini_program'],
             'customerUserUuid' => '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57',
             'currency' => 'cny',
             'totalAmount' => 12800,
@@ -353,8 +353,8 @@ final class StoreOrderServiceTest extends TestCase
         return new StoreOrder(
             $store,
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57',
             'CNY',
             12800,
@@ -365,10 +365,10 @@ final class StoreOrderServiceTest extends TestCase
     private function createOrder(): StoreOrder
     {
         return new StoreOrder(
-            new Store('xuhui', 'Xuhui', 'Asia/Shanghai'),
+            new Store('demo', 'Demo', 'Asia/Shanghai'),
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57',
             'CNY',
             12800,
