@@ -77,7 +77,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
 
         self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
         self::assertTrue($this->workflow->can($order, 'submit'));
-        self::assertTrue($this->workflow->can($order, 'store_submit'));
         self::assertTrue($this->workflow->can($order, 'cancel'));
     }
 
@@ -102,31 +101,11 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     }
 
     #[Group('low-value')]
-    public function testStoreBranchChainDraftToCancelledViaReject(): void
+    public function testPendingCanBeConfirmedThenPaid(): void
     {
         $order = new Order();
-
-        $this->workflow->apply($order, 'store_submit');
-        self::assertSame('awaiting_store_acceptance', $order->getStatus());
-
-        $this->workflow->apply($order, 'store_reject');
-        self::assertSame('store_rejected', $order->getStatus());
-
-        self::assertTrue($this->workflow->can($order, 'cancel'));
-        $this->workflow->apply($order, 'cancel');
-        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
-    }
-
-    #[Group('low-value')]
-    public function testStoreBranchChainAwaitingAcceptToConfirmed(): void
-    {
-        $order = new Order();
-
-        $this->workflow->apply($order, 'store_submit');
-        self::assertSame('awaiting_store_acceptance', $order->getStatus());
-
-        $this->workflow->apply($order, 'store_accept');
-        self::assertSame('store_accepted', $order->getStatus());
+        $this->workflow->apply($order, 'submit');
+        self::assertSame(Order::STATUS_PENDING, $order->getStatus());
 
         $this->workflow->apply($order, 'confirm');
         self::assertSame(Order::STATUS_CONFIRMED, $order->getStatus());
@@ -145,11 +124,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     public static function enabledTransitionsProvider(): array
     {
         return [
-            'draft' => ['draft', ['submit', 'store_submit', 'cancel']],
+            'draft' => ['draft', ['submit', 'cancel']],
             'pending' => ['pending', ['confirm', 'cancel']],
-            'awaiting_store_acceptance' => ['awaiting_store_acceptance', ['store_accept', 'store_reject']],
-            'store_accepted' => ['store_accepted', ['confirm']],
-            'store_rejected' => ['store_rejected', ['cancel']],
             'confirmed' => ['confirmed', ['pay', 'cancel']],
             'paid' => ['paid', ['fulfill', 'refund']],
             'fulfilled' => ['fulfilled', ['complete']],
@@ -186,13 +162,9 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     {
         return [
             'draft->submit' => ['draft', 'submit', 'pending'],
-            'draft->store_submit' => ['draft', 'store_submit', 'awaiting_store_acceptance'],
             'draft->cancel' => ['draft', 'cancel', 'cancelled'],
             'pending->confirm' => ['pending', 'confirm', 'confirmed'],
             'pending->cancel' => ['pending', 'cancel', 'cancelled'],
-            'awaiting_store_acceptance->store_accept' => ['awaiting_store_acceptance', 'store_accept', 'store_accepted'],
-            'awaiting_store_acceptance->store_reject' => ['awaiting_store_acceptance', 'store_reject', 'store_rejected'],
-            'store_accepted->confirm' => ['store_accepted', 'confirm', 'confirmed'],
             'confirmed->pay' => ['confirmed', 'pay', 'paid'],
             'confirmed->cancel' => ['confirmed', 'cancel', 'cancelled'],
             'paid->fulfill' => ['paid', 'fulfill', 'fulfilled'],
@@ -228,10 +200,15 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'draft->refund' => ['draft', 'refund'],
             'draft->store_accept' => ['draft', 'store_accept'],
             'draft->store_reject' => ['draft', 'store_reject'],
+            'draft->store_submit' => ['draft', 'store_submit'],
+            'draft->store_verify' => ['draft', 'store_verify'],
+            'draft->request_verification' => ['draft', 'request_verification'],
             'pending->pay' => ['pending', 'pay'],
             'pending->fulfill' => ['pending', 'fulfill'],
             'pending->submit' => ['pending', 'submit'],
             'pending->store_submit' => ['pending', 'store_submit'],
+            'pending->store_accept' => ['pending', 'store_accept'],
+            'pending->store_reject' => ['pending', 'store_reject'],
             'confirmed->submit' => ['confirmed', 'submit'],
             'confirmed->confirm' => ['confirmed', 'confirm'],
             'confirmed->fulfill' => ['confirmed', 'fulfill'],
@@ -242,10 +219,12 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'paid->confirm' => ['paid', 'confirm'],
             'paid->complete' => ['paid', 'complete'],
             'paid->cancel' => ['paid', 'cancel'],
+            'paid->store_accept' => ['paid', 'store_accept'],
             'fulfilled->pay' => ['fulfilled', 'pay'],
             'fulfilled->fulfill' => ['fulfilled', 'fulfill'],
             'fulfilled->refund' => ['fulfilled', 'refund'],
             'fulfilled->cancel' => ['fulfilled', 'cancel'],
+            'fulfilled->store_accept' => ['fulfilled', 'store_accept'],
             'completed->pay' => ['completed', 'pay'],
             'completed->complete' => ['completed', 'complete'],
             'completed->cancel' => ['completed', 'cancel'],
@@ -259,11 +238,9 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'refunded->pay' => ['refunded', 'pay'],
             'refunded->refund' => ['refunded', 'refund'],
             'refunded->cancel' => ['refunded', 'cancel'],
-            'store_accepted->store_accept' => ['store_accepted', 'store_accept'],
-            'store_accepted->cancel' => ['store_accepted', 'cancel'],
-            'store_rejected->confirm' => ['store_rejected', 'confirm'],
-            'awaiting_store_acceptance->cancel' => ['awaiting_store_acceptance', 'cancel'],
             'awaiting_store_verification->cancel' => ['awaiting_store_verification', 'cancel'],
+            'awaiting_store_verification->confirm' => ['awaiting_store_verification', 'confirm'],
+            'pending->store_verify' => ['pending', 'store_verify'],
         ];
     }
 
@@ -352,12 +329,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
 
     public function testNoTransitionInWorkflowConfigDeclaresAGuard(): void
     {
-        // In the installed Symfony Workflow version the Transition value object
-        // exposes no guard API at all, and config/packages/workflow.yaml does
-        // not set `guard:` on any order transition. Guard enforcement for
-        // store acceptance/verification lives in StoreOrderWorkflowGuardListener
-        // (event guard), not in workflow.yaml guard expressions. This test pins
-        // the set of transition names so accidental renames are caught.
         $definition = $this->workflow->getDefinition();
 
         $names = array_map(
@@ -365,9 +336,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             $definition->getTransitions(),
         );
 
-        // Multi-from transitions (confirm, cancel) are expanded by Symfony into
-        // one Transition object per (name, from-place) arc, hence 18 arcs for 12
-        // unique transition names (added request_verification + store_verify).
         $unique = array_values(array_unique($names));
         sort($unique);
 
@@ -379,9 +347,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'pay',
             'refund',
             'request_verification',
-            'store_accept',
-            'store_reject',
-            'store_submit',
             'store_verify',
             'submit',
         ], $unique);
@@ -505,14 +470,14 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
     }
 
     #[Group('low-value')]
-    public function testStoreRejectDoesNotSetTimestamp(): void
+    public function testCancelFromPendingSetsCancelledAt(): void
     {
-        $order = new Order();
-        $this->workflow->apply($order, 'store_submit');
-        $this->workflow->apply($order, 'store_reject');
+        $order = $this->orderIn(Order::STATUS_PENDING);
 
-        self::assertNull($order->getCancelledAt());
-        self::assertSame('store_rejected', $order->getStatus());
+        $this->workflow->apply($order, 'cancel');
+
+        self::assertInstanceOf(\DateTimeImmutable::class, $order->getCancelledAt());
+        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
     }
 
     public function testOrderEntityExposesMarkingViaGetStatusSetStatus(): void

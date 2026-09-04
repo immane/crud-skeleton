@@ -58,7 +58,7 @@ final readonly class StoreOrderRejectedHandler
                     $reason = is_string($payload['reason'] ?? null) ? $payload['reason'] : null;
                     $this->lifecycleService->markRejected($orderUuid, $storeUuid, $storeOrderUuid, $code, $reason);
                 }
-                $this->applyStoreReject($orderUuid, $storeUuid);
+                $this->autoCancelIfPending($orderUuid, $storeUuid);
             });
 
             return;
@@ -70,19 +70,23 @@ final readonly class StoreOrderRejectedHandler
             $reason = is_string($payload['reason'] ?? null) ? $payload['reason'] : null;
             $this->lifecycleService->markRejected($orderUuid, $storeUuid, $storeOrderUuid, $code, $reason);
         }
-        $this->applyStoreReject($orderUuid, $storeUuid);
+        $this->autoCancelIfPending($orderUuid, $storeUuid);
     }
 
-    private function applyStoreReject(string $orderUuid, string $storeUuid): void
+    private function autoCancelIfPending(string $orderUuid, string $storeUuid): void
     {
         $order = $this->orderService->get(['uuid' => $orderUuid]);
         if (!$order instanceof Order || ($order->getMetadata()['_store']['uuid'] ?? null) !== $storeUuid) {
             return;
         }
+        // Auto-cancel only before payment; paid/fulfilled/completed require manual refund.
+        if (!in_array($order->getStatus(), [Order::STATUS_DRAFT, Order::STATUS_PENDING, Order::STATUS_CONFIRMED], true)) {
+            return;
+        }
 
         $this->orderService->wrapInTransaction(function () use ($order): void {
-            if ($this->workflow->can($order, 'store_reject')) {
-                $this->workflow->apply($order, 'store_reject');
+            if ($this->workflow->can($order, 'cancel')) {
+                $this->workflow->apply($order, 'cancel');
             }
         });
     }

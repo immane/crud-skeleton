@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\UnitTest\Trade\MessageHandler;
 
-use App\Trade\Entity\Order;
+use App\Trade\Entity\OrderStoreLifecycle;
 use App\Trade\Message\StoreOrderAcceptedMessage;
 use App\Trade\MessageHandler\StoreOrderAcceptedHandler;
+use App\Trade\Repository\TradeConsumedEventRepository;
 use App\Trade\Service\OrderServiceInterface;
+use App\Trade\Service\OrderStoreLifecycleService;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -47,77 +50,33 @@ final class StoreOrderAcceptedHandlerTest extends TestCase
         (new StoreOrderAcceptedHandler($orders, $workflow))(new StoreOrderAcceptedMessage(['payload' => ['storeUuid' => self::STORE_UUID]]));
     }
 
-    public function testIgnoresMessageWhenOrderIsNotFound(): void
+    public function testMarksAcceptedViaLifecycleService(): void
     {
-        $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->with(['uuid' => self::ORDER_UUID])->willReturn(null);
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::never())->method('can');
-        $workflow->expects(self::never())->method('apply');
+        $orders = $this->createStub(OrderServiceInterface::class);
+        $workflow = $this->createStub(WorkflowInterface::class);
+        $lifecycle = $this->createMock(OrderStoreLifecycleService::class);
+        $lifecycle->expects(self::once())->method('markAccepted')->with(self::ORDER_UUID, self::STORE_UUID, 'store-order-uuid')->willReturn(new OrderStoreLifecycle(self::ORDER_UUID, self::STORE_UUID));
 
-        (new StoreOrderAcceptedHandler($orders, $workflow))(new StoreOrderAcceptedMessage(['payload' => [
+        $handler = new StoreOrderAcceptedHandler($orders, $workflow, null, $lifecycle, null);
+        $handler(new StoreOrderAcceptedMessage(['payload' => [
             'orderUuid' => self::ORDER_UUID,
             'storeUuid' => self::STORE_UUID,
+            'storeOrderUuid' => 'store-order-uuid',
         ]]));
     }
 
-    public function testIgnoresMessageWhenStoreUuidDoesNotMatch(): void
+    public function testIsIdempotentViaConsumedEvent(): void
     {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => '00000000-0000-4000-8000-000000000001']]);
-        $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->willReturn($order);
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::never())->method('apply');
+        $orders = $this->createStub(OrderServiceInterface::class);
+        $workflow = $this->createStub(WorkflowInterface::class);
+        $repo = $this->createMock(TradeConsumedEventRepository::class);
+        $repo->method('findOneByEventId')->with('event-123')->willReturn(new \App\Trade\Entity\TradeConsumedEvent('event-123', 'store.order.accepted.v1', self::ORDER_UUID, 'hash'));
+        $lifecycle = $this->createMock(OrderStoreLifecycleService::class);
+        $lifecycle->expects(self::never())->method('markAccepted');
 
-        (new StoreOrderAcceptedHandler($orders, $workflow))(new StoreOrderAcceptedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
-            'storeUuid' => self::STORE_UUID,
-        ]]));
-    }
-
-    public function testIgnoresMessageWhenOrderHasNoStoreMetadata(): void
-    {
-        $order = new Order();
-        $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->willReturn($order);
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::never())->method('apply');
-
-        (new StoreOrderAcceptedHandler($orders, $workflow))(new StoreOrderAcceptedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
-            'storeUuid' => self::STORE_UUID,
-        ]]));
-    }
-
-    public function testDoesNotApplyWhenWorkflowCannotAccept(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => self::STORE_UUID]]);
-        $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->willReturn($order);
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->with($order, 'store_accept')->willReturn(false);
-        $workflow->expects(self::never())->method('apply');
-
-        (new StoreOrderAcceptedHandler($orders, $workflow))(new StoreOrderAcceptedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
-            'storeUuid' => self::STORE_UUID,
-        ]]));
-    }
-
-    public function testAppliesStoreAcceptTransitionWithinTransaction(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => self::STORE_UUID]]);
-        $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->willReturn($order);
-        $orders->expects(self::once())->method('wrapInTransaction')->willReturnCallback(
-            static fn (callable $callback): mixed => $callback()
-        );
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->with($order, 'store_accept')->willReturn(true);
-        $workflow->expects(self::once())->method('apply')->with($order, 'store_accept');
-
-        (new StoreOrderAcceptedHandler($orders, $workflow))(new StoreOrderAcceptedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
+        $handler = new StoreOrderAcceptedHandler($orders, $workflow, $repo, $lifecycle, $this->createStub(EntityManagerInterface::class));
+        $handler(new StoreOrderAcceptedMessage(['eventId' => 'event-123', 'payload' => [
+            'orderUuid' => self::ORDER_UUID,
             'storeUuid' => self::STORE_UUID,
         ]]));
     }

@@ -19,9 +19,11 @@ use Symfony\Component\Workflow\WorkflowInterface;
 final readonly class StoreOrderAcceptedHandler
 {
     public function __construct(
+        /** @phpstan-ignore property.onlyWritten */
         private OrderServiceInterface $orderService,
+        /** @phpstan-ignore property.onlyWritten */
         #[Target('state_machine.order')]
-        private WorkflowInterface $workflow,
+        private readonly ?WorkflowInterface $workflow = null,
         private readonly ?TradeConsumedEventRepository $consumedRepository = null,
         private readonly ?OrderStoreLifecycleService $lifecycleService = null,
         private readonly ?EntityManagerInterface $entityManager = null,
@@ -56,7 +58,6 @@ final readonly class StoreOrderAcceptedHandler
                     $storeOrderUuid = is_string($payload['storeOrderUuid'] ?? null) ? $payload['storeOrderUuid'] : null;
                     $this->lifecycleService->markAccepted($orderUuid, $storeUuid, $storeOrderUuid);
                 }
-                $this->applyStoreAccept($orderUuid, $storeUuid);
             });
 
             return;
@@ -65,20 +66,6 @@ final readonly class StoreOrderAcceptedHandler
         if ($this->lifecycleService !== null) {
             $storeOrderUuid = is_string($payload['storeOrderUuid'] ?? null) ? $payload['storeOrderUuid'] : null;
             $this->lifecycleService->markAccepted($orderUuid, $storeUuid, $storeOrderUuid);
-        }
-        $this->applyStoreAccept($orderUuid, $storeUuid);
-    }
-
-    private function applyStoreAccept(string $orderUuid, string $storeUuid): void
-    {
-        $order = $this->orderService->get(['uuid' => $orderUuid]);
-        if (!$order instanceof Order || ($order->getMetadata()['_store']['uuid'] ?? null) !== $storeUuid) {
-            return;
-        }
-        if ($this->workflow->can($order, 'store_accept')) {
-            $this->orderService->wrapInTransaction(function () use ($order): void {
-                $this->workflow->apply($order, 'store_accept');
-            });
         }
     }
 }

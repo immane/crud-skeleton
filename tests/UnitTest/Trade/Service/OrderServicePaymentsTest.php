@@ -137,29 +137,18 @@ final class OrderServicePaymentsTest extends TestCase
     {
         $em = $this->createEntityManager();
         $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->willReturn(false);
+        $workflow->expects(self::once())->method('can')->with(self::isInstanceOf(Order::class), 'submit')->willReturn(false);
         $workflow->expects(self::never())->method('apply');
-
-        // Store requires acceptance -> can=false should throw
-        $store = new \App\Store\Entity\Store('STORE001', 'Test Store');
-        $store->setSettings(['order' => ['requireAcceptance' => true]]);
-        // Need to set uuid to match StoreContext STORE_UUID constant
-        $ref = new \ReflectionProperty(\App\Store\Entity\Store::class, 'uuid');
-        $ref->setValue($store, self::STORE_UUID);
-        $storeRepository = $this->createMock(\App\Store\Repository\StoreRepository::class);
-        $storeRepository->method('findOneBy')->willReturn($store);
 
         $service = $this->createService([
             'em' => $em,
             'workflow' => $workflow,
             'outboxService' => new TradeOutboxService($em),
-            'storeRepository' => $storeRepository,
         ]);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Order cannot be submitted for store acceptance.');
+        $order = $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
 
-        $service->createOrder([], null, 100, 'CNY', null, [], $this->storeContext());
+        self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
     }
 
     public function testCreateOrderWithStoreContextRecordsOutboxWhenAcceptanceIsDisabled(): void
@@ -171,7 +160,7 @@ final class OrderServicePaymentsTest extends TestCase
             }
         );
         $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->with(self::isInstanceOf(Order::class), 'store_submit')->willReturn(false);
+        $workflow->expects(self::once())->method('can')->with(self::isInstanceOf(Order::class), 'submit')->willReturn(false);
         $workflow->expects(self::never())->method('apply');
         $service = $this->createService([
             'em' => $em,

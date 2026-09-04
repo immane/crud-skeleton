@@ -9,6 +9,7 @@ use App\Store\Service\StoreServiceInterface;
 use App\Tests\Integration\DatabaseBootstrapTrait;
 use App\Tests\Integration\IntegrationWebTestCase;
 use App\Trade\Entity\Order;
+use App\Trade\Entity\OrderStoreLifecycle;
 use App\Store\Entity\Product;
 use App\Store\Entity\Specification;
 use App\Trade\Message\StoreOrderAcceptedMessage;
@@ -54,7 +55,7 @@ final class StoreScopedOrderFlowTest extends IntegrationWebTestCase
         $orderUuid = $response['data']['uuid'];
         $order = $entityManager->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('awaiting_store_acceptance', $order->getStatus());
+        self::assertSame(Order::STATUS_PENDING, $order->getStatus());
 
         $tradeOutbox = $container->get(TradeOutboxMessageRepository::class)->findUnpublished();
         self::assertCount(1, $tradeOutbox);
@@ -73,6 +74,9 @@ final class StoreScopedOrderFlowTest extends IntegrationWebTestCase
         $entityManager->clear();
         $acceptedOrder = $entityManager->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $acceptedOrder);
-        self::assertSame('store_accepted', $acceptedOrder->getStatus());
+        self::assertSame(Order::STATUS_PENDING, $acceptedOrder->getStatus());
+        $lifecycle = $entityManager->getRepository(OrderStoreLifecycle::class)->findOneBy(['tradeOrderUuid' => $orderUuid]);
+        self::assertNotNull($lifecycle);
+        self::assertSame(OrderStoreLifecycle::ACCEPTANCE_ACCEPTED, $lifecycle->getAcceptanceStatus());
     }
 }

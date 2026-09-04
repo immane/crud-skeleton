@@ -8,7 +8,7 @@ use App\Trade\Entity\OrderStoreLifecycle;
 use App\Trade\Repository\OrderStoreLifecycleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class OrderStoreLifecycleService
+class OrderStoreLifecycleService
 {
     public function __construct(
         private readonly OrderStoreLifecycleRepository $repository,

@@ -14,6 +14,7 @@ use App\Store\Repository\StoreOutboxMessageRepository;
 use App\Store\Repository\StoreTradeOrderCancellationRepository;
 use App\Store\Service\MembershipServiceInterface;
 use App\Trade\Entity\Order;
+use App\Trade\Entity\OrderStoreLifecycle;
 use App\Trade\Message\TradeOrderCancelledMessage;
 use App\Trade\Message\TradeOrderCreatedMessage;
 use App\Trade\Repository\TradeOutboxMessageRepository;
@@ -41,7 +42,7 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('awaiting_store_acceptance', $order->getStatus());
+        self::assertSame(Order::STATUS_PENDING, $order->getStatus());
 
         $tradeOutbox = $container->get(TradeOutboxMessageRepository::class)->findUnpublished();
         self::assertCount(1, $tradeOutbox);
@@ -69,7 +70,10 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('store_accepted', $order->getStatus());
+        self::assertSame(Order::STATUS_PENDING, $order->getStatus());
+        $lifecycle = $em->getRepository(OrderStoreLifecycle::class)->findOneBy(['tradeOrderUuid' => $orderUuid]);
+        self::assertNotNull($lifecycle);
+        self::assertSame(OrderStoreLifecycle::ACCEPTANCE_ACCEPTED, $lifecycle->getAcceptanceStatus());
 
         $tester = $this->storePublish($container);
         self::assertSame(0, $tester->getStatusCode());
@@ -97,7 +101,7 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $placed['uuid']]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame(Order::STATUS_DRAFT, $order->getStatus());
+        self::assertSame(Order::STATUS_PENDING, $order->getStatus());
 
         $tradeOutbox = $container->get(TradeOutboxMessageRepository::class)->findUnpublished();
         self::assertCount(1, $tradeOutbox);
@@ -153,14 +157,8 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('store_rejected', $order->getStatus());
-
-        $client->request('POST', '/api/v1/app/orders/' . $placed['id'] . '/cancel');
-        self::assertResponseIsSuccessful();
-        $em->clear();
-        $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $orderUuid]);
-        self::assertInstanceOf(Order::class, $order);
         self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
+
     }
 
     public function testStoreBecomingUnavailableAfterPlacementRejectsTheOrder(): void
@@ -188,7 +186,7 @@ final class StoreTradeFlowTest extends StoreTradeFlowTestCase
         $em->clear();
         $order = $em->getRepository(Order::class)->findOneBy(['uuid' => $placed['uuid']]);
         self::assertInstanceOf(Order::class, $order);
-        self::assertSame('store_rejected', $order->getStatus());
+        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
     }
 
     public function testUnknownStoreCodeReturnsErrorAndCreatesNoOrder(): void

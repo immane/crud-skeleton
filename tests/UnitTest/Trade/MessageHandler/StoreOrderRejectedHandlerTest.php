@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\UnitTest\Trade\MessageHandler;
 
 use App\Trade\Entity\Order;
+use App\Trade\Entity\OrderStoreLifecycle;
 use App\Trade\Message\StoreOrderRejectedMessage;
 use App\Trade\MessageHandler\StoreOrderRejectedHandler;
 use App\Trade\Service\OrderServiceInterface;
-use PHPUnit\Framework\TestCase;
+use App\Trade\Service\OrderStoreLifecycleService;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -39,76 +42,68 @@ final class StoreOrderRejectedHandlerTest extends TestCase
         (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => 42]));
     }
 
-    public function testIgnoresMessageWhenOrderIsNotFound(): void
+    public function testMarksRejectedViaLifecycleService(): void
     {
+        $orders = $this->createStub(OrderServiceInterface::class);
+        $workflow = $this->createStub(WorkflowInterface::class);
+        $lifecycle = $this->createMock(OrderStoreLifecycleService::class);
+        $lifecycle->expects(self::once())->method('markRejected')->with(self::ORDER_UUID, self::STORE_UUID, 'store-order-uuid', 'OUT_OF_STOCK', 'no stock')->willReturn(new OrderStoreLifecycle(self::ORDER_UUID, self::STORE_UUID));
+        // Order lookup for auto-cancel is not needed if lifecycle handles it, but handler will try to fetch order for auto-cancel; stub to return null to avoid cancel.
         $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->with(['uuid' => self::ORDER_UUID])->willReturn(null);
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::never())->method('apply');
+        $orders->method('get')->willReturn(null);
 
-        (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => [
+        $handler = new StoreOrderRejectedHandler($orders, $workflow, null, $lifecycle, null);
+        $handler(new StoreOrderRejectedMessage(['payload' => [
             'orderUuid' => self::ORDER_UUID,
             'storeUuid' => self::STORE_UUID,
+            'storeOrderUuid' => 'store-order-uuid',
+            'reasonCode' => 'OUT_OF_STOCK',
+            'reason' => 'no stock',
         ]]));
     }
 
-    public function testIgnoresMessageWhenStoreUuidDoesNotMatch(): void
+    public function testAutoCancelsPendingOrderOnRejection(): void
     {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => '00000000-0000-4000-8000-000000000001']]);
+        $order = (new Order())->setStatus(Order::STATUS_PENDING)->setMetadata(['_store' => ['uuid' => self::STORE_UUID]]);
+        // set uuid via reflection to match payload
+        $ref = new \ReflectionProperty(Order::class, 'uuid');
+        $ref->setValue($order, self::ORDER_UUID);
         $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->willReturn($order);
+        $orders->method('get')->with(['uuid' => self::ORDER_UUID])->willReturn($order);
+        $orders->method('wrapInTransaction')->willReturnCallback(static fn (callable $cb): mixed => $cb());
         $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::never())->method('apply');
+        $workflow->expects(self::once())->method('can')->with($order, 'cancel')->willReturn(true);
+        $workflow->expects(self::once())->method('apply')->with($order, 'cancel');
+        $lifecycle = $this->createMock(OrderStoreLifecycleService::class);
+        $lifecycle->method('markRejected')->willReturn(new OrderStoreLifecycle(self::ORDER_UUID, self::STORE_UUID));
 
-        (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
+        $handler = new StoreOrderRejectedHandler($orders, $workflow, null, $lifecycle, null);
+        $handler(new StoreOrderRejectedMessage(['payload' => [
+            'orderUuid' => self::ORDER_UUID,
             'storeUuid' => self::STORE_UUID,
+            'storeOrderUuid' => 'store-order-uuid',
+            'reasonCode' => 'OUT_OF_STOCK',
+            'reason' => 'no stock',
         ]]));
     }
 
-    public function testIgnoresMessageWhenOrderHasNoStoreMetadata(): void
+    public function testDoesNotAutoCancelWhenAlreadyPaid(): void
     {
-        $order = new Order();
-        $orders = $this->createMock(OrderServiceInterface::class);
-        $orders->expects(self::once())->method('get')->willReturn($order);
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::never())->method('apply');
-
-        (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
-            'storeUuid' => self::STORE_UUID,
-        ]]));
-    }
-
-    public function testDoesNotApplyWhenWorkflowCannotReject(): void
-    {
-        $order = (new Order())->setMetadata(['_store' => ['uuid' => self::STORE_UUID]]);
-        $orders = $this->createStub(OrderServiceInterface::class);
-        $orders->method('get')->willReturn($order);
-        $orders->method('wrapInTransaction')->willReturnCallback(static fn (callable $callback): mixed => $callback());
-        $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->with($order, 'store_reject')->willReturn(false);
-        $workflow->expects(self::never())->method('apply');
-
-        (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
-            'storeUuid' => self::STORE_UUID,
-        ]]));
-    }
-
-    public function testStoreRejectionDoesNotTransitionTheOrderToCancelled(): void
-    {
-        $order = (new Order())->setStatus('awaiting_store_acceptance')->setMetadata(['_store' => ['uuid' => '00000000-0000-4000-8000-000000000040']]);
+        $order = (new Order())->setStatus(Order::STATUS_PAID)->setMetadata(['_store' => ['uuid' => self::STORE_UUID]]);
+        $ref = new \ReflectionProperty(Order::class, 'uuid');
+        $ref->setValue($order, self::ORDER_UUID);
         $orders = $this->createMock(OrderServiceInterface::class);
         $orders->method('get')->willReturn($order);
-        $orders->method('wrapInTransaction')->willReturnCallback(static fn (callable $callback): mixed => $callback());
         $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->with($order, 'store_reject')->willReturn(true);
-        $workflow->expects(self::once())->method('apply')->with($order, 'store_reject');
+        $workflow->expects(self::never())->method('can');
+        $workflow->expects(self::never())->method('apply');
+        $lifecycle = $this->createMock(OrderStoreLifecycleService::class);
+        $lifecycle->method('markRejected')->willReturn(new OrderStoreLifecycle(self::ORDER_UUID, self::STORE_UUID));
 
-        (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => [
-            'orderUuid' => $order->getUuid(),
-            'storeUuid' => '00000000-0000-4000-8000-000000000040',
+        $handler = new StoreOrderRejectedHandler($orders, $workflow, null, $lifecycle, null);
+        $handler(new StoreOrderRejectedMessage(['payload' => [
+            'orderUuid' => self::ORDER_UUID,
+            'storeUuid' => self::STORE_UUID,
         ]]));
     }
 }

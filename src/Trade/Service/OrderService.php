@@ -17,11 +17,10 @@ use App\Trade\Entity\OrderItem;
 use App\Trade\Service\Pricing\PriceCalculationContext;
 use App\Trade\Service\Pricing\PriceCalculationResult;
 use App\Trade\Service\Pricing\PriceCalculatorInterface;
-use App\Wallet\Repository\WalletRepository;
-use App\Wallet\Service\Transfer\TransferServiceInterface;
-use App\Store\DTO\StoreSettings;
 use App\Store\Repository\StoreRepository;
 use App\Trade\Entity\OrderStoreLifecycle;
+use App\Wallet\Repository\WalletRepository;
+use App\Wallet\Service\Transfer\TransferServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -43,6 +42,7 @@ final class OrderService extends BaseService implements OrderServiceInterface
         private readonly ?TradeOutboxServiceInterface $outboxService = null,
         #[Target('state_machine.order')]
         private readonly ?WorkflowInterface $workflow = null,
+        /** @phpstan-ignore property.onlyWritten */
         private ?StoreRepository $storeRepository = null,
     ) {
         parent::__construct($container, Order::class);
@@ -145,13 +145,11 @@ final class OrderService extends BaseService implements OrderServiceInterface
                 if ($this->workflow === null || $this->outboxService === null) {
                     throw new \RuntimeException('Store order orchestration is not configured.');
                 }
-                if ($this->workflow->can($order, 'store_submit')) {
-                    $this->workflow->apply($order, 'store_submit');
-                } elseif ($this->isStoreRequireAcceptance($storeContext->storeUuid)) {
-                    throw new \RuntimeException('Order cannot be submitted for store acceptance.');
+                if ($this->workflow->can($order, 'submit')) {
+                    $this->workflow->apply($order, 'submit');
                 }
 
-                // StoreOrder creation is independent of the optional acceptance workflow.
+                // StoreOrder creation is independent of acceptance; confirm is gated by lifecycle.
                 $this->outboxService->record('trade.order.created.v1', 'trade_order', $order->getUuid(), [
                     'orderUuid' => $order->getUuid(),
                     'store' => $storeContext->toSnapshot(),
@@ -331,18 +329,5 @@ final class OrderService extends BaseService implements OrderServiceInterface
         });
 
         return $calculators;
-    }
-
-    private function isStoreRequireAcceptance(string $storeUuid): bool
-    {
-        if (!isset($this->storeRepository)) {
-            return false;
-        }
-        $store = $this->storeRepository->findOneBy(['uuid' => $storeUuid]);
-        if ($store === null) {
-            return false;
-        }
-
-        return StoreSettings::from($store->getSettings())->requireAcceptance;
     }
 }

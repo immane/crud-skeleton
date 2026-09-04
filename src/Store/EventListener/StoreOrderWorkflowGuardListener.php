@@ -7,6 +7,8 @@ namespace App\Store\EventListener;
 use App\Store\DTO\StoreSettings;
 use App\Store\Repository\StoreRepository;
 use App\Trade\Entity\Order;
+use App\Trade\Entity\OrderStoreLifecycle;
+use App\Trade\Repository\OrderStoreLifecycleRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\GuardEvent;
 
@@ -14,14 +16,14 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
 {
     public function __construct(
         private readonly StoreRepository $storeRepository,
+        private readonly ?OrderStoreLifecycleRepository $lifecycleRepository = null,
     ) {
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.order.guard.submit' => 'onGuard',
-            'workflow.order.guard.store_submit' => 'onGuard',
+            'workflow.order.guard.confirm' => 'onGuard',
             'workflow.order.guard.complete' => 'onGuard',
             'workflow.order.guard.request_verification' => 'onGuard',
             'workflow.order.guard.store_verify' => 'onGuard',
@@ -43,8 +45,7 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         $hasStore = $this->hasStore($subject);
 
         match ($transition) {
-            'submit' => $this->guardSubmit($event, $settings, $hasStore),
-            'store_submit' => $this->guardStoreSubmit($event, $settings, $hasStore),
+            'confirm' => $this->guardConfirm($event, $hasStore),
             'complete' => $this->guardComplete($event, $settings, $hasStore),
             'request_verification' => $this->guardRequestVerification($event, $settings, $hasStore),
             'store_verify' => $this->guardStoreVerify($event, $settings, $hasStore),
@@ -55,26 +56,19 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
     /**
      * @param GuardEvent<Order> $event
      */
-    private function guardSubmit(GuardEvent $event, StoreSettings $settings, bool $hasStore): void
+    private function guardConfirm(GuardEvent $event, bool $hasStore): void
     {
-        // When requireAcceptance is true and order has store, submit must be blocked (must go store_submit)
-        if ($hasStore && $settings->requireAcceptance) {
-            $event->setBlocked(true, 'Store acceptance required: use store_submit.');
-        }
-    }
-
-    /**
-     * @param GuardEvent<Order> $event
-     */
-    private function guardStoreSubmit(GuardEvent $event, StoreSettings $settings, bool $hasStore): void
-    {
-        // store_submit only guarded when order has store context
-        // Plain orders (no _store metadata) keep workflow-layer permissive for tests/legacy
         if (!$hasStore) {
             return;
         }
-        if (!$settings->requireAcceptance) {
-            $event->setBlocked(true, 'Store acceptance is disabled for this store.');
+        if ($this->lifecycleRepository === null) {
+            return;
+        }
+        $order = $event->getSubject();
+        \assert($order instanceof Order);
+        $lifecycle = $this->lifecycleRepository->findOneByTradeOrderUuid($order->getUuid());
+        if ($lifecycle === null || $lifecycle->getAcceptanceStatus() !== OrderStoreLifecycle::ACCEPTANCE_ACCEPTED) {
+            $event->setBlocked(true, 'Store acceptance required before confirm.');
         }
     }
 
