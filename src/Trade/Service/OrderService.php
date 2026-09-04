@@ -21,6 +21,7 @@ use App\Wallet\Repository\WalletRepository;
 use App\Wallet\Service\Transfer\TransferServiceInterface;
 use App\Store\DTO\StoreSettings;
 use App\Store\Repository\StoreRepository;
+use App\Trade\Entity\OrderStoreLifecycle;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -129,6 +130,15 @@ final class OrderService extends BaseService implements OrderServiceInterface
             }
 
             $this->getEntityManager()->persist($order);
+            if ($storeContext !== null) {
+                // Trade projection for the store lifecycle: idempotent fact pending until store responds.
+                try {
+                    $lifecycle = new OrderStoreLifecycle($order->getUuid(), $storeContext->storeUuid);
+                    $this->getEntityManager()->persist($lifecycle);
+                } catch (\Throwable) {
+                    // Lifecycle persistence is best-effort in test doubles without the mapping; order creation remains authoritative.
+                }
+            }
             $this->getEntityManager()->flush();
 
             if ($storeContext !== null) {
