@@ -36,6 +36,7 @@ final readonly class StoreContextResolver implements StoreContextResolverInterfa
             $store->getCode(),
             $store->getName(),
             $request->headers->get('X-Store-Channel', 'api'),
+            $store->getCurrency(),
         );
     }
 }

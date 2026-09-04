@@ -43,6 +43,7 @@ final class StoreContextResolverTest extends TestCase
     public function testResolveThrowsWhenStoreIsNotActive(): void
     {
         $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store->setCurrency('usd');
         $store->suspend();
         $repository = $this->createMock(StoreRepository::class);
         $repository->method('findOneByCode')->with('xuhui')->willReturn($store);
@@ -58,6 +59,7 @@ final class StoreContextResolverTest extends TestCase
     public function testResolveBuildsContextWithChannelHeader(): void
     {
         $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store->setCurrency('usd');
         $repository = $this->createMock(StoreRepository::class);
         $repository->method('findOneByCode')->with('xuhui')->willReturn($store);
         $requestStack = new RequestStack();
@@ -74,5 +76,6 @@ final class StoreContextResolverTest extends TestCase
         self::assertSame('xuhui', $context->storeCode);
         self::assertSame('Xuhui', $context->storeName);
         self::assertSame('wechat', $context->channel);
+        self::assertSame('USD', $context->currency);
     }
 }

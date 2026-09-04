@@ -63,8 +63,8 @@ class OrderController extends RestController
         }
         /** @var list<array<string, mixed>> $items */
 
-        $currency = $content['currency'] ?? 'CNY';
         $storeContext = $this->storeContextResolver->resolve();
+        $currency = $this->resolveCurrency($content['currency'] ?? null, $storeContext);
         $result = $this->service->calculatePrices($items, $currency, $storeContext?->storeCode, $content['meta'] ?? []);
 
         $content['__calculatedItems'] = $result->items;
@@ -113,10 +113,9 @@ class OrderController extends RestController
             return $this->warning('Items are required.', 400, '', 400);
         }
 
-        $currency = $content['currency'] ?? 'CNY';
-
         try {
             $storeContext = $this->storeContextResolver->resolve();
+            $currency = $this->resolveCurrency($content['currency'] ?? null, $storeContext);
             $result = $this->service->calculatePrices($items, $currency, $storeContext?->storeCode, $content['meta'] ?? []);
             return $this->success($result, 'Quote calculated');
         } catch (\Throwable $e) {
@@ -196,6 +195,18 @@ class OrderController extends RestController
         $user = $this->getUser();
 
         return $user instanceof User ? $user : null;
+    }
+
+    private function resolveCurrency(mixed $requestedCurrency, ?\App\Trade\DTO\StoreContext $storeContext): string
+    {
+        if ($storeContext !== null) {
+            return $storeContext->currency;
+        }
+        if ($requestedCurrency !== null && !is_string($requestedCurrency)) {
+            throw new \InvalidArgumentException('currency must be a string.');
+        }
+
+        return strtoupper($requestedCurrency ?? 'CNY');
     }
 
     #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]

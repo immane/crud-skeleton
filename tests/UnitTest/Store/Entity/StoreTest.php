@@ -16,6 +16,7 @@ final class StoreTest extends TestCase
 
         self::assertMatchesRegularExpression('/^[0-9a-f-]{36}$/', $store->getUuid());
         self::assertSame('shanghai-xuhui', $store->getCode());
+        self::assertSame('CNY', $store->getCurrency());
         self::assertTrue($store->isActive());
         self::assertNull($store->getUpdatedAt());
 
@@ -71,6 +72,16 @@ final class StoreTest extends TestCase
         self::assertSame('Asia/Shanghai', $store->getTimezone());
         self::assertNull($store->getId());
         self::assertInstanceOf(\DateTimeImmutable::class, $store->getCreatedAt());
+    }
+
+    public function testCurrencyIsNormalizedAndTouchesTheStore(): void
+    {
+        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+
+        $store->setCurrency('usd');
+
+        self::assertSame('USD', $store->getCurrency());
+        self::assertInstanceOf(\DateTimeImmutable::class, $store->getUpdatedAt());
     }
 
     public function testStringRepresentationPrefersNameOverCode(): void
