@@ -2,6 +2,7 @@
 
 namespace App\Core\Controller;
 
+use App\Core\Serializer\ExpansionMetadata;
 use App\Core\Utils\ArrayCommon;
 use App\Core\Utils\FixJSON;
 use App\Core\Utils\Math;
@@ -26,6 +27,7 @@ class RestController extends AbstractController
     private ?RequestStack $requestStack = null;
     private ?SerializerInterface $serializer = null;
     private ?TranslatorInterface $translator = null;
+    private ?ExpansionMetadata $expansionMetadata = null;
     protected ?ContainerInterface $serviceContainer = null;
 
     /**
@@ -59,6 +61,12 @@ class RestController extends AbstractController
     public function setTranslator(TranslatorInterface $translator): void
     {
         $this->translator = $translator;
+    }
+
+    #[Required]
+    public function setExpansionMetadata(ExpansionMetadata $expansionMetadata): void
+    {
+        $this->expansionMetadata = $expansionMetadata;
     }
 
     #[Required]
@@ -186,27 +194,44 @@ class RestController extends AbstractController
     /**
      * @param object $entity
      * @param list<string> $attributeChain
+     * @param \SplObjectStorage<object, null>|null $ancestors
      */
-    private function expandObjectToMetadata(mixed &$entity, array $attributeChain, int $level = -1): void
+    private function expandObjectToMetadata(
+        object $entity,
+        array $attributeChain,
+        int $depth = 0,
+        ?\SplObjectStorage $ancestors = null,
+    ): void
     {
-        if (empty($entity) || 0 === count($attributeChain) || 0 === $level) return;
+        if ($attributeChain === [] || $depth >= 16) {
+            return;
+        }
+
+        $ancestors ??= new \SplObjectStorage();
+        if (!$ancestors->offsetExists($entity)) {
+            $ancestors->offsetSet($entity);
+        }
 
         if (method_exists($entity, $getter = 'get' . ucfirst(trim($attributeChain[0])))) {
-            if ($next = $entity->$getter()) {
+            $next = $entity->$getter();
+            if ($next) {
                 foreach ($next instanceof \Traversable ? $next : [$next] as $node) {
-                    // expand
-                    $node->__metadata = $node;
+                    if (!is_object($node) || $ancestors->offsetExists($node)) {
+                        continue;
+                    }
 
-                    // recursive
-                    $copy = $attributeChain;
-                    $this->expandObjectToMetadata(
-                        $node,
-                        array_splice($copy, 1),
-                        $level - 1
-                    );
+                    $this->getExpansionMetadata()->mark($node);
+                    $ancestors->offsetSet($node);
+                    $this->expandObjectToMetadata($node, array_slice($attributeChain, 1), $depth + 1, $ancestors);
+                    $ancestors->offsetUnset($node);
                 }
             }
         }
+    }
+
+    private function getExpansionMetadata(): ExpansionMetadata
+    {
+        return $this->expansionMetadata ??= new ExpansionMetadata();
     }
 
     private function requestProcess(mixed $collection): mixed
@@ -219,6 +244,7 @@ class RestController extends AbstractController
             str_replace('\'', '"', (string) $rawExpand), true);
         try {
             if (is_array($expands)) {
+                $expands = array_values(array_filter($expands, 'is_string'));
                 if ($collection && (
                         is_array($collection)
                         || $collection instanceof ArrayCollection)

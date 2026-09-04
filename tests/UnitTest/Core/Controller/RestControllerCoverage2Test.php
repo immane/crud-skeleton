@@ -212,7 +212,7 @@ final class RestControllerCoverage2Test extends TestCase
         $r = $c->publicSuccess([$entity]);
 
         self::assertSame(200, $r->getStatusCode());
-        self::assertSame($child, $child->__metadata);
+        self::assertFalse(property_exists($child, '__metadata'));
     }
 
     public function testExpandsCatchesGetterExceptionSilently(): void
@@ -226,6 +226,28 @@ final class RestControllerCoverage2Test extends TestCase
         $body = json_decode((string) $r->getContent(), true);
         self::assertSame(200, $r->getStatusCode());
         self::assertIsArray($body['data']);
+    }
+
+    public function testExpandsDoesNotRecurseIntoAnAncestor(): void
+    {
+        $entity = new class {
+            public function getId(): int
+            {
+                return 1;
+            }
+
+            public function getParent(): object
+            {
+                return $this;
+            }
+        };
+
+        $req = Request::create('/api/test', 'GET', ['@expands' => '["parent.parent"]']);
+        $c = $this->createController($req);
+        $response = $c->publicSuccess([$entity]);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertFalse(property_exists($entity, '__metadata'));
     }
 
     public function testDisplayTraversesIntermediateArrays(): void
@@ -256,8 +278,6 @@ final class RestControllerCoverage2Test extends TestCase
 
 final class RestCovChild
 {
-    public $__metadata = null;
-
     public function getId(): int
     {
         return 1;
@@ -266,8 +286,6 @@ final class RestCovChild
 
 final class RestCovExpandEntity
 {
-    public $__metadata = null;
-
     public function __construct(private readonly RestCovChild $child)
     {
     }
@@ -285,8 +303,6 @@ final class RestCovExpandEntity
 
 final class RestCovExpandThrowingEntity
 {
-    public $__metadata = null;
-
     public function getId(): int
     {
         return 1;

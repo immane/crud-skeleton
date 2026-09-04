@@ -2,6 +2,7 @@
 
 namespace App\Core\Serializer\Normalizer;
 
+use App\Core\Serializer\ExpansionMetadata;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -14,11 +15,17 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
 {
     private NormalizerInterface $decorated;
     private PropertyAccessorInterface $accessor;
+    private ExpansionMetadata $expansionMetadata;
 
-    public function __construct(NormalizerInterface $decorated, PropertyAccessorInterface $accessor)
+    public function __construct(
+        NormalizerInterface $decorated,
+        PropertyAccessorInterface $accessor,
+        ExpansionMetadata $expansionMetadata,
+    )
     {
         $this->decorated = $decorated;
         $this->accessor = $accessor;
+        $this->expansionMetadata = $expansionMetadata;
     }
 
 
@@ -93,7 +100,9 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
                 if (method_exists($o, '__toString')) {
                     $res['__toString'] = $o->__toString();
                 }
-                if (method_exists($o, '__metadata')) {
+                if (($expanded = $this->expansionMetadata->get($o)) !== null) {
+                    $res['__metadata'] = $expanded;
+                } elseif (method_exists($o, '__metadata')) {
                     $res['__metadata'] = $o->__metadata();
                 } elseif (property_exists($o, '__metadata')) {
                     $res['__metadata'] = $o->__metadata;

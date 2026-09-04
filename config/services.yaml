@@ -23,6 +23,7 @@ services:
                 - [ setRequestStack, [ '@request_stack' ] ]
                 - [ setSerializer, [ '@serializer' ] ]
                 - [ setTranslator, [ '@translator' ] ]
+                - [ setExpansionMetadata, [ '@App\Core\Serializer\ExpansionMetadata' ] ]
                 - [ setServiceContainer, [ '@service_container' ] ]
         App\Payment\Service\PaymentGatewayInterface:
             tags: ['payment.gateway']

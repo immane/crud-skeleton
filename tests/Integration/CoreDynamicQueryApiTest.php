@@ -33,12 +33,15 @@ final class CoreDynamicQueryApiTest extends IntegrationWebTestCase
         $em = $client->getContainer()->get(EntityManagerInterface::class);
 
         $em->createQuery('DELETE FROM App\\Common\\Entity\\Category c')->execute();
+        $categories = [];
         foreach (['Alpha', 'Beta', 'Gamma'] as $i => $name) {
             $category = new Category($name, 'slug-' . $i);
             $category->setSortOrder($i);
             $category->setDescription('desc-' . $name);
             $em->persist($category);
+            $categories[$name] = $category;
         }
+        $categories['Alpha']->addChild($categories['Beta']);
         $em->flush();
         self::ensureKernelShutdown();
     }
@@ -258,7 +261,14 @@ final class CoreDynamicQueryApiTest extends IntegrationWebTestCase
 
     public function testExpandsReturnsMetadataWithoutDeprecation(): void
     {
-        self::markTestSkipped('BUG-2: @expands triggers PHP 8.5 dynamic-property deprecation (RestController.php:198), failing failOnDeprecation. See docs/issues/coverage-2026-08-09/core-integration-extra.md#bug-2.');
+        $client = static::createAuthenticatedClient();
+        $client->request('GET', '/api/v1/manage/categories?@expands=%5B%22parent%22%5D');
+
+        self::assertSame(200, $client->getResponse()->getStatusCode());
+        $body = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $beta = current(array_filter($body['data'], static fn (array $item): bool => $item['name'] === 'Beta'));
+        self::assertArrayHasKey('__metadata', $beta['parent']);
+        self::assertIsArray($beta['parent']['__metadata']);
     }
 
     public function testRegexMatchesWorksOnCurrentDb(): void
