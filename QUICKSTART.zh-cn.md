@@ -112,6 +112,33 @@ php -S 127.0.0.1:8000 -t public
 symfony server:start
 ```
 
+### 异步链路（Store/Trade）本地联调
+
+常驻进程（另起终端）：
+
+```bash
+php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M
+while true; do
+  php bin/console app:trade:outbox:publish --no-interaction
+  php bin/console app:store:outbox:publish --no-interaction
+  php bin/console app:inventory:outbox:publish --no-interaction
+  php bin/console app:inventory:reservations:release-expired --no-interaction
+  sleep 5
+done
+```
+
+一键跑通（已创建带 `X-Store-Code` 的订单后，验证 `store_order` 是否生成，默认 60s）。脚本会在后台每 5s 循环发布 outbox（对齐 `compose.yaml` 的 `scheduler`），前台消费 `async`，因此 `consume` 期间新产生的 `store_outbox` 也会被发布：
+
+```bash
+./scripts/dev/run-async.sh          # 60s，等价 ./scripts/dev/run-async.sh 60
+./scripts/dev/run-async.sh 120      # 120s
+./scripts/dev/run-async.sh 2m --verbose
+./scripts/dev/run-async.sh 10 --interval 2  # 10s 内每 2s 发布一次
+./scripts/dev/run-async.sh --dry-run  # 仅预览
+# Docker 内：
+docker compose exec app ./scripts/dev/run-async.sh 60
+```
+
 ## 7) 登录并验证受保护接口
 
 获取 token：

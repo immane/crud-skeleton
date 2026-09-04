@@ -40,36 +40,6 @@ final class StoreOrderControllerTest extends TestCase
         $this->controller = new StoreOrderController($this->orderService, $this->storeService);
     }
 
-    public function testAcceptUsesScopedPermissionAndStoreFilter(): void
-    {
-        $order = $this->order();
-        $request = $this->request('{}');
-        $this->injectDependencies($request);
-        $this->storeService->method('get')->with(['uuid' => $this->store->getUuid()])->willReturn($this->store);
-        $this->orderService->expects(self::once())
-            ->method('get')
-            ->with(['uuid' => $order->getUuid(), 'store' => $this->store])
-            ->willReturn($order);
-        $this->orderService->expects(self::once())->method('accept')->with($order, null)->willReturn($order);
-
-        $response = $this->controller->acceptAction($request, $this->store->getUuid(), $order->getUuid());
-
-        self::assertSame(200, $response->getStatusCode());
-    }
-
-    public function testAcceptReturns404ForAnOrderOutsideTheStoreScope(): void
-    {
-        $orderUuid = '00000000-0000-4000-8000-000000000001';
-        $request = $this->request('{}');
-        $this->injectDependencies($request);
-        $this->storeService->method('get')->with(['uuid' => $this->store->getUuid()])->willReturn($this->store);
-        $this->orderService->method('get')->willReturn(null);
-
-        $response = $this->controller->acceptAction($request, $this->store->getUuid(), $orderUuid);
-
-        self::assertSame(404, $response->getStatusCode());
-    }
-
     public function testListUsesCoreLifecycleAuthorizationAndStoreFilter(): void
     {
         $request = Request::create('/orders', 'GET');

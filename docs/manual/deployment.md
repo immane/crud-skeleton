@@ -438,6 +438,20 @@ topics, dispatched onto the `messageBus` with a versioned envelope, then
 later. The loop tolerates a crashed iteration (each run exits cleanly), making
 it safe to run as a scheduled job instead.
 
+## Local one-shot async runner
+
+After creating a `X-Store-Code` order and wondering why `store_order` is missing, run the bundled helper instead of remembering three commands. It runs a publish loop in background (every `$OUTBOX_PUBLISH_INTERVAL` or `--interval 5`) and `messenger:consume` in foreground, bounded by `--time-limit`:
+
+```bash
+./scripts/dev/run-async.sh          # publish loop + consume 60s
+./scripts/dev/run-async.sh 120      # custom duration (supports 60 / 60s / 2m / 1h)
+./scripts/dev/run-async.sh 10 --interval 2  # publish every 2s
+./scripts/dev/run-async.sh --dry-run
+docker compose exec app ./scripts/dev/run-async.sh 60
+```
+
+It is the local equivalent of the scheduler+worker pair above — the loop ensures `store_outbox` created *during* `consume` (e.g. by `TradeOrderCreatedHandler`) is also published within the same run.
+
 ## Useful commands
 
 Dev (production variants add `-f compose.yaml -f compose.prod.yaml --env-file .env.prod.local`):

@@ -7,6 +7,7 @@ namespace App\Store\Service;
 use App\Core\Service\BaseService;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
+use App\Store\DTO\StoreSettings;
 use App\Store\Repository\StoreOrderRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,17 +27,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
     public function accept(StoreOrder $storeOrder, ?string $reservationId = null): StoreOrder
     {
         return $this->transaction(function () use ($storeOrder, $reservationId): StoreOrder {
-            if ($this->outboxService === null) {
-                throw new \RuntimeException('Store outbox is not configured.');
-            }
             $storeOrder->accept($reservationId);
-            $this->outboxService->record('store.order.accepted.v1', 'store_order', $storeOrder->getUuid(), [
-                'orderUuid' => $storeOrder->getTradeOrderUuid(),
-                'storeOrderUuid' => $storeOrder->getUuid(),
-                'storeUuid' => $storeOrder->getStore()->getUuid(),
-                'acceptedAt' => $storeOrder->getAcceptedAt()?->format(DATE_ATOM),
-                'reservationId' => $storeOrder->getReservationId(),
-            ]);
 
             return $storeOrder;
         });
@@ -45,18 +36,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
     public function reject(StoreOrder $storeOrder, string $code, string $reason): StoreOrder
     {
         return $this->transaction(function () use ($storeOrder, $code, $reason): StoreOrder {
-            if ($this->outboxService === null) {
-                throw new \RuntimeException('Store outbox is not configured.');
-            }
             $storeOrder->reject($code, $reason);
-            $this->outboxService->record('store.order.rejected.v1', 'store_order', $storeOrder->getUuid(), [
-                'orderUuid' => $storeOrder->getTradeOrderUuid(),
-                'storeOrderUuid' => $storeOrder->getUuid(),
-                'storeUuid' => $storeOrder->getStore()->getUuid(),
-                'reasonCode' => $storeOrder->getRejectionCode(),
-                'reason' => $storeOrder->getRejectionReason(),
-                'rejectedAt' => $storeOrder->getRejectedAt()?->format(DATE_ATOM),
-            ]);
 
             return $storeOrder;
         });
@@ -72,18 +52,23 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
         });
     }
 
-    public function verify(StoreOrder $storeOrder, string $verificationCode, ?string $verifiedBy = null): StoreOrder
+    public function verify(StoreOrder $storeOrder, ?string $verifiedBy = null): StoreOrder
     {
-        return $this->transaction(function () use ($storeOrder, $verificationCode, $verifiedBy): StoreOrder {
+        return $this->transaction(function () use ($storeOrder, $verifiedBy): StoreOrder {
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
-            $storeOrder->verify($verificationCode, $verifiedBy);
+            if (!$storeOrder->isVerificationRequired()) {
+                throw new \LogicException('Store verification is disabled.');
+            }
+            if ($storeOrder->getOperationalStatus() !== StoreOrder::STATUS_FULFILLED) {
+                throw new \LogicException('Store order cannot be verified in its current status.');
+            }
+            $storeOrder->verify($verifiedBy);
             $this->outboxService->record('store.order.verified.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
                 'storeOrderUuid' => $storeOrder->getUuid(),
                 'storeUuid' => $storeOrder->getStore()->getUuid(),
-                'verificationCode' => $verificationCode,
                 'verifiedBy' => $verifiedBy,
                 'verifiedAt' => $storeOrder->getVerifiedAt()?->format(DATE_ATOM),
             ]);
@@ -117,6 +102,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
                     $data['currency'],
                     $data['totalAmount'],
                     $data['orderSnapshot'],
+                    $data['verificationRequired'],
                 );
                 $this->getEntityManager()->persist($storeOrder);
 
@@ -137,7 +123,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
 
     /**
      * @param array<string, mixed> $snapshot
-     * @return array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>}
+     * @return array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>, verificationRequired: bool}
      */
     private function normalizeSnapshot(Store $store, array $snapshot): array
     {
@@ -162,6 +148,10 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
         if ($snapshot['totalAmount'] < 0) {
             throw new \InvalidArgumentException('Trade order total amount cannot be negative.');
         }
+        $verificationRequired = $storeSnapshot['requireVerification'] ?? false;
+        if (!is_bool($verificationRequired)) {
+            throw new \InvalidArgumentException('Trade order store verification requirement must be a boolean.');
+        }
 
         $orderSnapshot = [
             'items' => $snapshot['items'],
@@ -183,11 +173,12 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             'currency' => strtoupper($snapshot['currency']),
             'totalAmount' => $snapshot['totalAmount'],
             'orderSnapshot' => $orderSnapshot,
+            'verificationRequired' => $verificationRequired,
         ];
     }
 
     /**
-     * @param array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>} $data
+     * @param array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>, verificationRequired: bool} $data
      */
     private function matchesSnapshot(StoreOrder $storeOrder, Store $store, array $data): bool
     {
@@ -197,7 +188,8 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             && $storeOrder->getCustomerUserUuid() === $data['customerUserUuid']
             && $storeOrder->getCurrency() === $data['currency']
             && $storeOrder->getTotalAmount() === $data['totalAmount']
-            && $storeOrder->getOrderSnapshot() === $data['orderSnapshot'];
+            && $storeOrder->getOrderSnapshot() === $data['orderSnapshot']
+            && $storeOrder->isVerificationRequired() === $data['verificationRequired'];
     }
 
     private function transaction(callable $callback): mixed

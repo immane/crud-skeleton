@@ -113,7 +113,7 @@ or
 symfony server:start
 ```
 
-For Store/Trade asynchronous events in native PHP, run these in separate terminals:
+For Store/Trade asynchronous events in native PHP, run these in separate terminals for long-running workers:
 
 ```bash
 php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M
@@ -124,6 +124,18 @@ while true; do
   php bin/console app:inventory:reservations:release-expired --no-interaction
   sleep 5
 done
+```
+
+For a one-shot local run (e.g. after creating a Trade order with `X-Store-Code` to verify `store_order` is created), use the bundled script (default 60s). It runs a publish loop in background (every 5s, like the `scheduler` in `compose.yaml`) and `messenger:consume` in foreground, so `store_outbox` created *during* the 60s is also published:
+
+```bash
+./scripts/dev/run-async.sh          # 60s, same as ./scripts/dev/run-async.sh 60
+./scripts/dev/run-async.sh 120      # 120s
+./scripts/dev/run-async.sh 2m --verbose   # 2 minutes, verbose
+./scripts/dev/run-async.sh 10 --interval 2  # publish every 2s for 10s
+./scripts/dev/run-async.sh --dry-run      # preview without executing
+# Inside Docker:
+docker compose exec app ./scripts/dev/run-async.sh 60
 ```
 
 7) Log in and test protected endpoints

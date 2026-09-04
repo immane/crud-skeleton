@@ -74,5 +74,6 @@ final class StoreContextResolverTest extends TestCase
         self::assertSame('xuhui', $context->storeCode);
         self::assertSame('Xuhui', $context->storeName);
         self::assertSame('wechat', $context->channel);
+        self::assertSame('CNY', $context->currency);
     }
 }

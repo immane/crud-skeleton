@@ -6,7 +6,6 @@ namespace App\Tests\UnitTest\Store\Service;
 
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
-use App\Store\Entity\StoreOutboxMessage;
 use App\Store\Repository\StoreOrderRepository;
 use App\Store\Service\StoreOutboxService;
 use App\Store\Service\StoreOrderService;
@@ -55,7 +54,7 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame($snapshot['items'], $first->getOrderSnapshot()['items']);
     }
 
-    public function testAcceptRecordsAnOutboxMessage(): void
+    public function testAcceptChangesOnlyTheStoreOrder(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $persisted = [];
@@ -74,13 +73,10 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $order->getOperationalStatus());
         self::assertSame('reservation-1', $order->getReservationId());
         self::assertInstanceOf(\DateTimeImmutable::class, $order->getAcceptedAt());
-        self::assertCount(1, $persisted);
-        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
-        self::assertSame('store.order.accepted.v1', $persisted[0]->getTopic());
-        self::assertSame($order->getUuid(), $persisted[0]->getPayload()['storeOrderUuid']);
+        self::assertCount(0, $persisted);
     }
 
-    public function testRejectRecordsAnOutboxMessage(): void
+    public function testRejectChangesOnlyTheStoreOrder(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $persisted = [];
@@ -100,10 +96,7 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame('out_of_stock', $order->getRejectionCode());
         self::assertSame('Inventory unavailable', $order->getRejectionReason());
         self::assertInstanceOf(\DateTimeImmutable::class, $order->getRejectedAt());
-        self::assertCount(1, $persisted);
-        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
-        self::assertSame('store.order.rejected.v1', $persisted[0]->getTopic());
-        self::assertSame('out_of_stock', $persisted[0]->getPayload()['reasonCode']);
+        self::assertCount(0, $persisted);
     }
 
     public function testFulfillStoresFulfillmentData(): void
@@ -118,26 +111,22 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame(['trackingNumber' => 'TRACK-1'], $order->getFulfillmentData());
     }
 
-    public function testAcceptRequiresAnOutboxService(): void
+    public function testAcceptDoesNotRequireAnOutboxService(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->method('getRepository')->with(StoreOrder::class)->willReturn($this->createMock(StoreOrderRepository::class));
         $service = new StoreOrderService($this->createContainer($entityManager), $this->createMock(StoreOrderRepository::class));
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Store outbox is not configured.');
-        $service->accept($this->createOrder());
+        self::assertSame(StoreOrder::STATUS_ACCEPTED, $service->accept($this->createOrder())->getOperationalStatus());
     }
 
-    public function testRejectWithoutOutboxThrows(): void
+    public function testRejectDoesNotRequireAnOutboxService(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->method('getRepository')->with(StoreOrder::class)->willReturn($this->createMock(StoreOrderRepository::class));
         $service = new StoreOrderService($this->createContainer($entityManager), $this->createMock(StoreOrderRepository::class));
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Store outbox is not configured.');
-        $service->reject($this->createOrder(), 'out_of_stock', 'Unavailable');
+        self::assertSame(StoreOrder::STATUS_REJECTED, $service->reject($this->createOrder(), 'out_of_stock', 'Unavailable')->getOperationalStatus());
     }
 
     public function testCreateFromSnapshotRejectsInvalidSnapshot(): void

@@ -8,6 +8,7 @@ tags:
   - { name: Auth, description: 'Login, OTP, token refresh, logout' }
   - { name: Products, description: 'Product and Specification CRUD + public listing' }
   - { name: Orders, description: 'Order lifecycle: create → submit → confirm → pay → fulfill → complete → refund' }
+  - { name: Store, description: 'Store scoping, StoreOrder fulfill/verify and completion snapshot' }
   - { name: Categories, description: 'Hierarchical category management' }
   - { name: Tags, description: 'Flat tag/label management' }
   - { name: Contents, description: 'Article-like content' }
@@ -312,6 +313,7 @@ paths:
         **State Machine:**
         draft → `submit`→ pending → `confirm`→ confirmed → `pay`→ paid → `fulfill`→ fulfilled → `complete`→ completed → `refund`→ refunded.
         Cancel: `cancel` from draft/pending/confirmed. Optionally pass data to update entity before transition.
+        When `_completionMode` is `store_verification` (Store `fulfillment.requireVerification=true` snapshotted at creation), `complete` is blocked for manual calls and completes only via Store verification (`POST /store/{scopeId}/orders/{uuid}/verify`).
       requestBody:
         content:
           application/json:
@@ -494,6 +496,61 @@ paths:
 
   /api/v1/app/settings:
     get: { tags: [Settings], summary: 'List settings (public)' }
+
+  # ====================================================================
+  # STORE — Staff (fulfill / verify)
+  # ====================================================================
+  /api/v1/store/{scopeId}/orders:
+    parameters:
+      - { name: scopeId, in: path, required: true, schema: { type: string } }
+    get:
+      tags: [Store]
+      summary: 'List store orders (staff, scoped)'
+      description: 'Scoped by store membership. Returns StoreOrder projection.'
+
+  /api/v1/store/{scopeId}/orders/{orderUuid}:
+    parameters:
+      - { name: scopeId, in: path, required: true, schema: { type: string } }
+      - { name: orderUuid, in: path, required: true, schema: { type: string } }
+    get:
+      tags: [Store]
+      summary: 'Get store order detail (staff, scoped)'
+
+  /api/v1/store/{scopeId}/orders/{orderUuid}/fulfill:
+    parameters:
+      - { name: scopeId, in: path, required: true, schema: { type: string } }
+      - { name: orderUuid, in: path, required: true, schema: { type: string } }
+    post:
+      tags: [Store]
+      summary: 'Mark StoreOrder fulfilled (staff)'
+      description: >
+        Requires `store:order:fulfill`. StoreOrder must be `accepted`/`fulfilling`.
+        No Store-to-Trade event; local fulfillment only.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fulfillmentData: { type: object }
+
+  /api/v1/store/{scopeId}/orders/{orderUuid}/verify:
+    parameters:
+      - { name: scopeId, in: path, required: true, schema: { type: string } }
+      - { name: orderUuid, in: path, required: true, schema: { type: string } }
+    post:
+      tags: [Store]
+      summary: 'Verify StoreOrder (staff) and complete TradeOrder'
+      description: >
+        Requires `store:order:verify`. StoreOrder must be `fulfilled` and snapshotted
+        `verificationRequired=true`. No body required; order UUID is the token.
+        Emits `store.order.verified.v1` → Trade `fulfilled → completed`. Out-of-order verification is handled via `_storeVerificationReceived`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {}
 
   # ====================================================================
   # WALLET

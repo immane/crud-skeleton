@@ -2,6 +2,7 @@
 
 namespace App\Core\Serializer\Normalizer;
 
+use App\Core\Serializer\ExpansionMetadata;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -76,6 +77,10 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
         // For each attribute, try to read the raw value via PropertyAccessor to apply the same
         // flattening logic that the old GetSetMethodNormalizer override did.
         foreach (array_keys($data) as $attribute) {
+            // Skip internal __metadata marker to avoid recursion (self-reference would otherwise loop)
+            if ($attribute === '__metadata') {
+                continue;
+            }
             try {
                 // Use the accessor to call the getter (works for getXxx / isXxx / hasXxx)
                 $raw = $this->accessor->getValue($object, $attribute);
@@ -104,6 +109,22 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
 
             // when object is a relation
             if (is_object($raw) && method_exists($raw, 'getId')) {
+                $isExpanded = ExpansionMetadata::isMarked($raw);
+                if ($isExpanded) {
+                    try {
+                        $full = $this->decorated->normalize($raw, $format, $context);
+                        if (is_array($full)) {
+                            if (method_exists($raw, '__toString')) {
+                                $full['__toString'] = (string) $raw;
+                            }
+                            $full['__metadata'] = $full;
+                            $data[$attribute] = $full;
+                            continue;
+                        }
+                    } catch (\Throwable $e) {
+                        // fallback to reduced
+                    }
+                }
                 $data[$attribute] = $reduceTransform($raw);
                 continue;
             }
@@ -113,6 +134,24 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
                 $tmp = [];
                 foreach ($raw as $o) {
                     if (is_object($o) && method_exists($o, 'getId')) {
+                        // If expanded via @expands (__metadata is object), return full normalized data
+                        $isExpanded = ExpansionMetadata::isMarked($o);
+                        if ($isExpanded) {
+                            try {
+                                $full = $this->decorated->normalize($o, $format, $context);
+                                if (is_array($full)) {
+                                    if (method_exists($o, '__toString')) {
+                                        $full['__toString'] = (string) $o;
+                                    }
+                                    // Keep __metadata marker for frontend compatibility but as expanded data
+                                    $full['__metadata'] = $full;
+                                    $tmp[] = $full;
+                                    continue;
+                                }
+                            } catch (\Throwable $e) {
+                                // fallback to reduced
+                            }
+                        }
                         $tmp[] = $reduceTransform($o);
                     }
                 }

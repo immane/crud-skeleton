@@ -183,6 +183,19 @@ the `App` and `Manage` controller trees (attribute routing).
 | `/api/wechat/oauth/url` | GET | public | Official-Account OAuth URL |
 | `/api/wechat/oauth/callback` | POST | public | OAuth `code` → JWT |
 
+### 3.5 Store & Trade (multi-store)
+
+| Endpoint | Method | Access | Purpose |
+|----------|--------|--------|---------|
+| `/api/v1/manage/stores` | POST | `ROLE_ADMIN` | Create store (`code`, `name`, `timezone`, `currency` 1..32 default `CNY`, `contact`/`address`/`settings` validated via JSON Schema) |
+| `/api/v1/manage/stores/{uuid}` | PUT | `ROLE_ADMIN` | Update store (`name`, `timezone`, `currency`, `contact`, `address`, `settings`); `code` immutable |
+| `/api/v1/manage/stores/{uuid}/members` | POST | `ROLE_ADMIN` | Grant membership (`userUuid`, `role` `owner/manager/clerk/fulfillment`) — upsert & re-activate |
+| `/api/v1/app/stores/{uuid}/membership` | POST | `ROLE_USER` | **Self-join as member** (idempotent, fixed `role=clerk`, body ignored, `200 Already a member` / `201 Joined`) |
+| `/api/v1/app/stores/{uuid}/membership` | GET | `ROLE_USER` | Get own membership for store |
+| `/api/v1/app/orders` | POST | `ROLE_USER` | Create order — `currency` is **authoritative from `Store`** via `X-Store-Code` header (`LIANSHENG_POINT` for points mall, `CNY` otherwise); mismatch `400 Currency mismatch`; global (no header) defaults to `CNY` |
+
+`StoreContact` (`Store/StoreContact` schema) now includes `subTitle` (1..100) and `tags` (array 1..30×20 unique) alongside `phone`, `email`, `serviceHours`, etc.; `StoreAddress` includes `province/city/district/street/detail/formattedAddress/latitude/longitude` with `additionalProperties:false`.
+
 ---
 
 ## 4. Pagination
@@ -213,7 +226,7 @@ controller paginates the result.
 | `@groupBy` | `entity.category` |
 | `@hints` | Doctrine query hints |
 | `@sort` | in-memory sort fallback expression |
-| `@expands` | `category,tags` |
+| `@expands` | `specifications` / `category,tags` (supports `specifications`, `a,b`, or `["a","b"]`) |
 | `@display` | `complex` / `reduce` / expression mapping |
 | `@showDQL` | debug: return compiled DQL |
 

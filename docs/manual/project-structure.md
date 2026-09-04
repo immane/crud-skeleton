@@ -78,21 +78,22 @@ src/
 │   └── Resources/config/services_identity.yaml
 │
 ├── Trade/                          # E-commerce
-│   ├── Controller/{App,Manage}/    # Product, Specification, Order, OrderItem
+│   ├── Controller/{App,Manage}/    # Product, Specification, Order (currency from Store via X-Store-Code), OrderItem
 │   ├── Service/
-│   │   ├── OrderService.php, ProductService.php, SpecificationService.php
-│   │   ├── Pricing/                # BasePrice → Quantity → TotalAggregator pipeline
+│   │   ├── OrderService.php (currency from StoreContext), ProductService.php, SpecificationService.php
+│   │   ├── Pricing/                # BasePrice → Quantity → TotalAggregator pipeline (currency validated)
 │   │   └── TradeOutboxService.php
-│   ├── Entity/                     # Product, Specification, Order, OrderItem, TradeOutboxMessage
+│   ├── Entity/                     # Product (store-private), Specification, Order (currency varchar(32), LIANSHENG_POINT), OrderItem, TradeOutboxMessage
+│   ├── DTO/StoreContext.php        # StoreContext with currency snapshot (code, uuid, name, channel, currency)
 │   ├── Message/ + MessageHandler/  # TradeOrderCreated/Cancelled, StoreOrderAccepted/Rejected
 │   ├── Event/ + EventListener/     # Order*Event, OrderInvoiceListener, OrderWorkflowListener
 │   └── Command/PublishOutboxCommand.php
 │
 ├── Store/                          # Multi-store operations
-│   ├── Controller/{App,Manage,Staff}/
-│   ├── Service/                    # StoreService, StoreOrderService, StoreOutboxService
-│   ├── Entity/                     # Store, Membership, StoreOrder, StoreOutboxMessage, …
-│   ├── Resources/JsonSchema/       # StoreAddress.json, StoreContact.json, StoreSettings.json (bundle schemas)
+│   ├── Controller/{App,Manage,Staff}/  # App: Store (public) + Membership self-join (`POST /app/stores/{uuid}/membership`); Manage: Store CRUD + members; Staff: Store-scoped ops
+│   ├── Service/                    # StoreService, StoreOrderService, StoreOutboxService, StoreContextResolver (X-Store-Code → StoreContext with currency)
+│   ├── Entity/                     # Store (currency varchar(32) DEFAULT CNY, LIANSHENG_POINT for points mall), Membership, StoreOrder (currency), StoreOutboxMessage, …
+│   ├── Resources/JsonSchema/       # StoreAddress.json, StoreContact.json (subTitle 1..100 + tags array 1..30×20), StoreSettings.json
 │   ├── MessageHandler/             # Reservation*, TradeOrder* handlers
 │   └── Command/PublishOutboxCommand.php
 │

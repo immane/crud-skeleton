@@ -100,7 +100,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         self::assertCount(1, $orders);
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $orders[0]->getOperationalStatus());
         $accepted = array_filter($container->get(StoreOutboxMessageRepository::class)->findUnpublished(), static fn ($message): bool => $message->getTopic() === 'store.order.accepted.v1');
-        self::assertCount(1, $accepted);
+        self::assertCount(0, $accepted);
     }
 
     public function testUnavailableStoreWithoutOrderUuidThrows(): void

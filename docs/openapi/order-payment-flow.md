@@ -771,7 +771,23 @@ Request:
 }
 ```
 
-Result: order status becomes `fulfilled`.
+Result: order status becomes `fulfilled`. For Store projection, Staff should also `POST /api/v1/store/{scopeId}/orders/{orderUuid}/fulfill` to mark `StoreOrder` fulfilled before verification.
+
+### Store Verify (when Store requires verification)
+
+```http
+POST /api/v1/store/{scopeId}/orders/{orderUuid}/verify
+Authorization: Bearer <access_token> (store member)
+Content-Type: application/json
+```
+
+No body required; the order UUID itself is the verification token. Requires `StoreOrder` in `fulfilled` and `fulfillment.requireVerification=true` snapshotted at order creation.
+
+```json
+{}
+```
+
+Result: `StoreOrder` becomes `verified` and emits `store.order.verified.v1`; the linked `TradeOrder` completes automatically (`fulfilled → completed`), or immediately after `fulfill` if verification arrived out-of-order.
 
 ### Complete Order
 
@@ -783,6 +799,8 @@ Authorization: Bearer <admin_access_token>
 Allowed only from `fulfilled`.
 
 Result: order status becomes `completed`.
+
+> Store-verified orders: if the order was created with `X-Store-Code` and the Store has `fulfillment.requireVerification=true`, the order's `_completionMode` is `store_verification`. Manual `do/complete` is then blocked (`Store verification is required`) and completion happens automatically after `POST /api/v1/store/{scopeId}/orders/{uuid}/verify` (fulfilled → verified) emits `store.order.verified.v1`. If verification arrived before fulfillment, completion is applied right after `fulfill`.
 
 ## Refund Flow
 

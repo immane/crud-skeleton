@@ -11,7 +11,7 @@ interface CatalogResolverInterface
 {
     /**
      * Resolve a sellable specification for pricing, respecting Store visibility.
-     * Returns null if not found, deleted, inactive, or not visible for the given storeCode.
+     * Accepts integer id or UUID string. Returns null if not found, deleted, inactive, or not visible for the given storeCode.
      */
-    public function resolveForPricing(int $specificationId, ?string $storeCode): ?CatalogItem;
+    public function resolveForPricing(int|string $specificationId, ?string $storeCode): ?CatalogItem;
 }

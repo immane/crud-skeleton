@@ -86,10 +86,10 @@ sequenceDiagram
     participant W as Wallet
     participant Se as Settlement
 
-    Note over T,S: StoreContext via X-Store-Code, StoreSettings 控制接受/核销
+    Note over T,S: StoreContext via X-Store-Code, _completionMode 快照
     Note over S,I: INVENTORY_ENABLED 为 0 默认跳过预留
 
-    T->>T: createOrder() store_submit（事务）
+    T->>T: createOrder() submit（事务）+ _completionMode
     T->>TO: trade.order.created.v1（事务）
     TO-->>S: 投递
 
@@ -114,7 +114,7 @@ sequenceDiagram
     SO-->>T: 投递
     T->>T: store_accept / store_reject
 
-    Note over T,P: 仅在 StoreSettings 要求时才需 store_accept，随后显式确认
+    Note over T,P: Payment via confirmed -> paid, no Store gate
     T->>P: 创建并支付发票同步经 Wallet wallet_balance 抵扣
     opt wallet amount
         P->>W: 抵扣转账（事务）
