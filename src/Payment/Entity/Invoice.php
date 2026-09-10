@@ -76,7 +76,7 @@ class Invoice
     #[ORM\Column(name: 'refunded_amount', type: 'bigint', options: ['default' => 0])]
     private int $refundedAmount = 0;
 
-    #[ORM\Column(type: 'string', length: 10, options: ['default' => 'CNY'])]
+    #[ORM\Column(type: 'string', length: 32, options: ['default' => 'CNY'])]
     private string $currency = 'CNY';
 
     #[ORM\ManyToOne(targetEntity: User::class)]

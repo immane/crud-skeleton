@@ -20,7 +20,7 @@ final class MembershipServiceTest extends TestCase
 {
     public function testAuthorizationRequiresAnActiveMembershipWithAnAllowedRole(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $membership = new Membership($store, '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', Membership::ROLE_MANAGER);
         $repository = $this->createMock(MembershipRepository::class);
         $repository->method('findForStoreAndUser')->willReturn($membership);
@@ -36,7 +36,7 @@ final class MembershipServiceTest extends TestCase
 
     public function testRequireAuthorizationReturnsMembershipOrDeniesAccess(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $membership = new Membership($store, '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', Membership::ROLE_MANAGER);
         $repository = $this->createMock(MembershipRepository::class);
         $repository->method('findForStoreAndUser')->willReturn($membership);
@@ -51,7 +51,7 @@ final class MembershipServiceTest extends TestCase
 
     public function testRequireAuthorizationDeniesMissingMembership(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $repository = $this->createMock(MembershipRepository::class);
         $repository->method('findForStoreAndUser')->willReturn(null);
         $service = new MembershipService($this->createContainer($repository), $repository);
@@ -64,7 +64,7 @@ final class MembershipServiceTest extends TestCase
     {
         $repository = $this->createMock(MembershipRepository::class);
         $service = new MembershipService($this->createContainer($repository), $repository);
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Store membership user UUID is required.');
@@ -75,7 +75,7 @@ final class MembershipServiceTest extends TestCase
     {
         $repository = $this->createMock(MembershipRepository::class);
         $service = new MembershipService($this->createContainer($repository), $repository);
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Store must be persisted before granting membership.');
@@ -84,7 +84,7 @@ final class MembershipServiceTest extends TestCase
 
     public function testGrantCreatesNewMembershipWhenNoneExists(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $this->assignStoreId($store, 7);
         $repository = $this->createMock(MembershipRepository::class);
         $repository->method('findForStoreAndUser')->willReturn(null);
@@ -102,7 +102,7 @@ final class MembershipServiceTest extends TestCase
 
     public function testGrantUpdatesExistingMembership(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $this->assignStoreId($store, 7);
         $existing = new Membership($store, '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', Membership::ROLE_CLERK);
         $existing->revoke();

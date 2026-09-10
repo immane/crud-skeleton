@@ -126,11 +126,30 @@ trait BaseServiceReadListTrait
 
                 /** @var QueryBuilder $filterQb */
                 $filterQb = $result['qb'];
-                $qb->andWhere((new Expr())->in("$alias.id", $filterQb->getDQL()));
-
-                foreach ($result['parameters'] as $parameter) {
-                    $qb->setParameter($parameter->getName(), $parameter->getValue());
+                $filterDql = $filterQb->getDQL();
+                // Avoid parameter name collision between commonFilter (DqlExpression) and @filter
+                $existingParams = [];
+                if (is_object($qb) && method_exists($qb, 'getParameters')) {
+                    foreach ($qb->getParameters() as $p) {
+                        if (is_object($p) && method_exists($p, 'getName')) {
+                            $existingParams[$p->getName()] = true;
+                        }
+                    }
                 }
+                foreach ($result['parameters'] as $parameter) {
+                    $oldName = $parameter->getName();
+                    $newName = $oldName;
+                    if (isset($existingParams[$oldName])) {
+                        $counter = 0;
+                        do {
+                            $newName = $oldName . '_' . (++$counter);
+                        } while (isset($existingParams[$newName]));
+                        $filterDql = str_replace(':' . $oldName, ':' . $newName, $filterDql);
+                    }
+                    $qb->setParameter($newName, $parameter->getValue());
+                    $existingParams[$newName] = true;
+                }
+                $qb->andWhere((new Expr())->in("$alias.id", $filterDql));
             } catch (\Exception $exception) {
                 $this->logger->error('Filter validation exception: '. $exception->getMessage());
                 $this->logger->error('Filter source: '. $filter);

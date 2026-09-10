@@ -219,10 +219,10 @@ Generic JSON Schema validator (`justinrainbow/json-schema` `^6.11`). Bundle sche
 
 | Member | Purpose |
 |--------|---------|
-| `validate(mixed $data, string $schemaName)` | Load `src/{Bundle}/Resources/JsonSchema/{Name}.json` via `%kernel.project_dir%`, coerce PHP arrays to objects, run draft-07 validation, throw `JsonSchemaViolationException` on failure (`property: message`). `null` is skipped (field is nullable). |
-| `validateInline(mixed $data, array $inlineSchema)` | Validate against an inline schema array. |
+| `validate(mixed $data, string $schemaName)` | Load `src/{Bundle}/Resources/JsonSchema/{Name}.json` via `%kernel.project_dir%`, coerce PHP arrays to objects (empty `[]` → `stdClass` when schema `type: object` to preserve `{}`), run draft-07 validation, throw `JsonSchemaViolationException` on failure (`property: message`). `null` is skipped (field is nullable). |
+| `validateInline(mixed $data, array $inlineSchema)` | Validate against an inline schema array (same empty-object handling). |
 
-`Store` bundle ships `StoreAddress`, `StoreContact`, `StoreSettings` schemas (see `store.md §5.1.1`); `Core` owns only the validator. Register `App\Core\Validator\JsonSchemaValidator` as `public: true` so `Create/UpdateApiViewMixin` can fetch it from the container (`serviceContainer`/`container`).
+`Store` bundle ships `StoreAddress`, `StoreContact` (`phone`, `email`, `subTitle` 1..100, `tags` array 1..30×20 unique), `StoreSettings` schemas (see `store.md §5.1.1`); `Core` owns only the validator. Empty `settings:{}` (decoded as `[]`) is coerced to `stdClass` for `StoreSettings` `type:object` so `POST /manage/stores {settings:{}}` passes. Register `App\Core\Validator\JsonSchemaValidator` as `public: true` so `Create/UpdateApiViewMixin` can fetch it from the container (`serviceContainer`/`container`).
 
 #### `jsonSchemas` on controllers
 
@@ -457,8 +457,13 @@ representation:
 - Avoids normalizing Doctrine internal objects (`Doctrine\ORM\*`,
   `Doctrine\Persistence\*`) — stringifies or returns the class name.
 - Adds `__toString` at the top level when present.
-- Reduces related objects to `{id, __toString, __metadata}`.
-- Expands traversable collections of related objects.
+- Reduces related objects to `{id, __toString, __metadata}`; when
+  `__metadata` is set (via `RestController::expandObjects()` for
+  `@expands=specifications`), the related object is fully normalized
+  (e.g. `Product.specifications[]` → `{id, uuid, name, price, ..., __metadata:{full spec}}`)
+  using a `clone` to avoid self-reference recursion.
+- Expands traversable collections of related objects (supports both JSON array
+  `["specifications"]` and plain/comma-separated `specifications` / `a,b`).
 - JSON-decodes string-valued fields (excluding numeric strings) into objects.
 - On normalization failure returns `{id, __toString}` or `{__class}`.
 

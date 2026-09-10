@@ -41,9 +41,14 @@ final readonly class JsonSchemaValidator
         }
 
         // Convert PHP array to object for json-schema validation (associative arrays become objects)
-        $dataForValidation = json_decode((string) json_encode($data));
-        if ($dataForValidation === null) {
-            $dataForValidation = $data;
+        // Handle empty object {} decoded as [] in PHP associative mode: preserve object type for empty object schemas
+        if ($data === [] && isset($schemaData->type) && $schemaData->type === 'object') {
+            $dataForValidation = new \stdClass();
+        } else {
+            $dataForValidation = json_decode((string) json_encode($data));
+            if ($dataForValidation === null) {
+                $dataForValidation = $data;
+            }
         }
 
         $validator = new JsonValidator();
@@ -80,7 +85,11 @@ final readonly class JsonSchemaValidator
         }
 
         $schemaData = json_decode((string) json_encode($inlineSchema));
-        $dataForValidation = json_decode((string) json_encode($data));
+        if ($data === [] && isset($schemaData->type) && $schemaData->type === 'object') {
+            $dataForValidation = new \stdClass();
+        } else {
+            $dataForValidation = json_decode((string) json_encode($data));
+        }
 
         $validator = new JsonValidator();
         $validator->validate($dataForValidation, $schemaData, Constraint::CHECK_MODE_NORMAL);

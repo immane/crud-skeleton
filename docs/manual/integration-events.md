@@ -67,9 +67,7 @@ framework:
         routing:
             App\Trade\Message\TradeOrderCreatedMessage: async
             App\Trade\Message\TradeOrderCancelledMessage: async
-            App\Trade\Message\StoreOrderAcceptedMessage: async
-            App\Trade\Message\StoreOrderRejectedMessage: async
-            App\Trade\Message\StoreOrderVerifiedMessage: async
+            App\Trade\Message\StoreOrderVerifiedMessage: async  # only Store->Trade message; accepted/rejected removed
             App\Inventory\Message\ReservationRequestedMessage: async
             App\Inventory\Message\ReservationReleaseRequestedMessage: async
             App\Inventory\Message\ReservationConfirmedMessage: async
@@ -106,7 +104,7 @@ final readonly class TradeOrderCreatedMessage
 |---------|------------|-------------|----------------|
 | `App\Trade\Message\TradeOrderCreatedMessage` | Trade outbox | Store | ✅ `envelope` |
 | `App\Trade\Message\TradeOrderCancelledMessage` | Trade outbox | Store | ✅ `envelope` |
-| `App\Store\Message…` → `StoreOrderAcceptedMessage`, `StoreOrderRejectedMessage`, `StoreOrderVerifiedMessage` | Store outbox | Trade | ✅ `envelope` |
+| `App\Trade\Message\StoreOrderVerifiedMessage` | Store outbox | Trade | ✅ `envelope` |
 | `App\Inventory\Message\ReservationRequestedMessage` | Store outbox | Inventory | ✅ `envelope` |
 | `App\Inventory\Message\ReservationReleaseRequestedMessage` | Store outbox | Inventory | ✅ `envelope` |
 | `App\Inventory\Message\ReservationConfirmedMessage` | Inventory outbox | Store | ✅ `envelope` |
@@ -115,9 +113,9 @@ final readonly class TradeOrderCreatedMessage
 | `App\Settlement\Message\SettlementAllocationPostingMessage` | Settlement outbox | Settlement | ❌ explicit fields (`allocationUuid`, `planUuid`) |
 | `App\Settlement\Message\SettlementFundingConfirmedMessage` | external producer (async) | Settlement | ❌ explicit fields |
 
-The Store message classes live in the **Target** module's namespace are imported into the
-producer command; e.g. `StoreOrderAcceptedMessage`/`StoreOrderRejectedMessage` are
-`App\Trade\Message\*` classes consumed by `App\Trade\MessageHandler\*`, while
+The Store message class lives in the **Target** module's namespace and is imported into the
+producer command; e.g. `StoreOrderVerifiedMessage` is an `App\Trade\Message\*` class
+consumed by `App\Trade\MessageHandler\StoreOrderVerifiedHandler`, while
 `ReservationRequestedMessage`/`ReservationReleaseRequestedMessage` are
 `App\Inventory\Message\*` consumed by `App\Inventory\MessageHandler\*`.
 
@@ -163,11 +161,11 @@ carry **explicit scalar fields** rather than an envelope (see
 
 | Topic (`.v1` suffix = version) | Emitter outbox | Consumer |
 |--------------------------------|----------------|----------|
-| `trade.order.created.v1` | `trade_outbox_message` | Store (`TradeOrderCreatedHandler`) — only when `settings.order.requireAcceptance=true` |
+| `trade.order.created.v1` | `trade_outbox_message` | Store (`TradeOrderCreatedHandler`) — always emitted when a `StoreContext` is present; Store validates and auto-accepts or creates an inventory reservation (no Trade ack) |
 | `trade.order.cancelled.v1` | `trade_outbox_message` | Store (`TradeOrderCancelledHandler`) |
-| `store.order.accepted.v1` | `store_outbox_message` | Trade (`StoreOrderAcceptedHandler`) |
-| `store.order.rejected.v1` | `store_outbox_message` | Trade (`StoreOrderRejectedHandler`) |
-| `store.order.verified.v1` | `store_outbox_message` | Trade (`StoreOrderVerifiedHandler` → `request_verification` + `store_verify`) — only when `settings.fulfillment.requireVerification=true`; payload `{orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}` with audit |
+| `store.order.verified.v1` | `store_outbox_message` | Trade (`StoreOrderVerifiedHandler`) — only when Trade order metadata `_completionMode == 'store_verification'` (snapshot of `StoreContext.requireVerification` at creation); payload `{orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt}` (no `verificationCode`; audit `verifiedBy`/`verifiedAt` only); guard is Trade `_completionMode` |
+| `store.order.accepted.v1` | — | **Removed** — former Store→Trade acceptance ack; no longer emitted or consumed |
+| `store.order.rejected.v1` | — | **Removed** — former Store→Trade rejection ack; no longer emitted or consumed |
 | `inventory.reservation.requested.v1` | `store_outbox_message` | Inventory (`ReservationRequestedHandler`) |
 | `inventory.reservation.release.requested.v1` | `store_outbox_message` | Inventory (`ReservationReleaseRequestedHandler`) |
 | `inventory.reservation.confirmed.v1` | `inventory_outbox_message` | Store (`ReservationConfirmedHandler`) |
@@ -199,6 +197,15 @@ scheduler:
         php bin/console app:settlement:outbox:publish --no-interaction
         sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"
       done
+```
+
+For local one-shot verification without Docker, use the bundled helper (publish loop in background + consume `async` in foreground for a bounded duration, default 60s):
+
+```bash
+./scripts/dev/run-async.sh 60        # publish loop (5s) + consume 60s
+./scripts/dev/run-async.sh 10 --interval 2  # publish every 2s
+./scripts/dev/run-async.sh 2m --verbose
+docker compose exec app ./scripts/dev/run-async.sh 60
 ```
 
 The three standard steps (identical for Trade, Store, Inventory, Settlement):
@@ -243,9 +250,9 @@ repository UPDATEs instead of through the Unit of Work, so it does not flush ent
 | `settlement_consumed_event` | INT | `VARCHAR(64)` UNIQUE | `source_aggregate_type`, `source_aggregate_id`, `payload_hash(64)` |
 
 All three share `topic`, `processed_at`, and `payload_hash` (SHA-256 of the JSON-encoded
-envelope). Trade has **no inbox table**: its handlers are guarded by the workflow's
-`can(transition)` check plus the store-uuid snapshot match inside a transaction, so a
-duplicate `store.order.accepted.v1` / `store.order.rejected.v1` is a no-op.
+envelope). Trade has **no inbox table**: `StoreOrderVerifiedHandler` is guarded by the
+snapshot `metadata._completionMode == 'store_verification'` plus the store-uuid match inside
+a transaction, and uses `metadata._storeVerificationReceived` with `Order::allowCompletionFromStoreVerification()` / `OrderCompletionGuardListener` so a duplicate `store.order.verified.v1` is a no-op when already completed or when `_completionMode` is `manual`.
 
 ### 4.2 Idempotency by `eventId`
 
@@ -307,7 +314,7 @@ Handlers validate their envelopes defensively before touching the database:
 
 - **Trade** assigns `correlationId = aggregateId` (the trade order uuid) and
   `causationId = null` on every outbound envelope — the whole order saga (order created →
-  store acceptance → inventory reservation → cancellation) shares that correlation scope.
+  store fulfillment/inventory reservation → verification → cancellation) shares that correlation scope.
 - **Settlement** is the only module that persists the trace into its domain model:
   `SettlementFundingConfirmedMessage` carries `correlationId`/`causationId`, and
   `settlement_plan` stores `correlation_id` and `causation_id` columns. The
@@ -331,15 +338,16 @@ sequenceDiagram
     participant I as Inventory
     participant IO as Inventory Outbox
 
-    T->>T: OrderService::createOrder()<br/>(txn) workflow store_submit
-    T->>TO: (txn) += trade.order.created.v1
+    T->>T: OrderService::createOrder(storeContext)<br/>(txn) workflow submit + record trade.order.created.v1<br/>metadata._completionMode = requireVerification ? 'store_verification' : 'manual'
+    T->>TO: (txn) += trade.order.created.v1 {orderUuid, store{uuid,code,name,requireVerification}, items, delivery, placedAt}
     TO->>S: app:trade:outbox:publish → TradeOrderCreatedMessage
-    S->>S: (txn) inbox += trade.order.created.v1
-    alt store inactive
-        S->>SO: (txn) += store.order.rejected.v1 (STORE_UNAVAILABLE)
+    S->>S: (txn) inbox += trade.order.created.v1 (StoreConsumedEvent)
+    alt store missing or inactive
+        S->>S: throw RuntimeException('Store is not available.')<br/>Messenger retry (no store.order.rejected.v1)
     else INVENTORY_ENABLED=0
-        S->>S: accept immediately
-    else reserve
+        S->>S: create StoreOrder + accept immediately (no outbox to Trade)
+    else INVENTORY_ENABLED=1
+        S->>S: create StoreOrder + awaitInventory(reservationId)
         S->>SO: (txn) += inventory.reservation.requested.v1
         SO->>I: app:store:outbox:publish → ReservationRequestedMessage
         I->>I: (txn) inbox += requested; InventoryService::reserve()
@@ -349,12 +357,12 @@ sequenceDiagram
             I->>IO: (txn) += inventory.reservation.confirmed.v1
         end
         IO->>S: app:inventory:outbox:publish → ReservationConfirmed/Rejected
-        S->>S: (txn) inbox += outcome; accept/reject storeOrder
-        S->>SO: (txn) += store.order.rejected.v1 (if rejected)
-        SO->>T: app:store:outbox:publish → StoreOrderRejectedMessage
-        T->>T: workflow store_reject / store_accept
+        S->>S: (txn) inbox += outcome; accept/reject storeOrder locally (no Trade relay)
     end
 ```
+
+Trade always writes `trade.order.created.v1` when a `StoreContext` is supplied. Store never
+acks with `store.order.accepted/rejected.v1`; the only Store→Trade signal is `store.order.verified.v1` for completion. An unavailable store is a retryable failure, not a rejection event.
 
 ### 6.2 Order cancellation → Store → Inventory release
 
@@ -387,7 +395,7 @@ sequenceDiagram
     end
 ```
 
-### 6.3 Fulfilled → Store verification → Completed (when `fulfillment.requireVerification=true`)
+### 6.3 Fulfilled → Store verification → Completed (when `_completionMode == 'store_verification'`)
 
 ```mermaid
 sequenceDiagram
@@ -395,17 +403,27 @@ sequenceDiagram
     participant T as Trade
     participant S as Store
     participant SO as Store Outbox
-    participant TO as Trade Outbox
 
     T->>T: fulfill: paid --fulfill--> fulfilled (OrderWorkflowListener sets fulfilledAt)
     S->>S: StoreOrder fulfill (if accepted) -> fulfilled
-    S->>S: POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}<br/>StoreOrderService::verify() (txn) verify(code, verifiedBy) -> verifiedAt
-    S->>SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}
+    S->>S: POST /store/{scopeId}/orders/{uuid}/verify<br/>StoreOrderService::verify(verifiedBy) (txn) verify -> verifiedAt<br/>outbox += store.order.verified.v1
+    S->>SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt} (no verificationCode)
     SO->>T: app:store:outbox:publish -> StoreOrderVerifiedMessage
-    T->>T: (txn) StoreOrderVerifiedHandler: if can(request_verification) apply -> awaiting_store_verification; if can(store_verify) apply -> completed (Trade OrderWorkflowListener sets completedAt via status-driven completed)
+    T->>T: (txn) StoreOrderVerifiedHandler: if _completionMode != 'store_verification' -> no-op;<br/>else _storeVerificationReceived=true; allowCompletionFromStoreVerification(); if can(complete) apply -> completed
+    Note over T: OrderCompletionGuardListener blocks fulfilled --complete--> completed<br/>when _completionMode == 'store_verification' unless isCompletingFromStoreVerification()
+    Note over T: Out-of-order: if verified arrives before fulfilled,<br/>handler stores _storeVerificationReceived; OrderVerificationCompletionListener on fulfilled (workflow.order.completed.fulfill) completes if flag set
 ```
 
-Guard `StoreOrderWorkflowGuardListener` blocks direct `fulfilled --complete--> completed` when `requireVerification=true` and allows `request_verification` + `store_verify`. Trade `OrderWorkflowListener` handles `completed` status-driven so it never hard-codes `store_verify`. Store `verificationCode` is required (≤64) and `verifiedBy` is the acting staff `userUuid`.
+Guard is `OrderCompletionGuardListener` on `workflow.order.guard.complete`: when
+`metadata._completionMode == 'store_verification'` it blocks `fulfilled --complete--> completed`
+unless `Order::isCompletingFromStoreVerification()` is true. `StoreOrderVerifiedHandler`
+sets `metadata._storeVerificationReceived = true` and briefly calls
+`allowCompletionFromStoreVerification()` to bypass the guard; the same flag is checked by
+`OrderVerificationCompletionListener` (`workflow.order.completed.fulfill`) so a verification
+that arrives before `fulfill` still completes the order once fulfilled. Store
+`verificationCode` is not part of the contract; verification is identified by
+`orderUuid`/`storeOrderUuid`/`storeUuid` with audit `verifiedBy` (`userUuid` or null) and
+`verifiedAt`.
 
 ### 6.4 Expired reservations
 
@@ -465,4 +483,6 @@ posted` (terminal `cancelled`/`failed`/`reversed`/`reversal_pending`), with
   available_at <= now`), plus the index `(published_at, available_at)` on each outbox
   table (Inventory appends `id`).
 - The `INVENTORY_ENABLED` environment toggle decides whether Store skips inventory
-  altogether and accepts orders immediately, or waits for an `inventory.reservation.confirmed.v1`.
+  altogether and accepts orders immediately (`accept()` with no reservation), or creates
+  a `pending_validation -> awaiting_inventory` transition and emits
+  `inventory.reservation.requested.v1` to wait for `inventory.reservation.confirmed/rejected.v1` (accepted/rejected locally, no Trade relay).

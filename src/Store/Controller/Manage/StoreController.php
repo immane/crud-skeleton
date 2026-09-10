@@ -29,10 +29,10 @@ final class StoreController extends RestController
     protected array $requiredCreateProperties = ['code', 'name', 'timezone'];
 
     /** @var list<string> */
-    protected array $acceptedCreateProperties = ['code', 'name', 'timezone', 'contact', 'address', 'settings'];
+    protected array $acceptedCreateProperties = ['code', 'name', 'timezone', 'currency', 'contact', 'address', 'settings'];
 
     /** @var list<string> */
-    protected array $acceptedUpdateProperties = ['name', 'timezone', 'contact', 'address', 'settings'];
+    protected array $acceptedUpdateProperties = ['name', 'timezone', 'currency', 'contact', 'address', 'settings'];
 
     /** @var array<string, string> JSON field → bundle schema */
     protected array $jsonSchemas = [
@@ -135,6 +135,14 @@ final class StoreController extends RestController
                 throw new \InvalidArgumentException('timezone must be a valid timezone.');
             }
         }
+        if (array_key_exists('currency', $content)) {
+            if (!is_string($content['currency']) || trim($content['currency']) === '') {
+                throw new \InvalidArgumentException('currency must be a non-empty string.');
+            }
+            if (!preg_match('/^[A-Za-z0-9._-]{1,32}$/', $content['currency'])) {
+                throw new \InvalidArgumentException('currency must be 1-32 chars of letters, digits, ., _, -.');
+            }
+        }
         foreach (['contact', 'address', 'settings'] as $field) {
             if (array_key_exists($field, $content) && $content[$field] !== null && !is_array($content[$field])) {
                 throw new \InvalidArgumentException(sprintf('%s must be an object or null.', $field));
@@ -153,11 +161,6 @@ final class StoreController extends RestController
         }
         if (array_key_exists('fulfillment', $settings) && $settings['fulfillment'] !== null && !is_array($settings['fulfillment'])) {
             throw new \InvalidArgumentException('settings.fulfillment must be an object or null.');
-        }
-        if (isset($settings['order']) && is_array($settings['order']) && array_key_exists('requireAcceptance', $settings['order'])) {
-            if (!is_bool($settings['order']['requireAcceptance'])) {
-                throw new \InvalidArgumentException('settings.order.requireAcceptance must be a boolean.');
-            }
         }
         if (isset($settings['fulfillment']) && is_array($settings['fulfillment']) && array_key_exists('requireVerification', $settings['fulfillment'])) {
             if (!is_bool($settings['fulfillment']['requireVerification'])) {

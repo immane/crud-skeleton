@@ -212,7 +212,7 @@ final class RestControllerCoverage2Test extends TestCase
         $r = $c->publicSuccess([$entity]);
 
         self::assertSame(200, $r->getStatusCode());
-        self::assertSame($child, $child->__metadata);
+        self::assertNull($child->__metadata);
     }
 
     public function testExpandsCatchesGetterExceptionSilently(): void

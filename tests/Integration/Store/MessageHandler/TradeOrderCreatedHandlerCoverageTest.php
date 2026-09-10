@@ -61,7 +61,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         $this->expectExceptionMessage('Trade order event does not include a store UUID.');
         $handler(new TradeOrderCreatedMessage([
             'eventId' => '00000000-0000-4000-8000-0000000000L3',
-            'payload' => ['orderUuid' => '00000000-0000-4000-8000-0000000000L4', 'store' => ['code' => 'xuhui', 'name' => 'Xuhui']],
+            'payload' => ['orderUuid' => '00000000-0000-4000-8000-0000000000L4', 'store' => ['code' => 'demo', 'name' => 'Demo']],
         ]));
     }
 
@@ -100,7 +100,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         self::assertCount(1, $orders);
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $orders[0]->getOperationalStatus());
         $accepted = array_filter($container->get(StoreOutboxMessageRepository::class)->findUnpublished(), static fn ($message): bool => $message->getTopic() === 'store.order.accepted.v1');
-        self::assertCount(1, $accepted);
+        self::assertCount(0, $accepted);
     }
 
     public function testUnavailableStoreWithoutOrderUuidThrows(): void

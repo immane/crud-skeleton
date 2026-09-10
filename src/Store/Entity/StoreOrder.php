@@ -24,6 +24,7 @@ class StoreOrder
     public const STATUS_FULFILLMENT_PENDING = 'fulfillment_pending';
     public const STATUS_FULFILLING = 'fulfilling';
     public const STATUS_FULFILLED = 'fulfilled';
+    public const STATUS_VERIFIED = 'verified';
     public const STATUS_CANCELLED = 'cancelled';
 
     #[ORM\Id]
@@ -50,7 +51,7 @@ class StoreOrder
     #[ORM\Column(name: 'customer_user_uuid', type: 'string', length: 36, nullable: true)]
     private ?string $customerUserUuid;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: 'string', length: 32)]
     private string $currency;
 
     #[ORM\Column(name: 'total_amount', type: 'bigint')]
@@ -88,8 +89,8 @@ class StoreOrder
     #[ORM\Column(name: 'verified_by', type: 'string', length: 36, nullable: true)]
     private ?string $verifiedBy = null;
 
-    #[ORM\Column(name: 'verification_code', type: 'string', length: 64, nullable: true)]
-    private ?string $verificationCode = null;
+    #[ORM\Column(name: 'verification_required', type: 'boolean', options: ['default' => false])]
+    private bool $verificationRequired = false;
 
     #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
@@ -98,7 +99,7 @@ class StoreOrder
     private ?\DateTimeImmutable $updatedAt = null;
 
     /** @param array<string, mixed> $orderSnapshot */
-    public function __construct(Store $store, string $tradeOrderUuid, string $storeCodeSnapshot, string $storeNameSnapshot, ?string $customerUserUuid, string $currency, int $totalAmount, array $orderSnapshot)
+    public function __construct(Store $store, string $tradeOrderUuid, string $storeCodeSnapshot, string $storeNameSnapshot, ?string $customerUserUuid, string $currency, int $totalAmount, array $orderSnapshot, bool $verificationRequired = false)
     {
         $this->uuid = UUID::v4();
         $this->store = $store;
@@ -109,6 +110,7 @@ class StoreOrder
         $this->currency = strtoupper($currency);
         $this->totalAmount = $totalAmount;
         $this->orderSnapshot = $orderSnapshot;
+        $this->verificationRequired = $verificationRequired;
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -133,7 +135,7 @@ class StoreOrder
     public function getReservationId(): ?string { return $this->reservationId; }
     public function getVerifiedAt(): ?\DateTimeImmutable { return $this->verifiedAt; }
     public function getVerifiedBy(): ?string { return $this->verifiedBy; }
-    public function getVerificationCode(): ?string { return $this->verificationCode; }
+    public function isVerificationRequired(): bool { return $this->verificationRequired; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getUpdatedAt(): ?\DateTimeImmutable { return $this->updatedAt; }
 
@@ -144,7 +146,7 @@ class StoreOrder
     public function beginFulfillment(?array $data = null): self { $this->operationalStatus = self::STATUS_FULFILLING; $this->fulfillmentData = $data; return $this->touch(); }
     /** @param array<string, mixed>|null $data */
     public function fulfill(?array $data = null): self { $this->operationalStatus = self::STATUS_FULFILLED; $this->fulfillmentData = $data; return $this->touch(); }
-    public function verify(string $verificationCode, ?string $verifiedBy = null): self { $this->verificationCode = $verificationCode; $this->verifiedBy = $verifiedBy; $this->verifiedAt = new \DateTimeImmutable(); return $this->touch(); }
+    public function verify(?string $verifiedBy = null): self { $this->operationalStatus = self::STATUS_VERIFIED; $this->verifiedBy = $verifiedBy; $this->verifiedAt = new \DateTimeImmutable(); return $this->touch(); }
     public function cancel(): self { $this->operationalStatus = self::STATUS_CANCELLED; return $this->touch(); }
 
     private function touch(): self { $this->updatedAt = new \DateTimeImmutable(); return $this; }

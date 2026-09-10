@@ -28,8 +28,8 @@ final class StoreControllerViewIntegrationTest extends IntegrationWebTestCase
         $entityManager = $container->get(EntityManagerInterface::class);
 
         $client->request('POST', '/api/v1/manage/stores', [], [], [], json_encode([
-            'code' => 'xuhui',
-            'name' => 'Xuhui Store',
+            'code' => 'demo',
+            'name' => 'Demo Store',
             'timezone' => 'Asia/Shanghai',
             'settings' => ['acceptingOrders' => true],
         ], JSON_THROW_ON_ERROR));
@@ -53,7 +53,7 @@ final class StoreControllerViewIntegrationTest extends IntegrationWebTestCase
         self::assertResponseIsSuccessful();
 
         $client->request('PUT', '/api/v1/manage/stores/' . $storeUuid, [], [], [], json_encode([
-            'name' => 'Updated Xuhui Store',
+            'name' => 'Updated Demo Store',
         ], JSON_THROW_ON_ERROR));
         self::assertResponseIsSuccessful();
         $client->request('PUT', '/api/v1/manage/stores/' . $storeUuid, [], [], [], json_encode([
@@ -81,6 +81,7 @@ final class StoreControllerViewIntegrationTest extends IntegrationWebTestCase
             12800,
             ['items' => [], 'delivery' => [], 'placedAt' => '2026-07-25T00:00:00+00:00'],
         );
+        $storeOrder->accept();
         $entityManager->persist($storeOrder);
         $entityManager->flush();
 
@@ -117,36 +118,8 @@ final class StoreControllerViewIntegrationTest extends IntegrationWebTestCase
         $client->request('GET', '/api/v1/store/' . $storeUuid . '/orders/00000000-0000-4000-8000-000000000000');
         self::assertResponseStatusCodeSame(404);
 
-        $client->request('POST', '/api/v1/store/' . $storeUuid . '/orders/' . $storeOrder->getUuid() . '/accept', [], [], [], json_encode([
-            'reservationId' => ['invalid'],
-        ], JSON_THROW_ON_ERROR));
-        self::assertResponseStatusCodeSame(400);
-        $client->request('POST', '/api/v1/store/' . $storeUuid . '/orders/' . $storeOrder->getUuid() . '/accept', [], [], [], '{}');
-        self::assertResponseIsSuccessful();
         $client->request('POST', '/api/v1/store/' . $storeUuid . '/orders/' . $storeOrder->getUuid() . '/fulfill', [], [], [], json_encode([
             'fulfillmentData' => ['mode' => 'pickup'],
-        ], JSON_THROW_ON_ERROR));
-        self::assertResponseIsSuccessful();
-
-        $managedStore = $entityManager->getRepository(Store::class)->findOneBy(['uuid' => $storeUuid]);
-        self::assertInstanceOf(Store::class, $managedStore);
-        $rejectedOrder = new StoreOrder(
-            $managedStore,
-            '3144f768-dcc2-4c27-a849-a4bda9787faf',
-            $managedStore->getCode(),
-            $managedStore->getName(),
-            $user->getUuid(),
-            'CNY',
-            6400,
-            ['items' => [], 'delivery' => [], 'placedAt' => '2026-07-25T00:00:00+00:00'],
-        );
-        $entityManager->persist($rejectedOrder);
-        $entityManager->flush();
-        $client->request('POST', '/api/v1/store/' . $storeUuid . '/orders/' . $rejectedOrder->getUuid() . '/reject', [], [], [], '{}');
-        self::assertResponseStatusCodeSame(400);
-        $client->request('POST', '/api/v1/store/' . $storeUuid . '/orders/' . $rejectedOrder->getUuid() . '/reject', [], [], [], json_encode([
-            'code' => 'OUT_OF_STOCK',
-            'reason' => 'Unavailable.',
         ], JSON_THROW_ON_ERROR));
         self::assertResponseIsSuccessful();
 

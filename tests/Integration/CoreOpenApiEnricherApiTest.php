@@ -84,9 +84,8 @@ final class CoreOpenApiEnricherApiTest extends IntegrationWebTestCase
 
     public function testStoreOrderEndpointsAreLeftUntaggedCurrently(): void
     {
-        // Fixed: Store endpoints are now correctly tagged via OA attributes + detectTag str_contains fix.
         $doc = $this->fetchSpec();
-        foreach (['/api/v1/store/{scopeId}/orders' => 'get', '/api/v1/store/{scopeId}/orders/{orderUuid}/accept' => 'post'] as $path => $method) {
+        foreach (['/api/v1/store/{scopeId}/orders' => 'get', '/api/v1/store/{scopeId}/orders/{orderUuid}/fulfill' => 'post'] as $path => $method) {
             self::assertSame(['Store'], $doc['paths'][$path][$method]['tags'] ?? [], "expected Store tag on $path $method");
         }
     }
@@ -94,7 +93,7 @@ final class CoreOpenApiEnricherApiTest extends IntegrationWebTestCase
     public function testStoreOrderEndpointsShouldBeTaggedStore(): void
     {
         $doc = $this->fetchSpec();
-        foreach (['/api/v1/store/{scopeId}/orders' => 'get', '/api/v1/store/{scopeId}/orders/{orderUuid}/accept' => 'post', '/api/v1/store/{scopeId}/orders/{orderUuid}/reject' => 'post', '/api/v1/store/{scopeId}/orders/{orderUuid}/fulfill' => 'post'] as $path => $method) {
+        foreach (['/api/v1/store/{scopeId}/orders' => 'get', '/api/v1/store/{scopeId}/orders/{orderUuid}/fulfill' => 'post', '/api/v1/store/{scopeId}/orders/{orderUuid}/verify' => 'post'] as $path => $method) {
             self::assertSame(['Store'], $doc['paths'][$path][$method]['tags'] ?? [], "expected Store tag on $path $method");
         }
     }

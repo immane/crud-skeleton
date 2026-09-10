@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Store\Service;
 
 use App\Store\Repository\StoreRepository;
+use App\Store\DTO\StoreSettings;
 use App\Trade\DTO\StoreContext;
 use App\Trade\Service\StoreContextResolverInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -36,6 +37,8 @@ final readonly class StoreContextResolver implements StoreContextResolverInterfa
             $store->getCode(),
             $store->getName(),
             $request->headers->get('X-Store-Channel', 'api'),
+            $store->getCurrency(),
+            StoreSettings::from($store->getSettings())->requireVerification,
         );
     }
 }

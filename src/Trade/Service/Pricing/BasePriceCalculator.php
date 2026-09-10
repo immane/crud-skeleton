@@ -27,11 +27,11 @@ class BasePriceCalculator implements PriceCalculatorInterface
             $specificationId = $inputItem['specificationId'];
             $quantity = $inputItem['quantity'] ?? 1;
 
-            $catalogItem = $this->catalogResolver->resolveForPricing((int) $specificationId, $context->storeCode);
+            $catalogItem = $this->catalogResolver->resolveForPricing($specificationId, $context->storeCode);
 
             if ($catalogItem === null) {
                 throw new SpecificationNotFoundException(
-                    sprintf('Specification #%d not found or not available.', $specificationId)
+                    sprintf('Specification #%s not found or not available.', (string) $specificationId)
                 );
             }
 

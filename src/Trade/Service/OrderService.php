@@ -19,8 +19,6 @@ use App\Trade\Service\Pricing\PriceCalculationResult;
 use App\Trade\Service\Pricing\PriceCalculatorInterface;
 use App\Wallet\Repository\WalletRepository;
 use App\Wallet\Service\Transfer\TransferServiceInterface;
-use App\Store\DTO\StoreSettings;
-use App\Store\Repository\StoreRepository;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -42,7 +40,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
         private readonly ?TradeOutboxServiceInterface $outboxService = null,
         #[Target('state_machine.order')]
         private readonly ?WorkflowInterface $workflow = null,
-        private ?StoreRepository $storeRepository = null,
     ) {
         parent::__construct($container, Order::class);
     }
@@ -97,6 +94,7 @@ final class OrderService extends BaseService implements OrderServiceInterface
             if ($storeContext !== null) {
                 $metadata ??= [];
                 $metadata['_store'] = $storeContext->toSnapshot();
+                $metadata['_completionMode'] = $storeContext->requireVerification ? 'store_verification' : 'manual';
             }
             $order->setMetadata($metadata);
 
@@ -135,17 +133,11 @@ final class OrderService extends BaseService implements OrderServiceInterface
                 if ($this->workflow === null || $this->outboxService === null) {
                     throw new \RuntimeException('Store order orchestration is not configured.');
                 }
-                // Optional acceptance: GuardListener blocks store_submit when requireAcceptance=false
-                if (!$this->workflow->can($order, 'store_submit')) {
-                    // If store requires acceptance but transition blocked for other reason, throw
-                    $requireAcceptance = $this->isStoreRequireAcceptance($storeContext->storeUuid);
-                    if ($requireAcceptance) {
-                        throw new \RuntimeException('Order cannot be submitted for store acceptance.');
-                    }
-                    // Acceptance disabled → leave order as draft (metadata retained), no outbox
-                } else {
-                    $this->workflow->apply($order, 'store_submit');
-                    $this->outboxService->record('trade.order.created.v1', 'trade_order', $order->getUuid(), [
+                if (!$this->workflow->can($order, 'submit')) {
+                    throw new \RuntimeException('Order cannot be submitted.');
+                }
+                $this->workflow->apply($order, 'submit');
+                $this->outboxService->record('trade.order.created.v1', 'trade_order', $order->getUuid(), [
                         'orderUuid' => $order->getUuid(),
                         'store' => $storeContext->toSnapshot(),
                         'customerUserUuid' => $order->getUser()?->getUuid(),
@@ -165,7 +157,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
                         'delivery' => is_array($metadata['delivery'] ?? null) ? $metadata['delivery'] : [],
                         'placedAt' => $order->getCreatedAt()->format(DATE_ATOM),
                     ]);
-                }
             }
 
             return $order;
@@ -327,16 +318,4 @@ final class OrderService extends BaseService implements OrderServiceInterface
         return $calculators;
     }
 
-    private function isStoreRequireAcceptance(string $storeUuid): bool
-    {
-        if (!isset($this->storeRepository)) {
-            return false;
-        }
-        $store = $this->storeRepository->findOneBy(['uuid' => $storeUuid]);
-        if ($store === null) {
-            return false;
-        }
-
-        return StoreSettings::from($store->getSettings())->requireAcceptance;
-    }
 }

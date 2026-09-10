@@ -65,9 +65,10 @@
 ├── src/Trade/                    # E-commerce module (orders + pricing, Store catalog via CatalogResolver)
 │   ├── Entity/                   # Order, OrderItem (scalar specificationUuid + snapshots), TradeOutboxMessage
 │   ├── Service/Catalog/                # CatalogResolverInterface + CatalogItem (Trade-owned port/DTO, Store implements)
-│   ├── Service/OrderService.php        # StoreContext-aware creation + price pipeline (Store visibility via CatalogResolver)
+│   ├── Service/OrderService.php        # StoreContext-aware creation + price pipeline (Store visibility via CatalogResolver); writes _store + _completionMode + trade.order.created.v1
 │   ├── Command/PublishOutboxCommand.php # app:trade:outbox:publish
-│   ├── MessageHandler/           # Store acceptance/rejection consumers
+│   ├── MessageHandler/           # StoreOrderVerifiedHandler (no inbox table; guard via _completionMode + _storeVerificationReceived)
+│   ├── EventListener/            # OrderCompletionGuardListener (workflow.order.guard.complete), OrderVerificationCompletionListener (workflow.order.completed.fulfill)
 │   ├── Service/Pricing/                # PriceCalculatorInterface (Base via CatalogResolver, Quantity, Total)
 │   ├── EventListener/OrderWorkflowListener.php
 │   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
@@ -150,8 +151,8 @@
 │       ├── nelmio_api_doc.yaml   # OpenAPI 3.1 config: System + Wechat + Authorization tags
 │       ├── security.yaml         # PUBLIC_ACCESS: docs/auth/webhooks/wechat + GET /api/v1/public/*; /api/v1/manage → ROLE_ADMIN
 │       ├── translation.yaml      # Translator config: default_locale en, translations/ path
-│       ├── workflow.yaml         # Order state machine, including Store acceptance
-│       ├── messenger.yaml        # Trade/Store integration messages to async transport
+│       ├── workflow.yaml         # Order state machine (Trade: draft→pending→confirmed→paid→fulfilled→completed; completion guard via _completionMode)
+│       ├── messenger.yaml        # Trade/Store integration messages to async transport (only store.order.verified remaining for Store→Trade)
 │       └── ...
 ├── migrations/                   # 33 migrations (latest: 20260903000003 — see `migrations/`; includes store `store_id` nullable and OrderItem `specificationUuid` backfill)
 ├── translations/                 # i18n translation files (messages.en/zh/zh_Hant/ja.yaml)
@@ -310,20 +311,28 @@ Key PHPDoc contracts:
 
 ```mermaid
 flowchart TD
-    draft["draft"] --> pending["pending"] --> confirmed["confirmed"] --> paid["paid"] --> fulfilled["fulfilled"] --> completed["completed"] --> refunded["refunded"]
-    draft --> awaiting["awaiting_store_acceptance"]
-    awaiting --> accepted["store_accepted"]
-    accepted --> confirmed
-    awaiting --> rejected["store_rejected"]
-    rejected --> cancelled["cancelled"]
+    draft["draft"] --> pending["pending"] --> confirmed["confirmed"] --> paid["paid"] --> fulfilled["fulfilled"] --> completed["completed"]
+    paid --> refunded["refunded"]
+    draft --> cancelled["cancelled"]
+    pending --> cancelled
+    confirmed --> cancelled
 ```
+
+Trade has no `awaiting_store_acceptance` / `store_accepted` / `store_rejected` places.
+Completion from `fulfilled -> completed` is guarded by `metadata._completionMode`:
+`_completionMode == 'store_verification'` blocks direct `complete` unless
+`Order::isCompletingFromStoreVerification()` (set by `StoreOrderVerifiedHandler` /
+`OrderVerificationCompletionListener`). `_completionMode` is a snapshot written at creation
+from `StoreContext.requireVerification` (`store_verification` vs `manual`).
+Out-of-order verification before `fulfill` is stored as `metadata._storeVerificationReceived`
+and completed by `OrderVerificationCompletionListener` on `workflow.order.completed.fulfill`.
 
 ### 7.2 OrderService Methods
 
 | Method | Description |
 |--------|-------------|
 | `calculatePrices(items, currency, storeCode?, meta?)` | Pipeline: BasePriceCalculator → QuantityCalculator → **TotalAggregator (subtotal, priority 55)** → **PromotionCalculator (priority 60)**. `meta` is an opaque bidirectional channel for calculators. |
-| `createOrder(..., ?StoreContext)` | Creates Order + OrderItems. A resolved StoreContext writes `_store` metadata and `trade.order.created.v1` in the same transaction. |
+| `createOrder(..., ?StoreContext)` | Creates Order + OrderItems. A resolved StoreContext writes `_store` snapshot and `_completionMode` (`store_verification` when `StoreContext.requireVerification` else `manual`) plus `trade.order.created.v1` in the same transaction (always; Store validates, never acks with accepted/rejected). |
 | `pay(Order, systemWalletId, paymentMethod)` | User wallet → system wallet via `TransferService`. Sets `paidAt`. |
 | `refund(Order, systemWalletId, reason)` | System wallet → user wallet via `TransferService`. Sets `refundedAt`. |
 | `fulfill(Order, data)` | Set tracking/shipping + `fulfilledAt`. |
@@ -339,7 +348,7 @@ flowchart TD
 | `trackingNumber` | string | On fulfill |
 | `shippingAddress` | text | On fulfill |
 | `refundReason` | text | On refund |
-| `metadata` | json | Optional request payload from app/manage order creation; useful for receiver/address snapshots |
+| `metadata` | json | Optional request payload from creation (receiver/address snapshots) plus internal snapshot `_store` (Store uuid/code/name/requireVerification), `_completionMode` (`manual`/`store_verification`), `_storeVerificationReceived` (bool set by `StoreOrderVerifiedHandler`) |
 
 ### 7.4 Manage Order Endpoints
 
@@ -361,7 +370,7 @@ flowchart TD
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/app/orders` | Create order. With trusted `X-Store-Code`, returns `202` while Store accepts asynchronously; otherwise uses the standard Trade flow. |
+| POST | `/app/orders` | Create order. With trusted `X-Store-Code`, creates order with Store snapshot (`_completionMode` from `requireVerification`) and emits `trade.order.created.v1` for Store to fulfill (Store auto-accepts or reserves inventory, no accepted/rejected relay); without a Store context creates a plain draft order. |
 | **POST** | **`/app/orders/quote`** | **Price preview without creating order** |
 | GET | `/app/orders/{id}/items` | View own order items |
 | GET | `/app/orders/{id}/items` | View own order items |
@@ -802,7 +811,7 @@ Enriches all endpoints (90+):
   - `tests/Integration/`: 73 files — kernel+DB+HTTP (module integration flows, API regressions, outbox/inbox, concurrency, cross-module flows, health/metrics/rate-limit endpoints, AuthorizationContentPilotTest) plus the 4 shared helpers; Trade integration remains the slowest area (see test-audit)
   - `tests/LowValue/`: 43 files — flagged by the 2026-08-09 audit as duplicates/coverage-chasing; excluded from default runs (`--group low-value` to execute)
   - `scripts/tests/api-smoke.sh`: real HTTP auth/catalog/wallet/order/payment smoke; strict 401/403/404 checks
-  - `scripts/tests/store-smoke.sh`: real HTTP Store-scoped order, Trade Outbox, Messenger consumer, Store Outbox, and `store_accepted` assertion
+  - `scripts/tests/store-smoke.sh`: real HTTP Store-scoped order, Trade Outbox, Messenger consumer, Store Outbox (verified flow uses `store.order.verified.v1` with `_completionMode` guard)
   - `scripts/tests/inventory-smoke.sh`: Inventory-scoped smoke (only when `INVENTORY_ENABLED=1`)
 
 ## 18. Environment Variables (Key)
@@ -914,15 +923,15 @@ covered by concurrency tests. The disabled schema/module may be deployed safely.
 
 ### 22.3 Integration Flow
 ```
-Trade order created
-  → Store validates + creates StoreOrder
-  → Store publishes inventory.reservation.requested.v1 (if INVENTORY_ENABLED)
+Trade order created (always trade.order.created.v1 with StoreContext; _completionMode = store_verification/manual)
+  → Store validates (missing/inactive Store throws RuntimeException for retry; no rejected event) + creates StoreOrder
+  → INVENTORY_ENABLED=0: Store accepts immediately; INVENTORY_ENABLED=1: Store awaitInventory + inventory.reservation.requested.v1
   → Inventory resolves recipe or direct finished material
   → Inventory reserves stock atomically (checks allowNegativeStock per stock)
   → Inventory publishes confirmed or rejected outcome
-  → Store accepts (confirmed) or rejects (rejected) StoreOrder
-  → Store publishes store.order.accepted.v1 or store.order.rejected.v1
-  → Trade applies workflow transition
+  → Store accepts (confirmed) or rejects (rejected) StoreOrder locally (no Trade relay)
+  → Later: fulfilled StoreOrder is verified via POST /store/{id}/orders/{uuid}/verify -> store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt}
+  → Trade StoreOrderVerifiedHandler checks _completionMode + storeUuid, sets _storeVerificationReceived and completes via guarded complete (out-of-order handled by OrderVerificationCompletionListener on fulfill)
 ```
 
 ### 22.4 Reservation Processing
@@ -943,10 +952,10 @@ Recipes expand a Specification into material demand. Material demand is aggregat
 | PUT | `/api/v1/manage/inventory/stocks/{storeUuid}/{materialUuid}/policy` | ROLE_ADMIN | Toggle allowNegativeStock |
 
 ### 22.7 Store Integration Changes
-- `TradeOrderCreatedHandler`: when INVENTORY_ENABLED, creates reservationId and writes awaiting_inventory state + reservation request outbox
-- New handlers: `ReservationConfirmedHandler`, `ReservationRejectedHandler`, `ReservationReleasedHandler`
-- `TradeOrderCancelledHandler`: requests inventory release for cancelled orders with reservation
+- `TradeOrderCreatedHandler`: validates Store (missing/inactive throws RuntimeException for Messenger retry, no store.order.rejected.v1); `INVENTORY_ENABLED=0` accepts immediately else creates reservationId and writes `awaiting_inventory` + `inventory.reservation.requested.v1` (no Store→Trade accepted/rejected)
+- Handlers: `ReservationConfirmedHandler`, `ReservationRejectedHandler`, `ReservationReleasedHandler` (all local to Store, no Trade relay); `TradeOrderCancelledHandler` requests inventory release for cancelled orders with reservation
 - `StoreTradeOrderCancellation` tombstone entity: handles out-of-order cancellation events
+- `StoreOrderService::verify()` emits only `store.order.verified.v1` `{orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt}` (no verificationCode); consumed by Trade `StoreOrderVerifiedHandler` gated on `_completionMode`
 - Trade events use OrderItem.uuid as stable lineId (not specification UUID)
 
 ## 23. Production Readiness & Known Defects
@@ -965,7 +974,7 @@ Recipes expand a Specification into material demand. Material demand is aggregat
   5. `src/Core/Service/BaseService.php:77` + `ReadListTrait:270` — `$user` is null for all HTTP requests → `@dql/@sort/@hints` 403 even for admins.
   6. Payment retry deadlock: `OrderService::createPayment()` reuses failed/cancelled invoices → order permanently stuck in `confirmed` (only reuse when status ∈ {pending, paying}).
   7. `src/Trade/Controller/Manage/OrderController.php:329` `/do/{transition}` forwards raw body to `update()` → admin can tamper order fields, bypassing the whitelist.
-  8. `src/Trade/MessageHandler/StoreOrderRejectedHandler.php:37` — Store rejection does not cancel the Trade order.
+  8. `src/Trade/MessageHandler/StoreOrderRejectedHandler.php:37` — **Removed** (Store no longer emits `store.order.rejected.v1`; former bug was Store rejection did not cancel the Trade order, now irrelevant — verification is the only Store→Trade path).
   9. Identity controllers: unguarded `json_decode(JSON_THROW_ON_ERROR)` → HTTP 500 on malformed bodies; numeric usernames cannot log in; `CreateUserCommand` persists empty email/username accounts.
   10. `src/Core/Controller/RestController.php:198` — `@expands` sets a dynamic `__metadata` property → PHP 8.5 deprecation (breaks `failOnDeprecation`).
 - **Not production-ready by design**: **Inventory** (§22.1) — `INVENTORY_ENABLED` must stay `0` outside isolated dev/test until consumption, expiry, serialized confirmation, and release-before-reserve handling are concurrency-tested.

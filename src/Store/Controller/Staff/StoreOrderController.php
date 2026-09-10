@@ -29,6 +29,7 @@ final class StoreOrderController extends RestController
     ) {
     }
 
+
     /** @return array<string, mixed> */
     protected function storeScopedFilter(Store $store): array
     {
@@ -56,8 +57,6 @@ final class StoreOrderController extends RestController
     protected function storeActionPermissions(): array
     {
         return [
-            'accept' => 'store:order:accept',
-            'reject' => 'store:order:reject',
             'fulfill' => 'store:order:fulfill',
             'verify' => 'store:order:verify',
         ];
@@ -68,48 +67,6 @@ final class StoreOrderController extends RestController
         return 'order';
     }
 
-    #[Route('/{orderUuid}/accept', name: 'accept', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
-    public function acceptAction(Request $request, string $scopeId, string $orderUuid): Response
-    {
-        $this->authorizeStoreAction('accept');
-        $order = $this->storeOrder($orderUuid);
-        if ($order === null) {
-            return $this->warning('Store order not found or access denied.', 404, '', 404);
-        }
-        if (!in_array($order->getOperationalStatus(), [StoreOrder::STATUS_PENDING_VALIDATION, StoreOrder::STATUS_AWAITING_INVENTORY], true)) {
-            return $this->warning('Store order cannot be accepted in its current status.', 400, '', 400);
-        }
-
-        $data = $this->body($request);
-        $reservationId = $data['reservationId'] ?? null;
-        if ($reservationId !== null && !is_string($reservationId)) {
-            return $this->warning('reservationId must be a string.', 400, '', 400);
-        }
-        $this->service->accept($order, $reservationId);
-
-        return $this->success($order, 'Store order accepted.');
-    }
-
-    #[Route('/{orderUuid}/reject', name: 'reject', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
-    public function rejectAction(Request $request, string $scopeId, string $orderUuid): Response
-    {
-        $this->authorizeStoreAction('reject');
-        $order = $this->storeOrder($orderUuid);
-        if ($order === null) {
-            return $this->warning('Store order not found or access denied.', 404, '', 404);
-        }
-        if (!in_array($order->getOperationalStatus(), [StoreOrder::STATUS_PENDING_VALIDATION, StoreOrder::STATUS_AWAITING_INVENTORY], true)) {
-            return $this->warning('Store order cannot be rejected in its current status.', 400, '', 400);
-        }
-
-        $data = $this->body($request);
-        if (!is_string($data['code'] ?? null) || trim($data['code']) === '' || !is_string($data['reason'] ?? null) || trim($data['reason']) === '') {
-            return $this->warning('code and reason are required.', 400, '', 400);
-        }
-        $this->service->reject($order, $data['code'], $data['reason']);
-
-        return $this->success($order, 'Store order rejected.');
-    }
 
     #[Route('/{orderUuid}/fulfill', name: 'fulfill', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
     public function fulfillAction(Request $request, string $scopeId, string $orderUuid): Response
@@ -144,18 +101,11 @@ final class StoreOrderController extends RestController
         if ($order->getOperationalStatus() !== StoreOrder::STATUS_FULFILLED) {
             return $this->warning('Store order cannot be verified in its current status.', 400, '', 400);
         }
+        if (!$order->isVerificationRequired()) {
+            return $this->warning('Store verification is disabled.', 400, '', 400);
+        }
         if ($order->getVerifiedAt() !== null) {
             return $this->warning('Store order already verified.', 400, '', 400);
-        }
-
-        $data = $this->body($request);
-        $verificationCode = $data['verificationCode'] ?? null;
-        if (!is_string($verificationCode) || trim($verificationCode) === '') {
-            return $this->warning('verificationCode is required.', 400, '', 400);
-        }
-        $verificationCode = trim($verificationCode);
-        if (strlen($verificationCode) > 64) {
-            return $this->warning('verificationCode must not exceed 64 characters.', 400, '', 400);
         }
 
         $user = $this->getUser();
@@ -164,7 +114,8 @@ final class StoreOrderController extends RestController
             $verifiedBy = $user->getUuid();
         }
 
-        $this->service->verify($order, $verificationCode, $verifiedBy);
+        // No verificationCode required - uses order number (uuid) as verification
+        $this->service->verify($order, $verifiedBy);
 
         return $this->success($order, 'Store order verified.');
     }
@@ -178,7 +129,18 @@ final class StoreOrderController extends RestController
 
     private function storeOrder(string $orderUuid): ?StoreOrder
     {
+        // Primary: lookup by tradeOrderUuid (order number) as requested
+        $store = $this->storeForAuthorization();
+        $order = $this->service->get(['tradeOrderUuid' => $orderUuid, 'store' => $store], false);
+        if ($order instanceof StoreOrder) {
+            return $order;
+        }
+        // Fallback: legacy lookup by StoreOrder uuid for backward compatibility
         $order = $this->service->get($this->mixIdToCommonFilter($orderUuid), false);
-        return $order instanceof StoreOrder ? $order : null;
+        if ($order instanceof StoreOrder && $order->getStore()->getUuid() === $store->getUuid()) {
+            return $order;
+        }
+
+        return null;
     }
 }
