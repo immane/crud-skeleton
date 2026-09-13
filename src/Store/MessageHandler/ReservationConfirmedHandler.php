@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Store\MessageHandler;
 
 use App\Inventory\Message\ReservationConfirmedMessage;
+use App\Store\DTO\StoreSettings;
 use App\Store\Entity\StoreConsumedEvent;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreConsumedEventRepository;
@@ -60,6 +61,11 @@ final readonly class ReservationConfirmedHandler
                 || $storeOrder->getTradeOrderUuid() !== $payload['tradeOrderUuid']
                 || $storeOrder->getReservationId() !== $payload['reservationId']
                 || $storeOrder->getOperationalStatus() !== StoreOrder::STATUS_AWAITING_INVENTORY) {
+                return;
+            }
+
+            if (StoreSettings::from($storeOrder->getStore()->getSettings())->requireAcceptance) {
+                // Staff acceptance still required: leave awaiting manual accept.
                 return;
             }
 

@@ -32,13 +32,17 @@ final readonly class StoreContextResolver implements StoreContextResolverInterfa
             throw new NotFoundHttpException('Store is not available.');
         }
 
+        $settings = StoreSettings::from($store->getSettings());
+
         return new StoreContext(
             $store->getUuid(),
             $store->getCode(),
             $store->getName(),
             $request->headers->get('X-Store-Channel', 'api'),
             $store->getCurrency(),
-            StoreSettings::from($store->getSettings())->requireVerification,
+            $settings->requireAcceptance,
+            $settings->requireInventory,
+            $settings->requireVerification,
         );
     }
 }

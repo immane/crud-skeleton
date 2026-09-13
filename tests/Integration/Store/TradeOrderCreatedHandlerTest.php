@@ -128,7 +128,7 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
             'eventId' => '00000000-0000-4000-8000-000000000010',
             'payload' => [
                 'orderUuid' => '00000000-0000-4000-8000-000000000011',
-                'store' => ['uuid' => $store->getUuid(), 'code' => $store->getCode(), 'name' => $store->getName()],
+                'store' => ['uuid' => $store->getUuid(), 'code' => $store->getCode(), 'name' => $store->getName(), 'requireInventory' => true],
                 'currency' => 'CNY',
                 'totalAmount' => 100,
                 'items' => [[

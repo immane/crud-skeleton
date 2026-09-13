@@ -30,4 +30,32 @@ final class StoreOrderWorkflowGuardListenerTest extends TestCase
         $blockers = iterator_to_array($event->getTransitionBlockerList());
         self::assertSame('Store fulfillment required before complete.', $blockers[0]->getMessage());
     }
+
+    public function testConfirmPassesWithoutWaitingWhenAcceptanceIsNotRequired(): void
+    {
+        $order = (new Order())->setStatus(Order::STATUS_PENDING)->setMetadata(['_store' => ['uuid' => 'store-uuid', 'requireAcceptance' => false]]);
+        $repository = $this->createMock(OrderStoreLifecycleRepository::class);
+        $repository->expects(self::never())->method('findOneByTradeOrderUuid');
+        $event = new GuardEvent($order, new Marking([Order::STATUS_PENDING => 1]), new Transition('confirm', Order::STATUS_PENDING, Order::STATUS_CONFIRMED));
+
+        (new StoreOrderWorkflowGuardListener($repository))->onGuard($event);
+
+        self::assertFalse($event->isBlocked());
+    }
+
+    public function testConfirmWaitsForAcceptanceFactWhenAcceptanceIsRequired(): void
+    {
+        $order = (new Order())->setStatus(Order::STATUS_PENDING)->setMetadata(['_store' => ['uuid' => 'store-uuid', 'requireAcceptance' => true]]);
+        $repository = $this->createMock(OrderStoreLifecycleRepository::class);
+        $repository->expects(self::once())->method('findOneByTradeOrderUuid')->with($order->getUuid())->willReturn(
+            new OrderStoreLifecycle($order->getUuid(), 'store-uuid'),
+        );
+        $event = new GuardEvent($order, new Marking([Order::STATUS_PENDING => 1]), new Transition('confirm', Order::STATUS_PENDING, Order::STATUS_CONFIRMED));
+
+        (new StoreOrderWorkflowGuardListener($repository))->onGuard($event);
+
+        self::assertTrue($event->isBlocked());
+        $blockers = iterator_to_array($event->getTransitionBlockerList());
+        self::assertSame('Store acceptance required before confirm.', $blockers[0]->getMessage());
+    }
 }

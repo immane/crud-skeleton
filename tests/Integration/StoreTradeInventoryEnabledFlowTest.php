@@ -50,6 +50,8 @@ final class StoreTradeInventoryEnabledFlowTest extends StoreTradeFlowTestCase
         $container = $client->getContainer();
         $em = $container->get(EntityManagerInterface::class);
         $store = $this->createStore($container, 'e2e-inv');
+        $store->setSettings(['order' => ['requireInventory' => true]]);
+        $em->flush();
         [$product, $specification] = $this->createProduct($em, 'E2E Inventory Product');
 
         $material = new Material((string) $specification->getUuid(), 'Finished ' . $specification->getName(), Material::KIND_FINISHED, 'piece');
@@ -198,6 +200,8 @@ final class StoreTradeInventoryEnabledFlowTest extends StoreTradeFlowTestCase
         $container = $client->getContainer();
         $em = $container->get(EntityManagerInterface::class);
         $store = $this->createStore($container, 'e2e-inv-reject');
+        $store->setSettings(['order' => ['requireInventory' => true]]);
+        $em->flush();
         [$product, $specification] = $this->createProduct($em, 'E2E Non Stockable Product');
         $placed = $this->placeStoreOrder($client, $store->getCode(), (int) $specification->getId());
 

@@ -127,7 +127,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         $this->expectExceptionMessage('Trade order event does not include inventory items.');
         $handler(new TradeOrderCreatedMessage([
             'eventId' => '00000000-0000-4000-8000-0000000000M3',
-            'payload' => $this->snapshot($store, '00000000-0000-4000-8000-0000000000M4'),
+            'payload' => $this->snapshot($store, '00000000-0000-4000-8000-0000000000M4', true),
         ]));
     }
 
@@ -137,7 +137,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         $container = $client->getContainer();
         $store = $container->get(StoreServiceInterface::class)->createStore('inv-zero', 'Inventory Zero', 'UTC');
         $handler = $this->inventoryEnabledHandler($container);
-        $payload = $this->snapshot($store, '00000000-0000-4000-8000-0000000000M5');
+        $payload = $this->snapshot($store, '00000000-0000-4000-8000-0000000000M5', true);
         $payload['items'] = [[
             'lineId' => '00000000-0000-4000-8000-0000000000M6',
             'catalogReference' => '00000000-0000-4000-8000-0000000000M7',
@@ -155,7 +155,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         $container = $client->getContainer();
         $store = $container->get(StoreServiceInterface::class)->createStore('inv-missing', 'Inventory Missing', 'UTC');
         $handler = $this->inventoryEnabledHandler($container);
-        $payload = $this->snapshot($store, '00000000-0000-4000-8000-0000000000M9');
+        $payload = $this->snapshot($store, '00000000-0000-4000-8000-0000000000M9', true);
         $payload['items'] = [[
             'lineId' => '00000000-0000-4000-8000-0000000000N1',
             'quantity' => 1,
@@ -172,7 +172,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         $container = $client->getContainer();
         $store = $container->get(StoreServiceInterface::class)->createStore('inv-num', 'Inventory Num', 'UTC');
         $handler = $this->inventoryEnabledHandler($container);
-        $payload = $this->snapshot($store, '00000000-0000-4000-8000-0000000000N3');
+        $payload = $this->snapshot($store, '00000000-0000-4000-8000-0000000000N3', true);
         $payload['items'] = [[
             'lineId' => '00000000-0000-4000-8000-0000000000N4',
             'catalogReference' => '00000000-0000-4000-8000-0000000000N5',
@@ -198,11 +198,14 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
     }
 
     /** @return array<string, mixed> */
-    private function snapshot(Store $store, string $orderUuid): array
+    private function snapshot(Store $store, string $orderUuid, bool $withInventory = false): array
     {
         return [
             'orderUuid' => $orderUuid,
-            'store' => ['uuid' => $store->getUuid(), 'code' => $store->getCode(), 'name' => $store->getName()],
+            'store' => array_merge(
+                ['uuid' => $store->getUuid(), 'code' => $store->getCode(), 'name' => $store->getName()],
+                $withInventory ? ['requireInventory' => true] : [],
+            ),
             'currency' => 'CNY',
             'totalAmount' => 100,
             'items' => [],

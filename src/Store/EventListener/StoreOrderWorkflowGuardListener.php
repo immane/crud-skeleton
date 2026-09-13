@@ -53,11 +53,17 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         if (!$hasStore) {
             return;
         }
+        $order = $event->getSubject();
+        \assert($order instanceof Order);
+        $metadata = $order->getMetadata();
+        $store = is_array($metadata) ? ($metadata['_store'] ?? null) : null;
+        if (!is_array($store) || ($store['requireAcceptance'] ?? false) !== true) {
+            // Acceptance not required for this order: Trade flows without waiting.
+            return;
+        }
         if ($this->lifecycleRepository === null) {
             return;
         }
-        $order = $event->getSubject();
-        \assert($order instanceof Order);
         $lifecycle = $this->lifecycleRepository->findOneByTradeOrderUuid($order->getUuid());
         if ($lifecycle === null || $lifecycle->getAcceptanceStatus() !== OrderStoreLifecycle::ACCEPTANCE_ACCEPTED) {
             $event->setBlocked(true, 'Store acceptance required before confirm.');
