@@ -1501,10 +1501,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#25-stable-scalar-references" class="md-nav__link">
+  <a href="#24-stable-scalar-references" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.5 Stable Scalar References
+        2.4 Stable Scalar References
       
     </span>
   </a>
@@ -1591,10 +1591,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#511-store-settings-schema-single-flow-default-false" class="md-nav__link">
+  <a href="#511-store-settings-schema-optional-flows-default-false" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.1.1 Store Settings Schema (single flow, default false)
+        5.1.1 Store Settings Schema (optional flows, default false)
       
     </span>
   </a>
@@ -1779,10 +1779,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#73-storeorderacceptedv1-removed" class="md-nav__link">
+  <a href="#73-storeorderacceptedv1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.3 store.order.accepted.v1 — Removed
+        7.3 store.order.accepted.v1
       
     </span>
   </a>
@@ -1790,10 +1790,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#74-storeorderrejectedv1-removed" class="md-nav__link">
+  <a href="#74-storeorderrejectedv1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.4 store.order.rejected.v1 — Removed
+        7.4 store.order.rejected.v1
       
     </span>
   </a>
@@ -3894,10 +3894,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#25-stable-scalar-references" class="md-nav__link">
+  <a href="#24-stable-scalar-references" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.5 Stable Scalar References
+        2.4 Stable Scalar References
       
     </span>
   </a>
@@ -3984,10 +3984,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#511-store-settings-schema-single-flow-default-false" class="md-nav__link">
+  <a href="#511-store-settings-schema-optional-flows-default-false" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.1.1 Store Settings Schema (single flow, default false)
+        5.1.1 Store Settings Schema (optional flows, default false)
       
     </span>
   </a>
@@ -4172,10 +4172,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#73-storeorderacceptedv1-removed" class="md-nav__link">
+  <a href="#73-storeorderacceptedv1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.3 store.order.accepted.v1 — Removed
+        7.3 store.order.accepted.v1
       
     </span>
   </a>
@@ -4183,10 +4183,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#74-storeorderrejectedv1-removed" class="md-nav__link">
+  <a href="#74-storeorderrejectedv1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.4 store.order.rejected.v1 — Removed
+        7.4 store.order.rejected.v1
       
     </span>
   </a>
@@ -4709,10 +4709,8 @@
 <h1 id="store-bundle-design">Store Bundle Design<a class="headerlink" href="#store-bundle-design" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>Status: phase 1-3 implemented in the modular monolith.</strong> Store, membership,
-StoreOrder, Trade/Store Outbox-Inbox, and Messenger consumers are implemented.
-Trade workflow is simplified (<code>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code>);
-StoreOrder is a projection created from <code>trade.order.created.v1</code> and auto-accepted when
-<code>INVENTORY_ENABLED=0</code>. Inventory reservation remains an intentionally deferred boundary.
+StoreOrder, Trade/Store Outbox-Inbox, Messenger consumers, and Store acceptance are
+implemented. Inventory reservation remains an intentionally deferred boundary.
 The Store bundle (<code>src/Store/</code>) owns multi-store context, store operations, the
 store-side order projection, and the Product/Specification catalog (shared/global
 <code>Product.store = NULL</code> and store-private <code>Product.store = Store</code>, tables
@@ -4743,7 +4741,7 @@ extracted as a service without changing the ownership of commercial orders.</p>
 <li>Store request context resolution and validation.</li>
 <li>The <code>StoreOrder</code> projection/aggregate for store acceptance and fulfillment data.</li>
 <li>Idempotent consumption and publication of Store integration events.</li>
-<li>The contract by which a store fulfills and verifies a Trade order (acceptance removed; fulfillment + verification only).</li>
+<li>The contract by which a store accepts or rejects a Trade order.</li>
 <li>Product and Specification catalog (shared/global and store-private, nullable <code>store</code>).</li>
 </ul>
 <p>The bundle does not own:</p>
@@ -4790,9 +4788,9 @@ extracted as a service without changing the ownership of commercial orders.</p>
 <td>Authoritative</td>
 </tr>
 <tr>
-<td>Store acceptance (historical, now auto-accept)</td>
+<td>Store acceptance/rejection</td>
 <td>Store</td>
-<td>Projection only; auto-accept when <code>INVENTORY_ENABLED=0</code></td>
+<td>Authoritative</td>
 </tr>
 <tr>
 <td>Store fulfillment operations</td>
@@ -4872,7 +4870,7 @@ PHP-FPM request process:</p>
 </table>
 <p>The scheduler and worker use the same application image and environment as <code>app</code>. This
 keeps the Outbox pattern durable in SQL while making the monolith operationally automatic.</p>
-<h3 id="25-stable-scalar-references">2.5 Stable Scalar References<a class="headerlink" href="#25-stable-scalar-references" title="Permanent link">&para;</a></h3>
+<h3 id="24-stable-scalar-references">2.4 Stable Scalar References<a class="headerlink" href="#24-stable-scalar-references" title="Permanent link">&para;</a></h3>
 <p>Cross-boundary references are UUIDs and scalar snapshots, never Doctrine associations.</p>
 <p>Examples:</p>
 <ul>
@@ -4897,23 +4895,18 @@ and generic; Trade MUST NOT import Store entities, repositories, or services.</p
 <tbody>
 <tr>
 <td>Trade order workflow</td>
-<td>Simplified: <code>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code> (no Store acceptance states)</td>
-<td>Store is a projection; payment is not gated on Store acceptance</td>
+<td>Add <code>awaiting_store_acceptance</code>, <code>store_accepted</code>, and <code>store_rejected</code> places/transitions</td>
+<td>Prevent payment before store acceptance</td>
 </tr>
 <tr>
 <td>Trade order creation</td>
-<td>Persist server-generated Store snapshot (<code>_store</code>, <code>_completionMode</code>) and always emit <code>trade.order.created.v1</code> when a <code>StoreContext</code> exists</td>
-<td>Start asynchronous Store projection; <code>TradeOrder</code> always enters <code>pending</code></td>
+<td>Persist server-generated store snapshot and a <code>trade.order.created.v1</code> outbox event</td>
+<td>Start asynchronous Store processing</td>
 </tr>
 <tr>
 <td>Trade payment entry</td>
-<td>No Store gate; standard Trade payment eligibility applies</td>
-<td>Store no longer blocks payment</td>
-</tr>
-<tr>
-<td>Trade completion guard</td>
-<td>Enforce <code>fulfilled -&gt; completed</code> only via <code>OrderCompletionGuardListener</code> / <code>OrderVerificationCompletionListener</code> when <code>_completionMode=store_verification</code></td>
-<td>Immutable verification requirement per order</td>
+<td>Permit payment only after <code>store_accepted</code></td>
+<td>Avoid payment for unavailable stock/store</td>
 </tr>
 <tr>
 <td>Trade outbox relay</td>
@@ -4932,9 +4925,14 @@ and generic; Trade MUST NOT import Store entities, repositories, or services.</p
 </tr>
 </tbody>
 </table>
-<p>The implemented Trade workflow is <code>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code> for both store and non-store orders. There are no <code>awaiting_store_acceptance</code>, <code>store_accepted</code>, or <code>store_rejected</code> places. <code>Trade/Service/OrderService::createOrder</code> always applies <code>submit</code> (<code>draft -&gt; pending</code>) when a <code>StoreContext</code> exists and always writes a <code>trade.order.created.v1</code> outbox row (see §6.3).</p>
+<p>The implemented Store-scoped workflow is <code>draft -&gt; awaiting_store_acceptance -&gt;
+store_accepted -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code>. Store rejection follows
+<code>awaiting_store_acceptance -&gt; store_rejected -&gt; cancelled</code>. Non-Store orders retain the
+existing Trade workflow.</p>
 <p>The current context transport is <code>X-Store-Code</code>, resolved only against an active Store
-by <code>StoreContextResolver</code>. A Store-scoped App order creates a <code>pending</code> Trade order (HTTP <code>201</code>) and the Store consumer auto-accepts eligible active Stores when <code>INVENTORY_ENABLED=0</code>; inventory reservation is the future decision boundary. When the Store is unavailable (not found / not active) the consumer throws <code>RuntimeException</code> to trigger Messenger retry/DLQ.</p>
+by <code>StoreContextResolver</code>. A Store-scoped App order returns <code>202</code>. The Trade-order
+consumer currently auto-accepts eligible active Stores; Inventory reservation is the
+future decision boundary.</p>
 <h3 id="31-store-context-at-the-trade-entry-point">3.1 Store Context At The Trade Entry Point<a class="headerlink" href="#31-store-context-at-the-trade-entry-point" title="Permanent link">&para;</a></h3>
 <p>The Trade controller obtains a <code>StoreContext</code> before calculating a quote or creating
 an order. It MUST use a generic interface or DTO, never a Store entity type.</p>
@@ -4945,23 +4943,9 @@ an order. It MUST use a generic interface or DTO, never a Store entity type.</p>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="x">        public string $storeCode,</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="x">        public string $storeName,</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="x">        public string $channel,</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">        public bool $requireVerification = false,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">    ) {}</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="x">    /** @return array{uuid: string, code: string, name: string, channel: string, requireVerification: bool} */</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="x">    public function toSnapshot(): array</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="x">    {</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="x">        return [</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="x">            'uuid' =&gt; $this-&gt;storeUuid,</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="x">            'code' =&gt; $this-&gt;storeCode,</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="x">            'name' =&gt; $this-&gt;storeName,</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="x">            'channel' =&gt; $this-&gt;channel,</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="x">            'requireVerification' =&gt; $this-&gt;requireVerification,</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="x">        ];</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="x">    }</span>
-<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="x">}</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="x">    ) {}</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="x">}</span>
 </code></pre></div>
-<p>Resolved by <code>Store/Service/StoreContextResolver</code> from <code>StoreSettings::from($store-&gt;getSettings())-&gt;requireVerification</code>.</p>
 <p>The Store bundle implements the resolver. Trade consumes only the resolved scalar data.
 The exact location mechanism may be one of:</p>
 <table>
@@ -4998,24 +4982,16 @@ a concrete <code>StoreContext</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">"_store"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shanghai-demo"</span><span class="p">,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo Store"</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mini_program"</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">"requireVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">"_completionMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"manual"</span><span class="p">,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">"_storeVerificationReceived"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shanghai-xuhui"</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Xuhui Store"</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mini_program"</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">}</span>
 </code></pre></div>
-<ul>
-<li><code>_store.requireVerification</code> — snapshot of <code>Store.settings.fulfillment.requireVerification</code> at order creation time (immutable per order). Also carried in <code>trade.order.created.v1</code> <code>store.requireVerification</code> and persisted as <code>StoreOrder.verificationRequired</code> (see §5.3). Live <code>Store.settings</code> changes do <strong>not</strong> affect inflight orders.</li>
-<li><code>_completionMode</code> — <code>manual</code> (default) or <code>store_verification</code>. Snapshotted by <code>Trade/Service/OrderService</code> as <code>storeContext-&gt;requireVerification ? 'store_verification' : 'manual'</code>. Enforced by <code>Trade/EventListener/OrderCompletionGuardListener</code> (blocks <code>complete</code> unless <code>allowCompletionFromStoreVerification</code>) and <code>Trade/EventListener/OrderVerificationCompletionListener</code> / <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code>.</li>
-<li><code>_storeVerificationReceived</code> — optional boolean flag set by <code>StoreOrderVerifiedHandler</code> when <code>store.order.verified.v1</code> arrives. If the Trade order is not yet <code>fulfilled</code>, the flag is stored and <code>OrderVerificationCompletionListener</code> auto-completes after <code>fulfill</code> (out-of-order handling).</li>
-</ul>
 <p>The snapshot is written by trusted server code only. It is useful for audit and order
 display, but it is not a query, authorization, or integrity boundary. <code>StoreOrder</code> is
 the Store-side authoritative record, and the integration event carries the same
-immutable snapshot. <code>TradeOrder.metadata</code> is the authoritative completion-mode source; <code>StoreOrder</code> stores the Store-side <code>verificationRequired</code> snapshot.</p>
+immutable snapshot.</p>
 <hr />
 <h2 id="4-module-structure">4. Module Structure<a class="headerlink" href="#4-module-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>src/Store/
@@ -5039,11 +5015,11 @@ immutable snapshot. <code>TradeOrder.metadata</code> is the authoritative comple
 <a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>|   `-- StoreConsumedEvent.php
 <a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>|-- Event/
 <a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>|   |-- TradeOrderCreatedV1.php             # Deserialized integration contract
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>|   `-- StoreOrderVerifiedV1.php            # Store verification event (accepted/rejected removed)
-<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>|-- MessageHandler/
-<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>|   |-- TradeOrderCreatedHandler.php        # trade.order.created.v1 -&gt; StoreOrder (auto-accept)
-<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>|   |-- TradeOrderCancelledHandler.php
-<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>|   `-- Reservation*.php                    # Future inventory adapter boundary
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>|   |-- StoreOrderAcceptedV1.php
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>|   `-- StoreOrderRejectedV1.php
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>|-- EventListener/
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>|   |-- TradeOrderCreatedConsumer.php
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>|   `-- ReservationListener.php    # Future adapter boundary
 <a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>|-- Exception/
 <a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>|   |-- StoreContextNotFoundException.php
 <a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>|   |-- StoreOrderConflictException.php
@@ -5061,13 +5037,16 @@ immutable snapshot. <code>TradeOrder.metadata</code> is the authoritative comple
 <a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>|   |-- StoreContextResolver.php
 <a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>|   |-- MembershipService.php
 <a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>|   |-- MembershipServiceInterface.php
-<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>|   |-- StoreOrderService.php               # fulfill + verify (accept/reject removed)
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>|   |-- StoreOrderService.php
 <a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>|   |-- StoreOrderServiceInterface.php
-<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>|   |-- StoreOutboxService.php
-<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>|   |-- StoreOutboxServiceInterface.php
-<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>|   `-- StoreSettings.php                   # DTO for fulfillment.requireVerification
-<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>`-- Resources/config/
-<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a>    `-- services_store.yaml
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>|   |-- StoreOrderDecisionService.php
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>|   |-- Outbox/
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>|   |   |-- OutboxPublisherInterface.php
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>|   |   `-- StoreOutboxPublisher.php
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a>|   `-- Consumer/
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a>|       `-- TradeOrderCreatedConsumer.php
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a>`-- Resources/config/
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a>    `-- services_store.yaml
 </code></pre></div>
 <p>The names above describe the target module. Inventory-specific implementation classes
 are intentionally deferred until the inventory design is approved.</p>
@@ -5160,11 +5139,12 @@ are intentionally deferred until the inventory design is approved.</p>
 <li><code>closed</code> stores cannot be selected for new orders.</li>
 <li>Historical orders use snapshots, so Store deletion is forbidden; closure is a status.</li>
 </ul>
-<h4 id="511-store-settings-schema-single-flow-default-false">5.1.1 Store Settings Schema (single flow, default <code>false</code>)<a class="headerlink" href="#511-store-settings-schema-single-flow-default-false" title="Permanent link">&para;</a></h4>
-<p><code>settings</code> is validated by <code>Store/Resources/JsonSchema/StoreSettings.json</code> (via <code>Manage/StoreController</code> + <code>Core/Validator/JsonSchemaValidator</code>) and parsed by <code>Store/DTO/StoreSettings</code>. Unknown top-level keys are tolerated for forward compatibility. Only fulfillment verification remains; <code>order.requireAcceptance</code> has been removed.</p>
+<h4 id="511-store-settings-schema-optional-flows-default-false">5.1.1 Store Settings Schema (optional flows, default <code>false</code>)<a class="headerlink" href="#511-store-settings-schema-optional-flows-default-false" title="Permanent link">&para;</a></h4>
+<p><code>settings</code> is validated by <code>Manage/StoreController::validateStoreSettings</code> and parsed by <code>Store/DTO/StoreSettings</code> (<code>StoreSettingsResolver</code>). Unknown keys are tolerated for forward compatibility.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"fulfillment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"requireVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">}</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"order"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"requireAcceptance"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"fulfillment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"requireVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -5177,23 +5157,28 @@ are intentionally deferred until the inventory design is approved.</p>
 </thead>
 <tbody>
 <tr>
+<td><code>order.requireAcceptance</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td><code>true</code> → Trade order with <code>X-Store-Code</code> must <code>draft --store_submit--&gt; awaiting_store_acceptance</code> and await <code>store.order.accepted/rejected.v1</code>. <code>false</code> → draft stays inline (<code>draft --submit--&gt; pending</code> is allowed), <code>_store</code> snapshot is still kept, no Trade outbox <code>trade.order.created.v1</code> is emitted. Guard: <code>Store/EventListener/StoreOrderWorkflowGuardListener</code> blocks <code>store_submit</code> when disabled and blocks <code>submit</code> when enabled + hasStore.</td>
+</tr>
+<tr>
 <td><code>fulfillment.requireVerification</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td><code>false</code> → Trade <code>fulfilled --complete--&gt; completed</code> directly (<code>_completionMode=manual</code>). <code>true</code> → Trade <code>fulfilled</code> can only <code>complete</code> via Store verification (<code>_completionMode=store_verification</code>). <code>StoreOrder.verificationRequired</code> is snapshotted at creation; Trade completion is gated by <code>Trade/EventListener/OrderCompletionGuardListener</code> (blocks <code>complete</code> unless <code>Order::allowCompletionFromStoreVerification()</code> has been called) and <code>Trade/EventListener/OrderVerificationCompletionListener</code> (auto-completes after <code>fulfill</code> if <code>_storeVerificationReceived=true</code>). Store side: <code>POST /store/{scopeId}/orders/{uuid}/verify</code> (<code>StoreOrderService::verify</code> → <code>store.order.verified.v1</code> → <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code>).</td>
+<td><code>true</code> → Trade <code>fulfilled --request_verification--&gt; awaiting_store_verification --store_verify--&gt; completed</code> via <code>store.order.verified.v1</code>. Guard blocks direct <code>complete</code> and requires <code>request_verification</code>+<code>store_verify</code>. <code>false</code> → <code>fulfilled --complete--&gt; completed</code> directly. <code>Trade/EventListener/OrderWorkflowListener</code> is status-driven for <code>completed</code> so it does not hard-code <code>store_verify</code>.</td>
 </tr>
 </tbody>
 </table>
 <p>Validation:</p>
 <ul>
-<li><code>settings</code> must be <code>object|null</code>; <code>fulfillment</code> must be <code>object|null</code> when present.</li>
-<li><code>fulfillment.requireVerification</code> must be <code>bool</code> when present.</li>
-<li><code>null</code> or missing <code>settings</code> is treated as <code>false</code> (legacy stores).</li>
-<li>The value is <strong>snapshotted per order</strong> into <code>TradeOrder.metadata._store.requireVerification</code>, <code>TradeOrder.metadata._completionMode</code>, and <code>StoreOrder.verificationRequired</code> at <code>trade.order.created.v1</code> time. Changing <code>Store.settings</code> after order creation does <strong>not</strong> affect inflight orders (immutable per-order verification requirement).</li>
+<li><code>settings</code> must be <code>object|null</code>; <code>order</code>/<code>fulfillment</code> must be <code>object|null</code>.</li>
+<li><code>requireAcceptance</code> / <code>requireVerification</code> must be <code>bool</code> when present.</li>
+<li><code>null</code> or missing <code>settings</code> is treated as both <code>false</code> (legacy stores). Change is immediate; inflight <code>fulfilled</code> orders whose Store flips to <code>true</code> will be blocked on next <code>complete</code> and must go through <code>request_verification</code>.</li>
 </ul>
-<p>Example — enable verification:</p>
+<p>Example — enable both flows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/manage/stores/<span class="o">{</span>uuid<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"settings":{"fulfillment":{"requireVerification":true}}}'</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"settings":{"order":{"requireAcceptance":true},"fulfillment":{"requireVerification":true}}}'</span>
 </code></pre></div>
 <h4 id="512-store-address-contact-schemas-standardized-via-json-schema">5.1.2 Store Address / Contact Schemas (standardized via JSON Schema)<a class="headerlink" href="#512-store-address-contact-schemas-standardized-via-json-schema" title="Permanent link">&para;</a></h4>
 <p><code>address</code> and <code>contact</code> are validated in the API layer <strong>before</strong> <code>processCreateContent</code> via <code>Core/Validator/JsonSchemaValidator</code> driven by <code>CreateApiViewMixin</code>/<code>UpdateApiViewMixin</code> (<code>$jsonSchemas</code>). Schemas live in <code>src/Store/Resources/JsonSchema/</code>; validator lives in <code>Core</code>.</p>
@@ -5207,7 +5192,7 @@ are intentionally deferred until the inventory design is approved.</p>
 <ul>
 <li><strong><code>StoreAddress.json</code></strong> — <code>province/city/district/street/detail/building/floor/postalCode/formattedAddress</code> (strings, <code>maxLength</code>), <code>latitude [-90,90]</code> + <code>longitude [-180,180]</code> (<code>number</code>) with <code>dependencies: latitude↔longitude</code>, <code>geohash</code> regex, <code>poiId</code>; <code>type: object</code>, <code>additionalProperties:false</code>, <code>null</code> skipped (field is nullable). Extra keys → <code>400</code>.</li>
 <li><strong><code>StoreContact.json</code></strong> — <code>phone/managerPhone</code> regex, <code>email/managerEmail</code> <code>format:email</code>, <code>managerUserUuid</code> <code>format:uuid</code>, <code>wechat/serviceHours</code>; <code>additionalProperties:false</code>.</li>
-<li><strong><code>StoreSettings.json</code></strong> — <code>fulfillment.requireVerification</code> (<code>bool</code>, default <code>false</code>); top-level <code>additionalProperties:true</code> for forward compat, inner <code>fulfillment</code> <code>additionalProperties:false</code>. No <code>order</code> key; <code>order.requireAcceptance</code> was removed.</li>
+<li><strong><code>StoreSettings.json</code></strong> — as above, top-level <code>additionalProperties:true</code> for forward compat, inner <code>order</code>/<code>fulfillment</code> <code>additionalProperties:false</code>.</li>
 </ul>
 <p>All <code>json</code> columns remain nullable; the schemas provide the <strong>API contract</strong> while preserving the current <code>1w</code>-store <code>json</code> storage and <code>Cache</code>-based distance calculation (no <code>latitude/longitude</code> columns yet). Violations throw <code>JsonSchemaViolationException</code> → <code>400</code>.</p>
 <h3 id="52-membership">5.2 Membership<a class="headerlink" href="#52-membership" title="Permanent link">&para;</a></h3>
@@ -5391,22 +5376,22 @@ It is not a second commercial order.</p>
 <td>Future inventory reservation reference</td>
 </tr>
 <tr>
-<td><code>verificationRequired</code></td>
-<td>bool</td>
-<td style="text-align: right;">Yes</td>
-<td>Immutable snapshot of <code>settings.fulfillment.requireVerification</code> at projection time (from <code>trade.order.created.v1</code> <code>store.requireVerification</code>). Default <code>false</code>. Controls whether <code>verify</code> is allowed.</td>
-</tr>
-<tr>
 <td><code>verifiedAt</code></td>
 <td>datetime_immutable nullable</td>
 <td style="text-align: right;">No</td>
-<td>Store verification time (set by <code>POST /store/{scopeId}/orders/{uuid}/verify</code>; requires <code>verificationRequired=true</code> and <code>operationalStatus=fulfilled</code>)</td>
+<td>Store verification time (when <code>settings.fulfillment.requireVerification=true</code>, set by <code>POST /store/{scopeId}/orders/{uuid}/verify</code>)</td>
 </tr>
 <tr>
 <td><code>verifiedBy</code></td>
 <td>string(36) nullable</td>
 <td style="text-align: right;">No</td>
 <td>Verifying staff <code>userUuid</code> (audit)</td>
+</tr>
+<tr>
+<td><code>verificationCode</code></td>
+<td>string(64) nullable</td>
+<td style="text-align: right;">No</td>
+<td>Client-supplied verification code (e.g. pickup/核销码, audit)</td>
 </tr>
 <tr>
 <td><code>createdAt</code></td>
@@ -5464,22 +5449,22 @@ violation, not a Store-side repricing opportunity.</p>
 <tbody>
 <tr>
 <td><code>pending_validation</code></td>
-<td>Event received; Store checks eligibility (transient, immediately accepted when <code>INVENTORY_ENABLED=0</code>)</td>
+<td>Event received; Store checks eligibility</td>
 <td>Store</td>
 </tr>
 <tr>
 <td><code>awaiting_inventory</code></td>
-<td>Store validated; reservation pending (only when <code>INVENTORY_ENABLED=1</code>)</td>
+<td>Store validated; reservation pending</td>
 <td>Store/Inventory integration</td>
 </tr>
 <tr>
 <td><code>accepted</code></td>
-<td>Projection accepted (auto-accepted when <code>INVENTORY_ENABLED=0</code>); Store can fulfill</td>
+<td>Store can fulfill order; acceptance event emitted</td>
 <td>Store</td>
 </tr>
 <tr>
 <td><code>rejected</code></td>
-<td>Reserved for future inventory rejection path only</td>
+<td>Store cannot fulfill order; rejection event emitted</td>
 <td>Store</td>
 </tr>
 <tr>
@@ -5498,24 +5483,14 @@ violation, not a Store-side repricing opportunity.</p>
 <td>Store</td>
 </tr>
 <tr>
-<td><code>verified</code></td>
-<td>Store verification completed (<code>fulfilled -&gt; verified</code> via <code>POST .../verify</code>); emits <code>store.order.verified.v1</code></td>
-<td>Store</td>
-</tr>
-<tr>
 <td><code>cancelled</code></td>
 <td>Store operation stopped after Trade cancellation</td>
 <td>Store</td>
 </tr>
 </tbody>
 </table>
-<p>Notes:</p>
-<ul>
-<li>In the current simplified coupling, <code>pending_validation -&gt; accepted</code> is auto-applied by <code>Store/MessageHandler/TradeOrderCreatedHandler</code> when <code>INVENTORY_ENABLED=0</code>. No <code>store.order.accepted.v1</code> / <code>rejected.v1</code> is emitted.</li>
-<li>When <code>verificationRequired=true</code>, the only Store verification transition is <code>fulfilled -&gt; verified</code>. Verification is checked against the immutable <code>StoreOrder.verificationRequired</code> snapshot, not live <code>Store.settings</code>.</li>
-<li>The Store workflow MUST NOT use <code>paid</code>, <code>refunded</code>, or <code>completed</code> as its own state
-  names. Those remain Trade commercial states.</li>
-</ul>
+<p>The Store workflow MUST NOT use <code>paid</code>, <code>refunded</code>, or <code>completed</code> as its own state
+names. Those remain Trade commercial states.</p>
 <h3 id="55-outbox-and-inbox-entities">5.5 Outbox And Inbox Entities<a class="headerlink" href="#55-outbox-and-inbox-entities" title="Permanent link">&para;</a></h3>
 <h4 id="storeoutboxmessage">StoreOutboxMessage<a class="headerlink" href="#storeoutboxmessage" title="Permanent link">&para;</a></h4>
 <p><strong>Table:</strong> <code>store_outbox_message</code></p>
@@ -5541,7 +5516,7 @@ violation, not a Store-side repricing opportunity.</p>
 <tr>
 <td><code>topic</code></td>
 <td>string(120)</td>
-<td>e.g. <code>store.order.verified.v1</code> (accepted/rejected removed)</td>
+<td>e.g. <code>store.order.accepted.v1</code></td>
 </tr>
 <tr>
 <td><code>aggregateType</code></td>
@@ -5633,85 +5608,80 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 <hr />
 <h2 id="6-trade-order-state-machine-extension">6. Trade Order State Machine Extension<a class="headerlink" href="#6-trade-order-state-machine-extension" title="Permanent link">&para;</a></h2>
 <h3 id="61-target-states">6.1 Target States<a class="headerlink" href="#61-target-states" title="Permanent link">&para;</a></h3>
-<p>Trade <code>order</code> workflow is intentionally simple and does <strong>not</strong> carry a Store acceptance branch. See <code>config/packages/workflow.yaml</code> and <code>src/Trade/Entity/Order.php</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>draft -&gt; cancelled
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>pending -&gt; cancelled
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>confirmed -&gt; cancelled
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>paid -&gt; refunded
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>fulfilled -&gt; completed
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>fulfilled -&gt; cancelled
+<p>Trade <code>order</code> workflow now carries two <strong>optional</strong> Store flows controlled by <code>Store.settings</code> (both <code>false</code> by default). See <code>config/packages/workflow.yaml</code>.</p>
+<p><strong>A. Store acceptance (pre-confirm) — <code>order.requireAcceptance</code></strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># when requireAcceptance = false (default) — order stays draft/pending like a plain order
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a># Store snapshot still kept in metadata, no outbox, no StoreOrder is strictly required
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed -&gt; refunded
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a># when requireAcceptance = true
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>draft -&gt; awaiting_store_acceptance -&gt; store_accepted -&gt; confirmed -&gt; paid ...
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>awaiting_store_acceptance -&gt; store_rejected -&gt; cancelled
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>awaiting_store_acceptance -&gt; cancelled (timeout or customer cancellation)
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>store_accepted -&gt; cancelled (before payment)
 </code></pre></div>
-<ul>
-<li>There are no <code>awaiting_store_acceptance</code>, <code>store_accepted</code>, <code>store_rejected</code>, <code>awaiting_store_verification</code>, <code>store_submit</code>, <code>store_accept</code>, <code>store_reject</code>, <code>request_verification</code>, or <code>store_verify</code> places/transitions.</li>
-<li><code>Trade/Service/OrderService::createOrder</code> always applies <code>submit</code> (<code>draft -&gt; pending</code>) when a <code>StoreContext</code> is present, persists <code>_store</code> + <code>_completionMode</code> into <code>metadata</code> (see §3.2), and always writes a <code>trade.order.created.v1</code> outbox row.</li>
-<li>Store verification does <strong>not</strong> introduce workflow states; it gates the existing <code>fulfilled -&gt; completed</code> transition via guards (see below).</li>
-</ul>
-<p><strong>Store verification completion (single optional flow) — <code>fulfillment.requireVerification</code></strong></p>
-<table>
-<thead>
-<tr>
-<th><code>fulfillment.requireVerification</code></th>
-<th><code>metadata._completionMode</code></th>
-<th>Trade completion behavior</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>false</code> (default)</td>
-<td><code>manual</code></td>
-<td><code>fulfilled --complete--&gt; completed</code> directly. No Store verification required.</td>
-</tr>
-<tr>
-<td><code>true</code></td>
-<td><code>store_verification</code></td>
-<td><code>fulfilled --complete--&gt; completed</code> only when <code>Order::isCompletingFromStoreVerification()=true</code>. Direct <code>complete</code> is blocked by <code>Trade/EventListener/OrderCompletionGuardListener</code>. Verification fact arrives via <code>store.order.verified.v1</code> → <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code> (sets <code>_storeVerificationReceived=true</code> and calls <code>allowCompletionFromStoreVerification()</code> → <code>workflow-&gt;apply(complete)</code>). Out-of-order case: if <code>verified.v1</code> arrives before <code>fulfilled</code>, the handler stores <code>_storeVerificationReceived</code> and <code>Trade/EventListener/OrderVerificationCompletionListener</code> auto-completes right after <code>fulfill</code>.</td>
-</tr>
-</tbody>
-</table>
-<p>Store side: <code>POST /store/{scopeId}/orders/{uuid}/verify</code> (no <code>verificationCode</code>; UUID is the verification token) checks <code>StoreOrder.isVerificationRequired()</code> (immutable snapshot) and <code>operationalStatus=fulfilled</code>, then transitions <code>fulfilled -&gt; verified</code> and emits <code>store.order.verified.v1</code> with <code>verifiedBy/verifiedAt</code>.</p>
-<p>Invariants:</p>
+<p>Guard: <code>Store/EventListener/StoreOrderWorkflowGuardListener</code> blocks <code>store_submit</code> when
+<code>requireAcceptance=false</code> and blocks <code>submit</code> when <code>true + hasStore</code>. <code>Trade/Service/OrderService::createOrder</code> emits <code>trade.order.created.v1</code> <strong>only</strong> when <code>store_submit</code> is actually taken.</p>
+<p><strong>B. Store verification (post-fulfill) — <code>fulfillment.requireVerification</code></strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a># when requireVerification = false (default)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>paid -&gt; fulfilled --complete--&gt; completed
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a># when requireVerification = true
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>paid -&gt; fulfilled --request_verification--&gt; awaiting_store_verification --store_verify--&gt; completed
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>fulfilled/cancel &amp; awaiting_store_verification/cancel also allowed
+</code></pre></div>
+<p>Guard blocks direct <code>complete</code> and requires <code>request_verification</code>+<code>store_verify</code> when enabled.
+Store side: <code>POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}</code> (<code>StoreOrderService::verify</code> → <code>store.order.verified.v1</code> → <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code> applies <code>request_verification</code> then <code>store_verify</code>). <code>Trade/EventListener/OrderWorkflowListener</code> sets <code>completedAt</code>/dispatches <code>OrderCompletedEvent</code> status-driven so it does not hard-code <code>store_verify</code>.</p>
+<p>Invariants (when the corresponding flag is <code>true</code>):</p>
 <ol>
-<li>Trade always emits <code>trade.order.created.v1</code> when a <code>StoreContext</code> exists, after it has an immutable order UUID and Store snapshot (including <code>requireVerification</code>).</li>
-<li>Payment is <strong>not</strong> gated on Store state. <code>pending -&gt; confirmed -&gt; paid</code> proceeds normally.</li>
-<li>Store projection is eventual; <code>TradeOrderCreatedHandler</code> auto-accepts (<code>pending_validation -&gt; accepted</code>) when <code>INVENTORY_ENABLED=0</code>.</li>
-<li>Verification consumers are idempotent (<code>StoreConsumedEvent</code> + <code>workflow.can()</code> checks + store-uuid match).</li>
-<li>When <code>_completionMode=store_verification</code>, <code>fulfilled</code> cannot <code>complete</code> without the Store verification flag (<code>OrderCompletionGuardListener</code> + <code>OrderVerificationCompletionListener</code>).</li>
+<li>Trade emits <code>trade.order.created.v1</code> only after it has an immutable order UUID and
+   Store snapshot.</li>
+<li>A payment invoice cannot be created or paid before Store acceptance.</li>
+<li>A Store rejection or acceptance timeout makes the commercial order terminally
+   cancelled before payment.</li>
+<li>Store acceptance/rejection/verification consumers are idempotent.</li>
+<li>When <code>requireVerification=true</code>, <code>fulfilled</code> cannot <code>complete</code> without Store verification.</li>
 </ol>
 <h3 id="62-payment-gate">6.2 Payment Gate<a class="headerlink" href="#62-payment-gate" title="Permanent link">&para;</a></h3>
-<p>No Store gate exists. The Trade payment service checks standard <code>order.status</code> eligibility (<code>pending</code>, <code>confirmed</code>, etc.). Payment endpoints do <strong>not</strong> return a conflict for Store-scoped orders awaiting any Store step. This was changed when <code>awaiting_store_acceptance</code> was removed.</p>
+<p>The Trade payment service checks <code>order.status</code> is payment-eligible. Payment endpoints
+MUST return a conflict response while an order is awaiting Store acceptance. This is a
+business gate, not a UI convention.</p>
 <h3 id="63-order-creation-response">6.3 Order Creation Response<a class="headerlink" href="#63-order-creation-response" title="Permanent link">&para;</a></h3>
-<p><code>POST /api/v1/app/orders</code> with <code>X-Store-Code</code> always creates a <code>pending</code> order and returns <code>201</code> <code>Order created</code> (even for Store-scoped orders). A <code>trade.order.created.v1</code> outbox row is always written when <code>StoreContext</code> exists:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nt">"store"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">      </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo Store"</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Order created"</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">}</span>
+<p>When <code>settings.order.requireAcceptance=false</code> (default), <code>POST /api/v1/app/orders</code> with
+<code>X-Store-Code</code> returns <code>201</code> <code>Order created</code> and the order stays in <code>draft</code> (no Store
+outbox). Only when <code>requireAcceptance=true</code> does the Trade outbox emit
+<code>trade.order.created.v1</code> and the API return <code>202</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"awaiting_store_acceptance"</span><span class="p">,</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="nt">"store"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">      </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Xuhui Store"</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Order submitted for store acceptance"</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="p">}</span>
 </code></pre></div>
-<p>The Store projection is created asynchronously; the client polls <code>GET /api/v1/app/store-orders/{uuid}</code> or the Trade order detail endpoint. Store availability does not affect the HTTP status; unavailable Store handling is via async retry/DLQ (see §8.1).</p>
-<p>For completion: <code>fulfilled --complete--&gt; completed</code> is direct when <code>fulfillment.requireVerification=false</code> (<code>_completionMode=manual</code>). When <code>true</code> (<code>_completionMode=store_verification</code>), the client/staff must trigger <code>POST /store/{scopeId}/orders/{uuid}/verify</code> and the Trade order auto-completes on <code>store.order.verified.v1</code> (see §7.5 and §8.1).</p>
+<p>Similarly <code>paid --complete--&gt; completed</code> is direct when
+<code>settings.fulfillment.requireVerification=false</code>; with <code>true</code> the client must drive
+<code>fulfilled --request_verification--&gt; awaiting_store_verification --store_verify--&gt; completed</code> via Store verification (see §7.6). The client polls the order detail endpoint; a <code>202</code> does not mean stock is available.</p>
 <hr />
 <h2 id="7-integration-event-contracts">7. Integration Event Contracts<a class="headerlink" href="#7-integration-event-contracts" title="Permanent link">&para;</a></h2>
 <h3 id="71-envelope">7.1 Envelope<a class="headerlink" href="#71-envelope" title="Permanent link">&para;</a></h3>
 <p>All integration events use this envelope:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">"eventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uuid"</span><span class="p">,</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade.order.created"</span><span class="p">,</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nt">"occurredAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:00:00+00:00"</span><span class="p">,</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span><span class="nt">"aggregateType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade_order"</span><span class="p">,</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nt">"aggregateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="nt">"correlationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="nt">"causationId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"eventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uuid"</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade.order.created"</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">"occurredAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:00:00+00:00"</span><span class="p">,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nt">"aggregateType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade_order"</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="nt">"aggregateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">  </span><span class="nt">"correlationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="nt">"causationId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Rules:</p>
 <ul>
@@ -5726,55 +5696,62 @@ business unique key on <code>StoreOrder.tradeOrderUuid</code> remains mandatory 
 </ul>
 <h3 id="72-tradeordercreatedv1">7.2 <code>trade.order.created.v1</code><a class="headerlink" href="#72-tradeordercreatedv1" title="Permanent link">&para;</a></h3>
 <p><strong>Publisher:</strong> Trade outbox relay after order creation commits.</p>
-<p><strong>Consumer:</strong> Store <code>TradeOrderCreatedHandler</code> (<code>Store/MessageHandler/TradeOrderCreatedHandler</code>).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"store"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shanghai-demo"</span><span class="p">,</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo Store"</span><span class="p">,</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mini_program"</span><span class="p">,</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="nt">"requireVerification"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="nt">"customerUserUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"identity-user-uuid"</span><span class="p">,</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span><span class="p">,</span>
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="nt">"totalAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">12800</span><span class="p">,</span>
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">      </span><span class="nt">"lineId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-item-uuid"</span><span class="p">,</span>
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">      </span><span class="nt">"catalogReference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-001"</span><span class="p">,</span>
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">      </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">      </span><span class="nt">"unitPrice"</span><span class="p">:</span><span class="w"> </span><span class="mi">6400</span><span class="p">,</span>
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="w">      </span><span class="nt">"lineAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">12800</span><span class="p">,</span>
-<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="w">      </span><span class="nt">"snapshot"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="w">  </span><span class="nt">"delivery"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
-<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="w">  </span><span class="nt">"placedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:00:00+00:00"</span>
-<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a><span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><code>store.requireVerification</code> is the snapshot of <code>Store.settings.fulfillment.requireVerification</code> at order creation (see §3.2, §5.1.1, §6.1). Store persists it as <code>StoreOrder.verificationRequired</code>; Trade persists it as <code>metadata._store.requireVerification</code> and derives <code>metadata._completionMode</code>.</li>
-</ul>
-<p>The event is a historical placement snapshot. Store does not re-read Trade tables to
-complete the payload.</p>
-<h3 id="73-storeorderacceptedv1-removed">7.3 <code>store.order.accepted.v1</code> — Removed<a class="headerlink" href="#73-storeorderacceptedv1-removed" title="Permanent link">&para;</a></h3>
-<blockquote>
-<p><strong>Removed in the simplified coupling.</strong> The Store no longer emits <code>store.order.accepted.v1</code>. <code>StoreOrder</code> is auto-accepted synchronously in <code>Store/MessageHandler/TradeOrderCreatedHandler</code> when <code>INVENTORY_ENABLED=0</code>; when <code>INVENTORY_ENABLED=1</code> it enters <code>awaiting_inventory</code> and future inventory confirms it. No <code>store_accept</code> workflow transition exists. Historical payload for reference:</p>
-</blockquote>
+<p><strong>Consumer:</strong> Store <code>TradeOrderCreatedConsumer</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">"storeOrderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">"storeUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nt">"acceptedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:01:00+00:00"</span><span class="p">,</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nt">"reservationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inventory-reservation-uuid"</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">}</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">"store"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shanghai-xuhui"</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Xuhui Store"</span><span class="p">,</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mini_program"</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">  </span><span class="nt">"customerUserUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"identity-user-uuid"</span><span class="p">,</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span><span class="p">,</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">  </span><span class="nt">"totalAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">12800</span><span class="p">,</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">      </span><span class="nt">"lineId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-item-uuid"</span><span class="p">,</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">      </span><span class="nt">"catalogReference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-001"</span><span class="p">,</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">      </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">      </span><span class="nt">"unitPrice"</span><span class="p">:</span><span class="w"> </span><span class="mi">6400</span><span class="p">,</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="w">      </span><span class="nt">"lineAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">12800</span><span class="p">,</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="w">      </span><span class="nt">"snapshot"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">  </span><span class="nt">"delivery"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="w">  </span><span class="nt">"placedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:00:00+00:00"</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="p">}</span>
 </code></pre></div>
-<h3 id="74-storeorderrejectedv1-removed">7.4 <code>store.order.rejected.v1</code> — Removed<a class="headerlink" href="#74-storeorderrejectedv1-removed" title="Permanent link">&para;</a></h3>
-<blockquote>
-<p><strong>Removed in the simplified coupling.</strong> The Store no longer emits <code>store.order.rejected.v1</code>. Rejection reasons below are retained only as a future inventory-rejection vocabulary; Trade does not consume a Store rejection event and does not transition to <code>cancelled</code> from a Store event.</p>
-</blockquote>
-<p>Previously allowed <code>reasonCode</code> values:</p>
+<p>The event is a historical placement snapshot. Store does not re-read Trade tables to
+complete the payload.</p>
+<h3 id="73-storeorderacceptedv1">7.3 <code>store.order.accepted.v1</code><a class="headerlink" href="#73-storeorderacceptedv1" title="Permanent link">&para;</a></h3>
+<p><strong>Publisher:</strong> Store, after local validation and the future inventory reservation
+contract succeed.</p>
+<p><strong>Consumer:</strong> Trade order decision consumer.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">"storeOrderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">"storeUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="nt">"acceptedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:01:00+00:00"</span><span class="p">,</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="nt">"reservationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inventory-reservation-uuid"</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Trade applies the <code>store_accept</code> transition only when the event store UUID matches the
+server-written order snapshot and the order is awaiting Store acceptance. Duplicates
+are no-ops.</p>
+<h3 id="74-storeorderrejectedv1">7.4 <code>store.order.rejected.v1</code><a class="headerlink" href="#74-storeorderrejectedv1" title="Permanent link">&para;</a></h3>
+<p><strong>Publisher:</strong> Store, when validation or inventory reservation cannot succeed.</p>
+<p><strong>Consumer:</strong> Trade order decision consumer.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">"storeOrderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">"storeUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span><span class="nt">"reasonCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OUT_OF_STOCK"</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One or more items are unavailable."</span><span class="p">,</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">  </span><span class="nt">"rejectedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-24T12:01:00+00:00"</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>Allowed <code>reasonCode</code> values begin with:</p>
 <table>
 <thead>
 <tr>
@@ -5813,22 +5790,20 @@ complete the payload.</p>
 </tr>
 </tbody>
 </table>
+<p>Trade transitions the unpaid order to cancellation and records a user-safe reason. It
+does not expose internal exception details.</p>
 <h3 id="75-implemented-verification-event">7.5 Implemented Verification Event<a class="headerlink" href="#75-implemented-verification-event" title="Permanent link">&para;</a></h3>
-<p><strong><code>store.order.verified.v1</code></strong> (Store → Trade) is implemented when the order's snapshotted <code>verificationRequired=true</code> (i.e. <code>Store.settings.fulfillment.requireVerification=true</code> at order creation time, <code>metadata._completionMode=store_verification</code>).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">"storeOrderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-order-uuid"</span><span class="p">,</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">"storeUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="nt">"verifiedBy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"staff-user-uuid"</span><span class="p">,</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="nt">"verifiedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-09-03T08:00:00+00:00"</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="p">}</span>
+<p><strong><code>store.order.verified.v1</code></strong> (Store → Trade) is implemented when <code>settings.fulfillment.requireVerification=true</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">"orderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">"storeOrderUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-order-uuid"</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="nt">"storeUuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"store-uuid"</span><span class="p">,</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="nt">"verificationCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PICKUP-OTP-123"</span><span class="p">,</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="nt">"verifiedBy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"staff-user-uuid"</span><span class="p">,</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">  </span><span class="nt">"verifiedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-09-03T08:00:00+00:00"</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="p">}</span>
 </code></pre></div>
-<ul>
-<li>No <code>verificationCode</code>. Verification uses the order UUID as the verification token: <code>POST /store/{scopeId}/orders/{uuid}/verify</code> takes no body (empty JSON <code>{}</code> accepted). The controller resolves the StoreOrder by UUID and verifies membership scope.</li>
-<li>Preconditions in <code>Store/Service/StoreOrderService::verify()</code>: <code>isVerificationRequired()=true</code> and <code>operationalStatus=fulfilled</code>; otherwise <code>LogicException</code>. On success transitions <code>fulfilled -&gt; verified</code> (<code>StoreOrder::verify()</code> sets <code>verifiedAt/verifiedBy</code>) and records <code>store.order.verified.v1</code> via <code>store_outbox_message</code> (<code>Store/Service/StoreOutboxService</code>).</li>
-<li>Consumer: <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code> (async <code>StoreOrderVerifiedMessage</code>). Checks <code>order.metadata._store.uuid === payload.storeUuid</code> and <code>metadata._completionMode === 'store_verification'</code>. Inside a transaction sets <code>metadata._storeVerificationReceived=true</code>, calls <code>Order::allowCompletionFromStoreVerification()</code>, then <code>workflow-&gt;can(complete)</code> → <code>workflow-&gt;apply(complete)</code> if <code>fulfilled</code>; otherwise the flag remains and <code>Trade/EventListener/OrderVerificationCompletionListener</code> completes after <code>fulfill</code> (out-of-order handling). Idempotent via <code>workflow.can()</code> and repeated flag writes.</li>
-<li>Audit fields on <code>store_order</code> are <code>verifiedAt/verifiedBy</code> only (see §5.3); <code>verificationCode</code> column was removed.</li>
-</ul>
+<p>Published by <code>Store/Service/StoreOrderService::verify()</code> via <code>store_outbox_message</code>. <code>PublishOutbox</code> routes it as <code>StoreOrderVerifiedMessage</code> to <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code>, which (inside one transaction) applies Trade <code>request_verification</code> if still in <code>fulfilled</code>, then <code>store_verify</code> to <code>completed</code>. Audit fields are <code>verifiedAt/verifiedBy/verificationCode</code> on <code>store_order</code> (see §5.3). Idempotent: <code>StoreOrderVerifiedHandler</code> checks store-uuid match and <code>workflow.can()</code>.</p>
 <h3 id="76-future-events">7.6 Future Events<a class="headerlink" href="#76-future-events" title="Permanent link">&para;</a></h3>
 <p>The following remain reserved:</p>
 <table>
@@ -5871,35 +5846,31 @@ complete the payload.</p>
 <hr />
 <h2 id="8-consumer-and-publisher-design">8. Consumer And Publisher Design<a class="headerlink" href="#8-consumer-and-publisher-design" title="Permanent link">&para;</a></h2>
 <h3 id="81-trade-order-created-consumer">8.1 Trade Order Created Consumer<a class="headerlink" href="#81-trade-order-created-consumer" title="Permanent link">&para;</a></h3>
-<p><code>Store/MessageHandler/TradeOrderCreatedHandler</code> (<code>TradeOrderCreatedMessage</code>) processes one message as follows:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>receive message (trade.order.created.v1)
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  -&gt; validate envelope and schema version (eventId + payload)
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>  -&gt; start Store local transaction
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>  -&gt; insert StoreConsumedEvent(eventId), or return if already present (inbox dedup)
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>  -&gt; find Store by payload.store.uuid; if not found or not active, throw RuntimeException
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>     (triggers Messenger retry; not a business rejection)
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>  -&gt; create/find StoreOrder by tradeOrderUuid via StoreOrderService::createFromTradeOrderSnapshot
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>     (includes verificationRequired snapshot from payload.store.requireVerification;
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>      idempotent on duplicate tradeOrderUuid with same snapshot; LogicException on mismatch)
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>  -&gt; if StoreTradeOrderCancellation exists for this tradeOrderUuid -&gt; StoreOrder.cancel()
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>  -&gt; if StoreOrder.operationalStatus != pending_validation -&gt; return (already handled)
-<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>  -&gt; if !INVENTORY_ENABLED -&gt; StoreOrderService::accept() (pending_validation -&gt; accepted, no outbox)
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>  -&gt; else -&gt; StoreOrder.awaitInventory(reservationId) + StoreOutboxService.record('inventory.reservation.requested.v1')
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>  -&gt; commit
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>  -&gt; acknowledge broker message
+<p><code>TradeOrderCreatedConsumer</code> processes one message as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>receive message
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  -&gt; validate envelope and schema version
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>  -&gt; start Store local transaction
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>  -&gt; insert StoreConsumedEvent(eventId), or return if already present
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>  -&gt; find Store by payload.store.uuid
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>  -&gt; create/find StoreOrder by tradeOrderUuid
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>  -&gt; validate Store status, channel, local eligibility
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>  -&gt; request inventory reservation (future boundary)
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>  -&gt; set StoreOrder accepted or rejected
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>  -&gt; insert StoreOutboxMessage for result event
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>  -&gt; commit
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>  -&gt; acknowledge broker message
 </code></pre></div>
-<p>No <code>store.order.accepted.v1</code> / <code>rejected.v1</code> is emitted. The unavailable-Store path throws <code>RuntimeException('Store is not available.')</code> so the broker retries rather than committing a rejected projection.</p>
 <p>The broker message is acknowledged only after the Store transaction commits. If the
 process crashes before acknowledgement, the event is delivered again and becomes an
 inbox/business-idempotent no-op.</p>
 <h3 id="82-outbox-publisher">8.2 Outbox Publisher<a class="headerlink" href="#82-outbox-publisher" title="Permanent link">&para;</a></h3>
 <p>The outbox publisher is a transport adapter, not business logic:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>poll unpublished outbox messages in created order
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  -&gt; lock one batch
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  -&gt; publish envelope to transport topic
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  -&gt; mark publishedAt on broker acknowledgement
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  -&gt; on transient error: increment attempts and retry later
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>  -&gt; on retry exhaustion: retain record and alert/DLQ
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>poll unpublished outbox messages in created order
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  -&gt; lock one batch
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>  -&gt; publish envelope to transport topic
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>  -&gt; mark publishedAt on broker acknowledgement
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>  -&gt; on transient error: increment attempts and retry later
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>  -&gt; on retry exhaustion: retain record and alert/DLQ
 </code></pre></div>
 <p>Initial deployment may use Symfony Messenger with Doctrine transport. The business
 contract must not depend on that choice. RabbitMQ, Kafka, SQS, or an HTTP event relay
@@ -5915,15 +5886,15 @@ can replace the transport without changing StoreOrder business code.</p>
 <tbody>
 <tr>
 <td>Duplicate <code>eventId</code></td>
-<td>Acknowledge; no mutation (inbox hit)</td>
+<td>Acknowledge; no mutation</td>
 </tr>
 <tr>
 <td>Duplicate <code>tradeOrderUuid</code>, same snapshot</td>
-<td>Continue idempotently; return existing StoreOrder</td>
+<td>Continue idempotently; ensure result event exists</td>
 </tr>
 <tr>
 <td>Duplicate <code>tradeOrderUuid</code>, different snapshot</td>
-<td>Do not overwrite; throw <code>LogicException</code> → critical alert and DLQ</td>
+<td>Do not overwrite; critical alert and DLQ</td>
 </tr>
 <tr>
 <td>Temporary database/broker failure</td>
@@ -5931,15 +5902,11 @@ can replace the transport without changing StoreOrder business code.</p>
 </tr>
 <tr>
 <td>Invalid event schema/version</td>
-<td>DLQ; do not retry blindly (<code>InvalidArgumentException</code>)</td>
+<td>DLQ; do not retry blindly</td>
 </tr>
 <tr>
-<td>Store not found / not active</td>
-<td>Throw <code>RuntimeException('Store is not available.')</code> → retry with backoff (Messenger retry), then DLQ</td>
-</tr>
-<tr>
-<td>Inventory rejection (future)</td>
-<td>Commit <code>rejected</code> StoreOrder; inventory DLQ handling to be defined</td>
+<td>Business rejection such as out of stock</td>
+<td>Commit rejected StoreOrder + rejection outbox event</td>
 </tr>
 <tr>
 <td>Unexpected domain exception</td>
@@ -5953,8 +5920,8 @@ can replace the transport without changing StoreOrder business code.</p>
   unique StoreOrder key and transaction locking where necessary.</li>
 <li>An event topic should preserve ordering per aggregate key where the transport supports
   it, but correctness must not rely on global ordering.</li>
-<li>Store verification after a Trade <code>fulfilled</code> is the only cross-bundle result event; <code>store.order.verified.v1</code> is idempotent via <code>_storeVerificationReceived</code> + <code>workflow.can(complete)</code>.</li>
-<li>Trade cancellation is consumed by <code>Store/MessageHandler/TradeOrderCancelledHandler</code> (<code>StoreTradeOrderCancellation</code> + <code>StoreOrder.cancel()</code>), ensuring late verification is ignored.</li>
+<li>Store acceptance after a terminal Trade cancellation is harmless: Trade ignores the
+  stale accept event and Store consumes <code>trade.order.cancelled.v1</code> to release work.</li>
 <li>All result handlers validate expected source state before applying transitions.</li>
 </ul>
 <hr />
@@ -6074,22 +6041,33 @@ payment, cancellation, refunds, and canonical commercial status.</p>
 </tr>
 <tr>
 <td>POST</td>
+<td><code>/api/v1/store/manage/orders/{uuid}/accept</code></td>
+<td>owner/manager (<code>store:order:accept</code>)</td>
+<td>Manual acceptance when <code>order.requireAcceptance=true</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/store/manage/orders/{uuid}/reject</code></td>
+<td>owner/manager (<code>store:order:reject</code>)</td>
+<td>Reject before payment with reason code</td>
+</tr>
+<tr>
+<td>POST</td>
 <td><code>/api/v1/store/manage/orders/{uuid}/fulfill</code></td>
-<td>fulfillment/manager/owner (<code>store:order:fulfill</code>)</td>
-<td>Mark Store operation <code>fulfilled</code> (local transition; fulfilled -&gt; fulfilled). Triggers <code>OrderVerificationCompletionListener</code> auto-complete if <code>_storeVerificationReceived</code> already true.</td>
+<td>fulfillment/manager (<code>store:order:fulfill</code>)</td>
+<td>Mark Store operation fulfilled (local)</td>
 </tr>
 <tr>
 <td>POST</td>
 <td><code>/api/v1/store/{scopeId}/orders/{uuid}/verify</code></td>
 <td>fulfillment/manager/owner (<code>store:order:verify</code>)</td>
-<td>Store verification post-fulfill — requires <code>StoreOrder.isVerificationRequired()=true</code> (snapshotted, not live settings) and <code>operationalStatus=fulfilled</code>; body is empty (<code>{}</code>); uses order UUID as verification token. Transitions <code>fulfilled -&gt; verified</code> and emits <code>store.order.verified.v1</code> with <code>verifiedAt/verifiedBy</code> (no <code>verificationCode</code>). Staff <code>userUuid</code> is taken from the authenticated Identity user.</td>
+<td>Store verification post-fulfill — requires <code>fulfillment.requireVerification=true</code>, <code>operationalStatus=fulfilled</code>, body <code>{verificationCode}</code>; records <code>store.order.verified.v1</code> with audit <code>verifiedAt/verifiedBy/verificationCode</code></td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><code>POST .../accept</code> and <code>POST .../reject</code> have been removed. Store acceptance is automatic; rejection is deferred to future inventory.</p>
-</blockquote>
-<p>All actions check membership against the <code>StoreOrder</code>'s local <code>Store</code> relation, not a request-supplied store identifier. <code>fulfill</code>/<code>verify</code> are idempotent guards: <code>verify</code> fails with <code>LogicException</code> if not <code>fulfilled</code> or not <code>verificationRequired</code>.</p>
+<p>The first asynchronous acceptance implementation may not expose manual actions until
+the timeout/escalation policy is ready. All actions check membership against the
+StoreOrder's local Store relation, not a request-supplied store identifier.</p>
 <hr />
 <h2 id="10-authorization-model">10. Authorization Model<a class="headerlink" href="#10-authorization-model" title="Permanent link">&para;</a></h2>
 <h3 id="101-roles">10.1 Roles<a class="headerlink" href="#101-roles" title="Permanent link">&para;</a></h3>
@@ -6110,12 +6088,12 @@ payment, cancellation, refunds, and canonical commercial status.</p>
 <tr>
 <td>Store <code>owner</code></td>
 <td>One Store</td>
-<td>Membership, store settings, fulfillment, verification</td>
+<td>Membership, store settings, acceptance, fulfillment</td>
 </tr>
 <tr>
 <td>Store <code>manager</code></td>
 <td>One Store</td>
-<td>Fulfillment, verification, operational views</td>
+<td>Acceptance, rejection, fulfillment, operational views</td>
 </tr>
 <tr>
 <td>Store <code>clerk</code></td>
@@ -6142,15 +6120,16 @@ payment, cancellation, refunds, and canonical commercial status.</p>
    queries Store membership locally.</li>
 <li><code>ROLE_ADMIN</code> bypasses membership checks only on explicitly administrative routes.</li>
 <li>Store staff cannot elevate a Trade order's commercial status directly.</li>
-<li>Store staff actions (<code>fulfill</code>, <code>verify</code>) produce Store events; Trade applies commercial <code>complete</code> only through <code>StoreOrderVerifiedHandler</code> + <code>OrderCompletionGuardListener</code>/<code>OrderVerificationCompletionListener</code> and workflow guards.</li>
+<li>Store staff actions produce Store events; Trade applies commercial transitions only
+   through its own event consumers and workflow guards.</li>
 </ol>
 <hr />
 <h2 id="11-store-context-and-promotion-contract">11. Store Context And Promotion Contract<a class="headerlink" href="#11-store-context-and-promotion-contract" title="Permanent link">&para;</a></h2>
 <p>Promotion currently uses a <code>storeCode</code> within Trade's price calculation context. The
 Store bundle gives that value an authoritative source:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>request -&gt; StoreContextResolver -&gt; active Store -&gt; StoreContext.storeCode
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>        -&gt; Trade calculatePrices(..., storeCode, ...)
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>        -&gt; Promotion storeCode filtering
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>request -&gt; StoreContextResolver -&gt; active Store -&gt; StoreContext.storeCode
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>        -&gt; Trade calculatePrices(..., storeCode, ...)
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>        -&gt; Promotion storeCode filtering
 </code></pre></div>
 <p>Rules:</p>
 <ul>
@@ -6168,13 +6147,12 @@ domain model or authorization mechanism.</p>
 <h2 id="12-inventory-boundary">12. Inventory Boundary<a class="headerlink" href="#12-inventory-boundary" title="Permanent link">&para;</a></h2>
 <p>Inventory is deliberately excluded from the first Store data model. Store defines the
 command/result boundary it needs:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Store validates order (TradeOrderCreatedHandler)
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  -&gt; if INVENTORY_ENABLED=0: auto-accept (pending_validation -&gt; accepted), no inventory event
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>  -&gt; if INVENTORY_ENABLED=1:
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>       inventory.reservation.requested.v1
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>       -&gt; Inventory reserves quantity idempotently
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>       -&gt; inventory.reservation.confirmed.v1  -&gt; StoreOrder.accept()
-<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>            or inventory.reservation.rejected.v1 -&gt; StoreOrder.reject()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Store validates order
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>  -&gt; inventory.reservation.requested.v1
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>  -&gt; Inventory reserves quantity idempotently
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>  -&gt; inventory.reservation.confirmed.v1
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>       or inventory.reservation.rejected.v1
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>  -&gt; Store accepts/rejects StoreOrder
 </code></pre></div>
 <p>The future request payload must include:</p>
 <ul>
@@ -6234,25 +6212,26 @@ cross-service database transaction.</p>
 <h2 id="14-persistence-and-migration-plan">14. Persistence And Migration Plan<a class="headerlink" href="#14-persistence-and-migration-plan" title="Permanent link">&para;</a></h2>
 <h3 id="141-initial-store-migration">14.1 Initial Store Migration<a class="headerlink" href="#141-initial-store-migration" title="Permanent link">&para;</a></h3>
 <p>A Store migration creates only Store-owned tables:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>store
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>store_membership
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>store_order
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>store_outbox_message
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>store_consumed_event
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>store
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>store_membership
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>store_order
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>store_outbox_message
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>store_consumed_event
 </code></pre></div>
 <p>It may include foreign keys from <code>store_membership.store_id</code> and <code>store_order.store_id</code>
 to the local <code>store</code> table. It MUST NOT add foreign keys to <code>users</code>, <code>trade_order</code>,
 <code>payment_invoice</code>, or future inventory tables.</p>
 <h3 id="142-trade-migration">14.2 Trade Migration<a class="headerlink" href="#142-trade-migration" title="Permanent link">&para;</a></h3>
 <p>A separate Trade migration adds only generic order orchestration data required by the
-new workflow, such as a Store snapshot (<code>_store</code>), <code>_completionMode</code>, and <code>_storeVerificationReceived</code> in existing <code>trade_order.metadata</code> JSON. No acceptance deadline field or Store FK is added.</p>
+new workflow, such as a Store snapshot in existing JSON metadata and any explicit
+acceptance deadline field. It must not add a foreign key to Store.</p>
 <h3 id="143-data-backfill">14.3 Data Backfill<a class="headerlink" href="#143-data-backfill" title="Permanent link">&para;</a></h3>
 <p>For existing orders without Store metadata:</p>
 <ul>
 <li>Treat them as legacy/global orders.</li>
 <li>Do not fabricate <code>StoreOrder</code> records unless a reliable external mapping exists.</li>
 <li>Existing payment/refund behavior remains unchanged.</li>
-<li>The simplified projection (auto-accept) and verification gate (<code>_completionMode</code>) apply only to newly created Store-scoped orders after this change.</li>
+<li>New Store acceptance workflow applies only to newly created Store-scoped orders.</li>
 </ul>
 <hr />
 <h2 id="15-failure-handling-and-observability">15. Failure Handling And Observability<a class="headerlink" href="#15-failure-handling-and-observability" title="Permanent link">&para;</a></h2>
@@ -6272,9 +6251,9 @@ new workflow, such as a Store snapshot (<code>_store</code>), <code>_completionM
 <td>Warning with safe store hint</td>
 </tr>
 <tr>
-<td>Store unavailable (not found / not active)</td>
-<td>Consumer throws <code>RuntimeException('Store is not available.')</code> → retry/DLQ</td>
-<td>Warning with storeUuid/tradeOrderUuid/attempt</td>
+<td>Store business rejection</td>
+<td>Publish rejection event</td>
+<td>Info with reason code/correlation</td>
 </tr>
 <tr>
 <td>Event schema violation</td>
@@ -6287,14 +6266,9 @@ new workflow, such as a Store snapshot (<code>_store</code>), <code>_completionM
 <td>Warning with attempt count</td>
 </tr>
 <tr>
-<td>Snapshot mismatch (<code>tradeOrderUuid</code> conflicts on <code>storeCode</code>/<code>verificationRequired</code>/amount)</td>
-<td>Do not mutate existing StoreOrder; throw <code>LogicException</code> → critical alert</td>
+<td>Snapshot mismatch</td>
+<td>Do not mutate existing StoreOrder</td>
 <td>Critical alert</td>
-</tr>
-<tr>
-<td>Verification precondition failure (<code>!verificationRequired</code> or <code>status != fulfilled</code>)</td>
-<td>HTTP 409/422 from <code>StoreOrderService::verify</code></td>
-<td>Warning with storeOrderUuid/verificationRequired/status</td>
 </tr>
 <tr>
 <td>Outbox publishing failure</td>
@@ -6305,8 +6279,8 @@ new workflow, such as a Store snapshot (<code>_store</code>), <code>_completionM
 </table>
 <h3 id="152-required-structured-log-fields">15.2 Required Structured Log Fields<a class="headerlink" href="#152-required-structured-log-fields" title="Permanent link">&para;</a></h3>
 <p>All asynchronous paths include:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>eventId, topic, aggregateId, correlationId, causationId,
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>tradeOrderUuid, storeOrderUuid, storeUuid, attempt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>eventId, topic, aggregateId, correlationId, causationId,
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>tradeOrderUuid, storeOrderUuid, storeUuid, attempt
 </code></pre></div>
 <p>Logs must not contain customer phone/address details, payment secrets, raw gateway
 payloads, or complete item snapshots unless explicitly redacted for secure diagnostics.</p>
@@ -6315,9 +6289,9 @@ payloads, or complete item snapshots unless explicitly redacted for secure diagn
 <ul>
 <li>Outbox backlog count and oldest unpublished age.</li>
 <li>Consumer lag by topic.</li>
-<li>StoreOrder creation count by Store (auto-accept vs awaiting_inventory).</li>
-<li>Verification count by Store (<code>verified</code> status).</li>
-<li>Fulfillment-to-completion latency (manual vs store_verification).</li>
+<li>Acceptance/rejection count by Store and reason code.</li>
+<li>Acceptance latency from Trade order creation to Store decision.</li>
+<li>Timeout cancellation count.</li>
 <li>Inbox duplicate count.</li>
 <li>DLQ count and oldest message age.</li>
 </ul>
@@ -6334,23 +6308,19 @@ payloads, or complete item snapshots unless explicitly redacted for secure diagn
 <tbody>
 <tr>
 <td><code>tests/Store/Entity/</code></td>
-<td>Store lifecycle, membership role/status, StoreOrder snapshots/statuses/verificationRequired, outbox/inbox fields</td>
+<td>Store lifecycle, membership role/status, StoreOrder snapshots/statuses, outbox/inbox fields</td>
 </tr>
 <tr>
 <td><code>tests/Store/Service/</code></td>
-<td>Context resolution, membership authorization, Store verify/fulfill guards (verificationRequired, fulfilled status), snapshot matching</td>
+<td>Context resolution, membership authorization, Store acceptance/rejection rules</td>
 </tr>
 <tr>
 <td><code>tests/Store/Consumer/</code></td>
-<td>Valid event (auto-accept), duplicate event, duplicate business key same/different snapshot, schema error, unavailable Store throws RuntimeException</td>
+<td>Valid event, duplicate event, duplicate business key, schema error, rejection event creation</td>
 </tr>
 <tr>
 <td><code>tests/Store/Outbox/</code></td>
 <td>Publish retry classification and event envelope serialization</td>
-</tr>
-<tr>
-<td><code>tests/Trade/</code></td>
-<td>Order <code>submit</code> always creates pending + outbox; <code>OrderCompletionGuardListener</code> blocks/permits <code>complete</code>; <code>StoreOrderVerifiedHandler</code> + <code>OrderVerificationCompletionListener</code> out-of-order handling</td>
 </tr>
 </tbody>
 </table>
@@ -6364,28 +6334,24 @@ payloads, or complete item snapshots unless explicitly redacted for secure diagn
 </thead>
 <tbody>
 <tr>
-<td>Active Store receives valid Trade event (<code>INVENTORY_ENABLED=0</code>)</td>
-<td>One <code>accepted</code> StoreOrder, no Store outbox (auto-accept)</td>
+<td>Active Store receives valid Trade event</td>
+<td>One accepted StoreOrder and one accepted outbox event</td>
 </tr>
 <tr>
-<td>Active Store with <code>requireVerification=true</code></td>
-<td><code>StoreOrder.verificationRequired=true</code> snapshotted; Trade <code>metadata._completionMode=store_verification</code></td>
-</tr>
-<tr>
-<td>Store is closed / not found</td>
-<td>Consumer throws <code>RuntimeException('Store is not available.')</code> → retry/DLQ; no StoreOrder committed</td>
+<td>Store is closed</td>
+<td>Rejected StoreOrder and rejection outbox event</td>
 </tr>
 <tr>
 <td>Same <code>eventId</code> redelivered</td>
-<td>No second StoreOrder or outbox event (inbox dedup)</td>
+<td>No second StoreOrder or result event</td>
 </tr>
 <tr>
 <td>Different event ids with same Trade UUID/same payload</td>
-<td>One StoreOrder; idempotent</td>
+<td>One StoreOrder; idempotent result behavior</td>
 </tr>
 <tr>
-<td>Same Trade UUID/different payload (e.g. different <code>requireVerification</code> or amount)</td>
-<td>No overwrite; <code>LogicException</code> → critical/DLQ</td>
+<td>Same Trade UUID/different payload</td>
+<td>No overwrite; critical failure/DLQ</td>
 </tr>
 <tr>
 <td>Store staff reads another store order</td>
@@ -6396,20 +6362,12 @@ payloads, or complete item snapshots unless explicitly redacted for secure diagn
 <td>404/403 without information leak</td>
 </tr>
 <tr>
-<td>Store <code>fulfill</code> then <code>verify</code> (verificationRequired)</td>
-<td>StoreOrder <code>fulfilled -&gt; verified</code> + <code>store.order.verified.v1</code>; Trade <code>fulfilled -&gt; completed</code></td>
+<td>Trade receives Store acceptance twice</td>
+<td>One legal workflow transition only</td>
 </tr>
 <tr>
-<td>Store <code>verify</code> before Trade <code>fulfilled</code> (out-of-order)</td>
-<td>Trade stores <code>_storeVerificationReceived=true</code>; <code>OrderVerificationCompletionListener</code> completes after <code>fulfill</code></td>
-</tr>
-<tr>
-<td>Trade <code>fulfilled -&gt; complete</code> without verification when <code>store_verification</code></td>
-<td>Blocked by <code>OrderCompletionGuardListener</code> (409/conflict)</td>
-</tr>
-<tr>
-<td>Store <code>verify</code> when <code>verificationRequired=false</code> or <code>status != fulfilled</code></td>
-<td>409/422 <code>LogicException</code></td>
+<td>Trade acceptance timeout races Store acceptance</td>
+<td>Exactly one terminal Trade outcome; stale event safely ignored</td>
 </tr>
 </tbody>
 </table>
@@ -6435,22 +6393,22 @@ serialization. Tests validate:</p>
 </ol>
 <h3 id="phase-2-trade-orchestration-contract">Phase 2: Trade Orchestration Contract<a class="headerlink" href="#phase-2-trade-orchestration-contract" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Simplify Trade workflow to <code>draft -&gt; pending -&gt; confirmed -&gt; paid -&gt; fulfilled -&gt; completed</code> (remove acceptance states).</li>
-<li>Add server-generated Store snapshot (<code>_store</code> + <code>_completionMode</code> + <code>_storeVerificationReceived</code>) to new Trade orders.</li>
+<li>Add target Trade workflow states/transitions and payment gate.</li>
+<li>Add server-generated Store snapshot to new Trade orders.</li>
 <li>Add a generic Trade integration-event outbox abstraction.</li>
-<li>Always publish <code>trade.order.created.v1</code> when a <code>StoreContext</code> exists, after the Trade transaction commits; <code>draft -&gt; pending</code> via <code>submit</code>.</li>
-<li>Return <code>201</code> (<code>pending</code>) for Store-scoped order creation (no <code>202</code>).</li>
+<li>Publish <code>trade.order.created.v1</code> only after the Trade transaction commits.</li>
+<li>Return <code>202</code> for Store-scoped order creation.</li>
 <li>Preserve legacy order behavior when no Store context is present, only if that legacy
    mode remains a product requirement.</li>
 </ol>
 <h3 id="phase-3-store-consumer-and-decision-events">Phase 3: Store Consumer And Decision Events<a class="headerlink" href="#phase-3-store-consumer-and-decision-events" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Implement <code>Store/MessageHandler/TradeOrderCreatedHandler</code> with inbox and business idempotency.</li>
-<li>Create StoreOrder from immutable event snapshot (including <code>verificationRequired</code>).</li>
-<li>Auto-accept (<code>pending_validation -&gt; accepted</code>) when <code>INVENTORY_ENABLED=0</code>; otherwise request inventory reservation (<code>awaiting_inventory</code>).</li>
-<li>Retries on unavailable Store via <code>RuntimeException</code> (no rejection event).</li>
-<li>Implement <code>StoreOrderService::fulfill</code> / <code>verify</code> and <code>store.order.verified.v1</code> outbox.</li>
-<li>Implement <code>Trade/MessageHandler/StoreOrderVerifiedHandler</code> + <code>OrderCompletionGuardListener</code> / <code>OrderVerificationCompletionListener</code> (including out-of-order handling).</li>
+<li>Implement <code>TradeOrderCreatedConsumer</code> with inbox and business idempotency.</li>
+<li>Create StoreOrder from immutable event snapshot.</li>
+<li>Implement Store eligibility checks and accepted/rejected decisions.</li>
+<li>Write <code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</code> to Store outbox.</li>
+<li>Implement Trade consumers that apply guarded workflow transitions.</li>
+<li>Add timeout cancellation and late-event handling.</li>
 </ol>
 <h3 id="phase-4-fulfillment-and-inventory-integration">Phase 4: Fulfillment And Inventory Integration<a class="headerlink" href="#phase-4-fulfillment-and-inventory-integration" title="Permanent link">&para;</a></h3>
 <ol>
@@ -6509,19 +6467,15 @@ serialization. Tests validate:</p>
 </tr>
 <tr>
 <td>Payment gate</td>
-<td>No Store gate; Trade payment eligibility is standard (no <code>awaiting_store_acceptance</code> block)</td>
+<td>A Store-scoped order cannot begin payment before Store acceptance</td>
 </tr>
 <tr>
 <td>Rejection/timeout</td>
-<td>No Store rejection event / acceptance timeout; unavailable Store is retried via DLQ, not cancelled</td>
-</tr>
-<tr>
-<td>Verification gate</td>
-<td>When <code>fulfillment.requireVerification=true</code>, <code>fulfilled -&gt; completed</code> requires <code>store.order.verified.v1</code> (immutable per-order snapshot, <code>verificationRequired</code> + <code>_completionMode</code>)</td>
+<td>Trade cancels unpaid orders on Store rejection or acceptance timeout</td>
 </tr>
 <tr>
 <td>Authorization</td>
-<td>Store membership scopes <code>fulfill</code>/<code>verify</code>; platform admin retains explicit override</td>
+<td>Store membership scopes Store operations; platform admin retains explicit override</td>
 </tr>
 <tr>
 <td>Inventory boundary</td>
