@@ -2,8 +2,12 @@
 
 namespace App\Common\Controller\App;
 
+use App\Common\Entity\Picture;
 use App\Common\Service\PictureServiceInterface;
 use App\Core\Controller\RestController;
+use App\Core\Query\DqlExpression;
+use App\Core\View\ApiViewMessages;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use App\Core\View\ApiView;
 use App\Core\View\CreateApiViewMixin;
 use App\Core\View\DeleteApiViewMixin;
@@ -30,12 +34,30 @@ class PictureController extends RestController
         protected readonly PictureServiceInterface $service
     ) {}
 
-    /** @return array<string, mixed> */
-    protected function commonFilter(): array
+    /** @return array<string, mixed>|DqlExpression */
+    protected function commonFilter(): array|DqlExpression
     {
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            return new DqlExpression('!entity.getUser()');
+        }
 
-        return $user instanceof User ? ['user' => $user] : ['id' => -1];
+        return new DqlExpression(
+            '!entity.getUser() || entity.getUser() == user',
+            ['user' => $user],
+        );
+    }
+
+    protected function authorizeApiAction(string $action, ?object $entity = null): void
+    {
+        // Public (user IS NULL) pictures are read-only via /app; writes stay owner-only.
+        if (($action === 'update' || $action === 'delete') && $entity instanceof Picture) {
+            $user = $this->getUser();
+            $owner = $entity->getUser();
+            if (!$user instanceof User || $owner === null || $owner->getId() !== $user->getId()) {
+                throw new AccessDeniedException(ApiViewMessages::ACCESS_DENIED);
+            }
+        }
     }
 
     /**
