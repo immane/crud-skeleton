@@ -3615,7 +3615,7 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <tr>
 <td><code>trade.order.created.v1</code></td>
 <td><code>trade_outbox_message</code></td>
-<td>Store (<code>TradeOrderCreatedHandler</code>) — always emitted when a <code>StoreContext</code> is present; Store validates and auto-accepts or creates an inventory reservation (no Trade ack)</td>
+<td>Store (<code>TradeOrderCreatedHandler</code>) — always emitted when a <code>StoreContext</code> is present; Store creates the StoreOrder and then follows per-store policy: auto-accept, manual accept, and/or inventory reservation, relaying <code>store.order.accepted/rejected.v1</code> back to Trade</td>
 </tr>
 <tr>
 <td><code>trade.order.cancelled.v1</code></td>
@@ -3629,13 +3629,13 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 </tr>
 <tr>
 <td><code>store.order.accepted.v1</code></td>
-<td>—</td>
-<td><strong>Removed</strong> — former Store→Trade acceptance ack; no longer emitted or consumed</td>
+<td><code>store_outbox_message</code></td>
+<td>Trade (<code>StoreOrderAcceptedHandler</code>) — projects <code>acceptance=accepted</code> into <code>OrderStoreLifecycle</code>; unblocks <code>confirm</code> when the order requires acceptance</td>
 </tr>
 <tr>
 <td><code>store.order.rejected.v1</code></td>
-<td>—</td>
-<td><strong>Removed</strong> — former Store→Trade rejection ack; no longer emitted or consumed</td>
+<td><code>store_outbox_message</code></td>
+<td>Trade (<code>StoreOrderRejectedHandler</code>) — projects <code>acceptance=rejected</code>; auto-cancels pre-payment Trade orders</td>
 </tr>
 <tr>
 <td><code>inventory.reservation.requested.v1</code></td>
@@ -3840,16 +3840,15 @@ simpler: a reused id is silently skipped.</p>
     participant I as Inventory
     participant IO as Inventory Outbox
 
-    T-&gt;&gt;T: OrderService::createOrder(storeContext)&lt;br/&gt;(txn) workflow submit + record trade.order.created.v1&lt;br/&gt;metadata._completionMode = requireVerification ? 'store_verification' : 'manual'
-    T-&gt;&gt;TO: (txn) += trade.order.created.v1 {orderUuid, store{uuid,code,name,requireVerification}, items, delivery, placedAt}
+    T-&gt;&gt;T: OrderService::createOrder(storeContext)&lt;br/&gt;(txn) Order + OrderStoreLifecycle + trade.order.created.v1&lt;br/&gt;metadata._store{uuid,code,name,requireAcceptance,requireInventory,requireVerification}
+    T-&gt;&gt;TO: (txn) += trade.order.created.v1 {orderUuid, store{...}, items, delivery, placedAt}
     TO-&gt;&gt;S: app:trade:outbox:publish → TradeOrderCreatedMessage
     S-&gt;&gt;S: (txn) inbox += trade.order.created.v1 (StoreConsumedEvent)
+    S-&gt;&gt;S: create StoreOrder (snapshots the verification requirement)
     alt store missing or inactive
-        S-&gt;&gt;S: throw RuntimeException('Store is not available.')&lt;br/&gt;Messenger retry (no store.order.rejected.v1)
-    else INVENTORY_ENABLED=0
-        S-&gt;&gt;S: create StoreOrder + accept immediately (no outbox to Trade)
-    else INVENTORY_ENABLED=1
-        S-&gt;&gt;S: create StoreOrder + awaitInventory(reservationId)
+        S-&gt;&gt;SO: (txn) += store.order.rejected.v1 {reasonCode: STORE_UNAVAILABLE}
+    else inventory required (per-store requireInventory, global INVENTORY_ENABLED master switch)
+        S-&gt;&gt;S: awaitInventory(reservationId)
         S-&gt;&gt;SO: (txn) += inventory.reservation.requested.v1
         SO-&gt;&gt;I: app:store:outbox:publish → ReservationRequestedMessage
         I-&gt;&gt;I: (txn) inbox += requested; InventoryService::reserve()
@@ -3859,10 +3858,20 @@ simpler: a reused id is silently skipped.</p>
             I-&gt;&gt;IO: (txn) += inventory.reservation.confirmed.v1
         end
         IO-&gt;&gt;S: app:inventory:outbox:publish → ReservationConfirmed/Rejected
-        S-&gt;&gt;S: (txn) inbox += outcome; accept/reject storeOrder locally (no Trade relay)
-    end</code></pre>
-<p>Trade always writes <code>trade.order.created.v1</code> when a <code>StoreContext</code> is supplied. Store never
-acks with <code>store.order.accepted/rejected.v1</code>; the only Store→Trade signal is <code>store.order.verified.v1</code> for completion. An unavailable store is a retryable failure, not a rejection event.</p>
+        S-&gt;&gt;S: (txn) inbox += outcome; reject on rejected;&lt;br/&gt;accept on confirmed unless staff acceptance required
+    else acceptance required (per-store requireAcceptance)
+        S-&gt;&gt;S: leave pending_validation for staff accept/reject via API
+    else default (neither required)
+        S-&gt;&gt;SO: (txn) accept + store.order.accepted.v1
+    end
+    SO-&gt;&gt;T: app:store:outbox:publish → StoreOrderAccepted/Rejected
+    T-&gt;&gt;T: (txn) TradeConsumedEvent + OrderStoreLifecycle markAccepted/markRejected;&lt;br/&gt;rejected auto-cancels pre-payment Trade orders</code></pre>
+<p>Trade always writes <code>trade.order.created.v1</code> when a <code>StoreContext</code> is supplied. Per-store
+acceptance/inventory policy (<code>settings.order.requireAcceptance</code>, <code>settings.order.requireInventory</code>,
+both default <code>false</code>) is snapshotted at order creation; later settings changes do not affect
+in-flight orders. Trade <code>confirm</code> waits for the acceptance fact only when the order snapshot
+has <code>requireAcceptance=true</code>; otherwise the Trade order flows normally while the Store order
+is still created and projected.</p>
 <h3 id="62-order-cancellation-store-inventory-release">6.2 Order cancellation → Store → Inventory release<a class="headerlink" href="#62-order-cancellation-store-inventory-release" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
     autonumber
