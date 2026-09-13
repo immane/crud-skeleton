@@ -125,6 +125,12 @@ class StoreOrder
     public function getTotalAmount(): int { return $this->totalAmount; }
     /** @return array<string, mixed> */
     public function getOrderSnapshot(): array { return $this->orderSnapshot; }
+    public function isAcceptanceRequired(): bool
+    {
+        $store = $this->orderSnapshot['_store'] ?? null;
+
+        return is_array($store) && ($store['requireAcceptance'] ?? false) === true;
+    }
     public function getOperationalStatus(): string { return $this->operationalStatus; }
 
     /**

@@ -201,11 +201,17 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
         if (!is_bool($verificationRequired)) {
             throw new \InvalidArgumentException('Trade order store verification requirement must be a boolean.');
         }
+        $acceptanceRequired = $storeSnapshot['requireAcceptance'] ?? false;
+        if (!is_bool($acceptanceRequired)) {
+            throw new \InvalidArgumentException('Trade order store acceptance requirement must be a boolean.');
+        }
 
         $orderSnapshot = [
             'items' => $snapshot['items'],
             'delivery' => $snapshot['delivery'],
             'placedAt' => $snapshot['placedAt'],
+            // Freeze the policy used after an asynchronous inventory confirmation.
+            '_store' => ['requireAcceptance' => $acceptanceRequired],
         ];
         if (isset($storeSnapshot['channel'])) {
             if (!is_string($storeSnapshot['channel'])) {
@@ -231,13 +237,19 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
      */
     private function matchesSnapshot(StoreOrder $storeOrder, Store $store, array $data): bool
     {
+        $existingOrderSnapshot = $storeOrder->getOrderSnapshot();
+        $incomingOrderSnapshot = $data['orderSnapshot'];
+        // Policy is captured only on the first delivery; redeliveries with changed
+        // flags remain idempotent and must not rewrite the in-flight order policy.
+        unset($existingOrderSnapshot['_store'], $incomingOrderSnapshot['_store']);
+
         return $storeOrder->getStore()->getUuid() === $store->getUuid()
             && $storeOrder->getStoreCodeSnapshot() === $data['storeCode']
             && $storeOrder->getStoreNameSnapshot() === $data['storeName']
             && $storeOrder->getCustomerUserUuid() === $data['customerUserUuid']
             && $storeOrder->getCurrency() === $data['currency']
             && $storeOrder->getTotalAmount() === $data['totalAmount']
-            && $storeOrder->getOrderSnapshot() === $data['orderSnapshot']
+            && $existingOrderSnapshot === $incomingOrderSnapshot
             && $storeOrder->isVerificationRequired() === $data['verificationRequired'];
     }
 

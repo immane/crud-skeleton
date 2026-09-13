@@ -57,7 +57,9 @@ final class StoreOrderWorkflowGuardListener implements EventSubscriberInterface
         \assert($order instanceof Order);
         $metadata = $order->getMetadata();
         $store = is_array($metadata) ? ($metadata['_store'] ?? null) : null;
-        if (!is_array($store) || ($store['requireAcceptance'] ?? false) !== true) {
+        // Orders created before this policy was introduced have no flag. Preserve
+        // their former behavior: Store acceptance remains required before confirm.
+        if (!is_array($store) || (array_key_exists('requireAcceptance', $store) && $store['requireAcceptance'] !== true)) {
             // Acceptance not required for this order: Trade flows without waiting.
             return;
         }

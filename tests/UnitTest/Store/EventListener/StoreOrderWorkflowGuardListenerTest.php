@@ -43,6 +43,20 @@ final class StoreOrderWorkflowGuardListenerTest extends TestCase
         self::assertFalse($event->isBlocked());
     }
 
+    public function testConfirmKeepsLegacyAcceptanceRequirementWhenPolicyIsMissing(): void
+    {
+        $order = (new Order())->setStatus(Order::STATUS_PENDING)->setMetadata(['_store' => ['uuid' => 'store-uuid']]);
+        $repository = $this->createMock(OrderStoreLifecycleRepository::class);
+        $repository->expects(self::once())->method('findOneByTradeOrderUuid')->with($order->getUuid())->willReturn(
+            new OrderStoreLifecycle($order->getUuid(), 'store-uuid'),
+        );
+        $event = new GuardEvent($order, new Marking([Order::STATUS_PENDING => 1]), new Transition('confirm', Order::STATUS_PENDING, Order::STATUS_CONFIRMED));
+
+        (new StoreOrderWorkflowGuardListener($repository))->onGuard($event);
+
+        self::assertTrue($event->isBlocked());
+    }
+
     public function testConfirmWaitsForAcceptanceFactWhenAcceptanceIsRequired(): void
     {
         $order = (new Order())->setStatus(Order::STATUS_PENDING)->setMetadata(['_store' => ['uuid' => 'store-uuid', 'requireAcceptance' => true]]);

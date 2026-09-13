@@ -71,6 +71,7 @@ final readonly class TradeOrderCreatedHandler
                 return;
             }
 
+            $policy = $this->storePolicy($payload);
             $storeOrder = $this->storeOrderService->createFromTradeOrderSnapshot($store, $payload);
             if ($cancellation !== null) {
                 $this->storeOrderService->cancel($storeOrder);
@@ -80,8 +81,8 @@ final readonly class TradeOrderCreatedHandler
                 return;
             }
 
-            if (!$this->inventoryEnabled || !$this->storePolicy($payload)['requireInventory']) {
-                if ($this->storePolicy($payload)['requireAcceptance']) {
+            if (!$this->inventoryEnabled || !$policy['requireInventory']) {
+                if ($policy['requireAcceptance']) {
                     // Manual acceptance: leave pending for staff accept/reject via API.
                     return;
                 }

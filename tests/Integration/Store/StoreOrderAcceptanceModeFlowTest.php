@@ -125,6 +125,11 @@ final class StoreOrderAcceptanceModeFlowTest extends IntegrationWebTestCase
         self::assertInstanceOf(StoreOrder::class, $order);
         self::assertSame(StoreOrder::STATUS_AWAITING_INVENTORY, $order->getOperationalStatus());
 
+        // The policy was frozen in the order snapshot. Later Store setting changes
+        // must not auto-accept this in-flight order.
+        $store->setSettings(['order' => ['requireAcceptance' => false, 'requireInventory' => true]]);
+        $container->get(EntityManagerInterface::class)->flush();
+
         $container->get(\App\Store\MessageHandler\ReservationConfirmedHandler::class)(new \App\Inventory\Message\ReservationConfirmedMessage([
             'eventId' => '20000000-0000-4000-8000-000000000006',
             'type' => 'inventory.reservation.confirmed',
@@ -157,9 +162,9 @@ final class StoreOrderAcceptanceModeFlowTest extends IntegrationWebTestCase
 
         $this->handle($container, '20000000-0000-4000-8000-000000000007', $this->snapshot($store, $orderUuid, []));
 
-        // Policy flags live in the event payload, not on the StoreOrder entity: a
-        // redelivery carrying changed flags still matches the existing order and
-        // stays idempotent instead of conflicting.
+        // The initial delivery freezes the policy in order_snapshot. A redelivery
+        // carrying changed flags still matches the existing order and stays
+        // idempotent instead of conflicting.
         $this->handle($container, '20000000-0000-4000-8000-000000000008', $this->snapshot($store, $orderUuid, ['requireAcceptance' => true]));
 
         $order = $container->get(StoreOrderRepository::class)->findOneByTradeOrderUuid($orderUuid);
