@@ -86,10 +86,10 @@ sequenceDiagram
     participant W as Wallet
     participant Se as Settlement
 
-    Note over T,S: StoreContext via X-Store-Code, StoreSettings が受付/検証を制御
+    Note over T,S: StoreContext via X-Store-Code, _completionMode スナップショット
     Note over S,I: INVENTORY_ENABLED は 0 がデフォルトで予約をスキップ
 
-    T->>T: createOrder() store_submit（トランザクション）
+    T->>T: createOrder() submit（トランザクション）+ _completionMode
     T->>TO: trade.order.created.v1（トランザクション）
     TO-->>S: リレー
 
@@ -114,7 +114,7 @@ sequenceDiagram
     SO-->>T: リレー
     T->>T: store_accept / store_reject
 
-    Note over T,P: StoreSettings が要求する場合のみ store_accept が必要、その後明示的に確認
+    Note over T,P: Payment via confirmed -> paid, no Store gate
     T->>P: 請求書を作成して決済同期 Wallet wallet_balance 調整経由
     opt wallet amount
         P->>W: 控除振替（トランザクション）

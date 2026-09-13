@@ -10,6 +10,7 @@ use App\Authorization\Service\AssignmentService;
 use App\Authorization\Service\AuthorizationAuditService;
 use App\Authorization\Service\AuthorizationCacheInvalidator;
 use App\Core\Controller\RestController;
+use App\Core\Query\DqlExpression;
 use App\Core\Utils\UUID;
 use App\Core\View\ApiView;
 use App\Core\View\CreateApiViewMixin;
@@ -48,48 +49,20 @@ class AssignmentController extends RestController
     ) {
     }
 
-    /**
-     * @param array<string, mixed>|\Doctrine\ORM\QueryBuilder|\App\Core\Query\DqlExpression|null $filter
-     * @return array<string, mixed>|\Doctrine\ORM\QueryBuilder|\App\Core\Query\DqlExpression|null
-     */
-    protected function listFilter(array|\Doctrine\ORM\QueryBuilder|\App\Core\Query\DqlExpression|null $filter = null): array|\Doctrine\ORM\QueryBuilder|\App\Core\Query\DqlExpression|null
+    /** @param array<string, mixed>|\Doctrine\ORM\QueryBuilder|DqlExpression|null $filter */
+    protected function listFilter(array|\Doctrine\ORM\QueryBuilder|DqlExpression|null $filter = null): DqlExpression
     {
         $request = $this->getRequestStack()->getCurrentRequest();
-        if ($request === null) {
-            return $filter;
-        }
-        $userUuid = $request->query->get('userUuid');
-        $roleId = $request->query->get('roleId');
-        $scopeType = $request->query->get('scopeType');
-        $scopeUuid = $request->query->get('scopeUuid');
-        $includeRevoked = $request->query->getBoolean('includeRevoked', false);
-
-        $criteria = [];
-        if (\is_string($userUuid) && $userUuid !== '') {
-            $criteria['userUuid'] = $userUuid;
-        }
-        if (\is_string($scopeType) && $scopeType !== '') {
-            $criteria['scopeType'] = $scopeType;
-        }
-        if (\is_string($scopeUuid) && $scopeUuid !== '') {
-            $criteria['scopeUuid'] = $scopeUuid;
-        }
-        if (!$includeRevoked) {
-            $criteria['revokedAt'] = null;
-        }
-
-        if ($filter instanceof \Doctrine\ORM\QueryBuilder) {
-            foreach ($criteria as $k => $v) {
-                $alias = $filter->getRootAliases()[0];
-                $filter->andWhere("$alias.$k = :$k")->setParameter($k, $v);
+        $parts = $request?->query->getBoolean('includeRevoked', false) ? ['entity.getId() > 0'] : ['!entity.getRevokedAt()'];
+        $values = [];
+        foreach (['userUuid', 'scopeType', 'scopeUuid'] as $field) {
+            $value = $request?->query->get($field);
+            if (\is_string($value) && $value !== '') {
+                $parts[] = 'entity.get' . ucfirst($field) . '() == ' . $field;
+                $values[$field] = $value;
             }
-            return $filter;
         }
-        if (\is_array($filter)) {
-            return array_merge($criteria, $filter);
-        }
-
-        return $criteria;
+        return new DqlExpression(implode(' && ', $parts), $values);
     }
 
     /**

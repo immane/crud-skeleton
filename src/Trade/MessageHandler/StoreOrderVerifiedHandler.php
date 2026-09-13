@@ -33,8 +33,7 @@ final readonly class StoreOrderVerifiedHandler
         $payload = $message->envelope['payload'] ?? null;
         $orderUuid = is_array($payload) ? ($payload['orderUuid'] ?? null) : null;
         $storeUuid = is_array($payload) ? ($payload['storeUuid'] ?? null) : null;
-        $verificationCode = is_array($payload) ? ($payload['verificationCode'] ?? null) : null;
-        if (!is_string($orderUuid) || !is_string($storeUuid) || !is_string($verificationCode) || trim($verificationCode) === '') {
+        if (!is_string($orderUuid) || !is_string($storeUuid)) {
             throw new \InvalidArgumentException('Invalid store.order.verified.v1 envelope.');
         }
 

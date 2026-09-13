@@ -26,9 +26,9 @@ final class StoreServiceTest extends TestCase
         $entityManager->expects(self::once())->method('persist')->with(self::isInstanceOf(Store::class));
         $service = new StoreService($this->createContainer($entityManager), $repository);
 
-        $store = $service->createStore('xuhui', 'Xuhui Store', 'Asia/Shanghai');
+        $store = $service->createStore('demo', 'Demo Store', 'Asia/Shanghai');
 
-        self::assertSame('xuhui', $store->getCode());
+        self::assertSame('demo', $store->getCode());
         self::assertSame('Asia/Shanghai', $store->getTimezone());
     }
 
@@ -39,7 +39,7 @@ final class StoreServiceTest extends TestCase
         $service = new StoreService($this->createContainer($entityManager), $repository);
 
         $this->expectException(\InvalidArgumentException::class);
-        $service->createStore(' ', 'Xuhui Store', 'Asia/Shanghai');
+        $service->createStore(' ', 'Demo Store', 'Asia/Shanghai');
     }
 
     public function testCreateStoreRejectsInvalidTimezoneAndDuplicateCode(): void
@@ -53,15 +53,15 @@ final class StoreServiceTest extends TestCase
         $service = new StoreService($this->createContainer($entityManager), $repository);
 
         try {
-            $service->createStore('xuhui', 'Xuhui Store', 'Invalid/Timezone');
+            $service->createStore('demo', 'Demo Store', 'Invalid/Timezone');
             self::fail('Expected invalid timezone exception.');
         } catch (\InvalidArgumentException $exception) {
             self::assertSame('Store timezone must be a valid IANA timezone.', $exception->getMessage());
         }
 
-        $existingStore = new Store('xuhui', 'Existing Store', 'Asia/Shanghai');
+        $existingStore = new Store('demo', 'Existing Store', 'Asia/Shanghai');
         $this->expectException(\LogicException::class);
-        $service->createStore('xuhui', 'Xuhui Store', 'Asia/Shanghai');
+        $service->createStore('demo', 'Demo Store', 'Asia/Shanghai');
     }
 
     public function testFindActiveByUuidExcludesInactiveStores(): void

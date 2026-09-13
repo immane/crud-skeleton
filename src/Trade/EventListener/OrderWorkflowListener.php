@@ -23,11 +23,10 @@ use Symfony\Component\Workflow\Event\TransitionEvent;
  * After each meaningful transition, a domain event is dispatched:
  *   pay → OrderPaidEvent
  *   fulfill → OrderFulfilledEvent
- *   * → completed (complete via Trade or store_verify via Store) → OrderCompletedEvent
+ *   complete → OrderCompletedEvent
  *   cancel → OrderCancelledEvent
  *   refund → OrderRefundedEvent
  *
- * Completed is status-driven so Trade does not need to know Store transition names.
  * Other modules subscribe to these events without depending on Trade internals.
  *
  * @see config/packages/workflow.yaml for the state machine definition
@@ -65,7 +64,7 @@ class OrderWorkflowListener implements EventSubscriberInterface
             $transitionName,
         ));
 
-        // Set timestamps - Trade owns pay/fulfill/cancel/refund/complete; store_verify lands in completed via Store
+        // Trade owns all Order status transitions and their timestamps.
         switch ($transitionName) {
             case 'cancel':
                 $order->setCancelledAt(new \DateTimeImmutable());
@@ -89,11 +88,6 @@ class OrderWorkflowListener implements EventSubscriberInterface
                 }
                 break;
         }
-        // Store-driven store_verify also lands in completed but Trade should not know the name; handle generically
-        if ($order->getStatus() === Order::STATUS_COMPLETED && $transitionName !== 'complete') {
-            $order->setCompletedAt(new \DateTimeImmutable());
-        }
-
         // Dispatch domain events for cross-module subscribers
         $domainEvent = match ($transitionName) {
             'cancel' => new OrderCancelledEvent($order),
@@ -101,7 +95,7 @@ class OrderWorkflowListener implements EventSubscriberInterface
             'fulfill' => new OrderFulfilledEvent($order),
             'complete' => new OrderCompletedEvent($order),
             'refund' => new OrderRefundedEvent($order),
-            default => $order->getStatus() === Order::STATUS_COMPLETED ? new OrderCompletedEvent($order) : null,
+            default => null,
         };
 
         if ($domainEvent !== null) {

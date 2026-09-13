@@ -301,17 +301,25 @@ trait BaseServiceReadListTrait
      */
     private function bindFilterParameters(object $qb, string $dql, iterable $parameters): string
     {
+        if (!method_exists($qb, 'setParameter')) {
+            throw new \LogicException('Filter query builder must support parameter binding.');
+        }
+
         $names = [];
-        try {
+        if (method_exists($qb, 'getParameters')) {
             foreach ($qb->getParameters() as $parameter) {
+                if (!is_object($parameter) || !method_exists($parameter, 'getName')) {
+                    continue;
+                }
                 $names[$parameter->getName()] = true;
             }
-        } catch (\Throwable) {
-            // Lightweight test query builders may not expose Doctrine parameters.
         }
 
         $counter = 0;
         foreach ($parameters as $parameter) {
+            if (!method_exists($parameter, 'getName') || !method_exists($parameter, 'getValue')) {
+                throw new \LogicException('Filter parameters must expose a name and value.');
+            }
             $name = $parameter->getName();
             $boundName = $name;
             if (isset($names[$name])) {

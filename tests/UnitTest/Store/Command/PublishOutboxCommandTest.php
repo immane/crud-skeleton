@@ -9,8 +9,7 @@ use App\Inventory\Message\ReservationRequestedMessage;
 use App\Store\Command\PublishOutboxCommand;
 use App\Store\Entity\StoreOutboxMessage;
 use App\Store\Repository\StoreOutboxMessageRepository;
-use App\Trade\Message\StoreOrderAcceptedMessage;
-use App\Trade\Message\StoreOrderRejectedMessage;
+use App\Trade\Message\StoreOrderVerifiedMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -43,7 +42,7 @@ final class PublishOutboxCommandTest extends TestCase
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $bus = $this->createMock(MessageBusInterface::class);
 
-        $message = new StoreOutboxMessage('store.order.accepted.v1', 'store_order', 'order-11111111-1111-4111-8111-111111111111', ['orderUuid' => 'order-11111111-1111-4111-8111-111111111111']);
+        $message = new StoreOutboxMessage('store.order.verified.v1', 'store_order', 'order-11111111-1111-4111-8111-111111111111', ['orderUuid' => 'order-11111111-1111-4111-8111-111111111111']);
 
         $repository->expects(self::once())->method('findUnpublished')->willReturn([$message]);
         $repository->expects(self::never())->method('claim');
@@ -63,7 +62,7 @@ final class PublishOutboxCommandTest extends TestCase
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $bus = $this->createMock(MessageBusInterface::class);
 
-        $message = $this->outboxMessage(11, 'store.order.accepted.v1');
+        $message = $this->outboxMessage(11, 'store.order.verified.v1');
 
         $repository->expects(self::once())->method('findUnpublished')->willReturn([$message]);
         $repository->expects(self::once())
@@ -113,15 +112,14 @@ final class PublishOutboxCommandTest extends TestCase
         $bus = $this->createMock(MessageBusInterface::class);
 
         $messages = [
-            $this->outboxMessage(21, 'store.order.accepted.v1'),
-            $this->outboxMessage(22, 'store.order.rejected.v1'),
-            $this->outboxMessage(23, 'inventory.reservation.requested.v1'),
-            $this->outboxMessage(24, 'inventory.reservation.release.requested.v1'),
+            $this->outboxMessage(21, 'store.order.verified.v1'),
+            $this->outboxMessage(22, 'inventory.reservation.requested.v1'),
+            $this->outboxMessage(23, 'inventory.reservation.release.requested.v1'),
         ];
 
         $repository->expects(self::once())->method('findUnpublished')->willReturn($messages);
         $claimed = [];
-        $repository->expects(self::exactly(4))
+        $repository->expects(self::exactly(3))
             ->method('claim')
             ->with(self::isInt(), self::isInstanceOf(\DateTimeImmutable::class))
             ->willReturnCallback(function (int $id, \DateTimeImmutable $until) use (&$claimed): bool {
@@ -131,7 +129,7 @@ final class PublishOutboxCommandTest extends TestCase
             });
 
         $dispatched = [];
-        $bus->expects(self::exactly(4))
+        $bus->expects(self::exactly(3))
             ->method('dispatch')
             ->with(self::callback(static function (object $busMessage) use (&$dispatched): bool {
                 $dispatched[] = $busMessage;
@@ -147,12 +145,11 @@ final class PublishOutboxCommandTest extends TestCase
         $exitCode = $this->runCommand($repository, $entityManager, $bus);
 
         self::assertSame(Command::SUCCESS, $exitCode);
-        self::assertStringContainsString('Published 4 Store outbox message(s).', $this->display());
-        self::assertCount(4, $dispatched);
-        self::assertInstanceOf(StoreOrderAcceptedMessage::class, $dispatched[0]);
-        self::assertInstanceOf(StoreOrderRejectedMessage::class, $dispatched[1]);
-        self::assertInstanceOf(ReservationRequestedMessage::class, $dispatched[2]);
-        self::assertInstanceOf(ReservationReleaseRequestedMessage::class, $dispatched[3]);
+        self::assertStringContainsString('Published 3 Store outbox message(s).', $this->display());
+        self::assertCount(3, $dispatched);
+        self::assertInstanceOf(StoreOrderVerifiedMessage::class, $dispatched[0]);
+        self::assertInstanceOf(ReservationRequestedMessage::class, $dispatched[1]);
+        self::assertInstanceOf(ReservationReleaseRequestedMessage::class, $dispatched[2]);
 
         foreach ($messages as $index => $message) {
             self::assertTrue($message->isPublished(), 'Message ' . $index . ' should be marked published');
@@ -171,7 +168,7 @@ final class PublishOutboxCommandTest extends TestCase
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $bus = $this->createMock(MessageBusInterface::class);
 
-        $message = $this->outboxMessage(31, 'store.order.accepted.v1');
+        $message = $this->outboxMessage(31, 'store.order.verified.v1');
 
         $repository->expects(self::once())->method('findUnpublished')->willReturn([$message]);
         $repository->expects(self::once())

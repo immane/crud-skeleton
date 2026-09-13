@@ -18,13 +18,9 @@ class Order
 {
     public const STATUS_DRAFT = 'draft';
     public const STATUS_PENDING = 'pending';
-    public const STATUS_AWAITING_STORE_ACCEPTANCE = 'awaiting_store_acceptance';
-    public const STATUS_STORE_ACCEPTED = 'store_accepted';
-    public const STATUS_STORE_REJECTED = 'store_rejected';
     public const STATUS_CONFIRMED = 'confirmed';
     public const STATUS_PAID = 'paid';
     public const STATUS_FULFILLED = 'fulfilled';
-    public const STATUS_AWAITING_STORE_VERIFICATION = 'awaiting_store_verification';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_REFUNDED = 'refunded';
@@ -44,7 +40,7 @@ class Order
     #[ORM\Column(type: 'bigint', options: ['default' => 0])]
     private int $totalAmount = 0;
 
-    #[ORM\Column(type: 'string', length: 10, options: ['default' => 'CNY'])]
+    #[ORM\Column(type: 'string', length: 32, options: ['default' => 'CNY'])]
     private string $currency = 'CNY';
 
     #[ORM\Column(type: 'string', length: 40, options: ['default' => 'draft'])]
@@ -98,6 +94,9 @@ class Order
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /** Set only while the Store verification inbox event applies `complete`. */
+    private bool $completingFromStoreVerification = false;
 
     /**
      * @var Collection<int, OrderItem>
@@ -181,6 +180,23 @@ class Order
         $this->status = $status;
         $this->touch();
         return $this;
+    }
+
+    public function allowCompletionFromStoreVerification(): self
+    {
+        $this->completingFromStoreVerification = true;
+        return $this;
+    }
+
+    public function disallowCompletionFromStoreVerification(): self
+    {
+        $this->completingFromStoreVerification = false;
+        return $this;
+    }
+
+    public function isCompletingFromStoreVerification(): bool
+    {
+        return $this->completingFromStoreVerification;
     }
 
     public function getNotes(): ?string

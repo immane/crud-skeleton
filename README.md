@@ -74,11 +74,11 @@ sequenceDiagram
 ### Commerce Orchestration
 
 Order fulfilment crosses synchronous transaction boundaries and asynchronous event
-delivery. Store acceptance/verification is gated by `StoreSettings` (default: no
-verification — auto-accept) and inventory reservation is gated by
-`INVENTORY_ENABLED` (default `0` = disabled). Settlement is intentionally shown
-separately: it begins with externally confirmed funding, not with an implemented
-Payment-to-Settlement event.
+delivery. Store verification is gated by `Store.settings.fulfillment.requireVerification`
+(default `false`) and completion is snapshotted per order (`_completionMode`);
+inventory reservation is gated by `INVENTORY_ENABLED` (default `0` = disabled).
+Settlement is intentionally shown separately: it begins with externally confirmed
+funding, not with an implemented Payment-to-Settlement event.
 
 ```mermaid
 sequenceDiagram
@@ -93,18 +93,17 @@ sequenceDiagram
     participant W as Wallet
     participant Se as Settlement
 
-    Note over T,S: StoreContext via X-Store-Code, StoreSettings controls acceptance
-    Note over S,I: INVENTORY_ENABLED is 0 by default, skips reservation
+    Note over T,S: StoreContext via X-Store-Code, snapshot _completionMode + verificationRequired
+    Note over S,I: INVENTORY_ENABLED is 0 by default, auto-accepts StoreOrder
 
-    T->>T: createOrder() store_submit (txn)
+    T->>T: createOrder() submit (txn) + _completionMode
     T->>TO: trade.order.created.v1 (txn)
     TO-->>S: relay
 
     alt store inactive
-        S->>SO: store.order.rejected.v1 STORE_UNAVAILABLE (txn)
-    else INVENTORY_ENABLED=0 or immediate accept
-        S->>S: accept storeOrder (txn)
-        S->>SO: store.order.accepted.v1 (txn)
+        S->>S: throw RuntimeException for retry (txn rollback)
+    else INVENTORY_ENABLED=0
+        S->>S: accept storeOrder (txn, no outbox)
     else reservation branch
         S->>SO: inventory.reservation.requested.v1 (txn)
         SO-->>I: relay
@@ -115,13 +114,10 @@ sequenceDiagram
             I->>IO: inventory.reservation.confirmed.v1 (txn)
         end
         IO-->>S: relay
-        S->>S: accept / reject on outcome (txn)
-        S->>SO: store.order.accepted.v1 or rejected.v1 (txn)
+        S->>S: accept / reject locally (txn, no Trade outbox)
     end
-    SO-->>T: relay
-    T->>T: store_accept / store_reject
 
-    Note over T,P: Payment requires store_accept where enforced, then explicit confirmation
+    Note over T,P: Payment via confirmed -> paid, no Store gate
     T->>P: create and pay invoice sync with wallet_balance adjustment
     opt wallet amount
         P->>W: deduction transfer (txn)

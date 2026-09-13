@@ -31,43 +31,13 @@ final class StoreOrderControllerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $this->store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $this->user = new User();
         $this->orderService = $this->createMock(StoreOrderServiceInterface::class);
         $this->storeService = $this->createMock(StoreServiceInterface::class);
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->authorizationChecker->method('isGranted')->willReturn(true);
         $this->controller = new StoreOrderController($this->orderService, $this->storeService);
-    }
-
-    public function testAcceptUsesScopedPermissionAndStoreFilter(): void
-    {
-        $order = $this->order();
-        $request = $this->request('{}');
-        $this->injectDependencies($request);
-        $this->storeService->method('get')->with(['uuid' => $this->store->getUuid()])->willReturn($this->store);
-        $this->orderService->expects(self::once())
-            ->method('get')
-            ->with(['uuid' => $order->getUuid(), 'store' => $this->store])
-            ->willReturn($order);
-        $this->orderService->expects(self::once())->method('accept')->with($order, null)->willReturn($order);
-
-        $response = $this->controller->acceptAction($request, $this->store->getUuid(), $order->getUuid());
-
-        self::assertSame(200, $response->getStatusCode());
-    }
-
-    public function testAcceptReturns404ForAnOrderOutsideTheStoreScope(): void
-    {
-        $orderUuid = '00000000-0000-4000-8000-000000000001';
-        $request = $this->request('{}');
-        $this->injectDependencies($request);
-        $this->storeService->method('get')->with(['uuid' => $this->store->getUuid()])->willReturn($this->store);
-        $this->orderService->method('get')->willReturn(null);
-
-        $response = $this->controller->acceptAction($request, $this->store->getUuid(), $orderUuid);
-
-        self::assertSame(404, $response->getStatusCode());
     }
 
     public function testListUsesCoreLifecycleAuthorizationAndStoreFilter(): void
@@ -87,8 +57,8 @@ final class StoreOrderControllerTest extends TestCase
         return new StoreOrder(
             $this->store,
             '2beed699-4e1b-4a49-af75-2e0b0f6db0fd',
-            'xuhui',
-            'Xuhui',
+            'demo',
+            'Demo',
             $this->user->getUuid(),
             'CNY',
             12800,

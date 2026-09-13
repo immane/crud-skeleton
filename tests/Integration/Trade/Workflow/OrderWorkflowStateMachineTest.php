@@ -197,23 +197,14 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'draft->fulfill' => ['draft', 'fulfill'],
             'draft->complete' => ['draft', 'complete'],
             'draft->refund' => ['draft', 'refund'],
-            'draft->store_accept' => ['draft', 'store_accept'],
-            'draft->store_reject' => ['draft', 'store_reject'],
-            'draft->store_submit' => ['draft', 'store_submit'],
-            'draft->store_verify' => ['draft', 'store_verify'],
-            'draft->request_verification' => ['draft', 'request_verification'],
             'pending->pay' => ['pending', 'pay'],
             'pending->fulfill' => ['pending', 'fulfill'],
             'pending->submit' => ['pending', 'submit'],
-            'pending->store_submit' => ['pending', 'store_submit'],
-            'pending->store_accept' => ['pending', 'store_accept'],
-            'pending->store_reject' => ['pending', 'store_reject'],
             'confirmed->submit' => ['confirmed', 'submit'],
             'confirmed->confirm' => ['confirmed', 'confirm'],
             'confirmed->fulfill' => ['confirmed', 'fulfill'],
             'confirmed->complete' => ['confirmed', 'complete'],
             'confirmed->refund' => ['confirmed', 'refund'],
-            'confirmed->store_submit' => ['confirmed', 'store_submit'],
             'paid->pay' => ['paid', 'pay'],
             'paid->confirm' => ['paid', 'confirm'],
             'paid->complete' => ['paid', 'complete'],
@@ -325,6 +316,10 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
 
     public function testNoTransitionInWorkflowConfigDeclaresAGuard(): void
     {
+        // In the installed Symfony Workflow version the Transition value object
+        // exposes no guard API at all, and config/packages/workflow.yaml does
+        // not set `guard:` on any order transition. Guard enforcement for
+        // No cross-module guard is attached to the Trade state machine. This test pins
         $definition = $this->workflow->getDefinition();
 
         $names = array_map(
@@ -332,6 +327,8 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             $definition->getTransitions(),
         );
 
+        // Multi-from transitions (confirm, cancel) are expanded by Symfony into
+        // one Transition object per (name, from-place) arc.
         $unique = array_values(array_unique($names));
         sort($unique);
 
