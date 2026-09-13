@@ -17,6 +17,7 @@ use App\Trade\Entity\OrderItem;
 use App\Trade\Service\Pricing\PriceCalculationContext;
 use App\Trade\Service\Pricing\PriceCalculationResult;
 use App\Trade\Service\Pricing\PriceCalculatorInterface;
+use App\Trade\Entity\OrderStoreLifecycle;
 use App\Wallet\Repository\WalletRepository;
 use App\Wallet\Service\Transfer\TransferServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -94,7 +95,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
             if ($storeContext !== null) {
                 $metadata ??= [];
                 $metadata['_store'] = $storeContext->toSnapshot();
-                $metadata['_completionMode'] = $storeContext->requireVerification ? 'store_verification' : 'manual';
             }
             $order->setMetadata($metadata);
 
@@ -127,6 +127,9 @@ final class OrderService extends BaseService implements OrderServiceInterface
             }
 
             $this->getEntityManager()->persist($order);
+            if ($storeContext !== null) {
+                $this->getEntityManager()->persist(new OrderStoreLifecycle($order->getUuid(), $storeContext->storeUuid));
+            }
             $this->getEntityManager()->flush();
 
             if ($storeContext !== null) {
@@ -317,5 +320,4 @@ final class OrderService extends BaseService implements OrderServiceInterface
 
         return $calculators;
     }
-
 }

@@ -136,7 +136,7 @@ final class OrderServicePaymentsTest extends TestCase
     {
         $em = $this->createEntityManager();
         $workflow = $this->createMock(WorkflowInterface::class);
-        $workflow->expects(self::once())->method('can')->willReturn(false);
+        $workflow->expects(self::once())->method('can')->with(self::isInstanceOf(Order::class), 'submit')->willReturn(false);
         $workflow->expects(self::never())->method('apply');
 
         $service = $this->createService([

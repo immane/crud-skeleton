@@ -73,6 +73,44 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
     }
 
     // =====================================================================
+    // Store branch
+    // =====================================================================
+
+    public function testStoreBranchAcceptThenConfirmViaDoTransitions(): void
+    {
+        $specId = $this->createSpecification($this->createProduct());
+        $orderId = $this->createOrder($specId);
+
+        // Store workflow decoupled: store_submit no longer exists, orders go pending via submit.
+        [$response] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/store_submit");
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->doTransitionOk($orderId, 'submit', Order::STATUS_PENDING);
+        $this->doTransitionOk($orderId, 'confirm', Order::STATUS_CONFIRMED);
+        $this->doTransitionOk($orderId, 'pay', Order::STATUS_PAID);
+    }
+
+    public function testStoreBranchRejectThenCancelViaDoTransitions(): void
+    {
+        $specId = $this->createSpecification($this->createProduct());
+        $orderId = $this->createOrder($specId);
+
+        [$response] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/store_submit");
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        // After decoupling, rejected store orders auto-cancel via lifecycle; here we just test normal cancel from pending.
+        $this->doTransitionOk($orderId, 'submit', Order::STATUS_PENDING);
+        $this->doTransitionOk($orderId, 'cancel', Order::STATUS_CANCELLED);
+    }
+
+    public function testStoreAcceptIsRejectedFromDraft(): void
+    {
+        $specId = $this->createSpecification($this->createProduct());
+        $orderId = $this->createOrder($specId);
+
+        [$response, $content] = $this->jsonPost("/api/v1/manage/orders/{$orderId}/do/store_accept");
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(400, $content['code']);
+    }
+
     // Cancel from every cancellable state + rejection after paid
     // =====================================================================
 

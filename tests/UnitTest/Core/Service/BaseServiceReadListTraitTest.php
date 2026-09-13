@@ -309,6 +309,31 @@ final class BaseServiceReadListTraitTest extends TestCase
         self::assertSame(1, $em->lastQueryBuilder?->params['filter_parameter_1'] ?? null);
     }
 
+    public function testFilterParametersAreRenamedWhenCommonFilterAlreadyUsesTheirName(): void
+    {
+        $repo = new ReadListFakeRepository([]);
+        $em = new ReadListFakeEntityManager($repo);
+        $service = $this->createService(new ReadListFakeContainer($em), ReadListEntity::class);
+
+        $qb = $this->createMock(QueryBuilder::class);
+        $qb->method('getParameters')->willReturn(new \Doctrine\Common\Collections\ArrayCollection([
+            new \Doctrine\ORM\Query\Parameter('scope', 1),
+        ]));
+        $qb->expects(self::once())
+            ->method('setParameter')
+            ->with('scope_filter_1', 2)
+            ->willReturn($qb);
+
+        $parameter = new class {
+            public function getName(): string { return 'scope'; }
+            public function getValue(): int { return 2; }
+        };
+        $method = new \ReflectionMethod($service, 'bindFilterParameters');
+        $dql = $method->invoke($service, $qb, 'SELECT f.id FROM Entity f WHERE f.scope = :scope', [$parameter]);
+
+        self::assertSame('SELECT f.id FROM Entity f WHERE f.scope = :scope_filter_1', $dql);
+    }
+
     public function testListWithFilterErrorFallsBackToLegacyFilterAndSorter(): void
     {
         $alpha = new ReadListEntity(1, 'alpha');

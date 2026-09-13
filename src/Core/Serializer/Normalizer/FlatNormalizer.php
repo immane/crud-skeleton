@@ -15,11 +15,17 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
 {
     private NormalizerInterface $decorated;
     private PropertyAccessorInterface $accessor;
+    private ExpansionMetadata $expansionMetadata;
 
-    public function __construct(NormalizerInterface $decorated, PropertyAccessorInterface $accessor)
+    public function __construct(
+        NormalizerInterface $decorated,
+        PropertyAccessorInterface $accessor,
+        ExpansionMetadata $expansionMetadata,
+    )
     {
         $this->decorated = $decorated;
         $this->accessor = $accessor;
+        $this->expansionMetadata = $expansionMetadata;
     }
 
 
@@ -98,7 +104,9 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
                 if (method_exists($o, '__toString')) {
                     $res['__toString'] = $o->__toString();
                 }
-                if (method_exists($o, '__metadata')) {
+                if (($expanded = $this->expansionMetadata->get($o)) !== null) {
+                    $res['__metadata'] = $expanded;
+                } elseif (method_exists($o, '__metadata')) {
                     $res['__metadata'] = $o->__metadata();
                 } elseif (property_exists($o, '__metadata')) {
                     $res['__metadata'] = $o->__metadata;
@@ -109,22 +117,6 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
 
             // when object is a relation
             if (is_object($raw) && method_exists($raw, 'getId')) {
-                $isExpanded = ExpansionMetadata::isMarked($raw);
-                if ($isExpanded) {
-                    try {
-                        $full = $this->decorated->normalize($raw, $format, $context);
-                        if (is_array($full)) {
-                            if (method_exists($raw, '__toString')) {
-                                $full['__toString'] = (string) $raw;
-                            }
-                            $full['__metadata'] = $full;
-                            $data[$attribute] = $full;
-                            continue;
-                        }
-                    } catch (\Throwable $e) {
-                        // fallback to reduced
-                    }
-                }
                 $data[$attribute] = $reduceTransform($raw);
                 continue;
             }
@@ -134,24 +126,6 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
                 $tmp = [];
                 foreach ($raw as $o) {
                     if (is_object($o) && method_exists($o, 'getId')) {
-                        // If expanded via @expands (__metadata is object), return full normalized data
-                        $isExpanded = ExpansionMetadata::isMarked($o);
-                        if ($isExpanded) {
-                            try {
-                                $full = $this->decorated->normalize($o, $format, $context);
-                                if (is_array($full)) {
-                                    if (method_exists($o, '__toString')) {
-                                        $full['__toString'] = (string) $o;
-                                    }
-                                    // Keep __metadata marker for frontend compatibility but as expanded data
-                                    $full['__metadata'] = $full;
-                                    $tmp[] = $full;
-                                    continue;
-                                }
-                            } catch (\Throwable $e) {
-                                // fallback to reduced
-                            }
-                        }
                         $tmp[] = $reduceTransform($o);
                     }
                 }

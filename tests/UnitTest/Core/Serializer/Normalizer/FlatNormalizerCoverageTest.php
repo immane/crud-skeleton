@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\UnitTest\Core\Serializer\Normalizer;
 
 use App\Core\Serializer\Normalizer\FlatNormalizer;
+use App\Core\Serializer\ExpansionMetadata;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -24,7 +25,7 @@ final class FlatNormalizerCoverageTest extends TestCase
 {
     public function testNormalizeNonObjectReturnsNull(): void
     {
-        $normalizer = new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor());
+        $normalizer = new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor(), new ExpansionMetadata());
 
         self::assertNull($normalizer->normalize(null, 'json'));
         self::assertNull($normalizer->normalize(123, 'json'));
@@ -33,7 +34,7 @@ final class FlatNormalizerCoverageTest extends TestCase
 
     public function testNormalizeDoctrineOrmObjectWithToStringReturnsString(): void
     {
-        $normalizer = new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor());
+        $normalizer = new FlatNormalizer(new ObjectNormalizer(), PropertyAccess::createPropertyAccessor(), new ExpansionMetadata());
 
         $obj = new \Doctrine\ORM\Mapping\ClassMetadata('App\Some\Entity');
 
@@ -46,7 +47,7 @@ final class FlatNormalizerCoverageTest extends TestCase
     {
         $decorated = $this->createMock(NormalizerInterface::class);
         $decorated->method('normalize')->willThrowException(new \RuntimeException('decorated boom'));
-        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class));
+        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class), new ExpansionMetadata());
 
         $obj = new class {
             public function getId(): int
@@ -69,7 +70,7 @@ final class FlatNormalizerCoverageTest extends TestCase
     {
         $decorated = $this->createMock(NormalizerInterface::class);
         $decorated->method('normalize')->willThrowException(new \RuntimeException('decorated boom'));
-        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class));
+        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class), new ExpansionMetadata());
 
         $result = $normalizer->normalize(new \stdClass(), 'json');
 
@@ -102,7 +103,7 @@ final class FlatNormalizerCoverageTest extends TestCase
 
         $decorated = $this->createMock(NormalizerInterface::class);
         $decorated->method('normalize')->willReturn(['relation' => ['id' => 7]]);
-        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor());
+        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor(), new ExpansionMetadata());
 
         $result = $normalizer->normalize($obj, 'json');
 
@@ -135,7 +136,7 @@ final class FlatNormalizerCoverageTest extends TestCase
 
         $decorated = $this->createMock(NormalizerInterface::class);
         $decorated->method('normalize')->willReturn(['relation' => ['id' => 8]]);
-        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor());
+        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor(), new ExpansionMetadata());
 
         $result = $normalizer->normalize($obj, 'json');
 
@@ -143,6 +144,32 @@ final class FlatNormalizerCoverageTest extends TestCase
             ['id' => 8, '__toString' => 'relation-8', '__metadata' => ['source' => 'property']],
             $result['relation'],
         );
+    }
+
+    public function testRelationReduceTransformUsesExpansionMetadataWithoutEntityMutation(): void
+    {
+        $relation = new class {
+            public function getId(): int
+            {
+                return 9;
+            }
+        };
+        $obj = new class($relation) {
+            public function __construct(public object $relation)
+            {
+            }
+        };
+
+        $metadata = new ExpansionMetadata();
+        $metadata->mark($relation);
+        $decorated = $this->createMock(NormalizerInterface::class);
+        $decorated->method('normalize')->willReturn(['relation' => ['id' => 9]]);
+        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor(), $metadata);
+
+        $result = $normalizer->normalize($obj, 'json');
+
+        self::assertSame($relation, $result['relation']['__metadata']);
+        self::assertFalse(property_exists($relation, '__metadata'));
     }
 
     public function testNormalizeDecodesJsonStringAttribute(): void
@@ -157,7 +184,7 @@ final class FlatNormalizerCoverageTest extends TestCase
             'meta' => '{"a":1,"b":"x"}',
             'plain' => 'not-json',
         ]);
-        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor());
+        $normalizer = new FlatNormalizer($decorated, PropertyAccess::createPropertyAccessor(), new ExpansionMetadata());
 
         $result = $normalizer->normalize($obj, 'json');
 
@@ -168,7 +195,7 @@ final class FlatNormalizerCoverageTest extends TestCase
     public function testDenormalizeThrowsWhenDecoratedCannotDenormalize(): void
     {
         $decorated = $this->createMock(NormalizerInterface::class);
-        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class));
+        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class), new ExpansionMetadata());
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Decorated normalizer cannot denormalize values.');
@@ -178,7 +205,7 @@ final class FlatNormalizerCoverageTest extends TestCase
     public function testSetSerializerForwardsAsNormalizerToNormalizerAwareDecorated(): void
     {
         $decorated = new NormalizerAwareOnlyNormalizerStub();
-        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class));
+        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class), new ExpansionMetadata());
 
         $serializer = new SerializerAndNormalizerStub();
         $normalizer->setSerializer($serializer);
@@ -189,7 +216,7 @@ final class FlatNormalizerCoverageTest extends TestCase
     public function testSetNormalizerForwardsToNormalizerAwareDecorated(): void
     {
         $decorated = new NormalizerAwareOnlyNormalizerStub();
-        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class));
+        $normalizer = new FlatNormalizer($decorated, $this->createMock(PropertyAccessorInterface::class), new ExpansionMetadata());
 
         $inner = $this->createMock(NormalizerInterface::class);
         $normalizer->setNormalizer($inner);

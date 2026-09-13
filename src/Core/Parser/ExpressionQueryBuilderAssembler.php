@@ -139,14 +139,21 @@ class ExpressionQueryBuilderAssembler
         $counter = 0;
         foreach ($params as $name => $value) {
             if (isset($existingParamNames[$name])) {
-                $counter++;
-                $newName = $name . '_x' . $counter;
+                do {
+                    $newName = $name . '_x' . (++$counter);
+                } while (isset($existingParamNames[$newName]) || isset($toSet[$newName]));
                 if ($where !== '') {
-                    $where = str_replace(':' . $name, ':' . $newName, $where);
+                    $where = preg_replace(
+                        '/(?<![A-Za-z0-9_]):' . preg_quote($name, '/') . '(?![A-Za-z0-9_])/',
+                        ':' . $newName,
+                        $where,
+                    ) ?? $where;
                 }
                 $toSet[$newName] = $value;
+                $existingParamNames[$newName] = true;
             } else {
                 $toSet[$name] = $value;
+                $existingParamNames[$name] = true;
             }
         }
 

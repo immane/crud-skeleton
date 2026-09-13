@@ -57,6 +57,8 @@ final class StoreOrderController extends RestController
     protected function storeActionPermissions(): array
     {
         return [
+            'accept' => 'store:order:accept',
+            'reject' => 'store:order:reject',
             'fulfill' => 'store:order:fulfill',
             'verify' => 'store:order:verify',
         ];
@@ -65,6 +67,49 @@ final class StoreOrderController extends RestController
     protected function storeAuthorizationResource(): string
     {
         return 'order';
+    }
+
+    #[Route('/{orderUuid}/accept', name: 'accept', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function acceptAction(Request $request, string $scopeId, string $orderUuid): Response
+    {
+        $this->authorizeStoreAction('accept');
+        $order = $this->storeOrder($orderUuid);
+        if ($order === null) {
+            return $this->warning('Store order not found or access denied.', 404, '', 404);
+        }
+        if (!in_array($order->getOperationalStatus(), [StoreOrder::STATUS_PENDING_VALIDATION, StoreOrder::STATUS_AWAITING_INVENTORY], true)) {
+            return $this->warning('Store order cannot be accepted in its current status.', 400, '', 400);
+        }
+
+        $data = $this->body($request);
+        $reservationId = $data['reservationId'] ?? null;
+        if ($reservationId !== null && !is_string($reservationId)) {
+            return $this->warning('reservationId must be a string.', 400, '', 400);
+        }
+        $this->service->accept($order, $reservationId);
+
+        return $this->success($order, 'Store order accepted.');
+    }
+
+    #[Route('/{orderUuid}/reject', name: 'reject', methods: ['POST'], requirements: ['orderUuid' => '\d+|[0-9a-fA-F-]{36}'])]
+    public function rejectAction(Request $request, string $scopeId, string $orderUuid): Response
+    {
+        $this->authorizeStoreAction('reject');
+        $order = $this->storeOrder($orderUuid);
+        if ($order === null) {
+            return $this->warning('Store order not found or access denied.', 404, '', 404);
+        }
+        if (!in_array($order->getOperationalStatus(), [StoreOrder::STATUS_PENDING_VALIDATION, StoreOrder::STATUS_AWAITING_INVENTORY], true)) {
+            return $this->warning('Store order cannot be rejected in its current status.', 400, '', 400);
+        }
+
+        $data = $this->body($request);
+        if (!is_string($data['code'] ?? null) || trim($data['code']) === '' || !is_string($data['reason'] ?? null) || trim($data['reason']) === '') {
+            return $this->warning('code and reason are required.', 400, '', 400);
+        }
+        $this->service->reject($order, $data['code'], $data['reason']);
+
+        return $this->success($order, 'Store order rejected.');
     }
 
 

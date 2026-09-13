@@ -75,7 +75,8 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
         self::assertSame('accepted', $storeOrder->getOperationalStatus());
 
         $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
-        self::assertCount(0, $outbox);
+        self::assertCount(1, $outbox);
+        self::assertSame('store.order.accepted.v1', $outbox[0]->getTopic());
     }
 
     public function testRejectsAnOrderForAnUnavailableStoreAndConsumesTheEvent(): void
@@ -91,9 +92,12 @@ final class TradeOrderCreatedHandlerTest extends IntegrationWebTestCase
             ],
         ]);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Store is not available.');
         $handler($message);
+
+        $outbox = $container->get(StoreOutboxMessageRepository::class)->findUnpublished();
+        self::assertCount(1, $outbox);
+        self::assertSame('store.order.rejected.v1', $outbox[0]->getTopic());
+        self::assertSame('STORE_UNAVAILABLE', $outbox[0]->getPayload()['reasonCode']);
     }
 
     public function testRejectsMalformedTradeOrderEnvelopes(): void

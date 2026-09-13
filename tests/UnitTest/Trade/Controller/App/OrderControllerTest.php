@@ -174,16 +174,28 @@ final class OrderControllerTest extends TestCase
         $requestStack = new RequestStack();
         $requestStack->push($this->jsonRequest('POST', '/api/v1/app/orders', [
             'items' => [['specificationId' => 1, 'quantity' => 1]],
-            'currency' => 'CNY',
+            'currency' => 'USD',
         ]));
         $this->injectDependencies($requestStack);
         $this->setCurrentUser(1);
 
-        $this->storeContextResolver->method('resolve')->willReturn(new StoreContext('store-uuid-1', 'STORE01', 'Store One'));
-        $this->service->method('calculatePrices')->willReturn($this->priceResult(1000));
+        $this->fakeService->invokeTransaction = true;
+        $this->service->method('new')->willReturn($this->createMock(Order::class));
+        $storeContext = new StoreContext('store-uuid-1', 'STORE01', 'Store One', 'api', 'USD');
+        $this->storeContextResolver->method('resolve')->willReturn($storeContext);
+        $this->service->expects(self::once())
+            ->method('calculatePrices')
+            ->with([['specificationId' => 1, 'quantity' => 1]], 'USD', 'STORE01', [])
+            ->willReturn($this->priceResult(1000, 'USD'));
         $order = $this->orderOwnedBy(1);
         $order->method('getStatus')->willReturn('awaiting_store_acceptance');
-        $this->service->method('createOrder')->willReturn($order);
+        $this->service->expects(self::once())
+            ->method('createOrder')
+            ->willReturnCallback(function (...$arguments) use ($order): Order {
+                self::assertSame('USD', $arguments[3]);
+                self::assertSame('USD', $arguments[6]->currency);
+                return $order;
+            });
 
         $response = $this->controller->createAction($requestStack->getCurrentRequest());
 
@@ -234,13 +246,16 @@ final class OrderControllerTest extends TestCase
         $requestStack = new RequestStack();
         $requestStack->push($this->jsonRequest('POST', '/api/v1/app/orders/quote', [
             'items' => [['specificationId' => 1, 'quantity' => 2]],
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'meta' => ['promo' => 'x'],
         ]));
         $this->injectDependencies($requestStack);
 
-        $this->storeContextResolver->method('resolve')->willReturn(new StoreContext('store-uuid-1', 'STORE01', 'Store One', 'api', 'USD'));
-        $this->service->method('calculatePrices')->willReturn($this->priceResult(2000, 'USD'));
+        $this->storeContextResolver->method('resolve')->willReturn(new StoreContext('store-uuid-1', 'STORE01', 'Store One', 'api', 'EUR'));
+        $this->service->expects(self::once())
+            ->method('calculatePrices')
+            ->with([['specificationId' => 1, 'quantity' => 2]], 'EUR', 'STORE01', ['promo' => 'x'])
+            ->willReturn($this->priceResult(2000, 'EUR'));
 
         $response = $this->controller->quoteAction($requestStack->getCurrentRequest());
 
@@ -248,7 +263,7 @@ final class OrderControllerTest extends TestCase
         $body = json_decode((string) $response->getContent(), true);
         self::assertSame('Quote calculated', $body['message']);
         self::assertSame(2000, $body['data']['totalAmount']);
-        self::assertSame('USD', $body['data']['currency']);
+        self::assertSame('EUR', $body['data']['currency']);
     }
 
     public function testQuoteActionReturns400WhenCalculationFails(): void

@@ -72,7 +72,7 @@
 │   ├── Service/Pricing/                # PriceCalculatorInterface (Base via CatalogResolver, Quantity, Total)
 │   ├── EventListener/OrderWorkflowListener.php
 │   ├── Exception/                      # OrderInvalidTransitionException, SpecificationNotFoundException
-│   └── Controller/App/ + Manage/       # CRUD + workflow + pay/refund/fulfill + items + cancel (catalog via Store)
+│   └── Controller/App/ + Manage/       # App: explicit submit/confirm/cancel/payment/refund (ownership-checked, no generic do/todo); Manage: CRUD + workflow + fulfill/refund + items + cancel (catalog via Store)
 │
 ├── src/Store/                    # Multi-store operational boundary + catalog
 │   ├── Entity/                   # Store, Product (trade_product, nullable store), Specification (trade_specification), membership, StoreOrder, Outbox, Inbox
@@ -168,7 +168,7 @@
 │   ├── UnitTest/                 #   197 files — pure unit tests (no kernel/DB), App\Tests\UnitTest\...
 │   ├── Integration/              #   73 files — kernel/DB/HTTP tests + helpers (DatabaseBootstrapTrait, IntegrationWebTestCase) incl. AuthorizationContentPilotTest (store_content_editor vs metadata_editor field-grant, /app/authorization/me)
 │   └── LowValue/                 #   43 files — deprecated/low-value tests, excluded from default run, App\Tests\LowValue\...
-│                                 主套件 = UnitTest + Integration（2394 tests, 159 notices）；低价值可 --group low-value 显式运行
+│                                 主套件 = UnitTest + Integration（2539 tests, 158 notices）；低价值可 --group low-value 显式运行
 ├── README.md                     # English README (vertical chain Clients→Api→Core→Identity/Authorization/Common/Storage/Promotion→Trade→Store&Inventory/Payment&Wallet→Settlement/Exchange→Messaging→Persistence)
 ├── README.zh-cn.md               # Chinese (Simplified) README
 ├── README.zh-hant.md             # Chinese (Traditional) README
@@ -319,23 +319,20 @@ flowchart TD
 ```
 
 Trade has no `awaiting_store_acceptance` / `store_accepted` / `store_rejected` places.
-Completion from `fulfilled -> completed` is guarded by `metadata._completionMode`:
-`_completionMode == 'store_verification'` blocks direct `complete` unless
-`Order::isCompletingFromStoreVerification()` (set by `StoreOrderVerifiedHandler` /
-`OrderVerificationCompletionListener`). `_completionMode` is a snapshot written at creation
-from `StoreContext.requireVerification` (`store_verification` vs `manual`).
-Out-of-order verification before `fulfill` is stored as `metadata._storeVerificationReceived`
-and completed by `OrderVerificationCompletionListener` on `workflow.order.completed.fulfill`.
+Store acceptance, fulfillment, and verification are projected from Store events into
+`OrderStoreLifecycle`; `confirm` and `complete` are guarded by those facts.
 
 ### 7.2 OrderService Methods
 
 | Method | Description |
 |--------|-------------|
 | `calculatePrices(items, currency, storeCode?, meta?)` | Pipeline: BasePriceCalculator → QuantityCalculator → **TotalAggregator (subtotal, priority 55)** → **PromotionCalculator (priority 60)**. `meta` is an opaque bidirectional channel for calculators. |
-| `createOrder(..., ?StoreContext)` | Creates Order + OrderItems. A resolved StoreContext writes `_store` snapshot and `_completionMode` (`store_verification` when `StoreContext.requireVerification` else `manual`) plus `trade.order.created.v1` in the same transaction (always; Store validates, never acks with accepted/rejected). |
-| `pay(Order, systemWalletId, paymentMethod)` | User wallet → system wallet via `TransferService`. Sets `paidAt`. |
+| `createOrder(..., ?StoreContext)` | Creates Order + OrderItems, the initial Store lifecycle projection, and `trade.order.created.v1` in one transaction. |
+| `createPayment(Order, payment, options)` | Creates/links an Invoice for a confirmed order and pays via gateway. **Reuses only a `pending` invoice**; a failed/cancelled linked invoice is replaced with a fresh one (retry-safe). |
 | `refund(Order, systemWalletId, reason)` | System wallet → user wallet via `TransferService`. Sets `refundedAt`. |
+| `refundPayment(Order, reason, options)` | Refunds via the linked Invoice (`InvoiceService::refund`). |
 | `fulfill(Order, data)` | Set tracking/shipping + `fulfilledAt`. |
+| `cancel(Order)` | Cancels the linked Invoice if present (used by `beforeTransition('cancel')`). |
 
 ### 7.3 Order Entity Fields
 
@@ -359,12 +356,13 @@ and completed by `OrderVerificationCompletionListener` on `workflow.order.comple
 | PUT | `/manage/orders/{id}` | Update draft only |
 | DELETE | `/manage/orders/{id}` | Delete draft only |
 | GET | `/manage/orders/{id}/items` | View order items |
-| POST | `/manage/orders/{id}/pay` | Wallet payment + transition |
 | POST | `/manage/orders/{id}/fulfill` | Fulfill with tracking |
 | POST | `/manage/orders/{id}/refund` | Wallet refund + transition |
 | GET | `/manage/orders/todo` | Orders with pending transitions |
 | GET | `/manage/orders/{id}/transitions` | Available transitions |
-| POST | `/manage/orders/{id}/do/{transition}` | Execute generic transition |
+| POST | `/manage/orders/{id}/do/{transition}` | Execute generic transition (Manage only; `WorkflowApiViewMixin`) |
+
+> Order payment is handled via **Invoice** (`/manage/invoices/{id}/pay/{payment}`), not the Order controller. `OrderService::createPayment()` creates/links the invoice and is called by the App `payment` endpoint.
 
 ### 7.5 App Order Endpoints
 
@@ -373,9 +371,13 @@ and completed by `OrderVerificationCompletionListener` on `workflow.order.comple
 | POST | `/app/orders` | Create order. With trusted `X-Store-Code`, creates order with Store snapshot (`_completionMode` from `requireVerification`) and emits `trade.order.created.v1` for Store to fulfill (Store auto-accepts or reserves inventory, no accepted/rejected relay); without a Store context creates a plain draft order. |
 | **POST** | **`/app/orders/quote`** | **Price preview without creating order** |
 | GET | `/app/orders/{id}/items` | View own order items |
-| GET | `/app/orders/{id}/items` | View own order items |
-| POST | `/app/orders/{id}/cancel` | Cancel own order (draft/pending/confirmed) |
-| POST | `/app/orders/{id}/payment` | **Pay order via gateway (wallet, mock, wechat)** |
+| POST | `/app/orders/{id}/submit` | Submit own order (draft → pending) |
+| POST | `/app/orders/{id}/confirm` | Confirm own order (pending/store_accepted → confirmed) |
+| POST | `/app/orders/{id}/cancel` | Cancel own order (draft/pending/confirmed/store_rejected) |
+| POST | `/app/orders/{id}/payment` | **Pay own order via gateway (wallet, mock, wechat)** — creates/links invoice via `OrderService::createPayment` |
+| POST | `/app/orders/{id}/refund` | **Refund own paid order** — via linked invoice (`refundPayment`) or wallet (`refund`) |
+
+> **App controller does NOT compose `WorkflowApiViewMixin`** — it exposes only explicit, ownership-checked `submit/confirm/cancel/payment/refund` actions (no generic `/{id}/do/{transition}` or `/todo`). This prevents a user from invoking privileged transitions (`pay`, `fulfill`, `complete`, `store_accept`, etc.) directly.
 
 ### 7.6 App Specification Endpoints
 
@@ -654,6 +656,7 @@ Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_pat
 | **Post-response enrichment** | Core | `OpenApiEnricherListener` post-processes `/api/doc` and `/api/doc.json` |
 | **commonFilter** | Controllers | Array criteria or `QueryBuilder` or `DqlExpression` injected into all queries. `[]` = no filter (admin), `['user' => $user]` = user-scoped, `['id' => -1]` = block all, `DqlExpression('entity.getStoreUuid() == storeUuid')` for readable Store scope, QueryBuilder required for `IS NULL` filters |
 | **Payment via wallet** | Trade | `POST /app/orders/{id}/payment` with `payment: "wallet"` creates Invoice → WalletGateway deducts user wallet |
+| **Workflow authorization** | Trade + Core | `WorkflowApiViewMixin` (Manage only) exposes generic `/{id}/do/{transition}` + `/todo`; App controller uses explicit ownership-checked `submit/confirm/cancel/payment/refund` actions instead. `beforeTransition`/`afterTransition` hooks run inside/after the workflow transaction. |
 | **Payment integration migration** | Payment -> Trade | Next phase replaces synchronous Invoice domain-event consumption with Payment Outbox and Trade Inbox; Payment request Inbox/Saga remains deferred |
 | **Balance audit** | Wallet | `GET /app/wallets/balance` audits only current user's wallets; `GET /manage/wallets/balance` is global; `POST /manage/wallets/reconcile` fixes per-wallet gaps with `TYPE_ADJUSTMENT` |
 | **Idempotent deposit** | Wallet | `POST /api/v1/manage/vouchers/deposit` with `referenceId` — duplicate requests return existing transaction |
@@ -798,9 +801,9 @@ Enriches all endpoints (90+):
 - **Low-value exclusion mechanism**: `phpunit.dist.xml` defines the "Project Test Suite" (UnitTest + Integration dirs) and a separate "Low Value" suite; a global `<exclude><group>low-value</group></exclude>` removes every test carrying `#[Group('low-value')]` (class- or method-level) from the default run — covering both whole LowValue files and individual flagged methods inside kept files (from the 2026-08-09 test audit). Run them explicitly with `php bin/phpunit --group low-value` (~480 tests).
 - **DB**: local tests default to SQLite `var/test.db` (paratest uses per-worker SQLite files); CI tests job runs on **PostgreSQL 16**; `migrations.yml` validates the migration chain on **MySQL 8.4**
 - **Coverage**: 90% minimum (enforced in CI), currently **99.46% lines (8511/8557)** from latest local Xdebug run (2026-08-09); Authorization pilot adds 1 integration test (27 assertions) with `DqlExpression` + `in` coverage
-- **Test count**: **2394 tests / 8658 assertions** in the default suite (UnitTest + Integration), plus ~480 low-value tests excluded by default; 31 skipped tests document real `src/` bugs (see §23 and `docs/issues/coverage-2026-08-09/`); **never delete or un-skip them** without fixing the underlying bug
+- **Test count**: **2539 tests / 9169 assertions** in the default suite (UnitTest + Integration), plus ~480 low-value tests excluded by default; 45 skipped tests document real `src/` bugs (see §23 and `docs/issues/coverage-2026-08-09/`); **never delete or un-skip them** without fixing the underlying bug
 - **Suite runtime**: serial ≈ 59 s (kernel-bootstrapping integration tests dominate). Run parallel with paratest for ~2.3× speedup: `PARATEST=1 php vendor/bin/paratest --processes 8 --runner WrapperRunner` (≈26 s; per-worker SQLite isolation is handled by `tests/bootstrap.php`)
-- **PHPUnit Notices**: 159 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more
+- **PHPUnit Notices**: 158 pre-existing mock/no-expectation noise (does not fail the run); new tests should avoid adding more
 - **Memory**: `phpunit.dist.xml` sets test-process `memory_limit=512M` (OpenAPI integration builds the full spec in-process)
 - **Test-quality contract**: `docs/testing/crud-skeleton-production/` (TEST_STRATEGY, TEST_MATRIX, BUSINESS_INVARIANTS, FAILURE_MODES, PRODUCTION_VALIDATION) governs what evidence a change requires before merge/release
 - **Static analysis**: PHPStan Level 8 with zero errors in its configured scope (`src/`, excluding optional SDK code, exception classes, and documented false-positive suppressions). Generic contract via `@template TEntity` on `BaseServiceInterface`/`BaseService` + `@extends` on 18 concrete service pairs. Rector automates Doctrine Collection/Repository PHPDoc with `composer rector:types`; CI enforces `composer rector:types:check` as a dry-run.
@@ -972,7 +975,7 @@ Recipes expand a Specification into material demand. Material demand is aggregat
   3. `src/Wechat/Service/Payment/WechatPayGateway.php:102-126` — notify never passes the request to EasyWeChat → **every real WeChat Pay callback fails**. Fix: `setRequestFromSymfonyRequest($request)` before `serve()`.
   4. `src/Core/Utils/Math.php:85,91` — one-arg `rand()`/`mt_rand()` **crash on PHP 8.5**.
   5. `src/Core/Service/BaseService.php:77` + `ReadListTrait:270` — `$user` is null for all HTTP requests → `@dql/@sort/@hints` 403 even for admins.
-  6. Payment retry deadlock: `OrderService::createPayment()` reuses failed/cancelled invoices → order permanently stuck in `confirmed` (only reuse when status ∈ {pending, paying}).
+  6. ~~Payment retry deadlock: `OrderService::createPayment()` reuses failed/cancelled invoices → order permanently stuck in `confirmed`~~ — **FIXED (2026-09-03)**: `createPayment()` now reuses only a `pending` invoice and creates a fresh one for failed/cancelled invoices.
   7. `src/Trade/Controller/Manage/OrderController.php:329` `/do/{transition}` forwards raw body to `update()` → admin can tamper order fields, bypassing the whitelist.
   8. `src/Trade/MessageHandler/StoreOrderRejectedHandler.php:37` — **Removed** (Store no longer emits `store.order.rejected.v1`; former bug was Store rejection did not cancel the Trade order, now irrelevant — verification is the only Store→Trade path).
   9. Identity controllers: unguarded `json_decode(JSON_THROW_ON_ERROR)` → HTTP 500 on malformed bodies; numeric usernames cannot log in; `CreateUserCommand` persists empty email/username accounts.

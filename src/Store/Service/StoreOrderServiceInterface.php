@@ -18,6 +18,8 @@ interface StoreOrderServiceInterface extends BaseServiceInterface
      */
     public function createFromTradeOrderSnapshot(Store $store, array $snapshot): StoreOrder;
 
+    public function awaitInventory(StoreOrder $storeOrder, string $reservationId): StoreOrder;
+
     public function accept(StoreOrder $storeOrder, ?string $reservationId = null): StoreOrder;
 
     public function reject(StoreOrder $storeOrder, string $code, string $reason): StoreOrder;
@@ -25,5 +27,6 @@ interface StoreOrderServiceInterface extends BaseServiceInterface
     /** @param array<string, mixed>|null $fulfillmentData */
     public function fulfill(StoreOrder $storeOrder, ?array $fulfillmentData = null): StoreOrder;
 
+    public function cancel(StoreOrder $storeOrder): StoreOrder;
     public function verify(StoreOrder $storeOrder, ?string $verifiedBy = null): StoreOrder;
 }

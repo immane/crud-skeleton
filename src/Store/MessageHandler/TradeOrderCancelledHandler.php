@@ -10,6 +10,7 @@ use App\Store\Entity\StoreTradeOrderCancellation;
 use App\Store\Repository\StoreConsumedEventRepository;
 use App\Store\Repository\StoreOrderRepository;
 use App\Store\Repository\StoreTradeOrderCancellationRepository;
+use App\Store\Service\StoreOrderServiceInterface;
 use App\Store\Service\StoreOutboxServiceInterface;
 use App\Trade\Message\TradeOrderCancelledMessage;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +25,7 @@ final readonly class TradeOrderCancelledHandler
         private StoreTradeOrderCancellationRepository $cancellationRepository,
         private StoreOutboxServiceInterface $outboxService,
         private EntityManagerInterface $entityManager,
+        private ?StoreOrderServiceInterface $storeOrderService = null,
     ) {
     }
 
@@ -76,7 +78,11 @@ final readonly class TradeOrderCancelledHandler
                 || in_array($storeOrder->getOperationalStatus(), [StoreOrder::STATUS_CANCELLED, StoreOrder::STATUS_REJECTED, StoreOrder::STATUS_FULFILLED], true)) {
                 return;
             }
-            $storeOrder->cancel();
+            if ($this->storeOrderService !== null) {
+                $this->storeOrderService->cancel($storeOrder);
+            } else {
+                $storeOrder->cancel();
+            }
             $reservationId = $storeOrder->getReservationId();
             if ($reservationId === null) {
                 return;

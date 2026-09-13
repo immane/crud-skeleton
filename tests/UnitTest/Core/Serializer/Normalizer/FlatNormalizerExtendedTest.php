@@ -3,6 +3,7 @@
 namespace App\Tests\UnitTest\Core\Serializer\Normalizer;
 
 use App\Core\Serializer\Normalizer\FlatNormalizer;
+use App\Core\Serializer\ExpansionMetadata;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -14,7 +15,7 @@ final class FlatNormalizerExtendedTest extends TestCase
     {
         $objectNormalizer = new ObjectNormalizer();
         $accessor = PropertyAccess::createPropertyAccessor();
-        return new FlatNormalizer($objectNormalizer, $accessor);
+        return new FlatNormalizer($objectNormalizer, $accessor, new ExpansionMetadata());
     }
 
     public function testNormalizeAddsToString(): void

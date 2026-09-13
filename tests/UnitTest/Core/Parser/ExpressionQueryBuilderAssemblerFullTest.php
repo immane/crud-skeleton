@@ -193,6 +193,38 @@ final class ExpressionQueryBuilderAssemblerFullTest extends TestCase
         self::assertSame($qb, $result);
     }
 
+    public function testApplyToQueryBuilderDoesNotRenameParameterPrefixes(): void
+    {
+        $parser = $this->createMock(ExpressionDqlParser::class);
+        $parser->method('getFragments')->willReturn([
+            'joins' => [],
+            'where' => 'e.first = :p1 AND e.second = :p10',
+            'params' => ['p1' => 1, 'p10' => 10],
+        ]);
+        $parser->method('getDataClass')->willReturn('App\\Common\\Entity\\Content');
+        $parser->method('getRootAlias')->willReturn('filter_entity');
+
+        $qb = $this->createMock(QueryBuilder::class);
+        $qb->method('getRootAliases')->willReturn(['e']);
+        $qb->method('getAllAliases')->willReturn(['e']);
+        $qb->method('getParameters')->willReturn(new \Doctrine\Common\Collections\ArrayCollection([
+            new Parameter('p1', 100),
+        ]));
+        $qb->expects(self::once())
+            ->method('andWhere')
+            ->with('e.first = :p1_x1 AND e.second = :p10')
+            ->willReturn($qb);
+        $qb->expects(self::exactly(2))
+            ->method('setParameter')
+            ->willReturnCallback(static function (string $name, int $value) use ($qb): QueryBuilder {
+                self::assertContains([$name, $value], [['p1_x1', 1], ['p10', 10]]);
+                return $qb;
+            });
+
+        $assembler = new ExpressionQueryBuilderAssembler($this->createMock(EntityManagerInterface::class));
+        $assembler->applyToQueryBuilder($qb, $parser);
+    }
+
     public function testApplyToQueryBuilderAddsFromWhenQueryBuilderHasNoRootAliases(): void
     {
         $parser = $this->createMock(ExpressionDqlParser::class);

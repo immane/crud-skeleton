@@ -126,29 +126,7 @@ trait BaseServiceReadListTrait
 
                 /** @var QueryBuilder $filterQb */
                 $filterQb = $result['qb'];
-                $filterDql = $filterQb->getDQL();
-                // Avoid parameter name collision between commonFilter (DqlExpression) and @filter
-                $existingParams = [];
-                if (is_object($qb) && method_exists($qb, 'getParameters')) {
-                    foreach ($qb->getParameters() as $p) {
-                        if (is_object($p) && method_exists($p, 'getName')) {
-                            $existingParams[$p->getName()] = true;
-                        }
-                    }
-                }
-                foreach ($result['parameters'] as $parameter) {
-                    $oldName = $parameter->getName();
-                    $newName = $oldName;
-                    if (isset($existingParams[$oldName])) {
-                        $counter = 0;
-                        do {
-                            $newName = $oldName . '_' . (++$counter);
-                        } while (isset($existingParams[$newName]));
-                        $filterDql = str_replace(':' . $oldName, ':' . $newName, $filterDql);
-                    }
-                    $qb->setParameter($newName, $parameter->getValue());
-                    $existingParams[$newName] = true;
-                }
+                $filterDql = $this->bindFilterParameters($qb, $filterQb->getDQL(), $result['parameters']);
                 $qb->andWhere((new Expr())->in("$alias.id", $filterDql));
             } catch (\Exception $exception) {
                 $this->logger->error('Filter validation exception: '. $exception->getMessage());
@@ -313,6 +291,53 @@ trait BaseServiceReadListTrait
         if ($request->query->has('@showDQL') && !$this->isDevelopmentEnvironment()) {
             throw new AccessDeniedHttpException('@showDQL is only available in the dev environment.');
         }
+    }
+
+    /**
+     * Bind @filter parameters without overwriting values already applied by a
+     * common filter or caller-provided QueryBuilder.
+     *
+     * @param iterable<object> $parameters
+     */
+    private function bindFilterParameters(object $qb, string $dql, iterable $parameters): string
+    {
+        if (!method_exists($qb, 'setParameter')) {
+            throw new \LogicException('Filter query builder must support parameter binding.');
+        }
+
+        $names = [];
+        if (method_exists($qb, 'getParameters')) {
+            foreach ($qb->getParameters() as $parameter) {
+                if (!is_object($parameter) || !method_exists($parameter, 'getName')) {
+                    continue;
+                }
+                $names[$parameter->getName()] = true;
+            }
+        }
+
+        $counter = 0;
+        foreach ($parameters as $parameter) {
+            if (!method_exists($parameter, 'getName') || !method_exists($parameter, 'getValue')) {
+                throw new \LogicException('Filter parameters must expose a name and value.');
+            }
+            $name = $parameter->getName();
+            $boundName = $name;
+            if (isset($names[$name])) {
+                do {
+                    $boundName = $name . '_filter_' . (++$counter);
+                } while (isset($names[$boundName]));
+                $dql = preg_replace(
+                    '/(?<![A-Za-z0-9_]):' . preg_quote($name, '/') . '(?![A-Za-z0-9_])/',
+                    ':' . $boundName,
+                    $dql,
+                ) ?? $dql;
+            }
+
+            $qb->setParameter($boundName, $parameter->getValue());
+            $names[$boundName] = true;
+        }
+
+        return $dql;
     }
 
     private function assertSafeSelect(string $select): void

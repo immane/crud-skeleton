@@ -40,8 +40,9 @@ final class CoreDynamicQueryApiTest extends IntegrationWebTestCase
             $category->setDescription('desc-' . $name);
             $categories[] = $category;
             $em->persist($category);
+            $categories[$name] = $category;
         }
-        $categories[0]->addChild($categories[1]);
+        $categories['Alpha']->addChild($categories['Beta']);
         $em->flush();
         self::ensureKernelShutdown();
     }
@@ -262,11 +263,13 @@ final class CoreDynamicQueryApiTest extends IntegrationWebTestCase
     public function testExpandsReturnsMetadataWithoutDeprecation(): void
     {
         $client = static::createAuthenticatedClient();
-        $client->request('GET', '/api/v1/manage/categories?@expands=children&@order=entity.id|ASC');
+        $client->request('GET', '/api/v1/manage/categories?@expands=%5B%22parent%22%5D');
 
         self::assertSame(200, $client->getResponse()->getStatusCode());
-        $data = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        self::assertSame('Beta', $data['data'][0]['children'][0]['name']);
+        $body = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $beta = current(array_filter($body['data'], static fn (array $item): bool => $item['name'] === 'Beta'));
+        self::assertArrayHasKey('__metadata', $beta['parent']);
+        self::assertIsArray($beta['parent']['__metadata']);
     }
 
     public function testRegexMatchesWorksOnCurrentDb(): void

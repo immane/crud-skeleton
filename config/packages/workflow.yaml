@@ -1,7 +1,9 @@
 # Workflow definitions for Symfony Workflow component
 # - invoice: Payment invoice lifecycle (App\Payment\Entity\Invoice)
-# - order:   Trade order lifecycle with Store handoff and verification (App\Trade\Entity\Order)
-# Both use state_machine type with method marking_store on `status` property.
+# - order:   Trade order lifecycle (App\Trade\Entity\Order) - core customer/payment flow
+# - store_order: Store operational fulfillment (App\Store\Entity\StoreOrder)
+# Trade and Store lifecycles are decoupled: Trade owns draft->pending->confirmed->paid->fulfilled->completed,
+# Store acceptance is tracked via Trade OrderStoreLifecycle projection and gates confirm.
 
 framework:
     workflows:
@@ -70,12 +72,50 @@ framework:
                     from: [paid, partial_refunded]
                     to: refunded
 
+        # StoreOrder: Store operational fulfillment
         # ---------------------------------------------------------------------
-        # Order: Trade module lifecycle
+        store_order:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'operationalStatus'
+            supports:
+                - App\Store\Entity\StoreOrder
+            initial_marking: pending_validation
+            places:
+                - pending_validation
+                - awaiting_inventory
+                - accepted
+                - rejected
+                - fulfillment_pending
+                - fulfilling
+                - fulfilled
+                - verified
+                - cancelled
+            transitions:
+                await_inventory:
+                    from: pending_validation
+                    to: awaiting_inventory
+                accept:
+                    from: [pending_validation, awaiting_inventory]
+                    to: accepted
+                reject:
+                    from: [pending_validation, awaiting_inventory]
+                    to: rejected
+                fulfill:
+                    from: [accepted, fulfillment_pending, fulfilling]
+                    to: fulfilled
+                verify:
+                    from: fulfilled
+                    to: verified
+                cancel:
+                    from: [pending_validation, awaiting_inventory, accepted, fulfillment_pending, fulfilling]
+                    to: cancelled
+
+        # ---------------------------------------------------------------------
+        # Order: Trade module - core lifecycle (store fulfillment/verification via events)
         # ---------------------------------------------------------------------
         order:
-            # State machine for Trade orders. Marking is via Order::getStatus()/setStatus().
-            # Supports App\Trade\Entity\Order only. Initial place is `draft` (order created locally, not yet submitted).
             type: 'state_machine'
             marking_store:
                 type: 'method'
@@ -84,20 +124,19 @@ framework:
                 - App\Trade\Entity\Order
             initial_marking: draft
             places:
-                # --- Order (core) ---
-                # draft: order created in Trade DB, not yet submitted.
+                # draft: order created, not yet submitted.
                 - draft
 
-                # pending: submitted and waiting for confirmation.
+                # pending: submitted, waiting for store acceptance (if store-scoped) then confirm.
                 - pending
 
-                # confirmed: order confirmed, ready for payment (Invoice creation). Next is pay -> paid.
+                # confirmed: order confirmed, ready for payment.
                 - confirmed
 
-                # paid: payment succeeded (wallet/gateway). Next is fulfill -> fulfilled.
+                # paid: payment succeeded. Next is fulfill -> fulfilled.
                 - paid
 
-                # fulfilled: logistics fulfilled, ready for explicit completion.
+                # fulfilled: logistics fulfilled, ready for completion. Store verification gates complete via lifecycle.
                 - fulfilled
 
                 # completed: order completed. Terminal success.
@@ -106,43 +145,33 @@ framework:
                 # cancelled: terminal cancelled. Only draft, pending, and confirmed can be cancelled.
                 - cancelled
 
-                # refunded: terminal refunded from paid (full refund via Payment). Only paid can go to refunded; no further transitions.
+                # refunded: terminal refunded from paid.
                 - refunded
-
             transitions:
-                # submit: draft -> pending.
                 submit:
                     from: draft
                     to: pending
 
-                # --- Order: confirmation & lifecycle ---
-                # confirm: pending -> confirmed. Internal confirmation step before payment.
                 confirm:
                     from: pending
                     to: confirmed
 
-                # pay: confirmed -> paid. Triggered by OrderService::pay() or Payment InvoicePaidEvent (wallet/gateway). Sets paidAt.
                 pay:
                     from: confirmed
                     to: paid
 
-                # fulfill: paid -> fulfilled. Triggered by OrderService::fulfill() with tracking/shipping data. Sets fulfilledAt.
                 fulfill:
                     from: paid
                     to: fulfilled
 
-                # complete: fulfilled -> completed. Store verification may invoke this normal transition.
                 complete:
                     from: fulfilled
                     to: completed
 
-                # --- Order: terminal ---
-                # cancel: draft/pending/confirmed -> cancelled.
                 cancel:
                     from: [draft, pending, confirmed]
                     to: cancelled
 
-                # refund: paid -> refunded. Only paid orders can be refunded (business rule). Triggered via OrderService::refund() after Payment refund; fulfilled/completed cannot directly refund.
                 refund:
                     from: paid
                     to: refunded

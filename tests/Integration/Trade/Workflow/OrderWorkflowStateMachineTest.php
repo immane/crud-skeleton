@@ -100,6 +100,20 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         self::assertSame([], $this->workflow->getEnabledTransitions($order));
     }
 
+    #[Group('low-value')]
+    public function testPendingCanBeConfirmedThenPaid(): void
+    {
+        $order = new Order();
+        $this->workflow->apply($order, 'submit');
+        self::assertSame(Order::STATUS_PENDING, $order->getStatus());
+
+        $this->workflow->apply($order, 'confirm');
+        self::assertSame(Order::STATUS_CONFIRMED, $order->getStatus());
+
+        $this->workflow->apply($order, 'pay');
+        self::assertSame(Order::STATUS_PAID, $order->getStatus());
+    }
+
     // =====================================================================
     // 2. Every enabled transition from every state (per workflow.yaml)
     // =====================================================================
@@ -195,10 +209,12 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
             'paid->confirm' => ['paid', 'confirm'],
             'paid->complete' => ['paid', 'complete'],
             'paid->cancel' => ['paid', 'cancel'],
+            'paid->store_accept' => ['paid', 'store_accept'],
             'fulfilled->pay' => ['fulfilled', 'pay'],
             'fulfilled->fulfill' => ['fulfilled', 'fulfill'],
             'fulfilled->refund' => ['fulfilled', 'refund'],
             'fulfilled->cancel' => ['fulfilled', 'cancel'],
+            'fulfilled->store_accept' => ['fulfilled', 'store_accept'],
             'completed->pay' => ['completed', 'pay'],
             'completed->complete' => ['completed', 'complete'],
             'completed->cancel' => ['completed', 'cancel'],
@@ -304,7 +320,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         // exposes no guard API at all, and config/packages/workflow.yaml does
         // not set `guard:` on any order transition. Guard enforcement for
         // No cross-module guard is attached to the Trade state machine. This test pins
-        // the set of transition names so accidental renames are caught.
         $definition = $this->workflow->getDefinition();
 
         $names = array_map(
@@ -338,19 +353,6 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
 
         self::assertSame(Order::STATUS_PAID, $order->getStatus());
         self::assertNotNull($order->getPaidAt());
-    }
-
-    public function testStoreVerificationModeBlocksManualCompletion(): void
-    {
-        $order = $this->orderIn(Order::STATUS_FULFILLED);
-        $order->setMetadata(['_completionMode' => 'store_verification']);
-
-        self::assertFalse($this->workflow->can($order, 'complete'));
-
-        $order->allowCompletionFromStoreVerification();
-        $this->workflow->apply($order, 'complete');
-
-        self::assertSame(Order::STATUS_COMPLETED, $order->getStatus());
     }
 
     public function testWorkflowLayerAllowsCompleteWithoutFulfilledAt(): void
@@ -456,6 +458,17 @@ final class OrderWorkflowStateMachineTest extends KernelTestCase
         self::assertNull($order->getCompletedAt());
         self::assertNull($order->getCancelledAt());
         self::assertNull($order->getRefundedAt());
+    }
+
+    #[Group('low-value')]
+    public function testCancelFromPendingSetsCancelledAt(): void
+    {
+        $order = $this->orderIn(Order::STATUS_PENDING);
+
+        $this->workflow->apply($order, 'cancel');
+
+        self::assertInstanceOf(\DateTimeImmutable::class, $order->getCancelledAt());
+        self::assertSame(Order::STATUS_CANCELLED, $order->getStatus());
     }
 
     public function testOrderEntityExposesMarkingViaGetStatusSetStatus(): void

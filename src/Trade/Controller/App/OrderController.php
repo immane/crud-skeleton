@@ -131,7 +131,7 @@ class OrderController extends RestController
                 }
             } else {
                 $currency = $requestedCurrency ?? 'CNY';
-            }
+        }
             $result = $this->service->calculatePrices($items, $currency, $storeContext?->storeCode, $content['meta'] ?? []);
             return $this->success($result, 'Quote calculated');
         } catch (\Throwable $e) {

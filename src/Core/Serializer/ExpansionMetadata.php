@@ -1,30 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Serializer;
 
+/**
+ * Holds request-scoped expansion targets without mutating Doctrine entities.
+ */
 final class ExpansionMetadata
 {
-    /** @var \WeakMap<object, true>|null */
-    private static ?\WeakMap $expanded = null;
+    /** @var \WeakMap<object, object> */
+    private \WeakMap $expanded;
 
-    public static function mark(object $object): void
+    public function __construct()
     {
-        self::expanded()[$object] = true;
+        $this->expanded = new \WeakMap();
     }
 
-    public static function isMarked(object $object): bool
+    public function mark(object $entity): void
     {
-        return isset(self::expanded()[$object]);
+        $this->expanded[$entity] = $entity;
     }
 
-    public static function clear(): void
+    public function get(object $entity): ?object
     {
-        self::$expanded = null;
-    }
-
-    /** @return \WeakMap<object, true> */
-    private static function expanded(): \WeakMap
-    {
-        return self::$expanded ??= new \WeakMap();
+        return $this->expanded[$entity] ?? null;
     }
 }

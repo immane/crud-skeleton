@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\UnitTest\Store\Service;
 
 use App\Store\Entity\Store;
+use App\Store\Entity\StoreOutboxMessage;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
 use App\Store\Service\StoreOutboxService;
@@ -54,7 +55,7 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame($snapshot['items'], $first->getOrderSnapshot()['items']);
     }
 
-    public function testAcceptChangesOnlyTheStoreOrder(): void
+    public function testAcceptPublishesAnAcceptanceEvent(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $persisted = [];
@@ -73,10 +74,12 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame(StoreOrder::STATUS_ACCEPTED, $order->getOperationalStatus());
         self::assertSame('reservation-1', $order->getReservationId());
         self::assertInstanceOf(\DateTimeImmutable::class, $order->getAcceptedAt());
-        self::assertCount(0, $persisted);
+        self::assertCount(1, $persisted);
+        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
+        self::assertSame('store.order.accepted.v1', $persisted[0]->getTopic());
     }
 
-    public function testRejectChangesOnlyTheStoreOrder(): void
+    public function testRejectPublishesARejectionEvent(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $persisted = [];
@@ -96,37 +99,55 @@ final class StoreOrderServiceTest extends TestCase
         self::assertSame('out_of_stock', $order->getRejectionCode());
         self::assertSame('Inventory unavailable', $order->getRejectionReason());
         self::assertInstanceOf(\DateTimeImmutable::class, $order->getRejectedAt());
-        self::assertCount(0, $persisted);
+        self::assertCount(1, $persisted);
+        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
+        self::assertSame('store.order.rejected.v1', $persisted[0]->getTopic());
     }
 
-    public function testFulfillStoresFulfillmentData(): void
+    public function testFulfillRecordsVerificationPolicySnapshot(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $persisted = [];
         $entityManager->method('getRepository')->with(StoreOrder::class)->willReturn($this->createMock(StoreOrderRepository::class));
-        $service = new StoreOrderService($this->createContainer($entityManager), $this->createMock(StoreOrderRepository::class));
-        $order = $this->createOrder();
+        $entityManager->method('persist')->willReturnCallback(static function (object $entity) use (&$persisted): void {
+            $persisted[] = $entity;
+        });
+        $service = new StoreOrderService(
+            $this->createContainer($entityManager),
+            $this->createMock(StoreOrderRepository::class),
+            new StoreOutboxService($entityManager),
+        );
+        $order = $this->createOrder(true);
 
         self::assertSame($order, $service->fulfill($order, ['trackingNumber' => 'TRACK-1']));
         self::assertSame(StoreOrder::STATUS_FULFILLED, $order->getOperationalStatus());
         self::assertSame(['trackingNumber' => 'TRACK-1'], $order->getFulfillmentData());
+        self::assertCount(1, $persisted);
+        self::assertInstanceOf(StoreOutboxMessage::class, $persisted[0]);
+        self::assertSame('store.order.fulfilled.v1', $persisted[0]->getTopic());
+        self::assertTrue($persisted[0]->getPayload()['requiresVerification']);
     }
 
-    public function testAcceptDoesNotRequireAnOutboxService(): void
+    public function testAcceptRequiresAnOutboxService(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->method('getRepository')->with(StoreOrder::class)->willReturn($this->createMock(StoreOrderRepository::class));
         $service = new StoreOrderService($this->createContainer($entityManager), $this->createMock(StoreOrderRepository::class));
 
-        self::assertSame(StoreOrder::STATUS_ACCEPTED, $service->accept($this->createOrder())->getOperationalStatus());
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Store outbox is not configured.');
+        $service->accept($this->createOrder());
     }
 
-    public function testRejectDoesNotRequireAnOutboxService(): void
+    public function testRejectRequiresAnOutboxService(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->method('getRepository')->with(StoreOrder::class)->willReturn($this->createMock(StoreOrderRepository::class));
         $service = new StoreOrderService($this->createContainer($entityManager), $this->createMock(StoreOrderRepository::class));
 
-        self::assertSame(StoreOrder::STATUS_REJECTED, $service->reject($this->createOrder(), 'out_of_stock', 'Unavailable')->getOperationalStatus());
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Store outbox is not configured.');
+        $service->reject($this->createOrder(), 'out_of_stock', 'Unavailable');
     }
 
     public function testCreateFromSnapshotRejectsInvalidSnapshot(): void
@@ -362,7 +383,7 @@ final class StoreOrderServiceTest extends TestCase
         );
     }
 
-    private function createOrder(): StoreOrder
+    private function createOrder(bool $verificationRequired = false): StoreOrder
     {
         return new StoreOrder(
             new Store('demo', 'Demo', 'Asia/Shanghai'),
@@ -373,6 +394,7 @@ final class StoreOrderServiceTest extends TestCase
             'CNY',
             12800,
             ['items' => [], 'delivery' => [], 'placedAt' => '2026-07-24T12:00:00+00:00'],
+            $verificationRequired,
         );
     }
 
