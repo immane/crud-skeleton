@@ -3127,7 +3127,7 @@ Rule followed: <strong>no files under <code>src/</code> were modified</strong> �
 <li><strong>File/line:</strong> <code>src/Store/Service/StoreContextResolver.php:37</code></li>
 <li><strong>Description:</strong> <code>$request-&gt;headers-&gt;get('X-Store-Channel', 'api')</code> returns the header verbatim; an explicitly-present-but-empty header yields channel <code>''</code> instead of <code>'api'</code>.</li>
 <li><strong>Impact:</strong> <code>StoreContext-&gt;channel</code> becomes <code>''</code> for such clients, which can break channel-conditional logic downstream.</li>
-<li><strong>Reproduction:</strong> send <code>X-Store-Code: xuhui</code> and <code>X-Store-Channel:</code> (empty) — <code>resolve()-&gt;channel === ''</code>.</li>
+<li><strong>Reproduction:</strong> send <code>X-Store-Code: demo</code> and <code>X-Store-Channel:</code> (empty) — <code>resolve()-&gt;channel === ''</code>.</li>
 <li><strong>Proposed fix:</strong> use <code>$request-&gt;headers-&gt;get('X-Store-Channel') ?: 'api'</code>.</li>
 </ul>
 <h2 id="skipped-tests">Skipped tests<a class="headerlink" href="#skipped-tests" title="Permanent link">&para;</a></h2>

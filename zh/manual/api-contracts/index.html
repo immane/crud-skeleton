@@ -868,6 +868,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#35-store-trade-multi-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Store &amp; Trade (multi-store)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3277,6 +3288,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#35-store-trade-multi-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Store &amp; Trade (multi-store)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3707,6 +3729,56 @@ the <code>App</code> and <code>Manage</code> controller trees (attribute routing
 </tr>
 </tbody>
 </table>
+<h3 id="35-store-trade-multi-store">3.5 Store &amp; Trade (multi-store)<a class="headerlink" href="#35-store-trade-multi-store" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Access</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/v1/manage/stores</code></td>
+<td>POST</td>
+<td><code>ROLE_ADMIN</code></td>
+<td>Create store (<code>code</code>, <code>name</code>, <code>timezone</code>, <code>currency</code> 1..32 default <code>CNY</code>, <code>contact</code>/<code>address</code>/<code>settings</code> validated via JSON Schema)</td>
+</tr>
+<tr>
+<td><code>/api/v1/manage/stores/{uuid}</code></td>
+<td>PUT</td>
+<td><code>ROLE_ADMIN</code></td>
+<td>Update store (<code>name</code>, <code>timezone</code>, <code>currency</code>, <code>contact</code>, <code>address</code>, <code>settings</code>); <code>code</code> immutable</td>
+</tr>
+<tr>
+<td><code>/api/v1/manage/stores/{uuid}/members</code></td>
+<td>POST</td>
+<td><code>ROLE_ADMIN</code></td>
+<td>Grant membership (<code>userUuid</code>, <code>role</code> <code>owner/manager/clerk/fulfillment</code>) — upsert &amp; re-activate</td>
+</tr>
+<tr>
+<td><code>/api/v1/app/stores/{uuid}/membership</code></td>
+<td>POST</td>
+<td><code>ROLE_USER</code></td>
+<td><strong>Self-join as member</strong> (idempotent, fixed <code>role=clerk</code>, body ignored, <code>200 Already a member</code> / <code>201 Joined</code>)</td>
+</tr>
+<tr>
+<td><code>/api/v1/app/stores/{uuid}/membership</code></td>
+<td>GET</td>
+<td><code>ROLE_USER</code></td>
+<td>Get own membership for store</td>
+</tr>
+<tr>
+<td><code>/api/v1/app/orders</code></td>
+<td>POST</td>
+<td><code>ROLE_USER</code></td>
+<td>Create order — <code>currency</code> is <strong>authoritative from <code>Store</code></strong> via <code>X-Store-Code</code> header (<code>REWARD_POINT</code> for points mall, <code>CNY</code> otherwise); mismatch <code>400 Currency mismatch</code>; global (no header) defaults to <code>CNY</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>StoreContact</code> (<code>Store/StoreContact</code> schema) now includes <code>subTitle</code> (1..100) and <code>tags</code> (array 1..30×20 unique) alongside <code>phone</code>, <code>email</code>, <code>serviceHours</code>, etc.; <code>StoreAddress</code> includes <code>province/city/district/street/detail/formattedAddress/latitude/longitude</code> with <code>additionalProperties:false</code>.</p>
 <hr />
 <h2 id="4-pagination">4. Pagination<a class="headerlink" href="#4-pagination" title="Permanent link">&para;</a></h2>
 <p>List endpoints are paginated through <code>RestController::pagination()</code>:</p>
@@ -3776,7 +3848,7 @@ controller paginates the result.</p>
 </tr>
 <tr>
 <td><code>@expands</code></td>
-<td><code>category,tags</code></td>
+<td><code>specifications</code> / <code>category,tags</code> (supports <code>specifications</code>, <code>a,b</code>, or <code>["a","b"]</code>)</td>
 </tr>
 <tr>
 <td><code>@display</code></td>
@@ -3882,7 +3954,7 @@ are gateway-specific plain text/accepted bytes required by each provider.</p>
 <hr />
 <h2 id="8-reference">8. Reference<a class="headerlink" href="#8-reference" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Design contract: <a href="../../design/api-design/"><t195/></a></li>
+<li>Design contract: <a href="../../design/api-design/"><t249/></a></li>
 <li>Controller + mixins: <code>src/Core/Controller/RestController.php</code>, <code>src/Core/View/*</code></li>
 <li>Auth: <code>src/Identity/Controller/AuthController.php</code>, <code>src/Identity/Controller/OtpController.php</code></li>
 <li>Webhooks: <code>src/Payment/Controller/Webhook/PaymentNotifyController.php</code></li>

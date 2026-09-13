@@ -4542,15 +4542,15 @@ expression. Throws <code>INVALID_CONTENT_FIELD</code> when a field is not a real
 <tbody>
 <tr>
 <td><code>validate(mixed $data, string $schemaName)</code></td>
-<td>Load <code>src/{Bundle}/Resources/JsonSchema/{Name}.json</code> via <code>%kernel.project_dir%</code>, coerce PHP arrays to objects, run draft-07 validation, throw <code>JsonSchemaViolationException</code> on failure (<code>property: message</code>). <code>null</code> is skipped (field is nullable).</td>
+<td>Load <code>src/{Bundle}/Resources/JsonSchema/{Name}.json</code> via <code>%kernel.project_dir%</code>, coerce PHP arrays to objects (empty <code>[]</code> → <code>stdClass</code> when schema <code>type: object</code> to preserve <code>{}</code>), run draft-07 validation, throw <code>JsonSchemaViolationException</code> on failure (<code>property: message</code>). <code>null</code> is skipped (field is nullable).</td>
 </tr>
 <tr>
 <td><code>validateInline(mixed $data, array $inlineSchema)</code></td>
-<td>Validate against an inline schema array.</td>
+<td>Validate against an inline schema array (same empty-object handling).</td>
 </tr>
 </tbody>
 </table>
-<p><code>Store</code> bundle ships <code>StoreAddress</code>, <code>StoreContact</code>, <code>StoreSettings</code> schemas (see <code>store.md §5.1.1</code>); <code>Core</code> owns only the validator. Register <code>App\Core\Validator\JsonSchemaValidator</code> as <code>public: true</code> so <code>Create/UpdateApiViewMixin</code> can fetch it from the container (<code>serviceContainer</code>/<code>container</code>).</p>
+<p><code>Store</code> bundle ships <code>StoreAddress</code>, <code>StoreContact</code> (<code>phone</code>, <code>email</code>, <code>subTitle</code> 1..100, <code>tags</code> array 1..30×20 unique), <code>StoreSettings</code> schemas (see <code>store.md §5.1.1</code>); <code>Core</code> owns only the validator. Empty <code>settings:{}</code> (decoded as <code>[]</code>) is coerced to <code>stdClass</code> for <code>StoreSettings</code> <code>type:object</code> so <code>POST /manage/stores {settings:{}}</code> passes. Register <code>App\Core\Validator\JsonSchemaValidator</code> as <code>public: true</code> so <code>Create/UpdateApiViewMixin</code> can fetch it from the container (<code>serviceContainer</code>/<code>container</code>).</p>
 <h4 id="jsonschemas-on-controllers"><code>jsonSchemas</code> on controllers<a class="headerlink" href="#jsonschemas-on-controllers" title="Permanent link">&para;</a></h4>
 <p>Any controller using <code>CreateApiViewMixin</code>/<code>UpdateApiViewMixin</code> may declare:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="x">protected array $jsonSchemas = [</span>
@@ -4896,8 +4896,13 @@ representation:</p>
 <li>Avoids normalizing Doctrine internal objects (<code>Doctrine\ORM\*</code>,
   <code>Doctrine\Persistence\*</code>) — stringifies or returns the class name.</li>
 <li>Adds <code>__toString</code> at the top level when present.</li>
-<li>Reduces related objects to <code>{id, __toString, __metadata}</code>.</li>
-<li>Expands traversable collections of related objects.</li>
+<li>Reduces related objects to <code>{id, __toString, __metadata}</code>; when
+  <code>__metadata</code> is set (via <code>RestController::expandObjects()</code> for
+  <code>@expands=specifications</code>), the related object is fully normalized
+  (e.g. <code>Product.specifications[]</code> → <code>{id, uuid, name, price, ..., __metadata:{full spec}}</code>)
+  using a <code>clone</code> to avoid self-reference recursion.</li>
+<li>Expands traversable collections of related objects (supports both JSON array
+  <code>["specifications"]</code> and plain/comma-separated <code>specifications</code> / <code>a,b</code>).</li>
 <li>JSON-decodes string-valued fields (excluding numeric strings) into objects.</li>
 <li>On normalization failure returns <code>{id, __toString}</code> or <code>{__class}</code>.</li>
 </ul>

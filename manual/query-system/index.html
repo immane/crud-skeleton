@@ -3471,10 +3471,10 @@ parameters on a <code>GET</code> request.</p>
 </tr>
 <tr>
 <td><code>@expands</code></td>
-<td>JSON</td>
+<td>JSON / list</td>
 <td>View</td>
-<td>Nested relation expansion (<code>__metadata</code>)</td>
-<td><code>category,tags</code></td>
+<td>Nested relation expansion (<code>__metadata</code>) — accepts JSON array <code>["a","b"]</code>, single value <code>a</code>, or comma-separated <code>a,b</code> (all equivalent)</td>
+<td><code>specifications</code> / <code>category,tags</code></td>
 </tr>
 <tr>
 <td><code>@display</code></td>
@@ -3671,10 +3671,22 @@ environment (any environment raises <code>AccessDeniedHttpException</code> other
 <p>Applied after the query, in <code>RestController::success()</code>/<code>requestProcess()</code>, and
 in the create/update mixins.</p>
 <h3 id="expands"><code>@expands</code><a class="headerlink" href="#expands" title="Permanent link">&para;</a></h3>
-<p>JSON array (single quotes allowed, <code>FixJSON</code> handles them) of dotted relation
-chains to expand by attaching a <code>__metadata</code> attribute (the object itself) to
-each related node, so the flat serializer can include it:</p>
+<p>JSON array (single quotes allowed, <code>FixJSON</code> handles them) <strong>or</strong> plain
+comma-separated list / single value (all equivalent) of dotted relation chains
+to expand by attaching a <code>__metadata</code> attribute (clone of the related object) to
+each related node, so <code>FlatNormalizer</code> can include the full normalized data:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a># GET /api/v1/manage/contents?@expands=['category','tags']
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a># GET /api/v1/app/products?@expands=specifications
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a># GET /api/v1/app/products?@expands=specifications,category
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a># GET /api/v1/app/products?@expands=["specifications"]
+</code></pre></div>
+<p>When <code>@expands</code> is present, <code>RestController::expandObjects()</code> sets
+<code>__metadata = clone node</code> (avoids self-reference recursion) and
+<code>FlatNormalizer</code> returns the full decorated normalization for that relation
+(<code>id</code>, <code>uuid</code>, <code>name</code>, <code>price</code>, etc. plus <code>__metadata</code> with the same full data)
+instead of the reduced <code>id/__toString</code> view. Example for <code>Product</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># GET /api/v1/app/products?@expands=specifications&amp;X-Store-Code=BUND
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a># → specifications: [{id:3, name:"经典", price:68000, ..., __metadata:{id:3, name:"经典", price:68000, ...}}]
 </code></pre></div>
 <h3 id="display"><code>@display</code><a class="headerlink" href="#display" title="Permanent link">&para;</a></h3>
 <p>Controls response projection:</p>
@@ -3688,7 +3700,7 @@ each related node, so the flat serializer can include it:</p>
 <li>omitted (default <code>complex</code>) — full serialized entity.</li>
 </ul>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># GET /api/v1/app/products?@display={"title":"entity.name","score":"Math.round(entity.price/100)"}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a># GET /api/v1/app/products?@display={"title":"entity.name","score":"Math.round(entity.price/100)"}
 </code></pre></div>
 <h3 id="transform"><code>@transform</code><a class="headerlink" href="#transform" title="Permanent link">&para;</a></h3>
 <p>Used by <code>CreateApiViewMixin</code>, <code>UpdateApiViewMixin</code>, and <code>Single*</code> mixins. A
@@ -3696,11 +3708,11 @@ JSON object mapping fields to <code>ExpressionLanguage</code> expressions that r
 submitted content. <code>:value</code> is substituted with the submitted field value, and
 <code>Service</code> (a gateway to the related entity's service), <code>entity</code>, <code>Math</code>,
 <code>ArrayCommon</code> are available.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a># POST /api/v1/manage/contents
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a># body:    {"title": "Hi", "category": "Test"}
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a># @transform={"category": "Service.get({'name': ':value'}).getId()"}
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a># GET /api/v1/manage/contents?@transform={"category":"Service.get({'name':':value'}).getId()"}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># POST /api/v1/manage/contents
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a># body:    {"title": "Hi", "category": "Test"}
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a># @transform={"category": "Service.get({'name': ':value'}).getId()"}
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a># GET /api/v1/manage/contents?@transform={"category":"Service.get({'name':':value'}).getId()"}
 </code></pre></div>
 <p>For a to-one relation on the entity, the matching <code>*Service</code> is auto-resolved by
 convention (<code>Entity</code> → <code>Service</code> in the class name). Returns the related
@@ -3719,7 +3731,7 @@ per-item exceptions).</p>
   submitted row (e.g. <code>@basis=id,sku</code>). When empty, no matching occurs (matters
   for upsert decisions).</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># POST /api/v1/manage/products/batch-update?@basis=sku&amp;@mode=mixed
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># POST /api/v1/manage/products/batch-update?@basis=sku&amp;@mode=mixed
 </code></pre></div>
 <hr />
 <h2 id="4-how-list-workflow-flow-works">4. How <code>list()</code> Workflow Flow Works<a class="headerlink" href="#4-how-list-workflow-flow-works" title="Permanent link">&para;</a></h2>
@@ -3731,9 +3743,13 @@ per-item exceptions).</p>
 <li><strong><code>@dql</code></strong> — appended as <code>id IN (subDql)</code>.</li>
 <li><strong><code>@filter</code></strong> — compiled by <code>ExpressionService::buildFilter()</code> →
    <code>ExpressionDqlParser</code> → <code>ExpressionQueryBuilderAssembler</code>; the resulting
-   ids are applied via <code>id IN (filterQb)</code> with parameters merged. On
-   compilation failure, non-admins get <code>AccessDeniedHttpException</code>, admins fall
-   back to in-memory filtering.</li>
+   ids are applied via <code>id IN (filterQb)</code> with parameters merged (parameter
+   names are de-duplicated when <code>commonFilter</code> is a <code>DqlExpression</code> — e.g.
+   <code>Store</code> <code>App/Product</code>'s <code>(!store||store==store) &amp;&amp; status=='active'</code> now
+   coexists with <code>@filter=entity.getName()=="金汤力"</code> as
+   <code>filter_parameter_1</code> vs <code>filter_parameter_1_1</code>). On compilation failure,
+   non-admins get <code>AccessDeniedHttpException</code>, admins fall back to in-memory
+   filtering.</li>
 <li><strong><code>@select</code> / <code>@groupBy</code></strong> — applied; the <code>joiner</code> derives <code>leftJoin</code>s for
    dotted paths.</li>
 <li><strong><code>@order</code></strong> — applied (<code>field|DIRECTION</code>), joins derived as needed.</li>

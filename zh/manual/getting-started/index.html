@@ -555,6 +555,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#async-workers-trade-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async workers (Trade → Store)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verifying-the-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3099,6 +3110,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#async-workers-trade-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async workers (Trade → Store)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verifying-the-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3362,21 +3384,34 @@ functional behind nginx (see <code>docker/nginx/default.conf</code> for the prod
 <p>Related optional variables: <code>OTP_REDIS_DSN</code>, <code>ALIYUN_*</code> (SMS), <code>WECHAT_*</code>
 (WeChat login/pay), <code>MAILER_DSN</code>, <code>MESSENGER_TRANSPORT_DSN</code>, <code>INVENTORY_ENABLED</code>.
 See <code>.env.example</code> for the full reference.</p>
+<h2 id="async-workers-trade-store">Async workers (Trade → Store)<a class="headerlink" href="#async-workers-trade-store" title="Permanent link">&para;</a></h2>
+<p>Docker Compose starts <code>worker</code> (<code>messenger:consume async --time-limit=3600</code>) and <code>scheduler</code> (outbox publish every 5s) automatically. For native PHP or one-shot local verification after creating a <code>X-Store-Code</code> order:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># One-shot: publish loop (5s) in background + consume for 60s (default)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/dev/run-async.sh<span class="w">          </span><span class="c1"># 60s</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>./scripts/dev/run-async.sh<span class="w"> </span><span class="m">120</span><span class="w">      </span><span class="c1"># 120s / 2m</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>./scripts/dev/run-async.sh<span class="w"> </span><span class="m">10</span><span class="w"> </span>--interval<span class="w"> </span><span class="m">2</span><span class="w">  </span><span class="c1"># publish every 2s</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>./scripts/dev/run-async.sh<span class="w"> </span>--dry-run
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># Inside Docker</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>./scripts/dev/run-async.sh<span class="w"> </span><span class="m">60</span>
+</code></pre></div>
+The loop is required because <code>TradeOrderCreatedHandler</code> creates <code>store_outbox</code> rows <em>during</em> <code>consume</code>; a single pre-publish would miss them.</p>
+<p>For long-running native workers, keep the two terminals from <code>QUICKSTART.md</code>:
+<code>messenger:consume async --time-limit=3600</code> + <code>while true; do app:*:outbox:publish; sleep 5; done</code>.</p>
 <h2 id="verifying-the-setup">Verifying the Setup<a class="headerlink" href="#verifying-the-setup" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Swagger UI (also available at http://localhost:8000/api/doc natively)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/api/doc<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">200</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Health/readiness returns JSON when the app, DB, and Redis are reachable</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/health/ready
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Swagger UI (also available at http://localhost:8000/api/doc natively)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/api/doc<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">200</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Health/readiness returns JSON when the app, DB, and Redis are reachable</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/health/ready
 </code></pre></div>
 <p>Log in and capture a token:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/auth/login<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"email":"admin@example.com","password":"P@ssw0rd"}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/auth/login<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"email":"admin@example.com","password":"P@ssw0rd"}'</span>
 </code></pre></div>
 <p>Use the returned <code>token</code> for authenticated calls:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/api/v1/profile<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer &lt;token&gt;"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/api/v1/profile<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer &lt;token&gt;"</span>
 </code></pre></div>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>

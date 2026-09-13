@@ -3314,11 +3314,11 @@ one Messenger bus, but they must behave as if they were independent services.</p
 </tr>
 <tr>
 <td><code>Trade</code></td>
-<td>E-commerce transactions: Order, OrderItem, pricing pipeline, payment orchestration; references Store catalog</td>
+<td>E-commerce transactions: Order (<code>currency</code> from <code>Store</code> via <code>X-Store-Code</code>), OrderItem, pricing pipeline (single currency per order), payment orchestration; references Store catalog</td>
 </tr>
 <tr>
 <td><code>Store</code></td>
-<td>Multi-store operations: Store, Membership, StoreOrder distribution; owns Product and Specification catalog (shared <code>NULL</code> / store-private, <a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
+<td>Multi-store operations: Store (<code>currency</code> varchar(32) DEFAULT <code>CNY</code>, <code>REWARD_POINT</code> for points mall, <code>X-Store-Code</code> → <code>StoreContext</code>), Membership (self-join <code>POST /app/stores/{uuid}/membership</code> as <code>clerk</code>), StoreOrder distribution; owns Product and Specification catalog (shared <code>NULL</code> / store-private, <a href="../../design/store-catalog/">Store Catalog Model</a>)</td>
 </tr>
 <tr>
 <td><code>Inventory</code></td>

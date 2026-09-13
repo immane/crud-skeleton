@@ -936,10 +936,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue" class="md-nav__link">
+  <a href="#63-fulfilled-store-verification-completed-when-_completionmode-store_verification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 Fulfilled → Store verification → Completed (when fulfillment.requireVerification=true)
+        6.3 Fulfilled → Store verification → Completed (when _completionMode == 'store_verification')
       
     </span>
   </a>
@@ -3272,10 +3272,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue" class="md-nav__link">
+  <a href="#63-fulfilled-store-verification-completed-when-_completionmode-store_verification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 Fulfilled → Store verification → Completed (when fulfillment.requireVerification=true)
+        6.3 Fulfilled → Store verification → Completed (when _completionMode == 'store_verification')
       
     </span>
   </a>
@@ -3401,16 +3401,14 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="nt">routing</span><span class="p">:</span>
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCreatedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">            </span><span class="nt">App\Trade\Message\TradeOrderCancelledMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderAcceptedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderVerifiedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="nt">App\Trade\Message\StoreOrderVerifiedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span><span class="w">  </span><span class="c1"># only Store-&gt;Trade message; accepted/rejected removed</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleaseRequestedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationRejectedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="nt">App\Inventory\Message\ReservationReleasedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementFundingConfirmedMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="nt">App\Settlement\Message\SettlementAllocationPostingMessage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 </code></pre></div>
 <ul>
 <li>All integration messages route to the single <code>async</code> transport (a Doctrine table
@@ -3454,7 +3452,7 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 <td>✅ <code>envelope</code></td>
 </tr>
 <tr>
-<td><code>App\Store\Message…</code> → <code>StoreOrderAcceptedMessage</code>, <code>StoreOrderRejectedMessage</code>, <code>StoreOrderVerifiedMessage</code></td>
+<td><code>App\Trade\Message\StoreOrderVerifiedMessage</code></td>
 <td>Store outbox</td>
 <td>Trade</td>
 <td>✅ <code>envelope</code></td>
@@ -3503,9 +3501,9 @@ modules through <strong>inboxes</strong>, connected by Symfony Messenger.</p>
 </tr>
 </tbody>
 </table>
-<p>The Store message classes live in the <strong>Target</strong> module's namespace are imported into the
-producer command; e.g. <code>StoreOrderAcceptedMessage</code>/<code>StoreOrderRejectedMessage</code> are
-<code>App\Trade\Message\*</code> classes consumed by <code>App\Trade\MessageHandler\*</code>, while
+<p>The Store message class lives in the <strong>Target</strong> module's namespace and is imported into the
+producer command; e.g. <code>StoreOrderVerifiedMessage</code> is an <code>App\Trade\Message\*</code> class
+consumed by <code>App\Trade\MessageHandler\StoreOrderVerifiedHandler</code>, while
 <code>ReservationRequestedMessage</code>/<code>ReservationReleaseRequestedMessage</code> are
 <code>App\Inventory\Message\*</code> consumed by <code>App\Inventory\MessageHandler\*</code>.</p>
 <h3 id="22-envelope-structure">2.2 Envelope structure<a class="headerlink" href="#22-envelope-structure" title="Permanent link">&para;</a></h3>
@@ -3617,7 +3615,7 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <tr>
 <td><code>trade.order.created.v1</code></td>
 <td><code>trade_outbox_message</code></td>
-<td>Store (<code>TradeOrderCreatedHandler</code>) — only when <code>settings.order.requireAcceptance=true</code></td>
+<td>Store (<code>TradeOrderCreatedHandler</code>) — always emitted when a <code>StoreContext</code> is present; Store validates and auto-accepts or creates an inventory reservation (no Trade ack)</td>
 </tr>
 <tr>
 <td><code>trade.order.cancelled.v1</code></td>
@@ -3625,19 +3623,19 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <td>Store (<code>TradeOrderCancelledHandler</code>)</td>
 </tr>
 <tr>
-<td><code>store.order.accepted.v1</code></td>
+<td><code>store.order.verified.v1</code></td>
 <td><code>store_outbox_message</code></td>
-<td>Trade (<code>StoreOrderAcceptedHandler</code>)</td>
+<td>Trade (<code>StoreOrderVerifiedHandler</code>) — only when Trade order metadata <code>_completionMode == 'store_verification'</code> (snapshot of <code>StoreContext.requireVerification</code> at creation); payload <code>{orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt}</code> (no <code>verificationCode</code>; audit <code>verifiedBy</code>/<code>verifiedAt</code> only); guard is Trade <code>_completionMode</code></td>
+</tr>
+<tr>
+<td><code>store.order.accepted.v1</code></td>
+<td>—</td>
+<td><strong>Removed</strong> — former Store→Trade acceptance ack; no longer emitted or consumed</td>
 </tr>
 <tr>
 <td><code>store.order.rejected.v1</code></td>
-<td><code>store_outbox_message</code></td>
-<td>Trade (<code>StoreOrderRejectedHandler</code>)</td>
-</tr>
-<tr>
-<td><code>store.order.verified.v1</code></td>
-<td><code>store_outbox_message</code></td>
-<td>Trade (<code>StoreOrderVerifiedHandler</code> → <code>request_verification</code> + <code>store_verify</code>) — only when <code>settings.fulfillment.requireVerification=true</code>; payload <code>{orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}</code> with audit</td>
+<td>—</td>
+<td><strong>Removed</strong> — former Store→Trade rejection ack; no longer emitted or consumed</td>
 </tr>
 <tr>
 <td><code>inventory.reservation.requested.v1</code></td>
@@ -3697,6 +3695,12 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
 <a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="no">sleep "${OUTBOX_PUBLISH_INTERVAL:-5}"</span>
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="no">done</span>
 </code></pre></div>
+<p>For local one-shot verification without Docker, use the bundled helper (publish loop in background + consume <code>async</code> in foreground for a bounded duration, default 60s):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./scripts/dev/run-async.sh<span class="w"> </span><span class="m">60</span><span class="w">        </span><span class="c1"># publish loop (5s) + consume 60s</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/dev/run-async.sh<span class="w"> </span><span class="m">10</span><span class="w"> </span>--interval<span class="w"> </span><span class="m">2</span><span class="w">  </span><span class="c1"># publish every 2s</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./scripts/dev/run-async.sh<span class="w"> </span>2m<span class="w"> </span>--verbose
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>./scripts/dev/run-async.sh<span class="w"> </span><span class="m">60</span>
+</code></pre></div>
 <p>The three standard steps (identical for Trade, Store, Inventory, Settlement):</p>
 <ol>
 <li><strong>Select</strong> unpublished rows older than their <code>available_at</code>
@@ -3711,10 +3715,10 @@ carry <strong>explicit scalar fields</strong> rather than an envelope (see
    can be retried by a later tick. Finally the EntityManager is flushed once.</li>
 </ol>
 <p>Trade's publisher also whitelists topics and treats anything else as an unsupported topic:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="x">if (!in_array($message-&gt;getTopic(), ['trade.order.created.v1', 'trade.order.cancelled.v1'], true)) {</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="x">    $this-&gt;repository-&gt;defer($id, 'Unsupported Trade outbox topic: ' . $message-&gt;getTopic(), new \DateTimeImmutable('+5 minutes'));</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="x">    continue;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">if (!in_array($message-&gt;getTopic(), ['trade.order.created.v1', 'trade.order.cancelled.v1'], true)) {</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">    $this-&gt;repository-&gt;defer($id, 'Unsupported Trade outbox topic: ' . $message-&gt;getTopic(), new \DateTimeImmutable('+5 minutes'));</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    continue;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">}</span>
 </code></pre></div>
 <p>The Inventory publisher is the outlier: it selects an <strong>array projection</strong>
 (<code>findUnpublishedForPublishing()</code>) and marks published/records attempts through direct
@@ -3758,35 +3762,35 @@ handlers do.</p>
 </tbody>
 </table>
 <p>All three share <code>topic</code>, <code>processed_at</code>, and <code>payload_hash</code> (SHA-256 of the JSON-encoded
-envelope). Trade has <strong>no inbox table</strong>: its handlers are guarded by the workflow's
-<code>can(transition)</code> check plus the store-uuid snapshot match inside a transaction, so a
-duplicate <code>store.order.accepted.v1</code> / <code>store.order.rejected.v1</code> is a no-op.</p>
+envelope). Trade has <strong>no inbox table</strong>: <code>StoreOrderVerifiedHandler</code> is guarded by the
+snapshot <code>metadata._completionMode == 'store_verification'</code> plus the store-uuid match inside
+a transaction, and uses <code>metadata._storeVerificationReceived</code> with <code>Order::allowCompletionFromStoreVerification()</code> / <code>OrderCompletionGuardListener</code> so a duplicate <code>store.order.verified.v1</code> is a no-op when already completed or when <code>_completionMode</code> is <code>manual</code>.</p>
 <h3 id="42-idempotency-by-eventid">4.2 Idempotency by <code>eventId</code><a class="headerlink" href="#42-idempotency-by-eventid" title="Permanent link">&para;</a></h3>
 <p>The canonical consumer shape — read-check, then re-check inside the transaction, and
 write the consumed row atomically with the effect:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="x">public function __invoke(TradeOrderCreatedMessage $message): void</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="x">{</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="x">    $eventId = $message-&gt;envelope['eventId'] ?? null;</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="x">    $payload = $message-&gt;envelope['payload'] ?? null;</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="x">    // ...validate...</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="x">    if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="x">        return; // already processed</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="x">    }</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="x">    $this-&gt;entityManager-&gt;wrapInTransaction(function () use ($eventId, ...): void {</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="x">        if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="x">            return; // re-check under the transaction (closes the race window)</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="x">        }</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="x">        $this-&gt;entityManager-&gt;persist(new StoreConsumedEvent(</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="x">            $eventId,</span>
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="x">            'trade.order.created.v1',</span>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="x">            (string) ($payload['orderUuid'] ?? ''),</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="x">            hash('sha256', json_encode($message-&gt;envelope, JSON_THROW_ON_ERROR)),</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="x">        ));</span>
-<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="x">        // ...apply the business effect...</span>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="x">    });</span>
-<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="x">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="x">public function __invoke(TradeOrderCreatedMessage $message): void</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="x">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="x">    $eventId = $message-&gt;envelope['eventId'] ?? null;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="x">    $payload = $message-&gt;envelope['payload'] ?? null;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="x">    // ...validate...</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="x">    if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="x">        return; // already processed</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="x">    }</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="x">    $this-&gt;entityManager-&gt;wrapInTransaction(function () use ($eventId, ...): void {</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="x">        if ($this-&gt;consumedEventRepository-&gt;findOneBy(['eventId' =&gt; $eventId]) !== null) {</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="x">            return; // re-check under the transaction (closes the race window)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="x">        }</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="x">        $this-&gt;entityManager-&gt;persist(new StoreConsumedEvent(</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="x">            $eventId,</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="x">            'trade.order.created.v1',</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="x">            (string) ($payload['orderUuid'] ?? ''),</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="x">            hash('sha256', json_encode($message-&gt;envelope, JSON_THROW_ON_ERROR)),</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="x">        ));</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="x">        // ...apply the business effect...</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="x">    });</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="x">}</span>
 </code></pre></div>
 <p>Inventory tightens this further. Its <code>isAlreadyConsumed()</code> compares the stored
 <code>payload_hash</code> with the hash of the arriving envelope using <code>hash_equals</code>; a reused
@@ -3815,7 +3819,7 @@ simpler: a reused id is silently skipped.</p>
 <ul>
 <li><strong>Trade</strong> assigns <code>correlationId = aggregateId</code> (the trade order uuid) and
   <code>causationId = null</code> on every outbound envelope — the whole order saga (order created →
-  store acceptance → inventory reservation → cancellation) shares that correlation scope.</li>
+  store fulfillment/inventory reservation → verification → cancellation) shares that correlation scope.</li>
 <li><strong>Settlement</strong> is the only module that persists the trace into its domain model:
   <code>SettlementFundingConfirmedMessage</code> carries <code>correlationId</code>/<code>causationId</code>, and
   <code>settlement_plan</code> stores <code>correlation_id</code> and <code>causation_id</code> columns. The
@@ -3836,15 +3840,16 @@ simpler: a reused id is silently skipped.</p>
     participant I as Inventory
     participant IO as Inventory Outbox
 
-    T-&gt;&gt;T: OrderService::createOrder()&lt;br/&gt;(txn) workflow store_submit
-    T-&gt;&gt;TO: (txn) += trade.order.created.v1
+    T-&gt;&gt;T: OrderService::createOrder(storeContext)&lt;br/&gt;(txn) workflow submit + record trade.order.created.v1&lt;br/&gt;metadata._completionMode = requireVerification ? 'store_verification' : 'manual'
+    T-&gt;&gt;TO: (txn) += trade.order.created.v1 {orderUuid, store{uuid,code,name,requireVerification}, items, delivery, placedAt}
     TO-&gt;&gt;S: app:trade:outbox:publish → TradeOrderCreatedMessage
-    S-&gt;&gt;S: (txn) inbox += trade.order.created.v1
-    alt store inactive
-        S-&gt;&gt;SO: (txn) += store.order.rejected.v1 (STORE_UNAVAILABLE)
+    S-&gt;&gt;S: (txn) inbox += trade.order.created.v1 (StoreConsumedEvent)
+    alt store missing or inactive
+        S-&gt;&gt;S: throw RuntimeException('Store is not available.')&lt;br/&gt;Messenger retry (no store.order.rejected.v1)
     else INVENTORY_ENABLED=0
-        S-&gt;&gt;S: accept immediately
-    else reserve
+        S-&gt;&gt;S: create StoreOrder + accept immediately (no outbox to Trade)
+    else INVENTORY_ENABLED=1
+        S-&gt;&gt;S: create StoreOrder + awaitInventory(reservationId)
         S-&gt;&gt;SO: (txn) += inventory.reservation.requested.v1
         SO-&gt;&gt;I: app:store:outbox:publish → ReservationRequestedMessage
         I-&gt;&gt;I: (txn) inbox += requested; InventoryService::reserve()
@@ -3854,11 +3859,10 @@ simpler: a reused id is silently skipped.</p>
             I-&gt;&gt;IO: (txn) += inventory.reservation.confirmed.v1
         end
         IO-&gt;&gt;S: app:inventory:outbox:publish → ReservationConfirmed/Rejected
-        S-&gt;&gt;S: (txn) inbox += outcome; accept/reject storeOrder
-        S-&gt;&gt;SO: (txn) += store.order.rejected.v1 (if rejected)
-        SO-&gt;&gt;T: app:store:outbox:publish → StoreOrderRejectedMessage
-        T-&gt;&gt;T: workflow store_reject / store_accept
+        S-&gt;&gt;S: (txn) inbox += outcome; accept/reject storeOrder locally (no Trade relay)
     end</code></pre>
+<p>Trade always writes <code>trade.order.created.v1</code> when a <code>StoreContext</code> is supplied. Store never
+acks with <code>store.order.accepted/rejected.v1</code>; the only Store→Trade signal is <code>store.order.verified.v1</code> for completion. An unavailable store is a retryable failure, not a rejection event.</p>
 <h3 id="62-order-cancellation-store-inventory-release">6.2 Order cancellation → Store → Inventory release<a class="headerlink" href="#62-order-cancellation-store-inventory-release" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
     autonumber
@@ -3886,21 +3890,31 @@ simpler: a reused id is silently skipped.</p>
             S-&gt;&gt;S: persist StoreTradeOrderCancellation (applied later)
         end
     end</code></pre>
-<h3 id="63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue">6.3 Fulfilled → Store verification → Completed (when <code>fulfillment.requireVerification=true</code>)<a class="headerlink" href="#63-fulfilled-store-verification-completed-when-fulfillmentrequireverificationtrue" title="Permanent link">&para;</a></h3>
+<h3 id="63-fulfilled-store-verification-completed-when-_completionmode-store_verification">6.3 Fulfilled → Store verification → Completed (when <code>_completionMode == 'store_verification'</code>)<a class="headerlink" href="#63-fulfilled-store-verification-completed-when-_completionmode-store_verification" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
     autonumber
     participant T as Trade
     participant S as Store
     participant SO as Store Outbox
-    participant TO as Trade Outbox
 
     T-&gt;&gt;T: fulfill: paid --fulfill--&gt; fulfilled (OrderWorkflowListener sets fulfilledAt)
     S-&gt;&gt;S: StoreOrder fulfill (if accepted) -&gt; fulfilled
-    S-&gt;&gt;S: POST /store/{scopeId}/orders/{uuid}/verify {verificationCode}&lt;br/&gt;StoreOrderService::verify() (txn) verify(code, verifiedBy) -&gt; verifiedAt
-    S-&gt;&gt;SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verificationCode, verifiedBy, verifiedAt}
+    S-&gt;&gt;S: POST /store/{scopeId}/orders/{uuid}/verify&lt;br/&gt;StoreOrderService::verify(verifiedBy) (txn) verify -&gt; verifiedAt&lt;br/&gt;outbox += store.order.verified.v1
+    S-&gt;&gt;SO: (txn) += store.order.verified.v1 {orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt} (no verificationCode)
     SO-&gt;&gt;T: app:store:outbox:publish -&gt; StoreOrderVerifiedMessage
-    T-&gt;&gt;T: (txn) StoreOrderVerifiedHandler: if can(request_verification) apply -&gt; awaiting_store_verification; if can(store_verify) apply -&gt; completed (Trade OrderWorkflowListener sets completedAt via status-driven completed)</code></pre>
-<p>Guard <code>StoreOrderWorkflowGuardListener</code> blocks direct <code>fulfilled --complete--&gt; completed</code> when <code>requireVerification=true</code> and allows <code>request_verification</code> + <code>store_verify</code>. Trade <code>OrderWorkflowListener</code> handles <code>completed</code> status-driven so it never hard-codes <code>store_verify</code>. Store <code>verificationCode</code> is required (≤64) and <code>verifiedBy</code> is the acting staff <code>userUuid</code>.</p>
+    T-&gt;&gt;T: (txn) StoreOrderVerifiedHandler: if _completionMode != 'store_verification' -&gt; no-op;&lt;br/&gt;else _storeVerificationReceived=true; allowCompletionFromStoreVerification(); if can(complete) apply -&gt; completed
+    Note over T: OrderCompletionGuardListener blocks fulfilled --complete--&gt; completed&lt;br/&gt;when _completionMode == 'store_verification' unless isCompletingFromStoreVerification()
+    Note over T: Out-of-order: if verified arrives before fulfilled,&lt;br/&gt;handler stores _storeVerificationReceived; OrderVerificationCompletionListener on fulfilled (workflow.order.completed.fulfill) completes if flag set</code></pre>
+<p>Guard is <code>OrderCompletionGuardListener</code> on <code>workflow.order.guard.complete</code>: when
+<code>metadata._completionMode == 'store_verification'</code> it blocks <code>fulfilled --complete--&gt; completed</code>
+unless <code>Order::isCompletingFromStoreVerification()</code> is true. <code>StoreOrderVerifiedHandler</code>
+sets <code>metadata._storeVerificationReceived = true</code> and briefly calls
+<code>allowCompletionFromStoreVerification()</code> to bypass the guard; the same flag is checked by
+<code>OrderVerificationCompletionListener</code> (<code>workflow.order.completed.fulfill</code>) so a verification
+that arrives before <code>fulfill</code> still completes the order once fulfilled. Store
+<code>verificationCode</code> is not part of the contract; verification is identified by
+<code>orderUuid</code>/<code>storeOrderUuid</code>/<code>storeUuid</code> with audit <code>verifiedBy</code> (<code>userUuid</code> or null) and
+<code>verifiedAt</code>.</p>
 <h3 id="64-expired-reservations">6.4 Expired reservations<a class="headerlink" href="#64-expired-reservations" title="Permanent link">&para;</a></h3>
 <p><code>app:inventory:reservations:release-expired</code> →
 <code>InventoryService::releaseExpiredReservations()</code> finds <code>confirmed</code> reservations past
@@ -3951,7 +3965,9 @@ posted</code> (terminal <code>cancelled</code>/<code>failed</code>/<code>reverse
   available_at &lt;= now</code>), plus the index <code>(published_at, available_at)</code> on each outbox
   table (Inventory appends <code>id</code>).</li>
 <li>The <code>INVENTORY_ENABLED</code> environment toggle decides whether Store skips inventory
-  altogether and accepts orders immediately, or waits for an <code>inventory.reservation.confirmed.v1</code>.</li>
+  altogether and accepts orders immediately (<code>accept()</code> with no reservation), or creates
+  a <code>pending_validation -&gt; awaiting_inventory</code> transition and emits
+  <code>inventory.reservation.requested.v1</code> to wait for <code>inventory.reservation.confirmed/rejected.v1</code> (accepted/rejected locally, no Trade relay).</li>
 </ul>
 
 

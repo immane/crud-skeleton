@@ -3158,6 +3158,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#store-verify-when-store-requires-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Store Verify (when Store requires verification)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#complete-order" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3787,6 +3798,17 @@
     <span class="md-ellipsis">
       
         Fulfill Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#store-verify-when-store-requires-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Store Verify (when Store requires verification)
       
     </span>
   </a>
@@ -4831,26 +4853,38 @@
 <a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a><span class="w">  </span><span class="nt">"shippingAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Address snapshot"</span>
 <a id="__codelineno-53-4" name="__codelineno-53-4" href="#__codelineno-53-4"></a><span class="p">}</span>
 </code></pre></div>
-<p>Result: order status becomes <code>fulfilled</code>.</p>
+<p>Result: order status becomes <code>fulfilled</code>. For Store projection, Staff should also <code>POST /api/v1/store/{scopeId}/orders/{orderUuid}/fulfill</code> to mark <code>StoreOrder</code> fulfilled before verification.</p>
+<h3 id="store-verify-when-store-requires-verification">Store Verify (when Store requires verification)<a class="headerlink" href="#store-verify-when-store-requires-verification" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="err">POST /api/v1/store/{scopeId}/orders/{orderUuid}/verify</span>
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a><span class="err">Authorization: Bearer &lt;access_token&gt; (store member)</span>
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a><span class="err">Content-Type: application/json</span>
+</code></pre></div>
+<p>No body required; the order UUID itself is the verification token. Requires <code>StoreOrder</code> in <code>fulfilled</code> and <code>fulfillment.requireVerification=true</code> snapshotted at order creation.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="p">{}</span>
+</code></pre></div>
+<p>Result: <code>StoreOrder</code> becomes <code>verified</code> and emits <code>store.order.verified.v1</code>; the linked <code>TradeOrder</code> completes automatically (<code>fulfilled → completed</code>), or immediately after <code>fulfill</code> if verification arrived out-of-order.</p>
 <h3 id="complete-order">Complete Order<a class="headerlink" href="#complete-order" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/do/complete</span>
-<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/do/complete</span>
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
 </code></pre></div>
 <p>Allowed only from <code>fulfilled</code>.</p>
 <p>Result: order status becomes <code>completed</code>.</p>
+<blockquote>
+<p>Store-verified orders: if the order was created with <code>X-Store-Code</code> and the Store has <code>fulfillment.requireVerification=true</code>, the order's <code>_completionMode</code> is <code>store_verification</code>. Manual <code>do/complete</code> is then blocked (<code>Store verification is required</code>) and completion happens automatically after <code>POST /api/v1/store/{scopeId}/orders/{uuid}/verify</code> (fulfilled → verified) emits <code>store.order.verified.v1</code>. If verification arrived before fulfillment, completion is applied right after <code>fulfill</code>.</p>
+</blockquote>
 <h2 id="refund-flow">Refund Flow<a class="headerlink" href="#refund-flow" title="Permanent link">&para;</a></h2>
 <p>Refunds are admin/backend operations in the current implementation.</p>
 <h3 id="refund-order">Refund Order<a class="headerlink" href="#refund-order" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/refund</span>
-<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
-<a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a><span class="err">Content-Type: application/json</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/refund</span>
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
+<a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="err">Content-Type: application/json</span>
 </code></pre></div>
 <p>Allowed only from <code>completed</code>.</p>
 <p>Request:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="p">{</span>
-<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
-<a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
-<a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="p">{</span>
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="p">}</span>
 </code></pre></div>
 <p>Rules:</p>
 <table>
@@ -4876,61 +4910,61 @@
 </tbody>
 </table>
 <p>Example response:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="p">{</span>
-<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="w">    </span><span class="nt">"invoice"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span>
-<a id="__codelineno-57-5" name="__codelineno-57-5" href="#__codelineno-57-5"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refunded"</span><span class="p">,</span>
-<a id="__codelineno-57-6" name="__codelineno-57-6" href="#__codelineno-57-6"></a><span class="w">      </span><span class="nt">"refundedAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span>
-<a id="__codelineno-57-7" name="__codelineno-57-7" href="#__codelineno-57-7"></a><span class="w">    </span><span class="p">},</span>
-<a id="__codelineno-57-8" name="__codelineno-57-8" href="#__codelineno-57-8"></a><span class="w">    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
-<a id="__codelineno-57-9" name="__codelineno-57-9" href="#__codelineno-57-9"></a><span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refunded"</span><span class="p">,</span>
-<a id="__codelineno-57-10" name="__codelineno-57-10" href="#__codelineno-57-10"></a><span class="w">    </span><span class="nt">"refundId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock-refund-PAY20260704120000ABCDEF12-4500"</span><span class="p">,</span>
-<a id="__codelineno-57-11" name="__codelineno-57-11" href="#__codelineno-57-11"></a><span class="w">    </span><span class="nt">"rawData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-57-12" name="__codelineno-57-12" href="#__codelineno-57-12"></a><span class="w">      </span><span class="nt">"gateway"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-57-13" name="__codelineno-57-13" href="#__codelineno-57-13"></a><span class="w">        </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
-<a id="__codelineno-57-14" name="__codelineno-57-14" href="#__codelineno-57-14"></a><span class="w">        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
-<a id="__codelineno-57-15" name="__codelineno-57-15" href="#__codelineno-57-15"></a><span class="w">        </span><span class="nt">"paidAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span>
-<a id="__codelineno-57-16" name="__codelineno-57-16" href="#__codelineno-57-16"></a><span class="w">      </span><span class="p">}</span>
-<a id="__codelineno-57-17" name="__codelineno-57-17" href="#__codelineno-57-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-57-18" name="__codelineno-57-18" href="#__codelineno-57-18"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-57-19" name="__codelineno-57-19" href="#__codelineno-57-19"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-57-20" name="__codelineno-57-20" href="#__codelineno-57-20"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Refund processed"</span>
-<a id="__codelineno-57-21" name="__codelineno-57-21" href="#__codelineno-57-21"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="p">{</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="w">    </span><span class="nt">"invoice"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span>
+<a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a><span class="w">      </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refunded"</span><span class="p">,</span>
+<a id="__codelineno-59-6" name="__codelineno-59-6" href="#__codelineno-59-6"></a><span class="w">      </span><span class="nt">"refundedAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span>
+<a id="__codelineno-59-7" name="__codelineno-59-7" href="#__codelineno-59-7"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-59-8" name="__codelineno-59-8" href="#__codelineno-59-8"></a><span class="w">    </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
+<a id="__codelineno-59-9" name="__codelineno-59-9" href="#__codelineno-59-9"></a><span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refunded"</span><span class="p">,</span>
+<a id="__codelineno-59-10" name="__codelineno-59-10" href="#__codelineno-59-10"></a><span class="w">    </span><span class="nt">"refundId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock-refund-PAY20260704120000ABCDEF12-4500"</span><span class="p">,</span>
+<a id="__codelineno-59-11" name="__codelineno-59-11" href="#__codelineno-59-11"></a><span class="w">    </span><span class="nt">"rawData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-59-12" name="__codelineno-59-12" href="#__codelineno-59-12"></a><span class="w">      </span><span class="nt">"gateway"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-59-13" name="__codelineno-59-13" href="#__codelineno-59-13"></a><span class="w">        </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
+<a id="__codelineno-59-14" name="__codelineno-59-14" href="#__codelineno-59-14"></a><span class="w">        </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
+<a id="__codelineno-59-15" name="__codelineno-59-15" href="#__codelineno-59-15"></a><span class="w">        </span><span class="nt">"paidAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span>
+<a id="__codelineno-59-16" name="__codelineno-59-16" href="#__codelineno-59-16"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-59-17" name="__codelineno-59-17" href="#__codelineno-59-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-59-18" name="__codelineno-59-18" href="#__codelineno-59-18"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-59-19" name="__codelineno-59-19" href="#__codelineno-59-19"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-59-20" name="__codelineno-59-20" href="#__codelineno-59-20"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Refund processed"</span>
+<a id="__codelineno-59-21" name="__codelineno-59-21" href="#__codelineno-59-21"></a><span class="p">}</span>
 </code></pre></div>
 <p>When the invoice becomes fully <code>refunded</code>, the linked order becomes <code>refunded</code> automatically.</p>
 <h3 id="refund-invoice-directly">Refund Invoice Directly<a class="headerlink" href="#refund-invoice-directly" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="err">POST /api/v1/manage/invoices/{invoiceId}/refund</span>
-<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
-<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="err">Content-Type: application/json</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="err">POST /api/v1/manage/invoices/{invoiceId}/refund</span>
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
+<a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="err">Content-Type: application/json</span>
 </code></pre></div>
 <p>Request:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="p">{</span>
-<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="w">  </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
-<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
-<a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
-<a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="p">{</span>
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="w">  </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
+<a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
+<a id="__codelineno-61-4" name="__codelineno-61-4" href="#__codelineno-61-4"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
+<a id="__codelineno-61-5" name="__codelineno-61-5" href="#__codelineno-61-5"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>amount</code> can be integer cents/fen or decimal string, for example <code>4500</code> or <code>"45.00"</code>.</p>
 <h2 id="admin-workflow-helpers">Admin Workflow Helpers<a class="headerlink" href="#admin-workflow-helpers" title="Permanent link">&para;</a></h2>
 <h3 id="get-available-order-transitions">Get Available Order Transitions<a class="headerlink" href="#get-available-order-transitions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="err">GET /api/v1/manage/orders/{orderId}/transitions</span>
-<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="err">GET /api/v1/manage/orders/{orderId}/transitions</span>
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
 </code></pre></div>
 <p>Example response field:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="p">{</span>
-<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"submit"</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-61-4" name="__codelineno-61-4" href="#__codelineno-61-4"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cancel"</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-61-5" name="__codelineno-61-5" href="#__codelineno-61-5"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-61-6" name="__codelineno-61-6" href="#__codelineno-61-6"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-61-7" name="__codelineno-61-7" href="#__codelineno-61-7"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span>
-<a id="__codelineno-61-8" name="__codelineno-61-8" href="#__codelineno-61-8"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="p">{</span>
+<a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="w">  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"submit"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cancel"</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-63-5" name="__codelineno-63-5" href="#__codelineno-63-5"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-63-6" name="__codelineno-63-6" href="#__codelineno-63-6"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-63-7" name="__codelineno-63-7" href="#__codelineno-63-7"></a><span class="w">  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span>
+<a id="__codelineno-63-8" name="__codelineno-63-8" href="#__codelineno-63-8"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="apply-generic-order-transition">Apply Generic Order Transition<a class="headerlink" href="#apply-generic-order-transition" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/do/{transition}</span>
-<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
-<a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a><span class="err">Content-Type: application/json</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/do/{transition}</span>
+<a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
+<a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a><span class="err">Content-Type: application/json</span>
 </code></pre></div>
 <p>Supported transitions:</p>
 <table>
@@ -4981,13 +5015,13 @@
 </table>
 <p>The body is optional. If present, supported order fields are updated before transition.</p>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="p">{</span>
-<a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="w">  </span><span class="nt">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"confirmed by backend"</span>
-<a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="p">{</span>
+<a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a><span class="w">  </span><span class="nt">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"confirmed by backend"</span>
+<a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="get-available-invoice-transitions">Get Available Invoice Transitions<a class="headerlink" href="#get-available-invoice-transitions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="err">GET /api/v1/manage/invoices/{invoiceId}/transitions</span>
-<a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="err">GET /api/v1/manage/invoices/{invoiceId}/transitions</span>
+<a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="err">Authorization: Bearer &lt;admin_access_token&gt;</span>
 </code></pre></div>
 <h2 id="recommended-frontend-state-handling">Recommended Frontend State Handling<a class="headerlink" href="#recommended-frontend-state-handling" title="Permanent link">&para;</a></h2>
 <h3 id="order-action-buttons">Order Action Buttons<a class="headerlink" href="#order-action-buttons" title="Permanent link">&para;</a></h3>
@@ -5062,10 +5096,10 @@
 </table>
 <h3 id="polling-strategy">Polling Strategy<a class="headerlink" href="#polling-strategy" title="Permanent link">&para;</a></h3>
 <p>After starting payment, poll:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="err">GET /api/v1/app/orders/{orderId}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="err">GET /api/v1/app/orders/{orderId}</span>
 </code></pre></div>
 <p>Stop polling when order status is one of:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a>paid, fulfilled, completed, cancelled, refunded
+<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a>paid, fulfilled, completed, cancelled, refunded
 </code></pre></div>
 <p>If order status is still <code>confirmed</code> but <code>paymentStatus</code> is <code>paying</code>, continue polling or ask user to complete gateway payment.</p>
 <h2 id="end-to-end-examples">End-To-End Examples<a class="headerlink" href="#end-to-end-examples" title="Permanent link">&para;</a></h2>
@@ -5073,42 +5107,42 @@
 <ol>
 <li>User creates order:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="err">POST /api/v1/app/orders</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="err">POST /api/v1/app/orders</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="p">{</span>
-<a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a><span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"specificationId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}],</span>
-<a id="__codelineno-68-3" name="__codelineno-68-3" href="#__codelineno-68-3"></a><span class="w">  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span>
-<a id="__codelineno-68-4" name="__codelineno-68-4" href="#__codelineno-68-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="p">{</span>
+<a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a><span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"specificationId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}],</span>
+<a id="__codelineno-70-3" name="__codelineno-70-3" href="#__codelineno-70-3"></a><span class="w">  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span>
+<a id="__codelineno-70-4" name="__codelineno-70-4" href="#__codelineno-70-4"></a><span class="p">}</span>
 </code></pre></div>
 <ol>
 <li>User submits and confirms order:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/submit</span>
-<a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a><span class="err">POST /api/v1/app/orders/{orderId}/confirm</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/submit</span>
+<a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a><span class="err">POST /api/v1/app/orders/{orderId}/confirm</span>
 </code></pre></div>
 <ol>
 <li>User starts mock auto-paid payment:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/payment</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/payment</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="p">{</span>
-<a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a><span class="w">  </span><span class="nt">"payment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock"</span><span class="p">,</span>
-<a id="__codelineno-71-3" name="__codelineno-71-3" href="#__codelineno-71-3"></a><span class="w">  </span><span class="nt">"autoPaid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
-<a id="__codelineno-71-4" name="__codelineno-71-4" href="#__codelineno-71-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="p">{</span>
+<a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a><span class="w">  </span><span class="nt">"payment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock"</span><span class="p">,</span>
+<a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a><span class="w">  </span><span class="nt">"autoPaid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-73-4" name="__codelineno-73-4" href="#__codelineno-73-4"></a><span class="p">}</span>
 </code></pre></div>
 <ol>
 <li>Frontend refreshes order:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="err">GET /api/v1/app/orders/{orderId}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="err">GET /api/v1/app/orders/{orderId}</span>
 </code></pre></div>
 <p>Expected order status: <code>paid</code>.</p>
 <h3 id="development-mock-payment-with-notify">Development Mock Payment With Notify<a class="headerlink" href="#development-mock-payment-with-notify" title="Permanent link">&para;</a></h3>
 <ol>
 <li>User starts payment without <code>autoPaid</code>:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="p">{</span>
-<a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a><span class="w">  </span><span class="nt">"payment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock"</span>
-<a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="p">{</span>
+<a id="__codelineno-75-2" name="__codelineno-75-2" href="#__codelineno-75-2"></a><span class="w">  </span><span class="nt">"payment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock"</span>
+<a id="__codelineno-75-3" name="__codelineno-75-3" href="#__codelineno-75-3"></a><span class="p">}</span>
 </code></pre></div>
 <ol>
 <li>
@@ -5118,16 +5152,16 @@
 <p>Simulate callback:</p>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="err">POST /api/payment/notify/mock</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="err">POST /api/payment/notify/mock</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="p">{</span>
-<a id="__codelineno-75-2" name="__codelineno-75-2" href="#__codelineno-75-2"></a><span class="w">  </span><span class="nt">"secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock"</span><span class="p">,</span>
-<a id="__codelineno-75-3" name="__codelineno-75-3" href="#__codelineno-75-3"></a><span class="w">  </span><span class="nt">"outTradeNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PAY20260704120000ABCDEF12"</span><span class="p">,</span>
-<a id="__codelineno-75-4" name="__codelineno-75-4" href="#__codelineno-75-4"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span>
-<a id="__codelineno-75-5" name="__codelineno-75-5" href="#__codelineno-75-5"></a><span class="w">  </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
-<a id="__codelineno-75-6" name="__codelineno-75-6" href="#__codelineno-75-6"></a><span class="w">  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span><span class="p">,</span>
-<a id="__codelineno-75-7" name="__codelineno-75-7" href="#__codelineno-75-7"></a><span class="w">  </span><span class="nt">"transactionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock-txn-001"</span>
-<a id="__codelineno-75-8" name="__codelineno-75-8" href="#__codelineno-75-8"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="p">{</span>
+<a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a><span class="w">  </span><span class="nt">"secret"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock"</span><span class="p">,</span>
+<a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a><span class="w">  </span><span class="nt">"outTradeNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PAY20260704120000ABCDEF12"</span><span class="p">,</span>
+<a id="__codelineno-77-4" name="__codelineno-77-4" href="#__codelineno-77-4"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span>
+<a id="__codelineno-77-5" name="__codelineno-77-5" href="#__codelineno-77-5"></a><span class="w">  </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
+<a id="__codelineno-77-6" name="__codelineno-77-6" href="#__codelineno-77-6"></a><span class="w">  </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CNY"</span><span class="p">,</span>
+<a id="__codelineno-77-7" name="__codelineno-77-7" href="#__codelineno-77-7"></a><span class="w">  </span><span class="nt">"transactionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mock-txn-001"</span>
+<a id="__codelineno-77-8" name="__codelineno-77-8" href="#__codelineno-77-8"></a><span class="p">}</span>
 </code></pre></div>
 <ol>
 <li>Frontend polls order; expected status: <code>paid</code>.</li>
@@ -5157,27 +5191,27 @@
 </tbody>
 </table>
 <p>Request:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/payment</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/payment</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="p">{</span>
-<a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a><span class="w">  </span><span class="nt">"payment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wallet"</span><span class="p">,</span>
-<a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
-<a id="__codelineno-77-4" name="__codelineno-77-4" href="#__codelineno-77-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="p">{</span>
+<a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a><span class="w">  </span><span class="nt">"payment"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wallet"</span><span class="p">,</span>
+<a id="__codelineno-79-3" name="__codelineno-79-3" href="#__codelineno-79-3"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
+<a id="__codelineno-79-4" name="__codelineno-79-4" href="#__codelineno-79-4"></a><span class="p">}</span>
 </code></pre></div>
 <p>Expected result: invoice <code>paid</code>, order <code>paid</code>, user wallet debited, system wallet credited.</p>
 <h3 id="cancel-before-payment-completes">Cancel Before Payment Completes<a class="headerlink" href="#cancel-before-payment-completes" title="Permanent link">&para;</a></h3>
 <p>Allowed order statuses: <code>draft</code>, <code>pending</code>, <code>confirmed</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/cancel</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="err">POST /api/v1/app/orders/{orderId}/cancel</span>
 </code></pre></div>
 <p>If an invoice is linked and still cancellable, it is cancelled too.</p>
 <h3 id="refund-after-completion">Refund After Completion<a class="headerlink" href="#refund-after-completion" title="Permanent link">&para;</a></h3>
 <p>Backend/admin:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/refund</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="err">POST /api/v1/manage/orders/{orderId}/refund</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="p">{</span>
-<a id="__codelineno-80-2" name="__codelineno-80-2" href="#__codelineno-80-2"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
-<a id="__codelineno-80-3" name="__codelineno-80-3" href="#__codelineno-80-3"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
-<a id="__codelineno-80-4" name="__codelineno-80-4" href="#__codelineno-80-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="p">{</span>
+<a id="__codelineno-82-2" name="__codelineno-82-2" href="#__codelineno-82-2"></a><span class="w">  </span><span class="nt">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer requested refund"</span><span class="p">,</span>
+<a id="__codelineno-82-3" name="__codelineno-82-3" href="#__codelineno-82-3"></a><span class="w">  </span><span class="nt">"systemWalletId"</span><span class="p">:</span><span class="w"> </span><span class="mi">99</span>
+<a id="__codelineno-82-4" name="__codelineno-82-4" href="#__codelineno-82-4"></a><span class="p">}</span>
 </code></pre></div>
 <p>Expected final status: order <code>refunded</code>, invoice <code>refunded</code>.</p>
 
