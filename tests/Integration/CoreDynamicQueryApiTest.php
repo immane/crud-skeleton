@@ -38,6 +38,7 @@ final class CoreDynamicQueryApiTest extends IntegrationWebTestCase
             $category = new Category($name, 'slug-' . $i);
             $category->setSortOrder($i);
             $category->setDescription('desc-' . $name);
+            $categories[] = $category;
             $em->persist($category);
             $categories[$name] = $category;
         }

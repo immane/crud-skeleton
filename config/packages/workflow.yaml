@@ -72,7 +72,6 @@ framework:
                     from: [paid, partial_refunded]
                     to: refunded
 
-        # ---------------------------------------------------------------------
         # StoreOrder: Store operational fulfillment
         # ---------------------------------------------------------------------
         store_order:
@@ -91,6 +90,7 @@ framework:
                 - fulfillment_pending
                 - fulfilling
                 - fulfilled
+                - verified
                 - cancelled
             transitions:
                 await_inventory:
@@ -105,6 +105,9 @@ framework:
                 fulfill:
                     from: [accepted, fulfillment_pending, fulfilling]
                     to: fulfilled
+                verify:
+                    from: fulfilled
+                    to: verified
                 cancel:
                     from: [pending_validation, awaiting_inventory, accepted, fulfillment_pending, fulfilling]
                     to: cancelled

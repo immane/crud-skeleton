@@ -83,6 +83,10 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
         // For each attribute, try to read the raw value via PropertyAccessor to apply the same
         // flattening logic that the old GetSetMethodNormalizer override did.
         foreach (array_keys($data) as $attribute) {
+            // Skip internal __metadata marker to avoid recursion (self-reference would otherwise loop)
+            if ($attribute === '__metadata') {
+                continue;
+            }
             try {
                 // Use the accessor to call the getter (works for getXxx / isXxx / hasXxx)
                 $raw = $this->accessor->getValue($object, $attribute);

@@ -103,9 +103,10 @@ final readonly class TradeOrderCreatedHandler
     private function recordRejected(array $payload, string $storeUuid, string $code, string $reason): void
     {
         $orderUuid = $payload['orderUuid'] ?? null;
-        if (!is_string($orderUuid)) {
+        if (!is_string($orderUuid) || $orderUuid === '') {
             throw new \InvalidArgumentException('Trade order event does not include an order UUID.');
         }
+
         $this->outboxService->record('store.order.rejected.v1', 'trade_order', $orderUuid, [
             'orderUuid' => $orderUuid,
             'storeOrderUuid' => null,

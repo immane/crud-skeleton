@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Store\Service;
 
 use App\Core\Service\BaseService;
-use App\Store\DTO\StoreSettings;
 use App\Store\Entity\Store;
 use App\Store\Entity\StoreOrder;
 use App\Store\Repository\StoreOrderRepository;
@@ -31,7 +30,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
     public function awaitInventory(StoreOrder $storeOrder, string $reservationId): StoreOrder
     {
         return $this->transaction(function () use ($storeOrder, $reservationId): StoreOrder {
-            $this->assertStoreOrderCan($storeOrder, 'await_inventory');
+            $this->applyStoreOrderTransition($storeOrder, 'await_inventory');
             $storeOrder->awaitInventory($reservationId);
 
             return $storeOrder;
@@ -44,7 +43,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
-            $this->assertStoreOrderCan($storeOrder, 'accept');
+            $this->applyStoreOrderTransition($storeOrder, 'accept');
             $storeOrder->accept($reservationId);
             $this->outboxService->record('store.order.accepted.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
@@ -64,7 +63,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
-            $this->assertStoreOrderCan($storeOrder, 'reject');
+            $this->applyStoreOrderTransition($storeOrder, 'reject');
             $storeOrder->reject($code, $reason);
             $this->outboxService->record('store.order.rejected.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
@@ -86,7 +85,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
-            $this->assertStoreOrderCan($storeOrder, 'fulfill');
+            $this->applyStoreOrderTransition($storeOrder, 'fulfill');
             $storeOrder->fulfill($fulfillmentData);
             $this->outboxService->record('store.order.fulfilled.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
@@ -94,25 +93,31 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
                 'storeUuid' => $storeOrder->getStore()->getUuid(),
                 'fulfilledAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
                 'fulfillmentData' => $fulfillmentData,
-                'requiresVerification' => StoreSettings::from($storeOrder->getStore()->getSettings())->requireVerification,
+                'requiresVerification' => $storeOrder->isVerificationRequired(),
             ]);
 
             return $storeOrder;
         });
     }
 
-    public function verify(StoreOrder $storeOrder, string $verificationCode, ?string $verifiedBy = null): StoreOrder
+    public function verify(StoreOrder $storeOrder, ?string $verifiedBy = null): StoreOrder
     {
-        return $this->transaction(function () use ($storeOrder, $verificationCode, $verifiedBy): StoreOrder {
+        return $this->transaction(function () use ($storeOrder, $verifiedBy): StoreOrder {
             if ($this->outboxService === null) {
                 throw new \RuntimeException('Store outbox is not configured.');
             }
-            $storeOrder->verify($verificationCode, $verifiedBy);
+            if (!$storeOrder->isVerificationRequired()) {
+                throw new \LogicException('Store verification is disabled.');
+            }
+            if ($storeOrder->getOperationalStatus() !== StoreOrder::STATUS_FULFILLED) {
+                throw new \LogicException('Store order cannot be verified in its current status.');
+            }
+            $this->applyStoreOrderTransition($storeOrder, 'verify');
+            $storeOrder->verify($verifiedBy);
             $this->outboxService->record('store.order.verified.v1', 'store_order', $storeOrder->getUuid(), [
                 'orderUuid' => $storeOrder->getTradeOrderUuid(),
                 'storeOrderUuid' => $storeOrder->getUuid(),
                 'storeUuid' => $storeOrder->getStore()->getUuid(),
-                'verificationCode' => $verificationCode,
                 'verifiedBy' => $verifiedBy,
                 'verifiedAt' => $storeOrder->getVerifiedAt()?->format(DATE_ATOM),
             ]);
@@ -146,6 +151,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
                     $data['currency'],
                     $data['totalAmount'],
                     $data['orderSnapshot'],
+                    $data['verificationRequired'],
                 );
                 $this->getEntityManager()->persist($storeOrder);
 
@@ -166,7 +172,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
 
     /**
      * @param array<string, mixed> $snapshot
-     * @return array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>}
+     * @return array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>, verificationRequired: bool}
      */
     private function normalizeSnapshot(Store $store, array $snapshot): array
     {
@@ -191,6 +197,10 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
         if ($snapshot['totalAmount'] < 0) {
             throw new \InvalidArgumentException('Trade order total amount cannot be negative.');
         }
+        $verificationRequired = $storeSnapshot['requireVerification'] ?? false;
+        if (!is_bool($verificationRequired)) {
+            throw new \InvalidArgumentException('Trade order store verification requirement must be a boolean.');
+        }
 
         $orderSnapshot = [
             'items' => $snapshot['items'],
@@ -212,11 +222,12 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             'currency' => strtoupper($snapshot['currency']),
             'totalAmount' => $snapshot['totalAmount'],
             'orderSnapshot' => $orderSnapshot,
+            'verificationRequired' => $verificationRequired,
         ];
     }
 
     /**
-     * @param array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>} $data
+     * @param array{tradeOrderUuid: string, storeCode: string, storeName: string, customerUserUuid: string|null, currency: string, totalAmount: int, orderSnapshot: array<string, mixed>, verificationRequired: bool} $data
      */
     private function matchesSnapshot(StoreOrder $storeOrder, Store $store, array $data): bool
     {
@@ -226,20 +237,21 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
             && $storeOrder->getCustomerUserUuid() === $data['customerUserUuid']
             && $storeOrder->getCurrency() === $data['currency']
             && $storeOrder->getTotalAmount() === $data['totalAmount']
-            && $storeOrder->getOrderSnapshot() === $data['orderSnapshot'];
+            && $storeOrder->getOrderSnapshot() === $data['orderSnapshot']
+            && $storeOrder->isVerificationRequired() === $data['verificationRequired'];
     }
 
     public function cancel(StoreOrder $storeOrder): StoreOrder
     {
         return $this->transaction(function () use ($storeOrder): StoreOrder {
-            $this->assertStoreOrderCan($storeOrder, 'cancel');
+            $this->applyStoreOrderTransition($storeOrder, 'cancel');
             $storeOrder->cancel();
 
             return $storeOrder;
         });
     }
 
-    private function assertStoreOrderCan(StoreOrder $storeOrder, string $transition): void
+    private function applyStoreOrderTransition(StoreOrder $storeOrder, string $transition): void
     {
         if ($this->storeOrderWorkflow === null) {
             return;
@@ -252,6 +264,7 @@ final class StoreOrderService extends BaseService implements StoreOrderServiceIn
                 $storeOrder->getOperationalStatus(),
             ));
         }
+        $this->storeOrderWorkflow->apply($storeOrder, $transition);
     }
 
     private function transaction(callable $callback): mixed

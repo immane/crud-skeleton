@@ -282,6 +282,19 @@ final class AuthorizationManagementApiTest extends IntegrationWebTestCase
         self::assertNotEmpty($active, 'active assignment should exist in DB');
         self::assertSame($assignmentUuid, $active[0]->getUuid());
 
+        // API list must also return the active assignment (revokedAt IS NULL, not `= NULL`)
+        $client->request('GET', '/api/v1/manage/assignments?userUuid='.$target->getUuid());
+        self::assertResponseStatusCodeSame(200);
+        $activeList = $this->decodeJson($client);
+        $foundActive = false;
+        foreach ($activeList['data'] ?? [] as $a) {
+            if (($a['uuid'] ?? '') === $assignmentUuid) {
+                $foundActive = true;
+                break;
+            }
+        }
+        self::assertTrue($foundActive, 'active assignment should appear in API list');
+
         $client->request('DELETE', '/api/v1/manage/assignments/'.$assignmentUuid);
         self::assertTrue(in_array($client->getResponse()->getStatusCode(), [200, 204], true), $client->getResponse()->getContent());
         $em->clear();

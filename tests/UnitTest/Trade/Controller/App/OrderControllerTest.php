@@ -174,7 +174,7 @@ final class OrderControllerTest extends TestCase
         $requestStack = new RequestStack();
         $requestStack->push($this->jsonRequest('POST', '/api/v1/app/orders', [
             'items' => [['specificationId' => 1, 'quantity' => 1]],
-            'currency' => 'CNY',
+            'currency' => 'USD',
         ]));
         $this->injectDependencies($requestStack);
         $this->setCurrentUser(1);
@@ -246,7 +246,7 @@ final class OrderControllerTest extends TestCase
         $requestStack = new RequestStack();
         $requestStack->push($this->jsonRequest('POST', '/api/v1/app/orders/quote', [
             'items' => [['specificationId' => 1, 'quantity' => 2]],
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'meta' => ['promo' => 'x'],
         ]));
         $this->injectDependencies($requestStack);

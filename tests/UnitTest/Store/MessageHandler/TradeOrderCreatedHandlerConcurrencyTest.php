@@ -55,7 +55,7 @@ final class TradeOrderCreatedHandlerConcurrencyTest extends TestCase
             'eventId' => '00000000-0000-4000-8000-0000000000P1',
             'payload' => [
                 'orderUuid' => '00000000-0000-4000-8000-0000000000P2',
-                'store' => ['uuid' => '00000000-0000-4000-8000-0000000000P3', 'code' => 'xuhui', 'name' => 'Xuhui'],
+                'store' => ['uuid' => '00000000-0000-4000-8000-0000000000P3', 'code' => 'demo', 'name' => 'Demo'],
                 'currency' => 'CNY',
                 'totalAmount' => 100,
                 'items' => [],

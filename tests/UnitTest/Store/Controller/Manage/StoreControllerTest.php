@@ -48,7 +48,7 @@ final class StoreControllerTest extends TestCase
 
     public function testStatusActionUpdatesAndSuspendsStore(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $request = Request::create('/status/suspend', 'POST');
         $this->injectDependencies($request);
         $this->service->method('get')->with(['uuid' => $store->getUuid()])->willReturn($store);
@@ -77,7 +77,7 @@ final class StoreControllerTest extends TestCase
 
     public function testListMembersActionReturnsMemberships(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $membership = new Membership($store, '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', Membership::ROLE_MANAGER);
         $request = Request::create('/members', 'GET');
         $this->injectDependencies($request);
@@ -107,7 +107,7 @@ final class StoreControllerTest extends TestCase
 
     public function testGrantMemberActionReturns400WhenDataInvalid(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $request = $this->jsonRequest('/members', ['userUuid' => 123]);
         $this->injectDependencies($request);
         $this->service->method('get')->with(['uuid' => $store->getUuid()])->willReturn($store);
@@ -121,7 +121,7 @@ final class StoreControllerTest extends TestCase
 
     public function testGrantMemberActionReturns400WhenGrantFails(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $request = $this->jsonRequest('/members', ['userUuid' => '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', 'role' => 'administrator']);
         $this->injectDependencies($request);
         $this->service->method('get')->with(['uuid' => $store->getUuid()])->willReturn($store);
@@ -136,7 +136,7 @@ final class StoreControllerTest extends TestCase
 
     public function testGrantMemberActionGrantsMembership(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $membership = new Membership($store, '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', Membership::ROLE_MANAGER);
         $request = $this->jsonRequest('/members', ['userUuid' => '47d07ad3-7e6e-4bfb-aea3-87bdb0e4de57', 'role' => 'manager']);
         $this->injectDependencies($request);
@@ -154,34 +154,34 @@ final class StoreControllerTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('code must be a non-empty string.');
-        $this->processCreate(['code' => ' ', 'name' => 'Xuhui Store', 'timezone' => 'UTC']);
+        $this->processCreate(['code' => ' ', 'name' => 'Demo Store', 'timezone' => 'UTC']);
     }
 
     public function testCreateActionRejectsEmptyName(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('name must be a non-empty string.');
-        $this->processCreate(['code' => 'xuhui', 'name' => '', 'timezone' => 'UTC']);
+        $this->processCreate(['code' => 'demo', 'name' => '', 'timezone' => 'UTC']);
     }
 
     public function testCreateActionRejectsNonStringTimezone(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('timezone must be a string.');
-        $this->processCreate(['code' => 'xuhui', 'name' => 'Xuhui Store', 'timezone' => 123]);
+        $this->processCreate(['code' => 'demo', 'name' => 'Demo Store', 'timezone' => 123]);
     }
 
     public function testCreateActionRejectsInvalidTimezoneValue(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('timezone must be a valid timezone.');
-        $this->processCreate(['code' => 'xuhui', 'name' => 'Xuhui Store', 'timezone' => 'Invalid/Timezone']);
+        $this->processCreate(['code' => 'demo', 'name' => 'Demo Store', 'timezone' => 'Invalid/Timezone']);
     }
 
     #[Group('low-value')]
     public function testProcessCreateContentReturnsValidContent(): void
     {
-        $content = ['code' => 'xuhui', 'name' => 'Xuhui Store', 'timezone' => 'UTC'];
+        $content = ['code' => 'demo', 'name' => 'Demo Store', 'timezone' => 'UTC'];
 
         $result = (new \ReflectionMethod(StoreController::class, 'processCreateContent'))->invoke($this->controller, $content, new Store());
 
@@ -206,7 +206,7 @@ final class StoreControllerTest extends TestCase
 
     public function testUpdateActionRejectsNonArraySettings(): void
     {
-        $store = new Store('xuhui', 'Xuhui', 'Asia/Shanghai');
+        $store = new Store('demo', 'Demo', 'Asia/Shanghai');
         $request = $this->jsonRequest('/' . $store->getUuid(), ['settings' => 'not-an-object']);
         $this->injectDependencies($request);
         $this->service->method('get')->with(['uuid' => $store->getUuid()])->willReturn($store);

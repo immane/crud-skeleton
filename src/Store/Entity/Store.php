@@ -38,7 +38,7 @@ class Store
     #[ORM\Column(type: 'string', length: 64)]
     private string $timezone = 'UTC';
 
-    #[ORM\Column(type: 'string', length: 10, options: ['default' => 'CNY'])]
+    #[ORM\Column(type: 'string', length: 32, options: ['default' => 'CNY'])]
     private string $currency = 'CNY';
 
     /** @var array<string, mixed>|null */

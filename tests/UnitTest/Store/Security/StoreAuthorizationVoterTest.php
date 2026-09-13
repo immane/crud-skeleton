@@ -20,7 +20,7 @@ final class StoreAuthorizationVoterTest extends TestCase
 {
     public function testGrantsOnlyForAnActiveMemberWithScopedPermission(): void
     {
-        $store = new Store('xuhui', 'Xuhui');
+        $store = new Store('demo', 'Demo');
         $user = new User();
         $membership = $this->createMock(MembershipServiceInterface::class);
         $membership->expects(self::once())->method('isAuthorized')->with($store, $user->getUuid())->willReturn(true);
@@ -38,7 +38,7 @@ final class StoreAuthorizationVoterTest extends TestCase
 
     public function testDeniesPermissionWhenMembershipIsInactive(): void
     {
-        $store = new Store('xuhui', 'Xuhui');
+        $store = new Store('demo', 'Demo');
         $user = new User();
         $membership = $this->createMock(MembershipServiceInterface::class);
         $membership->method('isAuthorized')->willReturn(false);

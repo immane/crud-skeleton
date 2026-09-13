@@ -61,7 +61,7 @@ final class TradeOrderCreatedHandlerCoverageTest extends IntegrationWebTestCase
         $this->expectExceptionMessage('Trade order event does not include a store UUID.');
         $handler(new TradeOrderCreatedMessage([
             'eventId' => '00000000-0000-4000-8000-0000000000L3',
-            'payload' => ['orderUuid' => '00000000-0000-4000-8000-0000000000L4', 'store' => ['code' => 'xuhui', 'name' => 'Xuhui']],
+            'payload' => ['orderUuid' => '00000000-0000-4000-8000-0000000000L4', 'store' => ['code' => 'demo', 'name' => 'Demo']],
         ]));
     }
 

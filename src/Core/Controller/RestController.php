@@ -238,10 +238,21 @@ class RestController extends AbstractController
     {
         $request = $this->getRequestStack()->getCurrentRequest();
 
-        // Expend Object
+        // Expend Object - supports JSON array '["specifications"]', single value 'specifications' and comma-separated 'a,b'
         $rawExpand = $request?->query?->get('@expands', '[]') ?? '[]';
         $expands = json_decode(
             str_replace('\'', '"', (string) $rawExpand), true);
+        if (!is_array($expands) && is_string($rawExpand) && trim($rawExpand) !== '' && trim($rawExpand) !== '[]') {
+            $tmp = trim($rawExpand);
+            // strip surrounding brackets if present but not valid JSON
+            $tmp = trim($tmp, '[]');
+            $parts = array_filter(array_map('trim', explode(',', $tmp)), fn($v) => $v !== '');
+            // Remove surrounding quotes from each part
+            $parts = array_map(fn($v) => trim($v, '"\''), $parts);
+            if ($parts !== []) {
+                $expands = $parts;
+            }
+        }
         try {
             if (is_array($expands)) {
                 $expands = array_values(array_filter($expands, 'is_string'));
@@ -367,7 +378,7 @@ class RestController extends AbstractController
         return new Response(
             $this->getSerializer()->serialize($response, 'json'),
             $status,
-            ['Content-Type' => 'application/json']
+            ['Content-Type' => 'application/json'],
         );
     }
 

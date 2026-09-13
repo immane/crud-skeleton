@@ -111,7 +111,6 @@ final class OrderWorkflowApiTest extends IntegrationWebTestCase
         self::assertSame(400, $content['code']);
     }
 
-    // =====================================================================
     // Cancel from every cancellable state + rejection after paid
     // =====================================================================
 

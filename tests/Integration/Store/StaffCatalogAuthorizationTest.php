@@ -100,7 +100,7 @@ final class StaffCatalogAuthorizationTest extends IntegrationWebTestCase
         $client->setServerParameter('HTTP_AUTHORIZATION', 'Bearer ' . $tokenCatalog);
         $client->jsonRequest('POST', sprintf('/api/v1/store/%s/products', $storeXUuid), [
             'name' => 'Tea Product',
-            'description' => 'Xuhui tea',
+            'description' => 'Demo tea',
             'status' => 'active',
         ]);
         self::assertResponseStatusCodeSame(201, 'catalog manager create product should be 201: ' . $client->getResponse()->getContent());

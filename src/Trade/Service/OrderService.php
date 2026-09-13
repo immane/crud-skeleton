@@ -17,7 +17,6 @@ use App\Trade\Entity\OrderItem;
 use App\Trade\Service\Pricing\PriceCalculationContext;
 use App\Trade\Service\Pricing\PriceCalculationResult;
 use App\Trade\Service\Pricing\PriceCalculatorInterface;
-use App\Store\Repository\StoreRepository;
 use App\Trade\Entity\OrderStoreLifecycle;
 use App\Wallet\Repository\WalletRepository;
 use App\Wallet\Service\Transfer\TransferServiceInterface;
@@ -42,8 +41,6 @@ final class OrderService extends BaseService implements OrderServiceInterface
         private readonly ?TradeOutboxServiceInterface $outboxService = null,
         #[Target('state_machine.order')]
         private readonly ?WorkflowInterface $workflow = null,
-        /** @phpstan-ignore property.onlyWritten */
-        private ?StoreRepository $storeRepository = null,
     ) {
         parent::__construct($container, Order::class);
     }
@@ -131,13 +128,7 @@ final class OrderService extends BaseService implements OrderServiceInterface
 
             $this->getEntityManager()->persist($order);
             if ($storeContext !== null) {
-                // Trade projection for the store lifecycle: idempotent fact pending until store responds.
-                try {
-                    $lifecycle = new OrderStoreLifecycle($order->getUuid(), $storeContext->storeUuid);
-                    $this->getEntityManager()->persist($lifecycle);
-                } catch (\Throwable) {
-                    // Lifecycle persistence is best-effort in test doubles without the mapping; order creation remains authoritative.
-                }
+                $this->getEntityManager()->persist(new OrderStoreLifecycle($order->getUuid(), $storeContext->storeUuid));
             }
             $this->getEntityManager()->flush();
 
@@ -145,31 +136,30 @@ final class OrderService extends BaseService implements OrderServiceInterface
                 if ($this->workflow === null || $this->outboxService === null) {
                     throw new \RuntimeException('Store order orchestration is not configured.');
                 }
-                if ($this->workflow->can($order, 'submit')) {
-                    $this->workflow->apply($order, 'submit');
+                if (!$this->workflow->can($order, 'submit')) {
+                    throw new \RuntimeException('Order cannot be submitted.');
                 }
-
-                // StoreOrder creation is independent of acceptance; confirm is gated by lifecycle.
+                $this->workflow->apply($order, 'submit');
                 $this->outboxService->record('trade.order.created.v1', 'trade_order', $order->getUuid(), [
-                    'orderUuid' => $order->getUuid(),
-                    'store' => $storeContext->toSnapshot(),
-                    'customerUserUuid' => $order->getUser()?->getUuid(),
-                    'currency' => $order->getCurrency(),
-                    'totalAmount' => $order->getTotalAmount(),
-                    'items' => array_map(static fn (OrderItem $item): array => [
-                        'lineId' => $item->getUuid(),
-                        'catalogReference' => $item->getSpecificationUuid() ?? $item->getSpecSnapshot()['uuid'] ?? '',
-                        'quantity' => $item->getQuantity(),
-                        'unitPrice' => $item->getUnitPrice(),
-                        'lineAmount' => $item->getPrice(),
-                        'snapshot' => [
-                            'specification' => $item->getSpecSnapshot() ?? [],
-                            'product' => $item->getProductSnapshot() ?? [],
-                        ],
-                    ], $order->getItems()->toArray()),
-                    'delivery' => is_array($metadata['delivery'] ?? null) ? $metadata['delivery'] : [],
-                    'placedAt' => $order->getCreatedAt()->format(DATE_ATOM),
-                ]);
+                        'orderUuid' => $order->getUuid(),
+                        'store' => $storeContext->toSnapshot(),
+                        'customerUserUuid' => $order->getUser()?->getUuid(),
+                        'currency' => $order->getCurrency(),
+                        'totalAmount' => $order->getTotalAmount(),
+                        'items' => array_map(static fn (OrderItem $item): array => [
+                            'lineId' => $item->getUuid(),
+                            'catalogReference' => $item->getSpecificationUuid() ?? $item->getSpecSnapshot()['uuid'] ?? '',
+                            'quantity' => $item->getQuantity(),
+                            'unitPrice' => $item->getUnitPrice(),
+                            'lineAmount' => $item->getPrice(),
+                            'snapshot' => [
+                                'specification' => $item->getSpecSnapshot() ?? [],
+                                'product' => $item->getProductSnapshot() ?? [],
+                            ],
+                        ], $order->getItems()->toArray()),
+                        'delivery' => is_array($metadata['delivery'] ?? null) ? $metadata['delivery'] : [],
+                        'placedAt' => $order->getCreatedAt()->format(DATE_ATOM),
+                    ]);
             }
 
             return $order;
