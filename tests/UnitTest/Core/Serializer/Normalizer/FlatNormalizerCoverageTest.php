@@ -55,6 +55,11 @@ final class FlatNormalizerCoverageTest extends TestCase
                 return 42;
             }
 
+            public function getUuid(): string
+            {
+                return 'uuid-42';
+            }
+
             public function __toString(): string
             {
                 return 'id-42';
@@ -63,7 +68,7 @@ final class FlatNormalizerCoverageTest extends TestCase
 
         $result = $normalizer->normalize($obj, 'json');
 
-        self::assertSame(['id' => 42, '__toString' => 'id-42'], $result);
+        self::assertSame(['id' => 42, 'uuid' => 'uuid-42', '__toString' => 'id-42'], $result);
     }
 
     public function testNormalizeDecoratedFailureFallsBackToClass(): void
@@ -83,6 +88,11 @@ final class FlatNormalizerCoverageTest extends TestCase
             public function getId(): int
             {
                 return 7;
+            }
+
+            public function getUuid(): string
+            {
+                return 'uuid-7';
             }
 
             public function __metadata(): array
@@ -108,7 +118,7 @@ final class FlatNormalizerCoverageTest extends TestCase
         $result = $normalizer->normalize($obj, 'json');
 
         self::assertSame(
-            ['id' => 7, '__toString' => 'relation-7', '__metadata' => ['source' => 'method']],
+            ['id' => 7, 'uuid' => 'uuid-7', '__toString' => 'relation-7', '__metadata' => ['source' => 'method']],
             $result['relation'],
         );
     }
@@ -119,6 +129,11 @@ final class FlatNormalizerCoverageTest extends TestCase
             public function getId(): int
             {
                 return 8;
+            }
+
+            public function getUuid(): string
+            {
+                return 'uuid-8';
             }
 
             public array $__metadata = ['source' => 'property'];
@@ -141,7 +156,7 @@ final class FlatNormalizerCoverageTest extends TestCase
         $result = $normalizer->normalize($obj, 'json');
 
         self::assertSame(
-            ['id' => 8, '__toString' => 'relation-8', '__metadata' => ['source' => 'property']],
+            ['id' => 8, 'uuid' => 'uuid-8', '__toString' => 'relation-8', '__metadata' => ['source' => 'property']],
             $result['relation'],
         );
     }

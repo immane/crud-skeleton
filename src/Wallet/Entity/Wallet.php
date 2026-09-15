@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wallet\Entity;
 
+use App\Core\Utils\UUID;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,6 +18,9 @@ class Wallet
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -55,6 +59,7 @@ class Wallet
 
     public function __construct(User $user, string $currency = 'USD')
     {
+        $this->uuid = UUID::v4();
         $this->user = $user;
         $this->currency = strtoupper($currency);
         $this->createdAt = new \DateTimeImmutable();
@@ -69,6 +74,11 @@ class Wallet
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getUser(): ?User

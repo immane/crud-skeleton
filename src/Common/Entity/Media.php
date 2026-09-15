@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Utils\UUID;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +15,9 @@ class Media
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $filename;
@@ -61,6 +65,7 @@ class Media
 
     public function __construct(string $filename, string $originalFilename, string $mimeType, int $size, string $path, string $storage = 'local')
     {
+        $this->uuid = UUID::v4();
         $this->filename = $filename;
         $this->originalFilename = $originalFilename;
         $this->mimeType = $mimeType;
@@ -78,6 +83,11 @@ class Media
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getFilename(): string

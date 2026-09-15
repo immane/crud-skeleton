@@ -63,6 +63,11 @@ final readonly class ReservationConfirmedHandler
                 return;
             }
 
+            if ($storeOrder->isAcceptanceRequired()) {
+                // Staff acceptance still required: leave awaiting manual accept.
+                return;
+            }
+
             $this->storeOrderService->accept($storeOrder, $payload['reservationId']);
         });
     }

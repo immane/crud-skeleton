@@ -15,6 +15,7 @@ final class WalletTest extends TestCase
         $wallet = new Wallet($user);
 
         self::assertSame($user, $wallet->getUser());
+        self::assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $wallet->getUuid());
         self::assertSame('USD', $wallet->getCurrency());
         self::assertSame(0, $wallet->getBalance());
         self::assertSame(0.0, $wallet->getBalanceAsFloat());

@@ -12,11 +12,18 @@ Every **CRUD aggregate** entity MUST have (defaults for domain aggregates such a
 | Element | Requirement |
 |---------|-------------|
 | Namespace | `App\{Module}\Entity` |
-| PHP 8 attributes | `#[ORM\Entity]`, `#[ORM\Table]`, `#[ORM\HasLifecycleCallbacks]` |
+| PHP 8 attributes | `#[ORM\Entity]`, `#[ORM\Table]`, `#[ORM\HasLifecycleCallbacks]` (only when the entity defines lifecycle callbacks) |
 | Primary key | `$id` (int, auto-increment) |
+| External identity | `$uuid` (string(36), unique, declared immediately below `$id`, generated via `UUID::v4()` in the constructor, exposed via `getUuid()`) — no `setUuid()` except where it already existed |
 | Created timestamp | `$createdAt` (DateTimeImmutable) |
 | Updated timestamp | `$updatedAt` (DateTimeImmutable) |
 | `__toString()` method | Returns human-readable identifier |
+
+> `uuid` is assigned in the constructor so it is available immediately.
+> Generic creation (`BaseServiceMutationTrait::new()`) may bypass the
+> constructor via reflection; in that path the service assigns `UUID::v4()`
+> to an uninitialized `$uuid` property. Entities MUST NOT rely on
+> `PrePersist` for UUID generation.
 
 > **Exception categories** (not CRUD aggregates): Inbox/Outbox event records
 > (`eventId` identity, claim fields, no `updatedAt`/`__toString`), append-only
@@ -36,6 +43,9 @@ class Xxx
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;

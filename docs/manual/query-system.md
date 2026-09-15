@@ -225,7 +225,7 @@ When `@expands` is present, `RestController::expandObjects()` sets
 `__metadata = clone node` (avoids self-reference recursion) and
 `FlatNormalizer` returns the full decorated normalization for that relation
 (`id`, `uuid`, `name`, `price`, etc. plus `__metadata` with the same full data)
-instead of the reduced `id/__toString` view. Example for `Product`:
+instead of the reduced `id/uuid/__toString` view. Example for `Product`:
 
 ```
 # GET /api/v1/app/products?@expands=specifications&X-Store-Code=BUND
@@ -236,7 +236,7 @@ instead of the reduced `id/__toString` view. Example for `Product`:
 
 Controls response projection:
 
-- **`@display=reduce`** — each item becomes `{id, __toString}`.
+- **`@display=reduce`** — each item becomes `{id, uuid, __toString}` (`uuid` included whenever the entity exposes `getUuid()`, which every Doctrine entity does).
 - **`@display=<json array>`** — e.g. `['id','name','category.name']` produces
   a flat object with the requested fields (dotted paths traversed via getters).
 - **`@display=<json object>`** — keys are output fields, values are

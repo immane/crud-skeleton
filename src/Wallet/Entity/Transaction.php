@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wallet\Entity;
 
+use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: \App\Wallet\Repository\TransactionRepository::class)]
@@ -66,9 +67,9 @@ class Transaction
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $completedAt = null;
 
-    public function __construct(string $uuid, int $amount, string $type)
+    public function __construct(?string $uuid, int $amount, string $type)
     {
-        $this->uuid = $uuid;
+        $this->uuid = $uuid ?? UUID::v4();
         $this->amount = $amount;
         $this->setType($type);
         $this->createdAt = new \DateTimeImmutable();

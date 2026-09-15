@@ -161,11 +161,11 @@ carry **explicit scalar fields** rather than an envelope (see
 
 | Topic (`.v1` suffix = version) | Emitter outbox | Consumer |
 |--------------------------------|----------------|----------|
-| `trade.order.created.v1` | `trade_outbox_message` | Store (`TradeOrderCreatedHandler`) — always emitted when a `StoreContext` is present; Store validates and auto-accepts or creates an inventory reservation (no Trade ack) |
+| `trade.order.created.v1` | `trade_outbox_message` | Store (`TradeOrderCreatedHandler`) — always emitted when a `StoreContext` is present; Store creates the StoreOrder and then follows per-store policy: auto-accept, manual accept, and/or inventory reservation, relaying `store.order.accepted/rejected.v1` back to Trade |
 | `trade.order.cancelled.v1` | `trade_outbox_message` | Store (`TradeOrderCancelledHandler`) |
 | `store.order.verified.v1` | `store_outbox_message` | Trade (`StoreOrderVerifiedHandler`) — only when Trade order metadata `_completionMode == 'store_verification'` (snapshot of `StoreContext.requireVerification` at creation); payload `{orderUuid, storeOrderUuid, storeUuid, verifiedBy, verifiedAt}` (no `verificationCode`; audit `verifiedBy`/`verifiedAt` only); guard is Trade `_completionMode` |
-| `store.order.accepted.v1` | — | **Removed** — former Store→Trade acceptance ack; no longer emitted or consumed |
-| `store.order.rejected.v1` | — | **Removed** — former Store→Trade rejection ack; no longer emitted or consumed |
+| `store.order.accepted.v1` | `store_outbox_message` | Trade (`StoreOrderAcceptedHandler`) — projects `acceptance=accepted` into `OrderStoreLifecycle`; unblocks `confirm` when the order requires acceptance |
+| `store.order.rejected.v1` | `store_outbox_message` | Trade (`StoreOrderRejectedHandler`) — projects `acceptance=rejected`; auto-cancels pre-payment Trade orders |
 | `inventory.reservation.requested.v1` | `store_outbox_message` | Inventory (`ReservationRequestedHandler`) |
 | `inventory.reservation.release.requested.v1` | `store_outbox_message` | Inventory (`ReservationReleaseRequestedHandler`) |
 | `inventory.reservation.confirmed.v1` | `inventory_outbox_message` | Store (`ReservationConfirmedHandler`) |
@@ -338,16 +338,15 @@ sequenceDiagram
     participant I as Inventory
     participant IO as Inventory Outbox
 
-    T->>T: OrderService::createOrder(storeContext)<br/>(txn) workflow submit + record trade.order.created.v1<br/>metadata._completionMode = requireVerification ? 'store_verification' : 'manual'
-    T->>TO: (txn) += trade.order.created.v1 {orderUuid, store{uuid,code,name,requireVerification}, items, delivery, placedAt}
+    T->>T: OrderService::createOrder(storeContext)<br/>(txn) Order + OrderStoreLifecycle + trade.order.created.v1<br/>metadata._store{uuid,code,name,requireAcceptance,requireInventory,requireVerification}
+    T->>TO: (txn) += trade.order.created.v1 {orderUuid, store{...}, items, delivery, placedAt}
     TO->>S: app:trade:outbox:publish → TradeOrderCreatedMessage
     S->>S: (txn) inbox += trade.order.created.v1 (StoreConsumedEvent)
+    S->>S: create StoreOrder (snapshots the verification requirement)
     alt store missing or inactive
-        S->>S: throw RuntimeException('Store is not available.')<br/>Messenger retry (no store.order.rejected.v1)
-    else INVENTORY_ENABLED=0
-        S->>S: create StoreOrder + accept immediately (no outbox to Trade)
-    else INVENTORY_ENABLED=1
-        S->>S: create StoreOrder + awaitInventory(reservationId)
+        S->>SO: (txn) += store.order.rejected.v1 {reasonCode: STORE_UNAVAILABLE}
+    else inventory required (per-store requireInventory, global INVENTORY_ENABLED master switch)
+        S->>S: awaitInventory(reservationId)
         S->>SO: (txn) += inventory.reservation.requested.v1
         SO->>I: app:store:outbox:publish → ReservationRequestedMessage
         I->>I: (txn) inbox += requested; InventoryService::reserve()
@@ -357,12 +356,22 @@ sequenceDiagram
             I->>IO: (txn) += inventory.reservation.confirmed.v1
         end
         IO->>S: app:inventory:outbox:publish → ReservationConfirmed/Rejected
-        S->>S: (txn) inbox += outcome; accept/reject storeOrder locally (no Trade relay)
+        S->>S: (txn) inbox += outcome; reject on rejected;<br/>accept on confirmed unless staff acceptance required
+    else acceptance required (per-store requireAcceptance)
+        S->>S: leave pending_validation for staff accept/reject via API
+    else default (neither required)
+        S->>SO: (txn) accept + store.order.accepted.v1
     end
+    SO->>T: app:store:outbox:publish → StoreOrderAccepted/Rejected
+    T->>T: (txn) TradeConsumedEvent + OrderStoreLifecycle markAccepted/markRejected;<br/>rejected auto-cancels pre-payment Trade orders
 ```
 
-Trade always writes `trade.order.created.v1` when a `StoreContext` is supplied. Store never
-acks with `store.order.accepted/rejected.v1`; the only Store→Trade signal is `store.order.verified.v1` for completion. An unavailable store is a retryable failure, not a rejection event.
+Trade always writes `trade.order.created.v1` when a `StoreContext` is supplied. Per-store
+acceptance/inventory policy (`settings.order.requireAcceptance`, `settings.order.requireInventory`,
+both default `false`) is snapshotted at order creation; later settings changes do not affect
+in-flight orders. Trade `confirm` waits for the acceptance fact only when the order snapshot
+has `requireAcceptance=true`; otherwise the Trade order flows normally while the Store order
+is still created and projected.
 
 ### 6.2 Order cancellation → Store → Inventory release
 

@@ -19,6 +19,9 @@ class SettlementOutboxMessage
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
+
     #[ORM\Column(name: 'event_id', type: 'string', length: 36, unique: true)]
     private string $eventId;
 
@@ -60,6 +63,7 @@ class SettlementOutboxMessage
         array $payload,
         ?\DateTimeImmutable $occurredAt = null,
     ) {
+        $this->uuid = UUID::v4();
         $this->eventId = UUID::v4();
         $this->topic = $topic;
         $this->aggregateType = $aggregateType;
@@ -70,6 +74,7 @@ class SettlementOutboxMessage
     }
 
     public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
     public function getEventId(): string { return $this->eventId; }
     public function getTopic(): string { return $this->topic; }
     public function getAggregateType(): string { return $this->aggregateType; }

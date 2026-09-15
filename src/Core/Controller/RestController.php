@@ -337,10 +337,16 @@ class RestController extends AbstractController
             if ($display === 'reduce') {
                 $items = $collection instanceof ArrayCollection ? $collection->toArray() : $collection;
                 return array_map(function ($entity) {
-                    return [
+                    $result = [
                         'id' => $entity->getId(),
                         '__toString' => $entity->__toString(),
                     ];
+
+                    if (is_callable([$entity, 'getUuid'])) {
+                        $result['uuid'] = call_user_func([$entity, 'getUuid']);
+                    }
+
+                    return $result;
                 }, $items);
             }
 

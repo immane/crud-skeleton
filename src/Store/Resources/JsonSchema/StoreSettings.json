@@ -2,11 +2,27 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "Store/StoreSettings",
   "title": "Store Settings",
-  "description": "Store-local configuration (Store.settings). Both flows default to false.",
+  "description": "Store-local configuration (Store.settings). All flows default to false.",
   "type": "object",
   "additionalProperties": true,
   "properties": {
-    "fulfillment": {
+    "order": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requireAcceptance": {
+          "type": "boolean",
+          "description": "When true, Trade confirm waits for the Store acceptance fact; StoreOrder stays pending until staff accept (or inventory confirms when requireInventory is also true). Default false (worker auto-accepts).",
+          "default": false
+        },
+        "requireInventory": {
+          "type": "boolean",
+          "description": "When true, StoreOrder awaits an inventory reservation before acceptance. Default false (no reservation requested).",
+          "default": false
+        }
+      },
+      "required": []
+    },    "fulfillment": {
       "type": "object",
       "additionalProperties": false,
       "properties": {

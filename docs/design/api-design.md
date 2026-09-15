@@ -276,7 +276,7 @@ database-side effect. Unknown regex flags are rejected.
 
 ### 8.1 Entity Serialization
 
-- Circular references resolved to `{ "id": N, "__toString": "...", "__metadata": {} }`
+- Circular references resolved to `{ "id": N, "uuid": "...", "__toString": "...", "__metadata": {} }`
 - `DateTime` fields serialized to ISO 8601 strings
 - JSON fields auto-parsed from string to object/array
 - Doctrine proxy/internal fields stripped
@@ -286,7 +286,7 @@ database-side effect. Unknown regex flags are rejected.
 | Mode | Behavior |
 |------|----------|
 | `complex` | Deep expansion with metadata |
-| `reduce` | Shallow, only ID+toString for relations |
+| `reduce` | Shallow, only ID+UUID+toString for relations |
 | Expression | Custom field mapping via expression syntax |
 | (none) | Flat normalization (default) |
 

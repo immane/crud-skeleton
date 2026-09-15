@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Utils\UUID;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,9 @@ class Content
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
@@ -45,6 +49,7 @@ class Content
 
     public function __construct(string $title, ?string $body = null)
     {
+        $this->uuid = UUID::v4();
         $this->title = $title;
         $this->body = $body;
         $this->tags = new ArrayCollection();
@@ -59,6 +64,11 @@ class Content
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getTitle(): string

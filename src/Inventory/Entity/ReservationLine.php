@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Inventory\Entity;
 
+use App\Core\Utils\UUID;
 use App\Inventory\Repository\ReservationLineRepository;
 use App\Inventory\Service\Quantity;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,9 @@ class ReservationLine
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'lines')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -46,6 +50,7 @@ class ReservationLine
      */
     public function __construct(Material $material, string $requestedQuantity, array $sourceSpecificationUuids)
     {
+        $this->uuid = UUID::v4();
         $this->materialUuid = $material->getUuid();
         $this->materialCodeSnapshot = $material->getCode();
         $this->unitSnapshot = $material->getUnit();
@@ -53,6 +58,9 @@ class ReservationLine
         $this->reservedQuantity = $this->requestedQuantity;
         $this->sourceSpecificationUuids = array_values(array_unique($sourceSpecificationUuids));
     }
+
+    public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
 
     public function getMaterialUuid(): string
     {

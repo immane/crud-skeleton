@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Identity\Entity;
 
+use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: \App\Identity\Repository\RefreshTokenRepository::class)]
@@ -16,6 +17,9 @@ class RefreshToken
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'bigint')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -47,6 +51,7 @@ class RefreshToken
 
     public function __construct(User $user, string $hash, \DateTimeImmutable $expiresAt, ?string $jti = null)
     {
+        $this->uuid = UUID::v4();
         $this->user = $user;
         $this->refreshTokenHash = $hash;
         $this->expiresAt = $expiresAt;
@@ -57,6 +62,11 @@ class RefreshToken
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getUser(): User

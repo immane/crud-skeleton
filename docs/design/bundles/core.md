@@ -299,7 +299,7 @@ Symfony ObjectNormalizer
   -> FlatNormalizer (decorator)
     -> Strips Doctrine proxy internals
     -> Adds __toString to every entity
-    -> Collapses related entities to {id, __toString, __metadata}
+    -> Collapses related entities to {id, uuid, __toString, __metadata}
     -> Auto-parses JSON strings to arrays/objects
 ```
 

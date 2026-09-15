@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: "App\\Common\\Repository\\PageRepository")]
@@ -13,6 +14,9 @@ class Page
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
@@ -43,6 +47,7 @@ class Page
 
     public function __construct(string $title, string $slug)
     {
+        $this->uuid = UUID::v4();
         $this->title = $title;
         $this->slug = $slug;
         $this->createdAt = new \DateTimeImmutable();
@@ -56,6 +61,11 @@ class Page
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getTitle(): string

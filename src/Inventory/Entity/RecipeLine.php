@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Inventory\Entity;
 
+use App\Core\Utils\UUID;
 use App\Inventory\Repository\RecipeLineRepository;
 use App\Inventory\Service\Quantity;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,9 @@ class RecipeLine
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: SpecificationRecipe::class, inversedBy: 'lines')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -32,6 +36,7 @@ class RecipeLine
 
     public function __construct(Material $material, string $quantityPerUnit, int $sort = 0)
     {
+        $this->uuid = UUID::v4();
         $this->material = $material;
         $this->quantityPerUnit = Quantity::normalize($quantityPerUnit, true);
         $this->sort = $sort;
@@ -40,6 +45,11 @@ class RecipeLine
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getRecipe(): ?SpecificationRecipe

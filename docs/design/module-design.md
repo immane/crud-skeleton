@@ -32,7 +32,7 @@ src/{Module}/
 
 - **Location**: `src/{Module}/Entity/{Name}.php`
 - **Namespace**: `App\{Module}\Entity`
-- **Must**: Implement `__toString()`, declare `touch()` lifecycle hook, use PHP 8 attributes
+- **Must**: Implement `__toString()`, declare `uuid` immediately below `id` with constructor `UUID::v4()` assignment plus `getUuid()` (no `setUuid`, no `PrePersist` for UUID), declare `touch()` lifecycle hook, use PHP 8 attributes
 - **Must**: Follow the [Data Model Design Contract](data-model.md)
 - **Must NOT**: Contain business logic, DI, or service references
 

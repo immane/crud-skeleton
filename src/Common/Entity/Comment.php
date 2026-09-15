@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Utils\UUID;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +15,9 @@ class Comment
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(type: 'text')]
     private string $body;
@@ -49,6 +53,7 @@ class Comment
 
     public function __construct(string $body, string $entityType, int $entityId)
     {
+        $this->uuid = UUID::v4();
         $this->body = $body;
         $this->entityType = $entityType;
         $this->entityId = $entityId;
@@ -63,6 +68,11 @@ class Comment
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getBody(): string

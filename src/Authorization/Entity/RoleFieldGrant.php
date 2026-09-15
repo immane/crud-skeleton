@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Authorization\Entity;
 
+use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: \App\Authorization\Repository\RoleFieldGrantRepository::class)]
@@ -16,6 +17,9 @@ class RoleFieldGrant
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: Role::class)]
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
@@ -42,6 +46,7 @@ class RoleFieldGrant
      */
     public function __construct(Role $role, string $resource, string $action, array $fields)
     {
+        $this->uuid = UUID::v4();
         $this->role = $role;
         $this->resource = $resource;
         $this->action = $action;
@@ -52,6 +57,11 @@ class RoleFieldGrant
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getRole(): Role

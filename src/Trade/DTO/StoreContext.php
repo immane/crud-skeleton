@@ -12,11 +12,13 @@ final readonly class StoreContext
         public string $storeName,
         public string $channel = 'api',
         public string $currency = 'CNY',
+        public bool $requireAcceptance = false,
+        public bool $requireInventory = false,
         public bool $requireVerification = false,
     ) {
     }
 
-    /** @return array{uuid: string, code: string, name: string, channel: string, currency: string, requireVerification: bool} */
+    /** @return array{uuid: string, code: string, name: string, channel: string, currency: string, requireAcceptance: bool, requireInventory: bool, requireVerification: bool} */
     public function toSnapshot(): array
     {
         return [
@@ -25,6 +27,8 @@ final readonly class StoreContext
             'name' => $this->storeName,
             'channel' => $this->channel,
             'currency' => $this->currency,
+            'requireAcceptance' => $this->requireAcceptance,
+            'requireInventory' => $this->requireInventory,
             'requireVerification' => $this->requireVerification,
         ];
     }

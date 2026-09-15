@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Utils\UUID;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +15,9 @@ class Picture
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -41,6 +45,7 @@ class Picture
 
     public function __construct(string $image, ?Category $category = null)
     {
+        $this->uuid = UUID::v4();
         $this->image = $image;
         $this->category = $category;
         $this->createdAt = new \DateTimeImmutable();
@@ -54,6 +59,11 @@ class Picture
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getUser(): ?User

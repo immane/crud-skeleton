@@ -117,10 +117,11 @@ class RestControllerTest extends TestCase
         $this->assertSame(1, $decoded['paginator']['limit']);
     }
 
-    public function testDisplayReduceProducesIdAndToString()
+    public function testDisplayReduceProducesIdUuidAndToString()
     {
         $entity = new class {
             public function getId() { return 123; }
+            public function getUuid() { return '550e8400-e29b-41d4-a716-446655440000'; }
             public function __toString() { return 'entity-123'; }
         };
 
@@ -140,7 +141,11 @@ class RestControllerTest extends TestCase
         $decoded = json_decode($resp->getContent(), true);
 
         $this->assertIsArray($decoded['data']);
-        $this->assertEquals([['id' => 123, '__toString' => 'entity-123']], $decoded['data']);
+        $this->assertEquals([[
+            'id' => 123,
+            '__toString' => 'entity-123',
+            'uuid' => '550e8400-e29b-41d4-a716-446655440000',
+        ]], $decoded['data']);
     }
 
     public function testExpressionEvaluationInDisplay()
@@ -243,6 +248,5 @@ class RestControllerTest extends TestCase
         self::assertArrayNotHasKey('paginator', $body);
     }
 }
-
 
 

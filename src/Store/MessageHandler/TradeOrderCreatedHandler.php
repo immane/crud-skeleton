@@ -71,6 +71,7 @@ final readonly class TradeOrderCreatedHandler
                 return;
             }
 
+            $policy = $this->storePolicy($payload);
             $storeOrder = $this->storeOrderService->createFromTradeOrderSnapshot($store, $payload);
             if ($cancellation !== null) {
                 $this->storeOrderService->cancel($storeOrder);
@@ -80,10 +81,18 @@ final readonly class TradeOrderCreatedHandler
                 return;
             }
 
-            if (!$this->inventoryEnabled) {
+            if (!$this->inventoryEnabled || !$policy['requireInventory']) {
+                if ($policy['requireAcceptance']) {
+                    // Manual acceptance: leave pending for staff accept/reject via API.
+                    return;
+                }
                 $this->storeOrderService->accept($storeOrder);
                 return;
             }
+
+            // Inventory-gated acceptance: await the reservation outcome. When staff
+            // acceptance is also required, the confirmed reservation leaves the order
+            // awaiting manual accept instead of auto-accepting.
 
             $reservationId = \App\Core\Utils\UUID::v4();
             $this->storeOrderService->awaitInventory($storeOrder, $reservationId);
@@ -99,9 +108,29 @@ final readonly class TradeOrderCreatedHandler
         });
     }
 
-    /** @param array<string, mixed> $payload */
-    private function recordRejected(array $payload, string $storeUuid, string $code, string $reason): void
+    /**
+     * Acceptance/inventory policy frozen in the event payload (StoreContext snapshot).
+     *
+     * @param array<string, mixed> $payload
+     * @return array{requireAcceptance: bool, requireInventory: bool}
+     */
+    private function storePolicy(array $payload): array
     {
+        $storeSnapshot = $payload['store'] ?? null;
+        $policy = is_array($storeSnapshot) ? $storeSnapshot : [];
+        foreach (['requireAcceptance', 'requireInventory'] as $key) {
+            $value = $policy[$key] ?? false;
+            if (!is_bool($value)) {
+                throw new \InvalidArgumentException(sprintf('Trade order store %s must be a boolean.', $key));
+            }
+            $policy[$key] = $value;
+        }
+
+        return ['requireAcceptance' => $policy['requireAcceptance'], 'requireInventory' => $policy['requireInventory']];
+    }
+
+    /** @param array<string, mixed> $payload */
+    private function recordRejected(array $payload, string $storeUuid, string $code, string $reason): void    {
         $orderUuid = $payload['orderUuid'] ?? null;
         if (!is_string($orderUuid) || $orderUuid === '') {
             throw new \InvalidArgumentException('Trade order event does not include an order UUID.');
