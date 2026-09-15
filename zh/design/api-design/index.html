@@ -4260,7 +4260,7 @@ database-side effect. Unknown regex flags are rejected.</p>
 <h2 id="8-response-encoding-rules">8. Response Encoding Rules<a class="headerlink" href="#8-response-encoding-rules" title="Permanent link">&para;</a></h2>
 <h3 id="81-entity-serialization">8.1 Entity Serialization<a class="headerlink" href="#81-entity-serialization" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Circular references resolved to <code>{ "id": N, "__toString": "...", "__metadata": {} }</code></li>
+<li>Circular references resolved to <code>{ "id": N, "uuid": "...", "__toString": "...", "__metadata": {} }</code></li>
 <li><code>DateTime</code> fields serialized to ISO 8601 strings</li>
 <li>JSON fields auto-parsed from string to object/array</li>
 <li>Doctrine proxy/internal fields stripped</li>
@@ -4280,7 +4280,7 @@ database-side effect. Unknown regex flags are rejected.</p>
 </tr>
 <tr>
 <td><code>reduce</code></td>
-<td>Shallow, only ID+toString for relations</td>
+<td>Shallow, only ID+UUID+toString for relations</td>
 </tr>
 <tr>
 <td>Expression</td>

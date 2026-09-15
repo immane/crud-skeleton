@@ -3275,10 +3275,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-33-migrations-single-source-migrations-directory" class="md-nav__link">
+  <a href="#15-database-tables-43-migrations-single-source-migrations-directory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (33 Migrations — single source: migrations/ directory)
+        15. Database Tables (43 Migrations — single source: migrations/ directory)
       
     </span>
   </a>
@@ -4312,10 +4312,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-database-tables-33-migrations-single-source-migrations-directory" class="md-nav__link">
+  <a href="#15-database-tables-43-migrations-single-source-migrations-directory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        15. Database Tables (33 Migrations — single source: migrations/ directory)
+        15. Database Tables (43 Migrations — single source: migrations/ directory)
       
     </span>
   </a>
@@ -5869,8 +5869,8 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </tr>
 <tr>
 <td><strong>UUID v4</strong></td>
-<td>Trade + Wallet + Authorization + Store</td>
-<td><code>UUID::v4()</code> for external identity</td>
+<td>All Doctrine entities</td>
+<td><code>UUID::v4()</code> (<code>random_bytes</code>-based) in the constructor (<code>uuid</code> below <code>id</code>, <code>getUuid()</code>, no <code>setUuid</code>/<code>PrePersist</code>); <code>BaseServiceMutationTrait::new()</code> backfills <code>uuid</code> when the constructor is bypassed; <code>@display=reduce</code> → <code>{id, uuid, __toString}</code>, relations flatten to <code>{id, uuid, __toString, __metadata}</code></td>
 </tr>
 <tr>
 <td><strong>Soft delete</strong></td>
@@ -6174,7 +6174,7 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 </table>
 <h3 id="144-schema-configuration-configpackagesnelmio_api_docyaml">14.4 Schema Configuration (<code>config/packages/nelmio_api_doc.yaml</code>)<a class="headerlink" href="#144-schema-configuration-configpackagesnelmio_api_docyaml" title="Permanent link">&para;</a></h3>
 <p>44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat, Authorization, Store). Each with field-level type, description, enum, and example values. <code>path_patterns</code> includes both <code>^/api</code> and <code>^/system</code>.</p>
-<h2 id="15-database-tables-33-migrations-single-source-migrations-directory">15. Database Tables (33 Migrations — single source: <code>migrations/</code> directory)<a class="headerlink" href="#15-database-tables-33-migrations-single-source-migrations-directory" title="Permanent link">&para;</a></h2>
+<h2 id="15-database-tables-43-migrations-single-source-migrations-directory">15. Database Tables (43 Migrations — single source: <code>migrations/</code> directory)<a class="headerlink" href="#15-database-tables-43-migrations-single-source-migrations-directory" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -6290,6 +6290,14 @@ and Store publishers; the existing <code>worker</code> will consume its Messenge
 <tr>
 <td>20260903000003</td>
 <td>Store order verification fields (<code>verified_at</code>, <code>verified_by</code>, <code>verification_code</code>)</td>
+</tr>
+<tr>
+<td>20260915000000-20260915000002</td>
+<td>UUID rollout for public resources (Common 8, Wallet, WechatUser, Permission): nullable add → PHP/DBAL backfill → unique + NOT NULL</td>
+</tr>
+<tr>
+<td>20260915000003-20260915000005</td>
+<td>UUID rollout for remaining entities (RefreshToken, AuditLog, RoleFieldGrant, Membership, Stock, lines, consumed/outbox events, VoucherComment, etc.): nullable add → PHP/DBAL backfill → unique + NOT NULL</td>
 </tr>
 </tbody>
 </table>

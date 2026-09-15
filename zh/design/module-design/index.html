@@ -3535,7 +3535,7 @@ This is the blueprint for extending the system with new domains.</p>
 <ul>
 <li><strong>Location</strong>: <code>src/{Module}/Entity/{Name}.php</code></li>
 <li><strong>Namespace</strong>: <code>App\{Module}\Entity</code></li>
-<li><strong>Must</strong>: Implement <code>__toString()</code>, declare <code>touch()</code> lifecycle hook, use PHP 8 attributes</li>
+<li><strong>Must</strong>: Implement <code>__toString()</code>, declare <code>uuid</code> immediately below <code>id</code> with constructor <code>UUID::v4()</code> assignment plus <code>getUuid()</code> (no <code>setUuid</code>, no <code>PrePersist</code> for UUID), declare <code>touch()</code> lifecycle hook, use PHP 8 attributes</li>
 <li><strong>Must</strong>: Follow the <a href="../data-model/">Data Model Design Contract</a></li>
 <li><strong>Must NOT</strong>: Contain business logic, DI, or service references</li>
 </ul>

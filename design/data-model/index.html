@@ -3718,11 +3718,15 @@
 </tr>
 <tr>
 <td>PHP 8 attributes</td>
-<td><code>#[ORM\Entity]</code>, <code>#[ORM\Table]</code>, <code>#[ORM\HasLifecycleCallbacks]</code></td>
+<td><code>#[ORM\Entity]</code>, <code>#[ORM\Table]</code>, <code>#[ORM\HasLifecycleCallbacks]</code> (only when the entity defines lifecycle callbacks)</td>
 </tr>
 <tr>
 <td>Primary key</td>
 <td><code>$id</code> (int, auto-increment)</td>
+</tr>
+<tr>
+<td>External identity</td>
+<td><code>$uuid</code> (string(36), unique, declared immediately below <code>$id</code>, generated via <code>UUID::v4()</code> in the constructor, exposed via <code>getUuid()</code>) — no <code>setUuid()</code> except where it already existed</td>
 </tr>
 <tr>
 <td>Created timestamp</td>
@@ -3739,6 +3743,11 @@
 </tbody>
 </table>
 <blockquote>
+<p><code>uuid</code> is assigned in the constructor so it is available immediately.
+Generic creation (<code>BaseServiceMutationTrait::new()</code>) may bypass the
+constructor via reflection; in that path the service assigns <code>UUID::v4()</code>
+to an uninitialized <code>$uuid</code> property. Entities MUST NOT rely on
+<code>PrePersist</code> for UUID generation.</p>
 <p><strong>Exception categories</strong> (not CRUD aggregates): Inbox/Outbox event records
 (<code>eventId</code> identity, claim fields, no <code>updatedAt</code>/<code>__toString</code>), append-only
 audit / ledger / projection records, join / pivot tables, DTO / value objects,
@@ -3757,21 +3766,24 @@ requirement.</p>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="x">    #[ORM\Column]</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="x">    private ?int $id = null;</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">    #[ORM\Column]</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="x">    private ?\DateTimeImmutable $createdAt = null;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="x">    #[ORM\Column(type: 'string', length: 36, unique: true)]</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="x">    private string $uuid;</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="x">    #[ORM\Column]</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="x">    private ?\DateTimeImmutable $updatedAt = null;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="x">    private ?\DateTimeImmutable $createdAt = null;</span>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="x">    public function __toString(): string { return (string)$this-&gt;id; }</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="x">    #[ORM\PrePersist]</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="x">    public function touch(): void</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="x">    {</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="x">        $this-&gt;createdAt = new \DateTimeImmutable();</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="x">        $this-&gt;updatedAt = new \DateTimeImmutable();</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="x">    }</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="x">}</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="x">    #[ORM\Column]</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="x">    private ?\DateTimeImmutable $updatedAt = null;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="x">    public function __toString(): string { return (string)$this-&gt;id; }</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="x">    #[ORM\PrePersist]</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="x">    public function touch(): void</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="x">    {</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="x">        $this-&gt;createdAt = new \DateTimeImmutable();</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="x">        $this-&gt;updatedAt = new \DateTimeImmutable();</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="x">    }</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="x">}</span>
 </code></pre></div>
 <hr />
 <h2 id="2-naming-conventions">2. Naming Conventions<a class="headerlink" href="#2-naming-conventions" title="Permanent link">&para;</a></h2>

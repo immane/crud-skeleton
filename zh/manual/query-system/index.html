@@ -3684,14 +3684,14 @@ each related node, so <code>FlatNormalizer</code> can include the full normalize
 <code>__metadata = clone node</code> (avoids self-reference recursion) and
 <code>FlatNormalizer</code> returns the full decorated normalization for that relation
 (<code>id</code>, <code>uuid</code>, <code>name</code>, <code>price</code>, etc. plus <code>__metadata</code> with the same full data)
-instead of the reduced <code>id/__toString</code> view. Example for <code>Product</code>:</p>
+instead of the reduced <code>id/uuid/__toString</code> view. Example for <code>Product</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># GET /api/v1/app/products?@expands=specifications&amp;X-Store-Code=BUND
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a># → specifications: [{id:3, name:"经典", price:68000, ..., __metadata:{id:3, name:"经典", price:68000, ...}}]
 </code></pre></div>
 <h3 id="display"><code>@display</code><a class="headerlink" href="#display" title="Permanent link">&para;</a></h3>
 <p>Controls response projection:</p>
 <ul>
-<li><strong><code>@display=reduce</code></strong> — each item becomes <code>{id, __toString}</code>.</li>
+<li><strong><code>@display=reduce</code></strong> — each item becomes <code>{id, uuid, __toString}</code> (<code>uuid</code> included whenever the entity exposes <code>getUuid()</code>, which every Doctrine entity does).</li>
 <li><strong><code>@display=&lt;json array&gt;</code></strong> — e.g. <code>['id','name','category.name']</code> produces
   a flat object with the requested fields (dotted paths traversed via getters).</li>
 <li><strong><code>@display=&lt;json object&gt;</code></strong> — keys are output fields, values are

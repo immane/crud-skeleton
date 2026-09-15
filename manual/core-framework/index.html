@@ -4896,7 +4896,7 @@ representation:</p>
 <li>Avoids normalizing Doctrine internal objects (<code>Doctrine\ORM\*</code>,
   <code>Doctrine\Persistence\*</code>) — stringifies or returns the class name.</li>
 <li>Adds <code>__toString</code> at the top level when present.</li>
-<li>Reduces related objects to <code>{id, __toString, __metadata}</code>; when
+<li>Reduces related objects to <code>{id, uuid, __toString, __metadata}</code> (<code>uuid</code> included whenever the object exposes <code>getUuid()</code>); when
   <code>__metadata</code> is set (via <code>RestController::expandObjects()</code> for
   <code>@expands=specifications</code>), the related object is fully normalized
   (e.g. <code>Product.specifications[]</code> → <code>{id, uuid, name, price, ..., __metadata:{full spec}}</code>)
@@ -4904,7 +4904,7 @@ representation:</p>
 <li>Expands traversable collections of related objects (supports both JSON array
   <code>["specifications"]</code> and plain/comma-separated <code>specifications</code> / <code>a,b</code>).</li>
 <li>JSON-decodes string-valued fields (excluding numeric strings) into objects.</li>
-<li>On normalization failure returns <code>{id, __toString}</code> or <code>{__class}</code>.</li>
+<li>On normalization failure returns <code>{id, uuid, __toString}</code> (<code>uuid</code> when <code>getUuid()</code> exists) or <code>{__class}</code>.</li>
 </ul>
 <h3 id="srccoreserializernormalizercircularreferencehandlerphp"><code>src/Core/Serializer/Normalizer/CircularReferenceHandler.php</code><a class="headerlink" href="#srccoreserializernormalizercircularreferencehandlerphp" title="Permanent link">&para;</a></h3>
 <p>A second, stricter circular handler: returns <code>['id' =&gt; $id]</code> when the object
