@@ -212,7 +212,7 @@ ObjectNormalizer (Symfony)
 |------|----------|
 | Doctrine proxies | Stripped (internals removed) |
 | `__toString` | Added to every serialized entity |
-| Related entities | Collapsed to `{id, __toString, __metadata}` |
+| Related entities | Collapsed to `{id, uuid, __toString, __metadata}` |
 | JSON strings in fields | Auto-parsed to arrays/objects |
 | Traversable collections | Normalized as arrays |
 | Max depth exceeded | Circular reference handler fallback |

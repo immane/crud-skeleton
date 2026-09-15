@@ -643,7 +643,7 @@ Placed in `src/Core/Controller/System/` (framework layer). NelmioApiDoc path_pat
 | **Generic services** | Core/Service | `@template TEntity` + `@extends BaseService<Entity>` enables static analysis inference across the service layer |
 | **Field whitelisting** | Controllers | `$requiredCreateProperties`, `$acceptedCreateProperties`, `$acceptedUpdateProperties` (Role: `code/name/scopeType`; Assignment: `userUuid/roleUuid/scopeType/scopeUuid`; Content: `title/body/category/tags/metadata`) |
 | **Money in cents** | Wallet + Trade + Payment | `bigint` cents, API boundary converts ×/÷100 |
-| **UUID v4** | Trade + Wallet + Authorization + Store | `UUID::v4()` for external identity |
+| **UUID v4** | All Doctrine entities | `UUID::v4()` (`random_bytes`-based) in the constructor (`uuid` below `id`, `getUuid()`, no `setUuid`/`PrePersist`); `BaseServiceMutationTrait::new()` backfills `uuid` when the constructor is bypassed; `@display=reduce` → `{id, uuid, __toString}`, relations flatten to `{id, uuid, __toString, __metadata}` |
 | **Soft delete** | Trade | `isDeleted` boolean on Product, Specification |
 | **Snapshot** | Trade | `OrderItem` captures `specSnapshot`/`productSnapshot` at creation |
 | **Order metadata** | Trade | App order creation accepts optional `metadata` JSON and persists it as-is to `trade_order.metadata`, useful for receiver/address snapshots and frontend extension data |
@@ -728,7 +728,7 @@ Enriches all endpoints (90+):
 
 44+ named schemas across 13 tags (Auth, Products, Orders, Categories, Tags, Contents, Comments, Pages, Media, Settings, Promotions, PromotionTemplates, Wallet, System, Wechat, Authorization, Store). Each with field-level type, description, enum, and example values. `path_patterns` includes both `^/api` and `^/system`.
 
-## 15. Database Tables (33 Migrations — single source: `migrations/` directory)
+## 15. Database Tables (43 Migrations — single source: `migrations/` directory)
 
 | Version | Tables |
 |---------|--------|
@@ -759,6 +759,8 @@ Enriches all endpoints (90+):
 | 20260903000000-20260903000001 | Trade OrderItem `specificationUuid` backfill two-step (add uuid, drop FK) — irreversible |
 | 20260903000002 | Identity `users.created_at` / `updated_at` timestamps |
 | 20260903000003 | Store order verification fields (`verified_at`, `verified_by`, `verification_code`) |
+| 20260915000000-20260915000002 | UUID rollout for public resources (Common 8, Wallet, WechatUser, Permission): nullable add → PHP/DBAL backfill → unique + NOT NULL |
+| 20260915000003-20260915000005 | UUID rollout for remaining entities (RefreshToken, AuditLog, RoleFieldGrant, Membership, Stock, lines, consumed/outbox events, VoucherComment, etc.): nullable add → PHP/DBAL backfill → unique + NOT NULL |
 
 ## 16. Documentation Assets
 

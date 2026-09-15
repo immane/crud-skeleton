@@ -180,7 +180,7 @@ inconsistent prefixes inside a module, non-mirrored controller/service names.
 | Practice | Where it shows up |
 |----------|-------------------|
 | Paginate every list | `RestController::pagination()` — default limit 100, Doctrine Paginator for QueryBuilder |
-| Project columns instead of fetching everything | `@select`, `@display` (e.g. `reduce` = id + `__toString` only) |
+| Project columns instead of fetching everything | `@select`, `@display` (e.g. `reduce` = id + uuid + `__toString` only) |
 | Push filtering to the database | Expression DSL compiles to DQL (`ExpressionDqlParser`); the in-memory fallback is only a fallback |
 | Avoid implicit relation loading | Relations load lazily; expand relation trees explicitly via `@expands` |
 | Concurrent writes are guarded | `Wallet` uses optimistic locking (`version` column) and pessimistic writes for transfers; token rotation uses reuse detection |

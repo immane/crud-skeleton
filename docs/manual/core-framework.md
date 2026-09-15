@@ -457,7 +457,7 @@ representation:
 - Avoids normalizing Doctrine internal objects (`Doctrine\ORM\*`,
   `Doctrine\Persistence\*`) — stringifies or returns the class name.
 - Adds `__toString` at the top level when present.
-- Reduces related objects to `{id, __toString, __metadata}`; when
+- Reduces related objects to `{id, uuid, __toString, __metadata}` (`uuid` included whenever the object exposes `getUuid()`); when
   `__metadata` is set (via `RestController::expandObjects()` for
   `@expands=specifications`), the related object is fully normalized
   (e.g. `Product.specifications[]` → `{id, uuid, name, price, ..., __metadata:{full spec}}`)
@@ -465,7 +465,7 @@ representation:
 - Expands traversable collections of related objects (supports both JSON array
   `["specifications"]` and plain/comma-separated `specifications` / `a,b`).
 - JSON-decodes string-valued fields (excluding numeric strings) into objects.
-- On normalization failure returns `{id, __toString}` or `{__class}`.
+- On normalization failure returns `{id, uuid, __toString}` (`uuid` when `getUuid()` exists) or `{__class}`.
 
 ### `src/Core/Serializer/Normalizer/CircularReferenceHandler.php`
 
