@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Authorization\Entity;
 
+use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: \App\Authorization\Repository\AuditLogRepository::class)]
@@ -15,6 +16,9 @@ class AuditLog
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'bigint')]
     private ?string $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(type: 'string', length: 36, nullable: true)]
     private ?string $actorUuid = null;
@@ -44,6 +48,7 @@ class AuditLog
 
     public function __construct(string $action, string $targetType, ?string $targetUuid = null, ?string $actorUuid = null)
     {
+        $this->uuid = UUID::v4();
         $this->action = $action;
         $this->targetType = $targetType;
         $this->targetUuid = $targetUuid;
@@ -54,6 +59,11 @@ class AuditLog
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getActorUuid(): ?string

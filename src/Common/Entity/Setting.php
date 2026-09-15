@@ -2,7 +2,7 @@
 
 namespace App\Common\Entity;
 
-use App\Core\Entity\UuidIdentityTrait;
+use App\Core\Utils\UUID;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: "App\\Common\\Repository\\SettingRepository")]
@@ -10,12 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Setting
 {
-    use UuidIdentityTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(name: '`key`', type: 'string', length: 255, unique: true)]
     private string $key;
@@ -46,7 +47,7 @@ class Setting
 
     public function __construct(string $key)
     {
-        $this->initializeUuid();
+        $this->uuid = UUID::v4();
         $this->key = $key;
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -59,6 +60,11 @@ class Setting
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getKey(): string

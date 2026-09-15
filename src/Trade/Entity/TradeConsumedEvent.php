@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Trade\Entity;
 
+use App\Core\Utils\UUID;
 use App\Trade\Repository\TradeConsumedEventRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,6 +17,9 @@ class TradeConsumedEvent
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'bigint')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(name: 'event_id', type: 'string', length: 36, unique: true)]
     private string $eventId;
@@ -34,6 +38,7 @@ class TradeConsumedEvent
 
     public function __construct(string $eventId, string $topic, string $aggregateId, string $payloadHash)
     {
+        $this->uuid = UUID::v4();
         $this->eventId = $eventId;
         $this->topic = $topic;
         $this->aggregateId = $aggregateId;
@@ -42,6 +47,7 @@ class TradeConsumedEvent
     }
 
     public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
     public function getEventId(): string { return $this->eventId; }
     public function getTopic(): string { return $this->topic; }
     public function getAggregateId(): string { return $this->aggregateId; }

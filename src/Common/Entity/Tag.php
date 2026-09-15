@@ -2,7 +2,7 @@
 
 namespace App\Common\Entity;
 
-use App\Core\Entity\UuidIdentityTrait;
+use App\Core\Utils\UUID;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,12 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Tag
 {
-    use UuidIdentityTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
@@ -36,7 +37,7 @@ class Tag
 
     public function __construct(string $name, string $slug)
     {
-        $this->initializeUuid();
+        $this->uuid = UUID::v4();
         $this->name = $name;
         $this->slug = $slug;
         $this->createdAt = new \DateTimeImmutable();
@@ -50,6 +51,11 @@ class Tag
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getName(): string

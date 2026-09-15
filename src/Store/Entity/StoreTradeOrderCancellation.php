@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Store\Entity;
 
+use App\Core\Utils\UUID;
 use App\Store\Repository\StoreTradeOrderCancellationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,6 +18,9 @@ class StoreTradeOrderCancellation
     #[ORM\Column(type: 'bigint')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
+
     #[ORM\Column(name: 'trade_order_uuid', type: 'string', length: 36, unique: true)]
     private string $tradeOrderUuid;
 
@@ -28,11 +32,14 @@ class StoreTradeOrderCancellation
 
     public function __construct(string $tradeOrderUuid, string $storeUuid, \DateTimeImmutable $cancelledAt)
     {
+        $this->uuid = UUID::v4();
         $this->tradeOrderUuid = $tradeOrderUuid;
         $this->storeUuid = $storeUuid;
         $this->cancelledAt = $cancelledAt;
     }
 
+    public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
     public function getTradeOrderUuid(): string { return $this->tradeOrderUuid; }
     public function getStoreUuid(): string { return $this->storeUuid; }
     public function getCancelledAt(): \DateTimeImmutable { return $this->cancelledAt; }

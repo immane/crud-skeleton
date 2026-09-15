@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Settlement\Entity;
 
+use App\Core\Utils\UUID;
 use App\Settlement\Repository\SettlementConsumedEventRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,6 +17,9 @@ class SettlementConsumedEvent
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\Column(name: 'event_id', type: 'string', length: 64, unique: true)]
     private string $eventId;
@@ -42,6 +46,7 @@ class SettlementConsumedEvent
         string $sourceAggregateId,
         string $payloadHash,
     ) {
+        $this->uuid = UUID::v4();
         $this->eventId = $eventId;
         $this->topic = $topic;
         $this->sourceAggregateType = $sourceAggregateType;
@@ -51,6 +56,7 @@ class SettlementConsumedEvent
     }
 
     public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
     public function getEventId(): string { return $this->eventId; }
     public function getTopic(): string { return $this->topic; }
     public function getSourceAggregateType(): string { return $this->sourceAggregateType; }

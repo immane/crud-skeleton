@@ -17,6 +17,9 @@ class InventoryOutboxMessage
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'bigint')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
+
     #[ORM\Column(name: 'event_id', type: 'string', length: 36, unique: true)]
     private string $eventId;
 
@@ -55,6 +58,7 @@ class InventoryOutboxMessage
      */
     public function __construct(string $topic, string $aggregateType, string $aggregateId, array $payload, ?\DateTimeImmutable $occurredAt = null)
     {
+        $this->uuid = UUID::v4();
         $this->eventId = UUID::v4();
         $this->topic = $topic;
         $this->aggregateType = $aggregateType;
@@ -67,6 +71,11 @@ class InventoryOutboxMessage
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getEventId(): string

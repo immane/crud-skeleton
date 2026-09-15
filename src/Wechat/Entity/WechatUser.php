@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wechat\Entity;
 
-use App\Core\Entity\UuidIdentityTrait;
+use App\Core\Utils\UUID;
 use App\Identity\Entity\User;
 use App\Wechat\Repository\WechatUserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class WechatUser
 {
-    use UuidIdentityTrait;
-
     public const APP_TYPE_MINIAPP = 'miniapp';
     public const APP_TYPE_OFFICIAL = 'official';
 
@@ -25,6 +23,9 @@ class WechatUser
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -75,7 +76,7 @@ class WechatUser
 
     public function __construct(User $user, string $openid, string $appType)
     {
-        $this->initializeUuid();
+        $this->uuid = UUID::v4();
         $this->user = $user;
         $this->openid = $openid;
         $this->appType = $appType;
@@ -89,6 +90,7 @@ class WechatUser
     }
 
     public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
 
     public function getUser(): User { return $this->user; }
 

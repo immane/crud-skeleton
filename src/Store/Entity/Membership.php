@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Store\Entity;
 
+use App\Core\Utils\UUID;
 use App\Store\Repository\MembershipRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +29,9 @@ class Membership
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
+
     #[ORM\ManyToOne(targetEntity: Store::class)]
     #[ORM\JoinColumn(name: 'store_id', referencedColumnName: 'id', nullable: false, onDelete: 'RESTRICT')]
     private Store $store;
@@ -49,6 +53,7 @@ class Membership
 
     public function __construct(Store $store, string $userUuid, string $role)
     {
+        $this->uuid = UUID::v4();
         $this->store = $store;
         $this->userUuid = $userUuid;
         $this->setRole($role);
@@ -56,6 +61,7 @@ class Membership
     }
 
     public function getId(): ?int { return $this->id; }
+    public function getUuid(): string { return $this->uuid; }
     public function getStore(): Store { return $this->store; }
     public function getUserUuid(): string { return $this->userUuid; }
     public function getRole(): string { return $this->role; }

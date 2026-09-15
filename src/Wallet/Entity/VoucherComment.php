@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wallet\Entity;
 
+use App\Core\Utils\UUID;
 use App\Wallet\Repository\VoucherCommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,6 +24,9 @@ class VoucherComment
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
+
     #[ORM\ManyToOne(targetEntity: Voucher::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'voucher_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Voucher $voucher;
@@ -38,6 +42,7 @@ class VoucherComment
 
     public function __construct(Voucher $voucher, string $actor, string $text)
     {
+        $this->uuid = UUID::v4();
         $this->voucher = $voucher;
         $this->actor = $actor;
         $this->text = $text;
@@ -47,6 +52,11 @@ class VoucherComment
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getActor(): string

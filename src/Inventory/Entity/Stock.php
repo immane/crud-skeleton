@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Inventory\Entity;
 
+use App\Core\Utils\UUID;
 use App\Inventory\Repository\StockRepository;
 use App\Inventory\Service\Quantity;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +17,9 @@ class Stock
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true)]
+    private string $uuid;
 
     #[ORM\ManyToOne(targetEntity: Material::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'RESTRICT')]
@@ -44,6 +48,7 @@ class Stock
 
     public function __construct(string $storeUuid, Material $material, bool $allowNegativeStock = false)
     {
+        $this->uuid = UUID::v4();
         $this->storeUuid = $storeUuid;
         $this->material = $material;
         $this->allowNegativeStock = $allowNegativeStock;
@@ -53,6 +58,11 @@ class Stock
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getMaterial(): Material

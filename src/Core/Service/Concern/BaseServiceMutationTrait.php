@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core\Service\Concern;
 
 use App\Core\Utils\Inflect;
+use App\Core\Utils\UUID;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -24,10 +25,19 @@ trait BaseServiceMutationTrait
         $ref = new \ReflectionClass($this->entityClass);
         $ctor = $ref->getConstructor();
         if ($ctor === null || $ctor->getNumberOfRequiredParameters() === 0) {
-            return $ref->newInstance();
+            $object = $ref->newInstance();
+        } else {
+            $object = $ref->newInstanceWithoutConstructor();
         }
 
-        return $ref->newInstanceWithoutConstructor();
+        if ($ref->hasProperty('uuid')) {
+            $uuidProperty = $ref->getProperty('uuid');
+            if (!$uuidProperty->isInitialized($object)) {
+                $uuidProperty->setValue($object, UUID::v4());
+            }
+        }
+
+        return $object;
     }
 
     /**
