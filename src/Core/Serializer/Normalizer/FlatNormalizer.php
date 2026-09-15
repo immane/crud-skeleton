@@ -66,7 +66,13 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
             // When normalization fails (e.g. Doctrine internal objects in collections),
             // return a minimal representation
             if (method_exists($object, 'getId') && method_exists($object, '__toString')) {
-                return ['id' => $object->getId(), '__toString' => (string) $object];
+                $fallback = ['id' => $object->getId()];
+                if (method_exists($object, 'getUuid')) {
+                    $fallback['uuid'] = $object->getUuid();
+                }
+                $fallback['__toString'] = (string) $object;
+
+                return $fallback;
             }
             return ['__class' => get_class($object)];
         }
@@ -100,6 +106,9 @@ class FlatNormalizer implements NormalizerInterface, DenormalizerInterface, Norm
                 $res = [];
                 if (method_exists($o, 'getId')) {
                     $res['id'] = $o->getId();
+                }
+                if (method_exists($o, 'getUuid')) {
+                    $res['uuid'] = $o->getUuid();
                 }
                 if (method_exists($o, '__toString')) {
                     $res['__toString'] = $o->__toString();
