@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Picture
 {
+    use UuidIdentityTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -41,6 +44,7 @@ class Picture
 
     public function __construct(string $image, ?Category $category = null)
     {
+        $this->initializeUuid();
         $this->image = $image;
         $this->category = $category;
         $this->createdAt = new \DateTimeImmutable();

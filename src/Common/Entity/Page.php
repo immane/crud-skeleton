@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: "App\\Common\\Repository\\PageRepository")]
@@ -9,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Page
 {
+    use UuidIdentityTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -43,6 +46,7 @@ class Page
 
     public function __construct(string $title, string $slug)
     {
+        $this->initializeUuid();
         $this->title = $title;
         $this->slug = $slug;
         $this->createdAt = new \DateTimeImmutable();

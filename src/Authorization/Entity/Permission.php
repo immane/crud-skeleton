@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Authorization\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: \App\Authorization\Repository\PermissionRepository::class)]
@@ -12,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Permission
 {
+    use UuidIdentityTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -46,6 +49,7 @@ class Permission
 
     public function __construct(string $code, string $module, string $resource, string $action, string $name)
     {
+        $this->initializeUuid();
         $this->code = $code;
         $this->module = $module;
         $this->resource = $resource;

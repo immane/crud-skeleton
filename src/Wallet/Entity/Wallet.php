@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wallet\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'uniq_wallet_user_currency', columns: ['user_id', 'currency'])]
 class Wallet
 {
+    use UuidIdentityTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -55,6 +58,7 @@ class Wallet
 
     public function __construct(User $user, string $currency = 'USD')
     {
+        $this->initializeUuid();
         $this->user = $user;
         $this->currency = strtoupper($currency);
         $this->createdAt = new \DateTimeImmutable();

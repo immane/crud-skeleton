@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Media
 {
+    use UuidIdentityTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -61,6 +64,7 @@ class Media
 
     public function __construct(string $filename, string $originalFilename, string $mimeType, int $size, string $path, string $storage = 'local')
     {
+        $this->initializeUuid();
         $this->filename = $filename;
         $this->originalFilename = $originalFilename;
         $this->mimeType = $mimeType;

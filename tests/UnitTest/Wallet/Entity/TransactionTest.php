@@ -28,6 +28,13 @@ final class TransactionTest extends TestCase
         self::assertInstanceOf(\DateTimeImmutable::class, $tx->getCreatedAt());
     }
 
+    public function testConstructorGeneratesUuidWhenNoneIsProvided(): void
+    {
+        $tx = new Transaction(null, 5000, Transaction::TYPE_TRANSFER);
+
+        self::assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $tx->getUuid());
+    }
+
     public function testConstructorInvalidTypeThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);

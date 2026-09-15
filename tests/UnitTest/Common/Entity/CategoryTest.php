@@ -14,6 +14,7 @@ final class CategoryTest extends TestCase
 
         self::assertSame('Test Category', $entity->getName());
         self::assertSame('test-category', $entity->getSlug());
+        self::assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $entity->getUuid());
         self::assertNull($entity->getDescription());
         self::assertNull($entity->getParent());
         self::assertEmpty($entity->getChildren());

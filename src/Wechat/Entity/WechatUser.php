@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Wechat\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use App\Identity\Entity\User;
 use App\Wechat\Repository\WechatUserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class WechatUser
 {
+    use UuidIdentityTrait;
+
     public const APP_TYPE_MINIAPP = 'miniapp';
     public const APP_TYPE_OFFICIAL = 'official';
 
@@ -72,6 +75,7 @@ class WechatUser
 
     public function __construct(User $user, string $openid, string $appType)
     {
+        $this->initializeUuid();
         $this->user = $user;
         $this->openid = $openid;
         $this->appType = $appType;

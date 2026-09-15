@@ -2,6 +2,7 @@
 
 namespace App\Common\Entity;
 
+use App\Core\Entity\UuidIdentityTrait;
 use App\Identity\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Comment
 {
+    use UuidIdentityTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -49,6 +52,7 @@ class Comment
 
     public function __construct(string $body, string $entityType, int $entityId)
     {
+        $this->initializeUuid();
         $this->body = $body;
         $this->entityType = $entityType;
         $this->entityId = $entityId;
