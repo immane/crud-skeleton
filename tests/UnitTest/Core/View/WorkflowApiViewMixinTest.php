@@ -24,6 +24,7 @@ final class WorkflowApiViewMixinTest extends TestCase
 {
     private function createController(WorkflowFakeService $service, WorkflowInterface $workflow, object $doctrine): object
     {
+        $service->entityManager = $this->createStub(\Doctrine\ORM\EntityManagerInterface::class);
         $controller = new class($service) extends RestController {
             use ApiView, WorkflowApiViewMixin;
 
@@ -316,6 +317,7 @@ final class WorkflowFakeService implements BaseServiceInterface
     public int $updateCalls = 0;
     public array $updatedData = [];
     public bool $transactionRan = false;
+    public \Doctrine\ORM\EntityManagerInterface $entityManager;
 
     public function get($object, bool $directly = false)
     {
@@ -353,7 +355,7 @@ final class WorkflowFakeService implements BaseServiceInterface
     {
         $this->transactionRan = true;
 
-        return $fn(new \stdClass());
+        return $fn($this->entityManager);
     }
 }
 
