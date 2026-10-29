@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -35,10 +35,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1556,6 +1556,17 @@
     <span class="md-ellipsis">
       
         2.2 Dependency Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-source-coordination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Source coordination
       
     </span>
   </a>
@@ -4065,6 +4076,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#23-source-coordination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Source coordination
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5350,6 +5372,24 @@ Fuiou and Huifu are referenced only as proven legacy architecture inputs for fut
 </table>
 <p>Payment is a generic collection module. Business modules decide how to react to invoice events.
 Wallet balance deduction belongs to Wallet as a provider implementation. Payment only orchestrates generic adjustments.</p>
+<h3 id="23-source-coordination">2.3 Source coordination<a class="headerlink" href="#23-source-coordination" title="Permanent link">&para;</a></h3>
+<p><code>InvoiceSourcePolicyInterface</code> is Payment's extension point for source-owned
+locking and refund eligibility. Implementations are auto-tagged with
+<code>payment.invoice_source_policy</code>; <code>InvoiceService</code> accepts one policy per
+<code>getSourceType()</code> value and rejects duplicate registrations. Sources without a
+policy remain invoice-only; Payment does not import their entities or services.
+Manual service construction must supply the policies needed by its source types.</p>
+<p>Payment calls <code>lock(Invoice)</code> inside its transaction <strong>before</strong> refreshing and
+locking the invoice. A policy must use the same connection, refresh current source
+state, and hold source locks until the transaction commits. After both locks are
+held, <code>assertRefundable(Invoice)</code> validates new refunds and resumed unknown
+attempts, before any refund reservation or external side effect. Completed
+idempotent replays bypass eligibility validation, but still acquire the locks.</p>
+<p>Trade implements this interface in <code>OrderInvoiceSourcePolicy</code> and owns all
+<code>trade_order</code> knowledge: order lookup, the order-first lock, and the requirement
+that an order remain paid and linked to the refunded invoice. The durable refund
+attempt and fulfillment workflow guard continue to enforce the cross-transaction
+barrier described in section 9.5.</p>
 <hr />
 <h2 id="3-invoice-domain-model">3. Invoice Domain Model<a class="headerlink" href="#3-invoice-domain-model" title="Permanent link">&para;</a></h2>
 <h3 id="31-entity-contract">3.1 Entity Contract<a class="headerlink" href="#31-entity-contract" title="Permanent link">&para;</a></h3>
@@ -6394,6 +6434,18 @@ Wallet balance deduction belongs to Wallet as a provider implementation. Payment
 <a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>  -&gt; Trade listener applies order refund transition when full refund is confirmed
 </code></pre></div>
 <p>First-phase wallet adjustment support SHOULD only allow full invoice refund when an adjustment exists. Partial refund allocation between gateway payment and wallet deduction is explicitly out of scope.</p>
+<p>Refund reservation and Trade fulfillment MUST serialize on the order-row lock.
+Before reserving or resuming a refund, the locked order must still be <code>paid</code> and
+linked to that invoice. A committed <code>processing</code> or <code>unknown</code> refund attempt MUST
+block the Trade <code>fulfill</code> transition until the refund is completed or reconciled,
+even while the gateway call runs outside the database transaction. All fulfillment
+mutation entry points must recheck the workflow while holding that lock. Completed
+refund replays remain valid after the order reaches <code>refunded</code>.</p>
+<p>Refund barriers MUST use current database reads in mutation transactions, not
+ordinary snapshot reads or cached entities. This includes MySQL <code>REPEATABLE READ</code>
+transactions whose snapshot predates a concurrently committed reservation. See
+<a href="../../../runbooks/payment/#5-refund-safety-and-recovery">refund safety and recovery</a>
+for retry and reconciliation procedures.</p>
 <h3 id="96-trade-listener-contract">9.6 Trade Listener Contract<a class="headerlink" href="#96-trade-listener-contract" title="Permanent link">&para;</a></h3>
 <p><strong>File</strong>: <code>src/Trade/EventListener/OrderInvoiceListener.php</code></p>
 <p>The listener MUST:</p>
@@ -6432,6 +6484,14 @@ Wallet balance deduction belongs to Wallet as a provider implementation. Payment
 <tr>
 <td>T-PAY-7</td>
 <td>Persist order through <code>OrderService</code>, not direct EntityManager logic in listener</td>
+</tr>
+<tr>
+<td>T-PAY-8</td>
+<td>A late paid invoice must not replace payment fields on a paid, fulfilled, completed, or refunded order; log conflicting invoice/order identities for reconciliation</td>
+</tr>
+<tr>
+<td>T-PAY-9</td>
+<td>If the <code>pay</code> transition is unavailable, preserve the order's marking and payment fields; retain the paid invoice and log the anomaly</td>
 </tr>
 </tbody>
 </table>
@@ -7243,10 +7303,10 @@ Wallet balance deduction belongs to Wallet as a provider implementation. Payment
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
       

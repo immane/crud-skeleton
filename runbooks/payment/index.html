@@ -27,7 +27,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -35,10 +35,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -2004,10 +2004,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-webhook-setup" class="md-nav__link">
+  <a href="#5-refund-safety-and-recovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Webhook Setup
+        5. Refund safety and recovery
       
     </span>
   </a>
@@ -2015,10 +2015,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-wallet-balance-adjustment" class="md-nav__link">
+  <a href="#6-webhook-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Wallet Balance Adjustment
+        6. Webhook Setup
       
     </span>
   </a>
@@ -2026,10 +2026,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-troubleshooting" class="md-nav__link">
+  <a href="#7-wallet-balance-adjustment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Troubleshooting
+        7. Wallet Balance Adjustment
       
     </span>
   </a>
@@ -2037,10 +2037,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-checklist-before-going-live" class="md-nav__link">
+  <a href="#8-troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Checklist Before Going Live
+        8. Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-checklist-before-going-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Checklist Before Going Live
       
     </span>
   </a>
@@ -3021,10 +3032,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-webhook-setup" class="md-nav__link">
+  <a href="#5-refund-safety-and-recovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Webhook Setup
+        5. Refund safety and recovery
       
     </span>
   </a>
@@ -3032,10 +3043,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-wallet-balance-adjustment" class="md-nav__link">
+  <a href="#6-webhook-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Wallet Balance Adjustment
+        6. Webhook Setup
       
     </span>
   </a>
@@ -3043,10 +3054,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-troubleshooting" class="md-nav__link">
+  <a href="#7-wallet-balance-adjustment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Troubleshooting
+        7. Wallet Balance Adjustment
       
     </span>
   </a>
@@ -3054,10 +3065,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-checklist-before-going-live" class="md-nav__link">
+  <a href="#8-troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Checklist Before Going Live
+        8. Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-checklist-before-going-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Checklist Before Going Live
       
     </span>
   </a>
@@ -3193,18 +3215,68 @@ variables and MUST NOT be committed.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="5-webhook-setup">5. Webhook Setup<a class="headerlink" href="#5-webhook-setup" title="Permanent link">&para;</a></h2>
+<h2 id="5-refund-safety-and-recovery">5. Refund safety and recovery<a class="headerlink" href="#5-refund-safety-and-recovery" title="Permanent link">&para;</a></h2>
+<p>Invoice changes use source-owned <code>InvoiceSourcePolicyInterface</code> adapters to lock
+the source before the invoice. Trade's <code>OrderInvoiceSourcePolicy</code> locks and refreshes
+the linked order; Payment itself has no Trade dependency. Custom sources that need
+aggregate coordination must register their own <code>payment.invoice_source_policy</code>.
+When constructing <code>InvoiceService</code> manually, supply the appropriate source policies
+explicitly; a source without a policy only locks its invoice. Refund requests are persisted in
+<code>payment_invoice_refund_attempt</code> before calling a gateway. A completed request is
+idempotent; concurrent or uncertain requests for the same invoice block a different
+refund until the original request is resolved. Refund must be called outside any
+existing database transaction, so its reservation commits before external effects.
+Callers must restructure workflows that currently wrap refund in a transaction.</p>
+<p>Refund attempt lookups use locking current reads inside mutation transactions,
+including on MySQL <code>REPEATABLE READ</code>; refreshing an entity with an ordinary read
+does not advance an existing snapshot. Trade invoice refunds require the locked
+order to remain paid and linked to that invoice before reserving or resuming a
+refund. Completed attempts can still be replayed after the order is refunded.
+The durable <code>processing</code>/<code>unknown</code> attempt blocks the Trade <code>fulfill</code> workflow
+transition while gateway calls run outside the reservation transaction. Fulfillment
+mutations must hold the order-row lock and recheck the workflow in the same
+transaction (including generic workflow endpoints). Unknown attempts keep blocking
+fulfillment until reconciled; do not delete the attempt to release this barrier.</p>
+<p>Clients should pass a stable <code>idempotencyKey</code> in the refund request body and reuse it
+for retries. If omitted, the service derives a key from the amount and reason, which
+means an intentional later refund with the same amount and reason must use a distinct
+explicit key. Gateways must honor the supplied <code>refundIdempotencyKey</code> or provide
+equivalent provider-side idempotency. Do not retry an uncertain refund with a new key.</p>
+<p>An attempt left in <code>processing</code> cannot be taken over automatically, even after a
+timeout: the original worker may still be running. Reconcile abandoned attempts
+only after confirming that the worker has stopped and checking the provider and
+any adjustment records. The original gateway and adjustment allocation is recorded
+on new attempts. An <code>unknown</code> attempt without adjustments can be retried with the
+same key; the gateway must return the original refund result rather than issue another
+transfer. An uncertain adjusted attempt, or a legacy attempt without an allocation,
+must be reconciled manually, even with the same key: an adjustment may already have
+been refunded or partially refunded. A finalization failure can leave <code>processing</code>
+and requires the same investigation.
+If a provider cannot guarantee this behavior, reconcile the provider dashboard and
+the <code>payment_invoice_refund_attempt</code> row manually before issuing any new refund.
+Never delete an uncertain attempt to unblock another refund: that removes the
+idempotency barrier and can permit a duplicate payout.</p>
+<h2 id="6-webhook-setup">6. Webhook Setup<a class="headerlink" href="#6-webhook-setup" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Configure the provider's notify URL to point at
    <code>https://&lt;host&gt;/api/payment/notify/{payment}</code>.</li>
 <li>Ensure the endpoint is reachable from the provider (no auth on the webhook).</li>
 <li>Verify the provider signs the callback and the gateway validates the signature.</li>
 </ol>
-<h2 id="6-wallet-balance-adjustment">6. Wallet Balance Adjustment<a class="headerlink" href="#6-wallet-balance-adjustment" title="Permanent link">&para;</a></h2>
+<p>Synchronous payment completion reuses the locks held by <code>pay()</code> and preserves
+both gateway-written invoice context and the sanitized <code>pay</code> payload. External
+notifications still refresh under the source/invoice locks before validating state.</p>
+<p>When another invoice is paid after an order is already paid, fulfilled, completed,
+or refunded, Trade preserves the original invoice link, payment method, status,
+and payment timestamp. Investigate the critical log containing both invoice
+identities and reconcile the extra payment using the provider records. An illegal
+<code>pay</code> transition likewise leaves order fields unchanged; the paid invoice and log
+retain evidence rather than forcing a status or replacing the association.</p>
+<h2 id="7-wallet-balance-adjustment">7. Wallet Balance Adjustment<a class="headerlink" href="#7-wallet-balance-adjustment" title="Permanent link">&para;</a></h2>
 <p>When <code>payment.adjustments.wallet_balance.enabled=true</code>, the wallet balance is deducted
 first; the gateway only handles the remaining invoice amount. The <code>system_wallet_id</code>
 must point to a valid system wallet.</p>
-<h2 id="7-troubleshooting">7. Troubleshooting<a class="headerlink" href="#7-troubleshooting" title="Permanent link">&para;</a></h2>
+<h2 id="8-troubleshooting">8. Troubleshooting<a class="headerlink" href="#8-troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3234,9 +3306,14 @@ must point to a valid system wallet.</p>
 <td>Invoice not in refundable state</td>
 <td>Check invoice state machine</td>
 </tr>
+<tr>
+<td>Refund result uncertain</td>
+<td>Gateway timed out or local finalization failed</td>
+<td>Retry only an unadjusted <code>unknown</code> attempt with the same key and an idempotent gateway; otherwise reconcile provider, adjustments and attempt row</td>
+</tr>
 </tbody>
 </table>
-<h2 id="8-checklist-before-going-live">8. Checklist Before Going Live<a class="headerlink" href="#8-checklist-before-going-live" title="Permanent link">&para;</a></h2>
+<h2 id="9-checklist-before-going-live">9. Checklist Before Going Live<a class="headerlink" href="#9-checklist-before-going-live" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] <code>default_currency</code> and <code>system_wallet_id</code> set.</li>
 <li>[ ] Required gateways enabled.</li>
@@ -3299,10 +3376,10 @@ must point to a valid system wallet.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
       
