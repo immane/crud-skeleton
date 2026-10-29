@@ -6,6 +6,9 @@ namespace App\Trade\Repository;
 
 use App\Trade\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\LockMode;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,6 +24,19 @@ class OrderRepository extends ServiceEntityRepository
     public function findById(int $id): ?Order
     {
         return $this->find($id);
+    }
+
+    /** Read current state under the order lock, not a cached entity or snapshot. */
+    public function findByUuidForUpdate(string $uuid): ?Order
+    {
+        $query = $this->createQueryBuilder('o')
+            ->where('o.uuid = :uuid')->setParameter('uuid', $uuid)->getQuery()
+            ->setHint(Query::HINT_REFRESH, true);
+        if (!$this->getEntityManager()->getConnection()->getDatabasePlatform() instanceof SQLitePlatform) {
+            $query->setLockMode(LockMode::PESSIMISTIC_WRITE);
+        }
+
+        return $query->getOneOrNullResult();
     }
 
     /**

@@ -593,16 +593,46 @@ final class OrderServicePaymentsTest extends TestCase
 
         $invoiceService = $this->createMock(InvoiceServiceInterface::class);
         $invoiceService->expects(self::once())->method('get')->with(['uuid' => $invoice->getUuid()])->willReturn($invoice);
-        $invoiceService->expects(self::once())->method('refund')->with($invoice, 1500, 'duplicate', [])->willReturn(
+        $key = hash('sha256', "order-refund\0duplicate");
+        $invoiceService->expects(self::once())->method('refund')->with($invoice, 1500, 'duplicate', ['idempotencyKey' => $key])->willReturn(
             new PaymentRefundResult($invoice, 1500, Invoice::STATUS_REFUNDED)
         );
 
-        $service = $this->createService(['invoiceService' => $invoiceService]);
+        $repository = $this->createStub(\Doctrine\ORM\EntityRepository::class);
+        $em = $this->createEntityManager();
+        $em->method('getRepository')->willReturn($repository);
+        $service = $this->createService(['invoiceService' => $invoiceService, 'em' => $em]);
 
         $result = $service->refundPayment($order, 'duplicate', []);
 
         self::assertSame(1500, $result->amount);
         self::assertSame(Invoice::STATUS_REFUNDED, $result->status);
+    }
+
+    public function testRefundedOrderOnlyReplaysMatchingCompletedAttempt(): void
+    {
+        $invoice = (new Invoice())->setAmount(2000)->setRefundedAmount(2000);
+        $order = (new Order())->setInvoiceId($invoice->getUuid())->setStatus(Order::STATUS_REFUNDED);
+        $key = 'client-key';
+        $attempt = new \App\Payment\Entity\InvoiceRefundAttempt(hash('sha256', $invoice->getUuid() . "\0" . $key), $invoice->getUuid(), 1500, 'duplicate');
+        $repository = $this->createStub(\Doctrine\ORM\EntityRepository::class);
+        $repository->method('find')->willReturn($attempt);
+        $em = $this->createEntityManager();
+        $em->method('getRepository')->willReturn($repository);
+        $invoiceService = $this->createMock(InvoiceServiceInterface::class);
+        $invoiceService->method('get')->willReturn($invoice);
+        $invoiceService->expects(self::once())->method('refund')->with($invoice, 1500, 'duplicate', ['idempotencyKey' => $key])->willReturn(new PaymentRefundResult($invoice, 1500, Invoice::STATUS_REFUNDED));
+        $service = $this->createService(['invoiceService' => $invoiceService, 'em' => $em]);
+
+        try {
+            $service->refundPayment($order, 'duplicate', ['idempotencyKey' => $key]);
+            self::fail('An unfinished attempt must not be replayed on a refunded order.');
+        } catch (\LogicException) {
+        }
+        $attempt->complete('refund-id', ['amount' => 1500]);
+        self::assertSame(1500, $service->refundPayment($order, 'duplicate', ['idempotencyKey' => $key])->amount);
+        $this->expectException(\LogicException::class);
+        $service->refundPayment($order, 'different', ['idempotencyKey' => $key]);
     }
 
     // ========================================================================

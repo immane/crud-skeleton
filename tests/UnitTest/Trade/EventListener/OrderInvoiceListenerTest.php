@@ -12,6 +12,7 @@ use App\Payment\Event\InvoiceRefundedEvent;
 use App\Trade\Entity\Order;
 use App\Trade\EventListener\OrderInvoiceListener;
 use App\Trade\Service\OrderServiceInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -118,6 +119,47 @@ final class OrderInvoiceListenerTest extends TestCase
         $logger = $this->createStub(LoggerInterface::class);
 
         (new OrderInvoiceListener($orders, $workflow, $logger))->onInvoicePaid(new InvoicePaidEvent($invoice));
+        self::assertNull($order->getInvoiceId());
+        self::assertNull($order->getPaidAt());
+        self::assertNull($order->getPaymentStatus());
+    }
+
+    /** @return iterable<string, array{string, bool}> */
+    public static function settledOrders(): iterable
+    {
+        foreach ([Order::STATUS_PAID, Order::STATUS_FULFILLED, Order::STATUS_COMPLETED, Order::STATUS_REFUNDED] as $status) {
+            yield $status.' duplicate' => [$status, false];
+            yield $status.' conflicting invoice' => [$status, true];
+        }
+    }
+
+    #[DataProvider('settledOrders')]
+    public function testPaidPreservesSettledOrderPaymentAssociation(string $status, bool $differentInvoice): void
+    {
+        $paidAt = new \DateTimeImmutable('2026-08-09T10:00:00+08:00');
+        $order = (new Order())->setStatus($status)->setTotalAmount(1500)->setCurrency('CNY');
+        $original = $this->createTradeInvoice($order, Invoice::STATUS_PAID, 1500, 'CNY');
+        $order->setInvoiceId($original->getUuid())->setInvoiceNo($original->getOutTradeNo())
+            ->setPaymentStatus($status === Order::STATUS_REFUNDED ? Invoice::STATUS_REFUNDED : Invoice::STATUS_PAID)
+            ->setPaymentMethod(Invoice::PAYMENT_WALLET)->setPaidAt($paidAt);
+        $incoming = $differentInvoice ? $this->createTradeInvoice($order, Invoice::STATUS_PAID, 1500, 'CNY') : $original;
+        $incoming->setPayment(Invoice::PAYMENT_WECHAT)->setPaidAt(new \DateTimeImmutable());
+        $orders = $this->createOrderService($order);
+        $orders->expects(self::never())->method('update');
+        $workflow = $this->createMock(WorkflowInterface::class);
+        $workflow->expects(self::never())->method('can');
+        $workflow->expects(self::never())->method('apply');
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($differentInvoice ? self::once() : self::never())->method('critical');
+
+        (new OrderInvoiceListener($orders, $workflow, $logger))->onInvoicePaid(new InvoicePaidEvent($incoming));
+
+        self::assertSame($status, $order->getStatus());
+        self::assertSame($original->getUuid(), $order->getInvoiceId());
+        self::assertSame($original->getOutTradeNo(), $order->getInvoiceNo());
+        self::assertSame($status === Order::STATUS_REFUNDED ? Invoice::STATUS_REFUNDED : Invoice::STATUS_PAID, $order->getPaymentStatus());
+        self::assertSame(Invoice::PAYMENT_WALLET, $order->getPaymentMethod());
+        self::assertSame($paidAt, $order->getPaidAt());
     }
 
     public function testPaidMarksOrderPaidAndAppliesTransition(): void

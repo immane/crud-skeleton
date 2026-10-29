@@ -5,6 +5,7 @@ namespace App\Core\View;
 use App\Core\Controller\RestController;
 use App\Core\Service\BaseService;
 use App\Core\Utils\UUID;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,6 +61,11 @@ trait WorkflowApiViewMixin
      * @param array<string, mixed>|null $content
      */
     protected function beforeTransition(string $transition, object $entity, ?array $content): void
+    {
+    }
+
+    /** Called inside the transaction before transition checks or side effects. */
+    protected function prepareTransition(EntityManagerInterface $entityManager, string $transition, object $entity): void
     {
     }
 
@@ -169,6 +175,7 @@ trait WorkflowApiViewMixin
             }
 
             $service->wrapInTransaction(function ($em) use ($service, $entity, $content, $filteredContent, $workflow, $transition): void {
+                $this->prepareTransition($em, $transition, $entity);
                 $this->beforeTransition($transition, $entity, $content);
                 if (null !== $filteredContent && $filteredContent !== []) {
                     $service->update($entity, $filteredContent);

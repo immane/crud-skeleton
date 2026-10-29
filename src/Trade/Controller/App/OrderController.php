@@ -13,9 +13,13 @@ use App\Identity\Entity\User;
 use App\Trade\Entity\Order;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\StoreContextResolverInterface;
+use Doctrine\DBAL\LockMode;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -196,9 +200,20 @@ class OrderController extends RestController
         }
 
         try {
-            $this->service->wrapInTransaction(function () use ($order, $transition) {
+            $this->service->wrapInTransaction(function (EntityManagerInterface $em) use ($order, $user, $transition, $invalidMessage) {
+                $lock = $em->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+                    ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+                $em->refresh($order, $lock);
+                if ($order->getUser()?->getId() !== $user->getId()) {
+                    throw new NotFoundHttpException('Order not found.');
+                }
+                if (!$this->orderWorkflow->can($order, $transition)) {
+                    throw new \InvalidArgumentException($invalidMessage);
+                }
                 $this->orderWorkflow->apply($order, $transition);
             });
+        } catch (NotFoundHttpException $e) {
+            return $this->warning($e->getMessage(), 404, '', 404);
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);
         }
@@ -232,11 +247,22 @@ class OrderController extends RestController
         }
 
         try {
-            $this->service->wrapInTransaction(function () use ($order) {
+            $this->service->wrapInTransaction(function (EntityManagerInterface $em) use ($order, $user) {
+                $lock = $em->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+                    ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+                $em->refresh($order, $lock);
+                if ($order->getUser()?->getId() !== $user->getId()) {
+                    throw new NotFoundHttpException('Order not found.');
+                }
+                if (!$this->orderWorkflow->can($order, 'cancel')) {
+                    throw new \InvalidArgumentException('Order cannot be cancelled in current status.');
+                }
                 $this->cancelLinkedInvoice($order);
                 $this->orderWorkflow->apply($order, 'cancel');
             });
             return $this->success($order, 'Order cancelled');
+        } catch (NotFoundHttpException $e) {
+            return $this->warning($e->getMessage(), 404, '', 404);
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);
         }
@@ -293,7 +319,7 @@ class OrderController extends RestController
             return $this->warning('Order not found.', 404, '', 404);
         }
 
-        if (!$this->orderWorkflow->can($order, 'refund')) {
+        if (!$this->orderWorkflow->can($order, 'refund') && !($order->getStatus() === Order::STATUS_REFUNDED && $order->getInvoiceId() !== null)) {
             return $this->warning('Order cannot be refunded in current status.', 400, '', 400);
         }
 
@@ -313,11 +339,22 @@ class OrderController extends RestController
                 return $this->warning('systemWalletId is required.', 400, '', 400);
             }
 
-            $this->service->wrapInTransaction(function () use ($order, $systemWalletId, $reason): void {
+            $this->service->wrapInTransaction(function (EntityManagerInterface $em) use ($order, $user, $systemWalletId, $reason): void {
+                $lock = $em->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+                    ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+                $em->refresh($order, $lock);
+                if ($order->getUser()?->getId() !== $user->getId()) {
+                    throw new NotFoundHttpException('Order not found.');
+                }
+                if (!$this->orderWorkflow->can($order, 'refund') || $order->getInvoiceId() !== null) {
+                    throw new \InvalidArgumentException('Order cannot be refunded using this method.');
+                }
                 $this->service->refund($order, $systemWalletId, $reason);
                 $this->orderWorkflow->apply($order, 'refund');
                 $this->service->update($order, []);
             });
+        } catch (NotFoundHttpException $e) {
+            return $this->warning($e->getMessage(), 404, '', 404);
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);
         }

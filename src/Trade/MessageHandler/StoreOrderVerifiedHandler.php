@@ -11,6 +11,8 @@ use App\Trade\Repository\TradeConsumedEventRepository;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\OrderStoreLifecycleService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\LockMode;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -78,7 +80,13 @@ final readonly class StoreOrderVerifiedHandler
         if ($order->getStatus() !== Order::STATUS_FULFILLED) {
             return;
         }
-        $this->orderService->wrapInTransaction(function () use ($order): void {
+        $this->orderService->wrapInTransaction(function (EntityManagerInterface $em) use ($order, $storeUuid): void {
+            $lock = $em->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+                ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+            $em->refresh($order, $lock);
+            if (($order->getMetadata()['_store']['uuid'] ?? null) !== $storeUuid || $order->getStatus() !== Order::STATUS_FULFILLED) {
+                return;
+            }
             if ($this->workflow->can($order, 'complete')) {
                 $this->workflow->apply($order, 'complete');
             }

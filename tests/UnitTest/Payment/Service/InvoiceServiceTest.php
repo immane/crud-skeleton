@@ -15,6 +15,7 @@ use App\Payment\Service\Adjustment\PaymentAdjustmentProviderInterface;
 use App\Payment\Service\Adjustment\PaymentAdjustmentRegistry;
 use App\Payment\Service\Gateway\MockGateway;
 use App\Payment\Service\InvoiceService;
+use App\Payment\Service\InvoiceSourcePolicyInterface;
 use App\Payment\Service\PaymentGatewayRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,7 +58,8 @@ final class InvoiceServiceTest extends TestCase
         $this->service = $this->createService($this->adjustmentRegistry);
     }
 
-    private function createService(PaymentAdjustmentRegistry $adjustments): InvoiceService
+    /** @param list<InvoiceSourcePolicyInterface> $sourcePolicies */
+    private function createService(PaymentAdjustmentRegistry $adjustments, array $sourcePolicies = []): InvoiceService
     {
         $container = new Container();
         $container->set('doctrine.orm.entity_manager', $this->em);
@@ -69,6 +71,7 @@ final class InvoiceServiceTest extends TestCase
             $adjustments,
             $this->workflow,
             $this->dispatcher,
+            $sourcePolicies,
         );
     }
 
@@ -117,6 +120,34 @@ final class InvoiceServiceTest extends TestCase
         self::assertSame('online', $invoice->getGateway());
         self::assertSame('h5', $invoice->getTradeType());
         self::assertSame(1000, $invoice->getExtraData()['pay']['amount']);
+    }
+
+    public function testCustomSourceLocksBeforeInvoiceRefreshAndSynchronousCompletionDoesNotRefreshAgain(): void
+    {
+        $policy = new class implements InvoiceSourcePolicyInterface {
+            public int $locks = 0;
+            public static function getSourceType(): string { return 'custom_document'; }
+            public function lock(Invoice $invoice): void { ++$this->locks; }
+            public function assertRefundable(Invoice $invoice): void { throw new \LogicException('Not used.'); }
+        };
+        $invoice = (new Invoice())->setSourceType('custom_document')->setAmount(100);
+        $this->em->expects(self::once())->method('refresh')->with($invoice, self::anything())
+            ->willReturnCallback(static function () use ($policy): void {
+                self::assertSame(1, $policy->locks, 'The source lock must precede the invoice lock.');
+            });
+        $this->workflow->method('can')->willReturn(true);
+        $this->workflow->method('apply')->willReturnCallback(static function (Invoice $subject, string $transition): \Symfony\Component\Workflow\Marking {
+            $subject->setStatus($transition === 'start_pay' ? Invoice::STATUS_PAYING : Invoice::STATUS_PAID);
+            return new \Symfony\Component\Workflow\Marking([$subject->getStatus() => 1]);
+        });
+        $this->dispatcher->expects(self::once())->method('dispatch')->willReturnArgument(0);
+
+        $result = $this->createService($this->adjustmentRegistry, [$policy])->pay($invoice, Invoice::PAYMENT_MOCK, ['autoPaid' => true]);
+
+        self::assertSame(Invoice::STATUS_PAID, $result->status);
+        self::assertSame(1, $policy->locks);
+        self::assertSame(100, $invoice->getExtraData()['pay']['amount']);
+        self::assertSame($invoice->getExtraData()['pay'], $invoice->getExtraData()['notify']);
     }
 
     #[Group('low-value')]
