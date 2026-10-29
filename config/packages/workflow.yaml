@@ -62,9 +62,9 @@ framework:
                     from: [pending, paying, failed]
                     to: cancelled
 
-                # partial_refund: paid -> partial_refunded. For partial amount refunds (not used in first-phase full refunds but reserved).
+                # partial_refund: paid/partial_refunded -> partial_refunded, including subsequent partial refunds.
                 partial_refund:
-                    from: paid
+                    from: [paid, partial_refunded]
                     to: partial_refunded
 
                 # refund: paid/partial_refunded -> refunded. Triggered by InvoiceService::refund() — first refunds gateway amount, then wallet adjustments.

@@ -108,6 +108,28 @@ src/Payment/
 Payment is a generic collection module. Business modules decide how to react to invoice events.
 Wallet balance deduction belongs to Wallet as a provider implementation. Payment only orchestrates generic adjustments.
 
+### 2.3 Source coordination
+
+`InvoiceSourcePolicyInterface` is Payment's extension point for source-owned
+locking and refund eligibility. Implementations are auto-tagged with
+`payment.invoice_source_policy`; `InvoiceService` accepts one policy per
+`getSourceType()` value and rejects duplicate registrations. Sources without a
+policy remain invoice-only; Payment does not import their entities or services.
+Manual service construction must supply the policies needed by its source types.
+
+Payment calls `lock(Invoice)` inside its transaction **before** refreshing and
+locking the invoice. A policy must use the same connection, refresh current source
+state, and hold source locks until the transaction commits. After both locks are
+held, `assertRefundable(Invoice)` validates new refunds and resumed unknown
+attempts, before any refund reservation or external side effect. Completed
+idempotent replays bypass eligibility validation, but still acquire the locks.
+
+Trade implements this interface in `OrderInvoiceSourcePolicy` and owns all
+`trade_order` knowledge: order lookup, the order-first lock, and the requirement
+that an order remain paid and linked to the refunded invoice. The durable refund
+attempt and fulfillment workflow guard continue to enforce the cross-transaction
+barrier described in section 9.5.
+
 ---
 
 ## 3. Invoice Domain Model
@@ -792,6 +814,20 @@ POST /api/v1/manage/orders/{id}/refund
 
 First-phase wallet adjustment support SHOULD only allow full invoice refund when an adjustment exists. Partial refund allocation between gateway payment and wallet deduction is explicitly out of scope.
 
+Refund reservation and Trade fulfillment MUST serialize on the order-row lock.
+Before reserving or resuming a refund, the locked order must still be `paid` and
+linked to that invoice. A committed `processing` or `unknown` refund attempt MUST
+block the Trade `fulfill` transition until the refund is completed or reconciled,
+even while the gateway call runs outside the database transaction. All fulfillment
+mutation entry points must recheck the workflow while holding that lock. Completed
+refund replays remain valid after the order reaches `refunded`.
+
+Refund barriers MUST use current database reads in mutation transactions, not
+ordinary snapshot reads or cached entities. This includes MySQL `REPEATABLE READ`
+transactions whose snapshot predates a concurrently committed reservation. See
+[refund safety and recovery](../../runbooks/payment.md#5-refund-safety-and-recovery)
+for retry and reconciliation procedures.
+
 ### 9.6 Trade Listener Contract
 
 **File**: `src/Trade/EventListener/OrderInvoiceListener.php`
@@ -807,6 +843,8 @@ The listener MUST:
 | T-PAY-5 | Apply order workflow transition only if `can()` returns true |
 | T-PAY-6 | Treat duplicate paid events as idempotent no-ops |
 | T-PAY-7 | Persist order through `OrderService`, not direct EntityManager logic in listener |
+| T-PAY-8 | A late paid invoice must not replace payment fields on a paid, fulfilled, completed, or refunded order; log conflicting invoice/order identities for reconciliation |
+| T-PAY-9 | If the `pay` transition is unavailable, preserve the order's marking and payment fields; retain the paid invoice and log the anomaly |
 
 ---
 

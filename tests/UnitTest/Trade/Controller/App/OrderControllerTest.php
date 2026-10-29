@@ -51,6 +51,11 @@ final class OrderControllerTest extends TestCase
         $this->workflow = $this->createMock(WorkflowInterface::class);
 
         $this->fakeService = new OrderControllerServiceFake($this->service);
+        $connection = $this->createStub(\Doctrine\DBAL\Connection::class);
+        $connection->method('getDatabasePlatform')->willReturn(new \Doctrine\DBAL\Platforms\SQLitePlatform());
+        $entityManager = $this->createStub(\Doctrine\ORM\EntityManagerInterface::class);
+        $entityManager->method('getConnection')->willReturn($connection);
+        $this->fakeService->entityManager = $entityManager;
         $this->controller = new OrderController($this->fakeService, $this->storeContextResolver, $this->workflow);
     }
 

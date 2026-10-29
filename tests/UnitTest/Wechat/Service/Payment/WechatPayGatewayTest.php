@@ -334,7 +334,7 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getRefundedAmount')->willReturn(0);
         $invoice->method('getStatus')->willReturn(Invoice::STATUS_PAID);
 
-        $result = $this->gateway->refund($invoice, 100, 200, 'Customer request');
+        $result = $this->gateway->refund($invoice, 100, 200, 'Customer request', ['refundIdempotencyKey' => 'attempt-1']);
 
         self::assertInstanceOf(PaymentRefundResult::class, $result);
         self::assertSame(100, $result->amount);
@@ -364,7 +364,7 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getRefundedAmount')->willReturn(100);
         $invoice->method('getStatus')->willReturn(Invoice::STATUS_PAID);
 
-        $result = $this->gateway->refund($invoice, 400, 500, 'Full refund');
+        $result = $this->gateway->refund($invoice, 400, 500, 'Full refund', ['refundIdempotencyKey' => 'attempt-2']);
 
         self::assertSame(400, $result->amount);
         self::assertSame(Invoice::STATUS_REFUNDED, $result->status);
@@ -389,9 +389,45 @@ final class WechatPayGatewayTest extends TestCase
         $invoice->method('getRefundedAmount')->willReturn(0);
         $invoice->method('getStatus')->willReturn(Invoice::STATUS_PAID);
 
-        $result = $this->gateway->refund($invoice, 100, 300, 'Processing');
+        self::expectException(\RuntimeException::class);
+        self::expectExceptionMessage('has not confirmed success');
+        $this->gateway->refund($invoice, 100, 300, 'Processing', ['refundIdempotencyKey' => 'attempt-3']);
+    }
 
-        self::assertSame(Invoice::STATUS_PAID, $result->status);
+    public function testRefundUsesStableDistinctProviderNumbers(): void
+    {
+        $payApp = $this->createMock(PayApp::class);
+        $response = $this->createMock(WechatResponse::class);
+        $response->method('toArray')->willReturn(['status' => 'SUCCESS', 'refund_id' => 'refund']);
+        $numbers = [];
+        $client = $this->createMock(\EasyWeChat\Pay\Client::class);
+        $client->expects(self::exactly(3))->method('postJson')->willReturnCallback(
+            static function (string $url, array $body) use (&$numbers, $response): WechatResponse {
+                self::assertSame('v3/refund/domestic/refunds', $url);
+                $numbers[] = $body['out_refund_no'];
+                return $response;
+            },
+        );
+        $payApp->method('getClient')->willReturn($client);
+        $this->wechatService->method('getPayApp')->willReturn($payApp);
+        $invoice = $this->createMock(Invoice::class);
+        $invoice->method('getOutTradeNo')->willReturn('TXN001');
+        $invoice->method('getCurrency')->willReturn('CNY');
+        $invoice->method('getRefundedAmount')->willReturn(0);
+
+        $this->gateway->refund($invoice, 100, 300, 'test', ['refundIdempotencyKey' => 'first']);
+        $this->gateway->refund($invoice, 100, 300, 'test', ['refundIdempotencyKey' => 'first']);
+        $this->gateway->refund($invoice, 100, 300, 'test', ['refundIdempotencyKey' => 'second']);
+        self::assertSame($numbers[0], $numbers[1]);
+        self::assertNotSame($numbers[0], $numbers[2]);
+        self::assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $numbers[0]);
+    }
+
+    public function testRefundRejectsMissingIdempotencyKeyBeforeContactingWechat(): void
+    {
+        $this->wechatService->expects(self::never())->method('getPayApp');
+        self::expectException(\InvalidArgumentException::class);
+        $this->gateway->refund($this->createStub(Invoice::class), 100, 100, 'test');
     }
 
     public function testNotifySuccess(): void

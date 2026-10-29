@@ -6,6 +6,7 @@ namespace App\Trade\Controller\Manage;
 
 use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
+use App\Core\View\ApiViewMessages;
 use App\Core\View\CreateApiViewMixin;
 use App\Core\View\DeleteApiViewMixin;
 use App\Core\View\DetailApiViewMixin;
@@ -15,6 +16,9 @@ use App\Core\View\WorkflowApiViewMixin;
 use App\Trade\Entity\Order;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\StoreContextResolverInterface;
+use Doctrine\DBAL\LockMode;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +55,20 @@ class OrderController extends RestController
     {
         if ($transition === 'cancel' && $entity instanceof Order) {
             $this->service->cancel($entity);
+        }
+    }
+
+    protected function prepareTransition(EntityManagerInterface $entityManager, string $transition, object $entity): void
+    {
+        if (!$entity instanceof Order) {
+            throw new \LogicException('Unexpected workflow entity.');
+        }
+        $lock = $entityManager->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+            ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+        $entityManager->refresh($entity, $lock);
+        $this->authorizeTransition($transition, $entity);
+        if (!$this->orderWorkflow->can($entity, $transition)) {
+            throw new ValidatorException(ApiViewMessages::TRANSITION_CANNOT_APPLY);
         }
     }
 
@@ -197,7 +215,13 @@ class OrderController extends RestController
         $content = json_decode($request->getContent(), true) ?: [];
 
         try {
-            $this->service->wrapInTransaction(function () use ($order, $content) {
+            $this->service->wrapInTransaction(function (EntityManagerInterface $em) use ($order, $content) {
+                $lock = $em->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+                    ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+                $em->refresh($order, $lock);
+                if (!$this->orderWorkflow->can($order, 'fulfill')) {
+                    throw new \InvalidArgumentException('Order cannot be fulfilled in current status.');
+                }
                 $this->service->fulfill($order, $content);
                 $this->orderWorkflow->apply($order, 'fulfill');
                 $this->service->update($order, []);
@@ -218,7 +242,7 @@ class OrderController extends RestController
             return $this->warning('Order not found.', 404, '', 404);
         }
 
-        if (!$this->orderWorkflow->can($order, 'refund')) {
+        if (!$this->orderWorkflow->can($order, 'refund') && !($order->getStatus() === Order::STATUS_REFUNDED && $order->getInvoiceId() !== null)) {
             return $this->warning('Order cannot be refunded in current status.', 400, '', 400);
         }
 
@@ -226,7 +250,7 @@ class OrderController extends RestController
         $systemWalletId = (int) ($content['systemWalletId'] ?? 0);
         $reason = $content['reason'] ?? '';
 
-        if ($reason === '') {
+        if (!is_string($reason) || $reason === '') {
             return $this->warning('reason is required.', 400, '', 400);
         }
 
@@ -239,7 +263,13 @@ class OrderController extends RestController
                 return $this->warning('systemWalletId is required.', 400, '', 400);
             }
 
-            $this->service->wrapInTransaction(function () use ($order, $systemWalletId, $reason) {
+            $this->service->wrapInTransaction(function (EntityManagerInterface $em) use ($order, $systemWalletId, $reason) {
+                $lock = $em->getConnection()->getDatabasePlatform() instanceof SQLitePlatform
+                    ? LockMode::NONE : LockMode::PESSIMISTIC_WRITE;
+                $em->refresh($order, $lock);
+                if (!$this->orderWorkflow->can($order, 'refund') || $order->getInvoiceId() !== null) {
+                    throw new \InvalidArgumentException('Order cannot be refunded using this method.');
+                }
                 $this->service->refund($order, $systemWalletId, $reason);
                 $this->orderWorkflow->apply($order, 'refund');
                 $this->service->update($order, []);

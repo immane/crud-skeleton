@@ -70,7 +70,11 @@ final class StoreOrderRejectedHandlerTest extends TestCase
         $ref->setValue($order, self::ORDER_UUID);
         $orders = $this->createMock(OrderServiceInterface::class);
         $orders->method('get')->with(['uuid' => self::ORDER_UUID])->willReturn($order);
-        $orders->method('wrapInTransaction')->willReturnCallback(static fn (callable $cb): mixed => $cb());
+        $connection = $this->createStub(\Doctrine\DBAL\Connection::class);
+        $connection->method('getDatabasePlatform')->willReturn(new \Doctrine\DBAL\Platforms\SQLitePlatform());
+        $entityManager = $this->createStub(\Doctrine\ORM\EntityManagerInterface::class);
+        $entityManager->method('getConnection')->willReturn($connection);
+        $orders->method('wrapInTransaction')->willReturnCallback(static fn (callable $cb): mixed => $cb($entityManager));
         $workflow = $this->createMock(WorkflowInterface::class);
         $workflow->expects(self::once())->method('can')->with($order, 'cancel')->willReturn(true);
         $workflow->expects(self::once())->method('apply')->with($order, 'cancel');
@@ -105,5 +109,29 @@ final class StoreOrderRejectedHandlerTest extends TestCase
             'orderUuid' => self::ORDER_UUID,
             'storeUuid' => self::STORE_UUID,
         ]]));
+    }
+
+    public function testDoesNotCancelWhenOrderBecomesPaidBeforeLock(): void
+    {
+        $order = (new Order())->setStatus(Order::STATUS_CONFIRMED)->setMetadata(['_store' => ['uuid' => self::STORE_UUID]]);
+        $orders = $this->createMock(OrderServiceInterface::class);
+        $orders->method('get')->willReturn($order);
+        $connection = $this->createStub(\Doctrine\DBAL\Connection::class);
+        $connection->method('getDatabasePlatform')->willReturn(new \Doctrine\DBAL\Platforms\SQLitePlatform());
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getConnection')->willReturn($connection);
+        $entityManager->expects(self::once())->method('refresh')->willReturnCallback(
+            static function (object $entity): void { $entity->setStatus(Order::STATUS_PAID); },
+        );
+        $orders->method('wrapInTransaction')->willReturnCallback(static fn (callable $cb): mixed => $cb($entityManager));
+        $workflow = $this->createMock(WorkflowInterface::class);
+        $workflow->expects(self::never())->method('can');
+        $workflow->expects(self::never())->method('apply');
+
+        (new StoreOrderRejectedHandler($orders, $workflow))(new StoreOrderRejectedMessage(['payload' => [
+            'orderUuid' => self::ORDER_UUID,
+            'storeUuid' => self::STORE_UUID,
+        ]]));
+        self::assertSame(Order::STATUS_PAID, $order->getStatus());
     }
 }

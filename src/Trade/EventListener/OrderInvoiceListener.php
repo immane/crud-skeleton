@@ -42,17 +42,32 @@ final class OrderInvoiceListener implements EventSubscriberInterface
         if (!$order instanceof Order) {
             return;
         }
-        if ($order->getStatus() === Order::STATUS_PAID) {
-            return;
-        }
         if ($invoice->getAmount() !== $order->getTotalAmount() || $invoice->getCurrency() !== $order->getCurrency()) {
             $this->logger->critical('Invoice/order payment mismatch', ['invoice' => $invoice->getOutTradeNo(), 'order' => $order->getUuid()]);
             return;
         }
-        if (!$this->workflow->can($order, 'pay')) {
+        if (in_array($order->getStatus(), [Order::STATUS_PAID, Order::STATUS_FULFILLED, Order::STATUS_COMPLETED, Order::STATUS_REFUNDED], true)) {
+            if ($order->getInvoiceId() !== null && $order->getInvoiceId() !== $invoice->getUuid()) {
+                $this->logger->critical('A different invoice was paid after the Trade order was already settled.', [
+                    'invoice' => $invoice->getOutTradeNo(),
+                    'invoiceUuid' => $invoice->getUuid(),
+                    'order' => $order->getUuid(),
+                    'orderStatus' => $order->getStatus(),
+                    'linkedInvoiceUuid' => $order->getInvoiceId(),
+                ]);
+            }
             return;
         }
-
+        if (!$this->workflow->can($order, 'pay')) {
+            // The invoice and this log retain reconciliation evidence without
+            // changing an order whose workflow rejects this payment.
+            $this->logger->critical('Invoice was paid while its Trade order could not transition to paid.', [
+                'invoice' => $invoice->getOutTradeNo(),
+                'order' => $order->getUuid(),
+                'orderStatus' => $order->getStatus(),
+            ]);
+            return;
+        }
         $order->setInvoiceId($invoice->getUuid());
         $order->setInvoiceNo($invoice->getOutTradeNo());
         $order->setPaymentStatus($invoice->getStatus());

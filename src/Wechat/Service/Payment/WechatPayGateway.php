@@ -148,9 +148,13 @@ final class WechatPayGateway implements PaymentGatewayInterface
     /** @param array<string, mixed> $options */
     public function refund(Invoice $invoice, int $amount, int $paidAmount, string $reason, array $options = []): PaymentRefundResult
     {
+        $key = $options['refundIdempotencyKey'] ?? null;
+        if (!is_string($key) || $key === '') {
+            throw new \InvalidArgumentException('A refundIdempotencyKey is required for WeChat refunds.');
+        }
         $app = $this->wechatService->getPayApp();
 
-        $outRefundNo = 'REF' . $invoice->getOutTradeNo() . '_' . date('YmdHis');
+        $outRefundNo = hash('sha256', $key);
         $body = [
             'out_trade_no' => $invoice->getOutTradeNo(),
             'out_refund_no' => $outRefundNo,
@@ -164,6 +168,9 @@ final class WechatPayGateway implements PaymentGatewayInterface
 
         $response = $this->postJson($app->getClient(), 'v3/refund/domestic/refunds', $body);
         $result = $response->toArray(false);
+        if (($result['status'] ?? null) !== 'SUCCESS') {
+            throw new \RuntimeException('WeChat refund has not confirmed success; reconcile or retry with the same idempotency key.');
+        }
 
         $refundStatus = match ($result['status'] ?? '') {
             'SUCCESS' => ($amount >= $paidAmount - $invoice->getRefundedAmount())

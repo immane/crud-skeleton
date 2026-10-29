@@ -10,6 +10,7 @@ use App\Trade\DTO\StoreContext;
 use App\Trade\Entity\Order;
 use App\Trade\Service\OrderServiceInterface;
 use App\Trade\Service\Pricing\PriceCalculationResult;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Test double for OrderServiceInterface used by the Trade order controller
@@ -28,6 +29,7 @@ final class OrderControllerServiceFake implements OrderServiceInterface
 
     /** When true, wrapInTransaction() invokes the callback like the real service. */
     public bool $invokeTransaction = false;
+    public ?EntityManagerInterface $entityManager = null;
 
     public function __construct(OrderServiceInterface $delegate)
     {
@@ -102,7 +104,7 @@ final class OrderControllerServiceFake implements OrderServiceInterface
     public function wrapInTransaction(callable $fn): mixed
     {
         if ($this->invokeTransaction) {
-            return $fn(new \stdClass());
+            return $fn($this->entityManager ?? throw new \LogicException('An entity manager test double is required.'));
         }
 
         return null;
