@@ -2152,6 +2152,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="5. Money Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authenticated-third-party-payment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authenticated third-party payment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3018,6 +3035,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="5. Money Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authenticated-third-party-payment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authenticated third-party payment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3165,6 +3199,49 @@ available moves.</p>
 <h2 id="5-money-handling">5. Money Handling<a class="headerlink" href="#5-money-handling" title="Permanent link">&para;</a></h2>
 <p>Order amounts are stored in <strong>cents</strong> (integer). Never use floats for money. The pricing
 pipeline and payment integration both operate on integer minor units.</p>
+<h3 id="authenticated-third-party-payment">Authenticated third-party payment<a class="headerlink" href="#authenticated-third-party-payment" title="Permanent link">&para;</a></h3>
+<p>The global Common Setting <code>payment.allowThirdPartyPayment</code> controls whether a
+signed-in user may start payment for another user's Trade order through the app
+order payment endpoint. It does not grant anonymous access or order-management
+permissions. Only the exact combination <code>type = boolean</code>, <code>value = true</code> enables
+the policy; missing, null, disabled and malformed settings fail closed. Values
+are stored as strings, not PHP booleans.</p>
+<p>Migration <code>Version20261104090000</code> creates the setting, if missing, with value
+<code>false</code>, group <code>payment</code>, and label <code>Allow third-party payment</code>. It never
+overwrites an existing value; rollback preserves operator configuration. Apply
+migrations through the normal reviewed deployment process. Administrators can
+then edit the setting using existing Common Setting management. No database
+schema change or frontend customization is required. A missing key has the same
+disabled behavior before migration, and the value is read for each non-owner
+payment request rather than cached as an authorization decision.</p>
+<p>When enabled, <code>POST /api/v1/app/orders/{id}/payment</code> accepts a confirmed order's
+numeric ID or UUID from a logged-in third party. Ownership filtering for lists,
+details, items, submission, confirmation, cancellation and refunds is unchanged.
+The existing Invoice app endpoints remain payer-scoped. The option does not
+bypass payment/workflow guards or provider-specific initiation requirements;
+in particular, it does not turn an authenticated Store payment adapter into a
+public Huifu checkout endpoint.</p>
+<p>The new Invoice's payer is the authenticated user, while <code>Order.user</code> remains
+the original owner. Wallet payments therefore debit the actual payer; provider
+adapters that resolve identity from <code>invoice.payer</code> also see that payer. The
+request body cannot select another payer. Non-owner payment responses project
+only Invoice identity/status/amount and payment-launch results; new third-party
+Invoices do not copy the owner's private order notes into their description.
+Owner payment responses retain their existing shape.</p>
+<p>A pending Invoice is reused only for the same payer. A payer change creates a
+new Invoice instead of reassigning the old one. Existing non-pending-Invoice
+replacement behavior, including a previous <code>paying</code> Invoice, is unchanged: the
+old record and provider transaction are not closed or cancelled automatically.
+This feature does not add duplicate-collection handling or fix stale Invoice
+event propagation; those are separate concerns when allowing multiple payment
+attempts.</p>
+<p>For trusted server integrations, the existing <code>createPayment()</code> signature is
+unchanged. Its options may contain the internal <code>_payer</code> key with an actual
+<code>User</code> object supplied after caller authorization; non-User values are rejected
+and the key is removed before gateway invocation. Omission preserves the
+historical order-owner payer behavior. The app controller always overwrites
+this key with the authenticated user. This service context is not itself an
+authorization API, and callers must not construct it from untrusted payer IDs.</p>
 <h2 id="6-troubleshooting">6. Troubleshooting<a class="headerlink" href="#6-troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
