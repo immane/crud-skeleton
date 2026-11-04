@@ -249,21 +249,29 @@ final class OrderService extends BaseService implements OrderServiceInterface
         if ($order->getStatus() !== Order::STATUS_CONFIRMED) {
             throw new \RuntimeException('Only confirmed orders can start payment.');
         }
+        // Internal, server-supplied context passed through existing decorators;
+        // preserve the public service signature and never forward it to gateways.
+        if (array_key_exists('_payer', $options) && !$options['_payer'] instanceof User) {
+            throw new \InvalidArgumentException('The payment payer must be a server-supplied User.');
+        }
+        $payer = $options['_payer'] ?? $order->getUser();
+        unset($options['_payer']);
 
         $invoice = null;
         if ($order->getInvoiceId() !== null) {
             $invoice = $this->invoiceService->get(['uuid' => $order->getInvoiceId()]);
         }
-        if (!$invoice instanceof Invoice || $invoice->getStatus() !== Invoice::STATUS_PENDING) {
+        if (!$invoice instanceof Invoice || $invoice->getStatus() !== Invoice::STATUS_PENDING
+            || $invoice->getPayer()?->getUuid() !== $payer?->getUuid()) {
             $invoice = $this->invoiceService->createInvoice(new CreateInvoiceRequest(
                 sourceType: 'trade_order',
                 sourceId: $order->getUuid(),
                 scene: Invoice::SCENE_ORDER,
                 amount: $order->getTotalAmount(),
                 currency: $order->getCurrency(),
-                payer: $order->getUser(),
+                payer: $payer,
                 subject: sprintf('Order #%d', $order->getId() ?? 0),
-                description: $order->getNotes(),
+                description: $payer?->getUuid() === $order->getUser()?->getUuid() ? $order->getNotes() : null,
                 extraData: ['orderId' => $order->getId()],
             ));
 
