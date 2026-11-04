@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Trade\Controller\App;
 
+use App\Common\Repository\SettingRepository;
 use App\Core\Controller\RestController;
 use App\Core\View\ApiView;
 use App\Core\View\CreateApiViewMixin;
@@ -42,6 +43,7 @@ class OrderController extends RestController
         private readonly StoreContextResolverInterface $storeContextResolver,
         #[Target('state_machine.order')]
         protected readonly WorkflowInterface $orderWorkflow,
+        private readonly ?SettingRepository $settings = null,
     ) {
     }
 
@@ -276,14 +278,18 @@ class OrderController extends RestController
     #[Route('/{id}/payment', name: 'payment', methods: ['POST'], requirements: ['id' => '\d+|[0-9a-fA-F-]{36}'])]
     public function paymentAction(Request $request, int|string $id): Response
     {
-        $order = $this->service->get($this->mixIdToCommonFilter($id), false);
+        $user = $this->getCurrentUser();
+        if ($user === null) return $this->warning('Order not found.', 404, '', 404);
+        // Only payment may look outside the ordinary owner-scoped filter.
+        $order = $this->service->get($this->identifierCriteria($id), false);
 
         if (!$order) {
             return $this->warning('Order not found.', 404, '', 404);
         }
 
-        $user = $this->getCurrentUser();
-        if ($user === null || $order->getUser()?->getId() !== $user->getId()) {
+        $isOwner = $order->getUser()?->getId() === $user->getId();
+        $setting = $isOwner ? null : $this->settings?->findByKey('payment.allowThirdPartyPayment');
+        if (!$isOwner && ($setting?->getType() !== 'boolean' || $setting->getValue() !== 'true')) {
             return $this->warning('Order not found.', 404, '', 404);
         }
 
@@ -298,7 +304,19 @@ class OrderController extends RestController
         }
 
         try {
+            // A JSON request cannot supply this internal User context. Always
+            // overwrite it with the authenticated user before calling adapters.
+            $content['_payer'] = $user;
             $result = $this->service->createPayment($order, $payment, $content);
+            if (!$isOwner) {
+                $invoice = $result->invoice;
+                return $this->success([
+                    'invoice' => ['id' => $invoice->getId(), 'uuid' => $invoice->getUuid(), 'outTradeNo' => $invoice->getOutTradeNo(),
+                        'status' => $invoice->getStatus(), 'amount' => $invoice->getAmount(), 'currency' => $invoice->getCurrency()],
+                    'status' => $result->status, 'payUrl' => $result->payUrl, 'qrCode' => $result->qrCode,
+                    'payload' => $result->payload, 'message' => $result->message,
+                ], 'Payment started');
+            }
             return $this->success($result, 'Payment started');
         } catch (\Throwable $e) {
             return $this->warning($e->getMessage(), 400, '', 400);

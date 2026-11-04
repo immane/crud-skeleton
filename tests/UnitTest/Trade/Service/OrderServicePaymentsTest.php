@@ -477,6 +477,29 @@ final class OrderServicePaymentsTest extends TestCase
         self::assertSame($invoice->getUuid(), $order->getInvoiceId());
     }
 
+    public function testCreatePaymentRejectsUntrustedPayerContext(): void
+    {
+        $service = $this->createService(['invoiceService' => $this->createStub(InvoiceServiceInterface::class)]);
+        $this->expectException(\InvalidArgumentException::class);
+        $service->createPayment((new Order())->setStatus(Order::STATUS_CONFIRMED), 'mock', ['_payer' => ['id' => 1]]);
+    }
+
+    public function testCreatePaymentUsesExplicitPayerAndDoesNotForwardInternalContext(): void
+    {
+        $owner = new User(); $payer = new User();
+        $order = (new Order())->setUser($owner)->setStatus(Order::STATUS_CONFIRMED)->setTotalAmount(1000)->setNotes('Private notes');
+        $created = (new Invoice())->setAmount(1000)->setPayer($payer);
+        $invoiceService = $this->createMock(InvoiceServiceInterface::class);
+        $invoiceService->expects(self::once())->method('createInvoice')->with(self::callback(
+            static fn (\App\Payment\DTO\CreateInvoiceRequest $request): bool => $request->payer === $payer && $request->description === null,
+        ))->willReturn($created);
+        $invoiceService->expects(self::once())->method('pay')->with($created, 'mock', ['autoPaid' => true])
+            ->willReturn(new PaymentResult($created, Invoice::STATUS_PAID));
+        $service = $this->createService(['em' => $this->createEntityManager(), 'invoiceService' => $invoiceService]);
+        $service->createPayment($order, 'mock', ['_payer' => $payer, 'autoPaid' => true]);
+        self::assertSame($owner, $order->getUser());
+    }
+
     public function testCreatePaymentCreatesNewInvoiceWhenNoneLinked(): void
     {
         $order = (new Order())

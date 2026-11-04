@@ -36,6 +36,9 @@ interface OrderServiceInterface extends BaseServiceInterface
     /**
      * @param array<string, mixed> $options
      */
+    // options['_payer'] is an internal authenticated User supplied by trusted
+    // callers after authorization. It is consumed before gateway invocation;
+    // omitted context preserves the historical order-owner payer behavior.
     public function createPayment(Order $order, string $payment = 'mock', array $options = []): PaymentResult;
 
     /**
