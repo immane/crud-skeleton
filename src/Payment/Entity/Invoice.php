@@ -19,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'idx_payment_invoice_payment_transaction', columns: ['payment', 'transaction_id'])]
 class Invoice
 {
+    public const EXTRA_PAID_FOLLOWUP = 'paid_followup';
+
     public const STATUS_PENDING = 'pending';
     public const STATUS_PAYING = 'paying';
     public const STATUS_PAID = 'paid';

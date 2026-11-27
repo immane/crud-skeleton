@@ -10,6 +10,7 @@ use App\Payment\Event\InvoiceFailedEvent;
 use App\Payment\Event\InvoicePaidEvent;
 use App\Payment\Event\InvoiceRefundedEvent;
 use App\Trade\Entity\Order;
+use App\Trade\Service\OrderInvoiceSourcePolicy;
 use App\Trade\Service\OrderServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -38,34 +39,27 @@ final class OrderInvoiceListener implements EventSubscriberInterface
     public function onInvoicePaid(InvoicePaidEvent $event): void
     {
         $invoice = $event->getInvoice();
+        if ($invoice->getSourceType() !== OrderInvoiceSourcePolicy::getSourceType()) {
+            return;
+        }
         $order = $this->findOrder($invoice);
         if (!$order instanceof Order) {
+            $this->recordPaidFollowup($invoice, null, 'source_order_missing');
             return;
         }
-        if ($invoice->getAmount() !== $order->getTotalAmount() || $invoice->getCurrency() !== $order->getCurrency()) {
-            $this->logger->critical('Invoice/order payment mismatch', ['invoice' => $invoice->getOutTradeNo(), 'order' => $order->getUuid()]);
-            return;
-        }
-        if (in_array($order->getStatus(), [Order::STATUS_PAID, Order::STATUS_FULFILLED, Order::STATUS_COMPLETED, Order::STATUS_REFUNDED], true)) {
-            if ($order->getInvoiceId() !== null && $order->getInvoiceId() !== $invoice->getUuid()) {
-                $this->logger->critical('A different invoice was paid after the Trade order was already settled.', [
-                    'invoice' => $invoice->getOutTradeNo(),
-                    'invoiceUuid' => $invoice->getUuid(),
-                    'order' => $order->getUuid(),
-                    'orderStatus' => $order->getStatus(),
-                    'linkedInvoiceUuid' => $order->getInvoiceId(),
-                ]);
+        if (OrderInvoiceSourcePolicy::isSettled($order)) {
+            if ($order->getInvoiceId() !== $invoice->getUuid()) {
+                $this->recordPaidFollowup($invoice, $order, $order->getInvoiceId() === null
+                    ? 'settled_invoice_missing' : 'duplicate_collection');
             }
             return;
         }
+        if ($invoice->getAmount() !== $order->getTotalAmount() || $invoice->getCurrency() !== $order->getCurrency()) {
+            $this->recordPaidFollowup($invoice, $order, 'source_order_payment_mismatch');
+            return;
+        }
         if (!$this->workflow->can($order, 'pay')) {
-            // The invoice and this log retain reconciliation evidence without
-            // changing an order whose workflow rejects this payment.
-            $this->logger->critical('Invoice was paid while its Trade order could not transition to paid.', [
-                'invoice' => $invoice->getOutTradeNo(),
-                'order' => $order->getUuid(),
-                'orderStatus' => $order->getStatus(),
-            ]);
+            $this->recordPaidFollowup($invoice, $order, OrderInvoiceSourcePolicy::REASON_ORDER_NOT_PAYABLE);
             return;
         }
         $order->setInvoiceId($invoice->getUuid());
@@ -81,7 +75,8 @@ final class OrderInvoiceListener implements EventSubscriberInterface
     {
         $invoice = $event->getInvoice();
         $order = $this->findOrder($invoice);
-        if (!$order instanceof Order) {
+        if (!$order instanceof Order || $order->getInvoiceId() !== $invoice->getUuid()
+            || OrderInvoiceSourcePolicy::isUnappliedPayment($order, $invoice)) {
             return;
         }
 
@@ -125,5 +120,23 @@ final class OrderInvoiceListener implements EventSubscriberInterface
 
         $order = $this->orderService->get(['uuid' => $invoice->getSourceId()]);
         return $order instanceof Order ? $order : null;
+    }
+
+    private function recordPaidFollowup(Invoice $invoice, ?Order $order, string $reason): void
+    {
+        $details = [
+            'status' => 'paid_followup_failed',
+            'reason' => $reason,
+            'orderUuid' => $invoice->getSourceId(),
+            'orderStatus' => $order?->getStatus(),
+            'linkedInvoiceUuid' => $order?->getInvoiceId(),
+            'recordedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
+        ];
+        $invoice->appendExtraData(Invoice::EXTRA_PAID_FOLLOWUP, $details);
+        $this->logger->critical('A paid invoice could not be applied to its Trade order.', [
+            ...$details,
+            'invoiceUuid' => $invoice->getUuid(),
+            'outTradeNo' => $invoice->getOutTradeNo(),
+        ]);
     }
 }

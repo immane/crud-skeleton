@@ -48,7 +48,7 @@ final class OrderInvoiceListenerTest extends TestCase
         self::assertTrue(true);
     }
 
-    public function testPaidIgnoresEventWhenOrderIsNotFound(): void
+    public function testPaidRecordsMissingSourceOrder(): void
     {
         $invoice = (new Invoice())->setSourceType('trade_order')->setSourceId(self::SOURCE_UUID);
 
@@ -59,6 +59,7 @@ final class OrderInvoiceListenerTest extends TestCase
         $logger = $this->createStub(LoggerInterface::class);
 
         (new OrderInvoiceListener($orders, $workflow, $logger))->onInvoicePaid(new InvoicePaidEvent($invoice));
+        self::assertSame('source_order_missing', $invoice->getExtraData()[Invoice::EXTRA_PAID_FOLLOWUP]['reason']);
     }
 
     public function testPaidSkipsAlreadyPaidOrder(): void
@@ -160,6 +161,7 @@ final class OrderInvoiceListenerTest extends TestCase
         self::assertSame($status === Order::STATUS_REFUNDED ? Invoice::STATUS_REFUNDED : Invoice::STATUS_PAID, $order->getPaymentStatus());
         self::assertSame(Invoice::PAYMENT_WALLET, $order->getPaymentMethod());
         self::assertSame($paidAt, $order->getPaidAt());
+        self::assertSame($differentInvoice ? 'duplicate_collection' : null, $incoming->getExtraData()[Invoice::EXTRA_PAID_FOLLOWUP]['reason'] ?? null);
     }
 
     public function testPaidMarksOrderPaidAndAppliesTransition(): void
@@ -235,6 +237,7 @@ final class OrderInvoiceListenerTest extends TestCase
     {
         $order = (new Order())->setStatus(Order::STATUS_PAID)->setTotalAmount(1500)->setCurrency('CNY');
         $invoice = $this->createTradeInvoice($order, Invoice::STATUS_PARTIAL_REFUNDED, 1500, 'CNY');
+        $order->setInvoiceId($invoice->getUuid());
 
         $workflow = $this->createMock(WorkflowInterface::class);
         $workflow->expects(self::never())->method('apply');
@@ -253,6 +256,7 @@ final class OrderInvoiceListenerTest extends TestCase
         $refundedAt = new \DateTimeImmutable('2026-08-09T11:00:00+08:00');
         $order = (new Order())->setStatus(Order::STATUS_COMPLETED)->setTotalAmount(1500)->setCurrency('CNY');
         $invoice = $this->createTradeInvoice($order, Invoice::STATUS_REFUNDED, 1500, 'CNY');
+        $order->setInvoiceId($invoice->getUuid());
         $invoice->setRefundedAt($refundedAt);
 
         $workflow = $this->createMock(WorkflowInterface::class);
@@ -272,6 +276,7 @@ final class OrderInvoiceListenerTest extends TestCase
     {
         $order = (new Order())->setStatus(Order::STATUS_COMPLETED)->setTotalAmount(1500)->setCurrency('CNY');
         $invoice = $this->createTradeInvoice($order, Invoice::STATUS_REFUNDED, 1500, 'CNY');
+        $order->setInvoiceId($invoice->getUuid());
 
         $workflow = $this->createMock(WorkflowInterface::class);
         $workflow->expects(self::once())->method('can')->with($order, 'refund')->willReturn(false);
