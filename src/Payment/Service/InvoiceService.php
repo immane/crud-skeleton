@@ -213,6 +213,12 @@ final class InvoiceService extends BaseService implements InvoiceServiceInterfac
         if (!$this->workflow->can($invoice, 'mark_paid')) {
             throw new InvoiceInvalidTransitionException($invoice, 'mark_paid');
         }
+        // Only server-side payment follow-up handlers may establish refund evidence.
+        $extraData = $invoice->getExtraData() ?? [];
+        if (array_key_exists(Invoice::EXTRA_PAID_FOLLOWUP, $extraData)) {
+            unset($extraData[Invoice::EXTRA_PAID_FOLLOWUP]);
+            $invoice->setExtraData($extraData);
+        }
         $invoice->setPayment($result->payment);
         $invoice->setTransactionId($result->transactionId);
         $invoice->setPaidAt($result->paidAt ?? new \DateTimeImmutable());
